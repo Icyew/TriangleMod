@@ -126,8 +126,8 @@ class W3LevelManager
 		}
 	}
 	
-	
-	public function AddPoints(type : ESpendablePointType, amount : int, show : bool )
+
+	public function AddPoints(type : ESpendablePointType, amount : int, show : bool, optional hideLevelIndicator : bool )
 	{
 		var total : int;
 		var arrInt : array<int>;
@@ -162,7 +162,7 @@ class W3LevelManager
 				total = GetTotalExpForNextLevel();
 				if(total > 0 && GetPointsTotal(EExperiencePoint) >= total)
 				{
-					GainLevel( true );
+					GainLevel( !hideLevelIndicator );
 					GetWitcherPlayer().AddAbility( GetWitcherPlayer().GetLevelupAbility( GetWitcherPlayer().GetLevel() ) );
 				}
 				else
