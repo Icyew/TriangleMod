@@ -1,0 +1,4 @@
+* text=auto
+**/content/**/*.xml filter=utf16
+*.bat	text eol=crlf
+*.sh	text eol=lf
