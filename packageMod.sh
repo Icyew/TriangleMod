@@ -75,7 +75,7 @@ done
 # fi
 cp -R "$binPath" "$gamePath"
 
-# eval "$batPath"
+eval "$batPath"
 
 read -p "After packing is complete, press enter to delete temp files!"
 

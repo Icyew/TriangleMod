@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<UserConfig>
+    <Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="AltArmorStaminaMod"				value="1"	/>
+				<Entry varId="ChestPantsAttackCost"				value="0.8"	/>
+				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
+				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
+				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
+				<Entry varId="StaminaRegenMult"					value="1.1"	/>
+				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
+				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
+				<Entry varId="LightAttackComboDecay"			value="4"	/>
+				<Entry varId="HeavyAttackComboDecay"			value="8"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="AltArmorStaminaMod"			 displayName="Use Alternate Armor Stamina Penalty"										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsAttackCost" 		 	 displayName="Extra armor stamina cost per weight level for Attacks - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsAttackCost" 		 displayName="Extra armor stamina cost per weight level for Attacks - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaminaRegenMult"		 		 displayName="Total stamina regen multiplier"								 			displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+    </Group>
+    <Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
+				<Entry varId="QuenDamageRatio"					value="0.667"/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+    </Group>
+    <Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="AreLevelOptionsEnabled"			value="1"	/>
+				<Entry varId="LinearUpscaling"					value="1"	/>
+				<Entry varId="LinearDownscaling"				value="0"	/>
+				<Entry varId="DontScaleAnimals"					value="1"	/>
+				<Entry varId="UpscalingFactor"					value="0.4"	/>
+				<Entry varId="DownscalingFactor"				value="0.4"	/>
+				<Entry varId="LevelBonus"						value="0.0"	/>
+				<Entry varId="LevelJitter"						value="0.0"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="AreLevelOptionsEnabled"		 displayName="Use custom leveling options? Disabling reverts to vanilla"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearUpscaling"				 displayName="Scale weaker enemies up to: x*PlayerLevel + (1-x)*EnemyLevel"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearDownscaling"				 displayName="Scale stronger enemies down to: y*PlayerLevel + (1-y)*EnemyLevel"	displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DontScaleAnimals"		 		 displayName="Exclude animals from linear scaling (not flat and jitter)"		displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="UpscalingFactor" 		 		 displayName="Upscaling factor (x):"								 			displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 			displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 		displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="			displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+    </Group>
+
+</UserConfig>
