@@ -3239,8 +3239,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		UnequipItemFromSlot(EES_SkillMutagen3);
 		UnequipItemFromSlot(EES_SkillMutagen4);
 		
+		// Triangle safe cleardevelop
+		Debug_ClearCharacterDevelopment();
 		levelManager.ResetCharacterDev();
-		((W3PlayerAbilityManager)abilityManager).ResetCharacterDev();		
 	}
 	
 	public function ConsumeItem( itemId : SItemUniqueId ) : bool
@@ -6913,6 +6914,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
+	// Triangle safe cleardevelop
 	public function Debug_ClearCharacterDevelopment(optional keepInv : bool)
 	{
 		var template : CEntityTemplate;
@@ -6921,62 +6923,88 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var i : int;
 		var items : array<SItemUniqueId>;
 		var abs : array<name>;
-	
-		delete abilityManager;
-		delete levelManager;
-		delete effectManager;
-		
-		
+		var totalExp : int;
+		var currentLevel : int;
+		var totalSkillPoints : int;
+		var skillPointDifference : int;
+		//Chicken Start
+		var eqweapon, eqarmor : array<SItemUniqueId>;
+
+		eqweapon = inv.GetHeldWeapons();
+		eqarmor = GetEquippedItems();
+
+		HorseUnequipItem(EES_HorseTrophy);
+
+		for(i=0; i<eqweapon.Size(); i+=1)
+		{
+			UnequipItem(eqweapon[i]);
+			EquipItem(eqweapon[i]);
+		}
+
+		for(i=0; i<eqarmor.Size(); i+=1)
+		{
+			UnequipItem(eqarmor[i]);
+			EquipItem(eqarmor[i]);
+		}
+		//Chicken end
+
+
+		inv.GetAllItems(items);
+		for(i=0; i<items.Size(); i+=1)
+		{
+			if(inv.ItemHasTag(items[i], 'MutagenIngredient'))   
+				UnequipItem(items[i]);
+		}
+
+
 		abs = GetAbilities(false);
 		for(i=0; i<abs.Size(); i+=1)
 			RemoveAbility(abs[i]);
-			
-		
+
+
 		abs.Clear();
 		GetCharacterStatsParam(abs);		
 		for(i=0; i<abs.Size(); i+=1)
 			AddAbility(abs[i]);
-					
-		
+
+		// Triangle save character data before clearing
+		totalExp = levelManager.GetPointsTotal(EExperiencePoint);
+		currentLevel = levelManager.GetLevel();
+		totalSkillPoints = levelManager.GetPointsTotal(ESkillPoint);
+
+		//leveling
+		delete levelManager;
 		levelManager = new W3LevelManager in this;			
 		levelManager.Initialize();
 		levelManager.PostInit(this, false);		
-						
+
+		// Triangle re-level
+		levelManager.AddPoints(EExperiencePoint, totalExp, false, true);
+		DisplayHudMessage("Re-add points from places of power with addSkillPoints(# of points)");
+		/*
+		// Triangle re-level and re-point
+		levelManager.AddPoints(EExperiencePoint, totalExp, true, true);
+		if ( theGame.GetInGameConfigWrapper().IsGroupVisible('SCOptionLB') )
+				skillPointDifference = totalSkillPoints - (levelManager.GetPointsTotal(ESkillPoint)/StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('SCOptionLB', 'SPG')));
+			else
+				skillPointDifference = totalSkillPoints - levelManager.GetPointsTotal(ESkillPoint);
 		
-		AddAbility('GeraltSkills_Testing');
-		SetAbilityManager();		
-		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
-		
-		SetEffectManager();
-		
-		abilityManager.PostInit();						
-		
-		
-		
-		
-		
-		if(!keepInv)
+		if (skillPointDifference > 0)
 		{
-			inv.RemoveAllItems();
-		}		
-		
-		
-		template = (CEntityTemplate)LoadResource("geralt_inventory_release");
-		entity = theGame.CreateEntity(template, Vector(0,0,0));
-		invTesting = (CInventoryComponent)entity.GetComponentByClassName('CInventoryComponent');
-		invTesting.GiveAllItemsTo(inv, true);
-		entity.Destroy();
-		
-		
-		inv.GetAllItems(items);
-		for(i=0; i<items.Size(); i+=1)
-		{
-			if(!inv.ItemHasTag(items[i], 'NoDrop'))			
-				EquipItem(items[i]);
+			levelManager.AddPoints(ESkillPoint, skillPointDifference, true);
 		}
-			
-		
-		Debug_GiveTestingItems(0);
+		*/
+
+		//skills, perks etc., exp, buffs
+		delete abilityManager;
+		//AddAbility('GeraltSkills_Testing');
+		SetAbilityManager();		//defined in inheriting classes but must be called before setting any other managers - sets skills and stats
+		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
+
+		delete effectManager;
+		SetEffectManager();
+
+		abilityManager.PostInit();
 	}
 	
 	final function Debug_HAX_UnlockSkillSlot(slotIndex : int) : bool
