@@ -9015,12 +9015,22 @@ statemachine abstract import class CR4Player extends CPlayer
 						
 							
 							
-							DrainStamina(ESAT_LightAttack);
+							// Triangle alt stamina
+							if (thePlayer.HasStaminaToUseAction(ESAT_LightAttack))
+							{
+								DrainStamina(ESAT_LightAttack);
 							
 							
-							thePlayer.BreakPheromoneEffect();
-							actionResult = OnPerformAttack(theGame.params.ATTACK_NAME_LIGHT);
-						
+								thePlayer.BreakPheromoneEffect();
+								// Triangle technically this could return false and it'd drain stamina without successfully attacking... but I don't care!
+								actionResult = OnPerformAttack(theGame.params.ATTACK_NAME_LIGHT);
+							}
+							else
+							{
+								actionResult = false;
+							}
+							// end Triangle
+							//target.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack );
 					} break;
 					
 					default :
@@ -9044,13 +9054,22 @@ statemachine abstract import class CR4Player extends CPlayer
 						
 							
 							
-							DrainStamina(ESAT_HeavyAttack);
+							// Triangle alt stamina
+							if (thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack))
+							{
+								DrainStamina(ESAT_HeavyAttack);
 							
 							
 							
-							thePlayer.BreakPheromoneEffect();		
-							actionResult = this.OnPerformAttack(theGame.params.ATTACK_NAME_HEAVY);
-						
+								thePlayer.BreakPheromoneEffect();		
+								actionResult = this.OnPerformAttack(theGame.params.ATTACK_NAME_HEAVY);
+							}
+							else
+							{
+								actionResult = false;
+							}
+							// end Triangle
+							//target.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack );
 					} break;
 					
 					case BS_Pressed :

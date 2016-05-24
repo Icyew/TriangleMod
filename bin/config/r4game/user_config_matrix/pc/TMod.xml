@@ -8,7 +8,7 @@
 				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
 				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
 				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
-				<Entry varId="StaminaRegenMult"					value="1.1"	/>
+				<Entry varId="StaminaRegenMult"					value="2.0"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
 				<Entry varId="LightAttackComboDecay"			value="4"	/>

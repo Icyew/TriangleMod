@@ -47,6 +47,7 @@ abstract class W3RegenEffect extends CBaseGameplayEffect
 				baseStaminaRegenVal = CalculatedArmorStaminaRegenBonus();
 				
 				regenPoints *= 1 + baseStaminaRegenVal;
+				regenPoints *= theGame.GetTModOptions().GetStaminaRegenMult(); // Triangle alt stamina
 			}
 			
 			else if(regenStat == CRS_Vitality || regenStat == CRS_Essence)
@@ -104,11 +105,17 @@ abstract class W3RegenEffect extends CBaseGameplayEffect
 			if ( bootsEq )
 				staminaRegenVal -= 0.03;
 		}
-		else
+		// Triangle alt stamina
+		else if (!theGame.GetTModOptions().GetAltArmorStaminaMod())
 		{
 			armorRegenVal = GetWitcherPlayer().GetAttributeValue('staminaRegen_armor_mod');
 			staminaRegenVal = armorRegenVal.valueMultiplicative;
 		}
+		else
+		{
+			staminaRegenVal = 0;
+		}
+		// Triangle end
 		
 		return staminaRegenVal;
 	}
