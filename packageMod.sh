@@ -1,9 +1,10 @@
 #!/bin/bash
 scriptsOnly=false
 xmlOnly=false
-while getopts "m:g:sx" opt; do
+debug=false
+while getopts "p:g:sxd" opt; do
 	case $opt in
-	m)
+	p)
 		modPath=$OPTARG
 		;;
 	g)
@@ -14,6 +15,9 @@ while getopts "m:g:sx" opt; do
 		;;
 	x)
 		xmlOnly=true
+		;;
+	d)
+		debug=true
 		;;
 	\?)
   		echo "Invalid option: -$OPTARG" >&2
@@ -26,10 +30,10 @@ while getopts "m:g:sx" opt; do
 	esac
 done
 
-tmpPath="./temp"
+tmpPath="$modPath/temp"
 
 if [ -z "$modPath" ]; then
-	echo "Mod path -m must be defined";
+	echo "Mod path -p must be defined";
 	exit 1;
 fi
 
@@ -53,17 +57,45 @@ contentPath="$modPath/Witcher3/content"
 scriptPath="$contentPath/scripts"
 batPath="$modPath/pack.bat"
 binPath="$modPath/bin"
+studioPath="$modPath/ScriptStudio"
 
-currentChanges=$(git status --porcelain | cut -c4-)
-oldChanges=$(git diff --name-only vanilla..HEAD)
+if test -e "$studioPath/scripts/local/"; then
+	rm -r "$studioPath/scripts/local/"*;
+fi
+if test -e "$studioPath/scripts/source/"; then
+	rm -r "$studioPath/scripts/source/"*;
+fi
+
+currentChanges=$(git status --porcelain)
+oldChanges=$(git diff --name-status vanilla..HEAD)
+
 prefix="Witcher3"
 mkdir -p "$tmpPath"
-for file in $currentChanges $oldChanges; do
-	if [[ $file =~ ^$prefix ]]; then
+IFS=$'\n'
+for fileWithStatus in $currentChanges $oldChanges; do
+	status=${fileWithStatus::1}
+	file=$(echo "$fileWithStatus" | grep -o "$prefix.*$")
+	if [[ $file =~ ^$prefix ]] && ([[ $status == "M" || $status == "A" ]]); then
 		filePath="$modPath/$file"
-		if ([[ $file =~ .*".xml"$ ]] && ! $scriptsOnly) || ([[ $file =~ .*".ws"$ ]] && ! $xmlOnly); then
+		if [[ $file =~ .*".xml"$ ]] && ! $scriptsOnly; then
 			echo "$filePath";
 			cp -R --parents "$filePath" "$tmpPath";
+		fi
+		if [[ $file =~ .*".ws"$ ]] && ! $xmlOnly; then
+			echo "$filePath";
+			if $debug; then
+				truncatedPath=${filePath#$scriptPath}
+				folder="source"
+				if [[ $status == "A" ]]; then
+					folder="local"
+				fi
+				localPath="$studioPath/scripts/$folder/$truncatedPath"
+				pathOnly=${localPath%/*}
+				mkdir -p "$pathOnly";
+				cp -R "$filePath" "$localPath";
+			else
+				cp -R --parents "$filePath" "$tmpPath";
+			fi
 		fi
 	fi
 done
