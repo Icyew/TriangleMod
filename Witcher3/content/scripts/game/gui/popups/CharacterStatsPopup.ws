@@ -225,8 +225,13 @@ function AddCharacterStat(tag : string, varKey:name, locKey:string, iconTag:stri
 		sp = GetWitcherPlayer().GetAttributeValue(varKey);
 		valueAbility = sp.valueAdditive + sp.valueMultiplicative * GetWitcherPlayer().GetStatMax(BCS_Stamina);
 	
+		// Triangle alt stamina
+		if (!theGame.GetTModOptions().GetAltArmorStaminaMod())
+		{
 		sp = GetWitcherPlayer().GetAttributeValue('staminaRegen_armor_mod');
 		valueAbility *= 1 + sp.valueMultiplicative;
+		}
+		// Triangle end
 		valueStr = NoTrailZeros(RoundMath(valueAbility)) + "/" + GetLocStringByKeyExt("per_second"); 
 	}
 	else if ( varKey == 'staminaOutOfCombatRegen' ) 

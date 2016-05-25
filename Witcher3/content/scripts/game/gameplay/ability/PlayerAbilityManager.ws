@@ -865,6 +865,11 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var attributeName : name;
 		var skill : ESkill;
 		var blizzard : W3Potion_Blizzard;
+		// Triangle alt stamina
+		var tempItem : SItemUniqueId;
+		var witcher : W3PlayerWitcher;
+		var TMod : TModOptions;
+		var armorCost : float;
 	
 		super.GetStaminaActionCostInternal(action, isPerSec, cost, delay, abilityName);
 		
@@ -888,6 +893,35 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			cost.valueMultiplicative = 0;
 		}
 		
+		// Triangle alt stamina
+		TMod = theGame.GetTModOptions();
+		witcher = GetWitcherPlayer();
+		if(TMod.GetAltArmorStaminaMod() &&
+			witcher &&
+			!isPerSec &&
+			(action == ESAT_LightAttack ||
+			action == ESAT_HeavyAttack ||
+			(action == ESAT_Ability && abilityName == GetSkillAbilityName(S_Sword_s02)) ||
+			(action == ESAT_Ability && abilityName == GetSkillAbilityName(S_Sword_s01)) ||
+			action == ESAT_Dodge ||
+			action == ESAT_Roll))
+		{
+			armorCost = 0;
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Armor, tempItem))
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action);
+
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Boots, tempItem))
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action);
+
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Pants, tempItem))
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action);
+
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, tempItem))
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action);
+
+			cost.valueAdditive += armorCost;
+		}
+		// Triangle end
 		
 		if( thePlayer.HasBuff( EET_Blizzard ) && owner == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel( EET_Blizzard ) == 3 && thePlayer.HasBuff( EET_BattleTrance ) )
 		{
