@@ -406,6 +406,7 @@
       <ability name="magic_s7">
         <tags>magic_s7,Igni</tags>
         <spell_power type="mult" min="0.05" />
+        <sword_damage type="add" min="50" /> <!-- Triangle spell sword bonus damage on sword strike. damage type set in scripts -->
       </ability>
 	  
       <!-- Melt Armor -->
@@ -439,6 +440,7 @@
       <ability name="magic_s12">
         <tags>magic_s12,Aard</tags>
         <spell_power min="0.05" type="mult" />
+        <sword_damage type="add" min="50" /> <!-- Triangle spell sword bonus damage on sword strike. damage type set in scripts -->
       </ability>
 	  
 	  <!-- quen impulse -->
@@ -462,12 +464,14 @@
         <tags>magic_s15,Quen</tags>
         <!-- take a look at how it's used in scripts before modifying it -->
         <spell_power type="mult" min="0.05" />
+        <sword_damage type="add" min="50" /> <!-- Triangle spell sword bonus damage on sword strike. damage type set in scripts -->
       </ability>
 	  
       <!-- Yrden Power -->
       <ability name="magic_s16">
         <tags>magic_s16,Yrden</tags>
         <spell_power type="mult" min="0.05" />
+        <sword_damage type="add" min="50" /> <!-- Triangle spell sword bonus damage on sword strike. damage type set in scripts -->
       </ability>
 	  
       <ability name="magic_s17">
@@ -480,6 +484,7 @@
       <ability name="magic_s18">
         <tags>magic_s16,Axii</tags>
         <spell_power type="mult" min="0.05" />
+        <sword_damage type="add" min="50" /> <!-- Triangle spell sword bonus damage on sword strike. damage type set in scripts -->
       </ability>
 	  
 	  <!-- Axii Dominate -->

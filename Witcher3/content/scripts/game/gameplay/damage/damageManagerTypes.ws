@@ -168,6 +168,7 @@ function GetResistForDamage(damageName : name, isDoTDamage : bool) : ECharacterD
 		case theGame.params.DAMAGE_NAME_SHOCK 		: return CDS_ShockRes;
 		case theGame.params.DAMAGE_NAME_MORALE 		:
 		case theGame.params.DAMAGE_NAME_DIRECT 		: return CDS_None;
+		case theGame.params.DAMAGE_NAME_WILL		: return CDS_WillRes; // Triangle spell sword 
 		default 									: return CDS_None;
 	}
 }

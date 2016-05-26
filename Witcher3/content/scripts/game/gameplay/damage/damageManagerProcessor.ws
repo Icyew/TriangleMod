@@ -360,6 +360,13 @@ class W3DamageManagerProcessor extends CObject
 			if( DamageHitsStamina(  dmgInfos[i].dmgType ) )		action.processedDmg.staminaDamage  += dmgValue;
 		}
 		
+		// Triangle spell sword Add bonus damage from sign power skills. Maybe causes problems if direct damage happens here... don't know
+		if (!anyDamageProcessed)
+			anyDamageProcessed = ProcessSpellSwordDmg();
+		else
+			ProcessSpellSwordDmg();
+		// Triangle end
+
 		if(size == 0 && canLog)
 		{
 			LogDMHits("*** There is no incoming damage set (probably only buffs).", action);
@@ -460,6 +467,48 @@ class W3DamageManagerProcessor extends CObject
 		return anyDamageProcessed;
 	}
 	
+	// Triangle spell sword
+	private function ProcessSpellSwordDmg() : bool
+	{
+		var spellSwordSign : ESignType;
+		var associatedSkill : ESkill;
+		var bonusDmgInfo : SRawDamage;
+		var anyDamageProcessed : bool;
+		var witcher : W3PlayerWitcher;
+		var dmgValue : float;
+
+		witcher = GetWitcherPlayer();
+		anyDamageProcessed = false;
+		spellSwordSign = witcher.GetSpellSwordSign();
+		// Triangle TODO let crossbow in on this damage?
+		if(spellSwordSign != ST_None)
+		if(attackAction && attackAction.IsActionMelee() && playerAttacker == witcher && spellSwordSign != ST_None)
+		{
+			associatedSkill = T_PowerSkillForSignType(spellSwordSign);
+
+			if (witcher.CanUseSkill(associatedSkill))
+			{
+				bonusDmgInfo.dmgVal = CalculateAttributeValue(witcher.GetSkillAttributeValue(associatedSkill, 'sword_damage', false, true)) * witcher.GetSkillLevel(associatedSkill);
+				bonusDmgInfo.dmgType = T_DmgTypeForPowerSkill(associatedSkill);
+			}
+
+			if (bonusDmgInfo.dmgVal > 0)
+			{
+				anyDamageProcessed = true;
+				dmgValue = MaxF(0, CalculateDamage(bonusDmgInfo, witcher.GetTotalSignSpellPower(SignEnumToSkillEnum(spellSwordSign))));
+
+				//add to total damage to be dealt
+				if( DamageHitsEssence(  bonusDmgInfo.dmgType ) )		action.processedDmg.essenceDamage  += dmgValue;
+				if( DamageHitsVitality( bonusDmgInfo.dmgType ) )		action.processedDmg.vitalityDamage += dmgValue;
+				if( DamageHitsMorale(   bonusDmgInfo.dmgType ) )		action.processedDmg.moraleDamage   += dmgValue;
+				if( DamageHitsStamina(  bonusDmgInfo.dmgType ) )		action.processedDmg.staminaDamage  += dmgValue;
+
+				// Add damage to action in case stuff processes it later
+				action.AddDamage(bonusDmgInfo.dmgType, dmgValue);
+			}
+		}
+		return anyDamageProcessed;
+	}
 	
 	private function ProcessInstantKill()
 	{

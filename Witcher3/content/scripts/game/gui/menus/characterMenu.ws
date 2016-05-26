@@ -1248,7 +1248,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s07, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s07, 'sword_damage', false, true);
+				ability.valueAdditive *= skillLevel;
+				baseString += "Next sword strike after casting Igni deals " + RoundMath(ability.valueAdditive) + " bonus Fire damage subject to Igni sign intensity <br>";
+				baseString += GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;
 			case S_Magic_s08:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s08, 'max_armor_reduction', false, false)) * skillLevel;
@@ -1286,7 +1292,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, 'sword_damage', false, true);
+				ability.valueAdditive *= skillLevel;
+				baseString += "Next sword strike after casting Aard deals " + RoundMath(ability.valueAdditive) + " bonus Force damage subject to Aard sign intensity <br>";
+				baseString += GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;
 			case S_Magic_s13:
 				argsInt.PushBack(10 + 2*(skillLevel-1));
@@ -1302,13 +1314,25 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s15, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s15, 'sword_damage', false, true);
+				ability.valueAdditive *= skillLevel;
+				baseString += "Next sword strike after Quen's shield breaks deals " + RoundMath(ability.valueAdditive) + " bonus Force damage subject to Quen sign intensity <br>";
+				baseString += GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;
 			case S_Magic_s16:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s16, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s16, 'sword_damage', false, true);
+				ability.valueAdditive *= skillLevel;
+				baseString += "Next sword strike after casting Yrden deals " + RoundMath(ability.valueAdditive) + " bonus Shock damage subject to Yrden sign intensity <br>";
+				baseString += GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;
 			case S_Magic_s17:
 				argsInt.PushBack(10 + 2*(skillLevel-1));
@@ -1319,7 +1343,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s18, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s18, 'sword_damage', false, true);
+				ability.valueAdditive *= skillLevel;
+				baseString += "Next sword strike after casting Axii deals " + RoundMath(ability.valueAdditive) + " bonus Will damage subject to Axii sign intensity <br>";
+				baseString += GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;
 			case S_Magic_s19:
 				argsInt.PushBack(10 + 2*(skillLevel-1));
