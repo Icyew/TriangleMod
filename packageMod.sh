@@ -60,10 +60,12 @@ binPath="$modPath/bin"
 studioPath="$modPath/ScriptStudio"
 
 if test -e "$studioPath/scripts/local/"; then
-	rm -r "$studioPath/scripts/local/"*;
+	rm -r "$studioPath/scripts/local/";
+	mkdir "$studioPath/scripts/local/";
 fi
 if test -e "$studioPath/scripts/source/"; then
-	rm -r "$studioPath/scripts/source/"*;
+	rm -r "$studioPath/scripts/source/";
+	mkdir "$studioPath/scripts/source/";
 fi
 
 currentChanges=$(git status --porcelain)
@@ -73,7 +75,7 @@ prefix="Witcher3"
 mkdir -p "$tmpPath"
 IFS=$'\n'
 for fileWithStatus in $currentChanges $oldChanges; do
-	status=${fileWithStatus::1}
+	status=$(echo "$fileWithStatus" | grep -oP "^.*?\S" | grep -o "\S")
 	file=$(echo "$fileWithStatus" | grep -o "$prefix.*$")
 	if [[ $file =~ ^$prefix ]] && ([[ $status == "M" || $status == "A" ]]); then
 		filePath="$modPath/$file"
