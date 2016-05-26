@@ -148,6 +148,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		theTelemetry.LogWithName( TE_HERO_SPAWNED );
 		
 		runewordInfusionType = ST_None;
+		
+		spellSwordSign = ST_None; // Triangle spell sword
 				
 		
 		inv = GetInventory();			
@@ -1397,10 +1399,61 @@ statemachine class W3PlayerWitcher extends CR4Player
 		_HoldBeforeOpenRadialMenuTime = time;
 	}
 	
+	// Triangle spell sword
+	public function GetSpellSwordSign() : ESignType
+	{
+		return spellSwordSign;
+	}
 	
+	// Triangle spell sword
+	public function SetSpellSwordSign(sign : ESignType)
+	{
+		var duration : SAbilityAttributeValue;
+		var value : float;
+		var items : array<SItemUniqueId>;
+		var weaponEnt : CEntity;
+		var fxName : name;
+		var associatedSkill : ESkill;
 	
+		items = inv.GetHeldWeapons();
+		if (items.Size() > 0)
+			weaponEnt = inv.GetItemEntityUnsafe(items[0]);
 	
+		//clear previous infusion or spellsword fx
+		weaponEnt.StopEffect('runeword_aard');
+		weaponEnt.StopEffect('runeword_axii');
+		weaponEnt.StopEffect('runeword_igni');
+		weaponEnt.StopEffect('runeword_quen');
+		weaponEnt.StopEffect('runeword_yrden');
 	
+		spellSwordSign = sign;
+		associatedSkill = T_PowerSkillForSignType(sign);
+
+		if(weaponEnt && associatedSkill != S_SUndefined && CanUseSkill(associatedSkill))
+		{
+			//show current fx
+			if(sign == ST_Aard)
+				fxName = 'runeword_aard';
+			else if(sign == ST_Axii)
+				fxName = 'runeword_axii';
+			else if(sign == ST_Igni)
+				fxName = 'runeword_igni';
+			else if(sign == ST_Quen)
+				fxName = 'runeword_quen';
+			else if(sign == ST_Yrden)
+				fxName = 'runeword_yrden';
+			else fxName = '';
+				
+			if (StrLen(fxName) > 0)
+				weaponEnt.PlayEffect(fxName);
+		}
+	}
+
+	// Triangle spell sword Currently never used. maybe come back later
+	private timer function SpellSwordSignDecay(delta : float, id : int)
+	{
+		SetSpellSwordSign(ST_None);
+	}
 	
 	
 	public function RepairItem (  rapairKitId : SItemUniqueId, usedOnItem : SItemUniqueId )
@@ -2004,6 +2057,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 					weaponEnt.StopEffect('runeword_yrden');
 				}
 				
+				// Triangle spell sword effect from sign power skills
+				if(!action.WasDodged() && spellSwordSign != ST_None && CanUseSkill(T_PowerSkillForSignType(spellSwordSign)))
+				{
+					// Triangle TODO is it a problem if these effects are played twice, once for the runeword?
+					if(spellSwordSign == ST_Axii)
+					{
+						actorVictim.SoundEvent('sign_axii_release');
+					}
+					else if(spellSwordSign == ST_Igni)
+					{
+						actorVictim.SoundEvent('sign_igni_charge_begin');
+					}
+					else if(spellSwordSign == ST_Quen)
+					{
+						PlayEffectSingle('drain_energy_caretaker_shovel');
+					}
+					else if(spellSwordSign == ST_Yrden)
+					{
+						actorVictim.SoundEvent('sign_yrden_shock_activate');
+					}
+					SetSpellSwordSign(ST_None);
+				}
+				// Triangle end
 				
 				if(ShouldProcessTutorial('TutorialLightAttacks') || ShouldProcessTutorial('TutorialHeavyAttacks'))
 				{
@@ -2261,6 +2337,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		runewordInfusionType = ST_None;
+		
+		SetSpellSwordSign(ST_None); //Triangle spell sword 'discharge' sign power skill bonus damage thing
 		
 		
 	}
@@ -6273,6 +6351,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private saved var runewordInfusionType : ESignType;
 	default runewordInfusionType = ST_None;
 	
+	private saved var spellSwordSign : ESignType; default spellSwordSign = ST_None; // Triangle spell sword
+	
 	public final function GetRunewordInfusionType() : ESignType
 	{
 		return runewordInfusionType;
@@ -6314,6 +6394,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 			weaponEnt.PlayEffect(fxName);
 		}
+
+		// Triangle spell sword
+		if (signType != ST_Quen)
+		{
+			SetSpellSwordSign(signType);
+		}
+		// Triangle end
 	}
 	
 	public saved var savedQuenHealth, savedQuenDuration : float;

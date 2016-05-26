@@ -622,6 +622,10 @@ state ShieldActive in W3QuenEntity extends Active
 				casterActor.PlayEffect( 'lasting_shield_impulse' );
 				parent.Impulse();
 			}
+			// Triangle Spell sword stuff
+			if (casterActor == thePlayer)
+				GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+			// Triangle end
 			
 			damageData.SetEndsQuen(true);
 		}
@@ -967,6 +971,10 @@ state QuenChanneled in W3QuenEntity extends Channeling
 				parent.PlayHitEffect( 'quen_rebound_sphere_impulse', attackerVictimEuler );
 				parent.Impulse();
 			}
+			// Triangle spell sword stuff
+			if (casterActor == thePlayer)
+				GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+			// Triangle end
 			
 			damageData.SetEndsQuen(true);			
 		}
