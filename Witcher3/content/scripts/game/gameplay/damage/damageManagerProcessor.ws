@@ -1122,16 +1122,40 @@ class W3DamageManagerProcessor extends CObject
 		var powerMod, criticalDamageBonus, min, max, critReduction : SAbilityAttributeValue;
 		var mutagen : CBaseGameplayEffect;
 		var totalBonus : float;
+		// Triangle attack combos heavy attack simplify
+		var dm : CDefinitionsManagerAccessor;
+		var attributes : array<name>;
+		var i : int;
+		var witcherPlayer : W3PlayerWitcher;
 			
 		
 		powerMod = action.GetPowerStatValue();
 		if ( powerMod.valueAdditive == 0 && powerMod.valueBase == 0 && powerMod.valueMultiplicative == 0 && theGame.CanLog() )
 			LogDMHits("Attacker has power stat of 0!", action);
 		
-		
-		if(playerAttacker && attackAction && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-			powerMod.valueMultiplicative -= 0.833;
-		
+		// Triangle heavy attack simplify
+		// Triangle power stat bonus from attack definition
+		if (playerAttacker && 
+			attackAction && 
+			(playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) || playerAttacker.IsLightAttack(attackAction.GetAttackName())))
+		{
+			dm = theGame.GetDefinitionsManager();
+			dm.GetAbilityAttributes(attackAction.GetAttackName(), attributes);	  
+			for(i=0; i<attributes.Size(); i+=1)
+			{
+				if(PowerStatNameToEnum(attributes[i]) == CPS_AttackPower)
+				{
+					// Note that there will be inconsistent behavior here if you change this to be an actual random value. wont match random val in attackAction.ws
+					// Subtracts attack power bonus from basic_attacks.xml, so we only use the total damage mod and geralt_skills.xml bonus when calculating heavy attack dmg
+					// If you add a global bonus for light attacks, it'll subtract that, too.
+					// Triangle TODO maybe remove light attack subtraction. The bonus isn't there and may be frustrating for someone trying to add one.
+					dm.GetAbilityAttributeValue(attackAction.GetAttackName(), attributes[i], min, max);
+					powerMod -= GetAttributeRandomizedValue(min, max);
+					break;
+				}
+			}
+		}
+		// Triangle end
 		
 		if ( playerAttacker && (W3IgniProjectile)action.causer )
 			powerMod.valueMultiplicative = 1 + (powerMod.valueMultiplicative - 1) * theGame.params.IGNI_SPELL_POWER_MILT;
@@ -1286,6 +1310,9 @@ class W3DamageManagerProcessor extends CObject
 		var temp : bool;
 		var fistfightDamageMult : float;
 		var burning : W3Effect_Burning;
+		// Triangle heavy attack simplify
+		var TMod : TModOptions;
+		TMod = theGame.GetTModOptions();
 	
 		
 		GetDamageResists(dmgInfo.dmgType, resistPoints, resistPercents);
@@ -1342,9 +1369,10 @@ class W3DamageManagerProcessor extends CObject
 			
 			finalDamage *= ( 1+fistfightDamageMult );
 		}
-		
+		// Triangle heavy attack simplify
 		if(playerAttacker && attackAction && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-			finalDamage *= 1.833;
+			finalDamage *= TMod.GetHeavyAttackDamageMod();
+		// Triangle end
 			
 		
 		burning = (W3Effect_Burning)action.causer;
