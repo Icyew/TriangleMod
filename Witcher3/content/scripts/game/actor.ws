@@ -2351,6 +2351,7 @@ import abstract class CActor extends CGameplayEntity
 		var attackAction : W3Action_Attack;
 		var wasAlive : bool;
 		var hudModuleDamageType : EFloatingValueType;
+		var witcherPlayer : W3PlayerWitcher; // Triangle attack combos
 		
 		playerAttacker = (CPlayer)action.attacker;
 		wasAlive = IsAlive();
@@ -2411,6 +2412,26 @@ import abstract class CActor extends CGameplayEntity
 				hudModuleDamageType = EFVT_None;
 			}			
 		
+			// Triangle attack combos
+			witcherPlayer = (W3PlayerWitcher)action.attacker;
+			if(witcherPlayer)
+			{
+				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))
+				{
+					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetLightAttackCounter(), false);
+				}
+				else if(attackAction && witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s04))
+				{
+					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetHeavyAttackCounter(), false);
+				}
+				// Triangle TODO move somwhere else
+				/*else if(action.GetSignSkill() != S_SUndefined && action.GetSignSkill() != S_Magic_3)
+				{
+					ShowFloatingValue(EFVT_SignCombo, witcherPlayer.GetLightAttackCounter(), false);
+					makeRoom = true;
+				}*/
+			}
+			// Triangle end
 			ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) );
 		}
 		
@@ -6550,7 +6571,12 @@ import abstract class CActor extends CGameplayEntity
 				module = (CR4HudModuleEnemyFocus)hud.GetHudModule("EnemyFocusModule");
 				if(module)
 				{
+					// Triangle attack combos
+					if(type == EFVT_LightCombo || type == EFVT_HeavyCombo || type == EFVT_SignCombo)
+						module.ShowComboType(type, value);
+					else
 					module.ShowDamageType(type, value, stringParam);
+					// Triangle end
 				}
 			}
 		}

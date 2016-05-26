@@ -7821,6 +7821,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var critChance : float;
 		var oilChanceAttribute : name;
+		var witcherPlayer : W3PlayerWitcher; // Triangle attack combos
 		
 		critChance = 0;
 		
@@ -7843,6 +7844,14 @@ statemachine abstract import class CR4Player extends CPlayer
 			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
 		else if (!isHeavyAttack && CanUseSkill(S_Sword_s17))
 			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
+			
+		// Triangle attack combos light attack combo
+		witcherPlayer = (W3PlayerWitcher)this;
+		if(witcherPlayer && !isHeavyAttack && CanUseSkill(S_Sword_s21))
+		{
+			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * witcherPlayer.GetLightAttackCounter();	
+		}
+		// Triangle end
 			
 		if(target && target.HasBuff(EET_Confusion))
 		{

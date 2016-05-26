@@ -156,10 +156,12 @@
         <instant_kill_chance type="add" min="0.01" />
       </ability>
 	  
-      <!-- Crushing Blows -->
+      <!-- Strength Training -->
       <ability name="sword_s4">
         <tags>sword_s4,attack_heavy</tags>
 		<attack_power type="mult" min="0.05" />
+        <critical_hit_damage_bonus type="add" min="0.06" /> <!-- Triangle attack combos -->
+        <max_combo type="add" min="1" /> <!-- Triangle attack combos -->
       </ability>
 	  
       <!-- Crippling Strikes -->
@@ -181,7 +183,7 @@
         <critical_hit_chance type="add" min="0.05" />
       </ability>
 	  
-	  <!-- Critical hits -->
+      <!-- Critical hits strong -->
 	  <ability name="sword_s8"> 
         <tags>sword_s8</tags>
 		<critical_hit_chance type="add" min="0.02" />
@@ -259,10 +261,12 @@
         <focus_gain type="add" min="0.05" />
       </ability>
 	 
-      <!-- Fiery Dancer -->
+      <!-- Muscle Memory -->
       <ability name="sword_s21">
         <tags>sword_s21,attack_light</tags>
 		<attack_power type="mult" min="0.05" />
+        <critical_hit_chance type="add" min="0.05" /> <!-- Triangle attack combos -->
+        <max_combo type="add" min="1" /> <!-- Triangle attack combos -->
       </ability>
 	  
       <!--#################################### Signs Path #####################################-->

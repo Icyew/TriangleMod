@@ -17,7 +17,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	private 			var levelupAbilities	: array< name >;
-	private 			var fastAttackCounter, heavyAttackCounter	: int;		
+	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;	  // Triangle attack combos
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
 	private saved 		var cannotUseUndyingSkill : bool;						
@@ -2667,6 +2667,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		var ret : bool;
 		var skill : ESkill;
+		// Triangle attack combos
+		var attackTypeName : name;
+		var TMod : TModOptions;
+		var maxLightCombo, maxHeavyCombo : float;
 	
 		ret = super.PrepareAttackAction(hitTarget, animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity, attackAction);
 		
@@ -2676,23 +2680,35 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(attackAction.IsActionMelee())
 		{			
-			skill = SkillNameToEnum( attackAction.GetAttackTypeName() );
-			if( skill != S_SUndefined && CanUseSkill(skill))
+			// Triangle attack combos
+			attackTypeName = attackAction.GetAttackTypeName();
+			if(attackTypeName)
 			{
-				if(IsLightAttack(animData.attackName))
+				maxLightCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s21));
+				maxHeavyCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s04));
+				TMod = theGame.GetTModOptions();
+				if(!IsHeavyAttack(attackTypeName))
+				{
+					if (fastAttackCounter < maxLightCombo && CanUseSkill(S_Sword_s21))
 					fastAttackCounter += 1;
-				else
-					fastAttackCounter = 0;
+					AddTimer('FastAttackCounterDecay', TMod.GetLightAttackComboDecay());
+				}
 				
-				if(IsHeavyAttack(animData.attackName))
+				if(IsHeavyAttack(attackTypeName))
+				{
+					if (heavyAttackCounter < maxHeavyCombo && CanUseSkill(S_Sword_s04))
 					heavyAttackCounter += 1;
-				else
-					heavyAttackCounter = 0;				
+					AddTimer('HeavyAttackCounterDecay', TMod.GetHeavyAttackComboDecay());
+				}
+
+				// Triangle TODO move somewhere else
+				/*if(attackAction.GetSignSkill() != S_SUndefined && attackAction.GetSignSkill() != S_Magic_3)
+					signAttackCounter += 1;*/
 			}		
+			// Triangle end
 		}
 		
-		AddTimer('FastAttackCounterDecay',5.0);
-		AddTimer('HeavyAttackCounterDecay',5.0);
+		// AddTimer('SignAttackCounterDecay',5.0); // Triangle TODO // Triangle attack combos
 		
 		return true;
 	}
@@ -2716,6 +2732,24 @@ statemachine class W3PlayerWitcher extends CR4Player
 		heavyAttackCounter = 0;
 	}
 		
+	
+	// Triangle attack combos
+	private timer function SignAttackCounterDecay(delta : float, id : int)
+	{
+		signAttackCounter = 0;
+	}
+
+	// Triangle attack combos
+	public function GetLightAttackCounter() : int
+	{
+		return fastAttackCounter;
+	}
+
+	// Triangle attack combos
+	public function GetHeavyAttackCounter() : int
+	{
+		return heavyAttackCounter;
+	}
 	
 	public function GetCraftingSchematicsNames() : array<name>		{return craftingSchematics;}
 	
