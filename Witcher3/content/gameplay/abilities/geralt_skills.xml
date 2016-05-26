@@ -112,7 +112,12 @@
       <ability name="sword_2">
         <tags>sword_2,attack_heavy</tags>
 		<armor_reduction type = "add" min="1000" max="1000"/>
-        <attack_power type="mult" min="0.333" />
+        <!-- Triangle I now use a menu option to control heavy dmg bonus.
+             Option uses a total dmg modifier instead of attack power bonus.
+             Vanilla hardcodes total dmg mod to .833, and subtracts .833 from attack power bonus,
+             so this attack_power bonus usually gets clobbered anyways, unless it is > .833 when
+             combined with the standard .15 heavy attack dmg bonus for all creatures -->
+        <!-- <attack_power type="mult" min="0.333" /> -->
       </ability>
 	  
 	  <!-- Battle Trance -->

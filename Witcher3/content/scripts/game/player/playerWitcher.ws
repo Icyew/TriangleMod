@@ -5821,6 +5821,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var value : SAbilityAttributeValue;
 		var mutagen : CBaseGameplayEffect;
 		var thunder : W3Potion_Thunderbolt;
+		// Triangle heavy attack simplify
+		var TMod : TModOptions;
+		TMod = theGame.GetTModOptions();
 		
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
@@ -5837,6 +5840,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 			strongAP += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
 		if (CanUseSkill(S_Perk_07))
 			strongAP +=	GetAttributeValue('attack_power_heavy_style');
+		// Triangle heavy attack simplify. I changed this to 0 in xml, but maybe you'll change it back
+		if(CanUseSkill(S_Sword_2))
+			strongAP += GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
+		// Triangle end
 			
 		if (CanUseSkill(S_Sword_s17)) 
 		{
@@ -5949,9 +5956,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if ( steelDmg != 0 )
 		{
 			playerOffenseStats.steelStrongDmg = (steelDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongDmg *= 1.833f;
+			playerOffenseStats.steelStrongDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.steelStrongCritDmg = (steelDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.steelStrongCritDmg) + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongCritDmg *= 1.833f;		}
+			playerOffenseStats.steelStrongCritDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;		
+		}
 		else
 		{
 			playerOffenseStats.steelStrongDmg = 0;
@@ -5983,9 +5991,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if ( silverDmg != 0 )
 		{
 			playerOffenseStats.silverStrongDmg = (silverDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongDmg *= 1.833f;
+			playerOffenseStats.silverStrongDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.silverStrongCritDmg = (silverDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.silverStrongCritDmg) + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongCritDmg *= 1.833f;
+			playerOffenseStats.silverStrongCritDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 		}
 		else
 		{
