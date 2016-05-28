@@ -38,3 +38,8 @@ function T_AddMessage(message : string)
 {
     theGame.witcherLog.AddMessage(message);
 }
+
+function T_LogMessage(message : string)
+{
+    LogChannel('TMod', message);
+}
