@@ -59,6 +59,11 @@
         <magic_5 is_ability="true" />
 		<!-- Level 3 Alchemy -->
 		<perk_8 is_ability="true" /> 
+        <!-- Triangle default skills -->
+        <!-- armor styles -->
+        <perk_5 is_ability="true" />
+        <perk_6 is_ability="true" />
+        <perk_7 is_ability="true" />
       </ability>
       <!-- skills not known at the beggining of the game - added only for testing purposes -->
       <ability name="GeraltSkills_Testing">
