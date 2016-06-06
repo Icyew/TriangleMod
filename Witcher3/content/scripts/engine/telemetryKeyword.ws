@@ -1,10 +1,6 @@
-﻿/************************************************\
-	File - telemetryKeyword.ws.
-	THE WITCHER® is a trademark of CD PROJEKT RED.	
-	2016, All Rights Reserved.
-\************************************************/
-
-
+﻿// Class pointed to by "theTelemetry"
+// Do not instanciate directly
+// Triangle this file needs to be overwritten for some reason. No other changes
 import class CR4TelemetryScriptProxy extends CObject
 {
 	import final function LogWithName( eventType : ER4TelemetryEvents );
