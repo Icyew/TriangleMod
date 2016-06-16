@@ -23,6 +23,10 @@ struct SPetardParams
 	editable var fxClusterWater : array<name>;
 	editable var fxWater : array<name>;
 	editable var componentsToSnap : array<name>;
+	editable var decalComponentNames : array< name >;
+	editable var decalComponentVisibleTimes : array< float >;
+	editable var decalComponentUseRandom : bool;
+	editable var decalComponentScaleModifier : float;
 	
 		default playHitAnimMode = EAHA_ForceYes;
 	
@@ -38,4 +42,14 @@ struct SPetardParams
 		hint componentsToSnap = "Components to be snapped to terrain";
 		hint range = "Effect's mechanics' radius (sphere - if no height) or range (if cylinder)";
 		hint fxPlayedOnHit = "FX played on target when target hit";
+		hint decalComponentName = "Name of decal components to spawn";
+		hint decalComponentVisibleTimes = "How long the decals will remain visible";
+		hint decalComponentUseRandom = "Show single random decal from decalComponentNames list";
+		hint decalComponentScaleModifier = "Random scale modifier in modifier's range";
+};
+
+struct SPetardShownDecals
+{
+	var componentName : name;
+	var remainingShowTime : float;
 };

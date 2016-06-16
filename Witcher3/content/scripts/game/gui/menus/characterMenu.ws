@@ -12,6 +12,7 @@ class W3BuySkillConfirmation extends ConfirmationPopupData
 	public var characterMenuRef : CR4CharacterMenu;
 	public var targetSkill      : ESkill;
 	
+	
 	protected function OnUserAccept() : void
 	{
 		characterMenuRef.handleBuySkillConfirmation(targetSkill);
@@ -24,7 +25,6 @@ class W3BuySkillConfirmation extends ConfirmationPopupData
 	}
 }
 
-
 enum CharacterMenuTabIndexes
 {
 	CharacterMenuTab_Sword = 0,
@@ -35,19 +35,54 @@ enum CharacterMenuTabIndexes
 };
 
 
+enum EMutationResourceType
+{
+	MRT_SkillPoints,
+	MRT_GreenMutation,
+	MRT_RedMutation,
+	MRT_BlueMutation
+};
+
+enum EBonusSkillSlot
+{
+	BSS_SkillSlot1 = 13,
+	BSS_SkillSlot2 = 14,
+	BSS_SkillSlot3 = 15,
+	BSS_SkillSlot4 = 16
+};	
+
 class CR4CharacterMenu extends CR4MenuBase
 {
-	protected var initDataBuySkill		: W3BuySkillConfirmation;
+	protected var initDataBuySkill		  : W3BuySkillConfirmation;
+	
 	private var _playerInv    	   		: W3GuiPlayerInventoryComponent;
 	protected var _inv                  : CInventoryComponent;
 	private var _charStatsPopupData 	: CharacterStatsPopupData;
 	private var _sentStats 				: array<SentStatsData>;
 	protected var currentlySelectedTab	: int;
-	private	var m_fxPaperdollChanged	: CScriptedFlashFunction;
-	private var m_fxClearSkillSlot 		: CScriptedFlashFunction;
-	private var m_fxNotifySkillUpgraded	: CScriptedFlashFunction;
-	private var m_fxActivateRunwordBuf	: CScriptedFlashFunction;
+	
 	private var m_previousSkillBonuses  : array<string>;
+	
+	private	var m_fxPaperdollChanged	 : CScriptedFlashFunction;
+	private var m_fxClearSkillSlot 	 	 : CScriptedFlashFunction;
+	private var m_fxNotifySkillUpgraded	 : CScriptedFlashFunction;
+	private var m_fxActivateRunwordBuf	 : CScriptedFlashFunction;
+	private var m_fxSetMutationBonusMode : CScriptedFlashFunction;
+	private var m_fxConfirmMutResearch	 : CScriptedFlashFunction;
+	private var m_fxResetInput	 		 : CScriptedFlashFunction;
+	
+	private var resRedMutagenList		: array<SItemUniqueId>;
+	private var resBlueMutagenList		: array<SItemUniqueId>;
+	private var resGreenMutagenList		: array<SItemUniqueId>;
+	
+	private var m_mutationBonusMode		 : bool;
+	default m_mutationBonusMode = false;
+	
+	private var MAX_BONUS_SOCKETS : int;
+	default MAX_BONUS_SOCKETS = 4;
+	
+	private var MAX_MASTER_MUTATION_STAGE : int;
+	default MAX_MASTER_MUTATION_STAGE = 4;
 	
 	event  OnConfigUI()
 	{	
@@ -64,6 +99,9 @@ class CR4CharacterMenu extends CR4MenuBase
 		m_fxClearSkillSlot = m_flashModule.GetMemberFlashFunction( "clearSkillSlot" );
 		m_fxNotifySkillUpgraded = m_flashModule.GetMemberFlashFunction( "notifySkillUpgraded" );
 		m_fxActivateRunwordBuf = m_flashModule.GetMemberFlashFunction( "activateRunwordBuf" );
+		m_fxSetMutationBonusMode = m_flashModule.GetMemberFlashFunction( "setMutationBonusMode" );
+		m_fxConfirmMutResearch = m_flashModule.GetMemberFlashFunction( "confirmMutationResearch" );
+		m_fxResetInput = m_flashModule.GetMemberFlashFunction( "resetInput" );
 		
 		SendCombatState();
 		
@@ -75,7 +113,33 @@ class CR4CharacterMenu extends CR4MenuBase
 		_playerInv.SetFilterType(IFT_Ingredients);
 		_playerInv.filterTagList = filterTagsList;
 		
+		if( GetWitcherPlayer().IsMutationSystemEnabled() )
+		{
+			setMutationBonusMode( true );
+		}
+		else
+		{
+			m_fxSetMutationBonusMode.InvokeSelfOneArg( FlashArgBool( false ) );
+		}
+		
+		
+		UpdateMasterMutation();
 		UpdateData(true);
+		
+		m_fxSetTooltipState.InvokeSelfTwoArgs( FlashArgBool( thePlayer.upscaledTooltipState ), FlashArgBool( true ) );
+	}
+
+	private function BlockClosing( locked : bool )
+	{	
+		var guiManager : CR4GuiManager;
+		var rootMenu : CR4CommonMenu;
+			
+		rootMenu = (CR4CommonMenu)theGame.GetGuiManager().GetRootMenu();
+		
+		if (rootMenu)
+		{
+			rootMenu.SetLockedInMenu(locked);
+		}
 	}
 
 	event  OnClosingMenu()
@@ -96,6 +160,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			_charStatsPopupData.ClosePopupOverlay();
 			delete _charStatsPopupData;
 		}
+		BlockClosing( false );
 	}
 
 	event  OnCloseMenu()
@@ -103,6 +168,11 @@ class CR4CharacterMenu extends CR4MenuBase
 		if ( _playerInv )
 		{
 			delete _playerInv;
+		}
+		
+		if ( initDataBuySkill )
+		{
+			delete initDataBuySkill;
 		}
 		
 		CloseMenu();
@@ -132,18 +202,604 @@ class CR4CharacterMenu extends CR4MenuBase
 		}
 	}
 	
-	private function PopulateTabData(tabIndex:int) : void
+	event  OnOpenMutationPanel():void
+	{
+		OnPlaySoundEvent( "gui_tutorial_big_appear" );
+		theGame.GetTutorialSystem().uiHandler.OnClosingMenu( 'CharacterMenu' );
+		theGame.GetTutorialSystem().uiHandler.OnOpeningMenu( 'MutationMenu' );
+		UpdateAllMutationsData();
+		BlockClosing( true );
+	}
+	
+	event  OnCloseMutationPanel():void
+	{
+		OnPlaySoundEvent( "gui_character_remove_mutagen" );
+		theGame.GetTutorialSystem().uiHandler.OnClosingMenu( 'MutationMenu' );
+		theGame.GetTutorialSystem().uiHandler.OnOpeningMenu( 'CharacterMenu' );
+		
+		
+		UpdateData( true ); 
+		BlockClosing( false );
+	}
+	
+	event  OnMutationSelected( mutationId : EPlayerMutationType ):void
+	{
+		var canResearch : W3TutorialManagerUIHandlerStateMutationsCanResearch;
+		
+		canResearch = ( W3TutorialManagerUIHandlerStateMutationsCanResearch ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+		if( canResearch )
+		{
+			m_fxResetInput.InvokeSelf();
+			canResearch.OnMutationSelected( mutationId );
+		}
+	}
+	
+	event  OnResearchOpened( mutationId : EPlayerMutationType ):void
+	{
+		var canResearch : W3TutorialManagerUIHandlerStateMutationsCanResearch;
+		
+		canResearch = ( W3TutorialManagerUIHandlerStateMutationsCanResearch ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+		if( canResearch )
+		{
+			canResearch.OnResearch();
+		}
+		OnPlaySoundEvent( "gui_global_panel_open" );
+	}
+	
+	event  OnResearchClosed():void
+	{
+		OnPlaySoundEvent( "gui_global_panel_close" );
+	}
+	
+	private function ResearchMutagen( mutationId : int, count : int, itemsList : array< SItemUniqueId > )
+	{
+		var i : int;
+		
+		for( i = 0; i < count; i+=1 )
+		{
+			GetWitcherPlayer().MutationResearchWithItem( mutationId, itemsList.PopBack() );
+		}
+	}
+	
+	private function UpdateMasterMutation():void
+	{
+		var currentlyEquipped : EPlayerMutationType;
+		
+		if( GetWitcherPlayer().IsMutationSystemEnabled() )
+		{
+			currentlyEquipped = GetWitcherPlayer().GetEquippedMutationType();
+			
+			if( currentlyEquipped != EPMT_None )
+			{
+				UpdateTargetMutationData( currentlyEquipped );
+			}
+		}
+	}
+	
+	event  OnCantResearchMutation()
+	{
+		
+	}
+	
+	event  OnResearchMutation( mutationId : int, points : int, red : int, green : int, blue : int ) 
+	{
+		var isChanged:bool = false;
+		var i : int;
+		var	idToRemove: SItemUniqueId;
+		if( thePlayer.IsInCombat() )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_combat" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
+		if( points > 0 )
+		{
+			GetWitcherPlayer().MutationResearchWithSkillPoints( mutationId, points );
+			UpdateSkillPoints();
+			isChanged = true;
+		}
+		
+		if( red > 0 )
+		{
+			ResearchMutagen( mutationId, red, resRedMutagenList );
+			isChanged = true;
+		}
+		
+		if( green > 0 )
+		{
+			ResearchMutagen( mutationId, green, resGreenMutagenList );
+			isChanged = true;
+		}
+		
+		if( blue > 0 )
+		{
+			ResearchMutagen( mutationId, blue, resBlueMutagenList );
+			isChanged = true;
+		}
+		
+		if( isChanged )
+		{
+			OnUpdateAfterResearch( mutationId );
+		}
+	}
+	
+	event OnUpdateAfterResearch( mutationId : int ) 
+	{
+		var researchedMutation	   : int;
+		var requaredForNextLevel   : int;
+		var masterStage			   : int;
+		var abilityManager         : W3PlayerAbilityManager;
+		
+		if(GetWitcherPlayer().IsMutationResearched( mutationId ) )
+		{
+			UpdateAllMutationsData();
+			
+			
+			masterStage = GetWitcherPlayer().GetMasterMutationStage();
+			if (masterStage > 0)
+			{
+				abilityManager = ( ( W3PlayerAbilityManager ) GetWitcherPlayer().abilityManager );
+				
+				requaredForNextLevel = abilityManager.GetMutationsRequiredForMasterStage(masterStage);
+				researchedMutation = abilityManager.GetResearchedMutationsCount();
+				
+				if (requaredForNextLevel == researchedMutation )
+				{
+					
+					OnPlaySoundEvent( "gui_enchanting_runeword_add" );		
+				}
+			}
+			
+			OnPlaySoundEvent( "gui_character_place_mutagen" );
+		}
+		else
+		{
+			UpdateTargetMutationData( mutationId );
+		}
+	}
+	
+	event  OnEquipMutation( mutationId : int )
+	{
+		var currentlyEquipped : EPlayerMutationType;
+		
+		currentlyEquipped = GetWitcherPlayer().GetEquippedMutationType();
+		
+		if( currentlyEquipped != mutationId )
+		{
+			if( thePlayer.IsInCombat() )
+			{
+				showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_combat" ) );
+				OnPlaySoundEvent( "gui_global_denied" );
+			}
+			else
+			{
+				GetWitcherPlayer().SetEquippedMutation( mutationId );
+				setMutationBonusMode( true );
+				UpdateAllMutationsData();
+				
+				OnPlaySoundEvent( "gui_character_synergy_effect" );
+			}
+		}
+	}
+	
+	event  OnUnequipMutation()
+	{
+		var currentlyEquipped : EPlayerMutationType;
+		
+		currentlyEquipped = GetWitcherPlayer().GetEquippedMutationType();
+		
+		if( currentlyEquipped != EPMT_None )
+		{
+			if( thePlayer.IsInCombat() )
+			{
+				showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_combat" ) );
+				OnPlaySoundEvent( "gui_global_denied" );
+			}
+			else
+			{
+				setMutationBonusMode( false );
+				GetWitcherPlayer().SetEquippedMutation( EPMT_None );
+				UpdateAllMutationsData();
+				
+				OnPlaySoundEvent( "gui_character_synergy_effect_lose" );
+			}
+		}
+	}
+	
+	private function setMutationBonusMode( value : bool ):void
+	{
+		if( m_mutationBonusMode != value )
+		{
+			m_mutationBonusMode = value;
+			m_fxSetMutationBonusMode.InvokeSelfOneArg( FlashArgBool( value ) );
+			
+			if( m_mutationBonusMode )
+			{
+				
+			}
+			else
+			{
+				thePlayer.UnequipSkill( BSS_SkillSlot1 );
+				thePlayer.UnequipSkill( BSS_SkillSlot2 );
+				thePlayer.UnequipSkill( BSS_SkillSlot3 );
+				thePlayer.UnequipSkill( BSS_SkillSlot4 );
+				
+				UpdatePlayerStatisticsData();
+				UpdateGroupsData();
+			}
+		}
+	}
+	
+	private function UpdateTargetMutationData( mutationId : EPlayerMutationType ):void
+	{
+		var mutationData      : CScriptedFlashObject;
+		
+		mutationData = CreateMutationFlashDataObj( mutationId );
+		m_flashValueStorage.SetFlashObject( "character.mutation", mutationData );
+	}
+	
+	private function UpdateAllMutationsData():void
+	{
+		var mutationsList      : CScriptedFlashArray;
+		var mutationData       : CScriptedFlashObject;
+		var count              : int;
+		var curMutationId      : int;
+		
+		resRedMutagenList = thePlayer.inv.GetItemsByName( 'Greater mutagen red' );		
+		resRedMutagenList = filterMutagens( resRedMutagenList );
+		
+		resBlueMutagenList = filterMutagens(thePlayer.inv.GetItemsByName( 'Greater mutagen blue' ));
+		resGreenMutagenList = filterMutagens(thePlayer.inv.GetItemsByName( 'Greater mutagen green' ));
+		
+		mutationsList = m_flashValueStorage.CreateTempFlashArray();
+		
+		if( GetWitcherPlayer().IsMutationSystemEnabled() )
+		{
+			count = EnumGetMax( 'EPlayerMutationType' );
+			
+			for( curMutationId = EPMT_Mutation1; curMutationId <= count; curMutationId += 1 )
+			{
+				mutationData = CreateMutationFlashDataObj( curMutationId );
+				mutationsList.PushBackFlashObject( mutationData );
+			}
+		}
+		
+		m_flashValueStorage.SetFlashArray( "character.mutations.list", mutationsList );
+	}
+	
+	private function filterMutagens( list : array<SItemUniqueId> ):array<SItemUniqueId>
+	{
+		var isEquipped: bool;
+		var tempArray: array<SItemUniqueId>;
+		var itemsCount, i : int;
+		
+		itemsCount = list.Size();
+		
+		for( i = 0; i < itemsCount; i += 1 )
+		{
+			if( !GetWitcherPlayer().IsItemEquipped( list[i] ) )
+			{
+				tempArray.PushBack( list[i] );
+			}
+		}
+		
+		return tempArray;
+	}
+	
+	private function CreateMutationFlashDataObj( curMutationId : EPlayerMutationType ) : CScriptedFlashObject
+	{
+		var mutationData : CScriptedFlashObject;
+		
+		var mutationResourceList    : CScriptedFlashArray;
+		var mutationResourceData    : CScriptedFlashObject;
+		var mutationRequirementList : CScriptedFlashArray;
+		var mutationRequirementData : CScriptedFlashObject;
+		var mutationColorList 		: CScriptedFlashArray;
+		var mutationColorData       : CScriptedFlashObject;
+		
+		var strIntParams		 : array< int >;
+		var colorName			 : string;
+		var colorsList    		 : array< ESkillColor >;
+		var curRequiredMutations : array< EPlayerMutationType >;
+		var curReqMutationType   : EPlayerMutationType;
+		var curReqMutation       : SMutation;
+		var curMutation    		 : SMutation;
+		var curProgress     	 : SMutationProgress;
+		var curPlayer      		 : W3PlayerWitcher;
+		
+		var colorsCount			 : int;
+		var unlockedSockets      : int;
+		var masterStage			 : int;
+		var masterStageLabel 	 : string;
+		var masterStageNumbLabel : string;
+		var masterStageDesc      : string;
+		var nextLevelDescription : string;
+		
+		var avaliableSkillPoints   : int;
+		var overalProgress         : int;
+		var i, requirementsCount   : int;
+		var progressStrInfo        : string;
+		var isResearchEnabled	   : bool;
+		var abilityManager         : W3PlayerAbilityManager;
+		var requaredResourcesCount : int;
+		var usedResourcesCount     : int;
+		var researchedMutation	   : int;
+		var requaredForNextLevel   : int;
+		
+		var avaliableRed		   : int;
+		var avaliableGreen		   : int;
+		var avaliableBlue		   : int;
+		var canResearch			   : bool;
+		
+		var equippedMutationId : EPlayerMutationType;
+		
+		curPlayer = GetWitcherPlayer();
+		abilityManager = ( ( W3PlayerAbilityManager ) curPlayer.abilityManager );
+		
+		equippedMutationId = curPlayer.GetEquippedMutationType();
+		
+		curMutation = curPlayer.GetMutation( curMutationId );
+		curProgress = curMutation.progress;
+		overalProgress = curPlayer.GetMutationResearchProgress( curMutationId );
+		mutationData = m_flashValueStorage.CreateTempFlashObject();
+		progressStrInfo = overalProgress + " % " + GetLocStringByKeyExt( "mutation_tooltip_research_progress" );
+		
+		mutationData.SetMemberFlashString( "name", GetLocStringByKeyExt( curMutation.localizationNameKey ) );
+		mutationData.SetMemberFlashString( "description", curPlayer.GetMutationLocalizedDescription( curMutationId) );
+		mutationData.SetMemberFlashString( "iconPath", curMutation.iconPath );
+		
+		usedResourcesCount = curMutation.progress.blueUsed + curMutation.progress.greenUsed + curMutation.progress.redUsed + curMutation.progress.skillpointsUsed;
+		requaredResourcesCount = curMutation.progress.blueRequired + curMutation.progress.redRequired + curMutation.progress.greenRequired + curMutation.progress.skillpointsRequired;
+		
+		mutationData.SetMemberFlashInt( "requaredResourcesCount", requaredResourcesCount );
+		mutationData.SetMemberFlashInt( "usedResourcesCount", usedResourcesCount );
+		mutationData.SetMemberFlashString( "progressInfo",  progressStrInfo );
+		
+		mutationData.SetMemberFlashInt( "mutationId", curMutationId );
+		mutationData.SetMemberFlashInt( "overallProgress", overalProgress ); 
+		mutationData.SetMemberFlashBool( "researchCompleted", overalProgress >= 100 );
+		
+		if (equippedMutationId == curMutationId)
+		{
+			mutationData.SetMemberFlashBool( "isEquipped", true );
+		}
+		
+		if( curMutationId == EPMT_MutationMaster )
+		{
+			masterStage = curPlayer.GetMasterMutationStage();
+			
+			if( masterStage < MAX_MASTER_MUTATION_STAGE )
+			{
+				masterStageDesc = GetLocStringByKeyExt( "mutation_master_mutation_description" ) + "<br/>";
+			}
+			else
+			{
+				masterStageDesc = "";
+			}
+			
+			requaredForNextLevel = abilityManager.GetMutationsRequiredForMasterStage(masterStage + 1);
+			researchedMutation = abilityManager.GetResearchedMutationsCount();
+			
+			if (masterStage == 0)
+			{
+				strIntParams.Clear();
+				strIntParams.PushBack( requaredForNextLevel );
+				mutationData.SetMemberFlashString( "lockedDescription",  GetLocStringByKeyExtWithParams( "mutation_master_mutation_requires_unlock", strIntParams ) );
+			}
+			else
+			{
+				strIntParams.Clear();
+				strIntParams.PushBack( masterStage  );
+				masterStageDesc = masterStageDesc + GetLocStringByKeyExtWithParams( "mutation_master_mutation_tooltip_unlocks", strIntParams );
+					
+				if (masterStage < MAX_MASTER_MUTATION_STAGE)
+				{
+					
+					strIntParams.Clear();
+					strIntParams.PushBack( requaredForNextLevel );
+					nextLevelDescription = GetLocStringByKeyExtWithParams( "mutation_master_mutation_requires", strIntParams );
+					masterStageDesc = masterStageDesc + "<br/>"+  nextLevelDescription;
+				}
+			}
+			
+			switch( masterStage )
+			{
+				case 1:
+					masterStageLabel = GetLocStringByKeyExt( "mutation_master_mutation_stage_1" );
+					masterStageNumbLabel = "I";
+					break;
+				case 2:
+					masterStageLabel = GetLocStringByKeyExt( "mutation_master_mutation_stage_2" );
+					masterStageNumbLabel = "II";
+					break;
+				case 3:
+					masterStageLabel = GetLocStringByKeyExt( "mutation_master_mutation_stage_3" );
+					masterStageNumbLabel = "III";
+					break;
+				case 4:
+					masterStageLabel = GetLocStringByKeyExt( "mutation_master_mutation_stage_4" );
+					masterStageNumbLabel = "IV";
+					break;
+				default:
+					masterStageLabel = "";
+					masterStageNumbLabel = "";
+			}
+			
+			mutationData.SetMemberFlashInt( "stage",  masterStage );
+			mutationData.SetMemberFlashBool( "isMasterMutation", true );
+			mutationData.SetMemberFlashString( "stageLabel",  masterStageLabel );
+			mutationData.SetMemberFlashString( "stageNumbLabel",  masterStageNumbLabel );
+			mutationData.SetMemberFlashString( "name", GetLocStringByKeyExt("skill_name_mutation_master") );
+			mutationData.SetMemberFlashString( "description", masterStageDesc);
+		}
+		else
+		{
+			
+			
+			isResearchEnabled = true;
+			curRequiredMutations = curMutation.requiredMutations;
+			requirementsCount = curRequiredMutations.Size();
+			mutationRequirementList = m_flashValueStorage.CreateTempFlashArray();
+			
+			for( i = 0; i < requirementsCount; i += 1 )
+			{
+				curReqMutationType = curRequiredMutations[i];
+				
+				if( !curPlayer.IsMutationResearched( curReqMutationType ) )
+				{
+					isResearchEnabled = false;
+				}
+				
+				curReqMutation = curPlayer.GetMutation( curReqMutationType );
+				mutationRequirementData = m_flashValueStorage.CreateTempFlashObject();
+				mutationRequirementData.SetMemberFlashString( "name", GetLocStringByKeyExt( curReqMutation.localizationNameKey ) );
+				mutationRequirementData.SetMemberFlashInt( "type", curReqMutationType );
+				mutationRequirementList.PushBackFlashObject( mutationRequirementData );
+			}
+			
+			mutationData.SetMemberFlashArray( "requiredMutations", mutationRequirementList );
+			mutationData.SetMemberFlashBool( "enabled", isResearchEnabled );
+			
+			
+			
+			mutationColorList = m_flashValueStorage.CreateTempFlashArray();
+			colorsList = curMutation.colors;
+			colorsCount = colorsList.Size();
+			
+			for( i=0; i < colorsCount; i+=1 )
+			{
+				mutationColorData = m_flashValueStorage.CreateTempFlashObject();
+				mutationColorData.SetMemberFlashString( "color",  colorsList[i] );
+				
+				switch ( colorsList[i] )
+				{
+					case SC_Red:
+						colorName = GetLocStringByKeyExt("panel_character_skill_sword");
+						break;
+					case SC_Blue:
+						colorName = GetLocStringByKeyExt("panel_character_skill_signs");
+						break;						
+					case SC_Green:
+						colorName = GetLocStringByKeyExt("panel_character_skill_alchemy");
+						break;
+				}
+				
+				mutationColorData.SetMemberFlashString( "colorLocName", colorName );
+				mutationColorList.PushBackFlashObject( mutationColorData );
+			}
+			
+			mutationData.SetMemberFlashArray( "colorsList", mutationColorList );
+			
+			
+			
+			mutationResourceList = m_flashValueStorage.CreateTempFlashArray();
+			
+			
+			avaliableSkillPoints = GetCurrentSkillPoints();
+			mutationResourceData = m_flashValueStorage.CreateTempFlashObject();
+			mutationResourceData.SetMemberFlashString( "title", GetLocStringByKeyExt("mutation_research_knowledge") );
+			mutationResourceData.SetMemberFlashInt( "type", MRT_SkillPoints );
+			mutationResourceData.SetMemberFlashInt( "used", curProgress.skillpointsUsed );
+			mutationResourceData.SetMemberFlashInt( "required", curProgress.skillpointsRequired );
+			mutationResourceData.SetMemberFlashInt( "avaliableResources", avaliableSkillPoints );
+			mutationResourceData.SetMemberFlashUInt( "resourceColor", 0 );
+			mutationResourceData.SetMemberFlashString( "resourceName", GetLocStringByKeyExt( "mutation_ability_point" ) );
+			mutationResourceData.SetMemberFlashString( "resourceIconPath", "img://icons/skills/ico_skill_point.png" );
+			mutationResourceData.SetMemberFlashString( "description", "1 /" + GetLocStringByKeyExt( "mutation_research_point" ) );
+			mutationResourceData.SetMemberFlashString( "avaliableResourcesText", GetLocStringByKeyExt( "mutation_research_available" ) );			
+			mutationResourceData.SetMemberFlashString( "researchCostText", "1x / " + GetLocStringByKeyExt( "mutation_research_point" ) );
+			mutationResourceData.SetMemberFlashUInt( "itemName", 0 );
+			mutationResourceList.PushBackFlashObject( mutationResourceData );
+			
+			
+			mutationResourceData = m_flashValueStorage.CreateTempFlashObject();
+			mutationResourceData.SetMemberFlashString( "title", GetLocStringByKeyExt("mutation_strain_research_green") );
+			mutationResourceData.SetMemberFlashInt( "type", MRT_GreenMutation );
+			mutationResourceData.SetMemberFlashInt( "used", curProgress.greenUsed );
+			mutationResourceData.SetMemberFlashInt( "required", curProgress.greenRequired );
+			
+			avaliableGreen = resGreenMutagenList.Size();
+			
+			AddItemResearchData( mutationResourceData, 'Greater mutagen green', SC_Green );
+			mutationResourceData.SetMemberFlashInt( "avaliableResources", avaliableGreen );
+			
+			mutationResourceList.PushBackFlashObject( mutationResourceData );
+			
+			
+			mutationResourceData = m_flashValueStorage.CreateTempFlashObject();
+			mutationResourceData.SetMemberFlashString( "title", GetLocStringByKeyExt("mutation_strain_research_red") );
+			mutationResourceData.SetMemberFlashInt( "type", MRT_RedMutation );
+			mutationResourceData.SetMemberFlashInt( "used", curProgress.redUsed );
+			mutationResourceData.SetMemberFlashInt( "required", curProgress.redRequired );
+			
+			avaliableRed = resRedMutagenList.Size();
+			AddItemResearchData( mutationResourceData, 'Greater mutagen red', SC_Red );
+			mutationResourceData.SetMemberFlashInt( "avaliableResources", avaliableRed );
+			
+			mutationResourceList.PushBackFlashObject( mutationResourceData );
+			
+			
+			mutationResourceData = m_flashValueStorage.CreateTempFlashObject();
+			mutationResourceData.SetMemberFlashString( "title", GetLocStringByKeyExt("mutation_strain_research_blue") );
+			mutationResourceData.SetMemberFlashInt( "type", MRT_BlueMutation );
+			mutationResourceData.SetMemberFlashInt( "used", curProgress.blueUsed );
+			mutationResourceData.SetMemberFlashInt( "required", curProgress.blueRequired );
+			
+			avaliableBlue = resBlueMutagenList.Size();
+			AddItemResearchData( mutationResourceData, 'Greater mutagen blue', SC_Blue );
+			mutationResourceData.SetMemberFlashInt( "avaliableResources", avaliableBlue );
+			mutationResourceList.PushBackFlashObject( mutationResourceData );
+			
+			mutationData.SetMemberFlashArray( "progressDataList", mutationResourceList );
+			
+			canResearch = avaliableRed >= curMutation.progress.redRequired;
+			canResearch = canResearch && avaliableGreen >= curMutation.progress.greenRequired;
+			canResearch = canResearch && avaliableBlue >= curMutation.progress.blueRequired;
+			canResearch = canResearch && avaliableSkillPoints >= curMutation.progress.skillpointsRequired;
+			
+			mutationData.SetMemberFlashInt( "redRequired", curMutation.progress.redRequired );
+			mutationData.SetMemberFlashInt( "greenRequired", curMutation.progress.greenRequired );
+			mutationData.SetMemberFlashInt( "blueRequired", curMutation.progress.blueRequired );
+			mutationData.SetMemberFlashInt( "skillpointsRequired", curMutation.progress.skillpointsRequired );
+		}
+		
+		mutationData.SetMemberFlashBool( "canResearch", canResearch );
+		
+		return mutationData;
+	}
+	
+	private function AddItemResearchData( out flashDataObj : CScriptedFlashObject, itemName : name, optional resourceColor : ESkillColor )
+	{
+		var playerInv    : CInventoryComponent;
+		var itemLocName  : string;
+		var itemIconPath : string;
+		
+		playerInv = thePlayer.inv;		
+		itemLocName = GetLocStringByKeyExt( playerInv.GetItemLocalizedNameByName( itemName ) );
+		itemIconPath = playerInv.GetItemIconPathByName( itemName );		
+		
+		flashDataObj.SetMemberFlashUInt( "resourceColor", resourceColor );
+		flashDataObj.SetMemberFlashString( "avaliableResourcesText", GetLocStringByKeyExt( "mutation_research_available" ) );
+		flashDataObj.SetMemberFlashString( "researchCostText", "1x / " + GetLocStringByKeyExt( "mutation_research_point" ) );
+		flashDataObj.SetMemberFlashString( "resourceName", itemLocName );
+		flashDataObj.SetMemberFlashString( "resourceIconPath", "img://" + itemIconPath );
+		flashDataObj.SetMemberFlashString( "description", "1 " + itemLocName + " / " + GetLocStringByKeyExt( "mutation_research_point" ) );
+		flashDataObj.SetMemberFlashUInt( "itemName", NameToFlashUInt( itemName ) );
+	}
+	
+	private function PopulateTabData(tabIndex:int, optional skillId:int) : void
 	{
 		switch (tabIndex)
 		{
 		case CharacterMenuTab_Sword:
-			PopulateDataForTabWithSkills(CharacterMenuTab_Sword, ESP_Sword);
+			PopulateDataForTabWithSkills(CharacterMenuTab_Sword, ESP_Sword, skillId);
 			break;
 		case CharacterMenuTab_Signs:
-			PopulateDataForTabWithSkills(CharacterMenuTab_Signs, ESP_Signs);
+			PopulateDataForTabWithSkills(CharacterMenuTab_Signs, ESP_Signs, skillId);
 			break;
 		case CharacterMenuTab_Alchemy:
-			PopulateDataForTabWithSkills(CharacterMenuTab_Alchemy, ESP_Alchemy);
+			PopulateDataForTabWithSkills(CharacterMenuTab_Alchemy, ESP_Alchemy, skillId);
 			break;
 		case CharacterMenuTab_Perks:
 			PopulateDataForTabWithSkills(CharacterMenuTab_Perks, ESP_Perks);
@@ -154,7 +810,7 @@ class CR4CharacterMenu extends CR4MenuBase
 		}
 	}
 	
-	private function PopulateDataForTabWithSkills(tabIndex:int, skillType:ESkillPath):void
+	private function PopulateDataForTabWithSkills(tabIndex:int, skillType:ESkillPath, optional skillId:int):void
 	{
 		var gfxSkill      : CScriptedFlashObject;
 		var gfxSkillsList : CScriptedFlashArray;
@@ -176,6 +832,17 @@ class CR4CharacterMenu extends CR4MenuBase
 			{
 				gfxSkill = m_flashValueStorage.CreateTempFlashObject();
 				GetSkillGFxObject(curSkill, true, gfxSkill);
+				
+				if( skillType == ESP_Perks )
+				{
+					gfxSkill.SetMemberFlashInt( "perkPosition", curSkill.positionID );
+				}
+				
+				if (skillId == curSkill.skillType)
+				{
+					gfxSkill.SetMemberFlashBool("playUpgradeAnimation", true);
+				}
+				
 				gfxSkillsList.PushBackFlashObject(gfxSkill);
 			}
 		}
@@ -275,8 +942,9 @@ class CR4CharacterMenu extends CR4MenuBase
 			OnPlaySoundEvent("gui_character_buy_skill");
 			
 			
+			UpdateMasterMutation();
 			UpdateSkillPoints();
-			PopulateTabData(GetTabForSkill(skill));
+			PopulateTabData( GetTabForSkill( skill ), skill );
 		}
 	}
 	
@@ -293,10 +961,11 @@ class CR4CharacterMenu extends CR4MenuBase
 			thePlayer.EquipSkill(skill2, slotID2);
 			
 			UpdateAppliedSkills();
-			UpdateSkillPoints();
-			UpdateMutagens();
-			UpdatePlayerStatisticsData();
+			UpdateSkillPoints();			
+			UpdatePlayerStatisticsData();						
 			UpdateGroupsData();
+			UpdateMutagens();
+			UpdateMasterMutation();
 			
 			OnPlaySoundEvent("gui_character_add_skill");
 		}
@@ -333,10 +1002,11 @@ class CR4CharacterMenu extends CR4MenuBase
 					m_fxClearSkillSlot.InvokeSelfOneArg(FlashArgInt(oldSkillSlot));
 				}
 				
-				UpdateAppliedSkill(slotID);
-				UpdateGroupsData();
+				UpdateAppliedSkill(slotID);				
 				UpdateMutagens();
-				UpdatePlayerStatisticsData();
+				UpdatePlayerStatisticsData();				
+				UpdateGroupsData();
+				UpdateMasterMutation();
 				
 				if (oldSkill != S_SUndefined)
 				{
@@ -366,15 +1036,25 @@ class CR4CharacterMenu extends CR4MenuBase
 			LogChannel('CHR', "OnUnequipSkill " + slotID);
 			thePlayer.UnequipSkill(slotID);
 			PopulateTabData(GetTabForSkill(skill));
-							
+			
 			UpdateAppliedSkill(slotID);
 			
-			UpdateGroupsData();
 			UpdateMutagens();
-			UpdatePlayerStatisticsData();
+			UpdatePlayerStatisticsData();			
+			UpdateGroupsData();
+			UpdateMasterMutation();
 			
 			m_fxPaperdollChanged.InvokeSelf();
 		}
+	}
+	
+	event  OnUpdateMutationData()
+	{
+		UpdateAppliedSkills();
+		PopulateTabData(CharacterMenuTab_Mutagens);
+		UpdateMutagens();
+		UpdateGroupsData();
+		UpdatePlayerStatisticsData();
 	}
 	
 	event  OnUpgradeSkill(skillID : ESkill)
@@ -429,6 +1109,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			UpdateGroupsData();
 			PopulateTabData(CharacterMenuTab_Mutagens);
 			UpdatePlayerStatisticsData();
+			UpdateMasterMutation();
 			
 			m_fxPaperdollChanged.InvokeSelf();
 		}
@@ -450,10 +1131,11 @@ class CR4CharacterMenu extends CR4MenuBase
 			OnPlaySoundEvent("gui_character_remove_mutagen");
 			
 			RemoveMutagenBonus();
-			UpdateMutagens();
-			UpdateGroupsData();
+			UpdateMutagens();			
 			UpdatePlayerStatisticsData();
-			PopulateTabData(CharacterMenuTab_Mutagens);
+			PopulateTabData(CharacterMenuTab_Mutagens);			
+			UpdateGroupsData();
+			UpdateMasterMutation();
 			
 			m_fxPaperdollChanged.InvokeSelf();
 		}
@@ -494,7 +1176,9 @@ class CR4CharacterMenu extends CR4MenuBase
 		thePlayer.AddSkill(skill);
 		OnPlaySoundEvent("gui_character_buy_skill");
 		UpdateSkillPoints();
-		PopulateTabData(GetTabForSkill(skill));
+		
+		PopulateTabData( GetTabForSkill( skill ), skill );
+		
 		UpdateAppliedSkillIfEquipped(skill);
 		UpdatePlayerStatisticsData();
 		UpdateMutagens();
@@ -516,8 +1200,8 @@ class CR4CharacterMenu extends CR4MenuBase
 		}
 		
 		UpdateAppliedSkills();
-		UpdateSkillPoints();
 		UpdateMutagens();
+		UpdateSkillPoints();
 		UpdatePlayerStatisticsData();
 		UpdateGroupsData();
 	}
@@ -535,7 +1219,6 @@ class CR4CharacterMenu extends CR4MenuBase
 		gfxGroupsList.PushBackFlashObject(CreateBonusGFxData(2));
 		gfxGroupsList.PushBackFlashObject(CreateBonusGFxData(3));
 		gfxGroupsList.PushBackFlashObject(CreateBonusGFxData(4));
-		
 		
 		m_flashValueStorage.SetFlashArray("character.groups.bonus", gfxGroupsList);
 	}
@@ -558,7 +1241,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			}	
 	}
 	
-	private function GetGroupBonusDescription(groupId:int):string
+	private function GetGroupBonusDescription( groupId:int, out color : ESkillColor ):string
 	{
 		var defManager			 	: CDefinitionsManagerAccessor;
 		var curAttributeValue, min, max	 : SAbilityAttributeValue;
@@ -566,7 +1249,7 @@ class CR4CharacterMenu extends CR4MenuBase
 		var curDescription		 	: string;
 		var curAbilityName 		 	: name;
 		var attributes 			 	: array<name>;	
-		var curColorCount,i					 	: int;
+		var curColorCount,i			: int;
 		var hasAbility		     	: bool;
 		var mutagen 				: SItemUniqueId;
 		var hasMutagen				: bool;
@@ -582,7 +1265,9 @@ class CR4CharacterMenu extends CR4MenuBase
 		curColorCount =  1 + thePlayer.GetGroupBonusCount( thePlayer.GetInventory().GetSkillMutagenColor( mutagen ), groupId );
 		
 		hasAbility = thePlayer.HasAbility(curAbilityName);
-
+		
+		color = SC_None;
+		
 		if ((curAbilityName == 'None' || !hasAbility) && !hasMutagen)
 		{
 			return "";
@@ -594,40 +1279,49 @@ class CR4CharacterMenu extends CR4MenuBase
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_red_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('mutagen_color_red_x' , curColorCount - 1);
+				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_green_synergy_bonus' ) 		
 			{
 				thePlayer.AddAbilityMultiple('mutagen_color_green_x' , curColorCount - 1);
+				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_blue_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('mutagen_color_blue_x' , curColorCount - 1);
+				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_red_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_red_x' , curColorCount - 1);
+				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_green_synergy_bonus' ) 		
 			{
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_green_x' , curColorCount - 1);
+				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_blue_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_blue_x' , curColorCount - 1);
+				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_red_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_red_x' , curColorCount - 1);
+				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_green_synergy_bonus' ) 		
 			{
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_green_x' , curColorCount - 1);
+				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_blue_synergy_bonus' ) 
 			{
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_blue_x' , curColorCount - 1);
+				color = SC_Blue;
 			}
 
 			for (i = 0; i < mutagenStats.Size(); i += 1)
@@ -676,9 +1370,10 @@ class CR4CharacterMenu extends CR4MenuBase
 	protected function CreateBonusGFxData(index:int):CScriptedFlashObject
 	{
 		var gfxGroupBonus : CScriptedFlashObject;
-		var description : string;
+		var description   : string;
+		var color         : ESkillColor;
 		
-		description = GetGroupBonusDescription(index);
+		description = GetGroupBonusDescription(index, color);
 		
 		if (index > m_previousSkillBonuses.Size())
 		{
@@ -699,41 +1394,93 @@ class CR4CharacterMenu extends CR4MenuBase
 		
 		gfxGroupBonus = m_flashValueStorage.CreateTempFlashObject();
 		gfxGroupBonus.SetMemberFlashString('description', description);
+		gfxGroupBonus.SetMemberFlashInt('color', color);
+		
 		return gfxGroupBonus;
 	}
 	
 	protected function UpdateAppliedSkills():void
 	{		
-		var gfxSlots     : CScriptedFlashObject;
-		var gfxSlotsList : CScriptedFlashArray;
-		var curSlot      : SSkillSlot;
-		var equipedSkill : SSkill;
-		var skillSlots   : array<SSkillSlot>;
-		var slotsCount 	 : int;
-		var i 	         : int;
+		var gfxSlots           : CScriptedFlashObject;
+		var gfxSlotsList       : CScriptedFlashArray;
+		var curSlot            : SSkillSlot;
+		var equipedSkill       : SSkill;
+		var skillSlots         : array<SSkillSlot>;
+		var slotsCount 	       : int;
+		var i 	               : int;
+		var equippedMutationId : EPlayerMutationType;
+		var equippedMutation   : SMutation;
+		var colorsList		   : array< ESkillColor >;
+		var colorBorderId      : string;
 		
 		gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
 		skillSlots = thePlayer.GetSkillSlots();
 		slotsCount = skillSlots.Size();
+		equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
 		
-		LogChannel('CHR', "UpdateAppliedSkills add "+slotsCount+" items");
-		for (i=0; i<slotsCount; i+=1)
+		if( equippedMutationId != EPMT_None )
 		{
-			curSlot = skillSlots[i];
-			equipedSkill = thePlayer.GetPlayerSkill(curSlot.socketedSkill);
-			
-			gfxSlots = m_flashValueStorage.CreateTempFlashObject();
-			GetSkillGFxObject(equipedSkill, false, gfxSlots);
-			
-			gfxSlots.SetMemberFlashInt('tabId', GetTabForSkill(curSlot.socketedSkill));
-			gfxSlots.SetMemberFlashInt('slotId', curSlot.id);
-			gfxSlots.SetMemberFlashInt('unlockedOnLevel', curSlot.unlockedOnLevel);
-			gfxSlots.SetMemberFlashInt('groupID', curSlot.groupID);
-			gfxSlots.SetMemberFlashBool('unlocked', curSlot.unlocked);
-			gfxSlotsList.PushBackFlashObject(gfxSlots);
+			equippedMutation = GetWitcherPlayer().GetMutation( equippedMutationId );
 		}
 		
-		m_flashValueStorage.SetFlashArray( "character.skills.slots", gfxSlotsList);
+		LogChannel( 'CHR', "UpdateAppliedSkills add " + slotsCount + " items" );
+		
+		for( i=0; i < slotsCount; i+=1 )
+		{
+			curSlot = skillSlots[i];
+			equipedSkill = thePlayer.GetPlayerSkill( curSlot.socketedSkill );
+			
+			gfxSlots = m_flashValueStorage.CreateTempFlashObject();
+			GetSkillGFxObject( equipedSkill, false, gfxSlots );
+			
+			gfxSlots.SetMemberFlashInt( 'tabId', GetTabForSkill( curSlot.socketedSkill ) );
+			gfxSlots.SetMemberFlashInt( 'slotId', curSlot.id );
+			gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', curSlot.unlockedOnLevel );
+			gfxSlots.SetMemberFlashInt( 'groupID', curSlot.groupID );
+			gfxSlots.SetMemberFlashBool( 'unlocked', curSlot.unlocked );
+			
+			colorBorderId = "";
+			if( curSlot.id >= BSS_SkillSlot1 )
+			{
+				gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
+				gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( curSlot.id - BSS_SkillSlot1 + 1 ) );
+				
+				if (equippedMutationId != EPMT_None)
+				{
+					colorsList = equippedMutation.colors;
+					
+					if( colorsList.Contains(SC_Red) )
+					{
+						colorBorderId += "Red";
+					}
+					
+					if( colorsList.Contains(SC_Green) )
+					{
+						colorBorderId += "Green";
+					}
+					
+					if( colorsList.Contains(SC_Blue) )
+					{
+						colorBorderId += "Blue";
+					}
+				}
+				
+				gfxSlots.SetMemberFlashString( 'colorBorder', colorBorderId );
+			}
+			else
+			{
+				gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', curSlot.unlockedOnLevel );
+			}
+			
+			gfxSlotsList.PushBackFlashObject( gfxSlots );
+		}
+		
+		m_flashValueStorage.SetFlashArray( "character.skills.slots", gfxSlotsList );
+	}
+	
+	protected function SkillColorEnumToName( color : ESkillColor ) : void
+	{
+		
 	}
 	
 	protected function GetSlotForSkill(skill : ESkill):int
@@ -807,8 +1554,19 @@ class CR4CharacterMenu extends CR4MenuBase
 	
 	protected function SendEquippedSkillInfo(curSlot : SSkillSlot):void
 	{
-		var gfxSlot     : CScriptedFlashObject;
-		var equipedSkill : SSkill;
+		var gfxSlot       : CScriptedFlashObject;
+		var equipedSkill  : SSkill;
+		var colorsList    : array< ESkillColor >;
+		var colorBorderId : string;
+		var equippedMutationId : EPlayerMutationType;
+		var equippedMutation   : SMutation;
+		
+		equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
+		
+		if( equippedMutationId != EPMT_None )
+		{
+			equippedMutation = GetWitcherPlayer().GetMutation( equippedMutationId );
+		}
 		
 		equipedSkill = thePlayer.GetPlayerSkill(curSlot.socketedSkill);
 		
@@ -820,6 +1578,29 @@ class CR4CharacterMenu extends CR4MenuBase
 		gfxSlot.SetMemberFlashInt('unlockedOnLevel', curSlot.unlockedOnLevel);
 		gfxSlot.SetMemberFlashInt('groupID', curSlot.groupID);
 		gfxSlot.SetMemberFlashBool('unlocked', curSlot.unlocked);
+		
+		colorBorderId = "";
+		if( equippedMutationId != EPMT_None && curSlot.id >= BSS_SkillSlot1 )
+		{
+			colorsList = equippedMutation.colors;
+			
+			if( colorsList.Contains(SC_Red) )
+			{
+				colorBorderId += "Red";
+			}
+			
+			if( colorsList.Contains(SC_Green) )
+			{
+				colorBorderId += "Green";
+			}
+			
+			if( colorsList.Contains(SC_Blue) )
+			{
+				colorBorderId += "Blue";
+			}
+			
+			gfxSlot.SetMemberFlashString( 'colorBorder', colorBorderId );
+		}
 		
 		m_flashValueStorage.SetFlashObject( "character.skills.slot.update", gfxSlot);
 	}
@@ -1006,6 +1787,7 @@ class CR4CharacterMenu extends CR4MenuBase
 		var baseString	: string;
 		var argsInt 	: array<int>;
 		var argsFloat	: array<float>;
+		var argsString	: array< string >;
 		var arg			: float;
 		var arg_focus	: float;
 		var ability		: SAbilityAttributeValue;
@@ -1084,7 +1866,8 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s03:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s03, 'instant_kill_chance', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				argsString.PushBack( NoTrailZeros( theGame.params.INSTANT_KILL_INTERNAL_PLAYER_COOLDOWN ) );
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt, , argsString) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				break;
 			case S_Sword_s04:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
@@ -1341,8 +2124,10 @@ class CR4CharacterMenu extends CR4MenuBase
 		var baseString		: string;
 		var argsInt 		: array<int>;
 		var argsFloat		: array<float>;
+		var argsString		: array<string>;
 		var arg				: float;
 		var arg_duration	: float;
+		var toxThreshold	: float;
 		var ability			: SAbilityAttributeValue;
 		var min, max		: SAbilityAttributeValue;
 		var dm 				: CDefinitionsManagerAccessor;
@@ -1356,9 +2141,15 @@ class CR4CharacterMenu extends CR4MenuBase
 		switch (targetSkill.skillType)
 		{
 			case S_Alchemy_s01:
+				
+				toxThreshold = 100 * theGame.params.TOXICITY_DAMAGE_THRESHOLD;
+				argsString.PushBack( RoundMath( toxThreshold ) );				
+				
+				
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s01, 'threshold', false, false)) * skillLevel;
-				argsInt.PushBack(RoundMath(arg*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				argsString.PushBack( RoundMath( toxThreshold + arg * 100 ) );
+				
+				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
 				break;
 			case S_Alchemy_s02:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s02, 'vitality_gain_perc', false, false)) * skillLevel;
@@ -1464,6 +2255,7 @@ class CR4CharacterMenu extends CR4MenuBase
 		var baseString	: string;
 		var argsInt 	: array<int>;
 		var argsFloat	: array<float>;
+		var argsString	: array<string>;
 		var arg			: float;
 		var ability		: SAbilityAttributeValue;
 		
@@ -1522,6 +2314,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(100 * ability.valueMultiplicative));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				break;
+			case S_Perk_15:
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_15, 'duration', false, false );
+				ability.valueAdditive /= 60;
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				baseString = GetLocStringByKeyExtWithParams( locKey, , , argsString );
+				break;
 			case S_Perk_18:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_18, 'focus_gain', false, true);
 				argsFloat.PushBack(ability.valueAdditive);
@@ -1531,6 +2329,28 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_19, 'critical_hit_chance', false, true);
 				argsInt.PushBack(RoundMath(100 * ability.valueAdditive));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				break;
+			case S_Perk_20:
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'dmg_multiplier', false, false );
+				ability.valueMultiplicative *= 100;
+				argsString.PushBack( FloatToString( ability.valueMultiplicative ) );
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'stack_multiplier', false, false );
+				ability.valueMultiplicative *= 100;
+				argsString.PushBack( FloatToString( ability.valueMultiplicative ) );
+				baseString = GetLocStringByKeyExtWithParams( locKey, , , argsString );
+				break;
+			case S_Perk_21:
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_21, 'parry', false, false );
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_21, 'counter', false, false );
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_21, 'dodge', false, false );
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_21, 'roll', false, false );
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				ability = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_21, 'perk21Time', false, false );
+				argsString.PushBack( FloatToString( ability.valueAdditive ) );
+				baseString = GetLocStringByKeyExtWithParams( locKey, , , argsString );
 				break;
 			case S_Perk_22:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_22, 'encumbrance', false, true);
@@ -1564,14 +2384,14 @@ class CR4CharacterMenu extends CR4MenuBase
 		{
 			if (!targetSkill.isCoreSkill)
 			{
-				currentLevelDesc += "<font color=\"#C1925B\">" + GetLocStringByKeyExt("panel_character_tooltip_skill_desc_current_level") + ":</font>&#10;";
+				currentLevelDesc += "<font color=\"#ecdda8\">" + GetLocStringByKeyExt("panel_character_tooltip_skill_desc_current_level") + ":</font>&#10;";
 			}
 			currentLevelDesc += GetSkillTooltipDescriptionForSkillLevel(targetSkill, skillLevel);
 		}
 		
 		if (skillLevel < targetSkill.maxLevel)
 		{
-			nextLevelDesc += "<font color=\"#C1925B\">" + GetLocStringByKeyExt("panel_character_tooltip_skill_desc_next_level") + ":</font>&#10;";
+			nextLevelDesc += "<font color=\"#A09588\">" + GetLocStringByKeyExt("panel_character_tooltip_skill_desc_next_level") + ":</font>&#10;";
 			nextLevelDesc += GetSkillTooltipDescriptionForSkillLevel(targetSkill, skillLevel + 1);
 		}
 	}
@@ -1594,6 +2414,7 @@ class CR4CharacterMenu extends CR4MenuBase
 	
 	private function GetSkillTooltipData(targetSkill : ESkill, compareItemType : int, isGridView : bool)
 	{
+		var abilityMgr 			  : W3PlayerAbilityManager;
 		var resultGFxData 	      : CScriptedFlashObject;
 		var targetSkillData       : SSkill;
 		var targetSubPathLocName  : string;
@@ -1601,6 +2422,7 @@ class CR4CharacterMenu extends CR4MenuBase
 		var skillNextLevelDesc    : string;
 		var skillLevelString	  : string;
 		var skillNumPoitnsNeeded  : int;
+		var pathPointsSpent		  : int;
 		
 		var originSkillLevel : int;
 		var boostedSkillLevel : int;
@@ -1621,13 +2443,15 @@ class CR4CharacterMenu extends CR4MenuBase
 		resultGFxData.SetMemberFlashString('skillName', GetLocStringByKeyExt(targetSkillData.localisationNameKey));
 		
 		GetSkillTooltipDescription(targetSkillData, isGridView, skillCurrentLevelDesc, skillNextLevelDesc);
-		resultGFxData.SetMemberFlashString('currentLevelDescription', skillCurrentLevelDesc);
+		
+		
 		resultGFxData.SetMemberFlashString('nextLevelDescription', skillNextLevelDesc);
 		resultGFxData.SetMemberFlashString('isCoreSkill', targetSkillData.isCoreSkill);
 		
 		if (targetSkillData.isCoreSkill)
 		{
-			skillLevelString = "";
+			skillLevelString = "<font color=\"#ecdda8\">" +GetLocStringByKeyExt("tooltip_skill_core_category") + "</font>&#10;";
+			skillCurrentLevelDesc = "<font color=\"#ecdda8\">" +GetLocStringByKeyExt("tooltip_skill_core_desc") + "</font>&#10;" + skillCurrentLevelDesc;
 		}
 		else
 		{
@@ -1655,7 +2479,9 @@ class CR4CharacterMenu extends CR4MenuBase
 			}
 		}
 		
+		resultGFxData.SetMemberFlashString('currentLevelDescription', skillCurrentLevelDesc);
 		resultGFxData.SetMemberFlashString('skillLevelString', skillLevelString);
+		
 		if ( isGridView )
 		{
 			resultGFxData.SetMemberFlashInt('level', GetWitcherPlayer().GetBoughtSkillLevel(targetSkillData.skillType));
@@ -1672,13 +2498,25 @@ class CR4CharacterMenu extends CR4MenuBase
 		}
 		else
 		{
-			skillNumPoitnsNeeded = targetSkillData.requiredPointsSpent;
+			abilityMgr = (W3PlayerAbilityManager)thePlayer.abilityManager;
+			
+			if( abilityMgr )
+			{
+				pathPointsSpent = targetSkillData.requiredPointsSpent - abilityMgr.GetPathPointsSpent( targetSkillData.skillPath );
+			}
+			else
+			{
+				pathPointsSpent = targetSkillData.requiredPointsSpent;
+			}
+			
+			skillNumPoitnsNeeded = pathPointsSpent;
 		}
 		
 		resultGFxData.SetMemberFlashNumber('requiredPointsSpent', skillNumPoitnsNeeded);
 		resultGFxData.SetMemberFlashString('IconPath', targetSkillData.iconPath);
 		resultGFxData.SetMemberFlashBool('hasEnoughPoints', CheckIfLocked(targetSkillData));
-		resultGFxData.SetMemberFlashInt('curSkillPoints', GetCurrentSkillPoints());
+		resultGFxData.SetMemberFlashInt( 'curSkillPoints', GetCurrentSkillPoints() );
+		
 		m_flashValueStorage.SetFlashObject("context.tooltip.data", resultGFxData);
 	}
 	
@@ -1709,6 +2547,34 @@ class CR4CharacterMenu extends CR4MenuBase
 		resultGFxData = m_flashValueStorage.CreateTempFlashObject();
 		resultGFxData.SetMemberFlashString('skillName', GetLocStringByKeyExt("panel_character_tooltip_skill_locked_title"));
 		resultGFxData.SetMemberFlashString('currentLevelDescription', GetLocStringByKeyExt("panel_character_tooltip_skill_locked_desc") + ": " + unlockedAtLevel);
+		resultGFxData.SetMemberFlashString('nextLevelDescription', "");
+		resultGFxData.SetMemberFlashString('skillLevelString', "");
+		resultGFxData.SetMemberFlashInt('level', -1);
+		resultGFxData.SetMemberFlashInt('maxLevel', -1);
+		resultGFxData.SetMemberFlashNumber('requiredPointsSpent', -1);		
+		resultGFxData.SetMemberFlashString('IconPath', "icons\\Skills\\skill_slot_locked.png");
+		resultGFxData.SetMemberFlashBool('hasEnoughPoints', true);
+		resultGFxData.SetMemberFlashInt('curSkillPoints', -1);
+		
+		m_flashValueStorage.SetFlashObject("context.tooltip.data", resultGFxData);
+	}
+	
+	event  OnGetLockedMutationSkillSlotTooltipData(unlockedAtLevel : int):void
+	{
+		var resultGFxData 	 : CScriptedFlashObject;
+		var abilityManager   : W3PlayerAbilityManager;
+		var lockDescription  : string;
+		var requaredMutCount : int;
+		var intParamArray    : array<int>;
+		
+		abilityManager = ( ( W3PlayerAbilityManager ) GetWitcherPlayer().abilityManager );
+		requaredMutCount = abilityManager.GetMutationsRequiredForMasterStage(unlockedAtLevel);
+		intParamArray.PushBack(requaredMutCount);
+		lockDescription = GetLocStringByKeyExtWithParams("mutation_master_mutation_requires_unlock", intParamArray);
+		
+		resultGFxData = m_flashValueStorage.CreateTempFlashObject();
+		resultGFxData.SetMemberFlashString('skillName', GetLocStringByKeyExt("panel_character_tooltip_skill_locked_title"));
+		resultGFxData.SetMemberFlashString('currentLevelDescription', lockDescription);
 		resultGFxData.SetMemberFlashString('nextLevelDescription', "");
 		resultGFxData.SetMemberFlashString('skillLevelString', "");
 		resultGFxData.SetMemberFlashInt('level', -1);
@@ -1838,13 +2704,14 @@ class CR4CharacterMenu extends CR4MenuBase
 			
 			tmpStr = NoTrailZeros( weight );
 			addGFxItemStat(propsList, "weight", tmpStr, "attribute_name_weight");
-			addGFxItemStat(propsList, "price", tooltipInv.GetItemPrice(item), "panel_inventory_item_price");
+			
+			addGFxItemStat(propsList, "price", 0, "panel_inventory_item_price");
 			
 		
 			
 			
 			
-			oilName = _inv.GetSwordOil(item);
+			oilName = _inv.GetOldestOilAppliedOnItem( item, false ).GetOilItemName();
 			if (oilName != '')
 			{
 				addGFxItemStat(propsList, "oil", GetLocStringByKeyExt(_inv.GetItemLocalizedNameByName(oilName)));

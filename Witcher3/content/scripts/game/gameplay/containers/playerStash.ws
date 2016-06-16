@@ -5,6 +5,8 @@
 /***********************************************************************/
 class W3Stash extends CInteractiveEntity
 {
+	editable var forceDiscoverable : bool;	default forceDiscoverable = false;
+
 	event OnInteraction( actionName : string, activator : CEntity )
 	{
 		if(activator != thePlayer)
@@ -12,5 +14,10 @@ class W3Stash extends CInteractiveEntity
 			
 		theGame.GameplayFactsAdd("stashMode", 1);
 		theGame.RequestMenuWithBackground( 'InventoryMenu', 'CommonMenu' );
+	}
+	
+	public function  IsForcedToBeDiscoverable() : bool
+	{
+		return forceDiscoverable;
 	}
 }

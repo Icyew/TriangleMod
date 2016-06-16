@@ -53,7 +53,7 @@ class W3SnowballProjectile extends W3AdvancedProjectile
 			action.Initialize((CGameplayEntity)caster,victim,this,caster.GetName(),EHRT_Light,CPS_AttackPower, false, true, false, false);
 			if ( this.projDMG > 0 )
 			{
-				action.AddDamage(damageTypeName, projDMG );	
+				action.AddDamage(damageTypeName, projDMG );
 			}
 			action.AddEffectInfo(this.projEfect);
 			action.SetCanPlayHitParticle(false);

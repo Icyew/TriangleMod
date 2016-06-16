@@ -18,7 +18,7 @@ import class CWitcherSword extends CItemEntity
 		var swordCategory : name;
 		var swordType : EWitcherSwordType;
 		var newRuneCount : int;
-
+		var oilBuff : W3Effect_Oil;
 		var invComp : CInventoryComponent;
 		var itemId : SItemUniqueId;
 		
@@ -34,21 +34,19 @@ import class CWitcherSword extends CItemEntity
 			{
 				swordCategory = 'steelsword';
 				break;
-		}
+			}
 		}
 		
-		invComp = ( CInventoryComponent )( actor.GetComponentByClassName( 'CInventoryComponent' ) );
-
-		ApplyOil( invComp );
-
+		invComp = actor.GetInventory();
 		itemId = invComp.GetItemByItemEntity( this );
+		
+		
 		runeCount = invComp.GetItemEnhancementCount( itemId );
 		UpdateEnhancements( invComp );
 		
 		stateName = actor.GetCurrentStateName();
 		
-		if (( swordType == WST_Silver && stateName == 'CombatSilver' )
-		||	( swordType == WST_Steel && stateName == 'CombatSteel' ) )
+		if( ( swordType == WST_Silver && stateName == 'CombatSilver' ) || ( swordType == WST_Steel && stateName == 'CombatSteel' ) )
 		{
 			PlayEffect( 'rune_blast_loop' );
 		}
@@ -89,33 +87,29 @@ import class CWitcherSword extends CItemEntity
 		GetWitcherPlayer().ResetPadBacklightColor( true );
 	}
 	
-	public function ApplyOil( invComp : CInventoryComponent )
+	public function ApplyOil( oilAbilityName : name )
 	{
-		var itemId : SItemUniqueId;
-		var abilities : array< name >;
-		
-		itemId = invComp.GetItemByItemEntity( this );
-		
-		invComp.GetItemAbilitiesWithTag( itemId, theGame.params.OIL_ABILITY_TAG, abilities );
-
-		if ( abilities.Size() > 0 )
-		{
-			PlayEffect( GetOilFxName( abilities[0] ) );
-		}
+		PlayEffect( GetOilFxName( oilAbilityName ) );
 	}
 	
-	public function RemoveOil( invComp : CInventoryComponent )
+	public function RemoveOil( oilAbilityName : name )
 	{
-		var itemId : SItemUniqueId;
-		var abilities : array< name >;
+		var inv : CInventoryComponent;
+		var id : SItemUniqueId;
+		var oil : W3Effect_Oil;
 		
-		itemId = invComp.GetItemByItemEntity( this );
-
-		invComp.GetItemAbilitiesWithTag( itemId, theGame.params.OIL_ABILITY_TAG, abilities );
-
-		if ( abilities.Size() > 0 )
+		
+		
+		PlayEffect( 'oil_none' );
+		
+		
+		inv = ( ( CActor ) GetParentEntity() ).GetInventory();
+		id = inv.GetItemByItemEntity( this );
+		oil = inv.GetNewestOilAppliedOnItem( id, true );
+		
+		if( oil )
 		{
-			StopEffect( GetOilFxName( abilities[0] ) );
+			ApplyOil( oil.GetOilAbilityName() );
 		}
 	}
 	

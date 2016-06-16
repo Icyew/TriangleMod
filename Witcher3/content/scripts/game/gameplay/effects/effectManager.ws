@@ -129,14 +129,7 @@ class W3EffectManager
 			
 			if(effects[i].IsActive())
 			{
-				if ( effects[i].UsesCustomCounter() )
-				{
-					effects[i].CheckCustomCounter();
-				}
-				else
-				{
-					effects[i].OnTimeUpdated(deltaTime);		
-				}
+				effects[i].OnTimeUpdated(deltaTime);		
 			}
 			else
 			{
@@ -761,6 +754,9 @@ class W3EffectManager
 		var action : W3DamageAction;
 		var hasQuen : bool;
 		var damages : array<SRawDamage>;
+		var forceOnNpc : bool;
+		var npcStorage : CBaseAICombatStorage;
+		
 		
 		if(effectType == EET_Undefined)
 		{
@@ -778,13 +774,22 @@ class W3EffectManager
 			}
 		}		
 		
-		else if(effectType == EET_Frozen)
+		else if( effectType == EET_Frozen )
 		{
 			npc = (CNewNPC)owner;
-			if(npc && npc.IsFlying())
+			if ( npc )
 			{
-				LogEffects("EffectManager.InternalAddEffect: unit <<" + owner + ">> will not get frozen effect since it's currently flying!");
-				return EI_Deny;
+				npcStorage = (CBaseAICombatStorage)npc.GetScriptStorageObject('CombatData');
+				if ( npc.IsFlying() )
+				{
+					LogEffects("EffectManager.InternalAddEffect: unit <<" + owner + ">> will not get frozen effect since it's currently flying!");
+					return EI_Deny;
+				}
+				else if ( npcStorage.GetIsInImportantAnim() )
+				{
+					LogEffects("EffectManager.InternalAddEffect: unit <<" + owner + ">> will not get frozen effect since it's in an uninterruptable animation!");
+					return EI_Deny;
+				}
 			}
 		}
 		
@@ -814,7 +819,16 @@ class W3EffectManager
 				LogEffects("EffectManager.InternalAddEffect: Geralt has active quen so it breaks and we don't stagger.");
 				return EI_Deny;
 			}
-		}		
+		}
+		
+		
+		
+		
+		if( owner == thePlayer && effectType == EET_HeavyKnockdown )
+		{
+			LogEffects( "EffectManager.InternalAddEffect: changing EET_HeavyKnockdown to EET_Knockdown, general rule for player character" );
+			effectType = EET_Knockdown;
+		}
 		
 		
 		if(srcName == "" && creat)
@@ -836,7 +850,23 @@ class W3EffectManager
 		actorCreator = (CActor)creat;
 		
 		
-		if(owner.IsImmuneToBuff(effectType) && (!actorCreator.HasAbility('ForceCriticalEffects') || IsCriticalEffectType(effectType)) )
+		if ( actorCreator.HasAbility('ForceCriticalEffectsAnim') )
+		{
+			forceOnNpc = true;
+		}
+		else if ( actorCreator.HasAbility('ForceCriticalEffectsAnimNPCOnly') && owner != thePlayer )
+		{
+			forceOnNpc = true;
+		}
+		
+		if ( owner.HasTag('vampire') && effectType == EET_SilverDust )
+		{
+			forceOnNpc = true;
+		}
+		
+		
+		
+		if(owner.IsImmuneToBuff(effectType) && !forceOnNpc && (!actorCreator.HasAbility('ForceCriticalEffects') || IsCriticalEffectType(effectType)) )
 		{
 			LogEffects("EffectManager.InternalAddEffect: unit <<" + owner + ">> is immune to effect of this type (" + effectType + ")");
 			return EI_Deny;
@@ -854,6 +884,27 @@ class W3EffectManager
 		
 		if(effect)
 		{
+			if((actorCreator && 
+				(((W3PlayerWitcher)owner) && 
+				(effectType == EET_Stagger || effectType == EET_LongStagger)) &&
+				(StrBeginsWith(actorCreator.GetName(), "q701_giant") || 
+					StrBeginsWith(actorCreator.GetName(), "scolopendromorph"))) ||
+				(srcName == "debuff_projectile"))
+			{
+				if(effectType == EET_Stagger)
+				{
+					theSound.TimedSoundEvent(1.5f, "start_stagger", "stop_stagger");
+				}
+				else if(effectType == EET_LongStagger)
+				{
+					theSound.TimedSoundEvent(2.f, "start_stagger", "stop_stagger");
+				}
+			}
+			else if(((W3PlayerWitcher)owner) && actorCreator && (effectType == EET_Stagger || effectType == EET_LongStagger)) 
+			{
+				theSound.TimedSoundEvent(1.f, "start_small_stagger", "stop_small_stagger");
+			}
+			
 			
 			if( (hasQuen || (((W3PlayerWitcher)owner) && FactsQuerySum("player_had_quen") > 0)) && IsDoTEffect(effect))
 			{
@@ -891,14 +942,14 @@ class W3EffectManager
 				LogEffects("EffectManager.InternalAddEffect: this can be due to high unit's resist, which is " + NoTrailZeros(effect.GetBuffResist()*100) + "%.");
 				return EI_Deny;
 			}
-
+			
 			
 			if(signEffect && (effectType == EET_Confusion || effectType == EET_Hypnotized) && creat == thePlayer && thePlayer.CanUseSkill(S_Magic_s17) && thePlayer.GetSkillLevel(S_Magic_s17) == 3 && effect.GetDurationLeft() < CalculateAttributeValue(thePlayer.GetSkillAttributeValue(S_Magic_s17, 'duration_to_force_stagger', false, true)) )
 			{				
 				LogEffects("EffectManager.InternalAddEffect: Axii effect is blocked, will be stagger from S_Magic_s17 skill");
 				return EI_Deny;
 			}
-		
+			
 			
 			if( theGame.effectMgr.CheckInteractionWith(this, effect, effects, overridenEffectsIdxs, cumulateIdx) )
 				return ApplyEffect(effect, overridenEffectsIdxs, cumulateIdx, customParams);
@@ -909,7 +960,7 @@ class W3EffectManager
 		return EI_Undefined;
 	}
 	
-	public final function GetDrunkMutagens() : array<CBaseGameplayEffect>
+	public final function GetDrunkMutagens( optional sourceName : string ) : array<CBaseGameplayEffect>
 	{
 		var i : int;
 		var ret : array<CBaseGameplayEffect>;
@@ -919,7 +970,30 @@ class W3EffectManager
 		{
 			mutagen = (W3Mutagen_Effect)effects[i];
 			if(mutagen)
-				ret.PushBack(mutagen);
+			{
+				if( sourceName == "" || mutagen.GetSourceName() == sourceName )
+				{
+					ret.PushBack(mutagen);
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	public final function GetMutagenBuffs() : array< W3Mutagen_Effect >
+	{
+		var i : int;
+		var ret : array< W3Mutagen_Effect >;
+		var mutagen : W3Mutagen_Effect;
+		
+		for(i=0; i<effects.Size(); i+=1)
+		{
+			mutagen = (W3Mutagen_Effect) effects[i];
+			if( mutagen )
+			{
+				ret.PushBack( mutagen );
+			}
 		}
 		
 		return ret;
@@ -1086,8 +1160,21 @@ class W3EffectManager
 		}
 	}
 	
+	public function RemoveAllBuffsWithSource( source : string )
+	{
+		var i : int;
+		
+		for(i=effects.Size()-1; i>=0; i-=1)
+		{
+			if( effects[i].GetSourceName() == source )
+			{
+				RemoveEffectOnIndex( i, false );
+			}
+		}
+	}
 	
-	public final function RemoveAllNonAutoEffects()
+	
+	public final function RemoveAllNonAutoEffects( optional removeOils : bool )
 	{
 		var autoEffects : array<name>;
 		var i : int;
@@ -1119,7 +1206,10 @@ class W3EffectManager
 			type = effects[i].GetEffectType();
 			if(!autos.Contains(type))
 			{
-				RemoveEffectOnIndex( i, true );
+				if( removeOils || ! ( (W3Effect_Oil)effects[i] ) )
+				{
+					RemoveEffectOnIndex( i, true );
+				}
 			}
 		}
 	}
@@ -1271,9 +1361,15 @@ class W3EffectManager
 		
 		if (buff)
 		{
-			maxDur = buff.GetInitialDuration();
+			maxDur = buff.GetInitialDurationAfterResists();
 			if(maxDur > 0)
+			{
 				return RoundMath( 100.0f * buff.GetDurationLeft() / maxDur );
+			}
+			else if( maxDur <= -1 )
+			{
+				return 100;
+			}
 		}
 		return 0;
 	}
@@ -1311,7 +1407,7 @@ class W3EffectManager
 			
 			if(signEntity)
 			{
-				applyBuff = GetSignApplyBuffTest(signEntity.GetSignType(), effectInfos[i].effectType, attackerPowerStatValue, signEntity.IsAlternateCast(), (CActor)action.attacker);
+				applyBuff = GetSignApplyBuffTest(signEntity.GetSignType(), effectInfos[i].effectType, attackerPowerStatValue, signEntity.IsAlternateCast(), (CActor)action.attacker, action.GetBuffSourceName() );
 			}
 			else
 			{
@@ -1326,7 +1422,7 @@ class W3EffectManager
 			else
 			{
 				
-				if(signEntity.GetSignType() == ST_Aard)
+				if( signEntity && signEntity.GetSignType() == ST_Aard )
 				{
 					
 					ret = InternalAddEffect(EET_Stagger, action.attacker, action.GetBuffSourceName(), effectInfos[i].effectDuration, effectInfos[i].effectCustomValue, effectInfos[i].customFXName, effectInfos[i].effectAbilityName, signEntity, attackerPowerStatValue, effectInfos[i].effectCustomParam );
@@ -1371,7 +1467,7 @@ class W3EffectManager
 	}
 	
 	
-	private final function GetSignApplyBuffTest(signType : ESignType, effectType : EEffectType, powerStatValue : SAbilityAttributeValue, isAlternate : bool, caster : CActor) : bool
+	private final function GetSignApplyBuffTest(signType : ESignType, effectType : EEffectType, powerStatValue : SAbilityAttributeValue, isAlternate : bool, caster : CActor, sourceName : string ) : bool
 	{
 		var sp, res, chance, tempF : float;
 		var chanceBonus : SAbilityAttributeValue;
@@ -1387,7 +1483,7 @@ class W3EffectManager
 		owner.GetResistValue(theGame.effectMgr.GetBuffResistStat(effectType), tempF, res);
 		chance = sp / theGame.params.MAX_SPELLPOWER_ASSUMED - res;
 		
-		if(signType == ST_Yrden || signType == ST_Axii )
+		if( signType == ST_Yrden || signType == ST_Axii || sourceName == "mutation11" )
 		{
 			chance = 1;
 		}
@@ -1613,7 +1709,7 @@ class W3EffectManager
 			{
 				if(regenEffect.GetRegenStat() == CRS_Stamina)
 				{
-					PauseEffects(effects[i].GetEffectType(), sourceName, true, duration);
+					PauseEffects(effects[i].GetEffectType(), sourceName, true, duration, true);
 				}
 			}
 		}
@@ -1637,7 +1733,7 @@ class W3EffectManager
 		}
 	}
 	
-	public final function ResumeHPRegenEffects(sourceName : name)
+	public final function ResumeHPRegenEffects( sourceName : name, optional forceAll : bool )
 	{		
 		var i : int;
 		var regenEffect : W3RegenEffect;
@@ -1649,16 +1745,16 @@ class W3EffectManager
 			{
 				if(regenEffect.GetRegenStat() == CRS_Vitality || regenEffect.GetRegenStat() == CRS_Essence)
 				{
-					ResumeEffects(effects[i].GetEffectType(), sourceName);
+					ResumeEffects( effects[i].GetEffectType(), sourceName, forceAll );
 				}
 			}
 		}
 	}
 	
 	
-	public final function ResumeEffects(effectType : EEffectType, sourceName : name)
+	public final function ResumeEffects( effectType : EEffectType, sourceName : name, optional forced : bool )
 	{
-		ResumeEffectsInternal(effectType, sourceName);
+		ResumeEffectsInternal( effectType, sourceName, forced );
 	}
 	
 	
@@ -1799,20 +1895,6 @@ class W3EffectManager
 	}
 	
 	
-	public final function UpdateApplicatorBuffs()
-	{
-		var i : int;
-		var applicator : W3ApplicatorEffect;
-		
-		for(i=0; i<effects.Size(); i+=1)
-		{
-			applicator = (W3ApplicatorEffect)effects[i];
-			if(applicator)
-				applicator.UpdateParams();
-		}
-	}
-	
-	
 	public final function GetPotionBuffLevel(effectType : EEffectType) : int
 	{
 		var buff : CBaseGameplayEffect;
@@ -1946,8 +2028,10 @@ class W3EffectManager
 				continue;
 			}
 				
-			if(effects[i].GetInitialDuration() != -1)
+			if(effects[i].GetTimeLeft() != -1)
+			{
 				RemoveEffectOnIndex(i, true);
+			}
 		}
 	}
 	

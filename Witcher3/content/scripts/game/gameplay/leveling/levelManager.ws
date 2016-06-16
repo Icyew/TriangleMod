@@ -11,8 +11,9 @@ class W3LevelManager
 {
 	private var owner : W3PlayerWitcher;
 	private saved var levelDefinitions : array< SLevelDefinition >;		
-	private saved var level : int;									
-	private saved var points : array< SSpendablePoints >;			
+	private saved var level : int;										
+	private saved var points : array< SSpendablePoints >;				
+	private saved var lastCustomLevel : int;							
 	
 	public function Initialize()
 	{
@@ -26,26 +27,125 @@ class W3LevelManager
 			points.PushBack(tmp);
 	}
 	
-	public function PostInit(own : W3PlayerWitcher, bFromLoad : bool)
+	public function PostInit(own : W3PlayerWitcher, bFromLoad : bool, enableInfiniteLevels : bool)
 	{
+		var i, expForCurrentLevel, pool, usedPoints, freePoints, temp, expDiff : int;
+		var dm : CDefinitionsManagerAccessor;
+		var main : SCustomNode;
+		var levelDef : SLevelDefinition;
+		
 		owner = own;
-				
+
+		
+		if(!bFromLoad || (enableInfiniteLevels && lastCustomLevel == 0) )
+		{
+			levelDefinitions.Clear();
+			LoadLevelingDataFromXML();
+			
+			
+			for(i=levelDefinitions.Size(); i>=0; i-=1)
+			{
+				if(levelDefinitions[i].number > lastCustomLevel)
+					lastCustomLevel = levelDefinitions[i].number;
+			}
+		}
+		
+		
 		if(!bFromLoad)
 		{	
-			LoadLevelingDataFromXML();
-			level = levelDefinitions[0].number;		
+			level = levelDefinitions[1].number;		
+		}		
+		
+		
+		if( bFromLoad && levelDefinitions[0].number != -1 )
+		{
+			dm = theGame.GetDefinitionsManager();
+			main = dm.GetCustomDefinition('leveling');
+			
+			for(i=0; i<main.subNodes.Size(); i+=1)
+			{
+				if( dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'number', temp) && temp == -1 )
+				{
+					levelDef.number = temp;
+					dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'requiredTotalExp', temp);
+					levelDef.requiredTotalExp = temp;
+					dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'addedSkillPoints', temp);			
+					levelDef.addedSkillPoints = temp;
+					dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'requiredExp', temp);			
+					levelDef.requiredExp = temp;
+					
+					levelDefinitions.Insert( 0, levelDef );
+					break;
+				}
+			}
+		}
+		
+		
+		if( bFromLoad && levelDefinitions.Size() > 51 )
+		{
+			lastCustomLevel = 50;
+			
+			for( i=levelDefinitions.Size()-1; i>=0; i-=1 )
+			{
+				if( levelDefinitions[i].number > lastCustomLevel )
+				{
+					levelDefinitions.EraseFast(i);
+				}
+			}
+		}
+		
+		
+		expForCurrentLevel = GetTotalExpForCurrLevel();
+		usedPoints = points[EExperiencePoint].used;
+		if( bFromLoad && usedPoints < expForCurrentLevel )
+		{
+			
+			if( theGame.IsNewGameInStandaloneDLCMode() && FactsQuerySum( "standalone_ep1" ) > 0 )
+			{
+				points[EExperiencePoint].used = expForCurrentLevel;
+				expDiff = expForCurrentLevel - usedPoints;
+				
+				
+				if( expDiff > 48000 )
+				{
+					points[EExperiencePoint].free = expDiff - 48000;
+				}
+				else
+				{
+					points[EExperiencePoint].free = 0;
+				}
+			}
+			else
+			{
+				points[EExperiencePoint].used = expForCurrentLevel;
+			}
 		}
 	}
 	
 	public final function ResetCharacterDev()
 	{
-		var i : int;
+		var mutPoints : int;
 		
-		for(i=0; i<points.Size(); i+=1)
-		{
-			points[i].free += points[i].used;
-			points[i].used = 0;
-		}
+		mutPoints = ( ( W3PlayerAbilityManager ) owner.abilityManager ).GetMutationsUsedSkillPoints();
+		points[ ESkillPoint].free += points[ ESkillPoint ].used - mutPoints;
+		points[ ESkillPoint ].used = mutPoints;	
+		
+		
+		
+		
+	}
+	
+	public final function ResetMutationsDev()
+	{
+		var mutPoints : int;
+		
+		mutPoints = ( ( W3PlayerAbilityManager ) owner.abilityManager ).GetMutationsUsedSkillPoints();
+		points[ ESkillPoint].free += mutPoints;
+		points[ ESkillPoint ].used -= mutPoints;	
+		
+		
+		
+		
 	}
 	
 	
@@ -68,7 +168,9 @@ class W3LevelManager
 		}
 		
 		ArraySortInts(tmpLevels);
-		for(i=1; i<tmpLevels.Size()-1; i+=1)
+		
+		
+		for(i=2; i<tmpLevels.Size()-1; i+=1)
 		{
 			if(tmpLevels[i-1]+1 != tmpLevels[i])
 			{
@@ -89,12 +191,13 @@ class W3LevelManager
 			levelDef.requiredTotalExp = temp;
 			dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'addedSkillPoints', temp);			
 			levelDef.addedSkillPoints = temp;
-			dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'addedMutationPoints', temp);
-			levelDef.addedMutationPoints = temp;
-			dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'addedKnowledgePoints', temp);
-			levelDef.addedKnowledgePoints = temp;
+			dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'requiredExp', temp);			
+			levelDef.requiredExp = temp;
 			
 			levelDefinitions.PushBack(levelDef);
+			
+			levelDef.requiredExp = 0;
+			levelDef.requiredTotalExp = 0;
 		}
 	}
 	
@@ -102,30 +205,7 @@ class W3LevelManager
 	{
 		points[ESkillPoint].free = amount;
 	}
-	
-	public function FixMaxLevel()
-	{
-		var i : int;
 		
-		
-		if(points[EExperiencePoint].used >= levelDefinitions[GetMaxLevel()].requiredTotalExp)
-		{
-			level = GetMaxLevel();
-			points[EExperiencePoint].free = 0;
-			
-			i = 0;
-			while( levelDefinitions[i].number != level )
-			{
-				i+=1;
-			}
-			points[EExperiencePoint].used = levelDefinitions[i].requiredTotalExp;
-		}
-		else if(level == GetMaxLevel())
-		{
-			points[EExperiencePoint].free = 0;
-		}
-	}
-	
 	
 	public function AddPoints(type : ESpendablePointType, amount : int, show : bool )
 	{
@@ -133,6 +213,7 @@ class W3LevelManager
 		var arrInt : array<int>;
 		var hudWolfHeadModule : CR4HudModuleWolfHead;		
 		var hud : CR4ScriptedHud;
+		var extraLevels: int;
 		hud = (CR4ScriptedHud)theGame.GetHud();
 	
 		if(amount <= 0)
@@ -141,16 +222,25 @@ class W3LevelManager
 			return;
 		}
 		
-		
-		if(type == EExperiencePoint && level >= GetMaxLevel())
-			return;
-			 
+		if( type == EExperiencePoint && GetLevel() == GetMaxLevel() )
+		{
+			return;				
+		}
+
 		points[type].free += amount;
 
 		if(type == EExperiencePoint)
 		{
 			
-			if(FactsQuerySum("NewGamePlus") > 0 && GetLevel() < 50)
+			if ( FactsQuerySum("NewGamePlus") > 0 )
+			{
+				if ( theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL > 0 )
+				{
+					extraLevels = theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL;
+				}
+			}
+			
+			if(FactsQuerySum("NewGamePlus") > 0 && GetLevel() < 50 + extraLevels)
 			{
 				points[type].free += amount;
 				amount *= 2;
@@ -162,15 +252,25 @@ class W3LevelManager
 				total = GetTotalExpForNextLevel();
 				if(total > 0 && GetPointsTotal(EExperiencePoint) >= total)
 				{
-					GainLevel( true );
-					GetWitcherPlayer().AddAbility( GetWitcherPlayer().GetLevelupAbility( GetWitcherPlayer().GetLevel() ) );
+					if( GainLevel( show ) )
+					{
+						GetWitcherPlayer().AddAbility( GetWitcherPlayer().GetLevelupAbility( GetWitcherPlayer().GetLevel() ) );
+					}
+					else
+					{
+						break;
+					}
 				}
 				else
+				{
 					break;
+				}
 			}
 			
-			if(level == GetMaxLevel())
+			
+			if( GetLevel() == GetMaxLevel() )
 			{
+				amount -= 2 * points[type].free;	
 				points[type].free = 0;
 			}
 		
@@ -236,48 +336,84 @@ class W3LevelManager
 	public function GetPointsUsed(type : ESpendablePointType) : int			{return points[type].used;}
 	public function GetPointsTotal(type : ESpendablePointType) : int		{return points[type].free + points[type].used;}
 	public function GetLevel() : int										{return level;}
-	public function GetMaxLevel() : int										{return 70;}
-
+	public function GetMaxLevel() : int										{return 100;}
+	
+	private final function GetLevelDefinition(level : int) : SLevelDefinition
+	{
+		var temp : SLevelDefinition;
+		var levelsOverMax : int;
+		
+		
+		if(level > lastCustomLevel)
+		{
+			levelsOverMax = level - lastCustomLevel;
+		
+			temp.number = level;
+			temp.addedSkillPoints = levelDefinitions[0].addedSkillPoints;
+			temp.requiredTotalExp = levelDefinitions[lastCustomLevel].requiredTotalExp + levelsOverMax * levelDefinitions[0].requiredExp;
+			
+			return temp;
+		}
+		else
+		{
+			return levelDefinitions[level];
+		}
+	}
+	
 	
 	public function GetTotalExpForCurrLevel() : int
 	{
-		if ( level > 0 )
-			return levelDefinitions[ level - 1 ].requiredTotalExp;
-		else
-			return 0;
+		var levelDef : SLevelDefinition;
+		
+		levelDef = GetLevelDefinition(level);
+		return levelDef.requiredTotalExp;
 	}
 	
 	
 	public function GetTotalExpForNextLevel() : int							
 	{
-		if(level < levelDefinitions[levelDefinitions.Size()-1].number)
-			return levelDefinitions[level].requiredTotalExp;
-		else
-			return -1;
+		var nextLevelDef : SLevelDefinition;
+		
+		nextLevelDef = GetLevelDefinition(level + 1);
+		return nextLevelDef.requiredTotalExp;
+	}
+	
+	public function GetTotalExpForGivenLevel( i : int ) : int
+	{
+		var levelDef		: SLevelDefinition;
+		
+		levelDef = GetLevelDefinition( i );
+		return levelDef.requiredTotalExp;
 	}
 		
-	public function GainLevel( show : bool )
+	public function GainLevel( show : bool ) : bool
 	{
 		var totalExp : int;
+		var newLevelDef : SLevelDefinition;
 	
 		if(level == GetMaxLevel())
 		{
 			LogAssert(false, "W3LevelManager.GainLevel: already at max level, so why trying to gain a level?");
-			return;
+			return false;
 		}
 		
 		level += 1;
 		
+		newLevelDef = GetLevelDefinition(level);
+		
 		totalExp = points[EExperiencePoint].used + points[EExperiencePoint].free;
-		points[EExperiencePoint].used = levelDefinitions[level].requiredTotalExp;
+		
+		points[EExperiencePoint].used = newLevelDef.requiredTotalExp;
 		points[EExperiencePoint].free = totalExp - points[EExperiencePoint].used;
 		
 		theTelemetry.LogWithValue(TE_HERO_LEVEL_UP, level);
 		
-		if(levelDefinitions[level].addedSkillPoints > 0)
-			AddPoints(ESkillPoint, levelDefinitions[level].addedSkillPoints, show);
+		if(newLevelDef.addedSkillPoints > 0)
+			AddPoints(ESkillPoint, newLevelDef.addedSkillPoints, show);
 			
 		owner.OnLevelGained(level, show);
+		
+		return true;
 	}
 	
 	public function AutoLevel()
@@ -310,5 +446,28 @@ class W3LevelManager
 				skills.Erase(i);
 			}			
 		}
+	}
+	
+	public function Hack_EP2StandaloneLevelShrink( lev : int )
+	{
+		var l_expForEP2Level	: int;
+		var l_i					: int;
+		
+		for( l_i = GetLevel() ; l_i > lev ; l_i -= 1 )
+		{
+			GetWitcherPlayer().RemoveAbility( GetWitcherPlayer().GetLevelupAbility( l_i ) );
+		} 
+		
+		
+		level = 1;
+		points[ EExperiencePoint ].free = 0;
+		points[ EExperiencePoint ].used = 0;		
+		points[ ESkillPoint ].free = 0;
+		points[ ESkillPoint ].used = 0;
+		
+		l_expForEP2Level = GetTotalExpForGivenLevel( lev );
+		AddPoints( EExperiencePoint, l_expForEP2Level, false );
+		
+		AddPoints( ESkillPoint, 10, false );
 	}
 }

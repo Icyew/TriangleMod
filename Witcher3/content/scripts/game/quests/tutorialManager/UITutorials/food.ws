@@ -22,7 +22,6 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		var currentTab : int;
 		var hasFood : bool;
 		var item : SItemUniqueId;
-		var highlights : array<STutorialHighlight>;
 		
 		super.OnEnterState(prevStateName);
 		
@@ -57,7 +56,7 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 		if(hasFood)
 		{
-			ShowHint(USAGE, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f);
+			ShowHint(USAGE, POS_INVENTORY_X, POS_INVENTORY_Y);
 		}
 		else
 		{
@@ -74,13 +73,7 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 			}
 			else
 			{
-				highlights.Resize(1);
-				highlights[0].x = 0.09;
-				highlights[0].y = 0.145;
-				highlights[0].width = 0.06;
-				highlights[0].height = 0.09;
-		
-				ShowHint(SELECT_TAB, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f, ETHDT_Infinite, highlights);
+				ShowHint( SELECT_TAB, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite, GetHighlightInvTabMisc() );
 			}
 		}		
 	}
@@ -89,10 +82,10 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		isClosing = true;
 		
-		CloseHint(SELECT_TAB);
-		CloseHint(SELECT_FOOD);
-		CloseHint(EQUIP_FOOD);
-		CloseHint(USAGE);
+		CloseStateHint(SELECT_TAB);
+		CloseStateHint(SELECT_FOOD);
+		CloseStateHint(EQUIP_FOOD);
+		CloseStateHint(USAGE);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(SELECT_TAB);
 		
@@ -114,9 +107,9 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	
 	event OnPotionTabSelected()
 	{
-		CloseHint(SELECT_TAB);
+		CloseStateHint(SELECT_TAB);
 		
-		ShowHint(SELECT_FOOD, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f, ETHDT_Infinite);
+		ShowHint(SELECT_FOOD, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite);
 	}
 	
 	event OnSelectedItem(itemId : SItemUniqueId)
@@ -124,20 +117,20 @@ state Food in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		if(IsCurrentHint(SELECT_FOOD) && thePlayer.inv.IsItemFood(itemId))
 		{
 			
-			CloseHint(SELECT_FOOD);
-			ShowHint(EQUIP_FOOD, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f, ETHDT_Infinite);
+			CloseStateHint(SELECT_FOOD);
+			ShowHint(EQUIP_FOOD, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite);
 		}
 		else if(IsCurrentHint(EQUIP_FOOD) && !thePlayer.inv.IsItemFood(itemId))
 		{
 			
-			CloseHint(EQUIP_FOOD);
-			ShowHint(SELECT_FOOD, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f, ETHDT_Infinite);
+			CloseStateHint(EQUIP_FOOD);
+			ShowHint(SELECT_FOOD, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite);
 		}
 	}
 	
 	event OnFoodEquipped()
 	{
-		CloseHint(EQUIP_FOOD);
-		ShowHint(USAGE, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1f);
+		CloseStateHint(EQUIP_FOOD);
+		ShowHint(USAGE, POS_INVENTORY_X, POS_INVENTORY_Y);
 	}
 }

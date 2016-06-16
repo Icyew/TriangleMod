@@ -8,9 +8,10 @@
 
 state ForcedAlchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 {
-	private const var ALCHEMY_GO_TO : name;
+	private const var ALCHEMY_GO_TO, OPEN_MENU : name;
 	
 		default ALCHEMY_GO_TO = 'TutorialAlchemyForcedEnterAlchemy';
+		default OPEN_MENU = 'TutorialAlchemyForcedOpenMenu';
 	
 	event OnEnterState( prevStateName : name )
 	{
@@ -20,7 +21,7 @@ state ForcedAlchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		theGame.GetTutorialSystem().uiHandler.LockCloseUIPanels(true);
 		
 		
-		CloseHint('TutorialAlchemyForcedOpenMenu');
+		theGame.GetTutorialSystem().HideTutorialHint( OPEN_MENU );
 		
 		
 		ShowHint(ALCHEMY_GO_TO, 0.35f, 0.6f, ETHDT_Infinite);	
@@ -31,7 +32,7 @@ state ForcedAlchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	
 	event OnLeaveState( nextStateName : name )
 	{
-		CloseHint(ALCHEMY_GO_TO);
+		CloseStateHint(ALCHEMY_GO_TO);
 		
 		super.OnLeaveState(nextStateName);
 	}	

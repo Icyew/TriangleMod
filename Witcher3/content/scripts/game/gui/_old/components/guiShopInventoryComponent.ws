@@ -13,13 +13,33 @@ class W3GuiShopInventoryComponent extends W3GuiBaseInventoryComponent
 	function SetInventoryFlashObjectForItem( item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void
 	{
 		var isQuest	 : bool;
+		var l_questTag	: string;
 		
 		super.SetInventoryFlashObjectForItem(item, flashObject);
 		
-		isQuest = _inv.ItemHasTag(item, 'Quest');
+		
+		l_questTag = "";
+		if(_inv.ItemHasTag(item, 'Quest'))
+		{
+			l_questTag = "Quest";
+			isQuest = true;
+		}
+		
+		if (_inv.ItemHasTag(item, 'QuestEP1'))
+		{
+			l_questTag = "QuestEP1";
+			isQuest = true;
+		}
+		
+		if (_inv.ItemHasTag(item, 'QuestEP2'))
+		{
+			l_questTag = "QuestEP2";
+			isQuest = true;
+		}
 		
 		flashObject.SetMemberFlashBool( "isQuest", isQuest );
 		flashObject.SetMemberFlashBool( "isNew", false ); 
+		flashObject.SetMemberFlashString( "questTag", l_questTag );
 	}
 	
 	protected function GridPositionEnabled() : bool

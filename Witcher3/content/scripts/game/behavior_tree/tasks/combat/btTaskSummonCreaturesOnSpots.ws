@@ -18,16 +18,19 @@ class BTTaskSummonCreaturesOnSpots extends IBehTreeTask
 	
 	
 	
-	private var entityToSpawn 			: CEntityTemplate;
-	private var summonOnAnimEvent 		: name;
-	private var spotTag 				: name;
-	private var minDistance				: float;
-	private var maxDistance				: float;
-	private var maxSpawnQuantity		: int;
-	private var betweenSpawnDelay		: SRangeF;
-	private var completeAfterSpawn		: bool;
-	private var spawnAreaCenter			: ETargetName;
-	private var minDistanceFromSpawner	: float;
+	private var entityToSpawn 				: CEntityTemplate;
+	private var summonOnAnimEvent 			: name;
+	private var spotTag 					: name;
+	private var minDistance					: float;
+	private var maxDistance					: float;
+	private var maxSpawnQuantity			: int;
+	private var betweenSpawnDelay			: SRangeF;
+	private var completeAfterSpawn			: bool;
+	private var spawnAreaCenter				: ETargetName;
+	private var minDistanceFromSpawner		: float;
+	private var spawnBehVarName				: name;
+	private var spawnBehVar					: float;
+	private var shouldForceBehaviorOnSpawn	: bool;
 	
 	private var m_Npc					: CNewNPC;
 	private var m_AllSpots				: array<CNode>;
@@ -181,6 +184,10 @@ class BTTaskSummonCreaturesOnSpots extends IBehTreeTask
 		{
 			
 			m_CreateEntityHelper.Reset();
+			if( shouldForceBehaviorOnSpawn )
+			{
+				m_CreateEntityHelper.SetPostAttachedCallback( this, 'ForceBehavior' );
+			}
 			theGame.CreateEntityAsync( m_CreateEntityHelper, entityToSpawn, l_availableSpots[i].GetWorldPosition(), l_availableSpots[i].GetWorldRotation(), true, false, false, PM_DontPersist );
 			
 			l_maxDelay = 0;
@@ -196,6 +203,12 @@ class BTTaskSummonCreaturesOnSpots extends IBehTreeTask
 			}
 			
 			l_createdEntity = m_CreateEntityHelper.GetCreatedEntity();
+			
+			if( IsNameValid( spawnBehVarName ) )
+			{
+				l_createdEntity.SetBehaviorVariable( spawnBehVarName, spawnBehVar );
+			}
+			
 			if ( l_summonerComponent )
 			{
 				l_summonerComponent.AddEntity ( l_createdEntity );
@@ -212,6 +225,16 @@ class BTTaskSummonCreaturesOnSpots extends IBehTreeTask
 			Sleep( RandRangeF( betweenSpawnDelay.max, betweenSpawnDelay.min ) );
 		}
 		
+	}
+	function ForceBehavior( l_summonEntity : CEntity)
+	{
+		var l_summon 		: CNewNPC;
+		var l_spawnTree 	: CAICustomSpawnActionDecorator;
+		
+		l_summon = ( CNewNPC ) l_summonEntity;
+		l_spawnTree = new CAICustomSpawnActionDecorator in l_summonEntity;
+		l_spawnTree.OnCreated();
+		l_summon.ForceAIBehavior( l_spawnTree, BTAP_Emergency );
 	}
 
 }
@@ -232,6 +255,9 @@ class BTTaskSummonCreaturesOnSpotsDef extends IBehTreeTaskDefinition
 	private editable var completeAfterSpawn			: bool;
 	private editable var spawnAreaCenter			: ETargetName;
 	private editable var minDistanceFromSpawner		: float;
+	private editable var spawnBehVarName			: name;
+	private editable var spawnBehVar				: float;
+	private editable var shouldForceBehaviorOnSpawn	: bool;
 	
 	default minDistance 			= -1;
 	default maxDistance 			= -1;

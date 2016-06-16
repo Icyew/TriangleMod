@@ -127,13 +127,24 @@ abstract class W3CriticalDOTEffect extends W3DamageOverTimeEffect
 		var veh : CGameplayEntity;
 		var horseComp : W3HorseComponent;
 		var boatComp : CBoatComponent;
-		
+		var params : W3BuffDoTParams;
+		var perk20Bonus : SAbilityAttributeValue;
+				
 		
 		if(IsImmuneToAllDamage(100000))		
 		{
 			isActive = false;
 			return true;
 		}
+		
+		params = (W3BuffDoTParams)customParams;
+		
+		if( params && params.isPerk20Active )
+		{
+			perk20Bonus = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'dmg_multiplier', false, false);
+			effectValue.valueAdditive *= ( 1 + perk20Bonus.valueMultiplicative );
+		}
+			
 		
 		super.OnEffectAdded(customParams);
 		

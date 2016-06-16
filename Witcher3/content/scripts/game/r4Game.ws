@@ -36,7 +36,7 @@ struct SPostponedPreAttackEvent
 import class CR4Game extends CCommonGame
 {
 	saved var zoneName : EZoneName;		
-	private var gamerProfile : W3GamerProfile;	
+	private var gamerProfile : W3GamerProfile;
 	private var isDialogOrCutscenePlaying : bool;					
 	private saved var recentDialogOrCutsceneEndGameTime : GameTime;		
 	public var isCutscenePlaying : bool;
@@ -642,7 +642,6 @@ import class CR4Game extends CCommonGame
 		
 	private function InitGamerProfile()
 	{
-		
 		gamerProfile = new W3GamerProfile in this;
 		gamerProfile.Init();
 	}
@@ -679,11 +678,11 @@ import class CR4Game extends CCommonGame
 		
 		if( !restored )
 		{
-			thePlayer.displayedQuestsGUID.Clear();
-			
 			
 			if(FactsQuerySum("started_new_game") <= 0)
 			{
+				thePlayer.displayedQuestsGUID.Clear();
+
 				dynamicallySpawnedBoats.Clear();
 				FactsAdd("started_new_game", 1);
 			}
@@ -852,7 +851,9 @@ import class CR4Game extends CCommonGame
 		var itemCount				: int;
 		var gameplayEntity 			: CGameplayEntity;
 		var inv		 				: CInventoryComponent;
-		var multiplier				: float;
+		var goldMultiplier			: float;
+		var itemMultiplier			: float;
+		var itemsCount				: int;
 		var ids						: array<SItemUniqueId>;
 		var itemCategory 			: name;
 		var lvlDiff					: int;
@@ -861,6 +862,7 @@ import class CR4Game extends CCommonGame
 		var difficultyMode			: EDifficultyMode;
 		var rewardNameS				: string;
 		var ep1Content				: bool;
+		var rewardMultData			: SRewardMultiplier;
 		
 		if ( target == thePlayer )
 		{
@@ -934,7 +936,6 @@ import class CR4Game extends CCommonGame
 					expModifier = 0.05f;			
 					GetWitcherPlayer().AddPoints( EExperiencePoint, RoundF( rewrd.experience * expGlobalMod_quests * expModifier), true);
 				}
-
 			}
 			
 			if ( rewrd.achievement > 0 )
@@ -949,26 +950,42 @@ import class CR4Game extends CCommonGame
 			inv = gameplayEntity.GetInventory();
 			if ( inv )
 			{
+				rewardMultData = thePlayer.GetRewardMultiplierData( rewardName );
+				
+				if( rewardMultData.isItemMultiplier )
+				{
+					goldMultiplier = 1.0;
+					itemMultiplier = rewardMultData.rewardMultiplier;
+				}
+				else
+				{
+					goldMultiplier = rewardMultData.rewardMultiplier;
+					itemMultiplier = 1.0;
+				}
+				
 				
 				if ( rewrd.gold > 0 )
 				{
-					multiplier = thePlayer.GetRewardMultiplier( rewardName );
-					inv.AddMoney( (int)(rewrd.gold * multiplier) );
+					inv.AddMoney( (int)(rewrd.gold * goldMultiplier) );
 					thePlayer.RemoveRewardMultiplier(rewardName);		
 					if( target == thePlayer )
 					{
-						moneyWon = (int)(rewrd.gold * multiplier);
-
+						moneyWon = (int)(rewrd.gold * goldMultiplier);
+						
 						if ( moneyWon > 0 )
 							thePlayer.DisplayItemRewardNotification('Crowns', moneyWon );
 					}
 				}
 				
+				
+				
 				for ( i = 0; i < rewrd.items.Size(); i += 1 )
 				{
-					if ( rewrd.items[ i ].amount > 0 )
+					itemsCount = RoundF( rewrd.items[ i ].amount * itemMultiplier );
+					
+					if( itemsCount > 0 )
 					{
-						ids = inv.AddAnItem( rewrd.items[ i ].item, rewrd.items[ i ].amount );
+						ids = inv.AddAnItem( rewrd.items[ i ].item, itemsCount );
 						
 						for ( itemCount = 0; itemCount < ids.Size(); itemCount += 1 )
 						{
@@ -978,7 +995,7 @@ import class CR4Game extends CCommonGame
 								inv.GenerateItemLevel( ids[i], true );
 							}
 						}
-
+						
 						itemCategory = inv.GetItemCategory( ids[0] );
 						if ( itemCategory == 'alchemy_recipe' ||  itemCategory == 'crafting_schematic' )
 						{
@@ -988,9 +1005,9 @@ import class CR4Game extends CCommonGame
 						if(target == thePlayer)
 						{
 							
-							if( !inv.ItemHasTag( ids[0],'GwintCard') )
+							if( !inv.ItemHasTag( ids[0], 'GwintCard') )
 							{
-								thePlayer.DisplayItemRewardNotification(rewrd.items[ i ].item, rewrd.items[ i ].amount );
+								thePlayer.DisplayItemRewardNotification(rewrd.items[ i ].item, RoundF( rewrd.items[ i ].amount * itemMultiplier ) );
 							}
 						}
 					}
@@ -1119,7 +1136,7 @@ import class CR4Game extends CCommonGame
 		witcher = GetWitcherPlayer();
 		if(b && witcher && witcher.IsAnyQuenActive())
 		{
-			witcher.FinishQuen(true);			
+			witcher.FinishQuen( true, true );			
 		}
 		
 		activePoster = thePlayer.GetActivePoster ();
@@ -1194,7 +1211,11 @@ import class CR4Game extends CCommonGame
 	{
 		if (GetPlatform() != Platform_PC)
 		{
-			if ( theGame.GetDLCManager().IsEP1Available() )
+			if ( theGame.GetDLCManager().IsEP2Available() )
+			{
+				menus.PushBack( 'StartScreenMenuEP2' );
+			}
+			else if ( theGame.GetDLCManager().IsEP1Available() )
 			{
 				menus.PushBack( 'StartScreenMenuEP1' );
 			}
@@ -1228,7 +1249,11 @@ import class CR4Game extends CCommonGame
 	
 	 public function PopulateMenuQueueMainAlways( out menus : array< name > )
 	{
-		if (theGame.GetDLCManager().IsEP1Available())
+		if (theGame.GetDLCManager().IsEP2Available())
+		{
+			menus.PushBack( 'CommonMainMenuEP2' );
+		}
+		else if (theGame.GetDLCManager().IsEP1Available())
 		{
 			menus.PushBack( 'CommonMainMenuEP1' );
 		}
@@ -2299,6 +2324,42 @@ import class CR4Game extends CCommonGame
 		}
 		return zoom34;
 	}
+	
+	public function GetGradientScale( areaType : int ) : float
+	{
+		var scale  : float;
+		var valueAsString : string;
+		
+		valueAsString = minimapSettings.GetValueAt( 24, areaType );
+		
+		if( StrLen( valueAsString ) != 0 )
+		{
+			scale = StringToFloat( valueAsString );
+		}
+		else
+		{
+			scale = GetWorldDLCExtender().GetGradientScale( areaType );
+		}
+		return scale;
+	}
+	
+	public function GetPreviewHeight( areaType : int ) : float
+	{
+		var height  : float;
+		var valueAsString : string;
+		
+		valueAsString = minimapSettings.GetValueAt( 25, areaType );
+		
+		if( StrLen( valueAsString ) != 0 )
+		{
+			height = StringToFloat( valueAsString );
+		}
+		else
+		{
+			height = GetWorldDLCExtender().GetPreviewHeight( areaType );
+		}
+		return height;
+	}
 
 	private function UnlockMissedAchievements()
 	{
@@ -2313,6 +2374,22 @@ import class CR4Game extends CCommonGame
 		if (FactsDoesExist("witcher3_game_finished"))
 		{
 			Achievement_FinishedGame();
+		}
+	}
+	
+	public final function MutationHUDFeedback( type : EMutationFeedbackType )
+	{
+		var hud : CR4ScriptedHud;
+		var hudWolfHeadModule : CR4HudModuleWolfHead;		
+
+		hud = (CR4ScriptedHud)GetHud();
+		if ( hud )
+		{
+			hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
+			if ( hudWolfHeadModule )
+			{
+				hudWolfHeadModule.DisplayMutationFeedback( type );
+			}
 		}
 	}
 }

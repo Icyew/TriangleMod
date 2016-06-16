@@ -19,8 +19,6 @@ class CBTTaskSearchForThrowable extends IBehTreeTask
 	var activate : bool;
 	var findTime : float;
 	
-	var throwData : CAIStorageHandler;
-	
 	function IsAvailable() : bool
 	{
 		return activate;

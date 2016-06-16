@@ -31,6 +31,8 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 	public var killHorse : bool;
 	private saved var isMountableByPlayer : bool; default isMountableByPlayer = true;
 	
+	private var horseMount : CComponent;
+	
 	public var cameraMode : int;
 	default cameraMode = 1;
 	
@@ -96,10 +98,24 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 		return GetEntity().HasTag('playerHorse');
 	}
 	
-	public function SetMountableByPlayer ( isMountable : bool )
+	private function GetHorseMount() : CComponent
+	{
+		var horseActor : CActor;
+		
+		horseActor = (CActor)GetEntity();
+		
+		if( horseActor )
+		{
+			horseMount = horseActor.GetComponent("horseMount");
+		}
+		
+		return horseMount;
+	}
+	
+	public function SetMountableByPlayer( isMountable : bool )
 	{
 		isMountableByPlayer = isMountable;
-		horseActor.GetComponent("horseMount").SetEnabled( isMountable );
+		GetHorseMount().SetEnabled( isMountableByPlayer );
 	}
 	
 	event OnInit()
@@ -192,7 +208,7 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 		lastRider = (CActor)entity;
 		
 		
-		horseActor.GetComponent("horseMount").SetEnabled( false );
+		GetHorseMount().SetEnabled( false );
 		
 		if( entity == thePlayer )
 		{
@@ -272,11 +288,8 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 		riderActor	= (CActor)entity;
 		horseActor 	= ((CActor)GetEntity());
 		
-		if (isMountableByPlayer )
-		{
-			
-			horseActor.GetComponent("horseMount").SetEnabled(true);
-		}
+		
+		GetHorseMount().SetEnabled( isMountableByPlayer );
 		
 		if( riderActor == thePlayer )
 		{
@@ -780,12 +793,21 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 	
 	public function ShakeOffRider( dismountType : EDismountType )
 	{
+		var horseActor 	: CActor;
+		
 		if ( user == thePlayer )
 		{
 			IssueCommandToDismount( dismountType );
 		}
 		else
 		{
+			horseActor = ((CActor)GetEntity());
+			
+			if( horseActor && horseActor.HasAbility( 'DisableHorsePanic' ) )
+			{
+				return;
+			}
+			
 			user.SignalGameplayEventParamInt( 'RidingManagerDismountHorse', dismountType | DT_fromScript );
 		}
 	}
@@ -889,6 +911,15 @@ statemachine import class W3HorseComponent extends CVehicleComponent
 	
 	event OnIgniHit( sign : W3IgniProjectile )
 	{
+		var horseActor 	: CActor;
+
+		horseActor = ((CActor)GetEntity());
+		
+		if( horseActor && horseActor.HasAbility( 'DisableHorsePanic' ) )
+		{
+			return false;
+		}
+		
 		if ( user.IsInCombat() )
 			this.user.SignalGameplayEventParamInt( 'RidingManagerDismountHorse', DT_shakeOff );
 	}

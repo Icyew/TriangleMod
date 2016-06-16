@@ -8,6 +8,7 @@ class CR4PosterMenu extends CR4MenuBase
 	private var	m_posterEntity : W3Poster;
 
 	private var m_fxSetDescriptionSFF			: CScriptedFlashFunction;
+	private var m_fxSetSubtitlesHackSFF			: CScriptedFlashFunction;
 
 	event  OnConfigUI()
 	{	
@@ -19,16 +20,26 @@ class CR4PosterMenu extends CR4MenuBase
 		flashModule = GetMenuFlash();
 
 		m_fxSetDescriptionSFF = flashModule.GetMemberFlashFunction( "SetDescription" );
+		m_fxSetSubtitlesHackSFF = flashModule.GetMemberFlashFunction( "SetSubtitlesHack" );
 
 		m_posterEntity = ( W3Poster )GetMenuInitData();
 		if ( m_posterEntity )
 		{
 			description = m_posterEntity.GetDescription();
-			if ( StrLen( description ) > 0 )
+			
+			if( m_posterEntity.GetIsDescriptionGenerated() )
 			{
-				description = GetLocStringByKeyExt( description );
+				m_fxSetDescriptionSFF.InvokeSelfTwoArgs( FlashArgString( description ), FlashArgBool( m_posterEntity.IsTextAlignedToLeft() ) );
 			}
-			m_fxSetDescriptionSFF.InvokeSelfOneArg( FlashArgString( description ) );
+			else
+			{
+				if ( StrLen( description ) > 0 )
+				{
+					description = GetLocStringByKeyExt( description );
+				}
+				
+				m_fxSetDescriptionSFF.InvokeSelfTwoArgs( FlashArgString( description ), FlashArgBool( m_posterEntity.IsTextAlignedToLeft() ) );
+			}
 		}
 
 		theInput.StoreContext( 'EMPTY_CONTEXT' );
@@ -57,6 +68,16 @@ class CR4PosterMenu extends CR4MenuBase
 	function CanPostAudioSystemEvents() : bool
 	{
 		return false;
+	}
+	
+	public function AddSubtitle( speaker : string, text : string )
+	{
+		m_fxSetSubtitlesHackSFF.InvokeSelfTwoArgs( FlashArgString( speaker ), FlashArgString( text ) );
+	}
+
+	public function RemoveSubtitle()
+	{
+		m_fxSetSubtitlesHackSFF.InvokeSelfTwoArgs( FlashArgString( "" ), FlashArgString( "" ) );
 	}
 }
 

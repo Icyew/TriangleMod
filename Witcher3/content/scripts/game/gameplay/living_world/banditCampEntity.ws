@@ -5,6 +5,13 @@
 /***********************************************************************/
 class W3POI_BanditCampEntity extends CR4MapPinEntity
 {	
+	private editable var regionType : EEP2PoiType;
+	
+	public function GetRegionType() : int
+	{
+		return (int) regionType;
+	}
+	
 	event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent )
 	{
 		var mapManager : CCommonMapManager;

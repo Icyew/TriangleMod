@@ -22,8 +22,14 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 	event OnProjectileShot( targetCurrentPosition : Vector, optional target : CNode )
 	{
 		super.OnProjectileShot(targetCurrentPosition,target);
+		
 		if ( !IsNameValid(activeTrail) )
 		{
+			if( ( W3PlayerWitcher ) GetOwner() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation9 ) )
+			{
+				defaultTrail = 'arrow_trail_mutation_9';
+			}
+		
 			ActivateTrail( defaultTrail );
 			
 			this.SoundEvent( "cmb_arrow_swoosh" );
@@ -54,6 +60,11 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 		var abs 		: array<name>;
 		var isRolling	: bool;
 		var template 	: CEntityTemplate;
+		
+		var meshComponent 	: CMeshComponent;
+		var boundingBox 	: Box;
+		var arrowSize 		: Vector;
+		var hitPos 			: Vector;
 		
 		if ( yrdenAlternate )
 		{
@@ -95,7 +106,7 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 			StopActiveTrail();
 			
 			
-			AddTimer('TimeDestroy', 20, false);
+			AddTimer('TimeDestroy', 5, false);
 			isScheduledForDestruction = true;
 			
 			
@@ -129,9 +140,26 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 			isActive = false;
 			StopActiveTrail();
 			
-			AddTimer('TimeDestroy', 20, false);
+			
+			AddTimer('TimeDestroy', 5, false);
 			isScheduledForDestruction = true;
 			
+			
+			if( StrFindFirst( this.GetName(), "bolt" ) != -1 )
+			{
+				
+				meshComponent = (CMeshComponent)GetComponentByClassName('CMeshComponent');
+				if( meshComponent )
+				{
+					boundingBox = meshComponent.GetBoundingBox();
+					arrowSize = boundingBox.Max - boundingBox.Min;
+					
+					hitPos = pos;
+					hitPos -= RotForward(  this.GetWorldRotation() ) * arrowSize.X * 0.7f; 
+					
+					Teleport( hitPos );
+				}
+			}
 			
 			ProcessDamageAction(victim, pos, boneName);
 			
@@ -205,7 +233,7 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 			
 			if(!bounce)
 			{
-				abs = thePlayer.GetAbilities(true);				
+				thePlayer.GetCharacterStats().GetAbilities(abs, true);				
 				bounce = abs.Contains(theGame.params.BOUNCE_ARROWS_ABILITY);
 				
 				if(bounce)
@@ -278,8 +306,14 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 			
 			this.SoundEvent("cmb_arrow_impact_body");
 			
-			if(IsNameValid(boneName))
+			if( ShouldPierceVictim( actorVictim ) ) 
+			{
+				Mutation9HitFX( actorVictim );
+			}
+			else if(IsNameValid(boneName))
+			{
 				AttachArrowToRagdoll(actorVictim,pos,boneName);
+			}
 			else
 			{
 				StopProjectile();
@@ -291,29 +325,42 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 		return true;
 	}
 	
-	
-	
-	event OnAardHit( sign : W3AardProjectile )
+	public final function Mutation9HitFX( actorVictim : CActor )
 	{
-		var rigidMesh : CMeshComponent;
+		var ent : CEntity;
 		
-		super.OnAardHit(sign);
 		
-		StopProjectile();
 		
-		rigidMesh = (CMeshComponent)this.GetComponentByClassName('CRigidMeshComponent');
 		
-		if ( rigidMesh )
+		GCameraShake( 0.2f );
+		
+		if(IsNameValid(boneName))
 		{
-			rigidMesh.SetEnabled( true );
+			ent = actorVictim.CreateFXEntityAtBone( 'mutation9_hit', boneName, true );
 		}
 		else
 		{
-			this.bounceOfVelocityPreserve = 0.7;
-			this.BounceOff(VecRand2D(),this.GetWorldPosition());
-			this.Init(thePlayer);
+			ent = actorVictim.CreateFXEntityAtPelvis( 'mutation9_hit', true );
 		}
+		
+		ent.PlayEffect( 'hit_refraction' );
+		ent.SoundEvent( 'ep2_mutations_09_bolt_impact_armor_type' );
 	}
+	
+	protected function ShouldPierceVictim( victim : CActor ) : bool
+	{
+		
+		if( victim && GetOwner() && (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation9 ) )
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
 	
 	event OnFireHit(source : CGameplayEntity)
 	{
@@ -466,26 +513,49 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 	
 	function AttachArrowToRagdoll(victim : CActor, pos : Vector, boneName : name)
 	{
-		var bones 		: array<name>;
-		var res 		: bool;
-		var arrowHitPos : Vector;
-		var timerAmount : float;
+		var bones 				: array<name>;
+		var res 				: bool;
+		var arrowHitPos 		: Vector;
+		var timerAmount 		: float;
+		var shouldPierceVictim 	: bool;
 		
-		StopProjectile();
-		StopActiveTrail();
-		isActive = false;
+		var meshComponent		: CMeshComponent;
+		var arrowSize			: Vector;
+		var boundingBox			: Box;
+		
+		shouldPierceVictim = ShouldPierceVictim( victim );
+		if( !shouldPierceVictim )
+		{
+			StopProjectile();
+			StopActiveTrail();	
+			isActive = false;
+		}
 		
 		bones.PushBack( 'head' );
 		bones.PushBack( 'hroll' );
 		bones.PushBack( 'neck' );
 		
-		if ( ( victim == thePlayer && bones.Contains(boneName) ) || ((CNewNPC)victim).IsHorse() ) 
+		if ( ( victim == thePlayer && bones.Contains(boneName) ) || ( ((CNewNPC)victim).IsHorse() && !shouldPierceVictim ) ) 
 		{
 			SmartDestroy();
 		}
-		else
+		else if( !shouldPierceVictim )
 		{
-			arrowHitPos = pos + RotForward( this.GetWorldRotation() ) * 0.3f; 
+			arrowHitPos = pos;
+			
+			
+			meshComponent = (CMeshComponent)GetComponentByClassName('CMeshComponent');
+			if( meshComponent )
+			{
+				boundingBox = meshComponent.GetBoundingBox();
+				arrowSize = boundingBox.Max - boundingBox.Min;
+				
+				
+				if( StrFindFirst( this.GetName(), "arrow" ) != -1 )
+					arrowHitPos += RotForward(  this.GetWorldRotation() ) * arrowSize.X * 0.1f; 
+				else
+					arrowHitPos -= RotForward(  this.GetWorldRotation() ) * arrowSize.X * 0.7f; 
+			}
 			
 			if ( boneName )
 			{
@@ -503,7 +573,7 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 				else if( victim == thePlayer )
 					timerAmount = 3;
 				else
-					timerAmount = 20;
+					timerAmount = 5;
 				
 				AddTimer('TimeDestroy', timerAmount, false);
 				isScheduledForDestruction = true;

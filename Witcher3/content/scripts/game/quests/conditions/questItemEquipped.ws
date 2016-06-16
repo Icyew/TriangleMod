@@ -23,6 +23,7 @@ class W3QuestCond_IsItemEquipped extends CQuestScriptedCondition
 {
 	editable var itemName 		: name;
 	editable var categoryName 	: name;
+	editable var inverted		: bool;
 
 	var isFulfilled				: bool;
 	var listener				: W3QuestCond_IsItemEquipped_Listener;
@@ -73,17 +74,27 @@ class W3QuestCond_IsItemEquipped extends CQuestScriptedCondition
 	function EvaluateImpl()
 	{
 		var player : W3PlayerWitcher;
-
+		var itemEquipped : bool;
+		
 		player = GetWitcherPlayer();
 		if ( player )
 		{
 			if ( IsNameValid( itemName ) )
 			{			
-				isFulfilled = player.IsItemEquippedByName( itemName );
+				itemEquipped = player.IsItemEquippedByName( itemName );
 			}
 			else if ( IsNameValid( categoryName ) )
 			{
-				isFulfilled = player.IsItemEquippedByCategoryName( categoryName );
+				itemEquipped = player.IsItemEquippedByCategoryName( categoryName );
+			}
+			
+			if( inverted )
+			{
+				isFulfilled = !itemEquipped;
+			}
+			else
+			{
+				isFulfilled = itemEquipped;
 			}
 		}
 	}

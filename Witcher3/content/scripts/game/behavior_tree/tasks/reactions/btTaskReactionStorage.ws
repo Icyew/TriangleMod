@@ -5,7 +5,6 @@
 /***********************************************************************/
 class CBTTaskReactionStorage extends IBehTreeTask
 {
-	protected var storageHandler 		: CAIStorageHandler;
 	protected var reactionDataStorage 	: CAIStorageReactionData;
 	
 	public var onActivate 		: bool;
@@ -53,9 +52,7 @@ class CBTTaskReactionStorage extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 	
 }
@@ -77,7 +74,6 @@ class CBTTaskReactionStorageDef extends IBehTreeReactionTaskDefinition
 
 class CBehTreeTaskReactionStorageCleanup extends IBehTreeTask
 {
-	protected var storageHandler 		: CAIStorageHandler;
 	protected var reactionDataStorage 	: CAIStorageReactionData;
 	
 	function OnActivate() : EBTNodeStatus
@@ -93,9 +89,7 @@ class CBehTreeTaskReactionStorageCleanup extends IBehTreeTask
 
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 }
 

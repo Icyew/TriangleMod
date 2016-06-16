@@ -60,13 +60,14 @@ class CBTTaskTornadoAttack extends CBTTaskAttack
 		
 		
 		attributeName = GetBasicAttackDamageAttributeName(theGame.params.ATTACK_NAME_LIGHT, theGame.params.DAMAGE_NAME_PHYSICAL);
-		damage = CalculateAttributeValue(npc.GetAttributeValue(attributeName));
+		damage = CalculateAttributeValue( npc.GetAttributeValue( attributeName ) );
+		if ( damage <= 0 )
+		{
+			damage = CalculateAttributeValue( npc.GetAttributeValue( 'light_attack_damage_vitality' ) );
+		}
+		
 		damage *= damageMultiplier;
-		
 		action = new W3DamageAction in this;
-		action.SetHitAnimationPlayType(EAHA_ForceNo);
-		action.attacker = npc;
-		
 		timeStamp = GetLocalTime();
 		
 		npc.SetBehaviorVariable( setBehVarOnDeactivation, 0 );
@@ -166,14 +167,17 @@ class CBTTaskTornadoAttack extends CBTTaskAttack
 						
 						if ( victims[i] != npc && !actorVictims.IsCurrentlyDodging() )
 						{
-							action.Initialize( npc, actorVictims, this, npc.GetName(), EHRT_None, CPS_AttackPower, false, true, false, false );
+							action.Initialize( npc, actorVictims, this, npc.GetName(), EHRT_None, CPS_Undefined, false, true, false, false );
+							action.SetHitAnimationPlayType(EAHA_ForceNo);
+							action.attacker = npc;
 							action.SetSuppressHitSounds(true);
 							action.SetHitEffect( '' );
 							action.SetIgnoreArmor(true);
 							action.AddDamage(theGame.params.DAMAGE_NAME_PHYSICAL, damage );
+							action.SetIsDoTDamage( damageInterval );
 							theGame.damageMgr.ProcessAction( action );
 							
-							npc.SignalGameplayEvent('DamageInstigated' );
+							npc.SignalGameplayEventParamObject( 'DamageInstigated', action );
 							
 							if ( ((W3PlayerWitcher)actorVictims).IsQuenActive( false ) )
 								((W3PlayerWitcher)actorVictims).FinishQuen( false );
@@ -191,11 +195,6 @@ class CBTTaskTornadoAttack extends CBTTaskAttack
 		
 		delete action;
 		return BTNS_Active;
-	}
-	
-	function Dupa()
-	{
-		
 	}
 	
 	

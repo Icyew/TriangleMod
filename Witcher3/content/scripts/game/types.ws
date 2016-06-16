@@ -20,7 +20,7 @@ enum EActorImmortalityChanel
 	AIC_Default = 1,
 	AIC_Combat = 2,
 	AIC_Scene = 4,
-	AIC_CombatFocusMode = 8,
+	AIC_Mutation11 = 8,
 	AIC_Fistfight = 16,
 	AIC_SyncedAnim = 32,
 	AIC_WhiteRaffardsPotion = 64,
@@ -61,12 +61,13 @@ enum EAreaName
 	AN_Spiral,
 	AN_Prologue_Village_Winter,
 	AN_Velen,
-	
 	AN_CombatTestLevel,
+	
 }
 
 enum EDlcAreaName
 {
+	
 	AN_Dlc_Bob = 11, 
 }
 
@@ -396,6 +397,7 @@ function IsBasicAttack(attackName : name) : bool
 		case theGame.params.ATTACK_NAME_LIGHT: 
 		case theGame.params.ATTACK_NAME_HEAVY:
 		case theGame.params.ATTACK_NAME_SUPERHEAVY:
+		case theGame.params.ATTACK_NAME_SPEED_BASED:
 			return true;
 		default : 
 			return false;
@@ -487,6 +489,26 @@ function MonsterCategoryToAttackPowerBonus(type : EMonsterCategory) : name
 		case MC_Vampire :			return 'vsVampire_attack_power';
 		
 		default :				return '';
+	}
+}
+function MonsterAttackPowerBonusToCategory( ap : name ) : EMonsterCategory
+{
+	switch(ap)
+	{
+		case 'vsBeast_attack_power': 		return MC_Beast;
+		case 'vsCursed_attack_power': 		return MC_Cursed;
+		case 'vsDraconide_attack_power': 	return MC_Draconide;
+		case 'vsHuman_attack_power': 		return MC_Human;
+		case 'vsHybrid_attack_power': 		return MC_Hybrid;
+		case 'vsInsectoid_attack_power': 	return MC_Insectoid;
+		case 'vsMagicals_attack_power': 	return MC_Magicals;
+		case 'vsNecrophage_attack_power': 	return MC_Necrophage;
+		case 'vsRelic_attack_power': 		return MC_Relic;
+		case 'vsSpecter_attack_power':		return MC_Specter;
+		case 'vsOgre_attack_power': 		return MC_Troll;
+		case 'vsVampire_attack_power': 		return MC_Vampire;
+		
+		default :							return MC_NotSet;
 	}
 }
 function MonsterCategoryToCriticalChanceBonus(type : EMonsterCategory) : name
@@ -846,8 +868,24 @@ EA_Unused,
 	EA_LatestFashion,								
 	EA_WantedDeadOrBovine,							
 	EA_Slide,										
-	EA_KilledIt										
+	EA_KilledIt,									
+	
+	
+	EA_BeauclairWelcomeTo,							
+	EA_HeroOfBeauclair,								
+	EA_BeauclairMostWanted,							
+	EA_ChampionOfBeauclair,							
+	EA_LikeAVirgin,									
+	EA_HomeSweetHome,								
+	EA_TurnedEveryStone,							
+	EA_GotToHaveThemAll,							
+	EA_BloodAndWine,								
+	EA_ReadyToRoll,									
+	EA_SchoolOfTheMutant,							
+	EA_HastaLaVista,								
+	EA_Goliath										
 }
+
 
 function AchievementNameToEnum(n : name) : EAchievement
 {
@@ -996,6 +1034,22 @@ function AchievementEnumToName(a : EAchievement) : name
 		case EA_KillEtherals : return 'EA_KillEtherals'; break;
 		case EA_DivineWhip : return 'EA_DivineWhip'; break;
 		case EA_LatestFashion : return 'EA_LatestFashion'; break;
+		
+		
+		case EA_BeauclairWelcomeTo : return 'EA_BeauclairWelcomeTo'; break;
+		case EA_HeroOfBeauclair : return 'EA_HeroOfBeauclair'; break;
+		case EA_BeauclairMostWanted : return 'EA_BeauclairMostWanted'; break;
+		case EA_ChampionOfBeauclair : return 'EA_ChampionOfBeauclair'; break;
+		case EA_LikeAVirgin : return 'EA_LikeAVirgin'; break;
+		case EA_HomeSweetHome : return 'EA_HomeSweetHome'; break;
+		case EA_TurnedEveryStone : return 'EA_TurnedEveryStone'; break;
+		case EA_GotToHaveThemAll : return 'EA_GotToHaveThemAll'; break;
+		case EA_BloodAndWine : return 'EA_BloodAndWine'; break;
+		case EA_ReadyToRoll : return 'EA_ReadyToRoll'; break;
+		case EA_SchoolOfTheMutant : return 'EA_SchoolOfTheMutant'; break;
+		case EA_HastaLaVista : return 'EA_HastaLaVista'; break;
+		
+		case EA_Goliath : return 'EA_Goliath'; break;
 
 		case EA_Undefined :
 		case EA_Unused :
@@ -1129,3 +1183,13 @@ struct SSwarmVictim
 	var timeInSwarm : float;
 	var inTrigger : bool;
 };
+
+
+enum EBloodType
+{
+	BT_Undefined,
+	BT_Red,
+	BT_Yellow,
+	BT_Black,
+	BT_Green
+}

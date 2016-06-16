@@ -16,6 +16,9 @@ class CBTTask3StateAttack extends CBTTaskAttack
 	var stopRotatingWhenTargetIsBehind 	: bool;
 	var playFXOnLoopStart 				: name;
 	var playLoopFXInterval				: float;
+	var raiseEventName 					: name;
+	var startDeactivationEventName 		: name;
+	var endDeactivationEventName 		: name;
 	
 	private var startPos				: Vector;
 	public var lastFXTime				: float;
@@ -34,13 +37,16 @@ class CBTTask3StateAttack extends CBTTaskAttack
 		
 		npc.SetBehaviorVariable( 'AttackEnd', 0.0 );
 		
-		if( npc.RaiseForceEvent( '3StateAttack' ) )
+		if( IsNameValid( raiseEventName ) )
 		{
-			npc.WaitForBehaviorNodeDeactivation( 'AttackStart', 10.0f );
-		}
-		else
-		{
-			return BTNS_Failed;
+			if( npc.RaiseForceEvent( raiseEventName ) )
+			{
+				npc.WaitForBehaviorNodeDeactivation( startDeactivationEventName, 10.0f );
+			}
+			else
+			{
+				return BTNS_Failed;
+			}
 		}
 		
 		if ( IsNameValid( playFXOnLoopStart ) && playLoopFXInterval <= 0 )
@@ -55,10 +61,12 @@ class CBTTask3StateAttack extends CBTTaskAttack
 		
 		ChooseAnim();
 		if ( IsNameValid( playFXOnLoopStart ))
+		{
 			npc.StopEffect( playFXOnLoopStart );
+		}
 		npc.SetBehaviorVariable( 'AttackEnd', 1.0 );
 		
-		npc.WaitForBehaviorNodeDeactivation('AttackEnd', 10.0f );
+		npc.WaitForBehaviorNodeDeactivation( endDeactivationEventName, 10.0f );
 		
 		if ( loopRes == -1 )
 		{
@@ -102,7 +110,7 @@ class CBTTask3StateAttack extends CBTTaskAttack
 			target = GetCombatTarget();
 			npcPos = npc.GetWorldPosition();
 			targetPos = target.GetWorldPosition();
-
+			
 			dist = VecDistance2D( npcPos, targetPos );
 			
 			while( dist > distanceToTarget )
@@ -111,7 +119,7 @@ class CBTTask3StateAttack extends CBTTaskAttack
 				npcPos = npc.GetWorldPosition();
 				targetPos = target.GetWorldPosition();
 				dist = VecDistance2D( npcPos, targetPos );
-			}	
+			}
 		}
 		else if ( endTaskWhenOwnerGoesPastTarget )
 		{
@@ -193,11 +201,17 @@ class CBTTask3StateAttackDef extends CBTTaskAttackDef
 	editable var stopRotatingWhenTargetIsBehind : bool;
 	editable var playFXOnLoopStart				: name;
 	editable var playLoopFXInterval				: float;
+	editable var raiseEventName 				: name;
+	editable var startDeactivationEventName 	: name;
+	editable var endDeactivationEventName 		: name;
 	
 	default distanceToTarget = 1.5;
 	default loopTime = 4.0;
 	default playLoopFXInterval = -1;
 	default stopRotatingWhenTargetIsBehind = false;
+	default raiseEventName = '3StateAttack';
+	default startDeactivationEventName = 'AttackStart';
+	default endDeactivationEventName = 'AttackEnd';
 }
 
 

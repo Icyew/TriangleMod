@@ -3,7 +3,7 @@
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
 /***********************************************************************/
-class W3AnimationInteractionEntity extends CGameplayEntity
+class W3AnimationInteractionEntity extends CR4MapPinEntity
 {
 	editable var animationForAllInteractions 	: bool;							default animationForAllInteractions = true;
 	editable var interactionName				: string;						default interactionName = "Examine";

@@ -58,3 +58,16 @@ class CBTTaskFinishableDef extends IBehTreeTaskDefinition
 
 	editable var finisherAnimName : name;
 }
+
+
+class CBTTaskEndFinisherOnDeactivate extends IBehTreeTask
+{
+	function OnDeactivate()
+	{
+		thePlayer.OnFinisherEnd();
+	}
+}
+class CBTTaskEndFinisherOnDeactivateDef extends IBehTreeTaskDefinition
+{
+	default instanceClass ='CBTTaskEndFinisherOnDeactivate';
+}

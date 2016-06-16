@@ -80,6 +80,13 @@ class CAISorceressTeleportActionTree extends IAICustomActionTree
 	editable var targetTag			: name;
 };
 
+class CAIVampireTeleportActionTree extends IAICustomActionTree
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\scripted_actions\custom_action_vampire_teleport.w2behtree";
+	
+	editable var targetTag			: name;
+};
+
 class CAISwarmTeleportAttackActionTree extends IAICustomActionTree
 {
 	default aiTreeName = "resdef:ai\scripted_actions\custom\custom_action_swarm_teleport_attack";

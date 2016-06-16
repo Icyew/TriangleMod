@@ -6,30 +6,25 @@
 
 
 abstract class CBTTaskRidingManagerBoatMount extends CBTTaskRidingManagerVehicleMount
-{	
+{
 	var behGraphAlias : name;
 	default attachSlot = 'seat';
 	
 	function GetVehicleComponent() : CVehicleComponent
 	{
-		var riderData       : CAIStorageRiderData;
 		var boat			: CEntity;
-        riderData        = (CAIStorageRiderData)aiStorageHandler.Get();
         boat = EntityHandleGet( riderData.sharedParams.boat );
 		return (CVehicleComponent)boat.GetComponentByClassName('CVehicleComponent');
 	}
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData       : CAIStorageRiderData;
         var vehicleComponent: CVehicleComponent;
         
         if ( super.OnActivate() != BTNS_Active )
         {   
 			return BTNS_Failed;
 		}
-		
-        riderData        = (CAIStorageRiderData)aiStorageHandler.Get();
 		
 		if ( riderData.sharedParams.vehicleSlot == EVS_driver_slot )
         {
@@ -69,12 +64,9 @@ abstract class CBTTaskRidingManagerBoatMount extends CBTTaskRidingManagerVehicle
 	}
 	latent function Main() : EBTNodeStatus
     {
-        var riderData       : CAIStorageRiderData;
         var vehicleComponent: CVehicleComponent;
         var vehicle			: CEntity;
         var boatComp		: CBoatComponent;
-        
-        riderData        = (CAIStorageRiderData)aiStorageHandler.Get();
         
         if( riderData.sharedParams.rider != thePlayer )
         {
@@ -188,11 +180,9 @@ abstract class CBTTaskRidingManagerBoatDismount extends CBTTaskRidingManagerVehi
     }
     latent function Main() : EBTNodeStatus
     {
-        var riderData       : CAIStorageRiderData;
         var vehicleComponent: CVehicleComponent;
         var boat			: CEntity;
 
-        riderData        = (CAIStorageRiderData)aiStorageHandler.Get();
         boat = EntityHandleGet( riderData.sharedParams.boat );
 		vehicleComponent = (CVehicleComponent)boat.GetComponentByClassName('CVehicleComponent');
 		DismountActor( riderData, vehicleComponent );			

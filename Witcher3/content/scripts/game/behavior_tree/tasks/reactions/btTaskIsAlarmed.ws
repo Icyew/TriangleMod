@@ -5,7 +5,6 @@
 /***********************************************************************/
 class CBTTaskIsAlarmed extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var reactionDataStorage : CAIStorageReactionData;
 	
 	function IsAvailable() : bool
@@ -20,9 +19,7 @@ class CBTTaskIsAlarmed extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 	
 }
@@ -34,7 +31,6 @@ class CBTTaskIsAlarmedDef extends IBehTreeReactionTaskDefinition
 
 class CBTTaskIsAngry extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var reactionDataStorage : CAIStorageReactionData;
 	
 	function IsAvailable() : bool
@@ -49,9 +45,7 @@ class CBTTaskIsAngry extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 	
 }

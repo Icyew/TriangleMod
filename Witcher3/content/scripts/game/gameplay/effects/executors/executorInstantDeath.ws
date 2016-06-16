@@ -15,7 +15,7 @@ class W3Executor_InstantDeath extends IInstantEffectExecutor
 	{
 		if(target)
 		{
-			target.Kill(executor);
+			target.Kill( 'Combat Focus Mode', executor);
 			return true;
 		}
 		return false;

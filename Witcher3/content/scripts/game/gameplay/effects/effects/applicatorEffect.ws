@@ -54,18 +54,6 @@ abstract class W3ApplicatorEffect extends CBaseGameplayEffect
 		return false;
 	}
 	
-	
-	public function UpdateParams()
-	{
-		var actor : CActor;
-	
-		actor = (CActor)GetCreator();
-		if(!actor)
-			return;
-	
-		actor.GetApplicatorParamsFor(this, creatorPowerStat);
-	}
-	
 	public function CacheSettings()
 	{
 		var appliedEffects : array<SCustomNode>;

@@ -25,7 +25,11 @@ class CExplorationStateStartFalling extends CExplorationStateAbstract
 	private				var fallType		: EFallType;
 	private				var behFallType		: name;			default	behFallType	= 'FallType';
 	
-
+	private				var cameraFallIsSet : bool;
+	private				var q704_gravit_shift : bool;
+	
+	
+	
 	
 	private function InitializeSpecific( _Exploration : CExplorationStateManager )
 	{	
@@ -54,7 +58,9 @@ class CExplorationStateStartFalling extends CExplorationStateAbstract
 
 	
 	function StateCanEnter( curStateName : name ) : bool
-	{	
+	{
+		
+		
 		return curStateName != 'Jump' && curStateName != 'Swim';
 	}
 	
@@ -62,6 +68,16 @@ class CExplorationStateStartFalling extends CExplorationStateAbstract
 	private function StateEnterSpecific( prevStateName : name )	
 	{
 		fallCancelled	= false;
+		cameraFallIsSet = false;
+		
+		if( thePlayer.IsActionBlockedBy( EIAB_Jump, 'q704_gravity_shift' ) )
+		{
+			q704_gravit_shift = true;
+		}
+		else
+		{
+			q704_gravit_shift = false;
+		}
 		
 		
 		thePlayer.OnRangedForceHolster( true );
@@ -96,11 +112,22 @@ class CExplorationStateStartFalling extends CExplorationStateAbstract
 		
 		
 		thePlayer.AbortSign();	
+		
+		if( q704_gravit_shift )
+		{
+			m_ExplorationO.m_MoverO.SetManualMovement( true );
+		}
 	}
 	
 	
 	function StateChangePrecheck( )	: name
-	{	
+	{
+		
+		if( q704_gravit_shift )
+		{
+			return '';
+		}
+		
 		
 		if( thePlayer.IsSwimming() )
 		{
@@ -125,11 +152,38 @@ class CExplorationStateStartFalling extends CExplorationStateAbstract
 	
 	protected function StateUpdateSpecific( _Dt : float )
 	{
+		if( q704_gravit_shift && !thePlayer.IsActionBlockedBy( EIAB_Jump, 'q704_gravity_shift' ) )
+		{
+			q704_gravit_shift = false;
+		}
+		
+		
 	}
 	
 	
 	private function StateExitSpecific( nextStateName : name )
 	{
+		if( q704_gravit_shift )
+		{
+			m_ExplorationO.m_MoverO.SetManualMovement( false );
+		}
+	}
+	
+	
+	private function ChangeCameraToFall()
+	{
+		var camera	: CCustomCamera = theGame.GetGameCamera();
+		
+		
+		camera.ChangePivotPositionController( 'Jump' );
+		
+		cameraFallIsSet = true;
+	}
+	
+	
+	function UpdateCameraIfNeeded( out moveData : SCameraMovementData, dt : float ) : bool
+	{
+		return q704_gravit_shift;
 	}
 	
 	

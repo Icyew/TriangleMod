@@ -7,6 +7,7 @@
 abstract class CBTTaskShouldBeScaredOnOverlay extends IBehTreeTask
 {
 	protected var infantInHand : bool;
+	protected var catOnLap : bool;
 	var jobTreeType : EJobTreeType;
 	
 	function ShouldBeScaredOnOverlay() : bool
@@ -25,10 +26,14 @@ abstract class CBTTaskShouldBeScaredOnOverlay extends IBehTreeTask
 			isInLeaveAction = npc.IsInLeaveAction();
 			return !isInLeaveAction;
 		}
-		
-		if ( jobTreeType == EJTT_InfantInHand )
+		else if ( jobTreeType == EJTT_InfantInHand )
 		{
 			infantInHand = true;
+			return true;
+		}
+		else if ( jobTreeType == EJTT_CatOnLap )
+		{
+			catOnLap = true;
 			return true;
 		}
 		
@@ -40,8 +45,9 @@ abstract class CBTTaskShouldBeScaredOnOverlay extends IBehTreeTask
 
 class CBTTaskScaredWhileSitting extends CBTTaskShouldBeScaredOnOverlay
 {
-	var leftItem : CDrawableComponent;
-	var rightItem : CDrawableComponent;
+	var leftItem 	: CDrawableComponent;
+	var rightItem 	: CDrawableComponent;
+	var entity 		: CEntity;
 	
 	function IsAvailable() : bool
 	{
@@ -50,14 +56,23 @@ class CBTTaskScaredWhileSitting extends CBTTaskShouldBeScaredOnOverlay
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var inv : CInventoryComponent;
-		var itemId : SItemUniqueId;
+		var leftItemAnimatedComponent 	: CAnimatedComponent;
+		var rightItemAnimatedComponent 	: CAnimatedComponent;
+		var inv 						: CInventoryComponent;
+		var itemId 						: SItemUniqueId;
 		
 		leftItem = NULL;
 		rightItem = NULL;
 		
 		if ( infantInHand )
+		{
 			GetNPC().RaiseEvent('ScaredWithInfant');
+		}
+		
+		else if ( catOnLap )
+		{
+			
+		}
 		else
 		{
 			inv = GetNPC().GetInventory();
@@ -92,6 +107,8 @@ class CBTTaskScaredWhileSitting extends CBTTaskShouldBeScaredOnOverlay
 			leftItem.SetVisible(true);
 		if ( rightItem )
 			rightItem.SetVisible(true);
+		if ( entity )
+			entity.Destroy();
 		GetNPC().RaiseEvent('ScaredOverlayEnd');
 		GetNPC().SignalGameplayEvent( 'AI_UnPauseWorkAnimation' );
 		

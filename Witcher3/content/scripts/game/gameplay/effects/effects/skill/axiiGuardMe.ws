@@ -27,7 +27,7 @@ class W3Effect_AxiiGuardMe extends CBaseGameplayEffect
 		
 		npc = (CNewNPC)target;
 		
-		((CAIStorageReactionData)npc.GetAIStorageObject('ReactionData')).ResetAttitudes(npc);
+		((CAIStorageReactionData)npc.GetScriptStorageObject('ReactionData')).ResetAttitudes(npc);
 		
 		
 		if ( npc.HasAttitudeTowards( thePlayer ) && npc.GetAttitude( thePlayer ) == AIA_Hostile )
@@ -69,7 +69,7 @@ class W3Effect_AxiiGuardMe extends CBaseGameplayEffect
 		{
 			npc.ResetTemporaryAttitudeGroup(AGP_Axii);
 			npc.SignalGameplayEvent('NoticedObjectReevaluation');
-			((CAIStorageReactionData)npc.GetAIStorageObject('ReactionData')).ResetAttitudes(npc);
+			((CAIStorageReactionData)npc.GetScriptStorageObject('ReactionData')).ResetAttitudes(npc);
 		}
 		
 		if(drainStaminaOnExit)

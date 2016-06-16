@@ -170,7 +170,7 @@ class CR4ListBaseMenu extends CR4MenuBase
 		flashObject.SetMemberFlashBool( "isNew", false );
 		flashObject.SetMemberFlashBool( "needRepair", false );
 		flashObject.SetMemberFlashInt( "actionType", IAT_None );
-		flashObject.SetMemberFlashInt( "price", 0 ); 		
+		flashObject.SetMemberFlashInt( "price", 0 );
 		flashObject.SetMemberFlashString( "userData", "");
 		flashObject.SetMemberFlashString( "category", "" );
 	}
@@ -183,65 +183,48 @@ class CR4ListBaseMenu extends CR4MenuBase
 	}
 	
 	event OnGetItemData(item : int, compareItemType : int) 
+	{		
+		var resultData 	: CScriptedFlashObject;		
+		
+		GetTooltipData( item, compareItemType, resultData);
+		
+		m_flashValueStorage.SetFlashObject("context.tooltip.data", resultData);
+	}
+	
+	protected function GetTooltipData(item : int, compareItemType : int, out resultData : CScriptedFlashObject ) : void
 	{
-		
-		
 		var itemName 			: string;
 		var category			: name;
 		var typeStr				: string;
-		var weight 				: float;
 		
-		var resultData 			: CScriptedFlashObject;
-		var statsList			: CScriptedFlashArray;		
 		var dm 					: CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();
+		
 		item = item - 1;
 		
 		resultData = m_flashValueStorage.CreateTempFlashObject();
-		statsList = m_flashValueStorage.CreateTempFlashArray();
 		
 		itemName = dm.GetItemLocalisationKeyName( itemsNames[item]);
 		itemName = GetLocStringByKeyExt(itemName);
 		resultData.SetMemberFlashString("ItemName", itemName);
-		
-		
-		
-		
-		
-		resultData.SetMemberFlashString("PriceValue", dm.GetItemPrice(itemsNames[item]));
-				
-		category = dm.GetItemCategory(itemsNames[item]);
-		
-		if( dm.ItemHasTag(itemsNames[item], 'Quest') 
-			|| dm.ItemHasTag(itemsNames[item], 'AlchemyIngredient') 
-			|| dm.ItemHasTag(itemsNames[item], 'CraftingIngredient') 
-			|| dm.ItemHasTag(itemsNames[item], 'Potion') 
-			|| dm.ItemHasTag(itemsNames[item], 'SilverOil') 
-			|| dm.ItemHasTag(itemsNames[item], 'SteelOil') 
-			|| category == 'petard' 
-			|| category == 'bolt' )
-		{
-			weight = 0;
-		}
-		else
-		{
-			weight = 1; 
-		}
-		
-		resultData.SetMemberFlashString("WeightValue", NoTrailZeros(weight));
-		resultData.SetMemberFlashString("ItemRarity", "" );
-		
-		typeStr = GetItemCategoryLocalisedString( category );
-		resultData.SetMemberFlashString("ItemType", typeStr );
-		
-		resultData.SetMemberFlashString("DurabilityValue", "");
-
 		resultData.SetMemberFlashString("IconPath", dm.GetItemIconPath(itemsNames[item]) );
+		
+		category = dm.GetItemCategory(itemsNames[item]);
+		typeStr = GetItemCategoryLocalisedString( category );
+		if ( m_guiManager.GetShowItemNames() )
+		{
+			typeStr = "<font color=\"#FFDB00\">Item name: '" + itemsNames[item] + "'</font><br>" + typeStr;
+		}
+		resultData.SetMemberFlashString("ItemType", typeStr );
 		resultData.SetMemberFlashString("ItemCategory", category);
-		m_flashValueStorage.SetFlashObject("context.tooltip.data", resultData);
 	}
 	
+	
+	
+	
+	
 	function UpdateDescription( entryName : name ) 
-	{	
+	{
+	
 	}		
 
 	function UpdateImage( entryName : name ) 

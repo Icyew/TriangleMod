@@ -14,7 +14,8 @@ class W3BoltProjectile extends W3ArrowProjectile
 	private saved var targetPos 			: Vector;					
 	private saved var crossbowId			: SItemUniqueId;
 	private var collisionGroups				: array<name>;
-	protected saved var wasShotUnderWater		: bool;						
+	private var hitVictims					: array<CActor>;			
+	protected saved var wasShotUnderWater	: bool;						
 	
 		default dodgeable = true;
 	
@@ -147,37 +148,58 @@ class W3BoltProjectile extends W3ArrowProjectile
 	
 	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
 	{
-		var victim 	: CActor;
-		var entity	: CEntity;
-	
+		var victim 		: CActor;
+		var gpEntity	: CGameplayEntity;
+		
+		var meshComponent		: CMeshComponent;
+		var arrowHitPos			: Vector;
+		var arrowSize			: Vector;
+		var boundingBox			: Box;
+		
+		if( !isActive )
+			return false;
+		
 		if(collidingComponent)
 		{
 			victim = (CActor)collidingComponent.GetEntity();
-
-			if ( CanCollideWithVictim( victim ))
+			if( victim.HasTag('AddRagdollCollision') && (CMovingAgentComponent)collidingComponent && !thePlayer.GetDisplayTarget())
 			{
-				if( super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex) )
-				{
-					SmartDestroy();
-				}
+				return false;
+			}
+			if ( CanCollideWithVictim( victim ) && !hitVictims.Contains( victim ) )
+			{
+				hitVictims.PushBack( victim );
+				super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 			}
 			
-			entity = collidingComponent.GetEntity();
+			gpEntity = ( CGameplayEntity ) collidingComponent.GetEntity();
 			
-			if( (CGameplayEntity) entity )
+			if( gpEntity )
 			{
-				((CGameplayEntity) entity).OnBoltHit();
+				gpEntity.OnBoltHit();
 			}
 		}
 		else if ( hitCollisionsGroups.Contains( 'Terrain' ) || hitCollisionsGroups.Contains( 'Static' ) )
 		{
-			StopProjectile();
+			StopProjectile();	
+			RemoveTimer( 'CheckIfInfWaterLoop' );
+			StopActiveTrail();
 			
 			
-			AddTimer('TimeDestroy', 20, false);
+			AddTimer('TimeDestroy', 5, false);
 			isScheduledForDestruction = true;
 			
-			Teleport(  pos - (RotForward( this.GetWorldRotation() ) * 0.1f) );
+			
+			arrowHitPos = pos;
+			meshComponent = (CMeshComponent)GetComponentByClassName('CMeshComponent');
+			if( meshComponent )
+			{
+				boundingBox = meshComponent.GetBoundingBox();
+				arrowSize = boundingBox.Max - boundingBox.Min;
+				arrowHitPos -= RotForward(  this.GetWorldRotation() ) * arrowSize.X * 0.7f; 
+			}
+			
+			Teleport( arrowHitPos );
 		}
 	}
 	
@@ -262,6 +284,7 @@ class W3BoltProjectile extends W3ArrowProjectile
 		AddTimer( 'ReleaseProjectiles', 0.001, false );		
 		
 		FactsAdd("crossbow_was_fired", 1, 3);
+		AddTag( 'fired_crossbow_bolt' );
 		
 		super.ThrowProjectile( targetPosIn );
 	}
@@ -272,6 +295,10 @@ class W3BoltProjectile extends W3ArrowProjectile
 		var sideLen 				: float;
 		var pos1					: Vector;
 		var rot1					: EulerAngles;
+				
+		
+		
+		
 		
 		pos1 = projectiles[0].GetWorldPosition();
 		rot1 = projectiles[0].GetWorldRotation();
@@ -319,7 +346,10 @@ class W3BoltProjectile extends W3ArrowProjectile
 			if ( npc )
 				boneIndex = npc.GetBoneIndex( 'torso2' );					
 		}
-		
+		if ( target.HasTag('AddRagdollCollision'))
+		{
+			collisionGroups.Remove('Character');
+		}
 		if ( boneIndex >= 0 )
 			projectiles[0].ShootProjectileAtBone( projAngle, projSpeed, npc, 'torso2', attackRange, collisionGroups );
 		else

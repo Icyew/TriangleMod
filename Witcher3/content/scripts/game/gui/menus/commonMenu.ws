@@ -43,6 +43,9 @@ class CR4CommonMenu extends CR4MenuBase
 	private var m_fxSetPlayerDefailsVis 		: CScriptedFlashFunction;
 	private var m_fxSetMeditationBackgroundMode	: CScriptedFlashFunction;
 	private var m_fxOnChildMenuConfigured		: CScriptedFlashFunction;
+	private var m_fxUpdateMenuBackgroundImage	: CScriptedFlashFunction;
+	private var m_fxBlockBackNavigation			: CScriptedFlashFunction;
+	
 	
 	private var m_fxSelectTab	: CScriptedFlashFunction;
 	private var m_fxEnterCurrentTab	: CScriptedFlashFunction;
@@ -76,14 +79,19 @@ class CR4CommonMenu extends CR4MenuBase
 	protected var isCraftingAvailable:bool;
 	protected var isAlchemyAvailable:bool;
 	
+	protected var isPlayerMeditatingInBed:bool;
+	
 	event  OnConfigUI()
 	{
-		var stateName   : name;
-		var menuName    : name;
-		var initData    : W3MenuInitData;
-		var initMapData : W3MapInitData;
+		var stateName     : name;
+		var menuName      : name;
 		var shouldSkipHub : bool;
-		var lootPopup	: CR4LootPopup;
+		var lootPopup	  : CR4LootPopup;
+		
+		var initData          : W3MenuInitData;
+		var initMapData       : W3MapInitData;
+		var initSingleData    : W3SingleMenuInitData;
+		var selectionPopupRef : CR4ItemSelectionPopup;
 		
 		if (!thePlayer.IsAlive() || theGame.HasBlackscreenRequested() || theGame.IsFading())
 		{
@@ -92,14 +100,12 @@ class CR4CommonMenu extends CR4MenuBase
 		}
 		
 		theGame.CreateNoSaveLock( "fullscreen_ui_panels", noSaveLock, false, false );
-		
 		theGame.GameplayFactsRemove("closingHubMenu");
-		
 		theSound.SoundEvent("system_pause");
+		
 		fetchCurrentHotkeys();
 		
 		m_initialSelectionsToIgnore = 2;
-		
 		m_hideTutorial = true;
 		m_forceHideTutorial = false;
 		
@@ -159,6 +165,8 @@ class CR4CommonMenu extends CR4MenuBase
 		m_fxSelectTab 					= m_flashModule.GetMemberFlashFunction( "setSelectedTab" );
 		m_fxEnterCurrentTab 			= m_flashModule.GetMemberFlashFunction( "enterCurrentlySelectedTab" );
 		m_fxOnChildMenuConfigured 		= m_flashModule.GetMemberFlashFunction( "onChildMenuConfigured" );
+		m_fxUpdateMenuBackgroundImage	= m_flashModule.GetMemberFlashFunction( "updateMenuBackgroundImage" );
+		m_fxBlockBackNavigation			= m_flashModule.GetMemberFlashFunction( "blockBackNavigation" );
 		
 		stateName = '';
 		initData = (W3MenuInitData)GetMenuInitData();
@@ -184,34 +192,60 @@ class CR4CommonMenu extends CR4MenuBase
 			DefineMenuStructure();
 			
 			initMapData = (W3MapInitData)initData;
+			initSingleData = (W3SingleMenuInitData)initData;
 			
 			SetMenuTabeEnable( 'InventoryMenu', false, 'HorseInventory');
 			
 			if (menuName == 'MapMenu' && initMapData && ( initMapData.GetTriggeredExitEntity() || initMapData.GetUsedFastTravelEntity() ) )
 			{
 				
-
+				m_menuData.Clear();
+				DefineMenuItem('MapMenu', "panel_title_fullmap", '', 'FastTravel');
+				
 				SetSingleMenuTabEnabled( 'MapMenu' );
 				m_hubEnabled = false;
 			}
 			
-			
-			else if (menuName == 'InventoryMenu' && stateName == 'SingleHorseInventory')
+			if( initSingleData )
 			{
-				stateName = 'HorseInventory';
-				SetMenuTabeEnable( 'InventoryMenu',	false,  'CharacterInventory');
-				SetMenuTabeEnable( 'JournalParent',		false );
-				SetMenuTabeEnable( 'GlossaryParent',	false );
-				SetMenuTabeEnable( 'MeditationClockMenu',	false );
-				SetMenuTabeEnable( 'MapMenu',	false, 'GlobalMap' );
+				if( initSingleData.GetBlockOtherPanels() )
+				{
+					m_menuData.Clear();
+					
+					if (menuName == 'MeditationClockMenu')
+					{
+						DefineMenuItem('MeditationClockMenu', "panel_name_sleep", '');
+					}
+					else
+					if (menuName == 'GlossaryBooksMenu')
+					{
+						DefineMenuItem('GlossaryBooksMenu', "books_panel_title", '');
+					}
+					
+					shouldSkipHub = true;
+					m_hubEnabled = false;
+					
+					SetSingleMenuTabEnabled( initSingleData.fixedMenuName );
+				}
+				
+				if( initSingleData.ignoreMeditationCheck )
+				{
+					isPlayerMeditatingInBed = true;
+				}
+				
+				if( initSingleData.unlockCraftingMenu )
+				{
+					m_menuData.Clear();
+					DefineMenuItem( 'CraftingParent', "panel_title_crafting" );
+					DefineMenuItem( 'BlacksmithMenu', "panel_title_blacksmith_disassamble", 'CraftingParent', 'Disassemble' );
+				}
 			}
-			
-			
 		}
+		
 		DisableNotAllowedTabs();
 		UpdateTabs();
+		SetMenuBackground();
 		
-		SetupMenu();
 		if( menuName == '')
 		{
 			if (stateName != '')
@@ -229,6 +263,20 @@ class CR4CommonMenu extends CR4MenuBase
 		{
 			SetMeditationMode(true);
 		}
+		
+		if( m_menuData.Size() < 1 )
+		{
+			m_hubEnabled = false;
+			shouldSkipHub = true;
+			
+			
+			if (menuName == 'InventoryMenu')
+			{
+				DefineMenuItem('InventoryMenu', "panel_inventory", '');
+			}
+		}
+		
+		SetupMenu();
 		
 		if (isCiri)
 		{
@@ -263,6 +311,24 @@ class CR4CommonMenu extends CR4MenuBase
 		{
 			theGame.MoveMouseTo(0.475, 0.48); 
 		}
+		
+		theSound.SoundLoadBank( "gui_ep2.bnk", true );
+		
+		selectionPopupRef = (CR4ItemSelectionPopup)theGame.GetGuiManager().GetPopup('ItemSelectionPopup');
+		if (selectionPopupRef)
+		{
+			theGame.ClosePopup('ItemSelectionPopup');
+		}
+		
+		if( !m_hubEnabled )
+		{
+			m_fxBlockBackNavigation.InvokeSelf();
+		}
+	}
+	
+	public function GetIsPlayerMeditatingInBed() : bool
+	{
+		return isPlayerMeditatingInBed;
 	}
 	
 	protected function GetSavedDataMenuName() : name
@@ -397,15 +463,18 @@ class CR4CommonMenu extends CR4MenuBase
 		}
 		
 		theGame.SetMenuToOpen( '' );
-				
+		
 		theGame.ReleaseNoSaveLock(noSaveLock);
 		
 		
 		theGame.GameplayFactsAdd("closingHubMenu",1);
 		
 		m_guiManager.RequestMouseCursor(false);
+		m_guiManager.ClearNotificationsQueue();
 		
-		super.OnClosingMenu();		
+		theSound.SoundUnloadBank( "gui_ep2.bnk" );
+		
+		super.OnClosingMenu();
 		
 		
 		theGame.FadeOutAsync( 0 ); 
@@ -427,24 +496,23 @@ class CR4CommonMenu extends CR4MenuBase
 	{
 		var childMenu : CR4MenuBase;
 		
+		childMenu = GetLastChild();
+		if (childMenu)
+		{
+			childMenu.CloseMenu();
+		}
+		
 		if (!m_hubEnabled)
 		{
 			CloseMenu();
 			return true;
 		}
 		
-		childMenu = GetLastChild();
-		
 		m_fxSubMenuClosed.InvokeSelf();
 		m_GFxBindings.Clear();
 		m_defaultBindings.Clear();
 		m_contextBindings.Clear();
-		UpdateInputFeedback();
-		
-		if (childMenu)
-		{
-			childMenu.CloseMenu();
-		}
+		UpdateInputFeedback();		
 	}
 	
 	event  OnRequestMenu( MenuName : name, MenuState : string)
@@ -456,6 +524,7 @@ class CR4CommonMenu extends CR4MenuBase
 		
 		currentSubMenu = (CR4MenuBase)GetSubMenu();
 		menuInitData = (W3MenuInitData)GetMenuInitData();
+		
 		if (menuInitData)
 		{
 			ignoreSaveData = menuInitData.ignoreSaveSystem;
@@ -560,6 +629,48 @@ class CR4CommonMenu extends CR4MenuBase
 		m_fxLockOpenTabNavigation.InvokeSelfOneArg(FlashArgBool(false));
 		m_fxOnChildMenuConfigured.InvokeSelf();
 	}
+	
+	public function SetMenuBackground()
+	{
+	   	var worldPath : string;
+	   	var imagePath: string;
+		
+		worldPath = theGame.GetWorld().GetDepotPath();
+		switch( worldPath )
+		{
+				case "levels\novigrad\novigrad.w2w":
+					imagePath = "img://icons/menubackground/panorama_novigrad.png";
+					break;
+				case "levels\skellige\skellige.w2w":
+					imagePath = "img://icons/menubackground/panorama_skellige.png";
+					break;
+				case "levels\kaer_morhen\kaer_morhen.w2w":
+					imagePath = "img://icons/menubackground/panorama_kaer_morhen.png";
+					break;
+				case "levels\prolog_village\prolog_village.w2w":
+					imagePath = "img://icons/menubackground/panorama_prolog_village.png";
+					break;
+				case "levels\wyzima_castle\wyzima_castle.w2w":
+					imagePath = "img://icons/menubackground/panorama_wyzima_castle.png";
+					break;
+				case "levels\island_of_mist\island_of_mist.w2w":
+					imagePath = "img://icons/menubackground/panorama_island_of_mist.png";
+					break;
+				case "levels\the_spiral\spiral.w2w":
+					imagePath = "img://icons/menubackground/panorama_spiral.png";
+					break;
+				case "levels\prolog_village_winter\prolog_village.w2w":
+					imagePath = "img://icons/menubackground/panorama_prologue_snow.png";
+					break;
+				case "dlc\bob\data\levels\bob\bob.w2w":
+					imagePath = "img://icons/menubackground/panorama_toussaint.png";
+					break;
+		}
+		if( imagePath != "" )
+		{
+			m_fxUpdateMenuBackgroundImage.InvokeSelfOneArg( FlashArgString( imagePath ) );
+		}
+	}
 
 	function HaxGetPanelStateName( stateName : string ) : name
 	{
@@ -652,6 +763,7 @@ class CR4CommonMenu extends CR4MenuBase
 				
 				DefineMenuItem('GlossaryTutorialsMenu', "panel_title_glossary_tutorials",'GlossaryParent');
 				DefineMenuItem('GlossaryEncyclopediaMenu', "panel_title_glossary_dictionary",'GlossaryParent');
+				DefineMenuItem('GlossaryBooksMenu', "books_panel_title",'GlossaryParent');
 				DefineMenuItem('CraftingMenu', "panel_title_crafting", 'GlossaryParent');
 				
 			DefineMenuItem('AlchemyMenu', "panel_title_alchemy", '');
@@ -714,7 +826,7 @@ class CR4CommonMenu extends CR4MenuBase
 		{
 			SetMenuTabeEnable( 'PreparationMenu',	false );				
 		}
-		if( !thePlayer.IsActionAllowed( EIAB_OpenMeditation ))
+		if( !thePlayer.IsActionAllowed( EIAB_OpenMeditation ) && !GetIsPlayerMeditatingInBed() )
 		{
 			SetMenuTabeEnable( 'MeditationClockMenu',	false );				
 		}
@@ -1027,17 +1139,52 @@ class CR4CommonMenu extends CR4MenuBase
 
 	public function SetSingleMenuTabEnabled( tabName:name ) : void
 	{
-		var j : int;
+		var j 		   : int;
+		var curTab     : SMenuTab;
+		var curParent  : name;
+		var menuCount  : int;
 		
-		for (j = 0; j < m_menuData.Size(); j+=1)
+		curParent =  '';
+		menuCount = m_menuData.Size();
+		
+		for( j = 0; j < menuCount; j+=1 )
 		{
-			if (m_menuData[j].MenuName == tabName )
+			curTab = m_menuData[j];
+			
+			if( curTab.MenuName == tabName )
 			{
-				m_menuData[j].Enabled = true;
+				curTab.Enabled = true;
+				
+				if (curTab.ParentMenu != '')
+				{
+					
+					curParent = curTab.ParentMenu;
+				}
 			}
-			else
+			else			
 			{
-				m_menuData[j].Enabled = false;
+				if( curTab.ParentMenu != curParent )
+				{
+					curTab.Enabled = false;
+				}
+				else
+				{
+					curParent = '';
+				}
+			}
+		}
+		
+		if( curParent != '')
+		{
+			for( j = 0; j < menuCount; j+=1 )
+			{
+				curTab = m_menuData[j];
+				
+				if( curTab.MenuName == curParent )
+				{
+					curTab.Enabled = true;
+					break;
+				}
 			}
 		}
 	}
@@ -1227,6 +1374,7 @@ class CR4CommonMenu extends CR4MenuBase
 			bindingGFxData = tempFlashObject.CreateFlashObject("red.game.witcher3.data.KeyBindingData");
 			bindingGFxData.SetMemberFlashString("gamepad_navEquivalent", curBinding.Gamepad_NavCode );
 			bindingGFxData.SetMemberFlashInt("keyboard_keyCode", curBinding.Keyboard_KeyCode );
+			bindingGFxData.SetMemberFlashBool( "hasHoldPrefix", curBinding.IsHold );
 			if (curBinding.IsLocalized)
 			{
 				bindingGFxData.SetMemberFlashString("label", curBinding.LocalizationKey );
@@ -1245,7 +1393,7 @@ class CR4CommonMenu extends CR4MenuBase
 	public function UpdateInputFeedback():void
 	{
 		var gfxDataList	: CScriptedFlashArray;
-		gfxDataList = m_flashValueStorage.CreateTempFlashArray();
+		gfxDataList = m_flashValueStorage.CreateTempFlashArray();	
 		GatherBindersArray(gfxDataList, m_contextBindings, 2, true);
 		GatherBindersArray(gfxDataList, m_GFxBindings, 1);
 		GatherBindersArray(gfxDataList, m_defaultBindings, 0);

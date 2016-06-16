@@ -154,8 +154,8 @@ class CPlayerInput
 			theInput.RegisterListener( this, 'OnDbgKillTarget', 'Debug_KillTarget' );
 			theInput.RegisterListener( this, 'OnDbgKillAll', 'Debug_KillAllEnemies' );
 			theInput.RegisterListener( this, 'OnDbgKillAllTargetingPlayer', 'Debug_KillAllTargetingPlayer' );
-			theInput.RegisterListener( this, 'OnDbgResurrectPlayer', 'Debug_Resurrect' );
 			theInput.RegisterListener( this, 'OnCommPanelFakeHud', 'PanelFakeHud' );
+			theInput.RegisterListener( this, 'OnDbgTeleportToPin', 'Debug_TeleportToPin' );
 		}
 		
 		
@@ -211,7 +211,15 @@ class CPlayerInput
 				return;
 				
 			actionLock.sourceName = sourceName;
-			actionLock.removedOnSpawn = !keepOnSpawn;
+			
+			if( action == EIAB_CameraLock )
+			{
+				actionLock.removedOnSpawn = true;
+			}
+			else 
+			{
+				actionLock.removedOnSpawn = !keepOnSpawn;
+			}
 			actionLock.isFromQuest = isFromQuest;
 			actionLock.isFromPlace = isFromPlace;
 			
@@ -351,7 +359,7 @@ class CPlayerInput
 		size = EnumGetMax('EInputActionBlock')+1;
 		for(i=0; i<size; i+=1)
 		{
-			if ( exceptions.Contains(i) )
+			if ( exceptions.Contains(i) || i == EIAB_CameraLock )
 				continue;
 			
 			BlockAction(i, sourceName, lock, saveLock, onSpawnedNullPointerHackFix, isFromQuest, isFromPlace);
@@ -363,11 +371,13 @@ class CPlayerInput
 	{
 		var action, j, size : int;
 		var isLocked, wasLocked : bool;
+		var exceptions : array< EInputActionBlock >;
 		
 		if(lock)
 		{
 			
-			BlockAllActions(sourceName, lock, , true, , true);
+			exceptions.PushBack( EIAB_FastTravelGlobal );
+			BlockAllActions(sourceName, lock, exceptions, true, , true);
 		}
 		else
 		{
@@ -487,7 +497,7 @@ class CPlayerInput
 		{
 			for(j=actionLocks[i].Size()-1; j>=0; j-=1)
 			{
-				if(actionLocks[i][j].removedOnSpawn)
+				if(actionLocks[i][j].removedOnSpawn || i == EIAB_CameraLock)
 				{
 					actionLocks[i].Erase(j);
 				}
@@ -690,14 +700,22 @@ class CPlayerInput
 		{
 			PushCharacterScreen();
 		}
-	}
+	} 
 	final function PushCharacterScreen()
 	{
 		if ( theGame.IsBlackscreenOrFading() )
 		{
 			return;
 		}
-		theGame.RequestMenuWithBackground( 'CharacterMenu', 'CommonMenu' );		
+		
+		if( IsActionAllowed(EIAB_OpenCharacterPanel) )
+		{
+			theGame.RequestMenuWithBackground( 'CharacterMenu', 'CommonMenu' );	
+		}
+		else
+		{
+			thePlayer.DisplayActionDisallowedHudMessage(EIAB_OpenCharacterPanel);
+		}
 	}
 
 	
@@ -2162,11 +2180,7 @@ class CPlayerInput
 					thePlayer.DisplayActionDisallowedHudMessage(EIAB_ThrowBomb);
 					return false;
 				}
-				else if(GetWitcherPlayer().GetBombDelay(GetWitcherPlayer().GetItemSlot(selectedItemId)) > 0 )
-				{
-					
-					return false;
-				}
+				
 				if ( thePlayer.IsHoldingItemInLHand() && !thePlayer.IsUsableItemLBlocked() )
 				{
 					thePlayer.SetPlayerActionToRestore ( PATR_ThrowBomb );
@@ -2562,7 +2576,11 @@ class CPlayerInput
 		{
 			if ( thePlayer.IsThreatened() || thePlayer.IsActorLockedToTarget() )
 			{
-				if ( !thePlayer.IsHardLockEnabled() && thePlayer.GetDisplayTarget() && (CActor)( thePlayer.GetDisplayTarget() ) && IsActionAllowed(EIAB_HardLock))
+				if( !IsActionAllowed(EIAB_CameraLock))
+				{
+					return false;
+				}
+				else if ( !thePlayer.IsHardLockEnabled() && thePlayer.GetDisplayTarget() && (CActor)( thePlayer.GetDisplayTarget() ) && IsActionAllowed(EIAB_HardLock))
 				{	
 					if ( thePlayer.bLAxisReleased )
 						thePlayer.ResetRawPlayerHeading();
@@ -2710,7 +2728,7 @@ class CPlayerInput
 		
 		if( target && IsReleased(action) )
 		{
-			target.Kill();
+			target.Kill( 'Debug' );
 		}
 	}
 	
@@ -2723,19 +2741,6 @@ class CPlayerInput
 		
 		if(IsReleased(action))
 			thePlayer.DebugKillAll();
-	}
-	
-	event OnDbgResurrectPlayer( action : SInputAction )
-	{
-		if( theGame.IsFinalBuild() )
-		{
-			return false;
-		}
-		
-		if(IsReleased(action))
-		{
-			thePlayer.CheatResurrect();
-		}
 	}
 	
 	
@@ -2755,9 +2760,20 @@ class CPlayerInput
 			for(i=0; i<all.Size(); i+=1)
 			{
 				if(all[i] != thePlayer && all[i].GetTarget() == thePlayer)
-					all[i].Kill();
+					all[i].Kill( 'Debug' );
 			}
 		}
+	}
+	
+	event OnDbgTeleportToPin( action : SInputAction )
+	{
+		if( theGame.IsFinalBuild() )
+		{
+			return false;
+		}
+		
+		if(IsReleased(action))
+			thePlayer.DebugTeleportToPin();
 	}
 	
 	

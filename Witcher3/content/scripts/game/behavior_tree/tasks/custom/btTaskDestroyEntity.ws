@@ -5,35 +5,59 @@
 /***********************************************************************/
 class CBTTaskDestroyEntity extends IBehTreeTask
 {
-	var entityTag : name;
-	var effectName	: name;
-	var playEffect	: bool;
-	
-	default playEffect = false;
+	var entityTag 			: name;
+	var playEffectName		: name;
+	var stopEffectName		: name;
+	var eventToRaise		: name;
+	var playEffect			: bool;
+	var stopEffect			: bool;
+	var destroyAfter		: float;
+	var onActivate			: bool;
+	var onDeactivate		: bool;
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		if( entityTag != '' )
+		if( entityTag != '' && onActivate )
 		{
-			FindAndDestoryEntity();
+			FindAndDestroyEntity();
 		}
 		
 		return BTNS_Active;
 	}
 	
-	private function FindAndDestoryEntity()
+	private function FindAndDestroyEntity()
 	{
-		var entity : CEntity; 
+		var entitiesArray   : array<CEntity>; 
+		var i				: int;
 
-		entity = theGame.GetEntityByTag( entityTag );
-			
-		if( entity )
+		theGame.GetEntitiesByTag( entityTag, entitiesArray );
+		
+		if( entitiesArray.Size() > 0 )
 		{
-			if( playEffect )
+			for( i=0; i<entitiesArray.Size(); i+=1)
 			{
-				entity.PlayEffect('effectName');
+				entitiesArray[i].RaiseEvent( eventToRaise );
+				
+				if( playEffect )
+				{
+					entitiesArray[i].PlayEffect( playEffectName );
+				}
+				else if( stopEffect )
+				{
+					entitiesArray[i].StopEffect( stopEffectName );
+				}
+				
+				entitiesArray[i].DestroyAfter( destroyAfter );
+				
 			}
-			entity.Destroy();
+		}
+	}
+	
+	function OnDeactivate()
+	{
+		if( entityTag != '' && onDeactivate )
+		{
+			FindAndDestroyEntity();
 		}
 	}
 };
@@ -41,7 +65,19 @@ class CBTTaskDestroyEntity extends IBehTreeTask
 class CBTTaskDestroyEntityDef extends IBehTreeTaskDefinition
 {
 	default instanceClass = 'CBTTaskDestroyEntity';
-	editable var entityTag : name;
-	editable var effectName	: name;
-	editable var playEffect	: bool;
+	
+	editable var entityTag 		: name;
+	editable var playEffectName	: name;
+	editable var stopEffectName	: name;
+	editable var eventToRaise	: name;
+	editable var playEffect		: bool;
+	editable var stopEffect		: bool;
+	editable var destroyAfter	: float;
+	editable var onActivate		: bool;
+	editable var onDeactivate	: bool;
+	
+	default onActivate = true;
+	default playEffect = false;
+	default destroyAfter = 1.0f;
+	default eventToRaise = 'Death';
 };

@@ -61,7 +61,7 @@ class W3WeatherShrine extends CGameplayEntity
 	
 	private function ChangeWeatherTo( newWeather : name ) : bool
 	{
-		if ( RequestWeatherChangeTo(newWeather, weatherBlendTime) )
+		if ( RequestWeatherChangeTo(newWeather, weatherBlendTime, false) )
 		{
 			thePlayer.DisplayHudMessage( GetLocStringByKeyExt( "panel_hud_message_prayer_heard" ) );
 			if ( prayerForSunAcceptedFX )

@@ -43,6 +43,7 @@ class W3QuestCond_IsItemQuantityMet extends CQuestScriptedCondition
 	default count = 1;
 	editable var includeHorseInventory : bool;
 	default includeHorseInventory = true;
+	editable var ignoreTags	: array< name >;
 	
 	var inventory			: CInventoryComponent;
 	saved var isFulfilled	: bool;
@@ -163,19 +164,19 @@ class W3QuestCond_IsItemQuantityMet extends CQuestScriptedCondition
 		{
 			if ( itemName != 'None' )
 			{
-				itemQuantity = inventory.GetItemQuantityByName( itemName, includeHorseInventory );
+				itemQuantity = inventory.GetItemQuantityByName( itemName, includeHorseInventory, ignoreTags );
 			}
 			else if ( itemCategory != 'None' )
 			{
-				itemQuantity = inventory.GetItemQuantityByCategory( itemCategory, includeHorseInventory );
+				itemQuantity = inventory.GetItemQuantityByCategory( itemCategory, includeHorseInventory, ignoreTags );
 			}
 			else if( IsNameValid(itemTag) )
 			{
-				itemQuantity = inventory.GetItemQuantityByTag( itemTag, includeHorseInventory );
+				itemQuantity = inventory.GetItemQuantityByTag( itemTag, includeHorseInventory, ignoreTags );
 			}
 			else	
 			{
-				itemQuantity = inventory.GetAllItemsQuantity( includeHorseInventory );
+				itemQuantity = inventory.GetAllItemsQuantity( includeHorseInventory, ignoreTags );
 			}
 			
 			itemID = inventory.GetItemId( itemName );

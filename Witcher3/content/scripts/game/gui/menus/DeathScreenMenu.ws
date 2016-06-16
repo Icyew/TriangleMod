@@ -103,6 +103,7 @@ class CR4DeathScreenMenu extends CR4MenuBase
 		var l_DataFlashObject 		: CScriptedFlashObject;	
 		
 		l_FlashArray = m_flashValueStorage.CreateTempFlashArray();
+				
 		hasSaveData = hasSaveDataToLoad();
 		if( hasSaveData )
 		{
@@ -135,6 +136,14 @@ class CR4DeathScreenMenu extends CR4MenuBase
 		l_DataFlashObject.SetMemberFlashUInt	( "tag", NameToFlashUInt('Quit') );
 		l_FlashArray.PushBackFlashObject( l_DataFlashObject );
 		
+		if( theGame.IsDebugQuestMenuEnabled() && !theGame.IsFinalBuild() )
+		{
+			l_DataFlashObject = m_flashValueStorage.CreateTempFlashObject();
+			l_DataFlashObject.SetMemberFlashString	( "label", "***Debug Resurrect***" );
+			l_DataFlashObject.SetMemberFlashUInt	( "tag", NameToFlashUInt('DebugResurrect') );
+			l_FlashArray.PushBackFlashObject( l_DataFlashObject );
+		}
+		
 		m_flashValueStorage.SetFlashArray( "hud.deathscreen.list", l_FlashArray );
 	}
 	
@@ -161,6 +170,9 @@ class CR4DeathScreenMenu extends CR4MenuBase
 			case 'Quit' :
 				OnQuit();
 				
+				break;
+			case 'DebugResurrect' :
+				thePlayer.CheatResurrect();
 				break;
 		}
 	}

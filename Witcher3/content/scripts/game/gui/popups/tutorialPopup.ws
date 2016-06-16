@@ -232,7 +232,7 @@ class CR4TutorialPopup extends CR4PopupBase
 			scriptTag = m_DataObject.scriptTag;
 			m_DataObject.CloseCallback(true, false);
 			delete m_DataObject;
-			theGame.GetTutorialSystem().OnTutorialHintClosed(scriptTag, true);
+			theGame.GetTutorialSystem().OnTutorialHintClosed(scriptTag, true, true);
 		}
 		if (enableGlossaryLink)
 		{
@@ -347,7 +347,7 @@ class CR4TutorialPopup extends CR4PopupBase
 		ClosePopup();
 		if (scriptTag != '')
 		{
-			theGame.GetTutorialSystem().OnTutorialHintClosed(scriptTag, false);
+			theGame.GetTutorialSystem().OnTutorialHintClosed( scriptTag, false, !willBeCloned );
 		}
 	}
 	

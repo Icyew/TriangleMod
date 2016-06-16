@@ -65,6 +65,7 @@ import class CR4GwintManager extends IGameSystem
 	import final function AddCardToCollection(cardIndex : int) : void;
 	import final function RemoveCardFromCollection(cardIndex : int) : void;
 	import final function HasCardInCollection(cardIndex : int) : bool;
+	import final function HasCardsOfFactionInCollection(faction : eGwintFaction, optional includeLeaders : bool) : bool;
 	
 	import final function AddCardToDeck(faction:eGwintFaction, cardIndex : int) : void;
 	import final function RemoveCardFromDeck(faction:eGwintFaction, cardIndex : int) : void;
@@ -86,6 +87,7 @@ import class CR4GwintManager extends IGameSystem
 		var nilfgardPlayerDeck : SDeckDefinition;
 		var scotialPlayerDeck : SDeckDefinition;
 		var nmlPlayerDeck : SDeckDefinition;
+		var skePlayerDeck : SDeckDefinition;
 	
 		
 		northernPlayerDeck.cardIndices.PushBack( 3 ); 
@@ -93,6 +95,8 @@ import class CR4GwintManager extends IGameSystem
 		northernPlayerDeck.cardIndices.PushBack( 4 ); 
 		northernPlayerDeck.cardIndices.PushBack( 4 ); 
 		northernPlayerDeck.cardIndices.PushBack( 5 ); 
+		northernPlayerDeck.cardIndices.PushBack( 5 ); 
+		northernPlayerDeck.cardIndices.PushBack( 6 ); 
 		northernPlayerDeck.cardIndices.PushBack( 6 ); 
 		northernPlayerDeck.cardIndices.PushBack( 106 ); 
 		northernPlayerDeck.cardIndices.PushBack( 111 ); 
@@ -107,6 +111,7 @@ import class CR4GwintManager extends IGameSystem
 		northernPlayerDeck.cardIndices.PushBack( 125 ); 
 		northernPlayerDeck.cardIndices.PushBack( 135 ); 
 		northernPlayerDeck.cardIndices.PushBack( 145 ); 
+		northernPlayerDeck.cardIndices.PushBack( 146 ); 
 		northernPlayerDeck.cardIndices.PushBack( 150 ); 
 		northernPlayerDeck.cardIndices.PushBack( 150 ); 
 		northernPlayerDeck.cardIndices.PushBack( 150 ); 
@@ -142,19 +147,38 @@ import class CR4GwintManager extends IGameSystem
 		nmlPlayerDeck.specialCard = -1; 
 		nmlPlayerDeck.unlocked = false;
 		SetFactionDeck(GwintFaction_NoMansLand, nmlPlayerDeck);
+
+		
+		
+		skePlayerDeck.leaderIndex = 5002;
+		skePlayerDeck.specialCard = -1; 
+		skePlayerDeck.unlocked = false;
+		SetFactionDeck(GwintFaction_Skellige, skePlayerDeck);
 		
 		UnlockDeck(GwintFaction_NothernKingdom);
 		UnlockDeck(GwintFaction_Nilfgaard);
 		UnlockDeck(GwintFaction_Scoiatael);
 		UnlockDeck(GwintFaction_NoMansLand);
 		
+		
 		SetSelectedPlayerDeck(GwintFaction_NothernKingdom);
+	}
+	
+	event  OnGwintSetupSkellige()
+	{
+		var skePlayerDeck : SDeckDefinition;
+		
+		skePlayerDeck.leaderIndex = 5002;
+		skePlayerDeck.specialCard = -1; 
+		skePlayerDeck.unlocked = false;
+		SetFactionDeck(GwintFaction_Skellige, skePlayerDeck);
+		
+		
 	}
 	
 	public function GetTutorialPlayerDeck() : SDeckDefinition
 	{
 		var tutorialDeck : SDeckDefinition;
-		
 		
 		tutorialDeck.cardIndices.PushBack( 3 ); 
 		tutorialDeck.cardIndices.PushBack( 3 ); 
@@ -162,7 +186,6 @@ import class CR4GwintManager extends IGameSystem
 		tutorialDeck.cardIndices.PushBack( 4 ); 
 		tutorialDeck.cardIndices.PushBack( 5 ); 
 		tutorialDeck.cardIndices.PushBack( 6 ); 
-		
 		tutorialDeck.cardIndices.PushBack( 106 ); 
 		tutorialDeck.cardIndices.PushBack( 111 ); 
 		tutorialDeck.cardIndices.PushBack( 112 ); 
@@ -181,7 +204,7 @@ import class CR4GwintManager extends IGameSystem
 		tutorialDeck.cardIndices.PushBack( 152 ); 
 		tutorialDeck.cardIndices.PushBack( 107 ); 
 		tutorialDeck.cardIndices.PushBack( 160 ); 
-		tutorialDeck.cardIndices.PushBack( 161 ); 
+		tutorialDeck.cardIndices.PushBack( 160 ); 
 		tutorialDeck.cardIndices.PushBack( 175 ); 
 		tutorialDeck.leaderIndex = 1001;
 		tutorialDeck.specialCard = -1; 
@@ -215,6 +238,11 @@ import class CR4GwintManager extends IGameSystem
 			SetupAIDeckDefinitions8();
 			SetupAIDeckDefinitions9();
 			SetupAIDeckDefinitions10();
+			
+			SetupAIDeckDefinitionsSkel();
+			SetupAIDeckDefinitionsTournament3();
+			SetupAIDeckDefinitionsTournament4();
+
 		}
 	}
 	
@@ -225,6 +253,7 @@ import class CR4GwintManager extends IGameSystem
 	private var enemyDecksSet : bool; default enemyDecksSet = false;
 	private var enemyDecks : array< SDeckDefinition >;
 	private var selectedEnemyDeck : int;
+	private var forcePlayerFaction : eGwintFaction;
 	
 	private var difficulty : int;
 
@@ -258,10 +287,28 @@ import class CR4GwintManager extends IGameSystem
 		return doubleAIEnabled;
 	}
 	
+	public function GetForcedFaction():eGwintFaction
+	{
+		return forcePlayerFaction;
+	}
+	
+	public function SetForcedFaction(faction : eGwintFaction):void
+	{
+		forcePlayerFaction = faction;
+	}
+	
 	public function GetCurrentPlayerDeck() : SDeckDefinition
 	{
 		var selectedDeck : SDeckDefinition;
-		GetFactionDeck(GetSelectedPlayerDeck(), selectedDeck);
+		
+		if (forcePlayerFaction == GwintFaction_Neutral)
+		{
+			GetFactionDeck(GetSelectedPlayerDeck(), selectedDeck);
+		}
+		else
+		{
+			GetFactionDeck(forcePlayerFaction, selectedDeck);
+		}
 		
 		return selectedDeck;
 	}
@@ -412,9 +459,32 @@ import class CR4GwintManager extends IGameSystem
 		case 'CircusGwentAddict':
 			selectedEnemyDeck = 41;
 			break;
+		case 'SkelEasy':
+			selectedEnemyDeck = 42;
+			break;
+		case 'SkelNormal':
+			selectedEnemyDeck = 43;
+			break;
+		case 'SkelHard':
+			selectedEnemyDeck = 44;
+			break;	
+		case 'ScoiaTournament2':
+			selectedEnemyDeck = 45;
+			break;
+		case 'NMLTournament2':
+			selectedEnemyDeck = 46;
+			break;		
+		case 'NKTournament2':
+			selectedEnemyDeck = 47;
+			break;
+		case 'NilfTournament2':
+			selectedEnemyDeck = 48;
+			break;
+		case 'SkelTournament2':
+			selectedEnemyDeck = 49;		
+			break;
 		default:
 			selectedEnemyDeck = 23;
-			break;
 		}
 	}
 	
@@ -559,8 +629,8 @@ import class CR4GwintManager extends IGameSystem
 			CardProdigyDeck.cardIndices.PushBack(145); 
 			CardProdigyDeck.cardIndices.PushBack(146); 
 			CardProdigyDeck.cardIndices.PushBack(160); 
-			CardProdigyDeck.cardIndices.PushBack(161); 
-			CardProdigyDeck.cardIndices.PushBack(162); 
+			CardProdigyDeck.cardIndices.PushBack(160); 
+			CardProdigyDeck.cardIndices.PushBack(160); 
 
 			
 
@@ -629,7 +699,7 @@ import class CR4GwintManager extends IGameSystem
 			DijkstraDeck.cardIndices.PushBack(146); 
 			DijkstraDeck.cardIndices.PushBack(150); 
 			DijkstraDeck.cardIndices.PushBack(160); 
-			DijkstraDeck.cardIndices.PushBack(161); 
+			DijkstraDeck.cardIndices.PushBack(160); 
 			DijkstraDeck.cardIndices.PushBack(170); 
 			DijkstraDeck.cardIndices.PushBack(175); 
 
@@ -693,8 +763,8 @@ import class CR4GwintManager extends IGameSystem
 			BaronDeck.cardIndices.PushBack(140); 
 			BaronDeck.cardIndices.PushBack(145); 
 			BaronDeck.cardIndices.PushBack(160); 
-			BaronDeck.cardIndices.PushBack(161); 
-			BaronDeck.cardIndices.PushBack(162); 
+			BaronDeck.cardIndices.PushBack(160); 
+			BaronDeck.cardIndices.PushBack(160); 
 			BaronDeck.cardIndices.PushBack(170); 
 
 			
@@ -827,7 +897,7 @@ import class CR4GwintManager extends IGameSystem
 			SjustaDeck.cardIndices.PushBack(131); 
 			SjustaDeck.cardIndices.PushBack(132); 
 			SjustaDeck.cardIndices.PushBack(160); 
-			SjustaDeck.cardIndices.PushBack(161); 
+			SjustaDeck.cardIndices.PushBack(160); 
 
 			SjustaDeck.dynamicCardRequirements.PushBack(diff5);
 			SjustaDeck.dynamicCards.PushBack(15);
@@ -1870,8 +1940,7 @@ import class CR4GwintManager extends IGameSystem
 				MousesackDeck.cardIndices.PushBack(401); 
 				MousesackDeck.cardIndices.PushBack(443); 
 			}
-
-			MousesackDeck.cardIndices.PushBack(401);	
+	
 			MousesackDeck.cardIndices.PushBack(407);	
 			MousesackDeck.cardIndices.PushBack(415);	
 			MousesackDeck.cardIndices.PushBack(417);
@@ -2150,7 +2219,7 @@ import class CR4GwintManager extends IGameSystem
 				HalflingsDeck.cardIndices.PushBack(105); 	
 				HalflingsDeck.cardIndices.PushBack(109);	
 				HalflingsDeck.cardIndices.PushBack(160);	
-				HalflingsDeck.cardIndices.PushBack(162); 	
+				HalflingsDeck.cardIndices.PushBack(160); 	
 			}
 			if (difficulty == 3)
 			{
@@ -2165,7 +2234,7 @@ import class CR4GwintManager extends IGameSystem
 			HalflingsDeck.cardIndices.PushBack(140); 	
 			HalflingsDeck.cardIndices.PushBack(141); 	
 			HalflingsDeck.cardIndices.PushBack(145); 	
-			HalflingsDeck.cardIndices.PushBack(161); 	
+			HalflingsDeck.cardIndices.PushBack(160); 	
 			HalflingsDeck.cardIndices.PushBack(170); 	
 			HalflingsDeck.cardIndices.PushBack(175);	
 			
@@ -2906,6 +2975,167 @@ import class CR4GwintManager extends IGameSystem
 			NMLHard.leaderIndex = 4003;
 			enemyDecks.PushBack(NMLHard);
 	}
+	
+			
+	
+private function SetupAIDeckDefinitionsSkel()
+	{
+		var SkelEasy				:SDeckDefinition;
+		var SkelNormal				:SDeckDefinition;
+		var SkelHard				:SDeckDefinition;
+		
+			
+			SkelEasy.cardIndices.PushBack(3); 
+			SkelEasy.cardIndices.PushBack(3); 
+			SkelEasy.cardIndices.PushBack(23); 
+			SkelEasy.cardIndices.PushBack(23); 
+
+			if (difficulty == 3)
+			{
+				SkelEasy.cardIndices.PushBack(22); 
+				SkelEasy.cardIndices.PushBack(503); 
+				SkelEasy.cardIndices.PushBack(515);	
+				SkelEasy.cardIndices.PushBack(515);	
+				SkelEasy.cardIndices.PushBack(515);	
+				SkelEasy.cardIndices.PushBack(9); 
+				SkelEasy.cardIndices.PushBack(502); 
+				SkelEasy.cardIndices.PushBack(16); 
+			}
+
+			SkelEasy.cardIndices.PushBack(504);
+			SkelEasy.cardIndices.PushBack(505);
+			SkelEasy.cardIndices.PushBack(506);
+			SkelEasy.cardIndices.PushBack(507);
+			SkelEasy.cardIndices.PushBack(510);
+			SkelEasy.cardIndices.PushBack(511);
+			SkelEasy.cardIndices.PushBack(513);
+			SkelEasy.cardIndices.PushBack(515);
+			SkelEasy.cardIndices.PushBack(517);
+			SkelEasy.cardIndices.PushBack(517);
+			SkelEasy.cardIndices.PushBack(517);
+			SkelEasy.cardIndices.PushBack(522);
+			SkelEasy.cardIndices.PushBack(522);
+			SkelEasy.cardIndices.PushBack(524);
+			SkelEasy.cardIndices.PushBack(16);
+			SkelEasy.cardIndices.PushBack(18);
+			SkelEasy.cardIndices.PushBack(19);
+			SkelEasy.cardIndices.PushBack(19);
+			SkelEasy.cardIndices.PushBack(20);
+			
+			SkelEasy.specialCard = -1; 
+			SkelEasy.leaderIndex = 5001;
+			enemyDecks.PushBack(SkelEasy);
+
+			
+			
+			
+ 			if (difficulty == 1)
+			{
+				SkelNormal.cardIndices.PushBack(0); 
+				SkelNormal.cardIndices.PushBack(1); 
+				SkelNormal.cardIndices.PushBack(1); 
+				SkelNormal.cardIndices.PushBack(6); 
+				SkelNormal.cardIndices.PushBack(525);	
+			}
+			if (difficulty == 2)
+			{
+				SkelNormal.cardIndices.PushBack(0); 
+				SkelNormal.cardIndices.PushBack(2); 
+				SkelNormal.cardIndices.PushBack(503); 
+				SkelNormal.cardIndices.PushBack(502); 
+				SkelNormal.cardIndices.PushBack(16); 
+			}
+			if (difficulty == 3)
+			{
+				SkelNormal.cardIndices.PushBack(7);  
+				SkelNormal.cardIndices.PushBack(502); 
+				SkelNormal.cardIndices.PushBack(17); 
+				SkelNormal.cardIndices.PushBack(509); 
+				SkelNormal.cardIndices.PushBack(16); 
+			}
+			SkelNormal.cardIndices.PushBack(9);		
+			SkelNormal.cardIndices.PushBack(15); 	
+			SkelNormal.cardIndices.PushBack(504); 	
+			SkelNormal.cardIndices.PushBack(12); 	
+			SkelNormal.cardIndices.PushBack(513);	
+			SkelNormal.cardIndices.PushBack(515);	
+			SkelNormal.cardIndices.PushBack(515);	
+			SkelNormal.cardIndices.PushBack(515);	
+			SkelNormal.cardIndices.PushBack(520);	
+			SkelNormal.cardIndices.PushBack(520);	
+			SkelNormal.cardIndices.PushBack(520);	
+			SkelNormal.cardIndices.PushBack(521);	
+			SkelNormal.cardIndices.PushBack(521);	
+			SkelNormal.cardIndices.PushBack(521);	
+			SkelNormal.cardIndices.PushBack(523);	
+			SkelNormal.cardIndices.PushBack(523);	
+			SkelNormal.cardIndices.PushBack(523);	
+
+			SkelNormal.dynamicCardRequirements.PushBack(diff12);
+			SkelNormal.dynamicCards.PushBack(12); 
+			SkelNormal.dynamicCardRequirements.PushBack(diff13);
+			SkelNormal.dynamicCards.PushBack(15); 
+			SkelNormal.dynamicCardRequirements.PushBack(diff15);
+			SkelNormal.dynamicCards.PushBack(10); 
+
+			SkelNormal.specialCard = -1; 
+			SkelNormal.leaderIndex = 5002;
+			enemyDecks.PushBack(SkelNormal);
+
+
+			
+			SkelHard.cardIndices.PushBack(22); 
+			SkelHard.cardIndices.PushBack(22); 
+			SkelHard.cardIndices.PushBack(1); 
+			SkelHard.cardIndices.PushBack(1); 
+			SkelHard.cardIndices.PushBack(2); 
+			SkelHard.cardIndices.PushBack(2); 
+
+
+ 			if (difficulty == 1)
+			{
+				SkelHard.cardIndices.PushBack(4); 
+			}
+			if (difficulty == 2)
+			{
+				SkelHard.cardIndices.PushBack(7);  
+				SkelHard.cardIndices.PushBack(10); 
+				SkelHard.cardIndices.PushBack(20);	
+			}
+			if (difficulty == 3)
+			{
+				SkelHard.cardIndices.PushBack(17);	
+				SkelHard.cardIndices.PushBack(504); 
+				SkelHard.cardIndices.PushBack(509);	
+
+			}
+			
+			SkelHard.cardIndices.PushBack(9);	
+			SkelHard.cardIndices.PushBack(15); 
+			SkelHard.cardIndices.PushBack(16); 
+			SkelHard.cardIndices.PushBack(12); 
+			SkelHard.cardIndices.PushBack(502);	
+			SkelHard.cardIndices.PushBack(513);	
+			SkelHard.cardIndices.PushBack(515);	
+			SkelHard.cardIndices.PushBack(515);	
+			SkelHard.cardIndices.PushBack(515);	
+			SkelHard.cardIndices.PushBack(520);	
+			SkelHard.cardIndices.PushBack(520);	
+			SkelHard.cardIndices.PushBack(520);	
+			SkelHard.cardIndices.PushBack(521);	
+			SkelHard.cardIndices.PushBack(521);	
+			SkelHard.cardIndices.PushBack(521);	
+			SkelHard.cardIndices.PushBack(523);	
+			SkelHard.cardIndices.PushBack(523);	
+			SkelHard.cardIndices.PushBack(523);	
+
+
+			SkelHard.specialCard = -1; 
+			SkelHard.leaderIndex = 5002;
+			enemyDecks.PushBack(SkelHard);
+			
+	}
+	
 	private function SetupAIDeckDefinitionsPrologue()
 	{
 		var NilfPrologue		: SDeckDefinition;
@@ -2971,7 +3201,7 @@ import class CR4GwintManager extends IGameSystem
 			NKTournament.cardIndices.PushBack(141); 
 			NKTournament.cardIndices.PushBack(145); 
 			NKTournament.cardIndices.PushBack(160);	
-			NKTournament.cardIndices.PushBack(161); 
+			NKTournament.cardIndices.PushBack(160); 
 			NKTournament.cardIndices.PushBack(170); 
 			NKTournament.cardIndices.PushBack(175);	
 			
@@ -3140,7 +3370,6 @@ import class CR4GwintManager extends IGameSystem
 				NMLTournament.cardIndices.PushBack(477);	
 			}
 
-			NMLTournament.cardIndices.PushBack(401);	
 			NMLTournament.cardIndices.PushBack(402);	
 			NMLTournament.cardIndices.PushBack(407);	
 			NMLTournament.cardIndices.PushBack(450);	
@@ -3178,6 +3407,298 @@ import class CR4GwintManager extends IGameSystem
 			NMLTournament.leaderIndex = 4004; 
 			enemyDecks.PushBack(NMLTournament);
 	}
+	
+	
+	
+
+	private function SetupAIDeckDefinitionsTournament3()
+	{
+
+		var ScoiaTournament2		: SDeckDefinition;		
+		var NMLTournament2			: SDeckDefinition;
+
+			
+			ScoiaTournament2.cardIndices.PushBack(2); 
+			ScoiaTournament2.cardIndices.PushBack(2); 
+			ScoiaTournament2.cardIndices.PushBack(1); 
+			ScoiaTournament2.cardIndices.PushBack(2); 
+			ScoiaTournament2.cardIndices.PushBack(3); 
+			ScoiaTournament2.cardIndices.PushBack(3); 
+			ScoiaTournament2.cardIndices.PushBack(5); 
+
+ 			if (difficulty == 1)
+			{	
+				ScoiaTournament2.cardIndices.PushBack(310); 
+				ScoiaTournament2.cardIndices.PushBack(312); 
+				ScoiaTournament2.cardIndices.PushBack(335); 
+			}
+			else
+			{
+				ScoiaTournament2.cardIndices.PushBack(301);	
+				ScoiaTournament2.cardIndices.PushBack(302);	
+				ScoiaTournament2.cardIndices.PushBack(366);	
+				ScoiaTournament2.cardIndices.PushBack(368);	
+			}
+ 
+			ScoiaTournament2.cardIndices.PushBack(303);	
+			ScoiaTournament2.cardIndices.PushBack(305);	
+			ScoiaTournament2.cardIndices.PushBack(306);	
+			ScoiaTournament2.cardIndices.PushBack(307);	
+			ScoiaTournament2.cardIndices.PushBack(308);	
+			ScoiaTournament2.cardIndices.PushBack(309);	
+			ScoiaTournament2.cardIndices.PushBack(313);	
+			ScoiaTournament2.cardIndices.PushBack(320);	
+			ScoiaTournament2.cardIndices.PushBack(321);	
+			ScoiaTournament2.cardIndices.PushBack(322);	
+			ScoiaTournament2.cardIndices.PushBack(365);	
+			ScoiaTournament2.cardIndices.PushBack(367);	
+			
+			
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff1);
+			ScoiaTournament2.dynamicCards.PushBack(15);
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff2);
+			ScoiaTournament2.dynamicCards.PushBack(12);
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff6);
+			ScoiaTournament2.dynamicCards.PushBack(300);
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff8);
+			ScoiaTournament2.dynamicCards.PushBack(11);
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff8);
+			ScoiaTournament2.dynamicCards.PushBack(14);
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff10);
+			ScoiaTournament2.dynamicCards.PushBack(7); 
+			ScoiaTournament2.dynamicCardRequirements.PushBack(diff10);
+			ScoiaTournament2.dynamicCards.PushBack(10);
+
+
+			ScoiaTournament2.specialCard = -1; 
+			ScoiaTournament2.leaderIndex = 3004; 
+			enemyDecks.PushBack(ScoiaTournament2);
+			
+			
+			
+			NMLTournament2.cardIndices.PushBack(0); 		
+			NMLTournament2.cardIndices.PushBack(0); 		
+			NMLTournament2.cardIndices.PushBack(1); 		
+			NMLTournament2.cardIndices.PushBack(6);		
+			NMLTournament2.cardIndices.PushBack(23);	
+			NMLTournament2.cardIndices.PushBack(23);	
+
+ 			if (difficulty == 1)
+			{	
+				NMLTournament2.cardIndices.PushBack(420);	
+				NMLTournament2.cardIndices.PushBack(420);	
+			}
+			else
+			{		
+				NMLTournament2.cardIndices.PushBack(1); 		
+				NMLTournament2.cardIndices.PushBack(403);	
+				NMLTournament2.cardIndices.PushBack(477);	
+				NMLTournament2.cardIndices.PushBack(16);	
+			}
+
+			NMLTournament2.cardIndices.PushBack(402);	
+			NMLTournament2.cardIndices.PushBack(407);	
+			NMLTournament2.cardIndices.PushBack(450);	
+			NMLTournament2.cardIndices.PushBack(451);	
+			NMLTournament2.cardIndices.PushBack(452);	
+			NMLTournament2.cardIndices.PushBack(460);	
+			NMLTournament2.cardIndices.PushBack(463);	
+			NMLTournament2.cardIndices.PushBack(461);	
+			NMLTournament2.cardIndices.PushBack(462);	
+			NMLTournament2.cardIndices.PushBack(464);	
+			NMLTournament2.cardIndices.PushBack(475);	
+			NMLTournament2.cardIndices.PushBack(476);	
+			
+			
+			NMLTournament2.dynamicCardRequirements.PushBack(diff1);	
+			NMLTournament2.dynamicCards.PushBack(1);				
+			NMLTournament2.dynamicCardRequirements.PushBack(diff3);	
+			NMLTournament2.dynamicCards.PushBack(11); 				
+			NMLTournament2.dynamicCardRequirements.PushBack(diff4);	
+			NMLTournament2.dynamicCards.PushBack(12); 				
+			NMLTournament2.dynamicCardRequirements.PushBack(diff4);	
+			NMLTournament2.dynamicCards.PushBack(2); 				
+			NMLTournament2.dynamicCardRequirements.PushBack(diff6);	
+			NMLTournament2.dynamicCards.PushBack(15); 				
+			NMLTournament2.dynamicCardRequirements.PushBack(diff10);	
+			NMLTournament2.dynamicCards.PushBack(7); 				
+			
+			NMLTournament2.specialCard = 401; 	
+			NMLTournament2.leaderIndex = 4004; 
+			enemyDecks.PushBack(NMLTournament2);
+	}
+
+	private function SetupAIDeckDefinitionsTournament4()
+	{
+		var NKTournament2		: SDeckDefinition;
+		var NilfTournament2		: SDeckDefinition;
+		var SkelTournament2		: SDeckDefinition;
+		
+	
+			
+			NKTournament2.cardIndices.PushBack(2); 
+			NKTournament2.cardIndices.PushBack(0); 
+			NKTournament2.cardIndices.PushBack(1); 
+			NKTournament2.cardIndices.PushBack(3); 
+			NKTournament2.cardIndices.PushBack(3); 
+			NKTournament2.cardIndices.PushBack(4); 
+
+ 			if (difficulty == 1)
+			{	
+				NKTournament2.cardIndices.PushBack(6); 
+				NKTournament2.cardIndices.PushBack(108); 
+				NKTournament2.cardIndices.PushBack(113); 
+				NKTournament2.cardIndices.PushBack(114); 
+			}
+			else
+			{
+				NKTournament2.cardIndices.PushBack(2); 
+				NKTournament2.cardIndices.PushBack(1); 
+				NKTournament2.cardIndices.PushBack(105); 
+			}
+
+			NKTournament2.cardIndices.PushBack(102);	
+			NKTournament2.cardIndices.PushBack(103);	
+			NKTournament2.cardIndices.PushBack(109);	
+			NKTournament2.cardIndices.PushBack(116); 
+			NKTournament2.cardIndices.PushBack(120); 
+			NKTournament2.cardIndices.PushBack(140); 
+			NKTournament2.cardIndices.PushBack(141); 
+			NKTournament2.cardIndices.PushBack(145); 
+			NKTournament2.cardIndices.PushBack(160);	
+			NKTournament2.cardIndices.PushBack(160); 
+			NKTournament2.cardIndices.PushBack(170); 
+			NKTournament2.cardIndices.PushBack(175);	
+			
+			NKTournament2.dynamicCardRequirements.PushBack(diff2);	
+			NKTournament2.dynamicCards.PushBack(13);				
+			NKTournament2.dynamicCardRequirements.PushBack(diff5);	
+			NKTournament2.dynamicCards.PushBack(151); 				
+			NKTournament2.dynamicCardRequirements.PushBack(diff6);	
+			NKTournament2.dynamicCards.PushBack(12); 				
+			NKTournament2.dynamicCardRequirements.PushBack(diff8);	
+			NKTournament2.dynamicCards.PushBack(11); 				
+			NKTournament2.dynamicCardRequirements.PushBack(diff8);	
+			NKTournament2.dynamicCards.PushBack(7); 				
+			NKTournament2.dynamicCardRequirements.PushBack(diff8);	
+			NKTournament2.dynamicCards.PushBack(15); 				
+			NKTournament2.dynamicCardRequirements.PushBack(diff10);	
+			NKTournament2.dynamicCards.PushBack(10);
+			NKTournament2.dynamicCardRequirements.PushBack(diff10);	
+			NKTournament2.dynamicCards.PushBack(9); 				
+			
+			NKTournament2.specialCard = 16;	
+			NKTournament2.leaderIndex = 1004; 
+			enemyDecks.PushBack(NKTournament2);
+
+			
+			
+			NilfTournament2.cardIndices.PushBack(0); 
+			NilfTournament2.cardIndices.PushBack(1); 
+			NilfTournament2.cardIndices.PushBack(2); 
+			NilfTournament2.cardIndices.PushBack(2); 
+			NilfTournament2.cardIndices.PushBack(6); 
+
+ 			if (difficulty == 1)
+			{	
+				NilfTournament2.cardIndices.PushBack(6); 
+				NilfTournament2.cardIndices.PushBack(205); 
+				NilfTournament2.cardIndices.PushBack(209); 
+				NilfTournament2.cardIndices.PushBack(212); 
+			}
+			else
+			{
+				NilfTournament2.cardIndices.PushBack(0); 
+				NilfTournament2.cardIndices.PushBack(0); 
+				NilfTournament2.cardIndices.PushBack(1); 
+				NilfTournament2.cardIndices.PushBack(218); 
+				NilfTournament2.cardIndices.PushBack(200); 
+				NilfTournament2.cardIndices.PushBack(230);
+			}
+
+			NilfTournament2.cardIndices.PushBack(201);
+			NilfTournament2.cardIndices.PushBack(202);
+			NilfTournament2.cardIndices.PushBack(203); 
+			NilfTournament2.cardIndices.PushBack(208); 
+			NilfTournament2.cardIndices.PushBack(213); 
+			NilfTournament2.cardIndices.PushBack(214); 
+			NilfTournament2.cardIndices.PushBack(231);
+			NilfTournament2.cardIndices.PushBack(235);
+			NilfTournament2.cardIndices.PushBack(236);
+			NilfTournament2.cardIndices.PushBack(240);
+			NilfTournament2.cardIndices.PushBack(241);
+			NilfTournament2.cardIndices.PushBack(260);
+			NilfTournament2.cardIndices.PushBack(261);
+
+			
+			NilfTournament2.dynamicCardRequirements.PushBack(diff1);
+			NilfTournament2.dynamicCards.PushBack(15);
+			NilfTournament2.dynamicCardRequirements.PushBack(diff4);
+			NilfTournament2.dynamicCards.PushBack(16);
+			NilfTournament2.dynamicCardRequirements.PushBack(diff4);
+			NilfTournament2.dynamicCards.PushBack(12);
+			NilfTournament2.dynamicCardRequirements.PushBack(diff6);
+			NilfTournament2.dynamicCards.PushBack(248);
+			NilfTournament2.dynamicCardRequirements.PushBack(diff6);
+			NilfTournament2.dynamicCards.PushBack(11);
+			NilfTournament2.dynamicCardRequirements.PushBack(diff8);
+			NilfTournament2.dynamicCards.PushBack(7); 
+			NilfTournament2.dynamicCardRequirements.PushBack(diff10);
+			NilfTournament2.dynamicCards.PushBack(9);
+			NilfTournament2.specialCard = -1; 
+			NilfTournament2.leaderIndex = 2004;
+			enemyDecks.PushBack(NilfTournament2);
+			
+			
+
+			
+			SkelTournament2.cardIndices.PushBack(3); 
+			SkelTournament2.cardIndices.PushBack(1); 
+			SkelTournament2.cardIndices.PushBack(1); 
+			SkelTournament2.cardIndices.PushBack(2); 
+			SkelTournament2.cardIndices.PushBack(2); 
+			SkelTournament2.cardIndices.PushBack(0); 
+
+ 			if (difficulty == 1)
+			{
+				SkelTournament2.cardIndices.PushBack(4); 
+			}
+			else
+			{
+				SkelTournament2.cardIndices.PushBack(10); 
+				SkelTournament2.cardIndices.PushBack(7);  
+				SkelTournament2.cardIndices.PushBack(17);	
+				SkelTournament2.cardIndices.PushBack(504); 
+				SkelTournament2.cardIndices.PushBack(509);	
+			}
+			
+			SkelTournament2.cardIndices.PushBack(9);	
+			SkelTournament2.cardIndices.PushBack(15); 
+			SkelTournament2.cardIndices.PushBack(16); 
+			SkelTournament2.cardIndices.PushBack(12); 
+			SkelTournament2.cardIndices.PushBack(502);	
+			SkelTournament2.cardIndices.PushBack(513);	
+			SkelTournament2.cardIndices.PushBack(515);	
+			SkelTournament2.cardIndices.PushBack(515);	
+			SkelTournament2.cardIndices.PushBack(515);	
+			SkelTournament2.cardIndices.PushBack(520);	
+			SkelTournament2.cardIndices.PushBack(520);	
+			SkelTournament2.cardIndices.PushBack(520);	
+			SkelTournament2.cardIndices.PushBack(521);	
+			SkelTournament2.cardIndices.PushBack(521);	
+			SkelTournament2.cardIndices.PushBack(521);	
+			SkelTournament2.cardIndices.PushBack(523);	
+			SkelTournament2.cardIndices.PushBack(523);	
+			SkelTournament2.cardIndices.PushBack(523);	
+
+			SkelTournament2.specialCard = -1; 
+			SkelTournament2.leaderIndex = 5002;
+			enemyDecks.PushBack(SkelTournament2);
+		
+	}
+
+
+
 
 	public function GwentLeadersNametoInt( val : name ) :int
 	{
@@ -3202,6 +3723,9 @@ import class CR4GwintManager extends IGameSystem
 			case 'gwint_card_eredin_silver':		return 4003; 
 			case 'gwint_card_eredin_gold':			return 4004; 
 			case 'gwint_card_eredin_platinium':		return 4005; 
+			
+			case 'gwint_card_king_bran_bronze':		return 5001; 
+			case 'gwint_card_king_bran_copper':		return 5002; 
 			default: return	0;
 		}
 	}
@@ -3379,6 +3903,40 @@ import class CR4GwintManager extends IGameSystem
 			default: return 0;
 		}
 	}
+
+	public function GwentSkeNameToInt( val : name ) :int
+	{
+		switch ( val )
+		{
+			case 'gwint_card_crach_an_craite':				return 500;
+			case 'gwint_card_hjalmar':						return 501;
+			case 'gwint_card_cerys':						return 502;
+			case 'gwint_card_ermion':						return 503;
+			case 'gwint_card_draig':						return 504;
+			case 'gwint_card_holger_blackhand':				return 505;
+			case 'gwint_card_madman_lugos':					return 506;
+			case 'gwint_card_donar_an_hindar':				return 507;
+			case 'gwint_card_udalryk':						return 508;
+			case 'gwint_card_birna_bran':					return 509;
+			case 'gwint_card_blueboy_lugos':				return 510;
+			case 'gwint_card_svanrige':						return 511;
+			case 'gwint_card_olaf':							return 512;
+			case 'gwint_card_berserker':					return 513;
+			case 'gwint_card_young_berserker':				return 515;
+			case 'gwint_card_clan_an_craite_warrior':		return 517;
+			case 'gwint_card_clan_tordarroch_armorsmith':	return 518;
+			case 'gwint_card_clan_heymaey_skald':			return 519;
+			case 'gwint_card_light_drakkar':				return 520;
+			case 'gwint_card_war_drakkar':					return 521;
+			case 'gwint_card_clan_brokvar_archer':			return 522;
+			case 'gwint_card_clan_drummond_shieldmaiden':	return 523;
+			case 'gwint_card_clan_drummond_shieldmaiden2':	return 526;
+			case 'gwint_card_clan_drummond_shieldmaiden3':	return 527;
+			case 'gwint_card_clan_dimun_pirate':			return 524;
+			case 'gwint_card_cock':							return 525;
+			default: return 0;
+		}
+	}
 	
 	public function GwentNeutralNameToInt( val : name ) :int
 	{
@@ -3398,6 +3956,8 @@ import class CR4GwintManager extends IGameSystem
 			case 'gwint_card_mrmirror':				return 18;
 			case 'gwint_card_mrmirror_foglet':		return 19;
 			case 'gwint_card_cow':					return 20;
+			case 'gwint_card_lady_of_the_lake':		return 24;
+			case 'gwint_card_visenna':				return 25;
 			default: return 0;
 		}
 	}
@@ -3412,7 +3972,9 @@ import class CR4GwintManager extends IGameSystem
 			case 'gwint_card_frost':				return 3 ; 
 			case 'gwint_card_fog':					return 4 ; 
 			case 'gwint_card_rain':					return 5 ; 
-			case 'gwint_card_clear_sky':			return 6 ; 
+			case 'gwint_card_clear_sky':			return 6 ;
+			case 'gwint_card_mushroom':				return 22 ;
+			case 'gwint_card_skellige_storm':		return 23 ;
 			default: return 0;
 		}
 	}

@@ -111,4 +111,31 @@ import abstract class CProjectileTrajectory extends CGameplayEntity
 				s.ShootDownProjectile(this);
 		}
 	}
+	
+	event OnAardHit( sign : W3AardProjectile )
+	{
+		var rigidMesh : CMeshComponent;
+		
+		super.OnAardHit(sign);
+		
+		if( IsStopped() )
+		{
+			return false;
+		}
+		
+		StopProjectile();
+		
+		rigidMesh = (CMeshComponent)this.GetComponentByClassName('CRigidMeshComponent');
+		
+		if ( rigidMesh )
+		{
+			rigidMesh.SetEnabled( true );
+		}
+		else
+		{
+			this.bounceOfVelocityPreserve = 0.7;
+			this.BounceOff(VecRand2D(),this.GetWorldPosition());
+			this.Init(thePlayer);
+		}
+	}
 }

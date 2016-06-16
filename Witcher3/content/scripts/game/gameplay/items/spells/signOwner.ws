@@ -211,6 +211,10 @@ class W3SignOwnerPlayer extends W3SignOwner
 			{
 				ret = false;
 			}
+			else if( player.HasBuff( EET_GryphonSetBonus ) && player.GetStatPercents( BCS_Stamina ) < 1.f )
+			{
+				ret = false;
+			}
 			else
 			{
 				signEntity.SetAlternateCast( newSkill );

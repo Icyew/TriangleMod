@@ -23,6 +23,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 	
 	protected var shieldDuration	: float;
 	protected var shieldHealth		: float;
+	protected var initialShieldHealth : float;
 	protected var dischargePercent	: float;
 	protected var ownerBoneIndex	: int;
 	protected var blockedAllDamage  : bool;
@@ -31,6 +32,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 	private const var MIN_HIT_ENTITY_SPAWN_DELAY : float;
 	private var hitDoTEntities : array<W3VisualFx>;
 	public var showForceFinishedFX : bool;
+	public var freeFromBearSetBonus	: bool;
 	
 	default skillEnum = S_Magic_4;
 	default MIN_HIT_ENTITY_SPAWN_DELAY = 0.25f;
@@ -75,14 +77,22 @@ statemachine class W3QuenEntity extends W3SignEntity
 		
 	protected function GetSignStats()
 	{
+		var min, max : SAbilityAttributeValue;
+		
 		super.GetSignStats();
 		
 		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_duration', true, true));
 		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_health', false, true));
+		initialShieldHealth = shieldHealth;
 		
 		if ( owner.CanUseSkill(S_Magic_s14))
 		{			
 			dischargePercent = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s14, 'discharge_percent', false, true)) * owner.GetSkillLevel(S_Magic_s14);
+			if( owner.GetPlayer().IsSetBonusActive( EISB_Bear_2 ) )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( GetSetBonusAbility( EISB_Bear_2 ), 'quen_dmg_boost', min, max );
+				dischargePercent *= 1 + min.valueMultiplicative;
+			}
 		}
 		else
 		{
@@ -90,12 +100,12 @@ statemachine class W3QuenEntity extends W3SignEntity
 		}
 	}
 	
-	public final function AddBuffImmunities(useDoTs : bool)
+	public final function AddBuffImmunities()
 	{
 		var actor : CActor;
 		var i : int;
-		
 		var crits : array<CBaseGameplayEffect>;
+		var effectType : EEffectType;
 		
 		actor = owner.GetActor();
 		
@@ -103,19 +113,32 @@ statemachine class W3QuenEntity extends W3SignEntity
 		crits = actor.GetBuffs();	
 		for(i=0; i<crits.Size(); i+=1)
 		{
-			if( IsDoTEffect(crits[i]) && crits[i].GetEffectType() != EET_SnowstormQ403 && crits[i].GetEffectType() != EET_Snowstorm)
+			effectType = crits[i].GetEffectType();
+			
+			
+			if( effectType == EET_SnowstormQ403 || effectType == EET_Snowstorm )
 			{
-				actor.RemoveEffect(crits[i], true);
-			}
-			else if(crits[i].GetEffectType() == EET_SnowstormQ403 || crits[i].GetEffectType() == EET_Snowstorm)
-			{
-				actor.FinishQuen(false);
+				actor.FinishQuen( false );
 				return;
 			}
+			
+			
+			if( !IsDoTEffect( crits[i] ) )
+			{
+				continue;
+			}
+			
+			
+			if( actor == GetWitcherPlayer() && ( effectType == EET_Poison || effectType == EET_PoisonCritical ) && actor.HasBuff( EET_GoldenOriole ) && GetWitcherPlayer().GetPotionBuffLevel( EET_GoldenOriole ) >= 3 )
+			{
+				continue;
+			}
+			
+			actor.RemoveEffect( crits[i], true );			
 		}		
 	}
 	
-	public final function RemoveBuffImmunities(useDoTs : bool)
+	public final function RemoveBuffImmunities()
 	{
 		var actor : CActor;
 		var i, size : int;
@@ -130,16 +153,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 		dots.PushBack(EET_Swarm);
 		
 		
-		if(useDoTs)
-		{
-			for(i=0; i<dots.Size(); i+=1)
-			{
-				actor.RemoveBuffImmunity(dots[i], 'Quen' );
-			}			
-		}		
-		
-		
-		size = EnumGetMax('EEffectType')+1;
+		size = (int)EET_EffectTypesSize;
 		for(i=0; i<size; i+=1)
 		{
 			if(IsCriticalEffectType(i) && !dots.Contains(i))
@@ -149,10 +163,12 @@ statemachine class W3QuenEntity extends W3SignEntity
 	
 	event OnStarted() 
 	{
-		var isAlternate : bool;
+		var isAlternate		: bool;
+		var witcherOwner	: W3PlayerWitcher;
 		
 		owner.ChangeAspect( this, S_Magic_s04 );
 		isAlternate = IsAlternateCast();
+		witcherOwner = owner.GetPlayer();
 		
 		if(isAlternate)
 		{
@@ -178,7 +194,21 @@ statemachine class W3QuenEntity extends W3SignEntity
 				
 		if( isAlternate || !owner.IsPlayer() )
 		{
-			PlayEffect( effects[1].castEffect );
+			if( owner.IsPlayer() && GetWitcherPlayer().HasBuff( EET_Mutation11Immortal ) )
+			{
+				PlayEffect( 'quen_second_life' );
+			}
+			else
+			{
+				PlayEffect( effects[1].castEffect );
+			}
+			
+			if( witcherOwner && witcherOwner.CanUseSkill( S_Magic_s14) && witcherOwner.IsSetBonusActive( EISB_Bear_2 ) )
+			{
+				PlayEffect( 'default_fx_bear_abl2' );
+				witcherOwner.PlayEffect( 'quen_lasting_shield_bear_abl2' );
+			}
+			
 			CacheActionBuffsFromSkill();
 			GotoState( 'QuenChanneled' );
 		}
@@ -186,97 +216,6 @@ statemachine class W3QuenEntity extends W3SignEntity
 		{
 			PlayEffect( effects[0].castEffect );
 			GotoState( 'QuenShield' );
-		}
-	}
-	
-	
-	public function Impulse()
-	{
-		var level, i, j : int;
-		var atts, damages : array<name>;
-		var ents : array<CGameplayEntity>;
-		var action : W3DamageAction;
-		var dm : CDefinitionsManagerAccessor;
-		var skillAbilityName : name;
-		var dmg : float;
-		var min, max : SAbilityAttributeValue;
-		var ownerActor : CActor;
-		
-		level = owner.GetSkillLevel(S_Magic_s13);
-		dm = theGame.GetDefinitionsManager();
-		skillAbilityName = owner.GetPlayer().GetSkillAbilityName(S_Magic_s13);
-		ownerActor = owner.GetActor();
-		
-		if(level >= 2)
-		{
-			
-			dm.GetAbilityAttributes(skillAbilityName, atts);
-			for(i=0; i<atts.Size(); i+=1)
-			{
-				if(IsDamageTypeNameValid(atts[i]))
-				{
-					damages.PushBack(atts[i]);
-				}
-			}
-		}
-		
-		
-		FindGameplayEntitiesInSphere(ents, ownerActor.GetWorldPosition(), 3, 1000, '', FLAG_OnlyAliveActors+FLAG_ExcludeTarget+FLAG_Attitude_Hostile+FLAG_Attitude_Neutral+FLAG_TestLineOfSight, ownerActor);
-		
-		
-		for(i=0; i<ents.Size(); i+=1)
-		{
-			action = new W3DamageAction in theGame;
-			action.Initialize(ownerActor, ents[i], this, "quen_impulse", EHRT_Heavy, CPS_SpellPower, false, false, true, false);
-			action.SetSignSkill(S_Magic_s13);
-			action.SetCannotReturnDamage(true);
-			action.SetProcessBuffsIfNoDamage(true);
-			
-			
-			if(!IsAlternateCast() && level >= 2)
-			{
-				action.SetHitEffect('hit_electric_quen');
-				action.SetHitEffect('hit_electric_quen', true);
-				action.SetHitEffect('hit_electric_quen', false, true);
-				action.SetHitEffect('hit_electric_quen', true, true);
-			}
-			
-			if(level >= 1)
-			{
-				action.AddEffectInfo(EET_Stagger);
-			}
-			if(level >= 2)
-			{
-				for(j=0; j<damages.Size(); j+=1)
-				{
-					dm.GetAbilityAttributeValue(skillAbilityName, damages[j], min, max);
-					dmg = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
-					action.AddDamage(damages[j], dmg);
-				}
-			}
-			if(level == 3)
-			{
-				action.AddEffectInfo(EET_KnockdownTypeApplicator);
-			}
-			
-			theGame.damageMgr.ProcessAction( action );
-			delete action;
-		}
-		
-		
-		if(IsAlternateCast())
-		{
-			PlayHitEffect('quen_impulse_explode', ownerActor.GetWorldRotation());
-		}
-		else
-		{
-			ownerActor.PlayEffect('lasting_shield_impulse');
-		}
-		
-		
-		if(IsAlternateCast() && level >= 2)
-		{
-			PlayHitEffect('quen_electric_explode', ownerActor.GetWorldRotation());
 		}
 	}
 	
@@ -325,6 +264,11 @@ statemachine class W3QuenEntity extends W3SignEntity
 		}
 	}
 	
+	public function EraseFirstTimeStamp()
+	{
+		hitEntityTimestamps.Erase(0);
+	}
+	
 	timer function RemoveDoTFX(dt : float, id : int)
 	{
 		RemoveHitDoTEntities();
@@ -342,6 +286,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 	}
 	
 	public final function GetShieldHealth() : float 		{return shieldHealth;}
+	public final function GetInitialShieldHealth() : float 		{return initialShieldHealth;}
 	
 	public final function GetShieldRemainingDuration() : float
 	{
@@ -360,9 +305,39 @@ statemachine class W3QuenEntity extends W3SignEntity
 	{		
 		GotoState( 'Expired' );
 	}
-	
-	public final function ForceFinishQuen(skipVisuals : bool)
+		
+	public final function ForceFinishQuen( skipVisuals : bool, optional forceNoBearSetBonus : bool )
 	{
+		var min, max : SAbilityAttributeValue;
+		var player : W3PlayerWitcher;
+		
+		player = owner.GetPlayer();
+		
+		if( !forceNoBearSetBonus && player && player.IsSetBonusActive( EISB_Bear_1 ) )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( GetSetBonusAbility( EISB_Bear_1), 'quen_reapply_chance', min, max );
+			
+			min.valueMultiplicative *= player.GetSetPartsEquipped( EIST_Bear );
+			
+			
+			min.valueMultiplicative /= player.m_quenReappliedCount;
+			if( player.m_quenReappliedCount > 4 )
+			{
+				min.valueMultiplicative = 0;
+			}	
+			
+			if( min.valueMultiplicative >= RandF() )
+			{
+				player.PlayEffect( 'quen_lasting_shield_back' );
+				player.AddTimer( 'BearSetBonusQuenReapply', 0.9, true );
+			}
+			
+			else
+			{
+				player.m_quenReappliedCount = 1;
+			}
+		}
+			
 		if(IsAlternateCast())
 		{
 			OnEnded();
@@ -418,38 +393,55 @@ state ShieldActive in W3QuenEntity extends Active
 	
 	event OnEnterState( prevStateName : name )
 	{
-		var witcher : W3PlayerWitcher;
-		var player : CR4Player;
-		var cost, stamina : float;
+		var witcher			: W3PlayerWitcher;
+		var params 			: SCustomEffectParams;
 		
 		super.OnEnterState( prevStateName );
 		
 		witcher = (W3PlayerWitcher)caster.GetActor();
+		
 		if(witcher)
+		{
 			witcher.SetUsedQuenInCombat();
+			witcher.m_quenReappliedCount = 1;
+			
+			params.effectType = EET_BasicQuen;
+			params.creator = witcher;
+			params.sourceName = "sign cast";
+			params.duration = parent.shieldDuration;
+			
+			witcher.AddEffectCustom( params );
+		}
 		
 		caster.GetActor().PlayEffect(GetLastingFxName());
 		
+		if( witcher && witcher.IsSetBonusActive( EISB_Bear_2 ) && witcher.CanUseSkill( S_Magic_s14 ) )
+		{
+			witcher.PlayEffect( 'quen_force_discharge_bear_abl2_armour' );
+		}
+		
 		parent.AddTimer( 'Expire', parent.shieldDuration, false, , , true );
 		
-		parent.AddBuffImmunities(false);
+		parent.AddBuffImmunities();
 		
-		player = caster.GetPlayer();
-		if(player == caster.GetActor() && player && player.CanUseSkill(S_Perk_09))
+		if( witcher )
 		{
-			cost = player.GetStaminaActionCost(ESAT_Ability, SkillEnumToName( parent.skillEnum ), 0);
-			stamina = player.GetStat(BCS_Stamina, true);
-			
-			if(cost > stamina)
-				player.DrainFocus(1);
-			else
-				caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+			if( !parent.freeFromBearSetBonus )
+			{
+				parent.ManagePlayerStamina();
+				parent.ManageGryphonSetBonusBuff();
+			}
 		}
 		else
+		{
 			caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+		}
 		
 		
-		witcher.CriticalEffectAnimationInterrupted("quen channeled");
+		if( !witcher.IsSetBonusActive( EISB_Bear_1 ) || ( !witcher.HasBuff( EET_HeavyKnockdown ) && !witcher.HasBuff( EET_Knockdown ) ) )
+		{
+			witcher.CriticalEffectAnimationInterrupted("basic quen cast");
+		}
 		
 		
 		witcher.AddTimer('HACK_QuenSaveStatus', 0, true);
@@ -468,9 +460,11 @@ state ShieldActive in W3QuenEntity extends Active
 			witcher.StopEffect(parent.effects[0].lastingEffectUpg2);
 			witcher.StopEffect(parent.effects[0].lastingEffectUpg3);
 			witcher.StopEffect(parent.effects[0].lastingEffectUpgNone);
+			witcher.StopEffect( 'quen_force_discharge_bear_abl2_armour' );
+			witcher.RemoveBuff( EET_BasicQuen );
 		}
 	
-		parent.RemoveBuffImmunities(false);
+		parent.RemoveBuffImmunities();
 		
 		parent.RemoveHitDoTEntities();
 		
@@ -620,7 +614,7 @@ state ShieldActive in W3QuenEntity extends Active
 			if ( parent.owner.CanUseSkill(S_Magic_s13) )
 			{				
 				casterActor.PlayEffect( 'lasting_shield_impulse' );
-				parent.Impulse();
+				caster.GetPlayer().QuenImpulse( false, parent, "quen_impulse" );
 			}
 			
 			damageData.SetEndsQuen(true);
@@ -682,7 +676,7 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		
 		casterActor.GetMovingAgentComponent().SetVirtualRadius( 'QuenBubble' );
 			
-		parent.AddBuffImmunities(false);	
+		parent.AddBuffImmunities();	
 		
 		
 		witcher.CriticalEffectAnimationInterrupted("quen channeled");
@@ -717,16 +711,17 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			
 		casterActor = caster.GetActor();
 		casterActor.GetMovingAgentComponent().ResetVirtualRadius();
-		casterActor.StopEffect('quen_shield');
+		casterActor.StopEffect('quen_shield');		
+		casterActor.StopEffect( 'quen_lasting_shield_bear_abl2' );
 		
-		parent.RemoveBuffImmunities(false);		
+		parent.RemoveBuffImmunities();		
 		
 		parent.StopAllEffects();
 		
 		parent.RemoveHitDoTEntities();
 		
 		if(isEnd && caster.CanUseSkill(S_Magic_s13))
-			parent.Impulse();
+			caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse" );
 	}
 	
 	event OnSignAborted( optional force : bool )
@@ -805,8 +800,10 @@ state QuenChanneled in W3QuenEntity extends Channeling
 	{
 		var movingAgent : CMovingPhysicalAgentComponent;
 		var inWater, hasFireDamage, hasElectricDamage, hasPoisonDamage, isDoT, isBirds : bool;
+		var witcher	: W3PlayerWitcher;
 		
 		isBirds = (CFlyingCrittersLairEntityScript)damageData.causer;
+		witcher = parent.owner.GetPlayer();
 		
 		if (isBirds)
 		{
@@ -824,14 +821,26 @@ state QuenChanneled in W3QuenEntity extends Channeling
 				hasPoisonDamage = damageData.GetDamageValue(theGame.params.DAMAGE_NAME_POISON) > 0;		
 				hasElectricDamage = damageData.GetDamageValue(theGame.params.DAMAGE_NAME_SHOCK) > 0;
 		
-				if (hasFireDamage)
+				if( witcher && witcher.CanUseSkill( S_Magic_s14 ) && witcher.IsSetBonusActive( EISB_Bear_2 ) )
+				{
+					parent.PlayHitEffect( 'quen_rebound_sphere_bear_abl2', rot );
+				}
+				else if (hasFireDamage)
+				{
 					parent.PlayHitEffect( 'quen_rebound_sphere_fire', rot );
+				}
 				else if (hasPoisonDamage)
+				{
 					parent.PlayHitEffect( 'quen_rebound_sphere_poison', rot );
+				}
 				else if (hasElectricDamage)
+				{
 					parent.PlayHitEffect( 'quen_rebound_sphere_electricity', rot );
+				}
 				else
+				{
 					parent.PlayHitEffect( 'quen_rebound_sphere', rot );
+				}
 			}
 		}
 		
@@ -898,10 +907,21 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		
 		if(reducibleDamage > 0)
 		{
-			shieldHP = casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative);
-			reducedDamage = MinF( reducibleDamage, casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative) );
+			if( casterActor.HasBuff( EET_Mutation11Buff ) )
+			{
+				shieldHP = 1000000;
+				reducedDamage = reducibleDamage;
+			}
+			else
+			{
+				shieldHP = casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative);
+				reducedDamage = MinF( reducibleDamage, casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative) );
+			}
+			
 			if(reducedDamage < reducibleDamage)
+			{
 				drainAllStamina = true;
+			}
 		}
 		else
 		{
@@ -924,7 +944,7 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			damageData.SetCanPlayHitParticle(false);
 						
 			
-			if (casterActor == thePlayer && GetWitcherPlayer().CanUseSkill(S_Magic_s14) && parent.dischargePercent > 0 && !damageData.IsActionRanged() && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) 
+			if( casterActor == thePlayer && parent.dischargePercent > 0 && !damageData.IsActionRanged() && IsRequiredAttitudeBetween( thePlayer, damageData.attacker, true) && GetWitcherPlayer().CanUseSkill(S_Magic_s14) && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) 
 			{
 				action = new W3DamageAction in theGame.damageMgr;
 				action.Initialize( casterActor, damageData.attacker, parent, 'quen', EHRT_Light, CPS_SpellPower, false, false, true, false, 'hit_shock' );
@@ -960,12 +980,12 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		caster.GetActor().Heal(reducedDamage * HEALING_FACTOR);
 		
 		
-		if( casterActor.GetStat( BCS_Stamina ) <= 0 )
+		if( casterActor.GetStat( BCS_Stamina ) <= 0 && !casterActor.HasBuff( EET_Mutation11Buff ) )
 		{
 			if ( caster.CanUseSkill(S_Magic_s13) )
 			{
 				parent.PlayHitEffect( 'quen_rebound_sphere_impulse', attackerVictimEuler );
-				parent.Impulse();
+				caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse" );
 			}
 			
 			damageData.SetEndsQuen(true);			

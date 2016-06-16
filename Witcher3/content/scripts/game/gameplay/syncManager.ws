@@ -59,7 +59,8 @@ statemachine class W3SyncAnimationManager
 	
 	protected var syncInstances				: array< CAnimationManualSlotSyncInstance >;
 	public var masterEntity					: CGameplayEntity;
-	public var slaveEntity					: CGameplayEntity;	
+	public var slaveEntity					: CGameplayEntity;
+	public var syncActionName 				: name;
 	
 	public var dlcFinishersLeftSide			: array< CR4FinisherDLC >;
 	public var dlcFinishersRightSide		: array< CR4FinisherDLC >;
@@ -94,21 +95,28 @@ statemachine class W3SyncAnimationManager
 		var masterSequencePart, slaveSequencePart	: SAnimationSequencePartDefinition;
 		var syncInstance							: CAnimationManualSlotSyncInstance;
 		
-		var instanceIndex	: int;
-		var sequenceIndex	: int;
+		var instanceIndex							: int;
+		var sequenceIndex							: int;
 		
-		var actorMaster, actorSlave : CActor;
+		var actorMaster, actorSlave 				: CActor;
 		
-		var temp : name; 
-		var rot : EulerAngles;
+		var temp 									: name; 
+		var tempF 									: float;
+		var rot 									: EulerAngles;
 		
-		var finisherAnim : bool;
-		var pos : Vector;
+		var ticketS, ticketR 						: SMovementAdjustmentRequestTicket;
+		var movementAdjustor						: CMovementAdjustor;
 		
-		var syncAnimName	: name;
+		var finisherAnim 							: bool;
+		var pos 									: Vector;
 		
-		var node, node1 : CNode; 
-		var rot0, rot1 : EulerAngles;
+		var syncAnimName							: name;
+		
+		var node, node1 							: CNode; 
+		var rot0, rot1 								: EulerAngles;
+		
+		var collisionGroups 						: array<name>;
+		var normal, zCorrectedPosition 				: Vector;
 		
 		syncInstance = CreateNewSyncInstance( instanceIndex );
 		
@@ -159,7 +167,15 @@ statemachine class W3SyncAnimationManager
 			case 'DeathFinisher':
 			{
 				
-				syncAnimName = GetFinisherSynAnimName();
+				if( ((CActor)slave).WillBeUnconscious() )
+				{
+					syncAnimName = GetFinisherSynAnimName( true );
+					
+				}
+				else
+				{
+					syncAnimName = GetFinisherSynAnimName();
+				}
 				
 				if ( thePlayer.forceFinisher && thePlayer.forceFinisherAnimName != '' )
 				{
@@ -189,7 +205,16 @@ statemachine class W3SyncAnimationManager
 				
 				
 				slave.SetKinematic( true );
-				slaveSequencePart.animation				= syncAnimName;
+				
+				if( ((CActor)slave).WillBeUnconscious() )
+				{
+					slaveSequencePart.animation = GetSlaveAnimName( syncAnimName );
+				}
+				else
+				{
+					slaveSequencePart.animation	= syncAnimName;
+				}
+				
 				slaveSequencePart.syncType				= AMST_SyncBeginning;
 				slaveSequencePart.useRefBone			= 'Reference';	
 				slaveSequencePart.rotationTypeUsingRefBone = SRT_TowardsOtherEntity;	
@@ -213,8 +238,14 @@ statemachine class W3SyncAnimationManager
 		
 				slaveDef.manualSlotName					= 'FinisherSlot';
 				slaveDef.freezeAtEnd					= false;
-
-				cameraAnimName = ProcessFinisherCameraAnimName( syncAnimName );
+				
+				masterEntity = (CGameplayEntity)master;
+				slaveEntity = (CGameplayEntity)slave;
+				
+				if( !((CActor)slave).WillBeUnconscious() )
+				{
+					cameraAnimName = ProcessFinisherCameraAnimName( syncAnimName );
+				}
 				
 				finisherAnim 							= true;
 				
@@ -412,7 +443,7 @@ statemachine class W3SyncAnimationManager
 			{
 				
 				masterSequencePart.animation		= 'monster_lessun_attack_grab_neck_quicker';
-				masterSequencePart.syncType			= AMST_SyncBeginning;
+				masterSequencePart.syncType			= AMST_SyncMatchEvents;
 				masterSequencePart.syncEventName	= 'SyncEvent';
 				masterSequencePart.finalPosition	= master.GetWorldPosition() + master.GetHeadingVector();
 				masterSequencePart.finalHeading		= master.GetHeading() + 180;
@@ -429,7 +460,7 @@ statemachine class W3SyncAnimationManager
 				
 				
 				slaveSequencePart.animation			= 'man_ger_sword_heavyhit_front_lp';
-				slaveSequencePart.syncType			= AMST_SyncBeginning;
+				slaveSequencePart.syncType			= AMST_SyncMatchEvents;
 				slaveSequencePart.syncEventName		= 'SyncEvent';
 				slaveSequencePart.shouldSlide		= false;
 				slaveSequencePart.blendInTime		= 0.2f;
@@ -443,10 +474,123 @@ statemachine class W3SyncAnimationManager
 				
 				break;
 			}
+			case 'PantherGrabLeft':
+			{
+				rot = master.GetWorldRotation();
+				pos = ((CActor)slave).PredictWorldPosition( 0.1 );
+				
+				collisionGroups.PushBack('Terrain');
+				collisionGroups.PushBack('Static');
+				collisionGroups.PushBack('Destructible');
+				
+				
+				masterSequencePart.animation		= 'mcat_attack_grab_left';
+				masterSequencePart.syncType			= AMST_SyncBeginning;
+				masterSequencePart.syncEventName	= 'SyncEvent';
+				
+				masterSequencePart.finalPosition	= pos + 0.25 * VecNormalize( VecFromHeading( VecHeading( pos - master.GetWorldPosition() ) + 90 ) );
+				
+				zCorrectedPosition = masterSequencePart.finalPosition;
+				zCorrectedPosition += ( 2.4 * VecNormalize( VecFromHeading( VecHeading( pos - master.GetWorldPosition() ) + 90 ) ) );
+				theGame.GetWorld().StaticTrace( zCorrectedPosition + Vector(0,0,2.0), zCorrectedPosition - Vector(0,0,5), zCorrectedPosition, normal, collisionGroups );
+				masterSequencePart.finalPosition.Z 	= zCorrectedPosition.Z;
+				masterSequencePart.finalHeading		= VecHeading( pos - master.GetWorldPosition() );
+				
+				masterSequencePart.shouldSlide		= true;
+				masterSequencePart.shouldRotate		= true;
+				masterSequencePart.blendInTime		= 0.1f;
+				masterSequencePart.blendOutTime		= 0.2f;
+				masterSequencePart.sequenceIndex	= 0;
+				masterSequencePart.disableProxyCollisions = true;
+				((CActor)master).GetVisualDebug().AddSphere( 'syncPos', 0.5, masterSequencePart.finalPosition, true, Color( 0,255,255 ), 5.0f );
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity					= master;
+				masterDef.manualSlotName			= 'GAMEPLAY_SLOT';
+				masterDef.freezeAtEnd				= false;
+				
+				
+				slaveSequencePart.animation			= 'mcat_attack_grab_left';
+				slaveSequencePart.syncType			= AMST_SyncBeginning;
+				slaveSequencePart.syncEventName		= 'SyncEvent';
+				slaveSequencePart.shouldSlide		= false;
+				slaveSequencePart.shouldRotate		= false;
+				slaveSequencePart.finalHeading		= VecHeading( pos - master.GetWorldPosition() ) + 180;
+				slaveSequencePart.finalPosition		= pos;
+				slaveSequencePart.blendInTime		= 0.2f;
+				slaveSequencePart.blendOutTime		= 0.2f;
+				slaveSequencePart.sequenceIndex		= 0;
+				
+				
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity						= slave;
+				slaveDef.manualSlotName				= 'GAMEPLAY_SLOT';
+				slaveDef.freezeAtEnd				= false;
+				
+				break;
+			}
+			case 'PantherGrabRight':
+			{
+				rot = master.GetWorldRotation();
+				pos = ((CActor)slave).PredictWorldPosition( 0.1 );
+				
+				collisionGroups.PushBack('Terrain');
+				collisionGroups.PushBack('Static');
+				collisionGroups.PushBack('Destructible');
+				
+				
+				masterSequencePart.animation		= 'mcat_attack_grab_right';
+				masterSequencePart.syncType			= AMST_SyncBeginning;
+				masterSequencePart.syncEventName	= 'SyncEvent';
+				
+				masterSequencePart.finalPosition	= pos + 0.25 * VecNormalize(VecFromHeading( VecHeading( pos - master.GetWorldPosition() ) + 90 ) );
+				
+				zCorrectedPosition = masterSequencePart.finalPosition;
+				zCorrectedPosition += ( 2.4 * VecNormalize( VecFromHeading( VecHeading( pos - master.GetWorldPosition() ) + 90 ) ) );
+				theGame.GetWorld().StaticTrace( zCorrectedPosition + Vector(0,0,2.0), zCorrectedPosition - Vector(0,0,5), zCorrectedPosition, normal, collisionGroups );
+				masterSequencePart.finalPosition.Z 	= zCorrectedPosition.Z;
+				masterSequencePart.finalHeading		= VecHeading( pos - master.GetWorldPosition() );
+				
+				masterSequencePart.shouldSlide		= true;
+				masterSequencePart.shouldRotate		= true;
+				masterSequencePart.blendInTime		= 0.1f;
+				masterSequencePart.blendOutTime		= 0.2f;
+				masterSequencePart.sequenceIndex	= 0;
+				
+				
+				masterSequencePart.disableProxyCollisions = true;
+				((CActor)master).GetVisualDebug().AddSphere( 'syncPos', 0.5, masterSequencePart.finalPosition, true, Color( 0,255,255 ), 5.0f );
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity					= master;
+				masterDef.manualSlotName			= 'GAMEPLAY_SLOT';
+				masterDef.freezeAtEnd				= false;
+				
+				
+				slaveSequencePart.animation			= 'mcat_attack_grab_right';
+				slaveSequencePart.syncType			= AMST_SyncBeginning;
+				slaveSequencePart.syncEventName		= 'SyncEvent';
+				slaveSequencePart.shouldSlide		= false;
+				slaveSequencePart.shouldRotate		= false;
+				slaveSequencePart.finalHeading		= VecHeading( pos - master.GetWorldPosition() ) + 180;
+				slaveSequencePart.finalPosition		= pos;
+				slaveSequencePart.blendInTime		= 0.2f;
+				slaveSequencePart.blendOutTime		= 0.2f;
+				slaveSequencePart.sequenceIndex		= 0;
+				slaveSequencePart.disableProxyCollisions = true;
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity						= slave;
+				slaveDef.manualSlotName				= 'GAMEPLAY_SLOT';
+				slaveDef.freezeAtEnd				= false;
+				
+				break;
+			}
 			case 'SirenCrawlFinisher':
 			{
 				
-				masterSequencePart.animation		= 'man_ger_crawl_finish';
+				masterSequencePart.animation		= 'man_attack';
 				masterSequencePart.syncType			= AMST_SyncMatchEvents;
 				masterSequencePart.syncEventName	= 'SyncEvent';
 				masterSequencePart.shouldSlide		= true;
@@ -745,7 +889,7 @@ statemachine class W3SyncAnimationManager
 				
 				break;
 			}
-						case 'BoarKnockDownFinisher':
+			case 'BoarKnockDownFinisher':
 			{
 				
 				masterSequencePart.animation		= 'man_ger_crawl_finish';
@@ -842,6 +986,70 @@ statemachine class W3SyncAnimationManager
 				slaveDef.freezeAtEnd				= true;
 				
 				finisherAnim 						= true;
+				
+				break;
+			}
+			case 'BruxaKnockDownFinisher':
+			{
+				
+				masterSequencePart.animation		= 'man_ger_crawl_finish_vampire';
+				masterSequencePart.syncType			= AMST_SyncMatchEvents;
+				masterSequencePart.syncEventName	= 'SyncEvent';
+				masterSequencePart.shouldSlide		= true;
+				masterSequencePart.shouldRotate		= true;
+				
+				pos = GetActorPosition( slave );				
+				masterSequencePart.finalPosition	= 1.15 * VecNormalize( master.GetWorldPosition() - pos ) + pos;
+				masterSequencePart.finalHeading		= VecHeading( pos - master.GetWorldPosition() );
+				
+				masterSequencePart.blendInTime		= 0.f;
+				masterSequencePart.blendOutTime		= 0.f;
+				masterSequencePart.sequenceIndex	= 0;
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity					= master;
+				masterDef.manualSlotName			= 'FinisherSlot';
+				masterDef.startForceEvent			= 'PerformFinisher';
+				masterDef.raiseEventOnEnd			= 'DoneFinisher';
+				masterDef.freezeAtEnd				= true;
+				
+				
+				if ( ( (CActor)slave ).HasAbility( 'EvadeFinisher' ) && !( (CActor)slave ).HasBuff( EET_Slowdown ) )
+				{
+					slaveSequencePart.animation		= 'bruxa_crawl_to_dodge_slide';
+					
+					slaveDef.startForceEvent 		= 'ForceIdle';
+					slaveDef.raiseForceEventOnEnd 	= 'ForceIdle';
+					
+					( (CNewNPC)slave ).AddTimer( 'EvadeFinisherTimer', 0.5, false );
+				}
+				else
+				{
+					slaveSequencePart.animation		= 'bruxa_crawl_finisher';
+					slaveDef.startForceEvent 		= 'FinisherDeath';
+					slaveDef.freezeAtEnd			= true;
+					finisherAnim = true;
+				}
+				slaveSequencePart.syncType			= AMST_SyncMatchEvents;
+				slaveSequencePart.syncEventName		= 'SyncEvent';
+				slaveSequencePart.shouldSlide		= false;
+				slaveSequencePart.blendInTime		= 0.2f;
+				slaveSequencePart.blendOutTime		= 0.2f;
+				slaveSequencePart.sequenceIndex		= 0;
+				slaveSequencePart.allowBreakAtStartBeforeEventsEnd	= 'SyncEvent';
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity						= slave;
+				slaveDef.manualSlotName				= 'GAMEPLAY_SLOT';
+				
+				masterEntity 						= (CGameplayEntity)master;
+				slaveEntity 						= (CGameplayEntity)slave;
+				syncActionName 						= syncAction;
+				
+				((CNewNPC)slave).AddBuffImmunity( EET_Knockdown, 'SyncAnim', false );
+				((CNewNPC)slave).AddBuffImmunity( EET_HeavyKnockdown, 'SyncAnim', false );
+				((CNewNPC)slave).AddBuffImmunity( EET_KnockdownTypeApplicator, 'SyncAnim', false );
+				((CNewNPC)slave).SetUnstoppable( true );
 				
 				break;
 			}
@@ -1221,13 +1429,403 @@ statemachine class W3SyncAnimationManager
 		
 		return true;
 	}
+	
+	
+	public function SetupSimpleSyncAnim2( syncAction : name, master, slave : CEntity ) : bool
+	{
+		var masterDef, slaveDef						: SAnimationSequenceDefinition;
+		var masterSequencePart, slaveSequencePart	: SAnimationSequencePartDefinition;
+		var syncInstance							: CAnimationManualSlotSyncInstance;
+		
+		var instanceIndex	: int;
+		var sequenceIndex	: int;
+		
+		var actorMaster, actorSlave : CActor;
+		
+		var temp : name; 
+		var tempF : float;
+		var rot : EulerAngles;
+		
+		var finisherAnim : bool;
+		var pos : Vector;
+		
+		var syncAnimName	: name;
+		
+		var node, node1 : CNode; 
+		var rot0, rot1 : EulerAngles;
+		
+		syncInstance = CreateNewSyncInstance( instanceIndex );
+		
+		
+		thePlayer.BlockAction(EIAB_Interactions, 'SyncManager' );
+		thePlayer.BlockAction(EIAB_FastTravel, 'SyncManager' );
+		
+		switch( syncAction )
+		{
+			case 'BruxaBite':
+			{
+				rot = slave.GetWorldRotation();
+				pos = ((CActor)slave).PredictWorldPosition( 0.1 );
+				tempF = NodeToNodeAngleDistance( master, slave );
+				
+				
+				if ( slave == thePlayer && ((CR4Player)slave).GetCombatIdleStance() == 0 )
+				{
+					
+					if ( tempF >= -90.0 && tempF < 90.0 )
+					{
+						masterSequencePart.animation = 'bruxa_attack_bite_front_lp';
+						slaveSequencePart.animation = 'bruxa_attack_bite_front_lp';
+						masterSequencePart.finalHeading	= rot.Yaw + 180;
+					}
+					
+					else
+					{
+						masterSequencePart.animation = 'bruxa_attack_bite_back_lp';
+						slaveSequencePart.animation = 'bruxa_attack_bite_back_lp';
+						masterSequencePart.finalHeading	= rot.Yaw;
+					}
+				}
+				
+				else
+				{
+					
+					if ( tempF >= -90.0 && tempF < 90.0 )
+					{
+						masterSequencePart.animation = 'bruxa_attack_bite_front_rp';
+						slaveSequencePart.animation = 'bruxa_attack_bite_front_rp';
+						masterSequencePart.finalHeading	= rot.Yaw + 180;
+					}
+					
+					else
+					{
+						masterSequencePart.animation = 'bruxa_attack_bite_back_rp';
+						slaveSequencePart.animation = 'bruxa_attack_bite_back_rp';
+						masterSequencePart.finalHeading	= rot.Yaw;
+					}
+				}
+				
+				((CActor)slave).AddEffectDefault( EET_Bleeding, (CActor)master, "BruxaBiteAttack" );
+				master.SetBehaviorVariable( 'bite', 1 );
+				FactsAdd( "player_bitten_by_vampire", 1, 3 );
+				
+				
+				
+				masterSequencePart.syncType			= AMST_SyncBeginning;
+				masterSequencePart.syncEventName	= 'SyncEvent';
+				masterSequencePart.finalPosition	= pos; 
+				
+				masterSequencePart.shouldSlide		= true;
+				masterSequencePart.shouldRotate		= true;
+				masterSequencePart.blendInTime		= 0.2f;
+				masterSequencePart.blendOutTime		= 0.2f;
+				masterSequencePart.sequenceIndex	= 0;
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity					= master;
+				masterDef.manualSlotName			= 'GAMEPLAY_SLOT';
+				masterDef.freezeAtEnd				= false;
+				masterDef.startForceEvent 			= 'ForceIdle';
+				
+				
+				
+				slaveSequencePart.syncType			= AMST_SyncBeginning;
+				slaveSequencePart.syncEventName		= 'SyncEvent';
+				slaveSequencePart.shouldSlide		= false;
+				slaveSequencePart.shouldRotate		= false;
+				slaveSequencePart.blendInTime		= 0.2f;
+				slaveSequencePart.blendOutTime		= 0.2f;
+				slaveSequencePart.sequenceIndex		= 0;
+				slaveSequencePart.disableProxyCollisions = true;
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity						= slave;
+				slaveDef.manualSlotName				= 'GAMEPLAY_SLOT';
+				slaveDef.freezeAtEnd				= false;
+				
+				break;
+			}
+			case 'DettlaffWings':
+			{
+				rot = slave.GetWorldRotation();
+				pos = slave.GetWorldPosition();
+					
+				
+				
+				masterSequencePart.animation			= 'man_finisher_dlc2_dettlaff_cut_wings_lp';
+				masterSequencePart.syncType				= AMST_SyncBeginning;
+				masterSequencePart.finalPosition		= pos; 
+				masterSequencePart.finalHeading			= rot.Yaw+180;
+				
+				masterSequencePart.shouldSlide			= true;
+				masterSequencePart.shouldRotate			= true;
+				
+				masterSequencePart.blendInTime			= 0.1f;
+				masterSequencePart.blendOutTime			= 0.2f;
+				masterSequencePart.sequenceIndex		= 0;
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity						= master;
+				masterDef.freezeAtEnd					= false;
+				masterDef.manualSlotName				= 'GAMEPLAY_SLOT';
+					
+				
+					
+				slaveSequencePart.animation				= 'man_finisher_dlc2_dettlaff_cut_wings_lp';
+				slaveSequencePart.syncType				= AMST_SyncBeginning;
+				slaveSequencePart.shouldRotate			= false;
+				slaveSequencePart.shouldSlide			= false;
+				slaveSequencePart.blendInTime			= 0.1f;
+				slaveSequencePart.blendOutTime			= 0.2f;
+				slaveSequencePart.sequenceIndex			= 0;
+				slaveSequencePart.disableProxyCollisions = true;
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity							= slave;
+				slaveDef.manualSlotName					= 'GAMEPLAY_SLOT';
+				slaveDef.freezeAtEnd					= false;
+				
+				masterEntity = (CGameplayEntity)master;
+				slaveEntity = (CGameplayEntity)slave;
+				
+				ProcessDettlaffFinisherCamera();
+				
+				
+				break;	
+			}
+			case 'DettlaffBlood':
+			{
+				rot = slave.GetWorldRotation();
+				pos = slave.GetWorldPosition();
+					
+				
+				
+				masterSequencePart.animation			= 'man_finisher_dlc2_dettlaff_blood_drinking';
+				masterSequencePart.syncType				= AMST_SyncBeginning;
+				masterSequencePart.finalPosition		= pos; 
+				masterSequencePart.finalHeading			= rot.Yaw;
+				
+				masterSequencePart.shouldSlide			= true;
+				masterSequencePart.shouldRotate			= true;
+				
+				masterSequencePart.blendInTime			= 0.0f;
+				masterSequencePart.blendOutTime			= 0.2f;
+				masterSequencePart.sequenceIndex		= 0;
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity						= master;
+				masterDef.freezeAtEnd					= false;
+				masterDef.manualSlotName				= 'GAMEPLAY_SLOT';
+					
+				
+					
+				slaveSequencePart.animation				= 'man_finisher_dlc2_dettlaff_blood_drinking';
+				slaveSequencePart.syncType				= AMST_SyncBeginning;
+				slaveSequencePart.shouldRotate			= false;
+				slaveSequencePart.shouldSlide			= false;
+				slaveSequencePart.blendInTime			= 0.0f;
+				slaveSequencePart.blendOutTime			= 0.2f;
+				slaveSequencePart.sequenceIndex			= 0;
+				slaveSequencePart.disableProxyCollisions = true;
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity							= slave;
+				slaveDef.manualSlotName					= 'GAMEPLAY_SLOT';
+				slaveDef.freezeAtEnd					= false;
+				
+				masterEntity = (CGameplayEntity)master;
+				slaveEntity = (CGameplayEntity)slave;
+				
+				
+				
+				break;	
+			}
+			case 'DettlaffTorso':
+			{
+				rot = slave.GetWorldRotation();
+				pos = ((CActor)slave).PredictWorldPosition( 0.2f );
+					
+				
+				
+				masterSequencePart.animation			= 'man_finisher_dlc2_dettlaff_cut_torso_rp';
+				masterSequencePart.syncType				= AMST_SyncMatchEvents;
+				masterSequencePart.syncEventName 		= 'SyncEvent';
+				masterSequencePart.finalPosition		= pos; 
+				masterSequencePart.finalHeading			= rot.Yaw;
+				
+				masterSequencePart.shouldSlide			= true;
+				masterSequencePart.shouldRotate			= true;
+				
+				masterSequencePart.blendInTime			= 0.0f;
+				masterSequencePart.blendOutTime			= 0.2f;
+				masterSequencePart.sequenceIndex		= 0;
+				
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity						= master;
+				masterDef.freezeAtEnd					= false;
+				masterDef.manualSlotName				= 'GAMEPLAY_SLOT';
 
-	private function GetFinisherSynAnimName() : name
+					
+				
+					
+				slaveSequencePart.animation				= 'man_finisher_dlc2_dettlaff_cut_torso_rp';
+				slaveSequencePart.syncType				= AMST_SyncMatchEvents;
+				slaveSequencePart.syncEventName 		= 'SyncEvent';
+				slaveSequencePart.shouldRotate			= false;
+				slaveSequencePart.shouldSlide			= false;
+				slaveSequencePart.blendInTime			= 0.0f;
+				slaveSequencePart.blendOutTime			= 0.2f;
+				slaveSequencePart.sequenceIndex			= 0;
+				slaveSequencePart.disableProxyCollisions = true;
+				
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity							= slave;
+				
+				slaveDef.manualSlotName					= 'FinisherSlot';
+				slaveDef.startForceEvent				= 'PerformFinisher';
+				slaveDef.raiseEventOnEnd				= 'DoneFinisher';
+				slaveDef.freezeAtEnd					= false;
+				finisherAnim 							= true;
+				
+				masterEntity = (CGameplayEntity)master;
+				slaveEntity = (CGameplayEntity)slave;
+				
+				ProcessDettlaffFinisherCamera();
+				
+				break;	
+			}
+			case 'ArchesporEating_01':
+			{
+				
+				masterSequencePart.animation			= 'utility_wander_eating_end';	
+				masterSequencePart.syncType				= AMST_SyncBeginning;
+				masterSequencePart.shouldSlide			= false;
+				masterSequencePart.shouldRotate			= false;		
+				masterSequencePart.blendInTime			= 0.f;
+				masterSequencePart.blendOutTime			= 0.f;
+				masterSequencePart.sequenceIndex		= 0;
+				masterSequencePart.allowBreakBeforeEnd 	= 7.0;
+				masterDef.parts.PushBack( masterSequencePart );
+				masterDef.entity						= master;
+				masterDef.manualSlotName				= 'GAMEPLAY_SLOT';
+				masterDef.raiseEventOnEnd				= 'ForceIdle';
+				
+				
+				slaveSequencePart.animation				= 'utility_wander_eating_end';
+				slaveSequencePart.syncType				= AMST_SyncBeginning;	
+				slaveSequencePart.blendInTime			= 0.f;
+				slaveSequencePart.blendOutTime			= 0.f;
+				slaveSequencePart.sequenceIndex			= 0;	
+				slaveSequencePart.allowBreakBeforeEnd 	= 7.0;
+				slaveDef.parts.PushBack( slaveSequencePart );
+				slaveDef.entity							= slave;
+				slaveDef.manualSlotName					= 'GAMEPLAY_SLOT';
+				
+				masterEntity = (CGameplayEntity)master;
+				slaveEntity = (CGameplayEntity)slave;
+				
+				break;	
+			}
+			default : 
+			{
+				syncInstances.Remove( syncInstance );
+				return false;
+			}
+			
+		}
+		
+		sequenceIndex = syncInstance.RegisterMaster( masterDef );
+		if( sequenceIndex == -1 )
+		{
+			syncInstances.Remove( syncInstance );
+			return false;
+		}
+		
+		
+		actorMaster = (CActor)master;
+		actorSlave = (CActor)slave;
+		
+		if(actorMaster)
+		{
+			actorMaster.SignalGameplayEventParamInt( 'SetupSyncInstance', instanceIndex );
+			actorMaster.SignalGameplayEventParamInt( 'SetupSequenceIndex', sequenceIndex );
+			if ( finisherAnim )
+				actorMaster.SignalGameplayEvent( 'PlayFinisherSyncedAnim' );
+			else
+				actorMaster.SignalGameplayEvent( 'PlaySyncedAnim' );
+			
+		}
+		
+		sequenceIndex = syncInstance.RegisterSlave( slaveDef );
+		if( sequenceIndex == -1 )
+		{
+			syncInstances.Remove( syncInstance );
+			return false;
+		}
+		
+		
+		if(actorSlave)
+		{
+			if( syncAction == 'Throat' )
+				actorSlave.SignalGameplayEventParamCName( 'SetupEndEvent', 'CriticalState' );
+				
+			actorSlave.SignalGameplayEventParamInt( 'SetupSyncInstance', instanceIndex );
+			actorSlave.SignalGameplayEventParamInt( 'SetupSequenceIndex', sequenceIndex );
+			if ( finisherAnim )
+				actorSlave.SignalGameplayEvent( 'PlayFinisherSyncedAnim' );
+			else
+				actorSlave.SignalGameplayEvent( 'PlaySyncedAnim' );
+		}
+		
+		
+		
+		return true;
+	}
+
+	private function GetFinisherSynAnimName( optional nonLethalFinisher : bool ) : name
 	{
 		var syncAnimName 	: name;
 		var syncAnimsNames	: array<name>;
 		var size 			: int;
 		var i 				: int;
+		
+		if( nonLethalFinisher )
+		{
+			if ( thePlayer.GetCombatIdleStance() <= 0.f )
+			{
+				if( thePlayer.GetTarget().HasAbility( 'ForceHiltFinisher' ) )
+				{
+					return 'man_finisher_hilt_01_lp';
+				}
+				else if( thePlayer.GetTarget().HasAbility( 'ForceHeadbuttFinisher' ) )
+				{
+					return 'man_finisher_head_01_lp';
+				}
+				else
+				{
+					syncAnimsNames.PushBack( 'man_finisher_hilt_01_lp' );
+					syncAnimsNames.PushBack( 'man_finisher_head_01_lp' );
+				}
+			}
+			else
+			{
+				if( thePlayer.GetTarget().HasAbility( 'ForceHiltFinisher' ) )
+				{
+					return 'man_finisher_hilt_01_rp';
+				}
+				else if( thePlayer.GetTarget().HasAbility( 'ForceHeadbuttFinisher' ) )
+				{
+					return 'man_finisher_head_01_rp';
+				}
+				else
+				{
+					syncAnimsNames.PushBack( 'man_finisher_hilt_01_rp' );
+					syncAnimsNames.PushBack( 'man_finisher_head_01_rp' );
+				}
+			}
+			
+			return syncAnimsNames[ RandRange( syncAnimsNames.Size(),  0 ) ];
+		}
 		
 		if ( thePlayer.forceFinisher && thePlayer.forceFinisherAnimName != '' )
 			return thePlayer.forceFinisherAnimName;
@@ -1257,6 +1855,18 @@ statemachine class W3SyncAnimationManager
 			}
 		}
 		return syncAnimsNames[ RandRange( syncAnimsNames.Size(),  0 ) ];
+	}
+	
+	private function GetSlaveAnimName( masterAnimName : name ) : name
+	{
+		if( masterAnimName == 'man_finisher_hilt_01_lp' || masterAnimName == 'man_finisher_hilt_01_rp' )
+		{
+			return 'man_finisher_hilt_01_reaction';
+		}
+		else
+		{
+			return 'man_finisher_head_01_reaction';
+		}
 	}
 		
 	private function PlayPhaseChangeCameraAnimation( animationName : name )
@@ -1470,6 +2080,57 @@ statemachine class W3SyncAnimationManager
 		return finisherCameraAnimName;
 	}
 	
+	private function ProcessDettlaffFinisherCamera() 
+	{
+		var camera 	: CCustomCamera = theGame.GetGameCamera();
+		var animation : SCameraAnimationDefinition;
+		var playerToCamHeading 				: float;
+		var playerTocamAnimInitialHeading 	: float;
+		var angleDiffs						: array<float>;
+		var i 								: int;	
+		var finisherCameraAnimName			: name;
+		var checkDLCs						: bool = false;
+		
+		playerToCamHeading = VecHeading( camera.GetWorldPosition() - thePlayer.GetWorldPosition() ); 
+		playerTocamAnimInitialHeading = thePlayer.GetHeading();
+		
+		for ( i = 0; i < 4; i += 1 )
+		{
+			angleDiffs.PushBack( AbsF( AngleDistance( playerToCamHeading, playerTocamAnimInitialHeading ) ) );
+			playerTocamAnimInitialHeading += 90.f;
+		}
+		
+		i = ArrayFindMinF( angleDiffs );	
+		
+		if ( i >= 3 )
+		{
+			finisherCameraAnimName = 'man_finisher_dlc2_dettlaff_cut_torso_rp_camera_left';
+		}
+		else if( i >= 2 )
+		{
+			finisherCameraAnimName = 'man_finisher_dlc2_dettlaff_cut_torso_rp_camera_front';
+		}
+		else if( i >= 1 )
+		{
+			finisherCameraAnimName = 'man_finisher_dlc2_dettlaff_cut_torso_rp_camera_right';
+		}
+		else
+		{
+			finisherCameraAnimName = 'man_finisher_dlc2_dettlaff_cut_torso_rp_camera_back';
+		}
+			
+		animation.animation = finisherCameraAnimName;
+		animation.priority = CAP_Highest;
+		animation.blendIn = 0.5f;
+		animation.blendOut = 1.f;
+		animation.weight = 1.0f;
+		animation.speed	= 1.0f;
+		animation.reset = false;
+		
+		camera.PlayAnimation( animation );
+		
+	}
+	
 	event OnRemoveFinisherCameraAnimation()
 	{
 		var camera 	: CCustomCamera = theGame.GetGameCamera();
@@ -1562,6 +2223,17 @@ state Active in W3SyncAnimationManager
 		
 		thePlayer.UnblockAction(EIAB_Interactions, 'SyncManager' );
 		thePlayer.UnblockAction(EIAB_FastTravel, 'SyncManager' );
+		thePlayer.BlockAllActions( 'BTTaskPlaySyncAnim', false );
+		thePlayer.SetImmortalityMode( AIM_None, AIC_SyncedAnim );
+		
+		if ( parent.syncActionName == 'BruxaKnockDownFinisher' )
+		{
+			((CNewNPC)parent.slaveEntity).CriticalEffectAnimationInterrupted( 'SyncAnim' );
+			((CNewNPC)parent.slaveEntity).RemoveBuffImmunity( EET_Knockdown, 'SyncAnim' );
+			((CNewNPC)parent.slaveEntity).RemoveBuffImmunity( EET_HeavyKnockdown, 'SyncAnim' );
+			((CNewNPC)parent.slaveEntity).RemoveBuffImmunity( EET_KnockdownTypeApplicator, 'SyncAnim' );
+			((CNewNPC)parent.slaveEntity).SetUnstoppable( false );
+		}
 	}
 	
 	entry function Run()
@@ -1588,6 +2260,24 @@ state Active in W3SyncAnimationManager
 		parent.PopState( true );
 	}
 }
+function PlayCustomCamAnim( val : name, blendIn : float, blendOut : float, weight : float, speed : float, reset : bool, optional priority : ECameraAnimPriority )
+{
+	var camera 	: CCustomCamera = theGame.GetGameCamera();
+	var animation : SCameraAnimationDefinition;
+	
+	
+
+	animation.animation = val;
+	
+	animation.blendIn = blendIn;
+	animation.blendOut = blendOut;
+	animation.weight = weight;
+	animation.speed	= speed;
+	animation.reset = reset;
+	animation.priority = priority;
+	camera.PlayAnimation( animation );
+}
+
 
 
 exec function PlayCamAnim( optional i : int )

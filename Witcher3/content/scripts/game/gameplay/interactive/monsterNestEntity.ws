@@ -3,7 +3,13 @@
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
 /***********************************************************************/
- struct SMonsterNestUpdateDefinition
+enum EMonsterNestType
+{
+	EMNT_Regular,
+	EMNT_InfestedWineyard
+};
+
+struct SMonsterNestUpdateDefinition
 {
 	editable saved var isRebuilding					: bool; 
 	editable saved  var defaultPhaseToActivate 		: name;
@@ -38,6 +44,8 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	editable var addExpOnlyOnce								: bool; default addExpOnlyOnce = false;
 	editable saved var nestUpdateDefintion					: SMonsterNestUpdateDefinition;
 	editable var monsterNestType							: ENestType; 
+	editable var regionType									: EEP2PoiType;
+	editable var entityType									: EMonsterNestType; default entityType = EMNT_Regular;
 	
 		hint desiredPlayerToEntityDistance = "if set to < 0 player will stay in position where interaction was pressed";
 		hint setDestructionFactImmediately = "if set then destrution fact is added immediately on destruction";
@@ -220,6 +228,18 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 		}
 	}
 	
+	
+	public function GetRegionType() : int
+	{
+		return (int) regionType;
+	}
+
+	
+	public function GetEntityType() : int
+	{
+		return (int) entityType;
+	}
+
 	function CanPlayVoiceSet() : bool
 	{
 		return !thePlayer.IsSpeaking() && !thePlayer.IsInNonGameplayCutscene() && !thePlayer.IsCombatMusicEnabled() && canPlayVset && !wasExploded;
@@ -239,6 +259,9 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 			case EN_Siren 			: return 'MonsterNestSirens';
 			case EN_Wyvern	 		: return 'MonsterNestWiwerns';
 			case EN_BlackSpider		: return 'DetectNestArachnomorphs';
+			case EN_Kikimora		: return 'MonsterNestKikimoras';
+			case EN_Archespore		: return 'MonsterNestArchespores';
+			case EN_Scolopendromorph: return 'MonsterNestScolopendromorps';
 			default					: return ''; 				
 		}
 		
@@ -642,6 +665,11 @@ state Explosion in CMonsterNestEntity
 		entitiesInRange.Remove( parent );
 		for( i = 0; i < entitiesInRange.Size(); i += 1 )
 		{
+			if( entitiesInRange[ i ] == thePlayer && thePlayer.CanUseSkill( S_Perk_16 ) )
+			{
+				continue;
+			}
+			
 			if( (CActor)entitiesInRange[i] )
 			{
 				damage = new W3DamageAction in parent;
@@ -748,7 +776,10 @@ enum ENestType
 	EN_Siren,
 	EN_Wyvern,
 	EN_None,
-	EN_BlackSpider
+	EN_BlackSpider,
+	EN_Kikimora,
+	EN_Archespore,
+	EN_Scolopendromorph
 }
 
 

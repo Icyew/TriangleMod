@@ -41,7 +41,7 @@ class CBTTaskKillEntityByTag extends IBehTreeTask
 		
 		for (i = 0; i<npc.Size(); i+=1)
 		{
-			npc[i].Kill();
+			npc[i].Kill( 'AI' );
 		}
 	}
 }

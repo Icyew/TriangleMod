@@ -16,6 +16,7 @@ class W3HorseManager extends CPeristentEntity
 	private saved var horseAbilities : array<name>;				
 	private saved var itemSlots : array<SItemUniqueId>;			
 	private saved var wasSpawned : bool;						
+	private saved var horseMode : EHorseMode;					
 	
 	default wasSpawned = false;
 	
@@ -31,13 +32,87 @@ class W3HorseManager extends CPeristentEntity
 		return inv;
 	}
 	
-	public function GetDefaultHorseAppearance() : name
+	
+	
+	public final function GetShouldHideAllItems() : bool
 	{
-		if( FactsQuerySum( "q110_geralt_refused_pay" ) > 0 ) 
+		return horseMode == EHM_Unicorn;
+	}
+	
+	private final function GetAppearanceName() : name
+	{
+		var worldName : String;
+		var isOnBobLevel : bool;
+		
+		worldName =  theGame.GetWorld().GetDepotPath();
+		if( StrFindFirst( worldName, "bob" ) < 0 )
+			isOnBobLevel = false;
+		else
+			isOnBobLevel = true; 
+	
+		if( horseMode == EHM_Unicorn )
 		{
-			return 'player_horse_after_q110';
+			return 'unicorn_wild_01';
+		}
+		else if( horseMode == EHM_Devil )
+		{
+			if( isOnBobLevel )
+				return 'player_horse_with_devil_saddle_mimics';
+			else
+				return 'player_horse_with_devil_saddle';
+		}		
+		else if( FactsQuerySum( "q110_geralt_refused_pay" ) > 0 ) 
+		{
+			if( isOnBobLevel )
+				return 'player_horse_after_q110_mimics';
+			else
+				return 'player_horse_after_q110';
 		}	
-		return 'player_horse';
+		else
+		{
+			if( isOnBobLevel )
+				return 'player_horse_mimics';
+			else
+				return 'player_horse';
+		}
+	}	
+	
+	public function SetHorseMode( m : EHorseMode )
+	{
+		var horse : CNewNPC;		
+		
+		
+		if( horseMode == EHM_Unicorn && m == EHM_Devil )
+		{
+			return;
+		}
+		
+		horse = thePlayer.GetHorseWithInventory();
+		
+		
+		if( horse && horseMode == EHM_Devil && m != horseMode )
+		{
+			horse.RemoveBuff( EET_WeakeningAura, true );
+			horse.StopEffect( 'demon_horse' );
+		}
+		
+		horseMode = m;
+		
+		
+		if( horse )
+		{
+			if( horseMode == EHM_Devil )
+			{
+				horse.PlayEffectSingle( 'demon_horse' );
+				if( !horse.HasBuff( EET_WeakeningAura ) )
+					horse.AddEffectDefault( EET_WeakeningAura, horse, 'horse saddle', false );
+			}
+			
+			horse.AddTimer( 'SetShowAllHorseItems', 0.3f );
+			
+			
+			horse.ApplyAppearance( GetAppearanceName() );
+		}
 	}
 		
 	
@@ -48,6 +123,7 @@ class W3HorseManager extends CPeristentEntity
 		var i 				: int;
 		var horseInv 		: CInventoryComponent;
 		var horse			: CNewNPC;
+		var itemName		: name;
 		
 		horse = thePlayer.GetHorseWithInventory();
 		if( !horse )
@@ -56,6 +132,12 @@ class W3HorseManager extends CPeristentEntity
 		}
 		
 		horseInv = horse.GetInventory();
+		
+		if( !horseInv )
+		{
+			return false;
+		}
+		
 		horseInv.GetAllItems(items);
 		
 		Debug_TraceInventories( "ApplyHorseUpdateOnSpawn ] BEFORE" );
@@ -65,8 +147,10 @@ class W3HorseManager extends CPeristentEntity
 		{
 			for(i=items.Size()-1; i>=0; i-=1)
 			{
-				if ( horseInv.ItemHasTag(items[i], 'HorseTail') || horseInv.ItemHasTag(items[i], 'HorseReins') )
+				if ( horseInv.ItemHasTag(items[i], 'HorseTail') || horseInv.ItemHasTag(items[i], 'HorseReins') || horseInv.GetItemCategory( items[i] ) == 'horse_hair' )
+				{
 					continue;
+				}
 				eqId = horseInv.GiveItemTo(inv, items[i], 1, false);
 				EquipItem(eqId);
 			}
@@ -76,38 +160,59 @@ class W3HorseManager extends CPeristentEntity
 		
 		for(i=items.Size()-1; i>=0; i-=1)
 		{
-			if ( horseInv.ItemHasTag(items[i], 'HorseTail') || horseInv.ItemHasTag(items[i], 'HorseReins') )
+			if ( horseInv.ItemHasTag(items[i], 'HorseTail') || horseInv.ItemHasTag(items[i], 'HorseReins') || horseInv.GetItemCategory( items[i] ) == 'horse_hair' )
+			{
+				if( !horseInv.IsItemMounted( items[i] ) )
+				{
+					horseInv.MountItem( items[i] );
+				}
 				continue;
+			}
 			horseInv.RemoveItem(items[i]);
 		}
 		
 		
-		for(i=0; i<itemSlots.Size(); i+=1)
+		for( i = 0; i < itemSlots.Size(); i += 1 )
 		{
-			if(inv.IsIdValid(itemSlots[i]))
+			if( inv.IsIdValid( itemSlots[i] ) )
 			{
-				ids = horseInv.AddAnItem(inv.GetItemName(itemSlots[i]));
-				horseInv.MountItem(ids[0]);
+				itemName = inv.GetItemName( itemSlots[i] );
+				ids = horseInv.AddAnItem( itemName );
+				horseInv.MountItem( ids[0] );
 			}
 		}
 	
 		
 		horseAbilities.Clear();
-		horseAbilities = horse.GetAbilities(true);
+		horse.GetCharacterStats().GetAbilities(horseAbilities, true);
+		
+		
+		if( GetWitcherPlayer().HasBuff( EET_HorseStableBuff ) && !horse.HasAbility( 'HorseStableBuff', false ) )
+		{
+			horse.AddAbility( 'HorseStableBuff' );
+		}
+		else if( !GetWitcherPlayer().HasBuff( EET_HorseStableBuff ) && horse.HasAbility( 'HorseStableBuff', false ) )
+		{
+			horse.RemoveAbility( 'HorseStableBuff' );
+		}
 		
 		ReenableMountHorseInteraction( horse );
 		
 		
-		eqId = GetItemInSlot(EES_HorseSaddle);
-		if ( GetInventoryComponent().GetItemName(eqId) == 'Devil Saddle' )
+		if( horseMode == EHM_NotSet )
 		{
-			horse.PlayEffectSingle('demon_horse');
-			horse.ApplyAppearance('player_horse_with_devil_saddle');
+			if( horseInv.HasItem( 'Devil Saddle' ) )
+			{
+				horseMode = EHM_Devil;
+			}
+			else
+			{
+				horseMode = EHM_Normal;
+			}
 		}
-		else
-		{
-			horse.ApplyAppearance( GetDefaultHorseAppearance() );
-		}
+		
+		
+		SetHorseMode( horseMode );
 
 		Debug_TraceInventories( "ApplyHorseUpdateOnSpawn ] AFTER" );
 				
@@ -148,6 +253,21 @@ class W3HorseManager extends CPeristentEntity
 		return itemSlots.Contains(id);
 	}
 	
+	public function IsItemEquippedByName( itemName : name ) : bool
+	{
+		var i : int;
+		
+		for( i=0; i<itemSlots.Size(); i+=1 )
+		{
+			if( inv.GetItemName( itemSlots[i] ) == itemName )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public function GetItemInSlot( slot : EEquipmentSlots ) : SItemUniqueId
 	{
 		if(slot == EES_InvalidSlot)
@@ -167,7 +287,7 @@ class W3HorseManager extends CPeristentEntity
 		{
 			if(thePlayer.GetHorseWithInventory())
 			{
-				horseAbilities = thePlayer.GetHorseWithInventory().GetAbilities(true);			
+				thePlayer.GetHorseWithInventory().GetCharacterStats().GetAbilities(horseAbilities,true);
 			}
 			else if(!excludeItems)
 			{
@@ -252,20 +372,14 @@ class W3HorseManager extends CPeristentEntity
 					horseAbilities.PushBack(abls[i]);
 			}
 			
-			if ( itemNameUnequip == 'Devil Saddle' )
+			if ( itemNameUnequip == 'Devil Saddle' && horseMode != EHM_Unicorn)
 			{
-				horse.RemoveBuff(EET_WeakeningAura, true);
-				horse.ApplyAppearance( GetDefaultHorseAppearance() );
-				
-				horse.StopEffect('demon_horse');
+				SetHorseMode( EHM_Normal );				
 			}
 			
 			if ( itemName == 'Devil Saddle' ) 
 			{
-				horse.AddEffectDefault(EET_WeakeningAura, horse, 'horse saddle', false);
-				horse.ApplyAppearance('player_horse_with_devil_saddle');
-				
-				horse.PlayEffectSingle('demon_horse');
+				SetHorseMode( EHM_Devil );			
 			}
 		}
 		else
@@ -273,6 +387,7 @@ class W3HorseManager extends CPeristentEntity
 			inv.GetItemAbilities(id, abls);
 			for (i=0; i < abls.Size(); i+=1)
 				horseAbilities.PushBack(abls[i]);
+			SetHorseMode( EHM_NotSet );
 		}
 		
 		
@@ -296,6 +411,13 @@ class W3HorseManager extends CPeristentEntity
 			GetWitcherPlayer().UpdateEncumbrance();
 		
 		Debug_TraceInventories( "EquipItem ] " + inv.GetItemName( id ) + " - AFTER" );
+		
+		
+		
+		if( horse )
+		{
+			horse.AddTimer( 'SetShowAllHorseItems', 0.0f );
+		}
 		
 		return unequippedItem;
 	}
@@ -357,12 +479,9 @@ class W3HorseManager extends CPeristentEntity
 		
 		Debug_TraceInventories( "UnequipItem ] " + itemName + " - BEFORE" );
 		
-		if ( itemName == 'Devil Saddle' ) 
+		if ( itemName == 'Devil Saddle' && horseMode == EHM_Devil) 
 		{
-			horse.RemoveBuff(EET_WeakeningAura, true);
-			horse.ApplyAppearance( GetDefaultHorseAppearance() );
-			
-			horse.StopEffect('demon_horse');
+			SetHorseMode( EHM_Normal );			
 		}
 		
 		

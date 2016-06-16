@@ -7,6 +7,7 @@
 class TaskManageCapsuleCollision extends IBehTreeTask
 {
 	var collision				: bool;
+	var allCollisionTypes 		: bool;
 	var overrideForThisTaskOnly	: bool;
 	var onActivate 				: bool;
 	var onDeactivate 			: bool;
@@ -64,6 +65,17 @@ class TaskManageCapsuleCollision extends IBehTreeTask
 			}
 			
 		}
+		else if ( animEventName == 'EnableCollisionDuration' )
+		{
+			if( animEventType == AET_DurationStart )
+			{
+				EnableCol( true );
+			}
+			else if( animEventType == AET_DurationEnd )
+			{
+				EnableCol( false );
+			}
+		}
 		
 		return true;
 	}
@@ -74,6 +86,10 @@ class TaskManageCapsuleCollision extends IBehTreeTask
 	{
 		var l_npc : CNewNPC = GetNPC();
 		l_npc.EnableCharacterCollisions( _Enable );
+		if ( allCollisionTypes )
+		{
+			l_npc.EnableCollisions( _Enable );
+		}
 		
 		if( switchVulnerability )
 		{
@@ -107,6 +123,7 @@ class TaskManageCapsuleCollisionDef extends IBehTreeTaskDefinition
 	default instanceClass = 'TaskManageCapsuleCollision';
 
 	editable var collision					: bool;
+	editable var allCollisionTypes 			: bool;
 	editable var overrideForThisTaskOnly	: bool;
 	editable var onActivate 				: bool;
 	editable var onDeactivate 				: bool;

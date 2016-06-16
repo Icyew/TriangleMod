@@ -12,6 +12,12 @@ class W3TreasureHuntMappinEntity extends CR4MapPinEntity
 	
 	private saved var mappinSet : bool;
 	private var isDisabled 		: bool;
+	private editable var regionType	: EEP2PoiType;
+
+	public function GetRegionType() : int
+	{
+		return (int) regionType;
+	}
 	
 	event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent )
 	{

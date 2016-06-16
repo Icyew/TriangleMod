@@ -16,7 +16,12 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 	private var m_craftingManager		: W3CraftingManager;
 	private var m_schematicList			: array< name >;
 	private var m_npc		 			: CNewNPC;
+	private var m_npcInventory  	    : CInventoryComponent;
+	private var m_shopInvComponent 	    : W3GuiShopInventoryComponent;
+	private var m_lastSelectedTag		: name;
+	
 	private var _craftsmanComponent		: W3CraftsmanComponent;	
+	private var _quantityPopupData	    : QuantityPopupData;
 	
 	private var m_fxSetCraftingEnabled	: CScriptedFlashFunction;
 	private var m_fxSetCraftedItem 		: CScriptedFlashFunction;
@@ -24,7 +29,7 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 	private var m_fxSetFilters			: CScriptedFlashFunction;
 	private var m_fxSetPinnedRecipe		: CScriptedFlashFunction;
 	private var m_fxSetMerchantCheck	: CScriptedFlashFunction;
-	
+		
 	default bCouldCraft 			= false;
 	
 	default DATA_BINDING_NAME			= "crafting.list";
@@ -37,10 +42,12 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 	{	
 		var commonMenu 				: CR4CommonMenu;
 		var l_obj		 			: IScriptable;
-		var l_npc		 			: CNewNPC;
+		
 		var l_initData				: W3InventoryInitData;
 		var l_craftingFilters		: SCraftingFilters;
 		var pinnedTag				: int;
+		
+		dontAutoCallOnOpeningMenuInOnConfigUIHaxxor = true;
 		
 		super.OnConfigUI();
 		
@@ -56,13 +63,13 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		l_initData = (W3InventoryInitData)l_obj;
 		if (l_initData)
 		{
-			l_npc = (CNewNPC)l_initData.containerNPC;
+			m_npc = (CNewNPC)l_initData.containerNPC;
 		}
 		else
 		{
-			l_npc = (CNewNPC)l_obj;
+			m_npc = (CNewNPC)l_obj;
 		}
-		_craftsmanComponent = (W3CraftsmanComponent)l_npc.GetComponentByClassName('W3CraftsmanComponent');
+		_craftsmanComponent = (W3CraftsmanComponent)m_npc.GetComponentByClassName('W3CraftsmanComponent');
 		
 		
 		if(theGame.GetTutorialSystem() && theGame.GetTutorialSystem().IsRunning())		
@@ -81,19 +88,22 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		m_fxSetPinnedRecipe = m_flashModule.GetMemberFlashFunction("setPinnedRecipe");
 		m_fxSetMerchantCheck = m_flashModule.GetMemberFlashFunction("setMerchantTypeCheck");
 		
+		if(_craftsmanComponent)
+		{
+			m_npcInventory = m_npc.GetInventory();
+			bCouldCraft = true;
+			UpdateMerchantData(m_npc);
+			
+			m_shopInvComponent = new W3GuiShopInventoryComponent in this;
+			m_shopInvComponent.Initialize( m_npcInventory );
+		}
+		
+		m_fxSetCraftingEnabled.InvokeSelfOneArg(FlashArgBool(bCouldCraft));
+		
 		l_craftingFilters = theGame.GetGuiManager().GetCraftingFilters();
 		m_fxSetFilters.InvokeSelfSixArgs(FlashArgString(GetLocStringByKeyExt("gui_panel_filter_has_ingredients")), FlashArgBool(l_craftingFilters.showCraftable), 
 										 FlashArgString(GetLocStringByKeyExt("gui_panel_filter_elements_missing")), FlashArgBool(l_craftingFilters.showMissingIngre), 
 										 FlashArgString(GetLocStringByKeyExt("panel_crafting_exception_wrong_craftsman_type") + " / " + GetLocStringByKeyExt("panel_crafting_exception_too_low_craftsman_level")), FlashArgBool(l_craftingFilters.showAlreadyCrafted));
-		
-		if(_craftsmanComponent)
-		{
-			bCouldCraft = true;
-			m_npc = l_npc;
-			UpdateMerchantData(l_npc);			
-		}
-		
-		m_fxSetCraftingEnabled.InvokeSelfOneArg(FlashArgBool(bCouldCraft));
 		
 		pinnedTag = NameToFlashUInt(theGame.GetGuiManager().PinnedCraftingRecipe);
 		m_fxSetPinnedRecipe.InvokeSelfOneArg(FlashArgUInt(pinnedTag));
@@ -102,12 +112,19 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		
 		
 		SelectFirstModule();
+		
+		m_fxSetTooltipState.InvokeSelfTwoArgs( FlashArgBool( thePlayer.upscaledTooltipState ), FlashArgBool( true ) );
 	}
 
 	event  OnClosingMenu()
 	{
 		super.OnClosingMenu();
 		theGame.GetGuiManager().SetLastOpenedCommonMenuName( GetMenuName() );
+		
+		if (_quantityPopupData)
+		{
+			delete _quantityPopupData;
+		}
 	}
 
 	event  OnCloseMenu() 
@@ -170,6 +187,9 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 
 	event   OnEntrySelected( tag : name ) 
 	{
+		var craftBuy : W3TutorialManagerUIHandlerStateCraftingBuy;
+		var i : int;
+	
 		if (tag != '')
 		{
 			m_fxHideContent.InvokeSelfOneArg(FlashArgBool(true));
@@ -181,12 +201,173 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 			currentTag = '';
 			m_fxHideContent.InvokeSelfOneArg(FlashArgBool(false));
 		}
+		
+		
+		if( ShouldProcessTutorial( 'TutorialCraftingBuy' ) )
+		{
+			for( i=0; i<itemsNames.Size(); i+=1 )
+			{
+				if( m_npcInventory.GetItemQuantityByName( itemsNames[i] ) > 0 )
+				{
+					craftBuy = (W3TutorialManagerUIHandlerStateCraftingBuy) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+					if( craftBuy )
+					{
+						craftBuy.OnCanSellSomething();
+					}
+					break;
+				}
+			}
+		}
 	}
 	
 	event  OnShowCraftedItemTooltip( tag : name )
 	{
 	}
 	
+	event  OnBuyIngredient( item : int, isLastItem : bool ) : void
+	{
+		var vendorItemId   : SItemUniqueId;	
+		var vendorItems    : array< SItemUniqueId >;
+		
+		
+		var reqQuantity    : int;
+		var itemName       : name;
+		var newItemID      : SItemUniqueId;
+		
+		if( m_npcInventory )
+		{
+			itemName = itemsNames[ item - 1 ];
+			vendorItems = m_npcInventory.GetItemsByName( itemName );
+			
+			if( vendorItems.Size() > 0 )
+			{
+				vendorItemId = vendorItems[0];
+				
+				
+				
+				
+				BuyIngredient( vendorItemId, 1, isLastItem );
+				OnPlaySoundEvent( "gui_inventory_buy" );
+			}
+		}
+	}
+	
+	public function BuyIngredient( itemId : SItemUniqueId, quantity : int, isLastItem : bool ) : void
+	{
+		var newItemID   : SItemUniqueId;
+		var result 		: bool;
+		var itemName	: name;
+		var notifText	: string;
+		var itemLocName : string;
+		
+		itemLocName = GetLocStringByKeyExt( m_npcInventory.GetItemLocalizedNameByUniqueID( itemId ) );
+		itemName = m_npcInventory.GetItemName( itemId );
+		theTelemetry.LogWithLabelAndValue( TE_INV_ITEM_BOUGHT, itemName, quantity );
+		result = m_shopInvComponent.GiveItem( itemId, _playerInv, quantity, newItemID );
+		
+		if( result )
+		{
+			notifText = GetLocStringByKeyExt("panel_blacksmith_items_added") + ":" + quantity + " x " + itemLocName;
+			
+			if (isLastItem)
+			{
+				PopulateData();
+			}
+		}
+		else
+		{
+			notifText = GetLocStringByKeyExt( "panel_shop_notification_not_enough_money" );
+		}
+		
+		showNotification( notifText );
+		
+		UpdateMerchantData(m_npc);
+		UpdateItemsCounter();
+		
+		if (m_lastSelectedTag != '')
+		{
+			UpdateItems(m_lastSelectedTag);
+		}
+	}
+	
+	private function OpenQuantityPopup( itemId : SItemUniqueId, reqValue: int, maxValue : int )
+	{
+		var invItem : SInventoryItem;
+		
+		if ( _quantityPopupData )
+		{
+			delete _quantityPopupData;
+		}
+		
+		_quantityPopupData = new QuantityPopupData in this;
+		_quantityPopupData.itemId = itemId;		
+		_quantityPopupData.currentValue = reqValue;
+		_quantityPopupData.maxValue = maxValue;
+		_quantityPopupData.craftingRef = this;
+		_quantityPopupData.actionType = QTF_Buy;
+		
+		RequestSubMenu( 'PopupMenu', _quantityPopupData );
+	}
+	
+	
+	public function FillItemInformation(flashObject : CScriptedFlashObject, index:int) : void
+	{		
+		super.FillItemInformation( flashObject, index );
+		
+		if( m_npcInventory )
+		{
+			flashObject.SetMemberFlashInt( "vendorQuantity", m_npcInventory.GetItemQuantityByName( itemsNames[index] ) );
+		}
+		
+		flashObject.SetMemberFlashInt( "reqQuantity", itemsQuantity[index] );
+	}
+	
+	
+	protected function GetTooltipData(item : int, compareItemType : int, out resultData : CScriptedFlashObject ) : void
+	{
+		var vendorItemId   : SItemUniqueId;		
+		var vendorItems    : array< SItemUniqueId >;
+		var vendorQuantity : int;
+		var vendorPrice    : int;
+		var itemName       : name;
+		var language 	   : string;
+		var audioLanguage  : string;
+		var locStringBuy   : string;
+		var locStringPrice : string;
+		theGame.GetGameLanguageName( audioLanguage, language);	
+		
+		super.GetTooltipData( item, compareItemType, resultData );
+		
+		if( m_npcInventory )
+		{
+			itemName = itemsNames[ item - 1 ];
+			
+			vendorItems = m_npcInventory.GetItemsByName( itemName );
+			
+			if( vendorItems.Size() > 0 )
+			{
+				vendorItemId = vendorItems[0];
+				vendorQuantity = m_npcInventory.GetItemQuantity( vendorItemId );
+				vendorPrice = m_npcInventory.GetItemPriceModified( vendorItemId, false );
+				
+				resultData.SetMemberFlashNumber( "vendorQuantity", vendorQuantity );
+				resultData.SetMemberFlashNumber( "vendorPrice", vendorPrice );
+				
+				locStringBuy = GetLocStringByKeyExt( "panel_inventory_quantity_popup_buy" );
+				
+				if( language != "AR")
+				{
+					resultData.SetMemberFlashString( "vendorInfoText", locStringBuy + " (" +  vendorPrice + ")" );
+				}
+				else
+				{
+					locStringPrice = " *" +  vendorPrice + "*" ;
+					resultData.SetMemberFlashString( "vendorInfoText", locStringPrice + locStringBuy  );
+				}
+			}
+		}
+	}
+
 	function CreateItem( schematic : name  )
 	{
 		var item : SItemUniqueId;
@@ -259,7 +440,12 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		var cookables				: array<SCraftable>;
 		var exists					: bool;
 		var j, cookableCount		: int;
-
+		var minQuality, maxQuality  : int;
+		var itemLevel				: int;
+		var itemLevelString			: string;
+		var lvlDiff 				: int;
+		var reqLevelColor			:string;
+		var playerLevel 			: int;
 		l_DataFlashArray = m_flashValueStorage.CreateTempFlashArray();
 		length = m_schematicList.Size();
 		
@@ -315,18 +501,39 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 						break;
 					}
 				}
-			
+				
+				
+				
 				l_DataFlashObject = m_flashValueStorage.CreateTempFlashObject();
 				
 				if(cookableCount > 0)
 				{
-					l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", " (" + cookableCount + ")" );
+					l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", " | " + cookableCount + " |" );
 				}
 				else
 				{
 					l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", "" );
 				}
-			
+				
+				thePlayer.inv.GetItemQualityFromName( schematic.craftedItemName, minQuality, maxQuality );
+				
+				if( m_definitionsManager.IsItemAnyArmor( schematic.craftedItemName ) || m_definitionsManager.IsItemWeapon( schematic.craftedItemName ) )
+				{
+						itemLevel = m_definitionsManager.GetItemLevelFromName( schematic.craftedItemName );
+						playerLevel = thePlayer.GetLevel();
+						lvlDiff = itemLevel - thePlayer.GetLevel();
+						if 		( lvlDiff > 0 ) { reqLevelColor = "<font color='#d61010'>";  }
+						else if ( lvlDiff >= -5 )  { reqLevelColor = "<font color='#ffffff'>";  }
+						else	{ reqLevelColor = "<font color='#969696'>"; }	
+				
+						itemLevelString = reqLevelColor + itemLevel + "</font>";
+					
+				}
+				else
+				{
+					itemLevelString = "";
+				}
+
 				l_DataFlashObject.SetMemberFlashUInt(  "tag", NameToFlashUInt(l_Tag) );
 				l_DataFlashObject.SetMemberFlashString(  "dropDownLabel", l_GroupTitle );
 				l_DataFlashObject.SetMemberFlashUInt(  "dropDownTag",  NameToFlashUInt(l_GroupTag) );
@@ -335,9 +542,14 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 				
 				l_DataFlashObject.SetMemberFlashBool( "isNew", l_IsNew );
 				
+				if ( m_guiManager.GetShowItemNames() )
+				{
+					l_Title = l_Title + "<br><font color=\"#FFDB00\">'" + schematic.schemName + "'</font>";
+				}
 				l_DataFlashObject.SetMemberFlashString(  "label", l_Title );
 				l_DataFlashObject.SetMemberFlashString(  "iconPath", l_IconPath );
-				
+				l_DataFlashObject.SetMemberFlashInt( "rarity", minQuality );
+				l_DataFlashObject.SetMemberFlashString(  "itemLevel", itemLevelString );
 				canCraftResult = m_craftingManager.CanCraftSchematic(schematicName, bCouldCraft);
 				
 				if (canCraftResult != ECE_NoException)
@@ -380,6 +592,7 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 	function UpdateMerchantData( targetNpc : CNewNPC ) : void
 	{
 		var l_merchantData	: CScriptedFlashObject;
+		
 		l_merchantData = m_flashValueStorage.CreateTempFlashObject();
 		GetNpcInfo((CGameplayEntity)targetNpc, l_merchantData);
 		m_flashValueStorage.SetFlashObject("crafting.merchant.info", l_merchantData);
@@ -393,6 +606,8 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		var schematic : SCraftingSchematic;
 		
 		
+		
+		m_lastSelectedTag = tag;
 		m_craftingManager.GetSchematic(tag,schematic);
 		
 		title = GetLocStringByKeyExt(m_definitionsManager.GetItemLocalisationKeyName(schematic.craftedItemName));	
@@ -416,11 +631,13 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		
 		itemsNames.Clear();
 		itemsQuantity.Clear();
+		
 		for( i = 0; i < schematic.ingredients.Size(); i += 1 )
 		{
 			itemsNames.PushBack(schematic.ingredients[i].itemName); 
 			itemsQuantity.PushBack(schematic.ingredients[i].quantity); 
 		}
+		
 		itemsFlashArray = CreateItems(itemsNames);
 		
 		if( itemsFlashArray )
@@ -517,15 +734,14 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		if (bCouldCraft)
 		{
 			itemCost = m_craftingManager.GetCraftingCost(tag);
-			priceStr = GetLocStringByKeyExt("panel_inventory_item_price") + " ";
 			
 			if (thePlayer.GetMoney() < itemCost)
 			{
-				priceStr += "<font color=\"#E34040\">" + itemCost + "</font>";
+				priceStr += "<font color=\"#d31717\">" + itemCost + "</font>";
 			}
 			else
 			{
-				priceStr += "<font color=\"#3FA524\">" + itemCost + "</font>";
+				priceStr += "<font color=\"#ffffff\">" + itemCost + "</font>";
 			}
 		}
 		else
@@ -534,18 +750,15 @@ class CR4CraftingMenu extends CR4ListBaseMenu
 		}
 		
 		m_fxSetCraftedItem.InvokeSelfEightArgs(FlashArgUInt(NameToFlashUInt(schematic.schemName)), FlashArgString(itemNameLoc), FlashArgString(imgPath), FlashArgBool(canCraft), FlashArgInt(gridSize), FlashArgString(priceStr), FlashArgInt(rarity), FlashArgInt(enhancementSlots));
-	}
-	
-	public  function FillItemInformation(flashObject : CScriptedFlashObject, index:int) : void
-	{	
-		super.FillItemInformation(flashObject, index);
-		
-		flashObject.SetMemberFlashInt("reqQuantity", itemsQuantity[index]);
-	}
+	}	
 	
 	public final function GetCraftsmanComponent() : W3CraftsmanComponent
 	{
 		return _craftsmanComponent;
+	}
+	
+	event  OnSetMouseInventoryComponent(moduleBinding : string, slotId:int)
+	{
 	}
 	
 	function PlayOpenSoundEvent()

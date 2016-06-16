@@ -9,22 +9,38 @@ class W3GuiDisassembleInventoryComponent extends W3GuiPlayerInventoryComponent
 	
 	public  function SetInventoryFlashObjectForItem( item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void
 	{
+		var targetGridSection : int;
+		
 		super.SetInventoryFlashObjectForItem( item, flashObject );
+		
 		addRecyclingPartsList( item, flashObject );
 		addSocketsListInfo( item, flashObject );
 		flashObject.SetMemberFlashBool( "enableComparison", _inv.CanBeCompared(item) );
 		flashObject.SetMemberFlashInt( "gridPosition", -1 );
+		
+		if( _inv.IsItemAnyArmor( item ) || _inv.IsItemWeapon( item ) || _inv.IsItemUpgrade( item ) || _inv.IsItemArmorReapairKit( item ) || _inv.IsItemWeaponReapairKit( item )  )
+		{
+			targetGridSection = 0;
+		}
+		else
+		{
+			targetGridSection = 1;
+		}
+		
+		flashObject.SetMemberFlashInt( "sectionId", targetGridSection );
 	}
 	
-	protected  function ShouldShowItem( item : SItemUniqueId ):bool
+	public  function ShouldShowItem( item : SItemUniqueId ):bool
 	{
 		var itemTags : array<name>;
 		var parts : array<SItemParts>;
 		var showItem : bool;
 		
 		
-		if(GetWitcherPlayer().IsItemEquipped(item))
+		if( GetWitcherPlayer().IsItemEquipped( item ) || ( _inv.IsItemReadable( item ) && _inv.IsBookRead( item ) ) )
+		{
 			return false;
+		}
 		
 		_inv.GetItemTags( item, itemTags );	
 		parts = _inv.GetItemRecyclingParts(item);
@@ -42,6 +58,9 @@ class W3GuiDisassembleInventoryComponent extends W3GuiPlayerInventoryComponent
 		var partDataList  : CScriptedFlashArray;
 		var curPartData	  : CScriptedFlashObject;
 		var invItem 	 : SInventoryItem;
+		var itemQuantityPrice : int;
+		var itemQuantity : int;
+		
 		
 		invItem = _inv.GetItem( item );
 		
@@ -64,7 +83,11 @@ class W3GuiDisassembleInventoryComponent extends W3GuiPlayerInventoryComponent
 		flashObject.SetMemberFlashArray("partList", partDataList);
 		flashObject.SetMemberFlashBool("disableAction", GetWitcherPlayer().IsItemEquipped(item) );
 		
-		flashObject.SetMemberFlashInt("actionPrice", merchantInv.GetItemPriceDisassemble( invItem ));
+		itemQuantity = _inv.GetItemQuantity( item );
+		itemQuantityPrice = merchantInv.GetItemPriceDisassemble( invItem );
+		
+		flashObject.SetMemberFlashInt("actionPrice", itemQuantityPrice);
+		flashObject.SetMemberFlashInt("actionPriceTotal", itemQuantity * itemQuantityPrice);
 	}
 	
 	private function addSocketsListInfo(item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void

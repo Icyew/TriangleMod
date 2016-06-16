@@ -155,7 +155,7 @@ function IngameMenu_FillOptionsSubMenuData(flashStorageUtility : CScriptedFlashV
 		
 		l_ChildMenuFlashArray = flashStorageUtility.CreateTempFlashArray();
 		
-		if (theGame.GetDLCManager().IsEP1Available())
+		if ( theGame.GetDLCManager().IsEP1Available() || theGame.GetDLCManager().IsEP2Available() )
 		{
 			l_DataFlashObject.SetMemberFlashUInt( "type", IGMActionType_MenuHolder );
 			IngameMenu_FillCreditsSubGroup(flashStorageUtility, l_ChildMenuFlashArray);
@@ -217,6 +217,23 @@ function IngameMenu_FillCreditsSubGroup(flashStorageUtility : CScriptedFlashValu
 		l_DataFlashObject.SetMemberFlashString( "id", "credits_heart_of_stone");
 		l_DataFlashObject.SetMemberFlashUInt(  "tag", CreditsIndex_Ep1 );
 		l_DataFlashObject.SetMemberFlashString(  "label", GetLocStringByKeyExt("dlc_hearts_of_stone") );	
+		
+		l_DataFlashObject.SetMemberFlashUInt( "type", IGMActionType_Credits );	
+		
+		l_ChildMenuFlashArray = flashStorageUtility.CreateTempFlashArray();
+		l_DataFlashObject.SetMemberFlashArray( "subElements", l_ChildMenuFlashArray );
+		
+		rootFlashArray.PushBackFlashObject(l_DataFlashObject);
+		
+	}
+	
+	if ( theGame.GetDLCManager().IsEP2Available() )
+	{
+		
+		l_DataFlashObject = flashStorageUtility.CreateTempFlashObject();
+		l_DataFlashObject.SetMemberFlashString( "id", "credits_blood_and_wine");
+		l_DataFlashObject.SetMemberFlashUInt(  "tag", CreditsIndex_Ep2 );
+		l_DataFlashObject.SetMemberFlashString(  "label", GetLocStringByKeyExt("dlc_blood_and_wine") );	
 		
 		l_DataFlashObject.SetMemberFlashUInt( "type", IGMActionType_Credits );	
 		

@@ -182,10 +182,23 @@ import class CCommonGame extends CGame
 	import final function ReleaseNoSaveLock( lock : int );
 	
 	
+	
 	import final function ReleaseNoSaveLockByName( lockName : string );
 	
 	
 	import final function AreSavesLocked() : bool;
+	
+	
+	
+	
+	import final function IsNewGame() : bool;
+	
+	
+	
+	import final function IsNewGameInStandaloneDLCMode() : bool;
+	
+	
+	import final function IsNewGamePlusEnabled() : bool;
 	
 	
 	import final function ConfigSave();

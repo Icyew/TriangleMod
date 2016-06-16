@@ -10,7 +10,6 @@
 class CR4HudModuleControlsFeedback extends CR4HudModuleBase
 {		
 	private var	m_fxSetSwordTextSFF 	: CScriptedFlashFunction;
-	private var	m_fxMakeVisible			: CScriptedFlashFunction;
 	private var m_flashValueStorage 	: CScriptedFlashValueStorage;
 	private var m_currentInputContext	: name;
 	private var m_previousInputContext 	: name;
@@ -38,7 +37,6 @@ class CR4HudModuleControlsFeedback extends CR4HudModuleBase
 		flashModule = GetModuleFlash();	
 		m_flashValueStorage = GetModuleFlashValueStorage();
 		m_fxSetSwordTextSFF = flashModule.GetMemberFlashFunction( "setSwordText" );
-		m_fxMakeVisible     = flashModule.GetMemberFlashFunction( "MakeVisible" );
 		
 		SetTickInterval( 0.5 );
 		
@@ -497,11 +495,6 @@ class CR4HudModuleControlsFeedback extends CR4HudModuleBase
 		{
 			m_flashValueStorage.SetFlashArray( KEY_CONTROLS_FEEDBACK_LIST, l_FlashArray );
 			
-			
-		}
-		else
-		{
-			m_fxMakeVisible.InvokeSelfOneArg( FlashArgBool( false ) );
 		}
 		m_previousInputContext = m_currentInputContext;
 	}

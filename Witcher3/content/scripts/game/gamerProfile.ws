@@ -322,6 +322,18 @@ class W3GamerProfile
 		SetStat(ES_DestroyedNests, 0);
 	}
 	
+	public final function ClearAllAchievementsForEP2()
+	{
+		
+		ClearAllAchievementsForEP1();
+		
+		
+		SetStat( ES_SelfArrowKills, 0 );
+		SetStat( ES_ActivePotions, 0 );
+		SetStat( ES_KilledCows, 0 );
+		SetStat( ES_SlideTime, 0 );
+	}
+	
 	public final function Debug_PrintAchievements()
 	{
 		var achievement : EAchievement;

@@ -14,6 +14,7 @@ import statemachine class CBeehiveEntity extends W3Container
 	
 	private var isOnFire : bool;
 	private var hangingDamageArea : CComponent;
+	public var originPoint : Vector;
 	public var actorsInHangArea : array<CActor>;
 	public var hangingBuffParams : SCustomEffectParams;
 	public var beesActivated					: bool;
@@ -50,6 +51,8 @@ import statemachine class CBeehiveEntity extends W3Container
 		hangingDamageArea = GetComponent(HANGING_AREA_NAME);
 		
 		hangingDamageArea.SetEnabled(false);
+		
+		originPoint = GetWorldPosition();
 		
 		GotoStateAuto();
 	}
@@ -323,11 +326,30 @@ state OnGroundActive in CBeehiveEntity
 	event OnFireHit( source : CGameplayEntity )
 	{
 		parent.OnFireHit( source );
-
+		
 		parent.StopAllEffects();
 		parent.PlayEffect( 'fire' );
 		
 		parent.GotoState( 'OnGroundBurned' );
+	}
+	
+	event OnAardHit( sign : W3AardProjectile )
+	{
+		parent.OnAardHit( sign );
+		
+		if ( VecDistance( parent.originPoint, parent.GetWorldPosition() ) > 50.f )
+		{
+			if ( parent.activeMovingBees )
+			{
+				parent.activeMovingBees.Enable(false);
+				parent.GotoState( 'OnGroundBurned' );
+			}
+			if ( parent.activeAttachedBees )
+			{
+				parent.activeAttachedBees.Enable(false);
+				parent.GotoState( 'OnGroundBurned' );
+			}
+		}
 	}
 }
 

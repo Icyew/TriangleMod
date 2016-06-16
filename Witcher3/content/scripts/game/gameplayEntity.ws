@@ -70,7 +70,7 @@ import class CGameplayEntity extends CPeristentEntity
 	editable var maxLootParamNumber			: int;					default maxLootParamNumber = -1; 
 
 	import final function GetInventory() : CInventoryComponent;
-	import protected final function GetCharacterStats() : CCharacterStats;
+	import public final function GetCharacterStats() : CCharacterStats;
 	public final function GetAllAttributes() : array<name>
 	{
 		var atts : array<name>;

@@ -113,6 +113,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	public		var m_SettlementBlockCanter : int;
 	
 	
+	
 	private var fistFightMinigameEnabled	: bool;
 	private var isFFMinigameToTheDeath		: bool;
 	private var FFMinigameEndsithBS			: bool;
@@ -188,11 +189,33 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	public saved var rememberedCustomHead : name;
+
+	
+	public saved var disableWeatherDisplay : bool;
 	
 	
 	public saved var proudWalk : bool;
 	private var etherealCount : int; 
 	default etherealCount = 0;
+	
+	
+	public saved var injuredWalk : bool;
+	public saved var tiedWalk : bool;
+	private var insideDiveAttackArea : bool;
+	default insideDiveAttackArea = false;
+	private var diveAreaNumber : int;
+	default diveAreaNumber = -1;
+	
+	
+	private var flyingBossCamera : bool;
+	default flyingBossCamera = false;
+	
+	public function SetFlyingBossCamera( val : bool ) { flyingBossCamera = val; }
+	public function GetFlyingBossCamera() : bool { return flyingBossCamera; }
+	
+	
+	public saved var upscaledTooltipState : bool;
+	default upscaledTooltipState = false;
 	
 	
 	private var phantomWeaponMgr : CPhantomWeaponManager;
@@ -447,6 +470,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		AddAnimEventCallback('pad_vibration_light',		'OnAnimEvent_pad_vibration_light');
 		AddAnimEventCallback('RemoveBurning',			'OnAnimEvent_RemoveBurning');
 		AddAnimEventCallback('RemoveTangled',			'OnAnimEvent_RemoveTangled');
+		AddAnimEventCallback('MoveNoise',				'OnAnimEvent_MoveNoise');
 		
 		AddItemPerLevelList();
 		
@@ -478,6 +502,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		{
 			
 			
+			
+			theGame.GameplayFactsRemove( "in_combat" );
 		}
 		
 		
@@ -624,6 +650,24 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if ( !FactsDoesExist("gwent_difficulty") )
 			FactsAdd("gwent_difficulty", 2);
+			
+		
+		if(!newGamePlusInitialized && FactsQuerySum("NewGamePlus") > 0)
+		{
+			NewGamePlusInitialize();
+		}
+		
+		
+		if( lastInstantKillTime > theGame.GetGameTime() )
+		{
+			SetLastInstantKillTime( GameTimeCreate(0) );
+		}
+	}
+	
+	public function NewGamePlusInitialize()
+	{
+		
+		SetLastInstantKillTime( GameTimeCreate(0) );
 	}
 	
 	public function GetTimeSinceSpawned() : float
@@ -871,9 +915,235 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
-	public function ApplyOil( oilId : SItemUniqueId, usedOnItem : SItemUniqueId );
-	public function IsEquippedSwordUpgradedWithOil(steel : bool, optional oilName : name) : bool;
-	public function GetOilAppliedOnSword(steel : bool) : name;
+	
+	public final function ReduceAllOilsAmmo( id : SItemUniqueId )
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		
+		oils = inv.GetOilsAppliedOnItem( id );
+		
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			oils[ i ].ReduceAmmo();
+		}
+	}
+	
+	public final function ResumeOilBuffs( steel : bool )
+	{
+		var item : SItemUniqueId;
+		var oils : array< CBaseGameplayEffect >;
+		var buff, recentOil : W3Effect_Oil;
+		var i : int;
+		
+		item = GetEquippedSword( steel );
+		oils = GetBuffs( EET_Oil );
+		
+		if( oils.Size() > 1 )
+		{
+			
+			
+			recentOil = inv.GetNewestOilAppliedOnItem( item, false );
+		}
+		
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			buff = ( W3Effect_Oil ) oils[ i ];
+			
+			if( recentOil && recentOil == buff )
+			{
+				continue;
+			}
+			
+			if(buff && buff.GetSwordItemId() == item )
+			{
+				buff.Resume( '' );
+			}
+		}
+		
+		if( recentOil )
+		{
+			recentOil.Resume( '' );
+		}
+	}
+	
+	protected final function PauseOilBuffs( isSteel : bool )
+	{
+		var item : SItemUniqueId;
+		var oils : array< CBaseGameplayEffect >;
+		var buff : W3Effect_Oil;
+		var i : int;
+		
+		item = GetEquippedSword( isSteel );
+		oils = GetBuffs( EET_Oil );
+		
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			buff = ( W3Effect_Oil ) oils[ i ];
+			if(buff && buff.GetSwordItemId() == item )
+			{
+				buff.Pause( '', true );
+			}
+		}
+	}
+	
+	public final function ManageAerondightBuff( apply : bool )
+	{
+		var aerondight		: W3Effect_Aerondight;
+		var item			: SItemUniqueId;
+		
+		item = inv.GetCurrentlyHeldSword();
+		
+		if( inv.ItemHasTag( item, 'Aerondight' ) )
+		{
+			aerondight = (W3Effect_Aerondight)GetBuff( EET_Aerondight );
+			
+			if( apply )
+			{
+				if( !aerondight )
+				{
+					AddEffectDefault( EET_Aerondight, this, "Aerondight" );
+				}
+				else
+				{
+					aerondight.Resume( 'ManageAerondightBuff' );
+				}
+			}
+			else
+			{
+				aerondight.Pause( 'ManageAerondightBuff' );
+			}
+		}
+	}
+	
+	
+	public function ApplyOil( oilId : SItemUniqueId, usedOnItem : SItemUniqueId ) : bool
+	{
+		var oilAbilities : array< name >;
+		var ammo, ammoBonus : float;
+		var dm : CDefinitionsManagerAccessor;		
+		var buffParams : SCustomEffectParams;
+		var oilParams : W3OilBuffParams;
+		var oilName : name;
+		var min, max : SAbilityAttributeValue;
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		var existingOil : W3Effect_Oil;
+				
+		if( !CanApplyOilOnItem( oilId, usedOnItem ) )
+		{
+			return false;
+		}
+		
+		dm = theGame.GetDefinitionsManager();
+		inv.GetItemAbilitiesWithTag( oilId, theGame.params.OIL_ABILITY_TAG, oilAbilities );
+		oilName = inv.GetItemName( oilId );
+		oils = inv.GetOilsAppliedOnItem( usedOnItem );
+		
+		
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			if( oils[ i ].GetOilItemName() == oilName )
+			{
+				existingOil = oils[ i ];
+				break;
+			}
+		}
+		
+		
+		if( !existingOil )
+		{
+			if( !GetWitcherPlayer() || !GetWitcherPlayer().IsSetBonusActive( EISB_Wolf_1 ) )
+			{
+				inv.RemoveAllOilsFromItem( usedOnItem );
+			}
+			else
+			{
+				dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Wolf_1 ), 'max_oils_count', min, max );
+				if( inv.GetActiveOilsAppliedOnItemCount( usedOnItem ) >= CalculateAttributeValue( max ) )
+				{
+					inv.RemoveOldestOilFromItem( usedOnItem );
+				}
+			}
+		}
+		
+		
+		ammo = CalculateAttributeValue(inv.GetItemAttributeValue(oilId, 'ammo'));
+		if(CanUseSkill(S_Alchemy_s06))
+		{
+			ammoBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s06, 'ammo_bonus', false, false));
+			ammo *= 1 + ammoBonus * GetSkillLevel(S_Alchemy_s06);
+		}
+		
+		
+		if( existingOil )
+		{
+			existingOil.Reapply( RoundMath( ammo ) );
+		}
+		else
+		{
+			buffParams.effectType = EET_Oil;
+			buffParams.creator = this;
+			oilParams = new W3OilBuffParams in this;
+			oilParams.iconPath = dm.GetItemIconPath( oilName );
+			oilParams.localizedName = dm.GetItemLocalisationKeyName( oilName );
+			oilParams.localizedDescription = dm.GetItemLocalisationKeyName( oilName );
+			oilParams.sword = usedOnItem;
+			oilParams.maxCount = RoundMath( ammo );
+			oilParams.currCount = RoundMath( ammo );
+			oilParams.oilAbilityName = oilAbilities[ 0 ];
+			oilParams.oilItemName = oilName;
+			buffParams.buffSpecificParams = oilParams;
+			
+			AddEffectCustom( buffParams );
+			
+			delete oilParams;
+		}
+		
+		LogOils("Added oil <<" + oilName + ">> to <<" + inv.GetItemName( usedOnItem ) + ">>");
+		
+		
+		SetFailedFundamentalsFirstAchievementCondition( true );		
+		
+		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnOilApplied );
+		
+		if( !inv.IsItemHeld( usedOnItem ) )
+		{
+			PauseOilBuffs( inv.IsItemSteelSwordUsableByPlayer( usedOnItem ) );
+		}
+		
+		return true;
+	}
+	
+	
+	public final function IsEquippedSwordUpgradedWithOil(steel : bool, optional oilName : name) : bool
+	{
+		var sword : SItemUniqueId;
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+	
+		sword = GetEquippedSword( steel );				
+		if( !inv.IsIdValid( sword ) )
+		{
+			return false;
+		}
+	
+		if( oilName == '' )
+		{
+			return inv.ItemHasAnyActiveOilApplied( sword );
+		}
+		
+		oils = inv.GetOilsAppliedOnItem( sword );
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			if( oils[ i ].GetOilItemName() == oilName )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	public function CanApplyOilOnItem(oilId : SItemUniqueId, usedOnItem : SItemUniqueId) : bool
 	{
@@ -1196,6 +1466,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		RemoveReactions();
 		SetPlayerCombatTarget(NULL);
 		OnEnableAimingMode( false );	
+		
+		theGame.EnableFreeCamera( false );
 	}
 	
 	
@@ -1278,13 +1550,13 @@ statemachine abstract import class CR4Player extends CPlayer
 		var validCounter, useKnockdown 	: bool;
 		var slideDistance, duration 	: float;
 		var playerToTargetRot			: EulerAngles;
-		var zDifference					: float;
+		var zDifference, mutation8TriggerHP : float;
 		var effectType 					: EEffectType;
 		var repelType					: EPlayerRepelType = PRT_Random;
 		var params						: SCustomEffectParams;
-		var thisPos, attackerPos : Vector;
-		var fistFightCheck : bool;
-		var fistFightCounter : bool;
+		var thisPos, attackerPos 		: Vector;
+		var fistFightCheck, isMutation8 : bool;
+		var fistFightCounter 			: bool;
 		var attackerInventory			: CInventoryComponent;
 		var weaponId					: SItemUniqueId;
 		var weaponTags					: array<name>;
@@ -1293,6 +1565,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		var tracePosEnd					: Vector;
 		var hitPos						: Vector;
 		var hitNormal					: Vector;
+		var min, max					: SAbilityAttributeValue;
+		var npc 						: CNewNPC;
 		
 		if(ShouldProcessTutorial('TutorialDodge') || ShouldProcessTutorial('TutorialCounter'))
 		{
@@ -1331,7 +1605,16 @@ statemachine abstract import class CR4Player extends CPlayer
 					weaponId = attackerInventory.GetItemFromSlot('r_weapon');
 					attackerInventory.GetItemTags( weaponId , weaponTags );
 					
+					if( GetWitcherPlayer().IsMutationActive( EPMT_Mutation8 ) )
+					{
+						isMutation8 = true;
+						theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation8', 'hp_perc_trigger', min, max );
+						mutation8TriggerHP = min.valueMultiplicative;
+					}
 					
+					
+					
+					npc = (CNewNPC)parryInfo.attacker;
 					
 					
 					if ( parryInfo.attacker.HasAbility('mon_gravehag') )
@@ -1340,7 +1623,7 @@ statemachine abstract import class CR4Player extends CPlayer
 						parryInfo.attacker.AddEffectDefault(EET_CounterStrikeHit, this, 'ReflexParryPerformed');
 						
 					}
-					else if ( (CNewNPC)parryInfo.attacker && !((CNewNPC)parryInfo.attacker).IsHuman() )
+					else if ( npc && !npc.IsHuman() && !npc.HasTag( 'dettlaff_vampire' ) )
 					{
 						repelType = PRT_SideStepSlash;
 					}
@@ -1349,6 +1632,16 @@ statemachine abstract import class CR4Player extends CPlayer
 						repelType = PRT_SideStepSlash;
 						parryInfo.attacker.AddEffectDefault(EET_CounterStrikeHit, this, "ReflexParryPerformed");
 						parryInfo.attacker.SignalGameplayEvent( 'SpearDestruction');
+					}
+					else if( isMutation8 && npc && !npc.IsImmuneToMutation8Finisher() )
+					{
+						repelType = PRT_RepelToFinisher;
+						npc.AddEffectDefault( EET_CounterStrikeHit, this, "ReflexParryPerformed" );
+						
+						
+						SetTarget( npc, true );
+						
+						PerformFinisher( 0.f, 0 );
 					}
 					else
 					{
@@ -1615,6 +1908,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		theGame.CreateNoSaveLock( 'combat', noSaveLock );
 		
+		theGame.GameplayFactsAdd( "in_combat" );
+		
 		
 		FactsRemove("statistics_cerberus_sign");
 		FactsRemove("statistics_cerberus_petard");
@@ -1645,6 +1940,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		thePlayer.HardLockToTarget( false );
 	
 		receivedDamageInCombat = false;
+		
+		theGame.GameplayFactsRemove( "in_combat" );
 			
 		
 		cnt = 0;
@@ -1694,6 +1991,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		var weaponType : EPlayerWeapon;
 		
 		super.OnReactToBeingHit(damageAction);
+		IncHitCounter();
 		
 		if ( IsInCombat() && damageAction.attacker && damageAction.attacker == GetTarget() && !( this.IsUsingVehicle() && this.IsOnBoat() ) )
 		{
@@ -1947,7 +2245,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			medallion.TriggerMedallionFX();
 		}
 	}
-		
+	
 	
 	
 	
@@ -2516,8 +2814,15 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if ( slotName == 'r_weapon' && (category == 'steelsword' || category == 'silversword') )
 		{
-			RemoveOilBuff(category == 'steelsword');
-		}	
+			if( category == 'silversword' )
+			{
+				ManageAerondightBuff( false );
+			}
+			
+			GetBuff( EET_LynxSetBonus ).Pause( 'drawing weapon' );
+			
+			PauseOilBuffs( category == 'steelsword' );
+		}
 		
 		if ( slotName == 'r_weapon' )
 		{
@@ -2556,6 +2861,19 @@ statemachine abstract import class CR4Player extends CPlayer
 	event OnHolsterLeftHandItem()
 	{
 		weaponHolster.OnHolsterLeftHandItem();
+	}
+	
+	timer function DelayedTryToReequipWeapon( dt: float, id : int )
+	{
+		var weaponType : EPlayerWeapon;
+		
+		if( IsInCombat() && GetTarget() )
+		{
+			weaponType = GetMostConvenientMeleeWeapon( GetTarget() );
+			
+			if ( weaponType == PW_Steel || weaponType == PW_Silver )
+				weaponHolster.OnEquipMeleeWeapon( weaponType, false );
+		}	
 	}
 	
 	timer function DelayedSheathSword( dt: float, id : int )
@@ -2771,13 +3089,8 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	private function ShouldGoToCombat( optional enemy : CActor ) : bool
-	{	
-		
-		if ( !enemy )
-		{ 
-			
-			return false;
-		}
+	{
+		var currentStateName : name;
 		
 		
 		if( !OnStateCanGoToCombat() )
@@ -2785,24 +3098,32 @@ statemachine abstract import class CR4Player extends CPlayer
 			return false;
 		}
 		
+		currentStateName = GetCurrentStateName();
 		
-		
-		
-		
-		if ( this.GetCurrentStateName() == 'AimThrow' )
+		if( currentStateName == 'AimThrow' )
 		{
 			return false;
 		}
 		
-		if ( this.GetCurrentStateName() == 'Swimming' )
+		if( currentStateName == 'Swimming' )
 		{
 			return false;
 		}
 
-		if ( this.GetCurrentStateName() == 'TraverseExploration' )
+		if( currentStateName == 'TraverseExploration' )
 		{
 			return false;
-		}		
+		}
+		
+		
+		
+		
+		
+		
+		if ( !enemy )
+		{ 
+			return playerMode.combatMode;
+		}
 		
 		
 		
@@ -3020,19 +3341,24 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	protected var slideNPC			: CNewNPC;
 	protected var minSlideDistance	: float;
+	protected var maxSlideDistance	: float;
 	protected var slideTicket 		: SMovementAdjustmentRequestTicket;
 	
 	event OnAnimEvent_SlideToTarget( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
 	{
 		var movementAdjustor	: CMovementAdjustor;
 		
-		if ( animEventType == AET_DurationStart )
+		if( animEventType == AET_DurationStart )
+		{
 			slideNPC = (CNewNPC)slideTarget;
+		}
 			
-		if(!slideNPC)
+		if( !slideNPC )
+		{
 			return false;
+		}
 			
-		if ( animEventType == AET_DurationStart && slideNPC.GetGameplayVisibility() )
+		if( animEventType == AET_DurationStart && slideNPC.GetGameplayVisibility() )
 		{
 			movementAdjustor = GetMovingAgentComponent().GetMovementAdjustor();
 			slideTicket = movementAdjustor.GetRequest( 'SlideToTarget' );
@@ -3043,9 +3369,17 @@ statemachine abstract import class CR4Player extends CPlayer
 			movementAdjustor.MaxLocationAdjustmentSpeed( slideTicket, 1000000 );
 			movementAdjustor.ScaleAnimation( slideTicket );
 			minSlideDistance = ((CMovingPhysicalAgentComponent)this.GetMovingAgentComponent()).GetCapsuleRadius()+((CMovingPhysicalAgentComponent)slideNPC.GetMovingAgentComponent()).GetCapsuleRadius();
-			movementAdjustor.SlideTowards( slideTicket, slideTarget, minSlideDistance, minSlideDistance );					
+			if( IsInCombatFist() )
+			{
+				maxSlideDistance = 1000.0f;	
+			}
+			else
+			{
+				maxSlideDistance = minSlideDistance;
+			}
+			movementAdjustor.SlideTowards( slideTicket, slideTarget, minSlideDistance, maxSlideDistance );	
 		}
-		else if ( !slideNPC.GetGameplayVisibility() )
+		else if( !slideNPC.GetGameplayVisibility() )
 		{
 			movementAdjustor = GetMovingAgentComponent().GetMovementAdjustor();
 			movementAdjustor.CancelByName( 'SlideToTarget' );
@@ -3054,7 +3388,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		else 
 		{
 			movementAdjustor = GetMovingAgentComponent().GetMovementAdjustor();
-			movementAdjustor.SlideTowards( slideTicket, slideTarget, minSlideDistance, minSlideDistance );				
+			movementAdjustor.SlideTowards( slideTicket, slideTarget, minSlideDistance, maxSlideDistance );				
 		}
 	}
 	
@@ -3152,6 +3486,12 @@ statemachine abstract import class CR4Player extends CPlayer
 			this.StopEffect('black_spider_web');
 			this.PlayEffectSingle('black_spider_web_break');		
 		}
+	}
+	
+	
+	event OnAnimEvent_MoveNoise( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
+	{
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'MoveNoise', -1, 30.0f, -1.f, -1, true );
 	}
 
 	
@@ -3384,7 +3724,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		gwintMinigameState = minigameState;
 	}
 	
-	public function OnGwintGameRequested( deckName : name )
+	public function OnGwintGameRequested( deckName : name, forceFaction : eGwintFaction )
 	{
 		var gwintManager:CR4GwintManager;
 		gwintManager = theGame.GetGwintManager();
@@ -3392,10 +3732,29 @@ statemachine abstract import class CR4Player extends CPlayer
 		gwintMinigameState = EMS_None;
 		
 		gwintManager.SetEnemyDeckByName(deckName);
+		gwintManager.SetForcedFaction(forceFaction);
 		
 		if (gwintManager.GetHasDoneTutorial() || !theGame.GetTutorialSystem().AreMessagesEnabled())
 		{
 			gwintManager.gameRequested = true;
+			theGame.RequestMenu( 'DeckBuilder' );
+		}
+		else
+		{
+			theGame.GetGuiManager().ShowUserDialog( UMID_SkipGwintTutorial, "gwint_tutorial_play_query_title", "gwint_tutorial_play_query", UDB_YesNo );
+		}
+	}
+	
+	public function StartGwint_TutorialOrSkip( skipTutorial : bool )
+	{
+		var gwintManager : CR4GwintManager;
+		
+		if( skipTutorial )
+		{
+			gwintManager = theGame.GetGwintManager();
+			gwintManager.gameRequested = true;
+			gwintManager.SetHasDoneTutorial(true);
+			gwintManager.SetHasDoneDeckTutorial(true);
 			theGame.RequestMenu( 'DeckBuilder' );
 		}
 		else
@@ -3463,7 +3822,13 @@ statemachine abstract import class CR4Player extends CPlayer
 	event OnGameCameraTick( out moveData : SCameraMovementData, dt : float )
 	{
 		var targetRotation	: EulerAngles;
+		var dist : float;
 		
+		if( thePlayer.IsInCombat() )
+		{
+			dist = VecDistance2D( thePlayer.GetWorldPosition(), thePlayer.GetTarget().GetWorldPosition() );
+			thePlayer.GetVisualDebug().AddText( 'dbg', dist, thePlayer.GetWorldPosition() + Vector( 0.f,0.f,2.f ), true, , Color( 0, 255, 0 ) );
+		}
 		
 		if ( isStartingFistFightMinigame )
 		{
@@ -3958,7 +4323,10 @@ statemachine abstract import class CR4Player extends CPlayer
 			if ( sprintingCamera )
 			{
 				
-				theGame.GetGameCamera().ForceManualControlVerTimeout();
+				if( thePlayer.GetAutoCameraCenter() )
+				{
+					theGame.GetGameCamera().ForceManualControlVerTimeout();
+				}
 				
 				playerToCamAngle =  AbsF( AngleDistance( GetHeading(), moveData.pivotRotationValue.Yaw ) );
 				
@@ -5054,6 +5422,8 @@ statemachine abstract import class CR4Player extends CPlayer
 	private var moveTargets 					: array<CActor>;		
 	public function GetMoveTargets() 			: array<CActor>	{ return moveTargets; }
 	public function GetNumberOfMoveTargets() 	: int	{ return moveTargets.Size(); }
+	public function GetHostileEnemies()			: array<CActor>	{ return hostileEnemies; }
+	public function GetHostileEnemiesCount()	: int	{ return hostileEnemies.Size(); }
 
 	protected var enableStrafe 		: bool;
 	
@@ -7649,6 +8019,9 @@ statemachine abstract import class CR4Player extends CPlayer
 
 	public function HardLockToTarget( flag : bool )
 	{
+		if( flag && GetTarget().HasTag( 'NoHardLock' ) )
+			return;
+			
 		EnableHardLock( flag );
 		LockToTarget( flag );
 	}
@@ -7753,7 +8126,9 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	protected function PlayHitAnimation(damageAction : W3DamageAction, animType : EHitReactionType)
 	{
-		var hitRotation : float;
+		var hitRotation 	: float;
+		var onHitCounter 	: SAbilityAttributeValue;
+		var counter 		: int;
 		
 		if( damageAction.HasAnyCriticalEffect() )
 			return;
@@ -7767,16 +8142,40 @@ statemachine abstract import class CR4Player extends CPlayer
 			SetBehaviorVariable( 'isAttackReflected', 1.f );
 		else
 			SetBehaviorVariable( 'isAttackReflected', 0.f );
+		
 		SetBehaviorVariable( 'HitReactionType',(int)animType);
 		SetBehaviorVariable( 'HitReactionWeapon', ProcessSwordOrFistHitReaction( this, (CActor)damageAction.attacker ) );
 		
 		if (damageAction.attacker)
 		{
+			super.PlayHitAnimation( damageAction, animType );
+			if ( damageAction.attacker.HasAbility( 'IncreaseHitReactionSeverityWithHitCounter' ) )
+			{
+				counter = GetHitCounter();
+				switch ( counter )
+				{
+					case 2 :						
+						SetBehaviorVariable( 'HitReactionType', 2 );
+						break;
+					
+					case 3 :						
+						AddEffectDefault( EET_Stagger, damageAction.attacker, damageAction.attacker.GetName() );
+						break;
+					
+					case 4 :						
+						AddEffectDefault( EET_Knockdown, damageAction.attacker, damageAction.attacker.GetName() );
+						break;
+					
+					default : 
+						break;
+				}
+			}
 			SetHitReactionDirection(damageAction.attacker);
 			SetDetailedHitReaction(damageAction.GetSwingType(), damageAction.GetSwingDirection());
 		}
-
+		
 		RaiseForceEvent( 'Hit' );
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'ActorInHitReaction', -1, 30.0f, -1.f, -1, true ); 
 		
 		if ( IsUsingBoat() )
 		{
@@ -7817,43 +8216,65 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	
-	public function GetCriticalHitChance(isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory) : float
+	public function GetCriticalHitChance( isLightAttack : bool, isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory, isBolt : bool ) : float
 	{
 		var critChance : float;
 		var oilChanceAttribute : name;
+		var weapons : array< SItemUniqueId >;
+		var i : int;
+		var holdsCrossbow : bool;
+		var critVal : SAbilityAttributeValue;
 		
 		critChance = 0;
 		
 		
-		if(FactsQuerySum('debug_fact_critical_boy') > 0)
+		if( FactsQuerySum( 'debug_fact_critical_boy' ) > 0 )
 		{
 			critChance += 1;
 		}
 		
-		if( IsInState( 'HorseRiding' ) && ((CActor)GetUsedVehicle()).GetMovingAgentComponent().GetRelativeMoveSpeed() >= 4.0 )
+		if( IsInState( 'HorseRiding' ) && ( ( CActor )GetUsedVehicle() ).GetMovingAgentComponent().GetRelativeMoveSpeed() >= 4.0 )
 		{
 			critChance += 1;
 		}
 		
 		
-		critChance += CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
+		critChance += CalculateAttributeValue( GetAttributeValue( theGame.params.CRITICAL_HIT_CHANCE ) );
 		
 		
-		if(isHeavyAttack && CanUseSkill(S_Sword_s08))
-			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
-		else if (!isHeavyAttack && CanUseSkill(S_Sword_s17))
-			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
-			
-		if(target && target.HasBuff(EET_Confusion))
-		{
-			critChance += ((W3ConfuseEffect)target.GetBuff(EET_Confusion)).GetCriticalHitChanceBonus();
+		weapons = inv.GetHeldWeapons();
+		for( i=0; i<weapons.Size(); i+=1 )
+		{			
+			holdsCrossbow = ( inv.IsItemCrossbow( weapons[i] ) || inv.IsItemBolt( weapons[i] ) );
+			if( holdsCrossbow != isBolt )
+			{
+				critVal = inv.GetItemAttributeValue( weapons[i], theGame.params.CRITICAL_HIT_CHANCE );
+				critChance -= CalculateAttributeValue( critVal );
+			}			
 		}
 		
 		
-		oilChanceAttribute = MonsterCategoryToCriticalChanceBonus(victimMonsterCategory);
-		if(IsNameValid(oilChanceAttribute))
-			critChance += CalculateAttributeValue(GetAttributeValue(oilChanceAttribute));
-			
+		if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) )
+		{
+			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s08 );
+		}
+		else if( isLightAttack && CanUseSkill( S_Sword_s17 ) )
+		{
+			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s17 );
+		}
+	
+		if( target && target.HasBuff( EET_Confusion ) )
+		{
+			critChance += ( ( W3ConfuseEffect )target.GetBuff( EET_Confusion ) ).GetCriticalHitChanceBonus();
+		}
+		
+		
+		oilChanceAttribute = MonsterCategoryToCriticalChanceBonus( victimMonsterCategory );
+		if( IsNameValid( oilChanceAttribute ) )
+		{
+			critChance += CalculateAttributeValue( GetAttributeValue( oilChanceAttribute ) );
+		}
+	
 		return critChance;
 	}
 	
@@ -7866,7 +8287,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
 		
-		if(inv.ItemHasOilApplied(weaponId))
+		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
 		{
 			vsAttributeName = MonsterCategoryToCriticalDamageBonus(victimMonsterCategory);
 			oilBonus = inv.GetItemAttributeValue(weaponId, vsAttributeName);
@@ -8024,6 +8445,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		var action					: W3DamageAction;
 		var xmlStaminaDamage 		: float;
 		var xmlStaminaDamageName	: name = 'stamina_damage' ;
+		var counter 				: int;
+		var onHitCounter 			: SAbilityAttributeValue;
 		
 
 
@@ -8048,16 +8471,26 @@ statemachine abstract import class CR4Player extends CPlayer
 					if ( !RaiseForceEvent( 'PerformParryOverlay' ) )
 						return false;
 					else
+					{
 						ClearCustomOrientationInfoStack();
+						IncDefendCounter();
+					}
 				}
 				else
 				{
-					if ( RaiseForceEvent( 'PerformParry' ) )
+					counter = GetDefendCounter();
+					onHitCounter = parryInfo.attacker.GetAttributeValue( 'break_through_parry_on_hit_counter' );
+					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase )
+					{
+						AddEffectDefault( EET_Stagger, parryInfo.attacker, "Break through parry" );
+					}
+					else if ( RaiseForceEvent( 'PerformParry' ) )
 					{
 						OnCombatActionStart();
 						ClearCustomOrientationInfoStack();
 						SetSlideTarget( parryInfo.attacker );
 						SetCustomRotation( 'Parry', parryHeading, 1080.f, 0.1f, false );
+						IncDefendCounter();
 					}
 					else
 						return false;
@@ -8068,7 +8501,6 @@ statemachine abstract import class CR4Player extends CPlayer
 				AddEffectDefault(EET_Stagger, parryInfo.attacker, "Parry");
 				return true;
 			}
-			
 			
 			if ( parryInfo.attacker.IsWeaponHeld( 'fist' ) && !parryInfo.target.IsWeaponHeld( 'fist' ) )
 			{
@@ -8167,6 +8599,9 @@ statemachine abstract import class CR4Player extends CPlayer
 		var target						: CActor;
 		var useIncomingAttacker			: bool;
 		
+		if( newLockTarget.HasTag( 'NoHardLock' ) )
+			return false;
+
 		if ( newLockTarget )
 			tempLockTarget = newLockTarget;
 		else
@@ -8181,7 +8616,11 @@ statemachine abstract import class CR4Player extends CPlayer
 			if ( !useIncomingAttacker )
 			{
 				target = GetTarget();
-				if ( target && target.IsAlive() && target.GetGameplayVisibility() && IsEnemyVisible( target ) && IsThreat( target ) && CanBeTargetedIfSwimming( target ) )
+				if( target.HasTag('ForceHardLock'))
+				{
+					return true;
+				}
+				else if ( target && target.IsAlive() && target.GetGameplayVisibility() && IsEnemyVisible( target ) && IsThreat( target ) && CanBeTargetedIfSwimming( target ) )
 					tempLockTarget = FindTarget();
 				else 
 				{
@@ -8189,6 +8628,9 @@ statemachine abstract import class CR4Player extends CPlayer
 				}
 			}
 		}
+		
+		if( tempLockTarget.HasTag( 'NoHardLock' ) )
+			return false;
 		
 		if ( tempLockTarget )
 		{
@@ -8219,6 +8661,8 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
+	
+	event OnTaskSyncAnim( npc : CNewNPC, animNameLeft : name ) {}
 	
 	
 	public function IsDoingSpecialAttack(heavy : bool) : bool
@@ -8383,6 +8827,11 @@ statemachine abstract import class CR4Player extends CPlayer
 			SetBehaviorVariable( 'forceCombatStance' , 1.f);
 		else
 			SetBehaviorVariable( 'forceCombatStance' , 0.f);
+			
+		if ( stance == PCS_AlertNear )
+			this.SetBehaviorVariable('isInCombatForOverlay',1.f);
+		else
+			this.SetBehaviorVariable('isInCombatForOverlay',0.f);
 	}
 	
 	private function CanChangeCombatStance( stance : EPlayerCombatStance, optional force : bool ) : bool
@@ -8398,19 +8847,13 @@ statemachine abstract import class CR4Player extends CPlayer
 		if ( isInHolsterAnim )
 			return false;
 		
-		if ( ( combatStance ==  PCS_Normal || combatStance ==  PCS_AlertFar )   
-			&& stance == PCS_AlertNear )
+		if ( ( combatStance ==  PCS_Normal || combatStance ==  PCS_AlertFar ) && stance == PCS_AlertNear )
 		{
 			currTime = theGame.GetEngineTimeAsSeconds();
 			if ( !isConfirmingCombatStance )
 			{		
 				isConfirmingCombatStance = true;
 				confirmCombatStanceTimeStamp = currTime;
-
-				if ( this.playerMoveType == PMT_Idle )
-					this.SetBehaviorVariable('isInCombatForOverlay',0.f);
-				else
-					this.SetBehaviorVariable('isInCombatForOverlay',1.f);				
 				
 				return false;
 			}
@@ -8932,6 +9375,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			{
 				theInput.ForceDeactivateAction('ThrowItem');
 				theInput.ForceDeactivateAction('ThrowItemHold');
+				this.SignalGameplayEvent( 'FriendlyAttackAction' );
 				return false;
 			}
 		}
@@ -8965,8 +9409,9 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		if ( !( action == EBAT_Dodge || action == EBAT_Roll ) )
+		{
 			SetIsCurrentlyDodging(false);
-	
+		}
 		
 		SetCombatActionHeading( ProcessCombatActionHeading( action ) );
 		
@@ -8985,7 +9430,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		{
 			SetSlideTarget( GetCombatActionTarget( action ) );
 		}
-	
+		
 		if( !slideTarget )
 			LogChannel( 'Targeting', "NO SLIDE TARGET" );
 			
@@ -9095,11 +9540,15 @@ statemachine abstract import class CR4Player extends CPlayer
 								rangedWeapon = ( Crossbow )( inv.GetItemEntityUnsafe( selectedItemId ) );
 								rangedWeapon.OnRangedWeaponPress();
 								GetTarget().SignalGameplayEvent( 'Approach' );
+								GetTarget().SignalGameplayEvent( 'ShootingCrossbow' );
 							}
 							else if(inv.IsItemBomb(selectedItemId) && this.inv.SingletonItemGetAmmo(selectedItemId) > 0 )
 							{
-								BombThrowStart();
-								GetTarget().SignalGameplayEvent( 'Approach' );
+								if( ((W3PlayerWitcher)this).GetBombDelay( ((W3PlayerWitcher)this).GetItemSlot( selectedItemId ) ) <= 0.0f )
+								{
+									BombThrowStart();
+									GetTarget().SignalGameplayEvent( 'Approach' );
+								}
 							}
 							else
 							{
@@ -9647,6 +10096,12 @@ statemachine abstract import class CR4Player extends CPlayer
 		}
 		
 		
+		if( action == EIAB_ThrowBomb && ( HasBuff( EET_Hypnotized ) || HasBuff( EET_Confusion ) ) )
+		{
+			return false;
+		}
+		
+		
 		if(isTimeLock)
 			return false;
 		
@@ -9684,7 +10139,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			isCombatLock = true;
 			
 		
-		if(!isCombatLock && !isPlaceLock && ! isTimeLock && action != EIAB_Undefined)
+		if(!isCombatLock && !isPlaceLock && !isTimeLock && action != EIAB_Undefined)
 		{
 			lockType = inputHandler.GetActionBlockedHudLockType(action);
 			
@@ -9846,6 +10301,26 @@ statemachine abstract import class CR4Player extends CPlayer
 		displayedQuestsGUID.PushBack(questGuid);
 		return true;
 	}	
+	
+	function GetRewardMultiplierData( rewardName : name ) : SRewardMultiplier
+	{
+		var defaultReward : SRewardMultiplier;
+		var i 			  : int;
+		
+		for(i = 0; i < rewardsMultiplier.Size(); i += 1 )
+		{
+			if( rewardsMultiplier[i].rewardName == rewardName )
+			{
+				return rewardsMultiplier[i];
+			}
+		}
+		
+		defaultReward.rewardName = rewardName;
+		defaultReward.rewardMultiplier = 1.0;
+		defaultReward.isItemMultiplier = false;
+		
+		return defaultReward;
+	}
 
 	function GetRewardMultiplier( rewardName : name ) : float 
 	{
@@ -9873,7 +10348,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		return false;
 	}
 
-	function SetRewardMultiplier( rewardName : name, value : float ) : void 
+	function SetRewardMultiplier( rewardName : name, value : float, optional isItemMultiplier : bool ) : void 
 	{
 		var i : int;
 		var rewardMultiplier : SRewardMultiplier;
@@ -9883,12 +10358,14 @@ statemachine abstract import class CR4Player extends CPlayer
 			if( rewardsMultiplier[i].rewardName == rewardName )
 			{
 				rewardsMultiplier[i].rewardMultiplier = value;
+				rewardsMultiplier[i].isItemMultiplier = isItemMultiplier;
 				return;
 			}
 		}
 		
 		rewardMultiplier.rewardName = rewardName;
 		rewardMultiplier.rewardMultiplier = value;
+		rewardMultiplier.isItemMultiplier = isItemMultiplier;
 		
 		rewardsMultiplier.PushBack(rewardMultiplier);
 	}	
@@ -9910,168 +10387,146 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
-	public final function GetCurrentOilAmmo(id : SItemUniqueId) : int
-	{
-		return inv.GetItemModifierInt(id, 'oil_charges');
-	}
 	
-	public final function GetMaxOilAmmo(id : SItemUniqueId) : int
-	{
-		return inv.GetItemModifierInt(id, 'oil_max_charges');
-	}
 	
-	public final function ReduceOilAmmo(id : SItemUniqueId, optional ammo : int)
+	public final function TissueExtractorDischarge() : bool
 	{
-		var currentAmmo : int;
+		var ids : array<SItemUniqueId>;
+		var chargesLeft, uses, curr, max, red, blue, green : int;
+		var i : int;
+		var text : string;
 		
-		if(ammo == 0)
-			ammo = 1;
-			
-		currentAmmo = GetCurrentOilAmmo(id);
-		if(currentAmmo > 0)
+		ids = thePlayer.inv.GetItemsByName( 'q705_tissue_extractor' );		
+		if( ids.Size() == 0 )
 		{
-			currentAmmo = Max(currentAmmo - ammo, 0);		
-			inv.SetItemModifierInt(id, 'oil_charges', currentAmmo);
-
-			
-			UpdateOilBuff(id);
-			
-			if(currentAmmo == 0)
-			{
-				RemoveItemOil(id);
-				
-				
-				if(ShouldProcessTutorial('TutorialAlchemyRefill') && FactsQuerySum("q001_nightmare_ended") > 0 && GetWitcherPlayer())
-					FactsAdd('tut_alch_refill', 1);
-			}
+			return false;
 		}
 		
-		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnOilApplied );
-	}
-	
-	
-	public final function HasOilBuffFromSword(sword : SItemUniqueId) : bool
-	{
-		var i : int;
-		var oil : W3Effect_Oil;
-		var oils : array<CBaseGameplayEffect>;
+		curr = GetTissueExtractorChargesCurr();
+		max = GetTissueExtractorChargesMax();
 		
-		oils = GetBuffs(EET_Oil);
-		for(i=0; i<oils.Size(); i+=1)
+		if( curr >= max )
 		{
-			oil = (W3Effect_Oil)oils[i];
-			if(oil && oil.GetSwordItemId() == sword)
-				return true;
+			
+			uses = FloorF( ( ( float ) curr ) / ( ( float ) max ) );
+			chargesLeft = Max( 0, curr - uses * max );
+			
+			
+			inv.SetItemModifierInt( ids[0], 'charges', chargesLeft );			
+			
+			
+			blue = 0;
+			green = 0;
+			red = 0;
+			for( i=0; i<uses; i+=1 )
+			{
+				switch( RandRange( 3 ) )
+				{
+					case 0:
+						blue += 1;
+						break;
+					case 1:
+						green += 1;
+						break;
+					case 2:
+						red += 1;
+				}
+			}
+			
+			text = GetLocStringByKeyExt( "message_q705_extractor_extracted" );
+			
+			if( blue > 0 )
+			{
+				inv.AddAnItem( 'Greater mutagen blue', blue, false, true );
+				text += "<br/>" + blue + "x " + GetLocStringByKey( inv.GetItemLocalizedNameByName( 'Greater mutagen blue' ) );
+			}
+			if( green > 0 )
+			{
+				inv.AddAnItem( 'Greater mutagen green', green, false, true );
+				text += "<br/>" + green + "x " + GetLocStringByKey( inv.GetItemLocalizedNameByName( 'Greater mutagen green' ) );
+			}
+			if( red > 0 )
+			{
+				inv.AddAnItem( 'Greater mutagen red', red, false, true );
+				text += "<br/>" + red + "x " + GetLocStringByKey( inv.GetItemLocalizedNameByName( 'Greater mutagen red' ) );
+			}
+			
+			
+			theGame.GetGuiManager().ShowNotification( text );
+			
+			
+			inv.SetItemModifierInt( ids[0], 'ui_notified', 0 );
+			
+			return true;
+		}
+		else
+		{
+			
+			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_q705_extractor_too_few_charges" ) );
 		}
 		
 		return false;
 	}
 	
-	
-	public final function AddOilBuff(steel : bool)
+	public final function TissueExtractorIncCharge()
 	{
-		var buffParams : SCustomEffectParams;
-		var oilParams : W3OilBuffParams;
-		var item : SItemUniqueId;
-		var oilName : name;
-		var dm : CDefinitionsManagerAccessor;
+		var ids : array<SItemUniqueId>;
+		var uiData : SInventoryItemUIData;
+		var curr : int;
 		
-		item = GetEquippedSword(steel);
-		
-		if(inv.ItemHasOilApplied(item) && !HasOilBuffFromSword(item))
+		ids = thePlayer.inv.GetItemsByName( 'q705_tissue_extractor' );
+		if( ids.Size() == 0 )
 		{
-			oilName = GetOilAppliedOnSword(steel);
-			dm = theGame.GetDefinitionsManager();
-			
-			oilParams = new W3OilBuffParams in theGame;
-			oilParams.iconPath = dm.GetItemIconPath(oilName);
-			oilParams.localizedName = dm.GetItemLocalisationKeyName(oilName);
-			oilParams.localizedDescription = dm.GetItemLocalisationKeyName(oilName);
-			oilParams.sword = item;
-			oilParams.maxCount = GetMaxOilAmmo(item);
-			oilParams.currCount = GetCurrentOilAmmo(item);
-			
-			buffParams.effectType = EET_Oil;
-			buffParams.creator = this;
-			buffParams.sourceName = "drawnSword";			
-			buffParams.buffSpecificParams = oilParams;
-			
-			AddEffectCustom(buffParams);
-			delete oilParams;
+			return;
 		}
-	}
-	
-	
-	protected final function RemoveOilBuff(isSteel : bool)
-	{
-		var i : int;
-		var oil : W3Effect_Oil;
-		var oils : array<CBaseGameplayEffect>;
-		var item : SItemUniqueId;
+		
+		curr = GetTissueExtractorChargesCurr() + 1;
+		inv.SetItemModifierInt( ids[0], 'charges', curr );
 		
 		
-		item = GetEquippedSword(isSteel);
-		
-		if(!inv.ItemHasOilApplied(item))
-			return; 
+		if( curr >= GetTissueExtractorChargesMax() )
+		{
+			uiData = inv.GetInventoryItemUIData( ids[0] );
+			uiData.isNew = true;
+			inv.SetInventoryItemUIData( ids[0], uiData );
 			
-		oils = GetBuffs(EET_Oil);
-		for(i=0; i<oils.Size(); i+=1)
-		{
-			oil = (W3Effect_Oil)oils[i];
-			if(oil && oil.GetSwordItemId() == item)
-				RemoveEffect(oil);
-		}
-	}
-	
-	
-	private final function UpdateOilBuff(swordId : SItemUniqueId)
-	{
-		var i : int;
-		var oil : W3Effect_Oil;
-		var oils : array<CBaseGameplayEffect>;
-		
-		oils = GetBuffs(EET_Oil);
-		for(i=0; i<oils.Size(); i+=1)
-		{
-			oil = (W3Effect_Oil)oils[i];
-			if(oil)
+			
+			if( inv.GetItemModifierInt( ids[0], 'ui_notified', 0 ) == 0 )
 			{
-				oil.UpdateCounter( GetCurrentOilAmmo(swordId) );
+				inv.SetItemModifierInt( ids[0], 'ui_notified', 1 );
+				theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_q705_extractor_charged" ), , true );
 			}
 		}
 	}
-			
 	
-	public function RemoveItemOil(id : SItemUniqueId)
+	public final function GetTissueExtractorChargesCurr() : int
 	{
-		var i : int;
-		var dm : CDefinitionsManagerAccessor;
-		var abilities : array<name>;
-		var sword : CWitcherSword;
-				
-		dm = theGame.GetDefinitionsManager();
-		inv.GetItemAbilities(id, abilities);
+		var ids : array<SItemUniqueId>;
 		
-		for(i=0; i<abilities.Size(); i+=1)
-			if(dm.AbilityHasTag(abilities[i], theGame.params.OIL_ABILITY_TAG))
-				inv.RemoveItemCraftedAbility(id, abilities[i]);
-				
-		inv.SetItemModifierInt(id, 'oil_charges', -1);
-		inv.SetItemModifierInt(id, 'oil_max_charges', -1);
-		sword = (CWitcherSword) inv.GetItemEntityUnsafe(id);
-		sword.RemoveOil( inv );
+		ids = thePlayer.inv.GetItemsByName( 'q705_tissue_extractor' );
+		if( ids.Size() == 0 )
+		{
+			return 0;
+		}
 		
+		return inv.GetItemModifierInt( ids[0], 'charges', 0 );
+	}
+	
+	public final function GetTissueExtractorChargesMax() : int
+	{
+		var ids : array<SItemUniqueId>;
+		var val : SAbilityAttributeValue;
 		
-		RemoveOilBuff(inv.IsItemSteelSwordUsableByPlayer(id));
+		ids = thePlayer.inv.GetItemsByName( 'q705_tissue_extractor' );
+		if( ids.Size() == 0 )
+		{
+			return 0;
+		}
 		
-		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnOilApplied );	
-	}	
-	
-	
-	
-	
-	
+		val = inv.GetItemAttributeValue( ids[0], 'maxCharges' );
+		
+		return FloorF( val.valueBase );
+	}
 	
 	public function GetEquippedSword(steel : bool) : SItemUniqueId;
 	
@@ -10195,6 +10650,16 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
+	
+	protected function ShouldDrainStaminaWhileSprinting() : bool
+	{
+		if( HasBuff( EET_PolishedGenitals ) && !IsInCombat() && !IsThreatened() )
+		{
+			return false;
+		}
+		
+		return super.ShouldDrainStaminaWhileSprinting();
+	}
 	
 	
 	
@@ -10337,7 +10802,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	public function GetGroupBonusCount(commonColor : ESkillColor,groupID : int) : int
 	{
 		if(abilityManager && abilityManager.IsInitialized())
-			return ((W3PlayerAbilityManager)abilityManager).GetGroupBonusCount(commonColor, groupID);
+			return ((W3PlayerAbilityManager)abilityManager).GetSkillGroupColorCount(commonColor, groupID);
 			
 		return 0;
 	}
@@ -10408,7 +10873,15 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1)
+		{
 			ret = true;
+		}
+			
+		
+		if( !ret && IsSkillSign( skill ) && GetWitcherPlayer().HasBuff( EET_GryphonSetBonus ) )
+		{
+			ret = true;
+		}
 		
 		if(!ret)
 		{
@@ -10863,6 +11336,9 @@ statemachine abstract import class CR4Player extends CPlayer
 						case 'custom_sword':
 							m_CollisionEffect.PlayEffect('sparks');
 						break;
+						case 'flesh':
+							m_CollisionEffect.PlayEffect('blood');
+						break;
 						default:
 							m_CollisionEffect.PlayEffect('wood');
 						break;
@@ -10953,7 +11429,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			{
 				if(ShouldProcessTutorial('TutorialFallingDamage'))
 				{
-					FactsAdd("tutorial_falling_damage");
+					FactsSet( "tutorial_falling_damage", 1 );
 				}	
 				
 				if(FactsQuerySum("tutorial_falling_damage") > 1 && ShouldProcessTutorial('TutorialFallingRoll'))
@@ -11205,6 +11681,23 @@ statemachine abstract import class CR4Player extends CPlayer
 		}
 	}
 	
+	private var isInIdle : bool;
+	
+	event OnPlayerIdleStart()
+	{
+		isInIdle = true;
+	}
+	
+	event OnPlayerIdleEnd()
+	{
+		isInIdle = false;
+	}
+	
+	public function IsInIdle() : bool
+	{
+		return isInIdle;
+	}
+	
 	event OnRunLoopStart()
 	{
 		EnableRunCamera( true );
@@ -11217,18 +11710,13 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	event OnCombatActionStartBehgraph()
 	{
-		var buff : CBaseGameplayEffect;
 		var action : EBufferActionType;
 		var cost, delay : float;
 	
 		
 		
 	
-		OnCombatActionStart();
-
-		
-		
-		buff = GetBuff(EET_AutoStaminaRegen);
+		OnCombatActionStart();	
 		
 		action = PerformingCombatAction();
 		switch ( action )
@@ -11273,8 +11761,10 @@ statemachine abstract import class CR4Player extends CPlayer
 				;
 		}
 		
-		if( (!buff || !buff.IsPaused('InsideCombatAction')) && delay > 0 )
-			PauseEffects(EET_AutoStaminaRegen, 'InsideCombatAction');		
+		
+		
+		if( delay > 0 )
+			PauseStaminaRegen( 'InsideCombatAction' );
 	}
 	
 	public function HolsterUsableItem() : bool
@@ -11385,30 +11875,34 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var item : SItemUniqueId;
 		var combatActionType : float;
-	
+		
 		super.OnCombatActionEnd();
 		
 		
 		
 		BlockAllActions( 'OnCombatActionStart', false );
-
-		UnblockAction( EIAB_DrawWeapon, 'OnCombatActionStart_Attack' );		
+		
+		UnblockAction( EIAB_DrawWeapon, 'OnCombatActionStart_Attack' );
+		
+		
+		UnblockAction( EIAB_Movement, 'CombatActionFriendly' );		
 		
 		
 		
-
+		
 		oTCameraOffset = 0.f;
 		oTCameraPitchOffset = 0.f;
-
+		
 		
 		SetBIsCombatActionAllowed( true );
 		
-
+		
 		SetBIsInputAllowed( true, 'OnCombatActionEnd' );			
 		SetCanPlayHitAnim( true );
 		EnableFindTarget( true );
 		
-		SetIsCurrentlyDodging( false );
+		
+		
 		
 		SetFinisherVictim( NULL );
 		
@@ -11434,12 +11928,14 @@ statemachine abstract import class CR4Player extends CPlayer
 	event OnCombatActionFriendlyStart()
 	{
 		SetBIsInCombatActionFriendly(true);
+		BlockAction( EIAB_Movement, 'CombatActionFriendly', false, false, false );
 		OnCombatActionStart();
 	}
 	
 	event OnCombatActionFriendlyEnd()
 	{
 		SetBIsInCombatActionFriendly(false);
+		UnblockAction( EIAB_Movement, 'CombatActionFriendly' );
 		OnCombatActionEnd();
 		SetBIsInCombatAction(false);
 		
@@ -11467,7 +11963,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		OnCombatActionStart();	
 		
 		
-		ResumeEffects(EET_AutoStaminaRegen, 'InsideCombatAction');
+		ResumeStaminaRegen( 'InsideCombatAction' );
 		
 		if( GetHealthPercents() < 0.3f )
 		{
@@ -11513,7 +12009,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		var camera 	: CCustomCamera = theGame.GetGameCamera();
 		var animation		: SCameraAnimationDefinition;
 		
-		if  (IsLastEnemyKilled() && theGame.GetWorld().NavigationCircleTest( this.GetWorldPosition(), 3.f ) )
+		if( IsLastEnemyKilled() && theGame.GetWorld().NavigationCircleTest( this.GetWorldPosition(), 3.f ) )
 		{
 			camera.StopAnimation('camera_shake_hit_lvl3_1' );
 			
@@ -11604,7 +12100,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		UnblockAction( EIAB_UsableItem, 'OnCombatActionStart' );
 		
 		UnblockAction( EIAB_DrawWeapon, 'OnCombatActionStart_Attack' );			
-				
+		
 		SetUnpushableTarget( NULL );
 		SetBIsInCombatAction(false);
 		SetIsCurrentlyDodging(false);
@@ -11632,13 +12128,13 @@ statemachine abstract import class CR4Player extends CPlayer
 			ResetRawPlayerHeading();
 			ResetCachedRawPlayerHeading();
 		}
-			
+		
 		
 		ReapplyCriticalBuff();	
 		SetBIsInputAllowed( true, 'OnCombatActionEndComplete' );
-			
 		
-		ResumeEffects(EET_AutoStaminaRegen, 'InsideCombatAction');
+		
+		ResumeStaminaRegen( 'InsideCombatAction' );
 		
 		bIsInHitAnim = false;
 		
@@ -11837,6 +12333,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				}
 			}
 			
+			theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'CriticalEffectStart', -1, 30.0f, -1.f, -1, true ); 
 			return true;
 		}
 		
@@ -11856,7 +12353,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				OnCriticalStateAnimStart();
 			}
 		
-			ResumeEffects(EET_AutoStaminaRegen, 'InsideCombatAction');	
+			ResumeStaminaRegen( 'InsideCombatAction' );
 		
 			keepRequestingCriticalAnimStart = true;
 			AddTimer('RequestCriticalAnimStart', 0, true);
@@ -11871,9 +12368,9 @@ statemachine abstract import class CR4Player extends CPlayer
 	public function CriticalEffectAnimationInterrupted(reason : string) : bool
 	{
 		var ret : bool;	
-	
+		
 		LogCriticalPlayer("R4Player.CriticalEffectAnimationInterrupted() - because: " + reason);
-	
+		
 		ret = super.CriticalEffectAnimationInterrupted(reason);
 		
 		if(ret)
@@ -11890,11 +12387,12 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		LogCriticalPlayer("R4Player.CriticalStateAnimStopped() - forced: " + forceRemoveBuff);
 		
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'RecoveredFromCriticalEffect', -1, 30.0f, -1.f, -1, true ); 
 		super.CriticalStateAnimStopped(forceRemoveBuff);
 		
 		substateManager.ReactOnCriticalState( false );
 	}
-		
+	
 	
 	timer function RequestCriticalAnimStart(dt : float, id : int)
 	{	
@@ -12031,32 +12529,30 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	public function CheatResurrect()
 	{
+		var items 		: array< SItemUniqueId >;
+		var i, size, itemLevel, maxPrice, itemPrice 	: int;
+		var itemToEquip : SItemUniqueId;
+
 		if(IsAlive())
 			return;
 			
+		
+		if ( !theGame.GetGuiManager().GetRootMenu() )
+		{
+			Log(" *** Call this function after DeathScreen appears *** ");
+			return;
+		}
+		
 		SetAlive(true);
 		
 		SetKinematic(true);
-		
-		delete abilityManager;
-		delete effectManager;
-		
-		SetAbilityManager();		
-		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
-		
-		SetEffectManager();
-		
-		abilityManager.PostInit();						
 	
 		EnableFindTarget( true );
 		SetBehaviorVariable( 'Ragdoll_Weight', 0.f );
 		RaiseForceEvent( 'RecoverFromRagdoll' );
 		SetCanPlayHitAnim( true );
 		SetBehaviorVariable( 'CriticalStateType', (int)ECST_None );		
-		
-		
-		
-			GoToStateIfNew('Exploration');	
+		GoToStateIfNew('Exploration');	
 
 		( (CDismembermentComponent)this.GetComponent( 'Dismemberment' ) ).ClearVisibleWound();
 		
@@ -12072,8 +12568,46 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		theSound.LeaveGameState(ESGS_Death);
+
 		
-		theGame.ReleaseNoSaveLock(deathNoSaveLock);		
+	 	abilityManager.ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality));
+		effectManager.StopVitalityRegen();
+		abilityManager.ForceSetStat( BCS_Air , 100.f );
+		effectManager.StopAirRegen();
+		abilityManager.ForceSetStat( BCS_Stamina , 100.f );
+		effectManager.StopStaminaRegen();
+		abilityManager.ForceSetStat( BCS_Toxicity , 0.f );
+		abilityManager.ForceSetStat( BCS_Focus , 0.f );
+		GetWitcherPlayer().UpdateEncumbrance();
+
+		
+		if ( !inv.IsThereItemOnSlot( EES_SteelSword ) )
+		{
+			items = inv.GetItemsByCategory( 'steelsword' );
+		}
+		else if ( !inv.IsThereItemOnSlot( EES_SilverSword ) )
+		{
+			items = inv.GetItemsByCategory( 'silversword' );
+		}
+		
+		size = items.Size();
+		maxPrice = -1;
+		for ( i = 0; i < size; i += 1 )
+		{
+			itemPrice = inv.GetItemPrice(items[i]);
+			itemLevel = inv.GetItemLevel(items[i]);
+			if ( itemLevel <= GetLevel() && itemPrice > maxPrice )
+			{
+				maxPrice = itemPrice;
+				itemToEquip = items[i];
+			}
+		}
+		if( inv.IsIdValid( itemToEquip ) )
+		{
+			EquipItem( itemToEquip , , true );
+		}
+
+		theGame.ReleaseNoSaveLock(deathNoSaveLock);
 	}
 	
 	
@@ -12210,10 +12744,11 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		if( currentlyEquipedItemL != GetInvalidUniqueId() )
 		{
-			if ( force )
+			if( force )
 			{
-				if (!RaiseEvent( 'ItemEndL' ) )	
+				if( !RaiseForceEvent( 'ItemEndL' ) )	
 				{
+					
 					OnUsingItemsReset();
 				}
 				return;
@@ -12399,7 +12934,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if ( currentlyEquipedItemL != GetInvalidUniqueId() )
 		{
-			SetBehaviorVariable( 'SelectedItemL', (int)GetUsableItemTypeById( currentlyEquipedItemL ) );		
+			SetBehaviorVariable( 'SelectedItemL', (int)GetUsableItemTypeById( currentlyEquipedItemL ), true );		
 			if ( force )
 			{
 				if ( RaiseEvent( 'ItemEndL' ) )
@@ -12424,7 +12959,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			{
 				return false;
 			}
-			SetBehaviorVariable( 'SelectedItemL', (int)GetUsableItemTypeById( selectedItemId ) );
+			SetBehaviorVariable( 'SelectedItemL', (int)GetUsableItemTypeById( selectedItemId ), true );
 			if( RaiseEvent( 'ItemUseL' ) )
 			{	
 				currentlyEquipedItemL = selectedItemId;
@@ -12686,9 +13221,57 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	public function ProcessCanAttackWhenNotInCombatBomb()
 	{
+		var targets : array< CGameplayEntity >;
+		var temp, throwVector, throwFrom, throwTo, throwVectorU : Vector;
+		var temp_n : name;
+		var throwVecLen : float;
+		var component : CComponent;
 		
 		
-		SetIsShootingFriendly( false );
+		
+		if( FactsQuerySum( "BombThrowSpecificTargets" ) > 0 )
+		{
+			
+			
+			
+			
+			
+			throwFrom = playerAiming.GetThrowStartPosition();
+			throwTo = playerAiming.GetThrowPosition();
+			throwVector = throwTo - throwFrom;
+			throwVecLen = VecDistance( throwFrom, throwTo );
+			throwVectorU =  throwVector / throwVecLen;
+			if( theGame.GetWorld().StaticTraceWithAdditionalInfo( throwFrom, throwTo + throwVectorU, temp, temp, temp_n, component ) && component && component.GetEntity().HasTag( 'BombThrowSpecificTarget' ) )
+			{
+				SetIsShootingFriendly( false );
+			}
+			else
+			{
+				SetIsShootingFriendly( true );
+			}
+		}
+		else if( FactsQuerySum( "BombThrowDisallowSpecificTargets" ) > 0 )
+		{
+			
+			throwFrom = playerAiming.GetThrowStartPosition();
+			throwTo = playerAiming.GetThrowPosition();
+			throwVector = throwTo - throwFrom;
+			throwVecLen = VecDistance( throwFrom, throwTo );
+			throwVectorU =  throwVector / throwVecLen;
+			if( theGame.GetWorld().StaticTraceWithAdditionalInfo( throwFrom, throwTo + throwVectorU, temp, temp, temp_n, component ) && component && component.GetEntity().HasTag( 'BombThrowDisallowedTarget' ) )
+			{
+				SetIsShootingFriendly( true );
+			}
+			else
+			{
+				SetIsShootingFriendly( false );
+			}
+		}
+		else
+		{
+			SetIsShootingFriendly( false );
+		}
+		
 		SetBehaviorVariable( 'isShootingFriendly', (float)( GetIsShootingFriendly() ) );		
 	}
 
@@ -12735,16 +13318,23 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	protected function BombThrowRelease()
 	{
+		var stateName : name;
+		
+		stateName = playerAiming.GetCurrentStateName();
 		OnDelayOrientationChangeOff();
 		
-		if ( GetIsShootingFriendly() )
+		if( GetIsShootingFriendly() || ( FactsQuerySum( "BombThrowSpecificTargets" ) > 0 && stateName != 'Aiming' ) )
+		{
 			BombThrowAbort();
+		}
 		else
 		{
 			SetBehaviorVariable( 'throwStage', (int)TS_End );
 			
-			if ( playerAiming.GetCurrentStateName() == 'Aiming' )
+			if ( stateName == 'Aiming' )
+			{
 				SetCustomRotation( 'Throw', VecHeading( this.GetLookAtPosition() - GetWorldPosition() ), 0.0f, 0.2f, false );
+			}
 		}
 	}
 	
@@ -12861,13 +13451,13 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
-	 event OnPocessActionPost(action : W3DamageAction)
+	 event OnProcessActionPost(action : W3DamageAction)
 	{
 		var npc : CNewNPC;
 		var attackAction : W3Action_Attack;
 		var lifeLeech : float;
 		
-		super.OnPocessActionPost(action);
+		super.OnProcessActionPost(action);
 		
 		attackAction = (W3Action_Attack)action;
 		
@@ -13323,6 +13913,19 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
+	public function SetWeatherDisplayDisabled( disable : bool )
+	{
+		disableWeatherDisplay = disable;
+	}
+	
+	public function GetWeatherDisplayDisabled() : bool
+	{
+		return disableWeatherDisplay;
+	}
+	
+	
+	
+	
 	
 	public function SetCurrentMonsterHuntInvestigationArea ( area : W3MonsterHuntInvestigationArea )
 	{
@@ -13691,6 +14294,11 @@ statemachine abstract import class CR4Player extends CPlayer
 			RaiseEvent('OpenDoor');
 	}
 	
+	public final function SetLoopingCameraShakeAnimName( n : name )
+	{
+		loopingCameraShakeAnimName = n;
+	}
+	
 	public var loopingCameraShakeAnimName : name;
 	timer function RemoveQuestCameraShakeTimer( dt : float , id : int)
 	{
@@ -13899,19 +14507,21 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	public function OnTeleportPlayerToPlayableArea( afterClosingMap : bool )
 	{
-		var BLACKSCREEN_INTERVAL : float = 0.5;
+		var BLACKSCREEN_INTERVAL : float = 0.1;
 		var manager : CCommonMapManager = theGame.GetCommonMapManager();
-
-		theGame.FadeOutAsync( 0 );
+		
 		thePlayer.TeleportWithRotation( manager.GetBorderTeleportPosition(), manager.GetBorderTeleportRotation() );
 		thePlayer.AddTimer( 'BorderTeleportFadeInTimer', BLACKSCREEN_INTERVAL, false );
+		
+		theGame.FadeOutAsync( 0 );
+		theGame.SetFadeLock('PlayerTeleportation');
 	}
 	
 	timer function BorderTeleportFadeInTimer( dt : float, id : int )
 	{
-		var FADEIN_INTERVAL : float = 0.5;
-
-		theGame.FadeInAsync( FADEIN_INTERVAL );
+		theGame.ResetFadeLock('PlayerTeleportation');
+		theGame.FadeOutAsync( 0 );
+		theGame.FadeInAsync( 2.0f );
 	}
 	
 	public final function SetLastInstantKillTime(g : GameTime)
@@ -13974,6 +14584,11 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	public function ResetEtherealCount() { etherealCount = 0; }
 	
+	public function SetInsideDiveAttackArea( val : bool ) { insideDiveAttackArea = val; }
+	public function IsInsideDiveAttackArea() : bool { return insideDiveAttackArea; }
+	public function SetDiveAreaNumber( val : int ) { diveAreaNumber = val; }
+	public function GetDiveAreaNumber() : int { return diveAreaNumber; }
+	
 	
 	
 	public function InitPhantomWeaponMgr()
@@ -14010,6 +14625,52 @@ statemachine abstract import class CR4Player extends CPlayer
 		GetPhantomWeaponMgr().DischargeWeapon();
 	}
 	
+	
+	
+	
+	private var forcedFinisherVictim : CActor;
+	
+	timer function PerformFinisher( time : float , id : int )
+	{
+		var combatTarget : CActor;
+		var i : int;
+		
+		combatTarget = thePlayer.GetTarget();
+		
+		if( combatTarget )
+		{
+			combatTarget.Kill( 'AutoFinisher', false, thePlayer );
+			thePlayer.SetFinisherVictim( combatTarget );
+			forcedFinisherVictim = combatTarget;
+			thePlayer.CleanCombatActionBuffer();
+			thePlayer.OnBlockAllCombatTickets( true );
+			moveTargets = thePlayer.GetMoveTargets();
+					
+			for( i = 0; i < moveTargets.Size(); i += 1 )
+			{
+				if( combatTarget != moveTargets[i] )
+					moveTargets[i].SignalGameplayEvent( 'InterruptChargeAttack' );
+			}	
+			
+			if( theGame.GetInGameConfigWrapper().GetVarValue( 'Gameplay', 'AutomaticFinishersEnabled' ) == "true" )
+				combatTarget.AddAbility( 'ForceFinisher', false );
+			
+			if( combatTarget.HasTag( 'ForceFinisher' ) )
+				combatTarget.AddAbility( 'ForceFinisher', false );
+				
+			combatTarget.SignalGameplayEvent( 'ForceFinisher' );
+			
+			thePlayer.FindMoveTarget();
+
+			thePlayer.AddTimer( 'SignalFinisher', 0.2, false );
+		}
+	}
+	
+	timer function SignalFinisher( time : float , id : int )
+	{
+		forcedFinisherVictim.SignalGameplayEvent( 'Finisher' );
+		forcedFinisherVictim = NULL;
+	}
 }
 
 exec function ttt()

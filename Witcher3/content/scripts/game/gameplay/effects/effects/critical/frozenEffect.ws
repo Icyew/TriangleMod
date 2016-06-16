@@ -93,6 +93,36 @@ class W3Effect_Frozen extends W3ImmobilizeEffect
 			wasKnockedDown = true;
 		}
 		effectManager.PauseAllRegenEffects('FrozenEffect');
+
+		if( target.HasTag( 'scolopendromorph' ) )
+		{
+			target.StopEffect( 'dirt_base' );
+		}
+	}
+	
+	event OnEffectAddedPost()
+	{
+		var dm : CDefinitionsManagerAccessor;
+		var min, max : SAbilityAttributeValue;
+		
+		super.OnEffectAddedPost();
+		
+		if( sourceName == "Mutation 6" )
+		{
+			
+			theGame.GetSurfacePostFX().AddSurfacePostFXGroup( target.GetWorldPosition(), 0.3f, duration, 2.f, 5.f, 0 );
+		}
+		
+		
+		target.FreezeCloth( true );
+		
+		
+		dm = theGame.GetDefinitionsManager();		
+		dm.GetAbilityAttributeValue(abilityName, 'hpPercDamageBonusPerHit', min, max);
+		bonusDamagePercents = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
+		
+		dm.GetAbilityAttributeValue(abilityName, 'killOnHit', min, max);
+		killOnHit = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 	}
 	
 	event OnEffectRemoved()
@@ -126,6 +156,8 @@ class W3Effect_Frozen extends W3ImmobilizeEffect
 			target.SetKinematic( false );
 		}
 		
+		
+		target.FreezeCloth( false );
 	}
 	
 	public function KillOnHit() : bool
@@ -156,21 +188,6 @@ class W3Effect_Frozen extends W3ImmobilizeEffect
 			LogCritical("Deactivating not animated CS <<" + criticalStateType + ">>");
 			isActive = false;			
 		}
-	}
-	
-	public function CacheSettings()
-	{
-		var dm : CDefinitionsManagerAccessor;
-		var min, max : SAbilityAttributeValue;
-		
-		super.CacheSettings();
-		
-		dm = theGame.GetDefinitionsManager();		
-		dm.GetAbilityAttributeValue(abilityName, 'hpPercDamageBonusPerHit', min, max);
-		bonusDamagePercents = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
-		
-		dm.GetAbilityAttributeValue(abilityName, 'killOnHit', min, max);
-		killOnHit = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 	}
 	
 	

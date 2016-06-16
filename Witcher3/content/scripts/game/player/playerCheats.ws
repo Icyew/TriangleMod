@@ -27,7 +27,7 @@ exec function killall( optional range : float )
 		{
 			if( npc.GetAttitude( thePlayer ) == AIA_Hostile )
 			{
-				npc.Kill();
+				npc.Kill( 'Debug' );
 			}
 		}
 	}
@@ -54,9 +54,15 @@ exec function staminaboy()
 function StaminaBoyInternal(on : bool)
 {
 	if(on)
+	{
 		FactsAdd("debug_fact_stamina_boy");			
+		LogCheats( "Stamina Boy is now ON" );
+	}
 	else
+	{
 		FactsRemove("debug_fact_stamina_boy");
+		LogCheats( "Stamina Boy is now OFF" );
+	}
 }
 
 exec function staminapony()
@@ -67,9 +73,15 @@ exec function staminapony()
 function StaminaPonyInternal(on : bool)
 {
 	if(on)
+	{
 		FactsAdd("debug_fact_stamina_pony");			
+		LogCheats( "Stamina Pony is now ON" );
+	}
 	else
+	{
 		FactsRemove("debug_fact_stamina_pony");
+		LogCheats( "Stamina Pony is now OFF" );
+	}
 }
 
 

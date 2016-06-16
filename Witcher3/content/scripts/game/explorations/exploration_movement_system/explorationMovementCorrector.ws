@@ -135,6 +135,8 @@ class CExplorationMovementCorrector
 	private var	debugingSpeed				: bool;			default	debugingSpeed				= false;
 	
 	
+	public var disallowRotWhenGoingToSleep	: bool;			default disallowRotWhenGoingToSleep = false;
+	
 	
 	public function Initialize( explorationManager : CExplorationStateManager )
 	{
@@ -323,7 +325,7 @@ class CExplorationMovementCorrector
 		var vel : float;
 		var player : CR4Player;
 		
-		if ( !theGame.IsUberMovementEnabled() )
+		if ( !theGame.IsUberMovementEnabled() || disallowRotWhenGoingToSleep )
 			turnAdjustBlocked = true;
 		else if ( AbsF( AngleDistance( thePlayer.rawPlayerHeading, thePlayer.GetHeading() ) ) >= 144.f )
 			turnAdjustBlocked = true;

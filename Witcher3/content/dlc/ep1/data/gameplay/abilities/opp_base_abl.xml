@@ -125,7 +125,7 @@
 			</ability>
 			
 			<ability name="olgierd_default_stats">
-				<tags> "base" </tags>
+				<tags> "base", "Boss"  </tags>
 				
 				<!-- Base stats -->
 				<level type="add" min="32" max="32" />
@@ -185,7 +185,7 @@
 		</ability>	
 			
 			<ability name="ethereal_default_stats">
-				<tags> "base" </tags>
+				<tags> "base", "Boss" </tags>
 				
 				<!-- Base stats -->
 				<level type="add" min="35" max="35" />

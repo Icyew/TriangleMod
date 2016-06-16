@@ -36,9 +36,9 @@ class CR4ScriptedHud extends CR4Hud
 	private var m_fxSetIsDynamicSFF			: CScriptedFlashFunction;
 	private var m_fxSetControllerType 	 	: CScriptedFlashFunction;
 	private var m_fxSwapAcceptCancel	    : CScriptedFlashFunction;
-	
 	protected var m_fxSetGamepadType       	: CScriptedFlashFunction;
 	protected var m_fxLockControlScheme     : CScriptedFlashFunction;
+	private var m_fxSetGameLanguage			: CScriptedFlashFunction;
 	
 	private var hudModules					: array<CR4HudModuleBase>;
 	public	var hudModulesNames				: array<name>;
@@ -59,7 +59,8 @@ class CR4ScriptedHud extends CR4Hud
 	private var m_visibleHudByUser   : bool;	default m_visibleHudByUser = true;
 	private var m_visibleHudByScene  : bool;	default m_visibleHudByScene = false;
 	private var m_visibleHudByRadial : bool;	default m_visibleHudByRadial = false;
-	
+	private var languageName 					: string;
+
 	private var m_lastUsedDeviceName : EInputDeviceType;
 
 	event OnTick( timeDelta : float )
@@ -68,8 +69,15 @@ class CR4ScriptedHud extends CR4Hud
 		var overlayPopupRef	  : CR4OverlayPopup;
 		var guiManager        : CR4GuiManager;
 		
+
+
+
+
 		ClearCachedPositionForEntity();
-		
+
+
+
+
 		UpdateLootPopupContext();
 		
 		if( currentInputContext != theInput.GetContext() )
@@ -111,9 +119,9 @@ class CR4ScriptedHud extends CR4Hud
 		
 		GetHudEventController().RunDelayedEvents();
 		
-		// TEMP: update for steam controller
+		
 		curUsedDeviceName = theInput.GetLastUsedGamepadType();
-		if( ( curUsedDeviceName == GT_Steam || m_lastUsedDeviceName == GT_Steam ) && curUsedDeviceName != m_lastUsedDeviceName )
+		if( ( curUsedDeviceName == IDT_Steam || m_lastUsedDeviceName == IDT_Steam ) && curUsedDeviceName != m_lastUsedDeviceName )
 		{
 			m_lastUsedDeviceName = curUsedDeviceName;
 			UpdateInputDeviceType();
@@ -127,6 +135,19 @@ class CR4ScriptedHud extends CR4Hud
 			
 			UpdateInputDevice();
 		}
+	}
+	
+	
+	public function setGameLanguage() : void
+	{
+		var tempLanguageName 	: string;
+		var audioLanguageName 	: string;
+		theGame.GetGameLanguageName(audioLanguageName,tempLanguageName);
+			if( tempLanguageName != languageName )
+			{
+				languageName = tempLanguageName;
+				m_fxSetGameLanguage.InvokeSelfOneArg( FlashArgString(languageName) );
+			}
 	}
 	
 	protected function CheckDLCMessagePending():void
@@ -259,6 +280,13 @@ class CR4ScriptedHud extends CR4Hud
 			m_scaleformOffsetX = -300;
 			m_scaleformOffsetY = 0;
 		}
+		else if ( AbsF( ratio - 43.0 / 18.0 ) < 0.01 )
+		{
+			m_scaleformWidth   = 2580;
+			m_scaleformHeight  = 1080;
+			m_scaleformOffsetX = -330;
+			m_scaleformOffsetY = 0;
+		}
 		else
 		{
 			m_scaleformWidth   = 1920;
@@ -319,6 +347,7 @@ class CR4ScriptedHud extends CR4Hud
 		
 		m_fxSetGamepadType		= m_HudFlashSFS.GetMemberFlashFunction( "setGamepadType" );
 		m_fxLockControlScheme	= m_HudFlashSFS.GetMemberFlashFunction( "lockControlScheme" );
+		m_fxSetGameLanguage 	= m_HudFlashSFS.GetMemberFlashFunction( "setGameLanguage" );
 		
 		CreateHudModule("AnchorsModule");			
 		hudModulesNames.PushBack('ControlsFeedbackModule');
@@ -362,10 +391,12 @@ class CR4ScriptedHud extends CR4Hud
 		
 		UpdateHudConfigs();
 		UpdateAcceptCancelSwaping();
-		//UpdateControlSchemeLock(); ignore for now
+		
 		UpdateInputDeviceType();
 		
 		CheckDLCMessagePending();
+		setGameLanguage();
+		ToogleMinimalBuffView(true);
 	}
 	
 	public function IsHudVisibilityAllowedByUser() : bool
@@ -546,6 +577,7 @@ class CR4ScriptedHud extends CR4Hud
 		UpdateHudConfig('MinimapFocusClues', false);
 		UpdateHudConfig('MinimapTracksWaypoints', false);
 		UpdateHudConfig('MiminapPoiQuestionMarks', false);
+		UpdateHudConfig('MinimapPoiCompletedIcons', false);
 		UpdateHudConfig('ControlsFeedbackModule', false);		
 		UpdateHudConfig('TimeLeftModule', false);
 		
@@ -668,6 +700,12 @@ class CR4ScriptedHud extends CR4Hud
 			{
 				configValue = inGameConfigWrapper.GetVarValue('Hud', configName);
 				theGame.GetCommonMapManager().ShowKnownEntities( configValue == "true" );
+			}
+			break;
+		case 'MinimapPoiCompletedIcons':
+			{
+				configValue = inGameConfigWrapper.GetVarValue('Hud', configName);
+				theGame.GetCommonMapManager().ShowDisabledEntities( configValue == "true" );
 			}
 			break;
 		case 'MinimapTracksWaypoints':
@@ -1493,11 +1531,15 @@ class CR4ScriptedHud extends CR4Hud
 	
 	public function OnRadialOpened()
 	{
+	
+		ToogleMinimalBuffView(false);
 		ForceShow( true, HVS_RadialMenu );
+
 	}
 	
 	public function OnRadialClosed()
 	{
+		ToogleMinimalBuffView(true);
 		ForceShow( false, HVS_RadialMenu );
 	}
 	
@@ -1510,6 +1552,19 @@ class CR4ScriptedHud extends CR4Hud
 	{
 		ForceShow( false, HVS_Scene );
 	}
+	
+	public function ToogleMinimalBuffView( value : bool )
+	{
+		var buffModule : CR4HudModuleBuffs;
+		
+		buffModule = (CR4HudModuleBuffs)GetHudModule("BuffsModule");
+		if( buffModule )
+		{
+			buffModule.SetMinimalViewMode(value);
+		}	
+	}
+	
+	
 
 
 
@@ -1542,6 +1597,17 @@ class CR4ScriptedHud extends CR4Hud
 
 
 
+
+	function OnRelevantSkillChanged( skill : ESkill, equipped : bool )
+	{
+		var buffModule : CR4HudModuleBuffs;
+		
+		buffModule = (CR4HudModuleBuffs)GetHudModule("BuffsModule");
+		if( buffModule )
+		{
+			buffModule.ForceUpdate();
+		}		
+	}
 }
 
 exec function showCrossbowTut()
@@ -1820,4 +1886,28 @@ exec function ForceHudScaleRefresh()
 		hud.UpdateScaleformStageSize();
 		hud.UpdateHudScale();
 	}
+}
+
+exec function showKnown( show : bool )
+{
+	var configValue : string;
+	var inGameConfigWrapper : CInGameConfigWrapper;
+		
+	inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+	inGameConfigWrapper.SetVarValue( 'Hud', 'MiminapPoiQuestionMarks', show );
+	theGame.SaveUserSettings();
+
+	theGame.GetCommonMapManager().ShowKnownEntities( show );
+}
+
+exec function showDisabled( show : bool )
+{
+	var configValue : string;
+	var inGameConfigWrapper : CInGameConfigWrapper;
+		
+	inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+	inGameConfigWrapper.SetVarValue( 'Hud', 'MinimapPoiCompletedIcons', show );
+	theGame.SaveUserSettings();
+
+	theGame.GetCommonMapManager().ShowDisabledEntities( show );
 }

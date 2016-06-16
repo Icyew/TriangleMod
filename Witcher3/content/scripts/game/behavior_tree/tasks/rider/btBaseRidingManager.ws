@@ -8,14 +8,12 @@
 abstract class CBTTaskRidingManagerVehicleMount extends IBehTreeTask
 {
 	protected var mountType : name;
-	var aiStorageHandler    : CAIStorageHandler;
+	var riderData      		: CAIStorageRiderData;
 	var attachSlot 			: name;
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData       : CAIStorageRiderData;
         var vehicleComponent: CVehicleComponent;
-        riderData        = (CAIStorageRiderData)aiStorageHandler.Get();
 		vehicleComponent = GetVehicleComponent();
 		
 		if ( !vehicleComponent || vehicleComponent.IsMountingPossible() == false )
@@ -177,10 +175,8 @@ abstract class CBTTaskRidingManagerVehicleMount extends IBehTreeTask
 	}
 	
     function Initialize()
-    {        
-        aiStorageHandler = new CAIStorageHandler in this;
-        aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-        aiStorageHandler.Get();
+    {
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
     }
 }
 
@@ -198,7 +194,7 @@ abstract class CBTTaskRidingManagerVehicleMountDef extends IBehTreeTaskDefinitio
 
 class CBTTaskRidingManagerVehicleDismount extends IBehTreeTask
 {
-    var aiStorageHandler     : CAIStorageHandler;
+    var riderData     : CAIStorageRiderData;
 
     function OnDismountStarted( riderData : CAIStorageRiderData, vehicleComponent : CVehicleComponent )
     {
@@ -525,10 +521,8 @@ class CBTTaskRidingManagerVehicleDismount extends IBehTreeTask
 		
 	}
     function Initialize()
-    {        
-        aiStorageHandler = new CAIStorageHandler in this;
-        aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-        aiStorageHandler.Get();
+    {
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
     }
 }
 

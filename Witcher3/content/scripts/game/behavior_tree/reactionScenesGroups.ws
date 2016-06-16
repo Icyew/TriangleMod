@@ -15,6 +15,7 @@ function GlobalRegisterReactionSceneGroups()
 	GlobalRegisterReactionSceneGroups_Nml( reactionManager );
 	GlobalRegisterReactionSceneGroups_Skellige( reactionManager );
 	GlobalRegisterReactionSceneGroups_Prologue( reactionManager );
+	GlobalRegisterReactionSceneGroups_Bob( reactionManager );
 }
 
 function GlobalRegisterReactionSceneGroups_Prologue( reactionManager : CBehTreeReactionManager )
@@ -421,4 +422,64 @@ function GlobalRegisterReactionSceneGroups_Novigrad( reactionManager : CBehTreeR
 	reactionManager.AddReactionSceneGroup( "vset_novigrad_sailor_01", 'sailor' );
 	reactionManager.AddReactionSceneGroup( "vset_novigrad_sailor_02", 'sailor' );
 	reactionManager.AddReactionSceneGroup( "vset_novigrad_sailor_03", 'sailor' );
+}
+
+function GlobalRegisterReactionSceneGroups_Bob( reactionManager : CBehTreeReactionManager )
+{
+	
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_beauclair_citizen_woman_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_man_06", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bard_woman_06", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_man_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_woman_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_bonvivant_woman_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_dockworker_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_dockworker_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_dockworker_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_man_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_man_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_woman_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_woman_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_old_woman_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_man_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_man_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_woman_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_woman_04", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_peasant_woman_05", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_man_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_man_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_man_03", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_woman_01", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_woman_02", 'bob' );
+	reactionManager.AddReactionSceneGroup( "vset_toussaint_poor_woman_03", 'bob' );
 }

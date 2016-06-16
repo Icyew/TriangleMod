@@ -32,6 +32,15 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 		return;
 	}
 	
+	else if(scriptName == 'restart')
+	{
+		
+		if(!theGame.GetTutorialSystem() || !theGame.GetTutorialSystem().IsRunning())
+			theGame.GetTutorialSystem().TutorialRestart();
+			
+		return;
+	}
+	
 	else if(!theGame.GetTutorialSystem() || !theGame.GetTutorialSystem().IsRunning())
 	{
 		return;
@@ -226,6 +235,13 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
 		
 		
+		uitut.menuName = 'GlossaryParent';
+		uitut.tutorialStateName = 'BestiaryGlossarySubmenu';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 1;
+		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
+		
+		
 		uitut.menuName = 'GlossaryBestiaryMenu';
 		uitut.tutorialStateName = 'Bestiary';
 		uitut.triggerCondition = EUITTC_OnMenuOpen;
@@ -233,7 +249,7 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 	}
 	else if(scriptName == 'bestiary_OFF')
 	{
-		theGame.GetTutorialSystem().uiHandler.UnregisterUIHint('IngameMenuBestiary');
+		theGame.GetTutorialSystem().uiHandler.UnregisterUIState('IngameMenuBestiary');
 		
 	}
 	else if(scriptName == 'bestiaryQ103_ON')
@@ -247,7 +263,7 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 	}
 	else if(scriptName == 'bestiaryQ103_OFF')
 	{
-		theGame.GetTutorialSystem().uiHandler.UnregisterUIHint('IngameMenuBestiary');
+		theGame.GetTutorialSystem().uiHandler.UnregisterUIState('IngameMenuBestiary');
 	}
 	else if(scriptName == 'journal')
 	{
@@ -279,6 +295,9 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 		uitut.triggerCondition = EUITTC_OnMenuOpen;
 		uitut.priority = 10;
 		uitut.abortOnMenuClose = true;
+		uitut.requiredGameplayFactName = "in_combat";
+		uitut.requiredGameplayFactValueInt = 1;
+		uitut.requiredGameplayFactComparator = CO_Lesser;
 		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
 		
 		uitut.menuName = 'CommonMenu';
@@ -286,6 +305,9 @@ quest function TutorialScript(scriptName : name, tutorialMessageName : name)
 		uitut.triggerCondition = EUITTC_OnMenuOpen;
 		uitut.priority = 10;
 		uitut.abortOnMenuClose = true;
+		uitut.requiredGameplayFactName = "in_combat";
+		uitut.requiredGameplayFactValueInt = 1;
+		uitut.requiredGameplayFactComparator = CO_Lesser;
 		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
 	}
 	else
@@ -431,12 +453,9 @@ function TutorialScript2(scriptName : name, tutorialMessageName : name)
 	}
 	else if(scriptName == 'books')
 	{
-		uitut.menuName = 'InventoryMenu';
-		uitut.tutorialStateName = 'Books';
-		uitut.triggerCondition = EUITTC_OnMenuOpen;
-		uitut.priority = 29;	
-		uitut.abortOnMenuClose = true;
-		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
+		
+		
+		
 	}
 	else if(scriptName == 'readingRecipe')
 	{		
@@ -495,6 +514,10 @@ function TutorialScript3(scriptName : name, tutorialMessageName : name)
 		uitut.requiredGameplayFactComparator = CO_GreaterEq;
 		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
 	}
+	else if( scriptName == 'UnmarkMessageAsSeen' )
+	{
+		theGame.GetTutorialSystem().UnmarkMessageAsSeen( tutorialMessageName );
+	}
 	else if(scriptName == 'ToxCloudPause')
 	{
 		theGame.Pause("TutorialToxicGas");
@@ -510,6 +533,22 @@ function TutorialScript3(scriptName : name, tutorialMessageName : name)
 		uitut.triggerCondition = EUITTC_OnMenuOpen;
 		uitut.priority = 20;
 		uitut.abortOnMenuClose = true;
+		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
+	}	
+	else if(scriptName == 'newInventory')
+	{
+		uitut.menuName = 'InventoryMenu';
+		uitut.tutorialStateName = 'NewInventory';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 21;
+		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
+	}
+	else if(scriptName == 'newGeekpage')
+	{
+		uitut.menuName = 'InventoryMenu';
+		uitut.tutorialStateName = 'NewGeekpage';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 100;
 		theGame.GetTutorialSystem().uiHandler.RegisterUIHint(uitut);
 	}
 	else if(scriptName == 'finalizePrologue')
@@ -662,9 +701,13 @@ quest function TutorialMessage(message : STutorialMessage)
 	theGame.GetTutorialSystem().DisplayTutorial(message);
 }
 
-quest function TutorialsSetGameplaySettings(enable : bool)
+quest function TutorialsSetGameplaySettings( enable : bool )
 {
-	TutorialMessagesEnable(enable);
+	
+	if( theGame.IsFinalBuild() )
+	{
+		TutorialMessagesEnable( enable );
+	}
 }
 
 struct SRadialDesaturation
@@ -741,7 +784,7 @@ function ShouldProcessTutorial(scriptName : name) : bool
 	if(!theGame.GetTutorialSystem() || !theGame.GetTutorialSystem().IsRunning())
 		return false;
 		
-	return theGame.GetTutorialSystem() && theGame.GetTutorialSystem().IsRunning() && !theGame.GetTutorialSystem().HasSeenTutorial(scriptName);
+	return !theGame.GetTutorialSystem().HasSeenTutorial(scriptName);
 }
 
 function ShouldProcessInteractionTutorials() : bool

@@ -20,3 +20,16 @@ class CBTTaskCounterDecoratorDef extends IBehTreeTaskDefinition
 {
 	default instanceClass = 'CBTTaskCounterDecorator';
 }
+
+
+class CBTCondIsCountering extends IBehTreeTask
+{
+	function IsAvailable() : bool
+	{
+		return GetNPC().IsCountering();
+	}
+}
+class CBTCondIsCounteringDef extends IBehTreeTaskDefinition
+{
+	default instanceClass = 'CBTCondIsCountering';
+}

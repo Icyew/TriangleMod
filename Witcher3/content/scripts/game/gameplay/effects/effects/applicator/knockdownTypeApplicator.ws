@@ -103,7 +103,7 @@ class W3Effect_KnockdownTypeApplicator extends W3ApplicatorEffect
 		params.effectValue = customEffectValue;	
 		
 		target.AddEffectCustom(params);
-				
+		
 		
 		
 		isActive = true;

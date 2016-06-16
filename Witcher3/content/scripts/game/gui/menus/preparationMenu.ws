@@ -682,24 +682,25 @@ class CR4PreparationMenu extends CR4MenuBase
 	
 	event  OnGetAppliedOilTooltip(equipID:int) : void
 	{
-		var oilName : name;
-		var statsList			: CScriptedFlashArray;
-		var resultData 			: CScriptedFlashObject;
+		var oilName 		: name;
+		var statsList		: CScriptedFlashArray;
+		var resultData 		: CScriptedFlashObject;
+		var buff 			: W3Effect_Oil;
+		var id				: SItemUniqueId;
 		
-		if (equipID == EES_SilverSword)
-		{
-			oilName = _inv.GetOilNameOnSword(false);
-		}
-		else if (equipID == EES_SteelSword)
-		{
-			oilName = _inv.GetOilNameOnSword(true);
-		}
-		else
+		if( !GetWitcherPlayer().GetItemEquippedOnSlot( equipID, id ) )
 		{
 			return false;
 		}
 		
-		if (oilName == '')
+		buff = _inv.GetOldestOilAppliedOnItem( id, false );
+		if( !buff )
+		{
+			return false;
+		}
+		
+		oilName = buff.GetOilItemName();
+		if( oilName == '' )
 		{
 			return false;
 		}

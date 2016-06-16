@@ -182,6 +182,7 @@ import abstract class CScriptedFlashFunction extends IScriptedFlash
 	import final function InvokeSelfSixArgs		( arg0, arg1, arg2, arg3, arg4, arg5 : SFlashArg );
 	import final function InvokeSelfSevenArgs	( arg0, arg1, arg2, arg3, arg4, arg5, arg6 : SFlashArg );
 	import final function InvokeSelfEightArgs	( arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 : SFlashArg );
+	import final function InvokeSelfNineArgs	( arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 : SFlashArg );
 }
 
 import abstract class CScriptedFlashValueStorage extends IScriptedFlash

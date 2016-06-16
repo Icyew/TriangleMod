@@ -66,10 +66,10 @@ class W3Potion_Cat extends CBaseGameplayEffect
 		{
 			timeSinceLastEnemyHighlight += dt;
 			
-			if(timeSinceLastEnemyHighlight >= ENEMY_HIGHLIGHT_DT)
+			if(timeSinceLastEnemyHighlight >= ENEMY_HIGHLIGHT_DT * 0.9f )
 			{
 				timeSinceLastEnemyHighlight = 0;
-				witcher.HighlightEnemies(highlightEnemiesRange, 1);
+				witcher.HighlightEnemies( highlightEnemiesRange, ENEMY_HIGHLIGHT_DT );
 			}
 		}
 	}
@@ -105,6 +105,10 @@ class W3Potion_Cat extends CBaseGameplayEffect
 	
 	private final function EnableScreenFx(en : bool)
 	{
+		var buffs : array< CBaseGameplayEffect >;
+		var i : int;
+		var catBuff : W3Potion_Cat;
+		
 		if(en)
 		{
 			EnableCatViewFx( 1.0f );	
@@ -112,13 +116,25 @@ class W3Potion_Cat extends CBaseGameplayEffect
 			SetBrightnessCatViewFx(350.0f);
 			SetViewRangeCatViewFx(200.0f);
 			SetPositionCatViewFx( Vector(0,0,0,0) , true );	
-			SetHightlightCatViewFx( Vector(0.3f,0.1f,0.1f,0.1f),0.05f,1.5f);
+			SetHightlightCatViewFx( Vector(0.5f,0.2f,0.2f,1.f),0.05f,1.5f);
 			SetFogDensityCatViewFx( 0.5 );
 			isScreenFxActive = true;
 		}
 		else
 		{
 			isScreenFxActive = false;
+			
+			
+			buffs = target.GetBuffs();
+			for( i=0; i<buffs.Size(); i+=1 )
+			{
+				catBuff = (W3Potion_Cat) buffs[i];
+				if( catBuff && catBuff != this && catBuff.isScreenFxActive )
+				{
+					return;
+				}
+			}			
+			
 			DisableCatViewFx( 1.0f );
 		}
 	}

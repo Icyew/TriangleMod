@@ -18,7 +18,7 @@ class CBTTaskSetBehVarOnScriptEvent extends IBehTreeTask
 	var previousValueOnDurationEnd	: bool;
 	
 
-	latent function Main()
+	latent function Main() : EBTNodeStatus
 	{
 		var npc : CNewNPC = GetNPC();
 		
@@ -41,6 +41,8 @@ class CBTTaskSetBehVarOnScriptEvent extends IBehTreeTask
 				}
 			}
 		}
+		
+		return BTNS_Active;
 	}
 	
 	function OnDeactivate()

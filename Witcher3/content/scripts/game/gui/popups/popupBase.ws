@@ -40,10 +40,9 @@ class CR4PopupBase extends CR4Popup
 		SetPlatformType(theGame.GetPlatform());
 		setArabicAligmentMode();
 		UpdateAcceptCancelSwaping();
-		//SetPlatformType(Platform_PS4);
+		
 		
 		UpdateInputDeviceType();
-		//SetPlatformType(Platform_PS4);
 	}
 	
 	event  OnClosingPopup()
@@ -80,6 +79,7 @@ class CR4PopupBase extends CR4Popup
 		}
 	}
 	
+	
 	protected function UpdateControlSchemeLock():void
 	{
 		if (m_fxLockControlScheme && m_guiManager)
@@ -108,7 +108,6 @@ class CR4PopupBase extends CR4Popup
 	{
 		var language : string;
 		var audioLanguage : string;
-		
 		theGame.GetGameLanguageName(audioLanguage,language);
 		if (m_fxSetArabicAligmentMode)
 		{

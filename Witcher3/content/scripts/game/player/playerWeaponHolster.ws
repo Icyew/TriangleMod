@@ -178,9 +178,10 @@ statemachine class WeaponHolster
 		var inv : CInventoryComponent;
 		var heldItems	: array<name>;
 		var mountedItems	: array<name>;
-		var hasPhysicalWeapon : bool;
+		var hasPhysicalWeapon, disableAutoSheathe : bool;
 		var i : int;
 		var npc : CNewNPC;
+		var inGameConfigWrapper : CInGameConfigWrapper;
 		
 		if ( (W3ReplacerCiri)thePlayer  )
 		{
@@ -235,19 +236,29 @@ statemachine class WeaponHolster
 		}
 		else
 		{
+			inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+			disableAutoSheathe = inGameConfigWrapper.GetVarValue( 'Gameplay', 'DisableAutomaticSwordSheathe' );
 			
-			if(targetToDrawAgainst.UsesVitality())
+			if( disableAutoSheathe )
 			{
-				ret = PW_Steel;
-			}
-			else if(targetToDrawAgainst.UsesEssence())
-			{
-				ret = PW_Silver;
+				ret = PW_Fists;
 			}
 			else
 			{
-				LogAssert(false, "CR4Player.weaponHolsterSelectWeaponToDraw: target has neither vitality nor essesnce - don't know which weapon to use!");
-				ret = PW_Fists;
+				
+				if(targetToDrawAgainst.UsesVitality())
+				{
+					ret = PW_Steel;
+				}
+				else if(targetToDrawAgainst.UsesEssence())
+				{
+					ret = PW_Silver;
+				}
+				else
+				{
+					LogAssert(false, "CR4Player.weaponHolsterSelectWeaponToDraw: target has neither vitality nor essesnce - don't know which weapon to use!");
+					ret = PW_Fists;
+				}
 			}
 		}
 		
@@ -498,18 +509,28 @@ state SelectingWeapon in WeaponHolster
 		
 		if( weaponType == PW_Steel || weaponType == PW_Silver )
 		{
-			thePlayer.AddOilBuff( weaponType == PW_Steel );			
+			thePlayer.ResumeOilBuffs( weaponType == PW_Steel );
+			thePlayer.PlayRuneword4FX(weaponType);
+			
+			thePlayer.GetBuff( EET_LynxSetBonus ).Resume( 'drawing weapon' );
 		}
 		
-		if(weaponType == PW_Steel || weaponType == PW_Silver)
-			thePlayer.PlayRuneword4FX(weaponType);
-	
+		if( weaponType == PW_Silver )
+		{
+			thePlayer.ManageAerondightBuff( true );
+		}
+
 		if ( parent.GetCurrentMeleeWeapon() != weaponType || weaponType == PW_Fists || weaponType == PW_None )
 		{
 			parent.UnqueueMeleeWeapon();
 			parent.SetCurrentMeleWeapon( weaponType );
 			parent.UpdateBehGraph();
 			thePlayer.SetBehaviorVariable( 'playerWeaponLatent', thePlayer.GetBehaviorVariable( 'playerWeapon' ) );
+		}
+		
+		if( weaponType == PW_None )
+		{
+			thePlayer.AddTimer( 'DelayedTryToReequipWeapon', 0.0f, false );
 		}
 	}
 	

@@ -44,7 +44,7 @@ abstract class W3RegenEffect extends CBaseGameplayEffect
 			
 			if (isOnPlayer && regenStat == CRS_Stamina && attributeName == RegenStatEnumToName(regenStat) && GetWitcherPlayer())
 			{
-				baseStaminaRegenVal = CalculatedArmorStaminaRegenBonus();
+				baseStaminaRegenVal = GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
 				
 				regenPoints *= 1 + baseStaminaRegenVal;
 			}
@@ -62,56 +62,7 @@ abstract class W3RegenEffect extends CBaseGameplayEffect
 			if( regenPoints > 0 )
 				effectManager.CacheStatUpdate(stat, regenPoints * dt);
 		}
-	}
-	
-	protected function CalculatedArmorStaminaRegenBonus() : float
-	{
-		var armorEq, glovesEq, pantsEq, bootsEq : bool;
-		var tempItem : SItemUniqueId;
-		var staminaRegenVal : float;
-		var armorRegenVal : SAbilityAttributeValue;
-		
-		armorEq = target.GetInventory().GetItemEquippedOnSlot( EES_Armor, tempItem );
-		glovesEq = target.GetInventory().GetItemEquippedOnSlot( EES_Gloves, tempItem );
-		pantsEq = target.GetInventory().GetItemEquippedOnSlot( EES_Pants, tempItem );
-		bootsEq =  target.GetInventory().GetItemEquippedOnSlot( EES_Boots, tempItem );
-		
-		
-		if ( target.HasAbility( 'Glyphword 2 _Stats', true ))
-		{
-			if ( armorEq )
-				staminaRegenVal += 0.1;
-			if ( glovesEq )
-				staminaRegenVal += 0.02;
-			if ( pantsEq )
-				staminaRegenVal += 0.1;
-			if ( bootsEq )
-				staminaRegenVal += 0.03;
-			
-		}
-		else if ( target.HasAbility( 'Glyphword 3 _Stats', true ))
-		{
-			staminaRegenVal = 0;
-		}
-		else if ( target.HasAbility( 'Glyphword 4 _Stats', true ))
-		{
-			if ( armorEq )
-				staminaRegenVal -= 0.1;
-			if ( glovesEq )
-				staminaRegenVal -= 0.02;
-			if ( pantsEq )
-				staminaRegenVal -= 0.1;
-			if ( bootsEq )
-				staminaRegenVal -= 0.03;
-		}
-		else
-		{
-			armorRegenVal = GetWitcherPlayer().GetAttributeValue('staminaRegen_armor_mod');
-			staminaRegenVal = armorRegenVal.valueMultiplicative;
-		}
-		
-		return staminaRegenVal;
-	}
+	}	
 	
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{

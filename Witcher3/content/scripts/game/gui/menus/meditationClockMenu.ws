@@ -11,15 +11,21 @@ class CR4MeditationClockMenu extends CR4MenuBase
 {
 	private var m_fxSetBlockMeditation		 	: CScriptedFlashFunction;
 	private var m_fxSetCanMeditate			 	: CScriptedFlashFunction;
+	private var m_fxSetBonusMeditationTime	 	: CScriptedFlashFunction;
 	private var m_fxSetGeraltBackgroundVisible	: CScriptedFlashFunction;
-	private var canMeditateWait				 	: bool;
 	private var m_fxSet24HRFormat			 	: CScriptedFlashFunction;
+	
+	private var canMeditateWait				 	: bool;
 	private var isGameTimePaused			 	: bool;
+	
+	private var BONUS_MEDITATION_TIME : int;
+	default BONUS_MEDITATION_TIME = 1;
 
 	event  OnConfigUI()
 	{	
 		var commonMenu : CR4CommonMenu;
 		var locCode : string;
+		var initData : W3SingleMenuInitData;
 		
 		super.OnConfigUI();
 		
@@ -28,12 +34,23 @@ class CR4MeditationClockMenu extends CR4MenuBase
 		m_fxSetBlockMeditation = m_flashModule.GetMemberFlashFunction( "SetBlockMeditation" );
 		m_fxSet24HRFormat = m_flashModule.GetMemberFlashFunction( "Set24HRFormat" );
 		m_fxSetGeraltBackgroundVisible = m_flashModule.GetMemberFlashFunction( "setGeraltBackgroundVisible" );
+		m_fxSetBonusMeditationTime = m_flashModule.GetMemberFlashFunction( "setBonusMeditationTime" );
+		
+		m_fxSetBonusMeditationTime.InvokeSelfOneArg( FlashArgInt( BONUS_MEDITATION_TIME ) );
+		
 		
 		
 		
 		theGame.Unpause("menus");		
 		
-		if(GetWitcherPlayer().CanMeditate() && GetWitcherPlayer().CanMeditateWait(true))
+		initData = (W3SingleMenuInitData)GetMenuInitData();
+		
+		if( initData && initData.isBonusMeditationAvailable )
+		{
+			SetMeditationBonuses();
+		}
+		
+		if(GetWitcherPlayer().CanMeditate() && GetWitcherPlayer().CanMeditateWait(true) || ( initData && initData.ignoreMeditationCheck ) )
 		{
 			canMeditateWait = true;
 			isGameTimePaused = false;			
@@ -55,7 +72,7 @@ class CR4MeditationClockMenu extends CR4MenuBase
 			m_fxSetGeraltBackgroundVisible.InvokeSelfOneArg(FlashArgBool(false)); 
 		}
 		
-		 m_fxSetBlockMeditation.InvokeSelfOneArg(FlashArgBool(!canMeditateWait));
+		m_fxSetBlockMeditation.InvokeSelfOneArg( FlashArgBool( !canMeditateWait ) );
 		
 		
 		
@@ -84,7 +101,14 @@ class CR4MeditationClockMenu extends CR4MenuBase
 		if (commonMenu)
 		{
 			commonMenu.SetMeditationMode(false);
+			
+			if( commonMenu.GetIsPlayerMeditatingInBed() )
+			{
+				GetWitcherPlayer().ManageSleeping();
+			}
 		}
+		
+		GetWitcherPlayer().MeditationClockStop();
 	}
 	
 	event  OnCloseMenu()
@@ -99,12 +123,155 @@ class CR4MeditationClockMenu extends CR4MenuBase
 			theGame.Pause("menus");
 		}
 		
-		GetWitcherPlayer().MeditationClockStop();
+
+		
 		CloseMenu();
+		
 		if( m_parentMenu )
 		{
 			m_parentMenu.ChildRequestCloseMenu();
 		}
+	}
+	
+	private function SetMeditationBonuses():void
+	{
+		var defManager	: CDefinitionsManagerAccessor;
+		var flashObject	: CScriptedFlashObject;
+		var flashArray	: CScriptedFlashArray;
+		var bedEntity	: W3WitcherBed;
+		var bedLevel	: int;
+		var min, max    : SAbilityAttributeValue;
+		var arrStr		: array< string >;
+		var abilityVal  : float;
+		var durationStr : string;
+		var bedLevelString	: string;
+		
+		defManager = theGame.GetDefinitionsManager();
+		bedEntity = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );
+		flashArray = m_flashValueStorage.CreateTempFlashArray();
+		
+		
+		
+		if( bedEntity )
+		{
+			flashObject = m_flashValueStorage.CreateTempFlashObject();
+			
+			bedLevel = bedEntity.GetBedLevel();
+			
+			if( bedLevel > 0 )
+			{
+				flashObject.SetMemberFlashBool( "available",  true );
+			}
+			else
+			{
+				flashObject.SetMemberFlashBool( "available",  false );
+				bedLevel = 1;
+			}
+			
+			bedLevelString = "bed_level_" + IntToString( bedLevel );
+			
+			arrStr.PushBack( IntToString( bedLevel ) );
+			flashObject.SetMemberFlashString( "title", GetLocStringByKeyExtWithParams( "panel_title_buff_bed",,, arrStr ) + " " + GetLocStringByKeyExt( bedLevelString ) );
+			arrStr.Clear();
+			
+			defManager.GetAbilityAttributeValue( 'WellRestedEffect', 'vitality', min, max);
+			abilityVal = CalculateAttributeValue( min );
+			if( bedLevel > 1 )
+				abilityVal *= 2;
+			arrStr.PushBack( FloatToStringPrec( abilityVal, 0 ) );
+			flashObject.SetMemberFlashString( "description", GetLocStringByKeyExtWithParams( "panel_buff_bed_descr",,, arrStr ) );
+			arrStr.Clear();
+			
+			defManager.GetAbilityAttributeValue( 'WellRestedEffect', 'duration', min, max);
+			abilityVal = CalculateAttributeValue( min );
+			if( bedLevel == 2 )
+				abilityVal *= 2;
+			arrStr.PushBack( FloatToString( abilityVal / 60 ) );
+			durationStr = GetLocStringByKeyExtWithParams( "panel_buff_duration",,, arrStr );
+			flashObject.SetMemberFlashString( "duration", durationStr );
+			arrStr.Clear();
+			
+			flashObject.SetMemberFlashString( "type", "bed" );
+			flashArray.PushBackFlashObject( flashObject );
+		}
+		
+		
+		
+		flashObject = m_flashValueStorage.CreateTempFlashObject();
+		
+		defManager.GetAbilityAttributeValue( 'BookshelfBuffEffect', 'nonhuman_exp_bonus_when_fatal', min, max);
+		abilityVal = CalculateAttributeValue( min );
+		arrStr.PushBack( FloatToStringPrec( ( abilityVal * 100 ), 0 ) );
+		flashObject.SetMemberFlashString( "description", GetLocStringByKeyExtWithParams( "panel_buff_bookshelf_descr",,, arrStr ) );
+		arrStr.Clear();
+		
+		defManager.GetAbilityAttributeValue( 'BookshelfBuffEffect', 'duration', min, max);
+		abilityVal = CalculateAttributeValue( min );
+		arrStr.PushBack( FloatToString( abilityVal / 60 ) );
+		durationStr = GetLocStringByKeyExtWithParams( "panel_buff_duration",,, arrStr );
+		flashObject.SetMemberFlashString( "duration", durationStr );
+		arrStr.Clear();
+		
+		flashObject.SetMemberFlashString( "title", GetLocStringByKeyExt( "panel_title_buff_bookshelf" ) );
+		flashObject.SetMemberFlashString( "type", "bookshelf" );
+		flashObject.SetMemberFlashBool( "available",  true );
+		
+		flashArray.PushBackFlashObject( flashObject );
+		
+		
+		
+		flashObject = m_flashValueStorage.CreateTempFlashObject();
+		flashObject.SetMemberFlashString( "title", GetLocStringByKeyExt( "panel_title_buff_alchemy_table" ) );
+		flashObject.SetMemberFlashString( "duration", "" );
+		flashObject.SetMemberFlashString( "type", "alchemytable" );
+		flashArray.PushBackFlashObject( flashObject );
+		
+		arrStr.PushBack( IntToString( theGame.params.QUANTITY_INCREASED_BY_ALCHEMY_TABLE ) );
+		flashObject.SetMemberFlashString( "description", GetLocStringByKeyExtWithParams( "panel_buff_alchemy_table_descr",,, arrStr ) );
+		arrStr.Clear();
+		
+		if( FactsDoesExist( "AlchemyTableExists" ) )
+		{
+			flashObject.SetMemberFlashBool( "available",  true );
+		}
+		else
+		{
+			flashObject.SetMemberFlashBool( "available",  false );
+		}
+		
+		
+		
+		flashObject = m_flashValueStorage.CreateTempFlashObject();
+		flashObject.SetMemberFlashString( "title", GetLocStringByKeyExt( "panel_title_buff_stables" ) );
+		flashObject.SetMemberFlashString( "type", "stable" );
+		
+		defManager.GetAbilityAttributeValue( 'HorseStableBuff', 'stamina', min, max );
+		abilityVal = CalculateAttributeValue( min );
+		arrStr.PushBack( FloatToStringPrec( abilityVal, 0 ) );
+		flashObject.SetMemberFlashString( "description", GetLocStringByKeyExtWithParams( "panel_buff_stables_descr",,,  arrStr ) );
+		arrStr.Clear();
+		
+		defManager.GetAbilityAttributeValue( 'HorseStableBuffEffect', 'duration', min, max );
+		abilityVal = CalculateAttributeValue( min );
+		arrStr.PushBack( FloatToString( abilityVal / 60 ) );
+		durationStr = GetLocStringByKeyExtWithParams( "panel_buff_duration",,, arrStr );
+		flashObject.SetMemberFlashString( "duration", durationStr );
+		arrStr.Clear();
+		
+		if( FactsDoesExist( "StablesExists" ) )
+		{
+			flashObject.SetMemberFlashBool( "available",  true );
+		}
+		else
+		{
+			flashObject.SetMemberFlashBool( "available",  false );
+		}
+		
+		flashArray.PushBackFlashObject( flashObject );
+		
+		
+		
+		m_flashValueStorage.SetFlashArray( "meditation.bonus", flashArray );
 	}
 	
 	function SetButtons()
@@ -145,19 +312,20 @@ class CR4MeditationClockMenu extends CR4MenuBase
 				theGame.Unpause("menus");
 			}
 			
-			GetWitcherPlayer().Meditate();
-			
-			OnPlaySoundEvent( "gui_meditation_start" );
-			
-			LogChannel('CLOCK',"	** OnMeditate ** ");
-			if(dayTime == GameTimeHours(theGame.GetGameTime()))
-				return false;
-			
-			medd = (W3PlayerWitcherStateMeditation)thePlayer.GetCurrentState();
-			medd.MeditationWait(CeilF(dayTime));
-			
-			
-			StartWaiting();
+			if( GetWitcherPlayer().Meditate() )
+			{
+				OnPlaySoundEvent( "gui_meditation_start" );
+				
+				LogChannel('CLOCK',"	** OnMeditate ** ");
+				if(dayTime == GameTimeHours(theGame.GetGameTime()))
+					return false;
+				
+				medd = (W3PlayerWitcherStateMeditation)thePlayer.GetCurrentState();
+				medd.MeditationWait(CeilF(dayTime));
+				
+				
+				StartWaiting();
+			}
 		}
 	} 
 	

@@ -51,28 +51,35 @@ import class IBehTreeTask extends IScriptable
 
 	import final function GetEventParamBaseDamage() : CBaseDamage;
 	
-	public function InitializeCombatStorage() : CAIStorageHandler
+	import final function GetReactionEventInvoker() : CEntity;
+	
+	import final function RequestStorageItem( itemName : name, itemClass : name ) : IScriptable;
+	import final function FindStorageItem( itemName : name, itemClass : name ) : IScriptable;
+	
+	public function InitializeCombatStorage() : IScriptable
 	{
-		var storageHandler : CAIStorageHandler = new CAIStorageHandler in this;
 		var actor : CActor = GetActor();
-		var className : name = '*CBaseAICombatStorage';
+		var className : name = 'CBaseAICombatStorage';
 		
 		
 		if( actor.HasTag( 'eredin' ) )
 		{
-			className = '*CBossAICombatStorage';
+			className = 'CBossAICombatStorage';
 		}
-		else if( actor.IsHuman() || actor.GetMovingAgentComponent().GetName() == "wild_hunt_base" )
+		else if( actor.HasTag( 'archespor' ) )
 		{
-			className = '*CHumanAICombatStorage';
+			className = 'CArchesporeAICombatStorage';
+		}
+		else if( actor.IsHuman() || actor.GetMovingAgentComponent().GetName() == "wild_hunt_base" || actor.HasTag( 'dettlaff_vampire' ) || actor.HasTag( 'mq7017_knight' ) )
+		{
+			className = 'CHumanAICombatStorage';
 		}
 		else if( actor.HasTag( 'black_spider' ) )
 		{
-			className = '*CExtendedAICombatStorage';
+			className = 'CExtendedAICombatStorage';
 		}
 		
-		storageHandler.Initialize( 'CombatData', className, this );
-		return storageHandler;
+		return RequestStorageItem( 'CombatData', className );
 	}
 	
 	

@@ -32,7 +32,6 @@ class W3SummonedEntityComponent extends CScriptedComponent
 	public function Init ( _Summoner : CActor )
 	{
 		var l_npc 	: CNewNPC;
-		var l_ga	: CAreaComponent;
 		
 		m_Summoner 		= _Summoner;
 		m_SummonedTime 	= theGame.GetEngineTimeAsSeconds();
@@ -40,8 +39,7 @@ class W3SummonedEntityComponent extends CScriptedComponent
 		l_npc = (CNewNPC) GetEntity();
 		if( l_npc && shouldUseSummonerGuardArea )
 		{
-			l_ga = ((CNewNPC) _Summoner).GetGuardArea();
-			l_npc.SetGuardArea( l_ga );
+			l_npc.DeriveGuardArea( (CNewNPC) _Summoner );
 		}
 	}
 	
@@ -61,7 +59,7 @@ class W3SummonedEntityComponent extends CScriptedComponent
 		{
 			npc = (CNewNPC)GetEntity();
 			npc.AddTag( 'AchievementKillDontCount' );
-			npc.Kill();
+			npc.Kill( 'Summoner Death' );
 		}
 		flies = (W3SummonedFlies) GetEntity();		
 		if( flies )

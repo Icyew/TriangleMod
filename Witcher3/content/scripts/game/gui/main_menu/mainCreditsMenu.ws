@@ -21,7 +21,8 @@ struct CreditsSection
 enum CreditsIndex
 {
 	CreditsIndex_Wither3 = 0,
-	CreditsIndex_Ep1 = 1
+	CreditsIndex_Ep1 = 1,
+	CreditsIndex_Ep2 = 2
 }
 
 class CR4MainCreditsMenu extends CR4MenuBase
@@ -32,6 +33,7 @@ class CR4MainCreditsMenu extends CR4MenuBase
 	private var	m_fxAddScrollingTextSFF : CScriptedFlashFunction;
 	private var	m_fxStartScrollingTextSFF : CScriptedFlashFunction;
 	private var	m_fxChangedConstraintedStateSFF : CScriptedFlashFunction;
+	private var	m_fxSetThankYouText : CScriptedFlashFunction;
 	
 	private var legalTextOverride : bool; default legalTextOverride = false;
 	public var shouldCloseOnMovieEnd: bool;
@@ -57,6 +59,7 @@ class CR4MainCreditsMenu extends CR4MenuBase
 		m_fxAddScrollingTextSFF		= flashModule.GetMemberFlashFunction( "addScrollingText" );
 		m_fxStartScrollingTextSFF	= flashModule.GetMemberFlashFunction( "startScrollingText" );
 		m_fxChangedConstraintedStateSFF = flashModule.GetMemberFlashFunction( "changedConstraintedState" );
+		m_fxSetThankYouText         = flashModule.GetMemberFlashFunction( "setThankYouText" );
 
 		m_fxSetScrollingSpeedSFF.InvokeSelfOneArg( FlashArgNumber( SCROLLING_SPEED ) );
 
@@ -76,7 +79,7 @@ class CR4MainCreditsMenu extends CR4MenuBase
 		theSound.StopMusic();
 		theSound.SoundEvent('play_music_main_menu');
 		
-		if ( theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Ep1 )
+		if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep1 )
 		{
 			if ( theGame.IsActive() && FactsQuerySum( "q605_mirror_banished" ) > 0 )
 			{
@@ -87,7 +90,13 @@ class CR4MainCreditsMenu extends CR4MenuBase
 				theSound.SoundEvent( 'mus_credits_usm_ep1' );
 			}
 		}
-		else if ( theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Wither3 )
+		else if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep2 )
+		{
+			theSound.SoundEvent('play_music_toussaint' );
+			theSound.SoundEvent( 'mus_credits_ep2_main' );
+			m_fxSetThankYouText.InvokeSelfOneArg( FlashArgString( GetLocStringByKey("credits_thank_you_note") ) );
+		}
+		else if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Wither3 )
 		{
 			theSound.SoundEvent( 'mus_credits_usm' );
 		}
@@ -123,13 +132,17 @@ class CR4MainCreditsMenu extends CR4MenuBase
 		
 		sectionID = -1;
 		
-		if (theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Wither3)
+		if (theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Wither3)
 		{
 			creditsCSV = LoadCSV("gameplay\globals\credits.csv");
 		}
-		else if (theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Ep1)
+		else if (theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep1)
 		{
 			creditsCSV = LoadCSV("gameplay\globals\credits_ep1.csv");
+		}
+		else if (theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep2)
+		{
+			creditsCSV = LoadCSV("gameplay\globals\credits_ep2.csv");
 		}
 		
 		rowsCount = creditsCSV.GetNumRows();
@@ -228,7 +241,7 @@ class CR4MainCreditsMenu extends CR4MenuBase
 			{
 				playedSecondSection = true;
 				
-				if ( theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Ep1 )
+				if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep1 )
 				{
 					if ( theGame.IsActive() && FactsQuerySum( "q605_mirror_banished" ) > 0 )
 					{
@@ -239,7 +252,11 @@ class CR4MainCreditsMenu extends CR4MenuBase
 						theSound.SoundEvent( 'mus_credits_secondary_ep1' );
 					}
 				}
-				else if ( theGame.GetGuiManager().lastRequestedCreditsIndex == CreditsIndex_Wither3 )
+				else if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Ep2 )
+				{
+					theSound.SoundEvent( 'mus_credits_ep2_secondary' );
+				}
+				else if ( theGame.GetGuiManager().GetLastRequestedCreditsIndex() == CreditsIndex_Wither3 )
 				{
 					theSound.SoundEvent( 'mus_credits_secondary' );
 				}
@@ -376,7 +393,13 @@ class CR4MainCreditsMenu extends CR4MenuBase
 			
 			if (ingameMenu)
 			{
-				if ( theGame.GetDLCManager().IsEP1Available() )
+				if ( theGame.GetDLCManager().IsEP2Available() )
+				{
+					theSound.SoundEvent('stop_music' );
+					theSound.SoundEvent('play_music_toussaint' );
+					theSound.SoundEvent('mus_main_menu_ep2');
+				}
+				else if ( theGame.GetDLCManager().IsEP1Available() )
 				{
 					theSound.SoundEvent('mus_main_menu_theme_ep1');
 				}
@@ -423,9 +446,14 @@ exec function crd()
 	theGame.GetGuiManager().RequestCreditsMenu(CreditsIndex_Wither3);
 }
 
-exec function casttest()
+exec function crd2()
+{
+	theGame.GetGuiManager().RequestCreditsMenu(CreditsIndex_Ep2);
+}
+
+exec function eu()
 {
 	var tempStr : string;
-	tempStr = GetLocStringByKeyExt( "credits_CAST" );
+	tempStr = GetLocStringByKeyExt( "credits_EU_LOGO" );
 	LogChannel('', "[" + tempStr + "]" );
 }

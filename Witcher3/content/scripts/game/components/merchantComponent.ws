@@ -16,7 +16,10 @@ enum EMerchantMapPinType
 	EMMPT_Herbalist,
 	EMMPT_Alchemist,
 	EMMPT_Innkeeper,
-	EMMPT_Enchanter
+	EMMPT_Enchanter,
+	EMMPT_DyeTrader,
+	EMMPT_WineTrader,
+	EMMPT_Cammerlengo
 }
 
 class W3MerchantComponent extends CScriptedComponent
@@ -46,6 +49,12 @@ class W3MerchantComponent extends CScriptedComponent
 				return 'Innkeeper';
 			case EMMPT_Enchanter:
 				return 'Enchanter';
+			case EMMPT_DyeTrader:
+				return 'DyeMerchant';
+			case EMMPT_WineTrader:
+				return 'WineMerchant';
+			case EMMPT_Cammerlengo:
+				return 'Cammerlengo';
 		}
 		return '';
 	}

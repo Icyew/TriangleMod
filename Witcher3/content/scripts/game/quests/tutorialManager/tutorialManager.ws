@@ -61,6 +61,11 @@ import class CR4TutorialSystem extends IGameSystem
 	{
 		return FactsQuerySum("tutorial_system_is_running");
 	}
+	
+	public function IsOnTickOptimalizationEnabled() : bool
+	{
+		return !needsTickEvent;
+	}
 		
 	public function IncreaseDodges()					{FactsAdd("tutorial_dodges_cnt");}
 	public function IncreaseRolls()						{FactsAdd("tutorial_rolls_cnt");}
@@ -92,8 +97,7 @@ import class CR4TutorialSystem extends IGameSystem
 		ActivateJournalEntry('TutorialJournalHeavyAttacks');
 		ActivateJournalEntry('TutorialHorseSummon');
 		ActivateJournalEntry('TutorialJournalLightAttacks');
-		ActivateJournalEntry('TutorialJournalSpecialAttacks');
-		ActivateJournalEntry('TutorialCiriCharge');
+		ActivateJournalEntry('TutorialJournalSpecialAttacks');		
 		ActivateJournalEntry('TutorialAdrenaline');
 	}
 	
@@ -119,6 +123,33 @@ import class CR4TutorialSystem extends IGameSystem
 		attackProcessed = false;
 		m_tutorialHintDataObj = NULL;
 		testData = NULL;
+	}
+	
+	
+	public function TutorialRestart()	
+	{
+		if(IsRunning())
+			return;
+			
+		ClearSavedVars();
+				
+		wereMessagesEnabled = AreMessagesEnabled();
+		uiHandler = new W3TutorialManagerUIHandler in this;
+		
+		
+		MarkMessageAsSeen('TutorialDialog');
+		MarkMessageAsSeen('TutorialContainers');
+		MarkMessageAsSeen('TutorialLootWindow');
+		MarkMessageAsSeen('TutorialHorseStop');
+		MarkMessageAsSeen('TutorialQuestBoard');
+		MarkMessageAsSeen('TutorialCiriTaunt');
+		MarkMessageAsSeen('TutorialWrongSwordSteel');
+		MarkMessageAsSeen('TutorialWrongSwordSilver');
+		MarkMessageAsSeen('TutorialCampfire');
+		MarkMessageAsSeen('TutorialPotionAmmo');
+		MarkMessageAsSeen('TutorialOilAmmo');
+		
+		FactsSet("tutorial_system_is_running", 1);	
 	}
 	
 	
@@ -419,7 +450,7 @@ import class CR4TutorialSystem extends IGameSystem
 		SelectAndDisplayTutorial(queuedTutorials[0]);
 		delayedQueuedTutorialShowTime = 0;
 		
-		LogTutorial("Show index is now: 0");
+		
 	}
 	
 	
@@ -437,11 +468,12 @@ import class CR4TutorialSystem extends IGameSystem
 				factOnSeen = queuedTutorials[i].factOnFinishedDisplay;
 				
 				
-				if(!closedByUIPanel)
+				if( !closedByUIPanel || willBeCloned )
 				{					
 					
 					
-					if(queuedTutorials[i].markAsSeenOnShow)
+					
+					if(queuedTutorials[i].markAsSeenOnShow  && !willBeCloned)
 						MarkMessageAsSeen(queuedTutorials[i].tutorialScriptTag);
 						
 					queuedTutorials.Erase(i);
@@ -450,7 +482,7 @@ import class CR4TutorialSystem extends IGameSystem
 				if(i == 0)
 				{
 					currentlyShownTutorialIndex = -1;
-					LogTutorial("Show index is now: -1");
+					
 				}
 				
 				LogTutorial("Closed tutorial <<" + scriptName + ">>, fromUI = " + closedByUIPanel );
@@ -479,9 +511,12 @@ import class CR4TutorialSystem extends IGameSystem
 	}
 	
 	
-	event OnTutorialClosed(scriptName : name, closedByUIPanel : bool)
+	event OnTutorialClosed(scriptName : name, closedByUIPanel : bool, informUIHandler : bool)
 	{
-		uiHandler.OnTutorialClosed(scriptName, closedByUIPanel);
+		if( informUIHandler )
+		{
+			uiHandler.OnTutorialClosed(scriptName, closedByUIPanel);
+		}
 	}
 	
 	
@@ -627,6 +662,8 @@ import class CR4TutorialSystem extends IGameSystem
 		
 		showNextHintInstantly = false;
 		currentlyShownTutorialIndex = 0;
+		
+		LogTutorial( "Now showing tutorial <<" + tut.tutorialScriptTag + ">>" );
 	}
 	
 	private function DisplayHUDTutorialHighlight(tutorialName : name ,bShow : bool )
@@ -696,6 +733,7 @@ import class CR4TutorialSystem extends IGameSystem
 		
 		if(!entryBase)
 		{
+			LogTutorial( "Cannot load journal entry file for <<" + scriptTag + ">>" );		
 			LogAssert(false, "W3TutorialManager.GetMessageText: cannot load resource <<" + scriptTag + ">>!");
 			return NULL;
 		}
@@ -758,7 +796,7 @@ import class CR4TutorialSystem extends IGameSystem
 			m_tutorialHintDataObj.CloseTutorialPopup(dontRemoveFromQueue);
 			
 			
-			OnTutorialClosing(scriptTag, false, true);
+			OnTutorialClosing(scriptTag, dontRemoveFromQueue, true);
 			
 			currentlyShownTutorialIndex = -1;	
 				
@@ -777,7 +815,9 @@ import class CR4TutorialSystem extends IGameSystem
 				{
 					if(queuedTutorials[i].tutorialScriptTag == scriptTag)
 					{						
-						queuedTutorials.Erase(i);	
+						
+						queuedTutorials.Erase(i);
+						i -= 1;
 					}
 				}
 			}
@@ -794,9 +834,9 @@ import class CR4TutorialSystem extends IGameSystem
 		OnTutorialClosing(scriptTag, forcedClose, willBeCloned);
 	}
 	
-	public function OnTutorialHintClosed(scriptTag : name, forcedClose:bool)
+	public function OnTutorialHintClosed(scriptTag : name, forcedClose:bool, informUIHandler : bool )
 	{
-		OnTutorialClosed(scriptTag, forcedClose);
+		OnTutorialClosed(scriptTag, forcedClose, informUIHandler);
 		
 		
 			DisplayHUDTutorialHighlight(scriptTag,false);
@@ -1238,13 +1278,13 @@ import class CR4TutorialSystem extends IGameSystem
 		thePlayer.BlockAllActions('tut_forced_preparation', false);
 		
 		
-		uiHandler.UnregisterUIHint('ForcedAlchemy');
+		uiHandler.UnregisterUIState('ForcedAlchemy');
 		
 		
-		uiHandler.UnregisterUIHint('Alchemy', "forced");
+		uiHandler.UnregisterUIState('Alchemy', "forced");
 			
 		
-		uiHandler.UnregisterUIHint('Potions', "forced");
+		uiHandler.UnregisterUIState('Potions', "forced");
 	}
 	
 	public final function RemoveAllQueuedTutorials()

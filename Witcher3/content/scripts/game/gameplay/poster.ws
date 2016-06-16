@@ -10,14 +10,17 @@ statemachine class W3Signboard  extends W3Poster
 
 statemachine class W3Poster extends CGameplayEntity
 {	
+	var descriptionGenerated			 	: bool;	
 	editable var description			 	: string;
 	editable var camera					 	: CEntityTemplate;
 	editable var factOnRead				 	: string;
+	editable var factOnInteraction			: string;
 	editable var blendInTime				: float; default blendInTime = 0.f;
 	editable var blendOutTime				: float; default blendOutTime = 0.f;
 	editable var fadeStartDuration			: float; default fadeStartDuration =  1.5;
 	editable var fadeEndDuration			: float; default fadeEndDuration =  1.5;
 	editable var focusModeHighlight			: EFocusModeVisibility; default focusModeHighlight = FMV_Interactive;
+	editable var alignLeft					: bool; default alignLeft = false;
 	
 	private var restoreUsableItemAtEnd		: bool;
 	
@@ -55,6 +58,17 @@ statemachine class W3Poster extends CGameplayEntity
 		return description;
 	}
 	
+	function IsTextAlignedToLeft() : bool
+	{
+		return alignLeft;
+	}
+	
+	
+	function GetIsDescriptionGenerated() : bool
+	{
+		return descriptionGenerated;
+	}
+	
 	function OnStartedObservingPoster()
 	{
 		var itemL : W3UsableItem;
@@ -73,6 +87,10 @@ statemachine class W3Poster extends CGameplayEntity
 				restoreUsableItemAtEnd = true;
 			}
 			
+		}
+		if ( factOnInteraction != "" && !FactsDoesExist ( factOnInteraction ) )
+		{
+			FactsAdd ( factOnInteraction, 1, -1 );
 		}
 		theInput.StoreContext( 'EMPTY_CONTEXT' );
 		thePlayer.BlockAction(EIAB_Interactions, 'Poster' );
@@ -157,4 +175,25 @@ state PosterObserved in W3Poster
 		parent.OnEndedObservingPoster();
 		super.OnLeaveState( nextStateName );
 	}
+}
+
+
+class W3SavedPoster extends W3Poster
+{
+	saved var savedFocusModeHighlight	: EFocusModeVisibility;
+	
+	event OnSpawned( spawnData : SEntitySpawnData )
+	{
+		
+		if ( spawnData.restored )
+		{
+			focusModeHighlight = savedFocusModeHighlight;
+		}
+		
+		else
+		{
+			savedFocusModeHighlight = focusModeHighlight;
+		}
+		super.OnSpawned( spawnData );
+	}	
 }

@@ -198,6 +198,8 @@ state Sailing in CR4Player extends UseGenericVehicle
 		return 0.0f;
 	}
 	
+	private var m_shouldEnableAutoRotation : bool;
+	
 	event OnGameCameraTick( out moveData : SCameraMovementData, dt : float )
 	{
 		var turnFactor  : float;
@@ -214,7 +216,35 @@ state Sailing in CR4Player extends UseGenericVehicle
 		var cameraToBoatDot : float;
 		var turnFactorSum : float;
 		
+		var camera : CCustomCamera;
+		var angleDist : float;
+		
 		parent.UpdateLookAtTarget();
+		
+		
+		camera = (CCustomCamera)theCamera.GetTopmostCameraObject();
+		
+		if( theInput.LastUsedGamepad() )
+		{
+			angleDist = AngleDistance( parent.GetHeading(), camera.GetHeading() );
+			
+			if( thePlayer.GetAutoCameraCenter() || ( !m_shouldEnableAutoRotation && AbsF(angleDist) <= 30.0f ) )
+			{
+				m_shouldEnableAutoRotation = true;
+			}
+			else if( m_shouldEnableAutoRotation && !thePlayer.GetAutoCameraCenter() && camera.IsManualControledHor() )
+			{
+				m_shouldEnableAutoRotation = false;
+			}
+		}
+		else
+		{
+			m_shouldEnableAutoRotation = thePlayer.GetAutoCameraCenter();
+		}
+		
+		camera.SetAllowAutoRotation( m_shouldEnableAutoRotation );
+		
+		
 		
 		boatComponent = (CBoatComponent)vehicle;
 		if( boatComponent )

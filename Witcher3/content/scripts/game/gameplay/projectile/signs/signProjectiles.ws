@@ -8,28 +8,62 @@ class W3AardProjectile extends W3SignProjectile
 {
 	protected var staminaDrainPerc : float;
 	
+	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
+	{
+		var projectileVictim : CProjectileTrajectory;
+		
+		projectileVictim = (CProjectileTrajectory)collidingComponent.GetEntity();
+		
+		if( projectileVictim )
+		{
+			projectileVictim.OnAardHit( this );
+		}
+		
+		super.OnProjectileCollision( pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex );
+	}
+	
 	protected function ProcessCollision( collider : CGameplayEntity, pos, normal : Vector )
 	{
 		var dmgVal : float;
 		var sp : SAbilityAttributeValue;
+		var isMutation6 : bool;
+		var victimNPC : CNewNPC;
 	
+		
 		if ( hitEntities.FindFirst( collider ) != -1 )
 		{
 			return;
 		}
+		
+		
 		hitEntities.PushBack( collider );
 	
 		super.ProcessCollision( collider, pos, normal );
 		
+		victimNPC = (CNewNPC) collider;
+		
+		
+		if( IsRequiredAttitudeBetween(victimNPC, caster, true ) )
+		{
+			isMutation6 = ( ( W3PlayerWitcher )owner.GetPlayer() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation6 ) );
+			if( isMutation6 )
+			{
+				action.SetBuffSourceName( "Mutation6" );
+			}		
+			else if ( owner.CanUseSkill(S_Magic_s06) )		
+			{			
+				
+				dmgVal = GetWitcherPlayer().GetSkillLevel(S_Magic_s06) * CalculateAttributeValue( owner.GetSkillAttributeValue( S_Magic_s06, theGame.params.DAMAGE_NAME_FORCE, false, true ) );
+				action.AddDamage( theGame.params.DAMAGE_NAME_FORCE, dmgVal );
+			}
+		}
+		else
+		{
+			isMutation6 = false;
+		}
+		
 		action.SetHitAnimationPlayType(EAHA_ForceNo);
 		action.SetProcessBuffsIfNoDamage(true);
-		
-		
-		if ( owner.CanUseSkill(S_Magic_s06) )
-		{			
-			dmgVal = GetWitcherPlayer().GetSkillLevel(S_Magic_s06) * CalculateAttributeValue( owner.GetSkillAttributeValue( S_Magic_s06, theGame.params.DAMAGE_NAME_FORCE, false, true ) );
-			action.AddDamage( theGame.params.DAMAGE_NAME_FORCE, dmgVal );
-		}
 		
 		
 		if ( !owner.IsPlayer() )
@@ -44,7 +78,86 @@ class W3AardProjectile extends W3SignProjectile
 		
 		theGame.damageMgr.ProcessAction( action );
 		
-		collider.OnAardHit( this );		
+		collider.OnAardHit( this );
+		
+		
+		if( isMutation6 && victimNPC && victimNPC.IsAlive() )
+		{
+			ProcessMutation6( victimNPC );
+		}
+	}
+	
+	private final function ProcessMutation6( victimNPC : CNewNPC )
+	{
+		var result : EEffectInteract;
+		var mutationAction : W3DamageAction;
+		var min, max : SAbilityAttributeValue;
+		var dmgVal : float;
+		var instaKill, hasKnockdown, applySlowdown : bool;
+				
+		instaKill = false;
+		hasKnockdown = victimNPC.HasBuff( EET_Knockdown ) || victimNPC.HasBuff( EET_HeavyKnockdown ) || victimNPC.GetIsRecoveringFromKnockdown();
+		
+		
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'full_freeze_chance', min, max );
+		if( RandF() >= min.valueMultiplicative )
+		{
+			
+			applySlowdown = true;			
+			instaKill = false;
+		}
+		else
+		{
+			
+			if( victimNPC.IsImmuneToInstantKill() )
+			{
+				result = EI_Deny;
+			}
+			else
+			{
+				result = victimNPC.AddEffectDefault( EET_Frozen, this, "Mutation 6", true );
+			}
+			
+			
+			if( EffectInteractionSuccessfull( result ) && hasKnockdown )				
+			{
+				
+				mutationAction = new W3DamageAction in theGame.damageMgr;
+				mutationAction.Initialize( action.attacker, victimNPC, this, "Mutation 6", EHRT_None, CPS_Undefined, false, false, true, false );
+				mutationAction.SetInstantKill();
+				mutationAction.SetForceExplosionDismemberment();
+				mutationAction.SetIgnoreInstantKillCooldown();
+				theGame.damageMgr.ProcessAction( mutationAction );
+				delete mutationAction;
+				instaKill = true;
+			}
+		}
+		
+		if( applySlowdown && !hasKnockdown )
+		{
+			victimNPC.AddEffectDefault( EET_SlowdownFrost, this, "Mutation 6", true );
+		}
+		
+		
+		if( !instaKill && !victimNPC.HasBuff( EET_Frozen ) )
+		{			
+			if ( owner.CanUseSkill(S_Magic_s06) )
+			{
+				dmgVal = GetWitcherPlayer().GetSkillLevel(S_Magic_s06) * CalculateAttributeValue( owner.GetSkillAttributeValue( S_Magic_s06, theGame.params.DAMAGE_NAME_FORCE, false, true ) );
+				action.AddDamage( theGame.params.DAMAGE_NAME_FORCE, dmgVal );
+			}
+			
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'ForceDamage', min, max );
+			dmgVal = CalculateAttributeValue( min );
+			action.AddDamage( theGame.params.DAMAGE_NAME_FORCE, dmgVal );
+			
+			action.ClearEffects();
+			action.SetProcessBuffsIfNoDamage( false );
+			action.SetForceExplosionDismemberment();
+			action.SetIgnoreInstantKillCooldown();
+			action.SetBuffSourceName( "Mutation 6" );
+			theGame.damageMgr.ProcessAction( action );
+		}
 	}
 	
 	event OnAttackRangeHit( entity : CGameplayEntity )

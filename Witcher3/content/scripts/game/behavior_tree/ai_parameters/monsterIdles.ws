@@ -93,6 +93,19 @@ class CAIMonsterIdleDecorator extends CAIIdleDecoratorTree
 	}
 }
 
+
+class CAIScolopendromorphIdleDecorator extends CAIMonsterIdleDecorator
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_scolopendromorph_idle_logic.w2behtree";
+}
+
+
+class CAIEchinopsIdleDecorator extends CAIMonsterIdleDecorator
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_echinops_idle_logic.w2behtree";
+}
+
+
 class CAIMonsterIdleDecoratorParams extends CAIIdleParameters
 {
 	editable inlined var reactionTree 		: CAIMonsterReactionsTree;
@@ -134,6 +147,26 @@ class CAIMonsterIdleDecoratorArachas extends CAIMonsterIdleDecorator
 		params.searchFoodTree = eat;
 		params.actions.PushBack( dig );
 	}
+};
+
+
+
+class CAIMonsterIdleDecoratorPanther extends CAIMonsterIdleDecorator
+{
+function Init()
+{
+
+var eat : CAIMonsterIdleEat = new CAIMonsterIdleEat in this;
+
+super.Init();
+
+eat.OnCreated();
+
+eat.params.cooldown = 4.0;
+eat.params.loopTime = 10.0;
+
+params.actions.PushBack( eat );
+}
 };
 
 

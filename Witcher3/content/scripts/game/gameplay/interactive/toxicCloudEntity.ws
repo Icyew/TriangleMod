@@ -43,7 +43,10 @@ import statemachine class W3ToxicCloud extends CGameplayEntity
 	private var buffSpecParams : W3BuffDoTParams;							
 	private var isFromClusterBomb : bool;									
 	private var bombOwner : CActor;											
-	
+	protected var wasPerk16Active : bool;	
+	private var canMultiplyDamageFromPerk20 : bool;							
+	private var friendlyFire : bool;
+		
 		default isFromBomb = false;
 		
 		hint restorationTime = "Time till cloud restores. If -1 will work only once";
@@ -116,9 +119,29 @@ import statemachine class W3ToxicCloud extends CGameplayEntity
 		return explodingTargetDamages;
 	}
 	
+	public function SetWasPerk16Active( d : bool )
+	{
+		wasPerk16Active = d;
+	}
+ 
+	public function GetWasPerk16Active() : bool
+	{
+		return wasPerk16Active;
+	}
+	
 	public function HasExplodingTargetDamages() : bool
 	{
 		return explodingTargetDamages.Size() > 0;
+	}
+	
+	public function SetPerk20DamageMultiplierOn()
+	{
+		canMultiplyDamageFromPerk20 = true;
+	}
+	
+	public function SetFriendlyFire( f : bool )
+	{
+		friendlyFire = f;
 	}
 	
 	public function PermanentlyDisable()
@@ -196,6 +219,7 @@ import statemachine class W3ToxicCloud extends CGameplayEntity
 		var i : int;
 		var ent : CEntity;
 		var expBolt : W3ExplosiveBolt;
+		var perk20Bonus : SAbilityAttributeValue;
 		
 		
 		ent = activator.GetEntity();
@@ -233,6 +257,12 @@ import statemachine class W3ToxicCloud extends CGameplayEntity
 						buffParams.buffSpecificParams = buffSpecParams;
 						buffParams.sourceName = 'ToxicGasCloud';
 					}
+					
+					if( canMultiplyDamageFromPerk20 )
+					{
+						perk20Bonus = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'dmg_multiplier', false, false);
+						buffParams.effectValue.valueAdditive *= ( 1 + perk20Bonus.valueMultiplicative );
+					}
 					if(!buffSpecParams)
 					{
 						buffSpecParams = new W3BuffDoTParams in this;
@@ -257,7 +287,7 @@ import statemachine class W3ToxicCloud extends CGameplayEntity
 		else if(area == GetGasAreaUnsafe())
 		{
 			gameplayEnt = (CGameplayEntity)ent;
-			if(gameplayEnt && (!bombOwner || IsRequiredAttitudeBetween(bombOwner, gameplayEnt, true)) )
+			if(gameplayEnt && (!bombOwner || IsRequiredAttitudeBetween(bombOwner, gameplayEnt, true, false, friendlyFire) ) )
 			{
 				entitiesInExplosionRange.PushBack(gameplayEnt);
 				
@@ -484,8 +514,16 @@ state Armed in W3ToxicCloud
 		for( i = 0; i < entitiesInRange.Size(); i += 1 )
 		{
 			if((W3SignEntity)entitiesInRange[i] || (W3SignProjectile)entitiesInRange[i])
+			{
 				continue;
-				
+			}
+			
+			
+			if( parent.GetWasPerk16Active() && entitiesInRange[i] == GetWitcherPlayer() )
+			{
+				continue;
+			}
+		
 			actor = (CActor)entitiesInRange[i];
 			if(actor)
 			{

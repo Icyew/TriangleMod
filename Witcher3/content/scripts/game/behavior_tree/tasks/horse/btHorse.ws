@@ -341,6 +341,11 @@ class CBTCondHorseShouldShakeOffRider extends IBehTreeTask
 		var horseComp 	: W3HorseComponent;
 		var panic : float;
 		
+		if( GetNPC().HasAbility( 'DisableHorsePanic' ) )
+		{
+			return false;
+		}
+		
 		if ( activate )
 			return true;
 		
@@ -365,6 +370,11 @@ class CBTCondHorseShouldShakeOffRider extends IBehTreeTask
 		
 		if ( !GetNPC().IsInCombat() )
 			return false;
+			
+		if( GetNPC().HasAbility( 'DisableHorsePanic' ) )
+		{
+			return false;
+		}
 		
 		
 		if ( eventName == 'CriticalState' )
@@ -597,20 +607,16 @@ class CBTCondHorseParkingDef extends IBehTreeHorseConditionalTaskDefinition
 
 class CBTTaskHorseReassure extends IBehTreeTask
 {
-	var aiStorageHandler 	: CAIStorageHandler;
+	var animalData 		: CAIStorageAnimalData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var animalData 		: CAIStorageAnimalData;
-		animalData 			= (CAIStorageAnimalData)aiStorageHandler.Get();
 		animalData.scared 	= false;
 		return BTNS_Active;
 	}
 
 	function Initialize()
 	{
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'AnimalData', '*CAIStorageAnimalData', this );
-		aiStorageHandler.Get();
+		animalData = (CAIStorageAnimalData)RequestStorageItem( 'AnimalData', 'CAIStorageAnimalData' );
 	}
 }
 
@@ -758,14 +764,11 @@ class CBTCondHorseIsNervousDef extends IBehTreeHorseConditionalTaskDefinition
 
 class CBTTaskHorseNervous extends IBehTreeTask
 {
-	private var aiStorageHandler 	: CAIStorageHandler;
 	private var timeTillNextNervous	: float;
 	
 	default timeTillNextNervous = 0.0;
 	function OnActivate(): EBTNodeStatus
 	{
-		var horseData 		: CAIStorageHorseData;
-		horseData 			= (CAIStorageHorseData)aiStorageHandler.Get();
 		GetActor().SignalGameplayEvent( 'HorseNervousStart' );
 		return BTNS_Active;
 	}
@@ -780,8 +783,6 @@ class CBTTaskHorseNervous extends IBehTreeTask
 	}
 	latent function Main() : EBTNodeStatus
 	{
-		var horseData 		: CAIStorageHorseData;
-		horseData 			= (CAIStorageHorseData)aiStorageHandler.Get();
 		while( true )
 		{
 			if ( IsTimeToNextNervous() )
@@ -793,12 +794,6 @@ class CBTTaskHorseNervous extends IBehTreeTask
 		}
 	
 		return BTNS_Completed;
-	}
-	function Initialize()
-	{
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'HorseData', '*CAIStorageHorseData', this );
-		aiStorageHandler.Get();
 	}
 }
 
@@ -1151,8 +1146,6 @@ class CBTCondHorseScriptedActionPendingDef extends IBehTreeHorseConditionalTaskD
 
 class CBTTaskHorseRequiredItemsForRider extends IBehTreeTask
 {
-	private var aiStorageHandler 		: CAIStorageHandler;
-	
 	private var processLeftItem : bool;
 	private var processRightItem : bool;
 	
@@ -1292,12 +1285,6 @@ class CBTTaskHorseRequiredItemsForRider extends IBehTreeTask
 		
 		return res;
 	}
-	
-	function Initialize()
-	{
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-	}
 }
 
 class CBTTaskHorseRequiredItemsForRiderDef extends IBehTreeHorseTaskDefinition
@@ -1423,18 +1410,10 @@ class CBTCondRiderCanPerformAttackDef extends IBehTreeHorseTaskDefinition
 
 class CBTTaskHorseManageRiderPosition extends IBehTreeTask
 {	
-
-	private var aiStorageHandler 			: CAIStorageHandler;	
 	private var rider 						: CActor;
 	private const var activation_distance 	: float;
 
 	default activation_distance = 6.5;
-	
-	function Initialize()
-	{
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-	}
 	
 	latent function Main() : EBTNodeStatus
 	{
@@ -1647,7 +1626,6 @@ class CBTCondIsHorseInAreaWithObstaclesDef extends IBehTreeHorseTaskDefinition
 
 class CBTTaskHorseUpdateRiderLookat extends IBehTreeTask
 {
-	private var aiStorageHandler 		: CAIStorageHandler;
 	private var rider : CActor;
 	
 	public var boneName : name;
@@ -1712,12 +1690,6 @@ class CBTTaskHorseUpdateRiderLookat extends IBehTreeTask
 	function OnDeactivate()
 	{
 		rider.SetBehaviorVariable( 'lookatOn',0.f);
-	}
-	
-	function Initialize()
-	{
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
 	}
 }
 

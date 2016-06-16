@@ -10,12 +10,23 @@ class W3Dimeritium extends W3Petard
 {
 	editable var affectedFX, affectedFXCluster : name;	
 	private var disableTimerCalled : bool;
+	private const var DISABLED_FX_CHECK_DELAY : float;
+	private var disabledFxDT : float;
 	
 		hint affectedFX = "Additional FX that is added when there are affected targets in the area";
 		hint affectedFXCluster = "Additional FX for Clusters that is added when there are affected targets in the area";
 		
 		default disableTimerCalled = false;
+		default DISABLED_FX_CHECK_DELAY = 1.f;
 
+	 event OnImpact()
+	{
+		super.OnImpact();
+		
+		
+		disabledFxDT = DISABLED_FX_CHECK_DELAY;
+	}
+	
 	protected function ProcessMechanicalEffect(targets : array<CGameplayEntity>, isImpact : bool, optional dt : float)
 	{
 		var i : int;
@@ -54,6 +65,14 @@ class W3Dimeritium extends W3Petard
 		super.LoopFunction(dt);
 		
 		
+		disabledFxDT -= dt;
+		if( disabledFxDT > 0.f )
+		{
+			return;
+		}
+		disabledFxDT = DISABLED_FX_CHECK_DELAY;
+		
+		
 		blocked = false;
 		for(i=0; i<targetsSinceLastCheck.Size(); i+=1)
 		{
@@ -70,16 +89,15 @@ class W3Dimeritium extends W3Petard
 			{
 				
 				if(isPlayer)
+				{
 					skill = SkillNameToEnum(loopParams.disabledAbilities[j].abilityName);
-				else
-					skill = S_SUndefined;
-				
-				
-				if(skill != S_SUndefined)
 					blocked = thePlayer.IsSkillBlocked(skill);
+				}
 				else
+				{
 					blocked = actor.IsAbilityBlocked(loopParams.disabledAbilities[j].abilityName);
-					
+				}
+	
 				if(blocked)
 					break;
 			}

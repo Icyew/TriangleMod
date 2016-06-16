@@ -36,7 +36,8 @@ enum EPlayerExplorationAction
 	PEA_AardLight,
 	PEA_SetBomb,
 	PEA_PourPotion,
-	PEA_DispelIllusion
+	PEA_DispelIllusion,
+	PEA_GoToSleep
 }
 
 enum EPlayerBoatMountFacing
@@ -164,16 +165,72 @@ S_UNUSED2,
 	
 	
 	S_Perk_13,				
-S_DROPPED1,
-S_DROPPED2,
-S_DROPPED3,
+	S_Perk_14,				
+	S_Perk_15,				
+	S_Perk_16,				
 	S_Perk_17,				
 	S_Perk_18,				
 	S_Perk_19,				
-S_DROPPED4,
-S_DROPPED5,
+	S_Perk_20,				
+	S_Perk_21,				
 	S_Perk_22,				
 	S_Perk_MAX
+}
+
+enum EItemSetBonus
+{
+	EISB_Undefined,
+	EISB_Lynx_1,			
+	EISB_Lynx_2,			
+	EISB_Gryphon_1,			
+	EISB_Gryphon_2,			
+	EISB_Bear_1,			
+	EISB_Bear_2,			
+	EISB_Wolf_1,			
+	EISB_Wolf_2,			
+	EISB_RedWolf_1,			
+	EISB_RedWolf_2,			
+	EISB_Vampire			
+}
+
+enum EItemSetType
+{
+	EIST_Undefined,
+	EIST_Lynx,
+	EIST_Gryphon,
+	EIST_Bear,
+	EIST_Wolf,
+	EIST_RedWolf,
+	EIST_Vampire,
+	EIST_Viper
+}
+
+function SetItemNameToType( nam : name ) : EItemSetType
+{
+	switch( nam )
+	{
+		case theGame.params.ITEM_SET_TAG_LYNX : 			return EIST_Lynx ;
+		case theGame.params.ITEM_SET_TAG_GRYPHON : 			return EIST_Gryphon ;
+		case theGame.params.ITEM_SET_TAG_BEAR : 			return EIST_Bear ;
+		case theGame.params.ITEM_SET_TAG_WOLF : 			return EIST_Wolf ;
+		case theGame.params.ITEM_SET_TAG_RED_WOLF : 		return EIST_RedWolf ;
+		case theGame.params.ITEM_SET_TAG_VAMPIRE :			return EIST_Vampire ;
+		case theGame.params.ITEM_SET_TAG_VIPER : 			return EIST_Viper;
+		default: 											return EIST_Undefined;
+	}
+}
+
+function GetSetBonusAbility( setBonus : EItemSetBonus ) : name
+{
+	switch( setBonus )
+	{
+		case EISB_Lynx_2:				return 'setBonusAbilityLynx_2';
+		case EISB_Bear_1:				return 'setBonusAbilityBear_1';
+		case EISB_Bear_2:				return 'setBonusAbilityBear_2';
+		case EISB_RedWolf_2:			return 'setBonusAbilityRedWolf_2';
+		case EISB_Wolf_1:				return 'SetBonusAbilityWolf_1';
+		default: 						return '';
+	}
 }
 
 
@@ -275,9 +332,14 @@ function SkillNameToEnum(n : name) : ESkill
 		case 'perk_11' :						return S_Perk_11;
 		case 'perk_12' :						return S_Perk_12;
 		case 'perk_13' :						return S_Perk_13;
+		case 'perk_14' :						return S_Perk_14;
+		case 'perk_15' :						return S_Perk_15;
+		case 'perk_16' :						return S_Perk_16;
 		case 'perk_17' :						return S_Perk_17;
 		case 'perk_18' :						return S_Perk_18;
 		case 'perk_19' :						return S_Perk_19;
+		case 'perk_20' :						return S_Perk_20;
+		case 'perk_21' :						return S_Perk_21;
 		case 'perk_22' :						return S_Perk_22;
 	
 		default:								return S_SUndefined;
@@ -397,9 +459,14 @@ function SkillEnumToName(s : ESkill) : name
 		case S_Perk_11 :						return 'perk_11';
 		case S_Perk_12 :						return 'perk_12';
 		case S_Perk_13 :						return 'perk_13';
+		case S_Perk_14 :						return 'perk_14';
+		case S_Perk_15 :						return 'perk_15';
+		case S_Perk_16 :						return 'perk_16';
 		case S_Perk_17 :						return 'perk_17';
 		case S_Perk_18 :						return 'perk_18';
 		case S_Perk_19 :						return 'perk_19';
+		case S_Perk_20 :						return 'perk_20';
+		case S_Perk_21 :						return 'perk_21';
 		case S_Perk_22 :						return 'perk_22';
 		
 		default:								return '';
@@ -535,6 +602,7 @@ enum EPlayerRepelType
 	PRT_Kick,
 	PRT_Slash,
 	PRT_SideStepSlash,
+	PRT_RepelToFinisher
 }
 
 enum ERotationRate
@@ -717,7 +785,9 @@ enum EInputActionBlock
 	EIAB_SpecialAttackLight,
 	EIAB_SpecialAttackHeavy,
 	EIAB_OpenMeditation,
-	EIAB_Noticeboards
+	EIAB_Noticeboards,
+	EIAB_FastTravelGlobal,
+	EIAB_CameraLock
 }
 
 function IsActionCombat(action : EInputActionBlock) : bool
@@ -783,6 +853,12 @@ struct SCustomOrientationInfo
 	var customHeading		: float;
 }
 
+struct SSelectedQuickslotItem
+{
+	saved var sourceName : name;
+	saved var itemID : SItemUniqueId;
+}
+
 enum EPlayerActionToRestore
 {
 	PATR_Default,
@@ -816,7 +892,8 @@ enum EPlayerPreviewInventory
 	PPI_Gryphon_4,
 	PPI_Common_1,	
 	PPI_Naked,
-	PPI_Viper
+	PPI_Viper,
+	PPI_Red_Wolf_1
 }
 
 enum EDismembermentWoundTypes
@@ -858,7 +935,16 @@ struct SRewardMultiplier
 {
 	var rewardName : name;
 	var rewardMultiplier : float;
+	var isItemMultiplier : bool;
 };	
+
+enum EHorseMode
+{
+	EHM_NotSet,
+	EHM_Normal,
+	EHM_Devil,
+	EHM_Unicorn
+}
 
 
  

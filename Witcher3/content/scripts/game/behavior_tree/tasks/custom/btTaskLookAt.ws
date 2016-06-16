@@ -24,7 +24,7 @@ class BTTaskLookat extends IBehTreeTask
 	{
 		if( lookatAtStart )
 		{
-			GetNPC().SetBehaviorVariable( 'lookatOn', 1);
+			GetNPC().SetBehaviorVariable( 'lookatOn', 1, true);
 		}
 		
 		
@@ -33,7 +33,7 @@ class BTTaskLookat extends IBehTreeTask
 	
 	function OnDeactivate()
 	{
-		GetNPC().SetBehaviorVariable( 'lookatOn', 0);
+		GetNPC().SetBehaviorVariable( 'lookatOn', 0, true);
 	}
 	latent function Main() : EBTNodeStatus
 	{
@@ -154,21 +154,21 @@ class BTTaskLookat extends IBehTreeTask
 			}
 			
 			desiredHorAngle = ClampF(desiredHorAngle,-1.f,1.f);
-			npc.SetBehaviorVariable( 'lookatHor', desiredHorAngle);
+			npc.SetBehaviorVariable( 'lookatHor', desiredHorAngle, true );
 			if ( additionalBehVarName != 'None' && setAdditionalBehVar )
 			{
-				npc.SetBehaviorVariable(additionalBehVarName, desiredHorAngle);
+				npc.SetBehaviorVariable( additionalBehVarName, desiredHorAngle, true );
 			}
 			
 			if ( verticalLookAt )
 			{
 				desiredVerAngle = (localVerAngle)/90;
 				desiredVerAngle = ClampF(desiredVerAngle,-1.f,1.f);
-				npc.SetBehaviorVariable( 'lookatVer', desiredVerAngle);
+				npc.SetBehaviorVariable( 'lookatVer', desiredVerAngle, true );
 			}
 			
 			if ( lookAtTargetCheck ) 
-				if ( !npc.SetBehaviorVectorVariable( 'lookAtTarget',targetPos) )
+				if ( !npc.SetBehaviorVectorVariable( 'lookAtTarget',targetPos, true ) )
 					lookAtTargetCheck = false;
 			
 			SleepOneFrame();
@@ -182,11 +182,11 @@ class BTTaskLookat extends IBehTreeTask
 		
 		if ( eventName == 'LookatOff' )
 		{
-			GetNPC().SetBehaviorVariable( 'lookatOn', 0);
+			GetNPC().SetBehaviorVariable( 'lookatOn', 0, true );
 		}
 		else if ( eventName == 'LookatOn' )
 		{
-			GetNPC().SetBehaviorVariable( 'lookatOn', 1);
+			GetNPC().SetBehaviorVariable( 'lookatOn', 1, true );
 		}
 		else if ( eventName == 'KeepLooking')
 		{
@@ -230,18 +230,20 @@ class BTTaskLookatDef extends IBehTreeTaskDefinition
 
 class BTTaskUpdateLookatTarget extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
-	protected var combatDataStorage : CHumanAICombatStorage;
+	protected var combatDataStorage 		: CHumanAICombatStorage;
 
-	public var useCombatTarget 	: bool;
-	public var useCustomTarget 	: bool;
-	public var headBoneName		: name;
-	public var usePrediction 	: bool;
-	public var addZOffsetValue 	: bool;
+	public var useCombatTarget 				: bool;
+	public var useCustomTarget 				: bool;
+	public var headBoneName					: name;
+	public var usePrediction 				: bool;
+	public var addZOffsetValue 				: bool;
+	public var disableLookAtOnDeath 		: bool;
+	public var disableLookAtOnDeactivate 	: bool;
 	
-	protected var lookatTarget		: CNode;
-	protected var lookatActor		: CActor;
-	protected var targetBoneIndex 	: int;
+	protected var lookatTarget				: CNode;
+	protected var lookatActor				: CActor;
+	protected var targetBoneIndex 			: int;
+	protected var targetPos					: Vector;
 	
 	function OnActivate() : EBTNodeStatus
 	{
@@ -266,7 +268,6 @@ class BTTaskUpdateLookatTarget extends IBehTreeTask
 	
 	latent function Main() : EBTNodeStatus
 	{
-		var targetPos		: Vector;
 		var heading			: float;
 		var targetIsActor	: bool;
 		var npc				: CActor;
@@ -312,6 +313,24 @@ class BTTaskUpdateLookatTarget extends IBehTreeTask
 		return BTNS_Active;
 	}
 	
+	function OnDeactivate()
+	{
+		if ( disableLookAtOnDeactivate )
+		{
+			GetActor().UpdateLookAtVariables(0.0, targetPos);
+		}
+	}
+	
+	function OnListenedGameplayEvent( eventName : CName ) : bool
+	{
+		if ( disableLookAtOnDeath && eventName == 'OnDeath' )
+		{
+			GetActor().UpdateLookAtVariables(0.0, targetPos);
+			return true;
+		}
+		return false;
+	}
+	
 	function PredictPosition( target : CActor, targetPos : Vector ) : Vector
 	{
 		var myPos, finalPos : Vector;
@@ -352,30 +371,37 @@ class BTTaskUpdateLookatTarget extends IBehTreeTask
 	{
 		if ( usePrediction )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
-	
 }
 
 class BTTaskUpdateLookatTargetDef extends IBehTreeTaskDefinition
 {
 	default instanceClass = 'BTTaskUpdateLookatTarget';
 
-	editable var useCombatTarget : bool;
-	editable var headBoneName : name;
-	editable var usePrediction : bool;
-	editable var useCustomTarget : bool;
-	editable var addZOffsetValue : bool;
+	editable var useCombatTarget 			: bool;
+	editable var headBoneName 				: name;
+	editable var usePrediction 				: bool;
+	editable var useCustomTarget 			: bool;
+	editable var addZOffsetValue 			: bool;
+	editable var disableLookAtOnDeath 		: bool;
+	editable var disableLookAtOnDeactivate 	: bool;
 	
-	default useCombatTarget = true;
-	default headBoneName = 'head';
-	default usePrediction = false;
-	default addZOffsetValue = true;
+	default useCombatTarget 				= true;
+	default headBoneName 					= 'head';
+	default usePrediction 					= false;
+	default addZOffsetValue 				= true;
+	default disableLookAtOnDeath 			= true;
 	
 	hint addZOffsetValue = "works only if headBone was not found. +1.f for custom target; +1.5f otherwise.";
 	hint usePrediction = "works only if target is CActor.";
+	
+	function InitializeEvents()
+	{
+		super.InitializeEvents();
+		listenToGameplayEvents.PushBack( 'OnDeath' );
+	}
 }
 
 
@@ -433,7 +459,7 @@ class BTTaskUpdateLookatTargetByTag extends BTTaskUpdateLookatTarget
 	function OnDeactivate()
 	{
 		lookatTarget = NULL;
-		GetActor().SetBehaviorVariable( 'lookatOn', 0.f );
+		GetActor().SetBehaviorVariable( 'lookatOn', 0.f, true );
 	}
 	
 }

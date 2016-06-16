@@ -47,6 +47,14 @@ import abstract class CActor extends CGameplayEntity
 	private 			var knockedUncounscious			: bool;
 	private 			var isGameplayVisible			: bool;
 	private				var lastBreathTime				: float;
+	protected 			var isRecoveringFromKnockdown   : bool;
+	
+	private 			var hitCounter 					: int;		default hitCounter = 0;
+	private 			var totalHitCounter 			: int;		default totalHitCounter = 0;
+	public 				var customHits 					: bool;		default customHits = false;
+	
+	private 			var defendCounter 				: int;		default defendCounter = 0;
+	private 			var totalDefendCounter 			: int;		default totalDefendCounter = 0;
 	
 	default bIsGuarded 							= false;
 	default bParryEnabled 						= false;
@@ -210,21 +218,6 @@ import abstract class CActor extends CGameplayEntity
 		return true;
 	}
 	
-	
-	
-	
-	function GetListOfCannotAddAttributes( out attributes : array< CName > )
-	{
-		if ( UsesEssence() )
-		{
-			attributes.PushBack( StatEnumToName( BCS_Vitality ) );
-		}
-		else if ( UsesVitality() )
-		{
-			attributes.PushBack( StatEnumToName( BCS_Essence ) );
-		}
-	}
-	
 	event OnAbilityAdded( abilityName : name)
 	{
 		if(abilityManager && abilityManager.IsInitialized())
@@ -237,15 +230,8 @@ import abstract class CActor extends CGameplayEntity
 			abilityManager.OnAbilityRemoved(abilityName);
 	}
 
-	public function IsAbilityBlocked(abilityName : name) : bool											{return abilityManager.IsAbilityBlocked(abilityName);}
-	public function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool	{return abilityManager.BlockAbility(abilityName, block, cooldown);}
-	
-	public function GetAbilities(includeAbilitiesFromItems : bool) : array<name>		
-	{
-		var tmp : array<name>;
-		GetCharacterStats().GetAbilities(tmp, includeAbilitiesFromItems);
-		return tmp;
-	}
+	public final function IsAbilityBlocked(abilityName : name) : bool											{return abilityManager.IsAbilityBlocked(abilityName);}
+	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool		{return abilityManager.BlockAbility(abilityName, block, cooldown);}
 	
 	import public function MuteHeadAudio( mute: bool );
 	import public function CanPush( canPush: bool );
@@ -262,6 +248,9 @@ import abstract class CActor extends CGameplayEntity
 	
 	
 	import public function ReportDeathToSpawnSystems();
+	
+	
+	import public function ForceSoundAppearanceUpdate();
 
 	saved var immortalityFlagsCopy : int;
 	default immortalityFlagsCopy = 0;
@@ -520,7 +509,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	import final function SignalGameplayDamageEvent( eventName : CName, data : CDamageData );
 	
-	import final function GetAIStorageObject( storageItemName : CName ) : IScriptable;
+	import final function GetScriptStorageObject( storageItemName : CName ) : IScriptable;
 	
 	import final function ForceAIUpdate();
 	
@@ -639,28 +628,8 @@ import abstract class CActor extends CGameplayEntity
 	{
 		return this.wasDefeatedFromFistFight;
 	}
-	public function IsFistFighting () : bool
-	{
-		var i : int;
-		var inv : CInventoryComponent;
-		
-		var weapons : array <SItemUniqueId>;
-		
-		inv = GetInventory();
-		
-		weapons = inv.GetHeldWeapons();
-		
-		for ( i = 0; i < weapons.Size(); i+=1 )
-		{
-			if ( inv.IsItemFists (weapons[i]))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 	
-	private var isInFFMiniGame : bool;
+	import private var isInFFMiniGame : bool;
 	
 	event OnStartFistfightMinigame()
 	{
@@ -743,6 +712,19 @@ import abstract class CActor extends CGameplayEntity
 					this.SignalGameplayEvent('EnableFinisher');
 			}
 		}
+	}
+	
+	public var ragdollPullingStartPosition : Vector;
+	
+	public function GetRagdollPullingStartPosition() : Vector
+	{
+		return ragdollPullingStartPosition;
+	}
+	
+	event OnRagdollPullingStarts( ragdollPos, entityPos : Vector )
+	{
+		ragdollPullingStartPosition = ragdollPos;
+		SignalGameplayEvent( 'OnRagdollPullingStart' );
 	}
 	
 	
@@ -1369,6 +1351,9 @@ import abstract class CActor extends CGameplayEntity
 	import final function GetOriginalInteractionPriority() : EInteractionPriority;
 	
 	
+	import final function SetGroupShadows( flag : bool );
+	
+	
 	
 	
 	
@@ -1468,7 +1453,9 @@ import abstract class CActor extends CGameplayEntity
 		AddAnimEventCallback( 'Death',				'OnAnimEvent_Death' );
 		AddAnimEventCallback( 'MountHorseType',		'OnAnimEvent_MountHorseType' );
 		AddAnimEventCallback( 'HorseRidingOn',		'OnAnimEvent_HorseRidingOn' ); 
-		
+		AddAnimEventCallback( 'item_track_hack_reading_book', 'OnAnimEvent_item_track_hack_reading_book' );
+		AddAnimEventCallback( 'item_track_hack_reading_book_unmount', 'OnAnimEvent_item_track_hack_reading_book_unmount' );
+	
 		effectsUpdateTicking = false;
 		SetBehaviorVariable( 'CriticalStateType', (int)ECST_None );		
 			
@@ -1476,14 +1463,14 @@ import abstract class CActor extends CGameplayEntity
 		{
 			SetAbilityManager();		
 			if(abilityManager)
-				abilityManager.Init(this, GetCharacterStats(), spawnData.restored, theGame.GetSpawnDifficultyMode());
+				abilityManager.Init(this, GetCharacterStats(), false, theGame.GetSpawnDifficultyMode());
 			
 			SetEffectManager();			
 		}
 		else
 		{
 			if(abilityManager)
-				abilityManager.Init(this, GetCharacterStats(), spawnData.restored, theGame.GetSpawnDifficultyMode());
+				abilityManager.Init(this, GetCharacterStats(), true, theGame.GetSpawnDifficultyMode());
 				
 			if(effectManager)
 				effectManager.OnLoad(this);
@@ -1501,7 +1488,7 @@ import abstract class CActor extends CGameplayEntity
 		
 		
 		if(effectManager)
-			ResumeEffects( EET_AutoStaminaRegen, 'SignCast' );
+			ResumeStaminaRegen( 'SignCast' );
 	}
 	
 	protected function SetEffectManager()
@@ -1560,6 +1547,11 @@ import abstract class CActor extends CGameplayEntity
 	}
 	
 	timer function DelaySoundInfoUpdate(dt : float , id : int)
+	{
+		UpdateSoundInfo();
+	}
+	
+	event OnForceUpdateSoundInfo()
 	{
 		UpdateSoundInfo();
 	}
@@ -1632,7 +1624,7 @@ import abstract class CActor extends CGameplayEntity
 		if ( cachedIsWoman != -1 )
 			return cachedIsWoman > 0;
 			
-		if ( GetMovingAgentComponent().GetName() == "woman_base" )
+		if ( GetMovingAgentComponent().GetName() == "woman_base" || GetMovingAgentComponent().GetName() == "noble_woman_base" )
 			cachedIsWoman = 1;
 		else
 			cachedIsWoman = 0;
@@ -1694,6 +1686,26 @@ import abstract class CActor extends CGameplayEntity
 		return cachedIsAnimal;
 	}
 	
+	private var cachedIsVampire : int;	default cachedIsVampire = -1;
+	public function IsVampire() : bool
+	{
+		var monsterCategory : EMonsterCategory;
+		var tmpName : name;
+		var tmpBool : bool;
+		
+		if ( cachedIsVampire != -1 )
+			return cachedIsVampire > 0;
+		
+		theGame.GetMonsterParamsForActor(this, monsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+		
+		if ( monsterCategory == MC_Vampire )
+			cachedIsVampire = 1;
+		else
+			cachedIsVampire = 0;
+		
+		return cachedIsVampire;
+	}
+	
 	protected function SetAbilityManager();
 	
 	timer function CheckBlockedAbilities(dt : float, id : int)
@@ -1706,7 +1718,7 @@ import abstract class CActor extends CGameplayEntity
 			AddTimer('CheckBlockedAbilities', nextCallTime, , , , true);
 	}
 	
-	protected function GetKillAction(optional ignoreImmortalityMode : bool, optional attacker : CGameplayEntity, optional source : name) : W3DamageAction
+	protected function GetKillAction( source : name, optional ignoreImmortalityMode : bool, optional attacker : CGameplayEntity ) : W3DamageAction
 	{
 		var vit, ess : float;
 		var action : W3DamageAction;
@@ -1727,18 +1739,18 @@ import abstract class CActor extends CGameplayEntity
 		return action;
 	}
 	
-	function Kill(optional ignoreImmortalityMode : bool, optional attacker : CGameplayEntity, optional source : name )
+	function Kill(source : name, optional ignoreImmortalityMode : bool, optional attacker : CGameplayEntity)
 	{
 		var action : W3DamageAction;
 		
 		if ( theGame.CanLog() )
 		{
-			LogDMHits("CActor.Kill: called for actor <<" + this + ">>");
+			LogDMHits( "CActor.Kill: called for actor <<" + this + ">> with source <<" + source + ">>" );
 		}
 		
-		action = GetKillAction(ignoreImmortalityMode, attacker );		
+		action = GetKillAction( source, ignoreImmortalityMode, attacker );		
 		
-		theGame.damageMgr.ProcessAction(action);
+		theGame.damageMgr.ProcessAction( action );
 		
 		delete action;
 	}
@@ -1746,7 +1758,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	private function InterfaceKill( force : bool, attacker : CActor )
 	{
-		Kill(force);
+		Kill( 'From Code', force);
 	}
 	
 	
@@ -1952,21 +1964,24 @@ import abstract class CActor extends CGameplayEntity
 	public function SetIsCurrentlyDodging(b : bool, optional isRolling : bool)
 	{
 		isCurrentlyDodging = b;
+		
+		
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'MoveNoise', -1, 30.0f, -1.f, -1, true ); 
 	}
 	
-	public function IsCurrentlyDodging() : bool				{return isCurrentlyDodging;}
+	public final function IsCurrentlyDodging() : bool				{return isCurrentlyDodging;}
 	
-	public function SetParryEnabled( flag : bool )
+	public final function SetParryEnabled( flag : bool )
 	{
 		bParryEnabled = flag;
 	}
 	
-	public function GetLastAttackRangeName() : name
+	public final function GetLastAttackRangeName() : name
 	{
 		return lastAttackRangeName;
 	}
 	
-	function CanPerformCounter() : bool
+	final function CanPerformCounter() : bool
 	{
 		return bCanPerformCounter;
 	}
@@ -1987,7 +2002,7 @@ import abstract class CActor extends CGameplayEntity
 		SetBehaviorVariable( 'bIsGuarded', (int)bIsGuarded);
 	}
 	
-	public function CanGuard() : bool
+	public final function CanGuard() : bool
 	{
 		var l_delayToWait   : float = CalculateAttributeValue( GetAttributeValue('delay_between_raise_guard') );		
 		var l_currentDelay	: float;
@@ -2003,17 +2018,17 @@ import abstract class CActor extends CGameplayEntity
 		return false;
 	}
 	
-	function DisableHitAnimFor( time : float )
+	final function DisableHitAnimFor( time : float )
 	{
 		this.SetCanPlayHitAnim(false);
 		AddTimer('EnableHitAnim', time, false, ,  ,true, true);
 	}
 	
-	public function UseAdditiveHit( ) : bool
+	public final function UseAdditiveHit( ) : bool
 	{
 		return useAdditiveHits;
 	}
-	public function SetUseAdditiveHit( _Flag : bool, optional _CriticalCancelAdditiveHit : bool, optional _OneTimeActivation : bool )
+	public final function SetUseAdditiveHit( _Flag : bool, optional _CriticalCancelAdditiveHit : bool, optional _OneTimeActivation : bool )
 	{
 		if ( _OneTimeActivation )
 			oneTimeAdditiveHit 		= _OneTimeActivation;
@@ -2021,11 +2036,11 @@ import abstract class CActor extends CGameplayEntity
 			useAdditiveHits 		= _Flag;
 		criticalCancelAdditiveHit 	= _CriticalCancelAdditiveHit;
 	}
-	public function UseAdditiveCriticalState() : bool
+	public final function UseAdditiveCriticalState() : bool
 	{
 		return useAdditiveCriticalStateAnim;
 	}
-	public function SetUseAdditiveCriticalStateAnim( flag : bool )
+	public final function SetUseAdditiveCriticalStateAnim( flag : bool )
 	{
 		useAdditiveCriticalStateAnim = flag;
 	}
@@ -2034,7 +2049,7 @@ import abstract class CActor extends CGameplayEntity
 		RemoveTimer('EnableHitAnim');
 		canPlayHitAnim = flag;
 	}
-	function CanPlayHitAnim() : bool
+	final function CanPlayHitAnim() : bool
 	{
 		return canPlayHitAnim;
 	}
@@ -2043,10 +2058,18 @@ import abstract class CActor extends CGameplayEntity
 		var movementAdjustor : CMovementAdjustor = GetMovingAgentComponent().GetMovementAdjustor();
 		movementAdjustor.Cancel( movementAdjustor.GetRequest( 'RotateEvent' ) );
 	}
+	public function GetCriticalCancelAdditiveHit() : bool
+	{
+		return criticalCancelAdditiveHit;
+	}
 	
 	
 	
 	
+	public final function GetAbilityManager() : W3AbilityManager
+	{
+		return abilityManager;
+	}
 	
 	
 	
@@ -2094,7 +2117,6 @@ import abstract class CActor extends CGameplayEntity
 		if(abilityManager && abilityManager.IsInitialized() && IsAlive())
 			abilityManager.AddPanic( amount );
 	}
-	
 	
 	public function GainStat( stat : EBaseCharacterStats, amount : float )
 	{
@@ -2280,9 +2302,9 @@ import abstract class CActor extends CGameplayEntity
 	}
 			
 	
-	public function UsesVitality() : bool
+	public final function UsesVitality() : bool
 	{
-		if(abilityManager && abilityManager.IsInitialized())
+		if(abilityManager )
 			return abilityManager.UsedHPType() == BCS_Vitality;
 			
 		return false;
@@ -2291,12 +2313,19 @@ import abstract class CActor extends CGameplayEntity
 	
 	public function UsesEssence() : bool
 	{
-		if(abilityManager && abilityManager.IsInitialized())
+		if(abilityManager )
 			return abilityManager.UsedHPType() == BCS_Essence;
 			
 		return false;
 	}
 	
+	public function GetUsedHealthType() : EBaseCharacterStats
+	{
+		if(abilityManager && abilityManager.IsInitialized())
+			return abilityManager.UsedHPType();
+			
+		return BCS_Undefined;
+	}
 	
 	public function GetStat(stat : EBaseCharacterStats, optional ignoreLock : bool) : float
 	{
@@ -2348,7 +2377,6 @@ import abstract class CActor extends CGameplayEntity
 		var mutagen : CBaseGameplayEffect;
 		var min, max : SAbilityAttributeValue;
 		var lifeLeech, health, stamina : float;
-		var attackAction : W3Action_Attack;
 		var wasAlive : bool;
 		var hudModuleDamageType : EFloatingValueType;
 		
@@ -2393,12 +2421,11 @@ import abstract class CActor extends CGameplayEntity
 		
 		if( ((action.attacker && action.attacker == thePlayer) || (CBaseGameplayEffect)action.causer) && !action.GetUnderwaterDisplayDamageHack() )
 		{
-			attackAction = (W3Action_Attack)action;
-			if(attackAction && attackAction.GetInstantKill())
+			if(action.GetInstantKillFloater())
 			{
 				hudModuleDamageType = EFVT_InstantDeath;
 			}
-			else if(attackAction && attackAction.IsCriticalHit())
+			else if(action.IsCriticalHit())
 			{
 				hudModuleDamageType = EFVT_Critical;
 			}
@@ -2511,7 +2538,47 @@ import abstract class CActor extends CGameplayEntity
 			
 		return false;
 	}
-		
+	
+	
+	public function GetHitCounter(optional total : bool) : int
+	{
+		if ( total )
+			return totalHitCounter;
+		return hitCounter;
+	}
+	
+	public function IncHitCounter()
+	{
+		hitCounter += 1;
+		totalHitCounter += 1;
+		AddTimer('ResetHitCounter',2.0,false);
+	}
+	
+	public timer function ResetHitCounter( deta : float , id : int)
+	{
+		hitCounter = 0;
+	}
+	
+	
+	public function GetDefendCounter(optional total : bool) : int
+	{
+		if ( total )
+			return totalDefendCounter;
+		return defendCounter;
+	}
+	
+	public function IncDefendCounter()
+	{
+		defendCounter += 1;
+		totalDefendCounter += 1;
+		AddTimer('ResetDefendCounter',2.0,false);
+	}
+	
+	public timer function ResetDefendCounter( deta : float , id : int)
+	{
+		defendCounter = 0;
+	}
+	
 	
 	public function ReactToReflectedAttack( target : CGameplayEntity)
 	{
@@ -2521,21 +2588,18 @@ import abstract class CActor extends CGameplayEntity
 		action = new W3DamageAction in this;
 		action.Initialize(target,this,NULL,'',EHRT_Reflect,CPS_AttackPower,true,false,false,false);
 		action.SetHitAnimationPlayType(EAHA_ForceYes);
+		action.SetCannotReturnDamage( true );
 		
 		
-		if(UsesVitality())
-			hp = GetStat(BCS_Vitality);
+		
+		if( ((CActor) target).HasTag( 'scolopendromorph' ) )
+		{
+			((CActor) target).PlayEffect('heavy_hit_back');
+		}
 		else
-			hp = GetStat(BCS_Essence);
-			
-		if(hp <= 1)
-			dmg = 0.0000001;
-		else
-			dmg = 1;
-			
-		action.AddDamage(theGame.params.DAMAGE_NAME_DIRECT,dmg);
-		
-		((CActor) target).PlayEffectOnHeldWeapon('light_block');
+		{
+			((CActor) target).PlayEffectOnHeldWeapon('light_block');
+		}
 		
 		theGame.damageMgr.ProcessAction( action );		
 		delete action;	
@@ -2632,7 +2696,7 @@ import abstract class CActor extends CGameplayEntity
 			{
 				
 				
-				if( ( useAdditiveHits || oneTimeAdditiveHit ) && !( criticalCancelAdditiveHit && attackAction.IsCriticalHit() ))
+				if( ( useAdditiveHits || oneTimeAdditiveHit ) && !( criticalCancelAdditiveHit && damageAction.IsCriticalHit() ))
 				{
 					animType = ModifyHitSeverityReaction(this, damageAction.GetHitReactionType());
 					if(animType != EHRT_None)
@@ -2816,7 +2880,15 @@ import abstract class CActor extends CGameplayEntity
 				SoundSwitch( "hit_location", "body" );
 
 			
-			SoundSwitch(  "opponent_attack_type", attackAction.GetSoundAttackType() );
+			
+			if(StrContains(action.attacker.GetName(), "kikimore") &&  soundMonsterName == 'Endriaga' && attackAction.GetSoundAttackType() == 'monster_medium_hit_heavy')
+			{
+				SoundSwitch(  "opponent_attack_type", 'monster_medium_hit_light' );
+			}
+			else
+			{
+				SoundSwitch(  "opponent_attack_type", attackAction.GetSoundAttackType() );
+			}
 
 			
 			cr4HumanoidCombatComponent = (CR4HumanoidCombatComponent)GetComponentByClassName( 'CR4HumanoidCombatComponent' );
@@ -2883,6 +2955,7 @@ import abstract class CActor extends CGameplayEntity
 		var effectName : name;
 		var attackAction : W3Action_Attack;
 		var actorAttacker : CActor;
+		var fxEntity : CEntity;
 		
 		if(HasTag('NoHitFx'))
 			return;
@@ -2915,13 +2988,72 @@ import abstract class CActor extends CGameplayEntity
 		
 		if(IsNameValid(effectName))
 			PlayEffect(effectName);
+			
+		
+		if( damageAction.IsCriticalHit() && damageAction.IsActionWitcherSign() && actorAttacker && IsAlive() && actorAttacker == thePlayer && GetWitcherPlayer().IsMutationActive( EPMT_Mutation2 ) )
+		{
+			fxEntity = CreateFXEntityAtPelvis( 'mutation2_critical', true );
+			if( fxEntity )
+			{
+				switch( damageAction.GetSignSkill() )
+				{
+					case S_Magic_1 :
+						fxEntity.PlayEffect( 'critical_aard' );
+						break;
+					case S_Magic_2 :
+						fxEntity.PlayEffect( 'critical_igni' );
+						break;
+					case S_Magic_3 :
+					case S_Magic_s03 :
+						fxEntity.PlayEffect( 'critical_yrden' );
+						break;
+					case S_Magic_4 :
+					case S_Magic_s04 :
+					case S_Magic_s13 :
+						fxEntity.PlayEffect( 'critical_quen' );
+						break;
+				}
+			}
+		}
+		
+		
+		if( actorAttacker == thePlayer && damageAction.IsActionWitcherSign() && IsAlive() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation1 ) )
+		{
+			fxEntity = CreateFXEntityAtPelvis( 'mutation1_hit', true ); 
+			if( fxEntity )
+			{
+				switch( damageAction.GetSignType() )
+				{
+					case ST_Aard:
+						effectName = 'mutation_1_hit_aard' ;
+						break;
+					case ST_Igni:
+						effectName = 'mutation_1_hit_igni' ;
+						break;
+					case ST_Yrden:
+						effectName = 'mutation_1_hit_yrden' ;
+						break;
+					case ST_Quen:
+						effectName = 'mutation_1_hit_quen' ;
+						break;
+				}
+				
+				fxEntity.PlayEffect( effectName );
+			}
+		}
 	}
 		
 	event OnReactToBeingHit( damageAction : W3DamageAction );	
 	
-	function InterruptCombatFocusMode();		
+	function InterruptCombatFocusMode();
 	
-	protected function PlayHitAnimation(damageAction : W3DamageAction, animType : EHitReactionType);
+	protected function PlayHitAnimation( damageAction : W3DamageAction, animType : EHitReactionType )
+	{
+		if ( IsNameValid( ( (CNewNPC)damageAction.attacker ).GetAbilityBuffStackedOnEnemyHitName() ) )
+		{
+			damageAction.attacker.AddAbility( ( (CNewNPC)damageAction.attacker ).GetAbilityBuffStackedOnEnemyHitName(), true );
+		}
+	}
 	
 	public function SetHitReactionDirection( attacker : CNode )
 	{
@@ -3557,18 +3689,6 @@ import abstract class CActor extends CGameplayEntity
 			effectManager.RecalcEffectDurations();
 	}
 	
-	public function UpdateApplicatorBuffs()
-	{
-		if(effectManager && effectManager.IsReady())
-			effectManager.UpdateApplicatorBuffs();
-	}
-	
-	public function GetApplicatorParamsFor(applicator : W3ApplicatorEffect, out pwrStatValue : SAbilityAttributeValue)
-	{
-		if(abilityManager)
-			abilityManager.GetApplicatorParamsFor(applicator, pwrStatValue);
-	}
-	
 	public function AddEffectCustom(params : SCustomEffectParams) : EEffectInteract
 	{
 		if( effectManager && effectManager.IsReady())
@@ -3605,10 +3725,10 @@ import abstract class CActor extends CGameplayEntity
 			effectManager.RemoveEffect(effect, csForcedRemove );
 	}
 	
-	public function RemoveAllNonAutoBuffs()
+	public function RemoveAllNonAutoBuffs( optional removeOils : bool )
 	{
 		if( effectManager && effectManager.IsReady() )
-			effectManager.RemoveAllNonAutoEffects();
+			effectManager.RemoveAllNonAutoEffects( removeOils );
 	}
 	
 	public function RemoveAllBuffsOfType(effectType : EEffectType)
@@ -3616,6 +3736,13 @@ import abstract class CActor extends CGameplayEntity
 		if( effectManager && effectManager.IsReady() )
 			effectManager.RemoveAllEffectsOfType(effectType);
 	}
+	
+	public function RemoveAllBuffsWithSource( source : string )
+	{
+		if( effectManager && effectManager.IsReady() )
+			effectManager.RemoveAllBuffsWithSource( source );
+	}
+	
 	
 	public function HasBuff(effectType : EEffectType) : bool
 	{
@@ -3685,6 +3812,16 @@ import abstract class CActor extends CGameplayEntity
 		return false;
 	}
 	
+	public final function IsImmuneToInstantKill() : bool
+	{
+		if( HasAbility( 'InstantKillImmune' ) || IsImmortal() || IsInvulnerable() || WillBeUnconscious() )
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public function IsImmuneToBuff(effect : EEffectType) : bool
 	{
 		var immunes : CBuffImmunity;
@@ -3736,7 +3873,7 @@ import abstract class CActor extends CGameplayEntity
 			return true;
 		
 		theGame.effectMgr.GetEffectTypeFlags(effect, potion, positive, neutral, negative, immobilize, confuse, damage);
-		if( (potion && immunes.potion) || (positive && immunes.positive) || (neutral && immunes.neutral) || (negative && immunes.negative) || (immobilize && immunes.immobilize) || (confuse && immunes.confuse) || (damage && immunes.damage) )
+		if( (potion && immunes.potion) || (positive && immunes.positive) || (neutral && immunes.neutral) || (negative && ( isImmuneToNegativeBuffs || immunes.negative ) ) || (immobilize && immunes.immobilize) || (confuse && immunes.confuse) || (damage && immunes.damage) )
 			return true;
 			
 		return false;
@@ -3746,7 +3883,7 @@ import abstract class CActor extends CGameplayEntity
 	{
 		var i, size : int;
 		
-		size = EnumGetMax('EEffectType')+1;
+		size = (int)EET_EffectTypesSize;
 		
 		for( i=0; i<size; i+=1 )
 		{
@@ -3754,17 +3891,11 @@ import abstract class CActor extends CGameplayEntity
 				AddBuffImmunity(i, source, removeIfPresent);
 		}
 	}
+	
+	protected saved var isImmuneToNegativeBuffs : bool;
 	public function AddBuffImmunity_AllNegative(source : name, removeIfPresent : bool)
 	{
-		var i, size : int;
-		
-		size = EnumGetMax('EEffectType')+1;
-		
-		for( i=0; i<size; i+=1 )
-		{
-			if( IsNegativeEffectType(i) )
-				AddBuffImmunity(i, source, removeIfPresent);
-		}
+		isImmuneToNegativeBuffs = true;
 	}
 		
 	public function AddBuffImmunity(effect : EEffectType, source : name, removeBuffIfPresent : bool)
@@ -3823,7 +3954,7 @@ import abstract class CActor extends CGameplayEntity
 		var i, size : int;
 	
 		
-		size = EnumGetMax('EEffectType')+1;
+		size = (int)EET_EffectTypesSize;
 		for(i=0; i<size; i+=1)
 		{
 			if(IsCriticalEffectType(i))
@@ -3833,15 +3964,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	public function RemoveBuffImmunity_AllNegative(optional source : name)
 	{
-		var i, size : int;
-	
-		
-		size = EnumGetMax('EEffectType')+1;
-		for(i=0; i<size; i+=1)
-		{
-			if(theGame.effectMgr.IsBuffNegative(i))
-				RemoveBuffImmunity(i, source);
-		}
+		isImmuneToNegativeBuffs = false;
 	}
 	
 	public function RemoveBuffImmunity(effect : EEffectType, optional source : name)
@@ -3889,22 +4012,32 @@ import abstract class CActor extends CGameplayEntity
 		}
 	}
 	
+	public final function SetIsRecoveringFromKnockdown()
+	{
+		isRecoveringFromKnockdown = true;		
+	}
+	
+	public final function GetIsRecoveringFromKnockdown() : bool
+	{
+		return isRecoveringFromKnockdown;
+	}
+	
 	public function PauseHPRegenEffects(sourceName : name, optional duration : float)
 	{
 		if(effectManager && effectManager.IsReady())
 			effectManager.PauseHPRegenEffects(sourceName, duration);			
 	}
 	
-	public function ResumeHPRegenEffects(sourceName : name)
+	public function ResumeHPRegenEffects( sourceName : name, optional forceAll : bool )
 	{
 		if(effectManager && effectManager.IsReady())
-			effectManager.ResumeHPRegenEffects(sourceName);			
+			effectManager.ResumeHPRegenEffects( sourceName, forceAll );			
 	}
 	
-	public function PauseStaminaRegen(sourceName : name, optional duration : float)
+	public function PauseStaminaRegen( sourceName : name, optional duration : float )
 	{
 		if(effectManager && effectManager.IsReady())
-			effectManager.PauseStaminaRegen(sourceName, duration);			
+			effectManager.PauseStaminaRegen(sourceName, duration );			
 	}
 	
 	public function ResumeStaminaRegen(sourceName : name)
@@ -4295,6 +4428,35 @@ import abstract class CActor extends CGameplayEntity
 		SignalGameplayEvent( 'HorseRidingOn' );
 	}
 	
+	
+	event OnAnimEvent_item_track_hack_reading_book( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
+	{
+		var ids : array<SItemUniqueId>;
+		
+		ids = GetInventory().AddAnItem( 'bookshelf_book', 1, true, true, false );
+		if( GetInventory().IsIdValid( ids[0] ) )
+		{
+			GetInventory().MountItem( ids[0], true, true );
+		}
+	}
+	
+	
+	event OnAnimEvent_item_track_hack_reading_book_unmount( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
+	{
+		var ids : array<SItemUniqueId>;		
+		
+		if( animEventType == AET_DurationEnd )
+		{
+			ids = GetInventory().GetItemsByName( 'bookshelf_book' );
+			if( GetInventory().IsIdValid( ids[0] ) )
+			{
+				GetInventory().UnmountItem( ids[0], true );
+				GetInventory().RemoveItemByName( 'bookshelf_book', -1 );
+			}
+		}
+	}
+	
+	
 	event OnDeathAnimFinished()
 	{
 		if(effectManager)
@@ -4421,7 +4583,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	public function SetWound( woundName : name, optional spawnEntity : bool, optional createParticles : bool,
 										        optional dropEquipment : bool, optional playSound : bool,
-										        optional direction : Vector, optional playEffects : bool )
+										        optional direction : Vector, optional playedEffectsMask : int )
 	{
 		var dc : CDismembermentComponent;
 		dc = (CDismembermentComponent)GetComponentByClassName( 'CDismembermentComponent' );
@@ -4433,7 +4595,7 @@ import abstract class CActor extends CGameplayEntity
 			{
 				createParticles = false;
 			}
-			dc.SetVisibleWound( woundName, spawnEntity, createParticles, dropEquipment, playSound, direction, playEffects );
+			dc.SetVisibleWound( woundName, spawnEntity, createParticles, dropEquipment, playSound, direction, playedEffectsMask );
 		}
 	}
 	
@@ -4473,11 +4635,13 @@ import abstract class CActor extends CGameplayEntity
 	private var woundToDismember 	: name;
 	private var forwardVector		: Vector;
 	private var dismemberForceRagdoll : bool;
-	public function SetDismembermentInfo( woundName : name, vec : Vector, forceRagoll : bool ) 	
+	private var dismemberEffectsMask : int;
+	public function SetDismembermentInfo( woundName : name, vec : Vector, forceRagoll : bool, optional playedEffectsMask : int ) 	
 	{ 
 		woundToDismember = woundName; 
 		forwardVector = vec;
 		dismemberForceRagdoll = forceRagoll;
+		dismemberEffectsMask = playedEffectsMask;
 	}
 	
 	public timer function DelayedDismemberTimer( time : float , id : int)
@@ -4487,7 +4651,7 @@ import abstract class CActor extends CGameplayEntity
 
 	private function Dismember()
 	{		
-		this.SetWound( woundToDismember, true, true, true, true, forwardVector );
+		SetWound( woundToDismember, true, true, true, true, forwardVector, dismemberEffectsMask );
 		
 		if(dismemberForceRagdoll && ((CMovingPhysicalAgentComponent)GetMovingAgentComponent()).HasRagdoll() )
 		{
@@ -4540,6 +4704,11 @@ import abstract class CActor extends CGameplayEntity
 				targets.EraseFast(i);
 			}	
 			else if(!targets[i].IsAlive())
+			{
+				
+				targets.EraseFast(i);
+			}
+			else if( targets[i].HasTag( 'isHiddenUnderground' ) )
 			{
 				
 				targets.EraseFast(i);
@@ -4638,12 +4807,14 @@ import abstract class CActor extends CGameplayEntity
 			ignoreAttack = false;
 			SetAttackData(data);
 			weaponId = GetInventory().GetItemFromSlot(data.weaponSlot);
-			
 			if ( this != thePlayer )
 				BlinkWeapon(weaponId);
 			
 			SetCurrentAttackData(data, animInfo );
-			
+			if ( data.rangeName == 'useCollisionFromItem' )
+			{
+				lastAttackRangeName = data.rangeName;
+			}
 		}
 		
 		else if(animEventType == AET_DurationEnd)
@@ -4678,7 +4849,6 @@ import abstract class CActor extends CGameplayEntity
 			
 			lastAttackRangeName = data.rangeName;
 			DoAttack(data, weaponId, parried, countered, parriedBy, GetAnimNameFromEventAnimInfo( animInfo ), GetLocalAnimTimeFromEventAnimInfo( animInfo ));
-			
 		}
 	}
 	
@@ -4718,7 +4888,7 @@ import abstract class CActor extends CGameplayEntity
 	private var ignoreAttack : bool;
 	private var currentAttackData : CPreAttackEventData;
 	private var currentAttackAnimInfo : SAnimationEventAnimInfo;
-	private var ignoreTargetsForCurrentAttack : array<CActor>;
+	private var ignoreTargetsForCurrentAttack : array<CGameplayEntity>;
 	
 	private function SetCurrentAttackData(data : CPreAttackEventData , animInfo : SAnimationEventAnimInfo)
 	{
@@ -4752,18 +4922,116 @@ import abstract class CActor extends CGameplayEntity
 	
 	
 	
-	event OnCollisionFromItem( collidedActor : CActor, optional itemEntity : CItemEntity )
+	event OnCollisionFromItem( collidedEntity : CGameplayEntity, optional itemEntity : CItemEntity )
 	{
-		var data : CPreAttackEventData;
-		var animInfo : SAnimationEventAnimInfo;
-		var parriedBy : array<CActor>;
-		var weaponId : SItemUniqueId;
-		var parried, countered : bool;
+		var data 				: CPreAttackEventData;
+		var animInfo 			: SAnimationEventAnimInfo;
+		var parriedBy 			: array<CActor>;
+		var weaponId 			: SItemUniqueId;
+		var parried, countered 	: bool;
 		var hasProperAttitude	: bool;
+		var npc 				: CNewNPC;
+		
+		if ( !attackEventInProgress )
+		{
+			LogItemCollision("Item " + itemEntity + " collided with " + collidedEntity + " but Attack is not in progress");
+			return false;
+		}
+		
+		npc = (CNewNPC) this;
+		if ( npc && !npc.IsAttacking() )
+		{
+			attackEventInProgress = false;
+			if ( ignoreAttack )
+			{
+				ignoreAttack = false;
+			}
+			
+			LogItemCollision("Item " + itemEntity + " collided with " + collidedEntity + " but npc is not attacking");
+			return false;
+		}
+		
+		if ( !collidedEntity )
+		{
+			LogItemCollision("Item " + itemEntity + " collided with NOT actor");
+			return false;
+		}
+		
+		if ( ignoreTargetsForCurrentAttack.Contains(collidedEntity) )
+			return false;
+		
+		GetCurrentAttackDataAndAnimInfo( data, animInfo);
+		
+		if ( data.rangeName != 'useCollisionFromItem' )
+			return false;
+			
+		hasProperAttitude = IsRequiredAttitudeBetween(this, collidedEntity, data.Damage_Hostile, data.Damage_Neutral, data.Damage_Friendly);
+		if ( !hasProperAttitude )
+		{
+			return false;
+		}
+		
+		weaponId = GetInventory().GetItemFromSlot(data.weaponSlot);
+		
+		GetInventory().GetItemEntityUnsafe(weaponId) == itemEntity;
+		
+		if(!GetInventory().IsIdValid(weaponId) || data.attackName == '' )
+		{
+			LogAttackEvents("No valid attack data set - skipping hit!");
+			LogAssert(false, "No valid attack data set - skipping hit!");
+			return false;
+		}
+		else if ( itemEntity && GetInventory().GetItemEntityUnsafe(weaponId) != itemEntity )
+		{
+			LogItemCollision("Item " + itemEntity + " collided with " + collidedEntity + " but Attack is for different item");
+			return false;
+		}
+		
+		
+		
+		if ( this.HasAbility( 'WildHunt_Imlerith' ) )
+			data.canBeDodged = false;
+		
+		hitTargets.PushBack(collidedEntity);
+		parriedBy = TestParryAndCounter(data, weaponId, parried, countered);
+		
+		DoAttack(data, weaponId, parried, countered, parriedBy, GetAnimNameFromEventAnimInfo( animInfo ), GetLocalAnimTimeFromEventAnimInfo( animInfo ));
+		
+		LogItemCollision("Item " + itemEntity + " collided with " + collidedEntity + " and Attack should deal dmg");
+		
+		ignoreTargetsForCurrentAttack.PushBack(collidedEntity);
+		ignoreAttack = true;
+		return true;
+	}
+	
+	
+	
+	event OnCollisionFromGiantWeapon( collidedActor : CActor, optional itemEntity : CItemEntity )
+	{
+		var data 				: CPreAttackEventData;
+		var animInfo 			: SAnimationEventAnimInfo;
+		var parriedBy 			: array<CActor>;
+		var weaponId 			: SItemUniqueId;
+		var parried, countered 	: bool;
+		var hasProperAttitude	: bool;
+		var npc 				: CNewNPC;
 		
 		if ( !attackEventInProgress )
 		{
 			LogItemCollision("Item " + itemEntity + " collided with " + collidedActor + " but Attack is not in progress");
+			return false;
+		}
+		
+		npc = (CNewNPC) this;
+		if ( npc && !npc.IsAttacking() )
+		{
+			attackEventInProgress = false;
+			if ( ignoreAttack )
+			{
+				ignoreAttack = false;
+			}
+			
+			LogItemCollision("Item " + itemEntity + " collided with " + collidedActor + " but npc is not attacking");
 			return false;
 		}
 		
@@ -4784,7 +5052,7 @@ import abstract class CActor extends CGameplayEntity
 		hasProperAttitude = IsRequiredAttitudeBetween(this, collidedActor, data.Damage_Hostile, data.Damage_Neutral, data.Damage_Friendly);
 		if ( !hasProperAttitude )
 		{
-			return false;
+		
 		}
 		
 		weaponId = GetInventory().GetItemFromSlot(data.weaponSlot);
@@ -4804,20 +5072,19 @@ import abstract class CActor extends CGameplayEntity
 		}
 		
 		
-		if ( this.HasAbility( 'WildHunt_Imlerith' ) )
-			data.canBeDodged = false;
+		if ( collidedActor.HasAbility( 'CustomReactionToGiantWeapon' ) || collidedActor.HasTag( 'CustomReactionToGiantWeapon' ) )
+		{	
+			this.SignalGameplayEventParamObject( 'ReactionToGiantWeaponActor', collidedActor );
+			this.SignalGameplayEventParamObject( 'ReactionToGiantWeaponItem', itemEntity );
+		}
+		else
+		{
+			return false;
+		}
 		
-		hitTargets.PushBack(collidedActor);
-		parriedBy = TestParryAndCounter(data, weaponId, parried, countered);
-		
-		DoAttack(data, weaponId, parried, countered, parriedBy, GetAnimNameFromEventAnimInfo( animInfo ), GetLocalAnimTimeFromEventAnimInfo( animInfo ));
-		
-		LogItemCollision("Item " + itemEntity + " collided with " + collidedActor + " and Attack should deal dmg");
-		
-		ignoreTargetsForCurrentAttack.PushBack(collidedActor);
-		ignoreAttack = true;
 		return true;
 	}
+	
 	
 	
 	
@@ -4851,6 +5118,8 @@ import abstract class CActor extends CGameplayEntity
 		if(npc)
 		{
 			npc.SetCounterWindowStartTime(theGame.GetEngineTime());
+			npc.SignalGameplayEventParamInt( 'swingType', data.swingType );
+			npc.SignalGameplayEventParamInt( 'swingDir', data.swingDir );
 			
 			if((ShouldProcessTutorial('TutorialCounter') || ShouldProcessTutorial('TutorialDodge')) && GetTarget() == thePlayer && FactsQuerySum("tut_fight_use_slomo") > 0 && !thePlayer.IsCurrentlyDodging())
 			{
@@ -4882,6 +5151,9 @@ import abstract class CActor extends CGameplayEntity
 						npc.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack_Light );
 					else if(data.hitReactionType == EHRT_Heavy)
 						npc.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack_Heavy );
+					
+					npc.SignalGameplayEventParamInt( 'swingType', data.swingType );
+					npc.SignalGameplayEventParamInt( 'swingDir', data.swingDir );
 				}
 				
 				if( ( npc.IsShielded(this) || npc.IsGuarded() ) && data.Can_Parry_Attack)
@@ -5002,18 +5274,6 @@ import abstract class CActor extends CGameplayEntity
 		return parriedBy;
 	}
 
-	private function SetCounterHint( )
-	{
-		
-		var hud : CR4ScriptedHud;
-		var module : CR4HudModuleEnemyFocus;
-
-		hud = (CR4ScriptedHud)theGame.GetHud();
-		module = (CR4HudModuleEnemyFocus)hud.GetHudModule("EnemyFocusModule");
-		
-		
-	}		
-	
 	
 	protected function DoAttack(animData : CPreAttackEventData, weaponId : SItemUniqueId, parried : bool, countered : bool, parriedBy : array<CActor>, attackAnimationName : name, hitTime : float)
 	{
@@ -5164,6 +5424,7 @@ import abstract class CActor extends CGameplayEntity
 			else if(countered)
 			{
 				attackAction.SetIsCountered(true);
+				SignalGameplayEvent('AttackCountered');
 			}
 		}
 		
@@ -5230,9 +5491,16 @@ import abstract class CActor extends CGameplayEntity
 			animData.hitBackFX 			= 'fire_hit';
 			animData.hitBackParriedFX 	= 'fire_hit';
 		}
+		else if (  weaponName == 'fists_lightning_lynx' )
+		{
+			animData.hitFX 				= 'hit_electric_quen';
+			animData.hitParriedFX 		= 'hit_electric_quen';
+			animData.hitBackFX 			= 'hit_electric_quen';
+			animData.hitBackParriedFX 	= 'hit_electric_quen';
+		}
 	}
 	
-	public function ReduceDamage( out damageData : W3DamageAction)
+	public function ReduceDamage( out damageData : W3DamageAction )
 	{
 		var actorAttacker 			: CActor;
 		var id 						: SItemUniqueId;
@@ -5251,44 +5519,62 @@ import abstract class CActor extends CGameplayEntity
 		var minDamage				: float;
 		var i						: int;
 		var dmgTypes 				: array< SRawDamage >;
+		var hasPoisonDamage			: bool;
 		
 		canLog = theGame.CanLog();
 			
 		
 		
 		
-		if (damageData.victim == thePlayer && !damageData.IsDoTDamage())
+		if( damageData.victim == thePlayer && !damageData.IsDoTDamage() )
 		{
-			damageData.GetDTs(dmgTypes);
+			damageData.GetDTs( dmgTypes );
 			
 			
-			for (i=0; i<dmgTypes.Size(); i+=1)
+			for( i=0; i<dmgTypes.Size(); i+=1 )
 			{
-				if(dmgTypes[i].dmgType == theGame.params.DAMAGE_NAME_DIRECT)
+				if( dmgTypes[i].dmgType == theGame.params.DAMAGE_NAME_DIRECT )
 				{
-					dmgTypes.EraseFast(i);
+					dmgTypes.EraseFast( i );
 					break;
 				}
 			}
 			
-			if(dmgTypes.Size() > 0)
+			if( dmgTypes.Size() > 0 )
 			{
-				minDamage = 0;
-				for (i=0; i<dmgTypes.Size(); i+=1)
+				hasPoisonDamage = false;
+				for( i=0; i<dmgTypes.Size(); i+=1 )
 				{
-					if (DamageHitsVitality(dmgTypes[i].dmgType))
+					if( dmgTypes[ i ].dmgType == theGame.params.DAMAGE_NAME_POISON )
 					{
-						minDamage += dmgTypes[i].dmgVal;
+						hasPoisonDamage = true;
+						break;
 					}
 				}
-				minDamage *= 0.05;
-				if (minDamage < 1) minDamage = 1;
-					
-				if (damageData.processedDmg.vitalityDamage < minDamage)
-					damageData.processedDmg.vitalityDamage = minDamage;
+			
+				if( !( hasPoisonDamage && this == GetWitcherPlayer() && HasBuff( EET_GoldenOriole ) && GetWitcherPlayer().GetPotionBuffLevel( EET_GoldenOriole ) == 3) )
+				{
+					minDamage = 0;
+					for( i=0; i<dmgTypes.Size(); i+=1 )
+					{
+						if( DamageHitsVitality( dmgTypes[ i ].dmgType ) )
+						{
+							minDamage += dmgTypes[ i ].dmgVal;
+						}
+					}
+					minDamage *= 0.05;
+					if(minDamage < 1)
+					{
+						minDamage = 1;
+					}	
+					if( damageData.processedDmg.vitalityDamage < minDamage )
+					{
+						damageData.processedDmg.vitalityDamage = minDamage;
+					}
+				}
 			}
 		}
-			
+		
 		
 		if(damageData.IsActionRanged() && damageData.attacker == thePlayer && (W3BoltProjectile)(damageData.causer) )
 		{
@@ -5328,11 +5614,24 @@ import abstract class CActor extends CGameplayEntity
 		}
 		
 		
-		if(!damageData.DealsAnyDamage())
+		if(damageData.IsActionMelee() && HasAbility( 'ReflectMeleeAttacks' ) )
+		{
+			if ( canLog )
+			{
+				LogDMHits("CActor.ReduceDamage: victim is heavily armored and attacker bounces of his armor", damageData );
+			}
+			damageData.SetAllProcessedDamageAs(0);
+			((CActor)damageData.attacker).ReactToReflectedAttack( this );
+			damageData.ClearEffects();
+			return;
+		}
+		
+		
+		if(!damageData.DealsAnyDamage() && damageData.GetBuffSourceName() != "Mutation4")
 			return;
 		
 		
-		if(attackAction && attackAction.IsActionMelee() && HasAbility( 'CannotBeAttackedFromBehind' ) && IsAttackerAtBack(damageData.attacker) )
+		if(damageData.IsActionMelee() && HasAbility( 'CannotBeAttackedFromAllSides' ) )
 		{
 			if ( canLog )
 			{
@@ -5340,8 +5639,36 @@ import abstract class CActor extends CGameplayEntity
 			}
 			damageData.SetAllProcessedDamageAs(0);
 			((CActor)damageData.attacker).ReactToReflectedAttack( this );
+			damageData.ClearEffects();
 			return;
 		}
+		
+		
+		if(damageData.IsActionMelee() && HasAbility( 'CannotBeAttackedFromBehind' ) && IsAttackerAtBack(damageData.attacker) )
+		{
+			if ( canLog )
+			{
+				LogDMHits("CActor.ReduceDamage: victim attacked from behind and immune to this type of strike - no damage will be done", damageData );
+			}
+			damageData.SetAllProcessedDamageAs(0);
+			((CActor)damageData.attacker).ReactToReflectedAttack( this );
+			damageData.ClearEffects();
+			return;
+		}
+		
+		
+		if(damageData.IsActionMelee() && HasAbility( 'VulnerableFromFront' ) && !IsAttackerAtBack(damageData.attacker) )
+		{
+			if ( canLog )
+			{
+				LogDMHits("CActor.ReduceDamage: victim attacked from front and vulnerable to this type of strike - attack will ignor armor", damageData );
+			}
+			damageData.SetIgnoreArmor( true );
+			damageData.SetPointResistIgnored( true );
+			return;
+		}
+		
+		
 		
 		if( this.HasAbility( 'EredinInvulnerable' ) && damageData.IsActionWitcherSign() )
 		{
@@ -5350,6 +5677,21 @@ import abstract class CActor extends CGameplayEntity
 				LogDMHits("CActor.ReduceDamage: victim has EredinInvulnerable ability - no damage will be done", damageData );
 			}
 			damageData.SetAllProcessedDamageAs(0);
+			return;
+		}
+		
+		
+		if(this != thePlayer && IsCurrentlyDodging() && damageData.CanBeDodged() && ( VecDistanceSquared(this.GetWorldPosition(),damageData.attacker.GetWorldPosition()) > 1.7 
+			|| this.HasAbility( 'IgnoreDodgeMinimumDistance' ) ))
+		{
+			if ( canLog )
+			{
+				LogDMHits("Non-player character dodge - no damage dealt", damageData);
+			}
+			damageData.SetWasDodged();
+			damageData.SetAllProcessedDamageAs(0);
+			damageData.ClearEffects();
+			damageData.SetHitAnimationPlayType(EAHA_ForceNo);
 			return;
 		}
 		
@@ -5367,17 +5709,6 @@ import abstract class CActor extends CGameplayEntity
 		}
 		
 		
-		if(this != thePlayer && IsCurrentlyDodging() && damageData.CanBeDodged() && VecDistanceSquared(this.GetWorldPosition(),damageData.attacker.GetWorldPosition()) > 1.7 ) 
-		{
-			if ( canLog )
-			{
-				LogDMHits("Non-player character dodge - no damage dealt", damageData);
-			}
-			damageData.SetAllProcessedDamageAs(0);
-			damageData.ClearEffects();
-			damageData.SetHitAnimationPlayType(EAHA_ForceNo);
-			return;
-		}
 		
 		
 		if(damageData.IsParryStagger())
@@ -5549,44 +5880,46 @@ import abstract class CActor extends CGameplayEntity
 			}
 		}
 		
-		
-		if(!damageData.GetIgnoreImmortalityMode())
-		{
-			if(!((W3PlayerWitcher)this))
-				Log("");
-		
-			
-			if( IsInvulnerable() )
-			{
-				if ( canLog )
-				{
-					LogDMHits("CActor.ReduceDamage: victim Invulnerable - no damage will be dealt", damageData );
-				}
-				damageData.SetAllProcessedDamageAs(0);
-				return;
-			}
-			
-			
-			if(actorAttacker && damageData.DealsAnyDamage() )
-				actorAttacker.SignalGameplayEvent('DamageInstigated' );
-			
-			
-			if( IsImmortal() )
-			{
-				if ( canLog )
-				{
-					LogDMHits("CActor.ReduceDamage: victim is Immortal, clamping damage", damageData );
-				}
-				damageData.processedDmg.vitalityDamage = ClampF(damageData.processedDmg.vitalityDamage, 0, GetStat(BCS_Vitality)-1 );
-				damageData.processedDmg.essenceDamage  = ClampF(damageData.processedDmg.essenceDamage, 0, GetStat(BCS_Essence)-1 );
-				return;
-			}
-		}
-		else
+		if(damageData.victim != thePlayer)
 		{
 			
-			if(actorAttacker && damageData.DealsAnyDamage() )
-				actorAttacker.SignalGameplayEvent('DamageInstigated' );
+			if(!damageData.GetIgnoreImmortalityMode())
+			{
+				if(!((W3PlayerWitcher)this))
+					Log("");
+				
+				
+				if( IsInvulnerable() )
+				{
+					if ( canLog )
+					{
+						LogDMHits("CActor.ReduceDamage: victim Invulnerable - no damage will be dealt", damageData );
+					}
+					damageData.SetAllProcessedDamageAs(0);
+					return;
+				}
+				
+				if(actorAttacker && damageData.DealsAnyDamage() )
+					actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
+				
+				
+				if( IsImmortal() )
+				{
+					if ( canLog )
+					{
+						LogDMHits("CActor.ReduceDamage: victim is Immortal, clamping damage", damageData );
+					}
+					damageData.processedDmg.vitalityDamage = ClampF(damageData.processedDmg.vitalityDamage, 0, GetStat(BCS_Vitality)-1 );
+					damageData.processedDmg.essenceDamage  = ClampF(damageData.processedDmg.essenceDamage, 0, GetStat(BCS_Essence)-1 );
+					return;
+				}
+			}
+			else
+			{
+				
+				if(actorAttacker && damageData.DealsAnyDamage() )
+					actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
+			}
 		}
 	}
 	
@@ -5612,17 +5945,17 @@ import abstract class CActor extends CGameplayEntity
 	function IsAttackerAtBack(attacker : CNode) : bool
 	{
 		var targetToSourceAngle	: float;
-
+		
 		if(!attacker)
 			return false;
-
+		
 		targetToSourceAngle = AbsF( NodeToNodeAngleDistance(attacker, this) );		
 		if( targetToSourceAngle > 90 )
 			return true;
 		
 		return false;
 	}
-		
+	
 	
 	function ProcessSlideToTarget( duration : float, slideProperties : SSlideToTargetEventProps )
 	{
@@ -5719,6 +6052,11 @@ import abstract class CActor extends CGameplayEntity
 		parryInfo.attackSwingType = attackSwingType;
 		parryInfo.attackSwingDir = attackSwingDir;
 		parryInfo.canBeParried = canBeParried;
+		
+		if( attacker.HasAbility( 'UnblockableAttacks' ) )
+		{
+			parryInfo.canBeParried = false;
+		}
 		
 		target.SetDetailedHitType(ChooseDetailedHitType(parryInfo));
 		
@@ -5837,7 +6175,7 @@ import abstract class CActor extends CGameplayEntity
 		}
 	}
 	
-	public function GetUsedVehicle() : CGameplayEntity
+	public final function GetUsedVehicle() : CGameplayEntity
 	{
 		var vehicleFromHandle : CGameplayEntity;
 
@@ -5861,7 +6199,7 @@ import abstract class CActor extends CGameplayEntity
 	}
 	
 	
-	public function IsUsingHorse( optional ignoreMountInProgress : bool ) : bool
+	public final function IsUsingHorse( optional ignoreMountInProgress : bool ) : bool
 	
 	{
 	
@@ -6241,7 +6579,41 @@ import abstract class CActor extends CGameplayEntity
 			physicalComponent.RegisterEventListener( this );
 		}
 	}
-
+	
+	public final function FreezeCloth( frozen : bool )
+	{
+		var comps : array< CComponent >;
+		var cloth : CClothComponent;
+		var i : int;
+		
+		comps = GetComponentsByClassName( 'CClothComponent' );
+		for( i=0; i<comps.Size(); i+=1 )
+		{
+			cloth = ( CClothComponent ) comps[ i ];
+			if( cloth )
+			{
+				cloth.SetFrozen( frozen );
+			}
+		}
+	}
+	
+	public final function SetClothSimulation( b : bool )
+	{
+		var comps : array< CComponent >;
+		var cloth : CClothComponent;
+		var i : int;
+		
+		comps = GetComponentsByClassName( 'CClothComponent' );
+		for( i=0; i<comps.Size(); i+=1 )
+		{
+			cloth = ( CClothComponent ) comps[ i ];
+			if( cloth )
+			{
+				cloth.SetSimulated( b );
+			}
+		}
+	}
+	
 	
 	
 	
@@ -6258,7 +6630,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	
 	
-	 event OnPocessActionPost(action : W3DamageAction)
+	 event OnProcessActionPost(action : W3DamageAction)
 	{
 		var actorVictim : CActor;
 		var bloodTrailParam : CBloodTrailEffect;
@@ -6278,6 +6650,19 @@ import abstract class CActor extends CGameplayEntity
 		}		
 	}
 	
+	event OnHitActionReaction( attacker : CActor, weaponName : name )
+	{
+		
+		if ( attacker.HasAbility( 'mon_cloud_giant' ) && weaponName == 'mon_q704_cloud_giant_ep2_weapon' )
+		{
+			SoundEvent( "monster_cloud_giant_cmb_weapon_hit_add", 'head' );
+		}
+		else if ( attacker.HasAbility( 'mon_knight_giant' ) && weaponName == 'mon_q701_giant_ep2_weapon' )
+		{
+			SoundEvent( "monster_knight_giant_cmb_weapon_hit_add", 'head' );
+		}
+	}
+	
 	
 	public function GetCriticalHitDamageBonus(weaponId : SItemUniqueId, victimMonsterCategory : EMonsterCategory, isStrikeAtBack : bool) : SAbilityAttributeValue
 	{
@@ -6290,7 +6675,7 @@ import abstract class CActor extends CGameplayEntity
 		return false;
 	}
 	
-	public function FinishQuen(skipVisuals : bool);
+	public function FinishQuen( skipVisuals : bool, optional forceNoBearSetBonus : bool );
 	
 	public function UpdateStatsForDifficultyLevel(d : EDifficultyMode)
 	{
@@ -6332,6 +6717,10 @@ import abstract class CActor extends CGameplayEntity
 		var definition : EPlayerPreviewInventory;
 		
 		
+		
+		buffImmunities.Clear();
+		
+		
 		if ( this.GetVoicetag() != 'GERALT' )
 		{
 			return true;
@@ -6369,7 +6758,10 @@ import abstract class CActor extends CGameplayEntity
 			case PPI_Viper :
 				resourceKey = 'preview_inventory_viper';
 				break;
-			
+			case PPI_Red_Wolf_1 :
+				resourceKey = 'preview_inventory_red_wolf_1';
+				break;
+				
 			case PPI_default :
 			default :
 				resourceKey = 'preview_inventory_default';
@@ -6383,7 +6775,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	event OnCutsceneDeath()
 	{
-		this.Kill( true );
+		Kill( 'Quest', true );
 	}
 	
 	
@@ -6554,6 +6946,59 @@ import abstract class CActor extends CGameplayEntity
 				}
 			}
 		}
+	}
+	
+	public function IsHuge() : bool
+	{
+		return HasAbility( 'mon_type_huge' );
+	}
+	
+	public function CreateFXEntityAtPelvis( resourceName : name, attach : bool ) : CEntity
+	{
+		var boneName : name;
+		var boneIndex : int;
+		
+		boneName = 'pelvis';
+		boneIndex = GetBoneIndex( boneName );		
+		if( boneIndex == -1 )
+		{
+			boneName = 'k_pelvis_g';
+		}
+		
+		return CreateFXEntityAtBone( resourceName, boneName, attach );
+	}
+	
+	public function CreateFXEntityAtBone( resourceName : name, boneName : name, attach : bool ) : CEntity
+	{
+		var template : CEntityTemplate;
+		var boneRotation : EulerAngles;
+		var bonePosition : Vector;
+		var boneIndex : int;
+		var fxEnt : CEntity;
+		
+		
+		boneIndex = GetBoneIndex( boneName );		
+		if( boneIndex == -1 )
+		{
+			return fxEnt;
+		}
+		
+		
+		template = (CEntityTemplate)LoadResource( resourceName );		
+		if( !template )
+		{
+			return fxEnt;
+		}
+		
+		GetBoneWorldPositionAndRotationByIndex( boneIndex, bonePosition, boneRotation );
+		fxEnt = theGame.CreateEntity( template, bonePosition, boneRotation );
+		
+		if( attach )
+		{
+			fxEnt.CreateAttachmentAtBoneWS( this, boneName, bonePosition, boneRotation );
+		}
+		
+		return fxEnt;
 	}
 	
 	

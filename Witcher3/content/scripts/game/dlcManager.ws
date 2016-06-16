@@ -27,10 +27,20 @@ import class CDLCManager extends CObject
 		return IsDLCAvailable('ep1');
 	}	
 	
+	public function IsEP1Enabled():bool
+	{
+		return IsDLCEnabled('ep1');
+	}
+	
 	public function IsEP2Available():bool
 	{
-		return IsDLCAvailable('bob_000_000');
-	}		
+		return IsDLCAvailable('abob_001_001');
+	}
+
+	public function IsEP2Enabled():bool
+	{
+		return IsDLCEnabled('abob_001_001');
+	}			
 	
 	public function IsAnyDLCAvailable():bool
 	{

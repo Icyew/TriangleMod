@@ -71,15 +71,34 @@ abstract class W3DamageOverTimeEffect extends CBaseGameplayEffect
 	
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		var params : W3BuffDoTParams;		
+		var params : W3BuffDoTParams;
+		var perk20Bonus :SAbilityAttributeValue;
 		
 		params = (W3BuffDoTParams)customParams;
 		if(params)
+		{
 			isEnvironment = params.isEnvironment;
+		}
+		
+		if( params.isPerk20Active )
+		{
+			perk20Bonus = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'dmg_multiplier', false, false);
+			effectValue = effectValue * ( 1 + perk20Bonus.valueMultiplicative );
+		}
 			
 		AddHealthRegenReductionBuff();		
 		
 		super.OnEffectAdded(customParams);
+	}
+	
+	event OnEffectAddedPost()
+	{
+		if( IsAddedByPlayer() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) && target != thePlayer )
+		{
+			GetWitcherPlayer().AddMutation12Decoction();
+		}
+		
+		super.OnEffectAddedPost();
 	}
 	
 	
@@ -217,4 +236,5 @@ abstract class W3DamageOverTimeEffect extends CBaseGameplayEffect
 class W3BuffDoTParams extends W3BuffCustomParams
 {
 	var isEnvironment : bool;			
+	var isPerk20Active : bool;			
 }

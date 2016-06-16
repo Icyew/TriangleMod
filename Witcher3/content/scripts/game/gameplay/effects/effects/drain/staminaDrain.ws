@@ -49,14 +49,14 @@ class W3Effect_StaminaDrain extends CBaseGameplayEffect
 		}
 		
 		ReadXMLValues();
-		target.PauseEffects(EET_AutoStaminaRegen, 'StaminaDrain', true );
+		target.PauseStaminaRegen( 'StaminaDrain' );
 	}
 	
 	public function OnLoad(t : CActor, eff : W3EffectManager)
 	{
 		super.OnLoad(t, eff);
 		
-		target.PauseEffects(EET_AutoStaminaRegen, 'StaminaDrain', true );
+		target.PauseStaminaRegen( 'StaminaDrain' );
 		ReadXMLValues();
 	}
 	
@@ -72,6 +72,6 @@ class W3Effect_StaminaDrain extends CBaseGameplayEffect
 	{
 		super.OnEffectRemoved();
 		
-		target.ResumeEffects(EET_AutoStaminaRegen, 'StaminaDrain');
+		target.ResumeStaminaRegen( 'StaminaDrain' );
 	}
 }

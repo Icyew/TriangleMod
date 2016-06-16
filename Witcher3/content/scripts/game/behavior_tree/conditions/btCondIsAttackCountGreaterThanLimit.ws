@@ -9,7 +9,6 @@
 
 class CBTCondIsAttackCountGreaterThanLimit extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CExtendedAICombatStorage;
 
 	public var attackCountLimit		: int;
@@ -28,8 +27,7 @@ class CBTCondIsAttackCountGreaterThanLimit extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CExtendedAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CExtendedAICombatStorage)InitializeCombatStorage();
 	}	
 };
 
@@ -47,7 +45,6 @@ class CBTCondIsAttackCountGreaterThanLimitDef extends IBehTreeConditionalTaskDef
 
 class CBTModifyAttackCount extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CExtendedAICombatStorage;
 	
 	public var attackName			: name;
@@ -72,8 +69,7 @@ class CBTModifyAttackCount extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CExtendedAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CExtendedAICombatStorage)InitializeCombatStorage();
 	}	
 };
 

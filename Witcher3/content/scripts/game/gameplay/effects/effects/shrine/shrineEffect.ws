@@ -23,6 +23,27 @@ abstract class W3Effect_Shrine extends CBaseGameplayEffect
 			isFromMutagen23 = shrineParams.isFromMutagen23;
 	}
 	
+	public function OnTimeUpdated( dt : float )
+	{
+		
+		if( target == GetWitcherPlayer() && GetWitcherPlayer().CanUseSkill( S_Perk_14 ) )
+		{
+			if( isActive && pauseCounters.Size() == 0)
+			{
+				timeActive += dt;	
+			}
+			
+			timeLeft = -1.f;
+			return;
+		}
+		else if( timeLeft == -1.f )
+		{
+			timeLeft = GetInitialDurationAfterResists() - timeActive;
+		}
+		
+		super.OnTimeUpdated( dt );
+	}
+	
 	public final function IsFromMutagen23() : bool		{return isFromMutagen23;}
 }
 
