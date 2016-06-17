@@ -3,7 +3,7 @@
     <Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
-				<Entry varId="AltArmorStaminaMod"				value="1"	/>
+				<Entry varId="AltArmorStaminaMod"				value="0"	/>
 				<Entry varId="ChestPantsAttackCost"				value="0.8"	/>
 				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
 				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
