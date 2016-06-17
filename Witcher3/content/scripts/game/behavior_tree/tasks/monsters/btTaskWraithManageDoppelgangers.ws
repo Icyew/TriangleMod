@@ -224,7 +224,7 @@ class CBTTaskWraithManageDoppelgangers extends IBehTreeTask
 			{
 				if( Kill ) 
 				{
-					l_actor.Kill();
+					l_actor.Kill( 'Dopplers' );
 				}
 				else
 				{

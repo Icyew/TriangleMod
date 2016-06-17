@@ -39,7 +39,12 @@ class CR4DeckBuilderMenu extends CR4GwintBaseMenu
 		
 		m_fxSetPassiveAbilString.InvokeSelfOneArg(FlashArgString(GetLocStringByKeyExt("gwint_passive_ability")));	
 		
-		selectedDeckIndex = gwintManager.GetSelectedPlayerDeck();
+		selectedDeckIndex = gwintManager.GetForcedFaction();
+		if (selectedDeckIndex == GwintFaction_Neutral)
+		{
+			selectedDeckIndex = gwintManager.GetSelectedPlayerDeck();
+		}
+		
 		m_fxSetSelectedDeck.InvokeSelfOneArg(FlashArgInt(selectedDeckIndex));
 		m_fxSetGwintGamePending.InvokeSelfOneArg(FlashArgBool(gwintManager.gameRequested));
 		
@@ -82,6 +87,9 @@ class CR4DeckBuilderMenu extends CR4GwintBaseMenu
 		else
 		{
 			theSound.LeaveGameState( ESGS_Gwent );
+			
+			
+			theGame.GetGwintManager().SetForcedFaction( GwintFaction_Neutral );
 		}
 	}
 	
@@ -89,6 +97,13 @@ class CR4DeckBuilderMenu extends CR4GwintBaseMenu
 	{
 		if (gwintManager.gameRequested)
 		{
+			if (!gwintManager.testMatch && theGame.isUserSignedIn())
+			{
+				theGame.FadeOutAsync( 0 );
+				theGame.SetFadeLock( "Gwint_EndFadeOut" );
+			}
+			gwintManager.testMatch = false;
+			
 			gwintManager.gameRequested = false;
 			thePlayer.SetGwintMinigameState( EMS_End_PlayerLost );
 		}
@@ -104,25 +119,36 @@ class CR4DeckBuilderMenu extends CR4GwintBaseMenu
 		
 		deckListArray = m_flashValueStorage.CreateTempFlashArray();
 		
-		if (gwintManager.GetFactionDeck(GwintFaction_NothernKingdom, currentDeckInfo) && currentDeckInfo.unlocked)
+		if (gwintManager.GetFactionDeck(GwintFaction_NothernKingdom, currentDeckInfo) && currentDeckInfo.unlocked && 
+			(gwintManager.GetForcedFaction() == GwintFaction_Neutral || gwintManager.GetForcedFaction() == GwintFaction_NothernKingdom))
 		{
 			deckInfo = CreateDeckDefinitionFlash(currentDeckInfo);
 			deckListArray.PushBackFlashObject(deckInfo);
 		}
 		
-		if (gwintManager.GetFactionDeck(GwintFaction_Nilfgaard, currentDeckInfo) && currentDeckInfo.unlocked)
+		if (gwintManager.GetFactionDeck(GwintFaction_Nilfgaard, currentDeckInfo) && currentDeckInfo.unlocked && 
+			(gwintManager.GetForcedFaction() == GwintFaction_Neutral || gwintManager.GetForcedFaction() == GwintFaction_Nilfgaard))
 		{
 			deckInfo = CreateDeckDefinitionFlash(currentDeckInfo);
 			deckListArray.PushBackFlashObject(deckInfo);
 		}
 		
-		if (gwintManager.GetFactionDeck(GwintFaction_Scoiatael, currentDeckInfo) && currentDeckInfo.unlocked)
+		if (gwintManager.GetFactionDeck(GwintFaction_Scoiatael, currentDeckInfo) && currentDeckInfo.unlocked && 
+			(gwintManager.GetForcedFaction() == GwintFaction_Neutral || gwintManager.GetForcedFaction() == GwintFaction_Scoiatael))
 		{
 			deckInfo = CreateDeckDefinitionFlash(currentDeckInfo);
 			deckListArray.PushBackFlashObject(deckInfo);
 		}
 		
-		if (gwintManager.GetFactionDeck(GwintFaction_NoMansLand, currentDeckInfo) && currentDeckInfo.unlocked)
+		if (gwintManager.GetFactionDeck(GwintFaction_NoMansLand, currentDeckInfo) && currentDeckInfo.unlocked && 
+			(gwintManager.GetForcedFaction() == GwintFaction_Neutral || gwintManager.GetForcedFaction() == GwintFaction_NoMansLand))
+		{
+			deckInfo = CreateDeckDefinitionFlash(currentDeckInfo);
+			deckListArray.PushBackFlashObject(deckInfo);
+		}
+
+		if (theGame.GetDLCManager().IsEP2Available() && gwintManager.GetFactionDeck(GwintFaction_Skellige, currentDeckInfo) && currentDeckInfo.unlocked && 
+			(gwintManager.GetForcedFaction() == GwintFaction_Neutral || gwintManager.GetForcedFaction() == GwintFaction_Skellige))
 		{
 			deckInfo = CreateDeckDefinitionFlash(currentDeckInfo);
 			deckListArray.PushBackFlashObject(deckInfo);

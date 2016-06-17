@@ -3,7 +3,7 @@
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
 /***********************************************************************/
-import class CHorseRiderSharedParams extends CObject
+import class CHorseRiderSharedParams extends IScriptable
 {
 	import private var 	horse 		: CActor;
 	import var 	mountStatus 		: EVehicleMountStatus;
@@ -31,7 +31,7 @@ import class CHorseRiderSharedParams extends CObject
 
 
 
-import class CAIStorageAnimalData extends CObject
+import class CAIStorageAnimalData extends IScriptable
 {
 	var scared			: Bool; 
 	default scared 		= false;	
@@ -39,7 +39,7 @@ import class CAIStorageAnimalData extends CObject
 
 
 
-import class CAIStorageHorseData extends CObject
+import class CAIStorageHorseData extends IScriptable
 {
 	var horseEntity 	: CActor;
 	var horseComponent 	: W3HorseComponent;
@@ -47,7 +47,7 @@ import class CAIStorageHorseData extends CObject
 
 
 
-import class CAIStorageRiderData extends CObject
+import class CAIStorageRiderData extends IScriptable
 {
 	import var sharedParams 					: CHorseRiderSharedParams;
 	import var horseScriptedActionTree 			: IAIActionTree;
@@ -69,7 +69,7 @@ import class CAIStorageRiderData extends CObject
 
 
 
-class CAIStorageReactionData extends CObject
+class CAIStorageReactionData extends IScriptable
 {
 	private const var TAUNTS_TO_BE_ALARMED 	: int; default TAUNTS_TO_BE_ALARMED = 2;
 	

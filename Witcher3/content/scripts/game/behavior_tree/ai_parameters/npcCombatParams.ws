@@ -131,6 +131,13 @@ class CAINpcImlerithSignsBlockAction extends CAINpcDefenseAction
 
 
 
+class CAINpcGregoireCounterAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\combat\npc_def_gregoire_counter";
+};
+
+
+
 class CAINpcEredinCounterAction extends CAINpcDefenseAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_def_eredin_counter";
@@ -202,6 +209,50 @@ class CAINpcOlgierdParryAction extends CAINpcDefenseAction
 	
 	default activationTimeLimitBonusHeavy = 0.5;
 	default activationTimeLimitBonusLight = 0.5;
+};
+
+
+
+class CAINpcDettlaffVampireCounterAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_vampire_counter";
+};
+
+
+class CAINpcDettlaffVampireCounterAfterHitAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_vampire_counter_after_hit";
+};
+
+
+class CAINpcDettlaffVampireParryAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_vampire_parry";
+	
+	editable var activationTimeLimitBonusHeavy : float;
+	editable var activationTimeLimitBonusLight : float;
+	
+	default activationTimeLimitBonusHeavy = 0.5;
+	default activationTimeLimitBonusLight = 0.5;
+};
+
+
+
+class CAINpcDettlaffMinionParryAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_minion_parry";
+	
+	editable var activationTimeLimitBonusHeavy : float;
+	editable var activationTimeLimitBonusLight : float;
+	
+	default activationTimeLimitBonusHeavy = 0.5;
+	default activationTimeLimitBonusLight = 0.5;
+};
+
+
+class CAINpcDettlaffMinionCounterAction extends CAINpcDefenseAction
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_minion_counter";
 };
 
 
@@ -460,19 +511,6 @@ class CAINpcVesemirTutorialTacticTreeParams extends CAINpcTacticTreeParams
 };
 
 
-
-class CAINpcVampiressTree extends CAINpcMeleeTacticTree
-{
-	default aiTreeName = "resdef:ai\combat\npc_tactic_vampiress";
-	
-	function Init()
-	{
-		params = new CAINpcTacticTreeParams in this;
-		params.OnCreated();
-	}
-};
-
-
 class CAINpcSorceressTacticTree extends CAINpcRangedTacticTree
 {
 	default aiTreeName = "resdef:ai\combat\npc_tactic_sorceress";
@@ -621,6 +659,41 @@ class CAINpcPhilippaTacticTree extends CAINpcCustomTacticTree
 class CAINpcOlgierdTacticTree extends CAINpcCustomTacticTree
 {
 	default aiTreeName = "resdef:ai\combat\npc_tactic_olgierd";
+	
+	function Init()
+	{
+		params = new CAINpcTacticTreeParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAINpcDettlaffVampireTacticTree extends CAINpcCustomTacticTree
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_vampire_logic";
+	
+	function Init()
+	{
+		params = new CAINpcTacticTreeParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAINpcDettlaffMinionTacticTree extends CAINpcCustomTacticTree
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_minion_logic";
+	
+	function Init()
+	{
+		params = new CAINpcTacticTreeParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAINpcGregoireTacticTree extends CAINpcCustomTacticTree
+{
+	default aiTreeName = "resdef:ai\monsters/npc_tactic_gregoire";
 	
 	function Init()
 	{
@@ -801,9 +874,53 @@ class CAIMagicSandGroundBlastSpecialAction extends CAISpecialAction
 	}
 };
 
+class CAIMagicSandGroundBlastSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_mage_ground_blast_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicWaterGroundBlastSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_water_mage_ground_blast_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
 class CAIMagicSandPushSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_mage_push";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicSandPushSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_mage_push_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicWaterPushSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_water_mage_push_bob.w2behtree";
 
 	function Init()
 	{
@@ -834,9 +951,53 @@ class CAIMagicTornadoSpecialAction extends CAISpecialAction
 	}
 };
 
+class CAIMagicTornadoSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_tornado_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicWaterTornadoSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_water_tornado_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
 class CAIMagicWindCoilSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_cast_wind_coil";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicWindCoilSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_wind_coil_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicWaterCoilSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_water_coil_bob.w2behtree";
 
 	function Init()
 	{
@@ -856,6 +1017,17 @@ class CAIMagicWindGustSpecialAction extends CAISpecialAction
 	}
 };
 
+class CAIMagicWindGustSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_wind_gust_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
 class CAIMagicSandCageSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_cast_sand_cage";
@@ -867,9 +1039,53 @@ class CAIMagicSandCageSpecialAction extends CAISpecialAction
 	}
 };
 
+class CAIMagicWaterCageSpecialAction extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_water_cage_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicSandCageSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_sand_cage_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
 class CAIMagicShieldSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_cast_magic_shield";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIMagicShieldSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_magic_shield_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIWaterMagicShieldSpecialActionBob extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_water_magic_shield_bob.w2behtree";
 
 	function Init()
 	{
@@ -900,6 +1116,18 @@ class CAIShootProjectilesFromGroundSpecialAction extends CAISpecialAction
 	}
 };
 
+class CAILynxWitchShootProjectilesFromGroundSpecialAction extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_shoot_projectiles_from_ground_bob.w2behtree";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+
 class CAICastRipApartSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_cast_rip_apart";
@@ -925,6 +1153,17 @@ class CAICastFireballSpecialAction extends CAISpecialAction
 class CAICastLightningSpecialAction extends CAISpecialAction
 {
 	default aiTreeName = "resdef:ai\combat\npc_special_cast_lightning";
+
+	function Init()
+	{
+		params = new CAISpecialActionParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAILynxWitchCastLightningSpecialAction extends CAISpecialAction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_special_cast_lightning_bob.w2behtree";
 
 	function Init()
 	{

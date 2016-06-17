@@ -34,4 +34,6 @@ import class CR4WorldDLCExtender extends CObject
 	import public function GetMiniMapZoom12( areaType : int ) : float;
 	import public function GetMiniMapZoom23( areaType : int ) : float;
 	import public function GetMiniMapZoom34( areaType : int ) : float;
+	import public function GetGradientScale( areaType : int ) : float;
+	import public function GetPreviewHeight( areaType : int ) : float;
 }

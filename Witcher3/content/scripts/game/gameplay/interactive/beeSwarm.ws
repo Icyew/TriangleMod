@@ -233,7 +233,7 @@ statemachine class W3BeeSwarm extends CGameplayEntity
 			buffParams.vibratePadHighFreq = 0.2;			
 			buffParams.effectType = EET_Swarm;
 			buffParams.creator = this;
-			buffParams.sourceName = "beeSwarm";
+			buffParams.sourceName = "bee_swarm";
 			buffParams.duration = 1;
 			buffParams.effectValue = damageVal;			
 			buffParams.buffSpecificParams = specParams;

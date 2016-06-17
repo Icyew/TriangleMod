@@ -7,14 +7,10 @@
 
 abstract class CBTTaskRidingManagerHorseMount extends CBTTaskRidingManagerVehicleMount
 {
-	
-	
 	default attachSlot = '';
 	
 	function GetVehicleComponent() : CVehicleComponent
 	{
-		var riderData       : CAIStorageRiderData;
-        riderData        	= (CAIStorageRiderData)aiStorageHandler.Get();
 		return (CVehicleComponent)riderData.sharedParams.GetHorse().GetComponentByClassName('CVehicleComponent');
 	}
 	
@@ -163,12 +159,10 @@ class CBTTaskRidingManagerNPCHorseMount extends CBTTaskRidingManagerHorseMount
     latent function Main() : EBTNodeStatus
     {
         var npc             	: CNewNPC = GetNPC();
-        var riderData       	: CAIStorageRiderData;
         var stupidArray 		: array< name >;
         var vehicleEntity		: CEntity;
 		var vehicleComponent	: CVehicleComponent;
 
-        riderData        					= (CAIStorageRiderData)aiStorageHandler.Get();
         riderData.ridingManagerMountError   = false;
 
         
@@ -235,11 +229,9 @@ class CBTTaskRidingManagerPlayerHorseMount extends CBTTaskRidingManagerHorseMoun
 
     latent function Main() : EBTNodeStatus
     {
-        var riderData       	: CAIStorageRiderData;
         var vehicleEntity		: CEntity;
 		var vehicleComponent	: CVehicleComponent;
     
-        riderData        					= (CAIStorageRiderData)aiStorageHandler.Get();
         riderData.ridingManagerMountError   = false; 
 
         vehicleEntity      = riderData.sharedParams.GetHorse();
@@ -300,10 +292,8 @@ abstract class CBTTaskRidingManagerHorseDismount extends CBTTaskRidingManagerVeh
 
     latent function Main() : EBTNodeStatus
     {
-        var riderData       	: CAIStorageRiderData; 
 		var vehicleEntity		: CEntity;
 		var vehicleComponent	: CVehicleComponent;    
-		riderData           = (CAIStorageRiderData)aiStorageHandler.Get();
 		vehicleEntity      	= riderData.sharedParams.GetHorse();
         vehicleComponent   	= ((CNewNPC)vehicleEntity).GetHorseComponent(); 
 		DismountActor( riderData, vehicleComponent );		
@@ -313,13 +303,11 @@ abstract class CBTTaskRidingManagerHorseDismount extends CBTTaskRidingManagerVeh
     function OnListenedGameplayEvent( eventName : CName ) : bool
 	{
 		var riderActor			: CActor 	= GetActor();
-		var riderData       	: CAIStorageRiderData;
 		var vehicleEntity 		: CEntity;
 		var vehicleComponent  	: W3HorseComponent;
 		
 		if ( eventName == 'OnPoolRequest' || eventName == 'RequestInstantDismount' )
 		{
-			riderData           = (CAIStorageRiderData)aiStorageHandler.Get();
 			vehicleEntity      	= riderData.sharedParams.GetHorse();
 			if ( vehicleEntity )
 			{
@@ -360,6 +348,8 @@ class CBTTaskRidingManagerNPCHorseDismount extends CBTTaskRidingManagerHorseDism
 		riderActor.GetRootAnimatedComponent().SetUseExtractedMotion( true ); 
 		riderActor.EnablePhysicalMovement(false);
 		((CMovingPhysicalAgentComponent)riderActor.GetMovingAgentComponent()).SetAnimatedMovement( false );
+		
+		riderActor.AddBuffImmunity( EET_Frozen, 'HorseDismount', true );
     }   
 
     function OnDismountFinishedA( riderData : CAIStorageRiderData, vehicleComponent : CVehicleComponent )
@@ -421,6 +411,8 @@ class CBTTaskRidingManagerNPCHorseDismount extends CBTTaskRidingManagerHorseDism
 			params.duration = 2;
 			riderActor.AddEffectCustom(params);
 		}
+		
+		riderActor.RemoveBuffImmunity( EET_Frozen, 'HorseDismount' );
 		
 		super.OnDismountFinishedB_Latent( riderData, vehicleComponent );
     }

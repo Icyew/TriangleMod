@@ -5,13 +5,24 @@
 /***********************************************************************/
 class CBTTask3StateProjectileAttack extends CBTTask3StateAttack
 {
-	public var attackRange			: float;
-	public var projEntity			: CEntityTemplate;
-	public var projectileName	 	: name;
-	public var dodgeable			: bool;
-	public var useLookatTarget		: bool;
+	public var attackRange							: float;
+	public var projEntity							: CEntityTemplate;
+	public var projectileName	 					: name;
+	public var dodgeable							: bool;
+	public var useLookatTarget						: bool;
+	public var dontShootAboveAngleDistanceToTarget 	: float;
 	
-	public var projectiles 		: array<W3AdvancedProjectile>;
+	public var projectiles 							: array<W3AdvancedProjectile>;
+	private var collisionGroups 					: array<name>;
+	
+	
+	function Initialize()
+	{
+		collisionGroups.PushBack('Ragdoll');
+		collisionGroups.PushBack('Terrain');
+		collisionGroups.PushBack('Static');
+		collisionGroups.PushBack('Water');
+	}
 	
 	latent function Main() : EBTNodeStatus
 	{
@@ -35,8 +46,6 @@ class CBTTask3StateProjectileAttack extends CBTTask3StateAttack
 	{
 		var res : bool;
 		
-		res = super.OnAnimEvent(animEventName,animEventType, animInfo);
-		
 		if ( animEventName == 'ShootProjectile' )
 		{
 			ShootProjectile();
@@ -59,6 +68,7 @@ class CBTTask3StateProjectileAttack extends CBTTask3StateAttack
 			return true;
 		}
 		
+		res = super.OnAnimEvent(animEventName,animEventType, animInfo);
 		return res;
 	}
 	
@@ -73,6 +83,12 @@ class CBTTask3StateProjectileAttack extends CBTTask3StateAttack
 		var target : CActor = GetCombatTarget();
 		
 		var projOriginMat : Matrix;
+		
+		
+		if ( dontShootAboveAngleDistanceToTarget > 0 && AbsF( NodeToNodeAngleDistance( target, npc ) ) > dontShootAboveAngleDistanceToTarget )
+		{
+			return;
+		}
 		
 		if ( npc.CalcEntitySlotMatrix( 'projectile_origin', projOriginMat ) )
 		{
@@ -98,7 +114,7 @@ class CBTTask3StateProjectileAttack extends CBTTask3StateAttack
 		else
 			targetPos = projPos +  npc.GetHeadingVector()*attackRange;
 			
-		projectile.ShootProjectileAtPosition( 0, projectile.projSpeed, targetPos, attackRange );
+		projectile.ShootProjectileAtPosition( 0, projectile.projSpeed, targetPos, attackRange, collisionGroups );
 		
 		if ( dodgeable )
 		{
@@ -117,11 +133,12 @@ class CBTTask3StateProjectileAttackDef extends CBTTask3StateAttackDef
 {
 	default instanceClass = 'CBTTask3StateProjectileAttack';
 
-	editable var attackRange 		: float;
+	editable var attackRange 							: float;
 	
-	editable var projectileName	 	: name;
-	editable var dodgeable			: bool;
-	editable var useLookatTarget	: bool;
+	editable var projectileName	 						: name;
+	editable var dodgeable								: bool;
+	editable var useLookatTarget						: bool;
+	editable var dontShootAboveAngleDistanceToTarget 	: float;
 	
 	hint projEntity = "!!Obsolete!! - use projectileName instead";
 	

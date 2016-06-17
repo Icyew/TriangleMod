@@ -125,47 +125,6 @@ class CAINpcCombatParams extends CAICombatParameters
 
 
 
-
-class CAINpcVampiressDefaults extends CAINpcDefaults
-{
-	function Init()
-	{
-		super.Init();
-		
-		combatTree = new CAINpcVampiressCombat in this;
-		combatTree.OnCreated();
-	}
-};
-
-class CAINpcVampiressCombat extends CAINpcCombat
-{	
-	function Init()
-	{
-		params = new CAINpcVampiressCombatParams in this;
-		params.OnCreated();
-	}
-}
-
-class CAINpcVampiressCombatParams extends CAINpcCombatParams
-{
-	function Init()
-	{
-		super.Init();
-		
-		ClearCSFinisherAnims();
-	}
-	
-	private function SetupCombatStyles()
-	{
-		combatStyles.Clear();
-		combatStyles.PushBack( new CAINpcVampiressCombatStyle in this );	
-		InitializeCombatStyles();
-	}
-}
-
-
-
-
 class CAINpcFistsDefaults extends CAINpcDefaults
 {
 	function Init()
@@ -742,6 +701,40 @@ class CAINpcTwoHandedSwordCombatParams extends CAINpcCombatParams
 
 
 
+class CAINpcGregoireDefaults extends CAINpcDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree = new CAINpcGregoireCombat in this;
+		combatTree.Init();
+	}
+};
+
+class CAINpcGregoireCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcGregoireCombatParams in this;
+		params.OnCreated();
+	}
+}
+
+class CAINpcGregoireCombatParams extends CAINpcCombatParams
+{
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcGregoireCombatStyle in this );  	
+		
+		InitializeCombatStyles();
+	}
+}
+
+
+
+
 class CAIHjalmarDefaults extends CAINpcDefaults
 {
 	function Init()
@@ -1092,6 +1085,17 @@ class CAINpcPhilippaDefaults extends CAINpcSorceressDefaults
 	}
 };
 
+class CAINpcLynxWitchDefaults extends CAINpcSorceressDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree = new CAINpcLynxWitchCombat in this;
+		combatTree.Init();
+	}
+};
+
 
 
 class CAINpcYenneferCombat extends CAINpcCombat
@@ -1123,6 +1127,14 @@ class CAINpcPhilippaCombat extends CAINpcCombat
 	function Init()
 	{
 		params = new CAINpcPhilippaCombatParams in this;
+		params.OnCreated();
+	}
+}
+class CAINpcLynxWitchCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcLynxWitchCombatParams in this;
 		params.OnCreated();
 	}
 }
@@ -1217,6 +1229,24 @@ class CAINpcPhilippaCombatParams extends CAINpcCombatParams
 	}
 }
 
+class CAINpcLynxWitchCombatParams extends CAINpcCombatParams
+{
+	function Init()
+	{
+		super.Init();
+		
+		ClearCSFinisherAnims();
+	}
+	
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcLynxWitchCombatStyle in this );		
+		
+		InitializeCombatStyles();
+	}
+}
+
 
 
 
@@ -1260,6 +1290,48 @@ class CAINpcWindMageCombat extends CAINpcCombat
 	function Init()
 	{
 		params = new CAINpcWindMageCombatParams in this;
+		params.OnCreated();
+	}
+}
+
+
+class CAINpcBobWindMageDefaults extends CAINpcSorcererDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree = new CAINpcBobWindMageCombat in this;
+		combatTree.Init();
+	}
+};
+
+class CAINpcBobWindMageCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcBobWindMageCombatParams in this;
+		params.OnCreated();
+	}
+}
+
+
+class CAINpcBobWaterMageDefaults extends CAINpcSorcererDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree = new CAINpcBobWaterMageCombat in this;
+		combatTree.Init();
+	}
+};
+
+class CAINpcBobWaterMageCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcBobWaterMageCombatParams in this;
 		params.OnCreated();
 	}
 }
@@ -1336,6 +1408,42 @@ class CAINpcWindMageCombatParams extends CAINpcCombatParams
 	{
 		combatStyles.Clear();
 		combatStyles.PushBack( new CAINpcWindMageCombatStyle in this );		
+		
+		InitializeCombatStyles();
+	}
+}
+
+class CAINpcBobWindMageCombatParams extends CAINpcCombatParams
+{
+	function Init()
+	{
+		super.Init();
+		
+		ClearCSFinisherAnims();
+	}
+	
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcWindMageCombatStyleBob in this );		
+		
+		InitializeCombatStyles();
+	}
+}
+
+class CAINpcBobWaterMageCombatParams extends CAINpcCombatParams
+{
+	function Init()
+	{
+		super.Init();
+		
+		ClearCSFinisherAnims();
+	}
+	
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcWaterMageCombatStyleBob in this );		
 		
 		InitializeCombatStyles();
 	}
@@ -1533,6 +1641,76 @@ class CAINpcOlgierdCombatParams extends CAINpcCombatParams
 	{
 		combatStyles.Clear();
 		combatStyles.PushBack( new CAINpcOlgierdCombatStyle in this ); 	
+		
+		InitializeCombatStyles();
+	}
+}
+
+
+
+
+class CAINpcDettlaffVampireCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcDettlaffVampireCombatParams in this;
+		params.OnCreated();
+	}
+}
+
+class CAINpcDettlaffVampireCombatParams extends CAINpcCombatParams
+{
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcDettlaffVampireCombatStyle in this ); 	
+		
+		InitializeCombatStyles();
+	}
+}
+
+
+
+class CAINpcDettlaffMinion extends CAINpcDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree = new CAINpcDettlaffMinionCombat in this;
+		combatTree.OnCreated();
+		
+		deathTree = new CAIDettlaffMinionDeath in this;
+		deathTree.OnCreated();
+	}
+};
+class CAIDettlaffMinionDeath extends CAIDeathTree
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_dettlaff_minion_death.w2behtree";
+
+	editable inlined var params : CAINpcDeathParams;
+	
+	function Init()
+	{
+		params = new CAINpcDeathParams in this;
+		params.OnCreated();
+	}
+};
+class CAINpcDettlaffMinionCombat extends CAINpcCombat
+{	
+	function Init()
+	{
+		params = new CAINpcDettlaffMinionCombatParams in this;
+		params.OnCreated();
+	}
+}
+
+class CAINpcDettlaffMinionCombatParams extends CAINpcCombatParams
+{
+	private function SetupCombatStyles()
+	{
+		combatStyles.Clear();
+		combatStyles.PushBack( new CAINpcDettlaffMinionCombatStyle in this ); 	
 		
 		InitializeCombatStyles();
 	}

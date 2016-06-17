@@ -127,7 +127,7 @@
 		localisation_key_description	="item_desc_kontusz"
 		icon_path						="icons/inventory/quests/q602_wedding_suit_64x128.png"
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor, LightArmor, mod_armor, DoNotEnhance
+		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor, LightArmor, mod_armor, DoNotEnhance, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_kontusz _Stats</a>
 										<a>Default armor _Stats</a>
@@ -161,7 +161,7 @@
 		localisation_key_description	="item_desc_kontusz"
 		icon_path						="icons/inventory/armors/wedding_suit_64x128.png"
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor,LightArmor, mod_armor, mod_valuable, EP1
+		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor,LightArmor, mod_armor, mod_valuable, EP1, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_kontusz_r _Stats</a>
 										<a>Default armor _Stats</a>
@@ -195,7 +195,7 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/ofir_armor_2_64x128.png"
 	>									  
-		<tags>							Armor, LightArmor, mod_armor, mod_armor, mod_origin_ofir, mod_valuable, Ofir, DoNotEnhance
+		<tags>							Armor, LightArmor, mod_armor, mod_armor, mod_origin_ofir, mod_valuable, Ofir, DoNotEnhance, Sleevless
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Ofir Armor _Stats</a>
@@ -225,7 +225,7 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/ofir_armor_2_64x128.png"
 	>									  
-		<tags>							Autogen, AutogenUseLevelRange, Armor, LightArmor, mod_armor, mod_armor, mod_origin_ofir, Ofir, DoNotEnhance
+		<tags>							Autogen, AutogenUseLevelRange, Armor, LightArmor, mod_armor, mod_armor, mod_origin_ofir, Ofir, DoNotEnhance, Sleevless
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Ofir Armor B _Stats</a>

@@ -145,10 +145,7 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 	var setAppearanceTo 				: name;
 	var createReactionEvent				: name;
 	var changeAppearanceAfter 			: float;
-	var attacker 						: CGameplayEntity;
-	var causer 							: IScriptable;
 	var saveLockID						: int;
-	
 	var dropWeapons						: bool;
 	
 	private var deadDestructSquaredDist : float; 
@@ -164,7 +161,7 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 		var i : int;
 		
 		
-		if(  owner.isDead )
+		if( owner.isDead )
 		{
 			owner.DestroyAfter(0);
 			return BTNS_Active;
@@ -174,19 +171,16 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 		owner.SignalGameplayEvent( 'Death' );
 		owner.SignalGameplayEventParamInt( 'RidingManagerDismountHorse', DT_ragdoll );
 		
-		if ( owner.GetMovingAgentComponent().GetName() == "woman_base" )
+		if( owner.GetMovingAgentComponent().GetName() == "woman_base" )
 		{
 			owner.DisableAgony();
 		}		
-		if ( attacker )
-			chooseDeathAnim( attacker, causer);
+		
 		owner.SetAlive(false);
 		owner.DisableLookAt();
 		
 		if ( owner.GetComponent('talk') )
 			owner.GetComponent('talk').SetEnabled(false);
-		
-		
 		
 		if( IsNameValid( createReactionEvent ) )
 		{
@@ -205,22 +199,20 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 		return BTNS_Active;
 	}
 	
-	function AddWasKilledFacts()
-	{
-		var tags : array<name>;
-		var attackerTags : array<name>;
-		
-		attackerTags = attacker.GetTags();
-		tags = GetNPC().GetTags();
-		AddHitFacts( tags, attackerTags, "_was_killed", true, "actor_" );	
-	}
-	
 	function ChangeHeldItemAppearance()
 	{
 		var inv : CInventoryComponent;
 		var weapon : SItemUniqueId;
+		var heldItemsNames : array<name>;
 		
 		inv = GetNPC().GetInventory();
+		
+		inv.GetAllHeldItemsNames( heldItemsNames );
+		
+		if( heldItemsNames.Contains( 'fists_lightning' ) || heldItemsNames.Contains( 'fists_fire' ) )
+		{
+			GetNPC().StopEffect( 'hand_fx' );
+		}
 		
 		weapon = inv.GetItemFromSlot('l_weapon');
 		
@@ -239,7 +231,6 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 				inv.GetItemEntityUnsafe(weapon).ApplyAppearance("rigid");
 			return;
 		}
-		
 	}
 	
 	latent function Main() : EBTNodeStatus
@@ -314,7 +305,7 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 	{
 		var damageAction 	: CDamageData;
 		var owner 			: CNewNPC;
-		
+
 		if ( animEventName == 'Destroy' )
 		{
 			destroyAnimEvent = true;
@@ -326,14 +317,22 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 	function OnListenedGameplayEvent( eventName : name ) : bool
 	{
 		var damageAction : CDamageData;
-		if ( eventName == 'OnDeath' )
+		
+		if( eventName == 'OnDeath' )
 		{
-			damageAction 	= (CDamageData)GetEventParamObject();
-			attacker 		= damageAction.attacker;
-			causer 			= damageAction.causer;
-			return true;
+			damageAction = (CDamageData)GetEventParamObject();
+			if( damageAction )
+			{
+				if( damageAction.attacker )
+				{
+					ChooseDeathAnim( damageAction.attacker, damageAction.causer );
+					GetNPC().SetHitReactionDirection( damageAction.attacker );
+				}
+				
+				return true;
+			}
 		}
-		else if ( eventName == 'DropWeaponsInDeathTask')
+		else if( eventName == 'DropWeaponsInDeathTask')
 		{
 			dropWeapons = true;
 		}
@@ -341,35 +340,25 @@ class CBehTreeTaskDeathState extends IBehTreeTask
 		return false;
 	}
 	
-	function chooseDeathAnim( attacker : CGameplayEntity, optional damageCauser : IScriptable )
+	function ChooseDeathAnim( attacker : CGameplayEntity, optional damageCauser : IScriptable )
 	{
+		var npc	: CNewNPC;
 		
-		var victimHeading				: float;
-		var attackerHeading				: float;
-		var victimToAttackerWorldRot	: EulerAngles;
-		var victimToAttackerAngle		: float;
-		var npc							: CNewNPC;
 		npc = GetNPC();
-		
-		victimToAttackerWorldRot 	= VecToRotation( npc.GetWorldPosition() -  attacker.GetWorldPosition() );
-		victimHeading 				= npc.GetHeading();
-		attackerHeading 			= attacker.GetHeading();
-		victimToAttackerAngle 		= AngleDistance( victimToAttackerWorldRot.Yaw, victimHeading );
-		
-		
-		if (damageCauser && ( (W3IgniProjectile)damageCauser || (W3Effect_Burning)damageCauser  ))
+
+		if( damageCauser && ( (W3IgniProjectile)damageCauser || (W3Effect_Burning)damageCauser  ) )
 		{
-			npc.SetBehaviorVariable( 'DeathType',(int)EDT_IgniDeath);
+			npc.SetBehaviorVariable( 'DeathType',(int)EDT_IgniDeath );
 			npc.DisableAgony();
 		}
-		else if (damageCauser && (W3AardProjectile)damageCauser )
+		else if( damageCauser && (W3AardProjectile)damageCauser )
 		{
-			npc.SetBehaviorVariable( 'DeathType',(int)EDT_AardDeath);
+			npc.SetBehaviorVariable( 'DeathType',(int)EDT_AardDeath );
 			npc.DisableAgony();
 		}
 		else
 		{
-			npc.SetBehaviorVariable( 'DeathType',(int)EDT_Default);
+			npc.SetBehaviorVariable( 'DeathType',(int)EDT_Default );
 		}
 	}
 	
@@ -423,11 +412,14 @@ class CBehTreeTaskDeathStateDef extends IBehTreeTaskDefinition
 
 class CBehTreeTaskDeathIdle extends IBehTreeTask
 {
-	var setAppearanceTo : name;
-	var changeAppearanceAfter : float;
-	var disableCollision : bool;
-	var disableCollisionDelay : float;
-	var tag	: array<name>;
+	public var setAppearanceTo 			: name;
+	public var changeAppearanceAfter 	: float;
+	public var disableRagdollAfter 		: float;
+	public var disableCollision 		: bool;
+	public var disableCollisionDelay 	: float;
+	public var tag						: array<name>;
+	
+	private var timeStamp 				: float;
 	
 	function OnActivate() : EBTNodeStatus
 	{
@@ -436,7 +428,9 @@ class CBehTreeTaskDeathIdle extends IBehTreeTask
 		thePlayer.AddToFinishableEnemyList( GetNPC(), false );
 		
 		actor.EnableFinishComponent( false );
-		actor.RaiseForceEvent('FinisherDeath');	
+		actor.RaiseForceEvent('FinisherDeath');
+		
+		timeStamp = GetLocalTime();
 		
 		return BTNS_Active;
 	}
@@ -445,19 +439,25 @@ class CBehTreeTaskDeathIdle extends IBehTreeTask
 	{
 		var owner : CNewNPC = GetNPC();
 		
-		if ( changeAppearanceAfter > 0 )
+		while ( true )
 		{
-			Sleep( changeAppearanceAfter );
-			
-			if( setAppearanceTo )
+			if ( IsNameValid( setAppearanceTo ) && GetLocalTime() > timeStamp + changeAppearanceAfter )
 			{
 				owner.SetAppearance( setAppearanceTo );
+				setAppearanceTo = '';
 			}
-		}
-		if ( disableCollision )
-		{
-			Sleep( disableCollisionDelay );
-			owner.EnableCharacterCollisions( false );
+			if ( disableRagdollAfter > 0 && GetLocalTime() > timeStamp + disableRagdollAfter  )
+			{
+				owner.GetRootAnimatedComponent().SetEnabled( false );
+				disableRagdollAfter = 0;
+			}
+			if ( disableCollision && GetLocalTime() > timeStamp + disableCollisionDelay )
+			{
+				owner.EnableCharacterCollisions( false );
+				disableCollision = false;
+			}
+			
+			SleepOneFrame();
 		}
 		return BTNS_Active;
 	}
@@ -471,10 +471,12 @@ class CBehTreeTaskDeathIdleDef extends IBehTreeTaskDefinition
 	editable var changeAppearanceAfter 	: CBehTreeValFloat;
 	editable var disableCollision 		: CBehTreeValBool;
 	editable var disableCollisionDelay 	: CBehTreeValFloat;
+	editable var disableRagdollAfter 	: CBehTreeValFloat;
 	
-	default changeAppearanceAfter = 0;
-	default disableCollision = true;
-	default disableCollisionDelay = 1.0;
+	default changeAppearanceAfter 		= 0;
+	default disableCollision 			= true;
+	default disableCollisionDelay 		= 1.0;
+	default disableRagdollAfter 		= 5.0;
 	
 };
 
@@ -483,16 +485,16 @@ class CBehTreeTaskDeathIdleDef extends IBehTreeTaskDefinition
 class CBTTaskDropLoot extends IBehTreeTask
 {
 	public var onActivate 		: bool;
-	public var delay : float;
+	public var delay 			: float;
 	
-	private var lootDropped : bool;				
-	private var attacker 						: CGameplayEntity;
-	private var causer 							: IScriptable;
+	private var lootDropped 	: bool;			
+	private var attacker 		: CGameplayEntity;
+	private var causer 			: IScriptable;
+	private var saveLockID 		: int;
 	
-	private var saveLockID : int;
+	default lootDropped 		= false;
+	default saveLockID 			= -1;
 	
-	default lootDropped = false;
-	default saveLockID = -1;
 	
 	function OnActivate() : EBTNodeStatus
 	{
@@ -503,7 +505,10 @@ class CBTTaskDropLoot extends IBehTreeTask
 			if ( false == npc.isDead ) 
 			{
 				LootDrop();
-				AddWasKilledFacts();
+				if ( !npc.HasAbility( 'DontAddFactsOnDeath' ) )
+				{
+					AddWasKilledFacts();
+				}
 			}
 			RemoveSaveLock();
 		}		
@@ -519,7 +524,10 @@ class CBTTaskDropLoot extends IBehTreeTask
 		{
 			Sleep( delay );
 			LootDrop();
-			AddWasKilledFacts();
+			if ( !GetActor().HasAbility( 'DontAddFactsOnDeath' ) )
+			{
+				AddWasKilledFacts();
+			}
 			RemoveSaveLock();
 		}
 		return BTNS_Active;
@@ -541,7 +549,7 @@ class CBTTaskDropLoot extends IBehTreeTask
 		var waterLevel 			: float;
 		var submersionLevel 	: float;
 		var world				: CWorld;
-				
+		
 		
 		if ( lootDropped || owner.clearInvOnDeath || owner.isDead )
 		{
@@ -577,7 +585,7 @@ class CBTTaskDropLoot extends IBehTreeTask
 			{
 				loot.LootDropped(owner);
 			}
-		
+			
 			
 			if ( owner.RemainsTags.Size() > 0 )
 			{
@@ -666,6 +674,9 @@ class CBTTaskDropLootDef extends IBehTreeTaskDefinition
 
 class CBehTreeHLTaskUnconscious extends IBehTreeTask
 {
+	private var syncInstance	: CAnimationManualSlotSyncInstance;
+	private var finisherEnabled : bool;
+	
 	function OnActivate() : EBTNodeStatus
 	{
 		var i : int;
@@ -687,6 +698,13 @@ class CBehTreeHLTaskUnconscious extends IBehTreeTask
 	{
 		GetActor().EndKnockedUnconscious();
 		GetActor().EnableCharacterCollisions(true);
+		
+		if( GetActor().GetBehaviorVariable( 'unconsciousFinisher' ) == 1.0 )
+		{
+			GetActor().SetBehaviorVariable( 'unconsciousFinisher', 0.0 );
+			GetNPC().FinisherAnimInterrupted();
+			GetNPC().ResetFinisherAnimInterruptionState();
+		}
 	}
 	
 	function OnGameplayEvent( eventName : CName ) : bool
@@ -697,6 +715,31 @@ class CBehTreeHLTaskUnconscious extends IBehTreeTask
 				Complete(true);
 			return true;
 		}
+		else if ( eventName == 'Finisher' )
+		{
+			GetActor().EnableFinishComponent( false );
+			thePlayer.AddToFinishableEnemyList( GetActor(), false );
+			theGame.GetSyncAnimManager().SetupSimpleSyncAnim('DeathFinisher', thePlayer, GetActor() );		
+			GetNPC().FinisherAnimStart();
+			GetNPC().AddTimer( 'SetUnconsciousFinisher', 1.0 );
+			return true;
+		}
+		else if ( eventName == 'SetupSyncInstance' )
+		{
+			syncInstance = theGame.GetSyncAnimManager().GetSyncInstance( GetEventParamInt( -1 ) );
+		}
+		return false;
+	}
+	
+	function OnListenedGameplayEvent( eventName : name ) : bool
+	{
+		if ( eventName == 'ForceFinisher' )
+		{
+			finisherEnabled = true;
+			GetActor().EnableFinishComponent( true );
+			thePlayer.AddToFinishableEnemyList( GetActor(), true );
+			return true;
+		}
 		return false;
 	}
 };
@@ -704,6 +747,12 @@ class CBehTreeHLTaskUnconscious extends IBehTreeTask
 class CBehTreeHLTaskUnconsciousDef extends IBehTreeHLTaskDefinition
 {
 	default instanceClass = 'CBehTreeHLTaskUnconscious';
+	
+	function InitializeEvents()
+	{
+		super.InitializeEvents();
+		listenToGameplayEvents.PushBack( 'ForceFinisher' );
+	}
 }
 
 
@@ -760,7 +809,7 @@ class CBehTreeTaskDeathAnimDecorator extends IBehTreeTask
 			return false;
 		}
 		
-		if ( npc.IsRagdolled() )
+		if ( npc.IsRagdolled() && !GetActor().HasAbility( 'PoisonDeath' ) )
 		{
 			npc.SetKinematic(false);
 			return false;
@@ -924,6 +973,7 @@ class CBehTreeTaskDeathAnimDecorator extends IBehTreeTask
 				thePlayer.AddToFinishableEnemyList( owner, false );
 				theGame.GetSyncAnimManager().SetupSimpleSyncAnim('DeathFinisher', thePlayer, GetActor() );		
 				owner.FinisherAnimStart();
+				owner.SetBehaviorVariable( 'unconsciousFinisher', 1.0 );
 				return true;
 			}
 		}

@@ -67,6 +67,9 @@ import class W3GameParams extends CObject
 		
 	public var MONSTER_BONUS_DEADLY : name;						
 		default MONSTER_BONUS_DEADLY = 'MonsterLevelBonusDeadly';
+	
+	public var BOSS_NGP_BONUS : name;
+		default BOSS_NGP_BONUS = 'BossNGPLevelBonus';
 		
 	public var GLOBAL_PLAYER_ABILITY : name;					
 		default GLOBAL_PLAYER_ABILITY = 'all_PC_ability';
@@ -77,16 +80,19 @@ import class W3GameParams extends CObject
 	
 	public const var ALCHEMY_COOKED_ITEM_TYPE_POTION, ALCHEMY_COOKED_ITEM_TYPE_BOMB, ALCHEMY_COOKED_ITEM_TYPE_OIL : string;		
 	public const var OIL_ABILITY_TAG : name;																					
+	public const var QUANTITY_INCREASED_BY_ALCHEMY_TABLE : int;
 		default ALCHEMY_COOKED_ITEM_TYPE_POTION = "Potion";
 		default ALCHEMY_COOKED_ITEM_TYPE_BOMB = "Bomb";
 		default ALCHEMY_COOKED_ITEM_TYPE_OIL = "Oil";	 
 		default	OIL_ABILITY_TAG = 'OilBonus';
+		default QUANTITY_INCREASED_BY_ALCHEMY_TABLE = 1;
 	
 	
-	public const var ATTACK_NAME_LIGHT, ATTACK_NAME_HEAVY, ATTACK_NAME_SUPERHEAVY, ATTACK_NO_DAMAGE : name;		
+	public const var ATTACK_NAME_LIGHT, ATTACK_NAME_HEAVY, ATTACK_NAME_SUPERHEAVY, ATTACK_NAME_SPEED_BASED, ATTACK_NO_DAMAGE : name;		
 		default ATTACK_NAME_LIGHT = 'attack_light';
 		default ATTACK_NAME_HEAVY = 'attack_heavy';
-		default ATTACK_NAME_SUPERHEAVY = 'attack_super_heavy';		
+		default ATTACK_NAME_SUPERHEAVY = 'attack_super_heavy';
+		default ATTACK_NAME_SPEED_BASED = 'attack_speed_based';		
 		default ATTACK_NO_DAMAGE = 'attack_no_damage';		
 	
 	
@@ -232,6 +238,7 @@ import class W3GameParams extends CObject
 		default HEAVY_HIT_BACK_FX = 'heavy_hit_back';
 		default HEAVY_HIT_PARRIED_FX = 'heavy_hit_parried';
 		default HEAVY_HIT_BACK_PARRIED_FX = 'heavy_hit_back_parried';
+		
 	public const var LOW_HP_SHOW_LEVEL : float;							
 		default LOW_HP_SHOW_LEVEL = 0.25;
 
@@ -260,7 +267,7 @@ import class W3GameParams extends CObject
 	private var BOOTS_MAGICAL_ABILITIES 	: array<name>;			
 	private var WEAPON_MASTERWORK_ABILITIES	: array<name>;			
 	private var WEAPON_MAGICAL_ABILITIES 	: array<name>;			
-	public const var ITEM_SET_TAG_BEAR, ITEM_SET_TAG_GRYPHON, ITEM_SET_TAG_LYNX, ITEM_SET_TAG_WOLF : name;		
+	public const var ITEM_SET_TAG_BEAR, ITEM_SET_TAG_GRYPHON, ITEM_SET_TAG_LYNX, ITEM_SET_TAG_WOLF, ITEM_SET_TAG_RED_WOLF, ITEM_SET_TAG_VAMPIRE, ITEM_SET_TAG_VIPER : name;		
 	public const var BOUNCE_ARROWS_ABILITY : name;					
 	public const var TAG_ALCHEMY_REFILL_ALCO : name;				
 	public const var REPAIR_OBJECT_BONUS_ARMOR_ABILITY : name;		
@@ -287,6 +294,9 @@ import class W3GameParams extends CObject
 		default ITEM_SET_TAG_GRYPHON = 'GryphonSet';
 		default ITEM_SET_TAG_LYNX = 'LynxSet';
 		default ITEM_SET_TAG_WOLF = 'WolfSet';
+		default ITEM_SET_TAG_RED_WOLF = 'RedWolfSet';
+		default ITEM_SET_TAG_VIPER = 'ViperSet';
+		default ITEM_SET_TAG_VAMPIRE = 'VampireSet';
 		default BOUNCE_ARROWS_ABILITY = 'bounce_arrows';
 		default TAG_ALCHEMY_REFILL_ALCO = 'StrongAlcohol';
 		default REPAIR_OBJECT_BONUS_ARMOR_ABILITY = 'repair_object_armor_bonus';
@@ -322,6 +332,14 @@ import class W3GameParams extends CObject
 	
 	public const var POTION_QUICKSLOTS_COUNT : int;										
 		default POTION_QUICKSLOTS_COUNT = 4;
+	
+	
+	public const var ITEMS_REQUIRED_FOR_MINOR_SET_BONUS : int;
+	public const var ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS : int;
+	public const var ITEM_SET_TAG_BONUS					: name;
+		default ITEMS_REQUIRED_FOR_MINOR_SET_BONUS = 3;
+		default ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS = 6;
+		default ITEM_SET_TAG_BONUS = 'SetBonusPiece';
 	
 	
 	public const var TAG_STEEL_SOCKETABLE, TAG_SILVER_SOCKETABLE, TAG_ARMOR_SOCKETABLE, TAG_ABILITY_SOCKET : name;
@@ -382,17 +400,6 @@ import class W3GameParams extends CObject
 	
 	public const var TOXICITY_DAMAGE_THRESHOLD : float;									
 		default TOXICITY_DAMAGE_THRESHOLD = 0.75;
-	
-	
-	public const var TUT_POS_INVENTORY_X, TUT_POS_INVENTORY_Y : float;					
-	public const var TUT_POS_ALCHEMY_X, TUT_POS_ALCHEMY_Y : float;						
-	public const var TUT_POS_CHAR_DEV_X, TUT_POS_CHAR_DEV_Y : float;
-		default TUT_POS_INVENTORY_X = 0.67f;
-		default TUT_POS_INVENTORY_Y = 0.4f;
-		default TUT_POS_ALCHEMY_X = 0.67f;
-		default TUT_POS_ALCHEMY_Y = 0.5f;
-		default TUT_POS_CHAR_DEV_X = 0.67f;
-		default TUT_POS_CHAR_DEV_Y = 0.57f;
 		
 	
 	public const var DEBUG_CHEATS_ENABLED : bool;										
@@ -418,6 +425,7 @@ import class W3GameParams extends CObject
 	public const var LEVEL_DIFF_XP_MOD : float;											
 	public const var MAX_XP_MOD : float;												
 	public const var DEVIL_HORSE_AURA_MIN_DELAY, DEVIL_HORSE_AURA_MAX_DELAY : int;		
+	public const var TOTAL_AMOUNT_OF_BOOKS	: int;										
 	
 		default DEBUG_CHEATS_ENABLED = true;
 		default SKILL_GLOBAL_PASSIVE_TAG = 'GlobalPassiveBonus';
@@ -445,6 +453,7 @@ import class W3GameParams extends CObject
 		default MAX_XP_MOD = 1.5f;
 		default DEVIL_HORSE_AURA_MIN_DELAY = 2;
 		default DEVIL_HORSE_AURA_MAX_DELAY = 6;
+		default TOTAL_AMOUNT_OF_BOOKS = 130;
 		
 	
 	public function Init()
@@ -993,17 +1002,21 @@ import class W3GameParams extends CObject
 			if ( stat.valueMultiplicative > 1.9 ) level = 32;
 		} 
 		level = level - 1;
-		if ( level < 1 ) level = 1;	if ( level > 70 ) level = 70;
+		if ( level < 1 ) level = 1;	if ( level > GetWitcherPlayer().GetMaxLevel() ) level = GetWitcherPlayer().GetMaxLevel();
 		
 		return level;
 	}
 	
 	public final function SetNewGamePlusLevel(playerLevel : int)
 	{
-		newGamePlusLevel = NEW_GAME_PLUS_MIN_LEVEL;
-		
-		if (theGame.GetDLCManager().IsDLCAvailable('ep1'))
-			newGamePlusLevel = NEW_GAME_PLUS_EP1_MIN_LEVEL;
+		if ( playerLevel > NEW_GAME_PLUS_MIN_LEVEL )
+		{
+			newGamePlusLevel = playerLevel;
+		}
+		else
+		{
+			newGamePlusLevel = NEW_GAME_PLUS_MIN_LEVEL;
+		}
 			
 		FactsAdd("FinalNewGamePlusLevel", newGamePlusLevel);
 	}
@@ -1011,5 +1024,9 @@ import class W3GameParams extends CObject
 	public final function GetNewGamePlusLevel() : int
 	{
 		return newGamePlusLevel;
+	}
+	public final function NewGamePlusLevelDifference() : int
+	{
+		return ( theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL );
 	}
 }

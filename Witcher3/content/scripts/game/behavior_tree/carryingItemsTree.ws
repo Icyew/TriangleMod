@@ -42,8 +42,9 @@ class CAICarryingItems extends CAIWanderTree
 
 class CAICarryingItemsParams extends CAINpcWanderParams
 {	
-	editable var storePointTag	: name;
-	editable var carryingArea 	: EntityHandle;
+	editable var storePointTag			: name;
+	editable var carryingArea 			: EntityHandle;
+	editable var dropItemOnDeactivation : bool;
 	
 	function Init()
 	{

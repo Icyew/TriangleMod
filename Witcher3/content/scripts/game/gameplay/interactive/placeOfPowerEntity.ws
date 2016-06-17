@@ -221,6 +221,16 @@ state PlaceOfPower_Activated in CMajorPlaceOfPowerEntity
 	{
 		var params : SCustomEffectParams;
 	
+		
+		if( GetWitcherPlayer().CanUseSkill( S_Perk_14 ) )
+		{
+			thePlayer.RemoveAllBuffsOfType( EET_ShrineAard );
+			thePlayer.RemoveAllBuffsOfType( EET_ShrineAxii );
+			thePlayer.RemoveAllBuffsOfType( EET_ShrineIgni );
+			thePlayer.RemoveAllBuffsOfType( EET_ShrineQuen );
+			thePlayer.RemoveAllBuffsOfType( EET_ShrineYrden );
+		}
+	
 		params.effectType = GetStatFromEnum( parent.buffType );
 		params.creator = parent;
 		params.sourceName = parent.buffUniqueName;

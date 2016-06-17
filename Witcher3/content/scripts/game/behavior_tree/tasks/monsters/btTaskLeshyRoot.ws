@@ -9,10 +9,21 @@
 
 class CBTTaskLeshyRootAttack extends CBTTaskAttack
 {
-	var loopTime 	: float;
-	var attackRange	: float;
-	var dodgeable	: float;
-	var projEntity	: CEntityTemplate;
+	public var loopTime 				: float;
+	public var attackRange				: float;
+	public var dodgeable				: float;
+	public var projEntity				: CEntityTemplate;
+	
+	private var collisionGroups 		: array<name>;
+	
+	
+	function Initialize()
+	{
+		collisionGroups.PushBack('Ragdoll');
+		collisionGroups.PushBack('Terrain');
+		collisionGroups.PushBack('Static');
+		collisionGroups.PushBack('Water');
+	}
 	
 	latent function Main() : EBTNodeStatus
 	{
@@ -122,10 +133,10 @@ class CBTTaskLeshyRootAttackDef extends CBTTaskAttackDef
 {
 	default instanceClass = 'CBTTaskLeshyRootAttack';
 
-	editable var loopTime 	 	: float;
-	editable var attackRange 	: float;
-	editable var dodgeable		: float;
-	editable var projEntity	 	: CEntityTemplate;
+	editable var loopTime 	 				: float;
+	editable var attackRange 				: float;
+	editable var dodgeable					: float;
+	editable var projEntity	 				: CEntityTemplate;
 	
 	default loopTime = 4.0;
 	default attackRange = 10.0;

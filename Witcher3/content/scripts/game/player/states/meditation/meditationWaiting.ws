@@ -224,8 +224,16 @@ state MeditationWaiting in W3PlayerWitcher extends MeditationBase
 	private final function FinalHack_GetSimulateBuffTime() : float
 	{
 		var passedSecondsInGameTime, passedSecondsInRealTime : float;
+		var currTime : GameTime;
 		
-		passedSecondsInGameTime = GameTimeToSeconds(theGame.GetGameTime() - waitStartTime);
+		
+		currTime = theGame.GetGameTime();
+		if( waitStartTime > currTime )
+		{
+			return 0.f;
+		}
+		
+		passedSecondsInGameTime = GameTimeToSeconds(currTime - waitStartTime);
 		passedSecondsInRealTime = ConvertGameSecondsToRealTimeSeconds(passedSecondsInGameTime);
 		
 		return passedSecondsInRealTime;

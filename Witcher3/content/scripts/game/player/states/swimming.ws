@@ -1331,14 +1331,12 @@ state Swimming in CR4Player extends ExtendedMovable
 	
 	event OnGameCameraTick( out moveData : SCameraMovementData, dt : float )
 	{
-		theGame.GetGameCamera().SetCollisionOffset(Vector(0.f,0.f,1.f));
-		
 		
 		if ( theGame.IsFocusModeActive() )
 		{	
 			return false;
 		}
-		else if( parent.OnGameCameraTick( moveData, dt ) )
+		else if( super.OnGameCameraTick( moveData, dt ) )
 		{
 			return true;
 		}

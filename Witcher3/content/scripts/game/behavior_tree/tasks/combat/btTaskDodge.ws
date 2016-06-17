@@ -16,6 +16,9 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 	protected var dodgeChanceBomb			: int;
 	protected var dodgeChanceProjectile		: int;
 	protected var dodgeChanceFear			: int;
+	protected var counterChance 			: float;
+	protected var counterMultiplier 		: float;
+	protected var hitsToCounter 			: int;
 	
 	protected var Time2Dodge				: bool;
 	protected var dodgeType					: EDodgeType;
@@ -25,14 +28,23 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 	private var nextDodgeTime 				: float;
 	private var performDodgeDelay			: float;
 	private var ownerPosition				: Vector;
+	private var swingType 					: int;
+	private var swingDir 					: int;
 	
 	public var navmeshCheckDist 					: float;
 	public var minDelayBetweenDodges 				: float;
 	public var maxDistanceFromTarget				: float;
 	public var movementAdjustorSlideDistance		: float;
+	public var disableIsDodgingFlagAfter 			: float;
 	public var allowDodgeWhileAttacking				: bool;
 	public var signalGameplayEventWhileInHitAnim	: bool;
 	public var alwaysAvailableOnDodgeType			: EDodgeType;
+	
+	public var allowDodgeOverlap 					: bool;
+	public var earlyDodgeActivation 				: bool;
+	public var interruptTaskToExecuteCounter 		: bool;
+	public var ignoreDodgeChanceStats 				: bool;
+	public var delayDodgeHeavyAttack 				: float;
 	
 	default Time2Dodge = false;
 	default nextDodgeTime = 0.0;
@@ -41,30 +53,53 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 	function IsAvailable() : bool
 	{
 		var npc : CNewNPC = GetNPC();
-		
-		if ( dodgeEventTime && (dodgeEventTime + 0.1 < GetLocalTime()) )
+
+		if ( !npc.IsCurrentlyDodging() && Time2Dodge && dodgeEventTime )
 		{
-			Time2Dodge = false;
-		}
-		else if ( !super.IsAvailable() ) 
-		{
-			Time2Dodge = false;
+			if ( dodgeEventTime + 0.1 < GetLocalTime() )
+			{
+				Time2Dodge = false;
+			}
+			if ( delayDodgeHeavyAttack > 0 && dodgeEventTime > GetLocalTime() )
+			{
+				return false;
+			}
 		}
 		
-		return Time2Dodge;
-		
+		return Time2Dodge && super.IsAvailable();
 	}
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		GetActor().SetIsCurrentlyDodging(true);
+		var npc : CNewNPC = GetNPC();
+		
+		
+		if ( swingDir != -1 )
+		{
+			npc.SetBehaviorVariable( 'HitSwingDirection', swingDir );
+		}
+		if ( swingType != -1 )
+		{
+			npc.SetBehaviorVariable( 'HitSwingType', swingType );
+		}
+		npc.SetIsCurrentlyDodging(true);
+		npc.IncDefendCounter();
+		if ( interruptTaskToExecuteCounter && CheckCounter() )
+		{
+			npc.DisableHitAnimFor(0.1);
+			return BTNS_Completed;
+		}
+		
+		
+		
+		
 		
 		return super.OnActivate();
 	}
 	
 	latent function Main() : EBTNodeStatus
 	{
-		Sleep(0.4);
+		Sleep( disableIsDodgingFlagAfter );
 		GetActor().SetIsCurrentlyDodging(false);
 		
 		return BTNS_Active;
@@ -72,7 +107,9 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 	
 	function OnDeactivate()
 	{
-		Time2Dodge = false;
+		
+		swingType = -1;
+		swingDir = -1;
 		nextDodgeTime = GetLocalTime() + minDelayBetweenDodges;
 		performDodgeDelay = 0;
 		GetActor().SetIsCurrentlyDodging(false);
@@ -144,6 +181,33 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 		dodgeChanceBomb			= (int)(100*CalculateAttributeValue(npc.GetAttributeValue('dodge_bomb_chance')));
 		dodgeChanceProjectile	= (int)(100*CalculateAttributeValue(npc.GetAttributeValue('dodge_projectile_chance')));
 		dodgeChanceFear			= (int)(100*CalculateAttributeValue(npc.GetAttributeValue('dodge_fear_chance')));
+		counterChance 			= MaxF(0, 100*CalculateAttributeValue(npc.GetAttributeValue('counter_chance')));
+		hitsToCounter 			= (int)MaxF(0, CalculateAttributeValue(npc.GetAttributeValue('hits_to_roll_counter')));
+		counterMultiplier 		= (int)MaxF(0, 100*CalculateAttributeValue(npc.GetAttributeValue('counter_chance_per_hit')));
+		counterChance 			+= Max( 0, npc.GetDefendCounter() ) * counterMultiplier;
+		
+		if ( hitsToCounter < 0 )
+		{
+			hitsToCounter = 65536;
+		}
+	}
+	
+	private function CheckCounter() : bool
+	{
+		var npc : CNewNPC = GetNPC();
+		var defendCounter : int;
+		
+		defendCounter = npc.GetDefendCounter();
+		if ( defendCounter >= hitsToCounter )
+		{
+			if( Roll( counterChance ) )
+			{
+				npc.SignalGameplayEvent('CounterFromDefence');
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	function ChooseAndCheckDodge() : bool
@@ -163,7 +227,7 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 			default : return false;
 		}
 		
-		if (RandRange(100) < dodgeChance)
+		if ( ( RandRange(100) < dodgeChance ) || ignoreDodgeChanceStats )
 		{
 			if (dodgeType == EDT_Attack_Light || dodgeType == EDT_Attack_Heavy || dodgeType == EDT_Fear)
 			{
@@ -201,6 +265,16 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 	{
 		var npc : CNewNPC = GetNPC();
 		
+		
+		if ( eventName == 'swingType' )
+		{
+			swingType = this.GetEventParamInt(-1);
+		}
+		if ( eventName == 'swingDir' )
+		{
+			swingDir = this.GetEventParamInt(-1);
+		}
+		
 		if ( eventName == 'Time2DodgeProjectile' )
 		{
 			dodgeType = EDT_Projectile;
@@ -210,8 +284,7 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 			npc.AddTimer( 'DelayDodgeProjectileEventTimer', performDodgeDelay );
 			return true;
 		}
-		
-		if ( eventName == 'Time2DodgeBomb' )
+		else if ( eventName == 'Time2DodgeBomb' )
 		{
 			dodgeType = EDT_Bomb;
 			ownerPosition = npc.GetWorldPosition();
@@ -220,15 +293,28 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 			npc.AddTimer( 'DelayDodgeBombEventTimer', performDodgeDelay );
 			return true;
 		}
-		
-		if ( eventName == 'Time2Dodge' || eventName == 'Time2DodgeProjectileDelayed' || eventName == 'Time2DodgeBombDelayed' )
+		else if ( ( eventName == 'Time2DodgeFast' && earlyDodgeActivation ) || eventName == 'Time2Dodge' || eventName == 'Time2DodgeProjectileDelayed' || eventName == 'Time2DodgeBombDelayed' )
 		{
 			GetDodgeStats();
-			dodgeEventTime = GetLocalTime();
+			if ( interruptTaskToExecuteCounter && CheckCounter() && !npc.IsCountering() )
+			{
+				npc.DisableHitAnimFor(0.1);
+				Complete(true);
+				return false;
+			}
 			
 			if ( eventName != 'Time2DodgeProjectileDelayed' && eventName != 'Time2DodgeBombDelayed')
 			{
 				dodgeType = this.GetEventParamInt(-1);
+			}
+			
+			if ( delayDodgeHeavyAttack > 0 && dodgeType == EDT_Attack_Heavy )
+			{
+				dodgeEventTime = GetLocalTime() + delayDodgeHeavyAttack;
+			}
+			else
+			{
+				dodgeEventTime = GetLocalTime();
 			}
 			
 			if ( Dodge() )
@@ -238,6 +324,10 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 					npc.SignalGameplayEvent('WantsToPerformDodge');
 				else if ( dodgeType == EDT_Attack_Heavy )
 					npc.SignalGameplayEvent('WantsToPerformDodgeAgainstHeavyAttack');
+				if ( allowDodgeOverlap && npc.IsCurrentlyDodging() )
+				{
+					Complete(true);
+				}
 			}
 			
 			return true;
@@ -245,7 +335,6 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 		
 		return false;
 	}
-	
 	
 	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
 	{
@@ -287,22 +376,36 @@ class CBTTaskDodgeDef extends CBTTaskPlayAnimationEventDecoratorDef
 	editable var minDelayBetweenDodges 				: float;
 	editable var maxDistanceFromTarget 				: float;
 	editable var movementAdjustorSlideDistance		: float;
+	editable var disableIsDodgingFlagAfter 			: float;
 	editable var allowDodgeWhileAttacking 			: bool;
 	editable var signalGameplayEventWhileInHitAnim 	: bool;
 	editable var alwaysAvailableOnDodgeType			: EDodgeType;
 	
-	default navmeshCheckDist 					= 3.f;
-	default movementAdjustorSlideDistance		= 3.f;
-	default minDelayBetweenDodges 				= 0;
-	default maxDistanceFromTarget				= 5;
-	default allowDodgeWhileAttacking			= false;
-	default signalGameplayEventWhileInHitAnim	= false;
-	default alwaysAvailableOnDodgeType			= EDT_Undefined;
+	editable var allowDodgeOverlap 					: bool;
+	editable var earlyDodgeActivation 				: bool;
+	editable var interruptTaskToExecuteCounter 		: bool;
+	editable var ignoreDodgeChanceStats 			: bool;
+	editable var delayDodgeHeavyAttack 				: float;
 	
-	default xmlStaminaCostName 	= 'dodge_stamina_cost';
-	default drainStaminaOnUse 	= true;
+	hint disableIsDodgingFlagAfter 					= "cannot be longer then animation duration";
+	hint useAsTerminalAndAllowDodgeOverlap 			= "use this if you want dodge interrupting ongoing dodge";
+	hint earlyDodgeActivation 						= "activate on the beginning of light attack, not on preattack event";
 	
-	default rotateOnRotateEvent = false;
+	default navmeshCheckDist 						= 3.f;
+	default movementAdjustorSlideDistance			= 3.f;
+	default minDelayBetweenDodges 					= 0;
+	default maxDistanceFromTarget					= 5;
+	default disableIsDodgingFlagAfter 				= 0.4;
+	default allowDodgeWhileAttacking				= false;
+	default signalGameplayEventWhileInHitAnim		= false;
+	default alwaysAvailableOnDodgeType				= EDT_Undefined;
+	
+	default xmlStaminaCostName 						= 'dodge_stamina_cost';
+	default drainStaminaOnUse 						= true;
+	default allowDodgeOverlap 						= true;
+	default earlyDodgeActivation 					= true;
+	
+	default rotateOnRotateEvent 					= false;
 	
 	function InitializeEvents()
 	{
@@ -312,6 +415,8 @@ class CBTTaskDodgeDef extends CBTTaskPlayAnimationEventDecoratorDef
 		listenToGameplayEvents.PushBack( 'Time2DodgeBomb' );
 		listenToGameplayEvents.PushBack( 'Time2DodgeProjectileDelayed' );
 		listenToGameplayEvents.PushBack( 'Time2DodgeBombDelayed' );
+		listenToGameplayEvents.PushBack( 'swingType' );
+		listenToGameplayEvents.PushBack( 'swingDir' );
 	}
 }
 

@@ -16,21 +16,38 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	private 		var pathPointsSpent : array<int>;							
 	private   saved var skillSlots : array<SSkillSlot>;							
 	protected saved var skillAbilities : array<name>;							
-	private			var totalSkillSlotsCount, orgTotalSkillSlotsCount : int;								//amount of skill slots (Elys)
+	private			var totalSkillSlotsCount : int;
+	private			var orgTotalSkillSlotsCount : int;								//amount of skill slots (Elys) Triangle passive skills
 	private 		var tempSkills : array<ESkill>;								
 	private   saved var mutagenSlots : array<SMutagenSlot>;						
 	private			var temporaryTutorialSkills : array<STutorialTemporarySkill>;	
 	private   saved var ep1SkillsInitialized : bool;
 	private   saved var ep2SkillsInitialized : bool;
+	private   saved var baseGamePerksGUIPosUpdated : bool;
+	private   saved var mutagenBonuses : array< SMutagenBonusAlchemy19 >;		
+	private   saved var alchemy19OptimizationDone : bool;						
+	
+	
+	private   saved var isMutationSystemEnabled : bool;							
+	private   saved var equippedMutation : EPlayerMutationType;					
+	private   saved var mutations : array< SMutation >;							
+	private   saved var mutationUnlockedSlotsIndexes : array< int >;			
+	private   saved var mutationSkillSlotsInitialized : bool;					
+	
 	
 	private const var LINK_BONUS_BLUE, LINK_BONUS_GREEN, LINK_BONUS_RED : name;	
+	private const var MUTATION_SKILL_GROUP_ID : int;							
 	
 		default LINK_BONUS_BLUE = 'SkillLinkBonus_Blue';
 		default LINK_BONUS_GREEN = 'SkillLinkBonus_Green';
 		default LINK_BONUS_RED = 'SkillLinkBonus_Red';
+		default MUTATION_SKILL_GROUP_ID = 5;
 		
 		default ep1SkillsInitialized = false;
 		default ep2SkillsInitialized = false;
+		default baseGamePerksGUIPosUpdated = false;
+		
+		
 	
 	public final function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool
 	{
@@ -52,7 +69,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		
 		resistStatsItems.Resize(EnumGetMax('EEquipmentSlots')+1);
-		pathPointsSpent.Resize(EnumGetMax('ESkillPath')+1);
+		pathPointsSpent.Resize(EnumGetMax('ESkillPath')+1);		
 		
 		
 		ownr.AddAbility(theGame.params.GLOBAL_PLAYER_ABILITY);
@@ -63,12 +80,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		LogChannel('CHR', "Init W3PlayerAbilityManager "+isFromLoad);		
 		
 		
+		InitSkillSlots( isFromLoad );
+		
 		if(!isFromLoad)
-		{
-			InitSkillSlots();
-	
+		{	
 			
-			skillDefs = charStats.GetAbilitiesWithTag('SkillDefinitionName');		
+			charStats.GetAbilitiesWithTag('SkillDefinitionName', skillDefs);
 			LogAssert(skillDefs.Size()>0, "W3PlayerAbilityManager.Init: actor <<" + owner + ">> has no skills!!");
 			
 			for(i=0; i<skillDefs.Size(); i+=1)
@@ -77,9 +94,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			LoadMutagenSlotsDataFromXML();
 			
 			
+			mutagenBonuses.Resize( GetSkillGroupsCount() + 1 );
+			
+			
 			InitSkills();
 			
-			PrecacheModifierSkills();
+			PrecacheModifierSkills();			
 		}
 		else
 		{
@@ -93,8 +113,20 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if ( !ep2SkillsInitialized && theGame.GetDLCManager().IsEP2Available() )
 			{
 				ep2SkillsInitialized = FixMissingSkills();
-			}			
+			}
+			if ( !baseGamePerksGUIPosUpdated )
+			{
+				baseGamePerksGUIPosUpdated = FixBaseGamePerksGUIPos();
+			}
+			if( !alchemy19OptimizationDone )
+			{
+				Alchemy19OptimizationRetro();
+				alchemy19OptimizationDone = true;
+			}
 		}
+		
+		
+		LoadMutationData();		
 		
 		isInitialized = true;
 
@@ -120,7 +152,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var skillDefs : array<name>;
 		var fixedSomething : bool;
 		
-		skillDefs = charStats.GetAbilitiesWithTag('SkillDefinitionName');		
+		charStats.GetAbilitiesWithTag('SkillDefinitionName', skillDefs);
 		LogAssert(skillDefs.Size()>0, "W3PlayerAbilityManager.Init: actor <<" + owner + ">> has no skills!!");
 		fixedSomething = false;
 		
@@ -142,6 +174,60 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			{
 				skills[i] = newSkills[i];
 				fixedSomething = true;
+			}
+		}
+		
+		return fixedSomething;
+	}
+	
+	private final function FixBaseGamePerksGUIPos() : bool
+	{
+		var i, j, size, size2, tmpInt : int;
+		var fixedSomething : bool;
+		var dm : CDefinitionsManagerAccessor;
+		var sks, main : SCustomNode;
+		var skillType : ESkill;
+		var tmpName : name;
+		
+		dm = theGame.GetDefinitionsManager();
+		sks = dm.GetCustomDefinition('skills');
+		
+		
+		size = sks.subNodes.Size();		
+		for( i = 0; i < size; i += 1 )
+		{
+			if(dm.GetCustomNodeAttributeValueName(sks.subNodes[i], 'def_name', tmpName))
+			{
+				if(tmpName == 'GeraltSkills')
+				{
+					main = sks.subNodes[i];
+					size2 = main.subNodes.Size();
+					for( j = 0; j < size2; j += 1 )
+					{
+						dm.GetCustomNodeAttributeValueName(main.subNodes[j], 'skill_name', tmpName);
+						skillType = SkillNameToEnum(tmpName);
+						
+						switch( skillType )
+						{
+							case S_Perk_01 :
+							case S_Perk_02 :
+							case S_Perk_03 :
+							case S_Perk_04 :
+							case S_Perk_05 :
+							case S_Perk_06 :
+							case S_Perk_07 :
+							case S_Perk_08 :
+							case S_Perk_09 :
+							case S_Perk_10 :
+							case S_Perk_11 :
+							case S_Perk_12 :
+								dm.GetCustomNodeAttributeValueInt(main.subNodes[j], 'guiPositionID', tmpInt);
+								skills[ skillType ].positionID = tmpInt;
+								fixedSomething = true;
+						}
+					}
+					break;
+				}
 			}
 		}
 		
@@ -206,8 +292,42 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			playerLevel = ((W3PlayerWitcher)owner).GetLevel();
 			for(i=0; i<skillSlots.Size(); i+=1)
 			{
-				skillSlots[i].unlocked = ( playerLevel >= skillSlots[i].unlockedOnLevel);
+				if( skillSlots[ i ].groupID != MUTATION_SKILL_GROUP_ID )
+				{
+					skillSlots[i].unlocked = ( playerLevel >= skillSlots[i].unlockedOnLevel);
+				}
 			}
+		}
+		
+		
+		if( FactsQuerySum( "154531" ) <= 0 )
+		{
+			mutationUnlockedSlotsIndexes.Clear();
+			FactsAdd( "154531" );
+		}
+		if( FactsQuerySum( "154975" ) <= 0 )
+		{
+			mutationUnlockedSlotsIndexes.Clear();
+			FactsAdd( "154975" );
+		}
+		
+		
+		if( mutationUnlockedSlotsIndexes.Size() == 0 )
+		{
+			for( i=0; i<skillSlots.Size(); i+=1 )
+			{
+				if( skillSlots[ i ].groupID == MUTATION_SKILL_GROUP_ID )
+				{
+					mutationUnlockedSlotsIndexes.PushBack( i );
+				}
+			}
+		}
+		
+		
+		if( !mutationSkillSlotsInitialized && theGame.GetDLCManager().IsEP2Enabled() && theGame.GetDLCManager().IsEP2Available() )
+		{
+			UpdateMutationSkillSlots();
+			mutationSkillSlotsInitialized = true;
 		}
 	}
 	
@@ -306,6 +426,16 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		{
 			owner.AddEffectDefault(EET_Runeword8, owner, "max focus");
 		}
+		
+		
+		if( points >= 1.f && GetWitcherPlayer().IsMutationActive( EPMT_Mutation5 ) && !owner.HasBuff( EET_Mutation5 ) && owner.IsInCombat() )
+		{
+			owner.AddEffectDefault( EET_Mutation5, owner, "", false );
+		}
+		else if( points < 1.f && GetWitcherPlayer().IsMutationActive( EPMT_Mutation5 ) )
+		{
+			owner.RemoveBuff( EET_Mutation5 );
+		}
 	}
 	
 	
@@ -342,6 +472,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	protected final function OnToxicityChanged()
 	{
 		var tox : float;
+		var enemies : array< CActor >;
 	
 		if( !((W3PlayerWitcher)owner) )
 			return;
@@ -349,10 +480,30 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		tox = GetStat(BCS_Toxicity);
 	
 		
-		if(tox == 0 && owner.HasBuff(EET_Toxicity))
-			owner.RemoveBuff(EET_Toxicity);
-		else if(tox > 0 && !owner.HasBuff(EET_Toxicity))
+		if( tox == 0.f && owner.HasBuff( EET_Toxicity ) )
+		{
+			owner.RemoveBuff( EET_Toxicity );			
+		}
+		else if(tox > 0.f && !owner.HasBuff(EET_Toxicity))
+		{
 			owner.AddEffectDefault(EET_Toxicity,owner,'toxicity_change');
+		}	
+		
+		
+		if( tox == 0.f )
+		{
+			owner.RemoveBuff( EET_Mutation10 );
+		}
+		else if( (W3PlayerWitcher)owner && GetWitcherPlayer().IsMutationActive( EPMT_Mutation10 ) && !owner.HasBuff( EET_Mutation10 ) && owner.IsInCombat() )
+		{
+			enemies = GetWitcherPlayer().GetEnemies();
+			
+			
+			if( enemies.Size() > 0 )
+			{
+				owner.AddEffectDefault( EET_Mutation10, NULL, "Mutation 10" );
+			}
+		}
 			
 		theTelemetry.SetCommonStatFlt(CS_TOXICITY, GetStat(BCS_Toxicity));
 	}
@@ -378,15 +529,19 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function IsSkillMutagenSlotUnlocked(eqSlot : EEquipmentSlots) : bool
+	public final function IsSkillMutagenSlotUnlocked( eqSlot : EEquipmentSlots ) : bool
 	{
 		var i : int;
 		
-		i = GetMutagenSlotIndex(eqSlot);
-		if(i<0)
+		i = GetMutagenSlotIndex( eqSlot );
+		if( i<0 )
+		{
 			return false;
+		}
 		
-		return ((W3PlayerWitcher)owner).GetLevel() >= mutagenSlots[i].unlockedAtLevel;
+		
+		
+		return ( ( W3PlayerWitcher ) owner ).GetLevel() >= mutagenSlots[ i ].unlockedAtLevel;
 	}
 	
 	private final function GetMutagenSlotForGroupId(groupID : int) : EEquipmentSlots
@@ -460,7 +615,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if(CanUseSkill(S_Alchemy_s19))
 		{
-			MutagenSynergyBonusEnable(item, true, GetSkillLevel(S_Alchemy_s19));
+			MutagensSyngergyBonusUpdate( mutagenSlots[i].skillGroupID, GetSkillLevel( S_Alchemy_s19) );
 		}
 		
 		
@@ -491,7 +646,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if(CanUseSkill(S_Alchemy_s19))
 		{
-			MutagenSynergyBonusEnable(item, false, GetSkillLevel(S_Alchemy_s19));
+			MutagensSyngergyBonusUpdate( mutagenSlots[i].skillGroupID, GetSkillLevel( S_Alchemy_s19) );
 		}
 		
 		mutagenSlots[i].item = GetInvalidUniqueId();
@@ -522,52 +677,112 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		LinkUpdate(newColorB, oldColorB);
 	}
 	
-	
-	private final function MutagensSyngergyBonusProcess(enable : bool, skillLevel : int)
+	private final function Alchemy19OptimizationRetro()
 	{
 		var i : int;
-		var inv : CInventoryComponent;
+		var mutagenItemID : SItemUniqueId;
 		
-		inv = owner.GetInventory();
-		for(i=0; i<mutagenSlots.Size(); i+=1)
+		
+		for( i=0; i<mutagenSlots.Size(); i+=1 )
 		{
-			
-			if(inv.IsIdValid(mutagenSlots[i].item))
-			{
-				MutagenSynergyBonusEnable(mutagenSlots[i].item, enable, skillLevel);
+			mutagenItemID = GetMutagenItemIDFromGroupID( mutagenSlots[i].skillGroupID );		
+			if( owner.GetInventory().IsIdValid( mutagenItemID ) )
+			{			
+				owner.RemoveAbilityAll( GetMutagenBonusAbilityName( mutagenItemID ) );
 			}
+		}
+			
+		
+		mutagenBonuses.Resize( GetSkillGroupsCount() + 1 );
+		
+		
+		if( CanUseSkill( S_Alchemy_s19 ) )
+		{
+			MutagensSyngergyBonusUpdate( -1, GetSkillLevel( S_Alchemy_s19 ) );
 		}
 	}
 	
 	
-	private final function MutagenSynergyBonusEnable(mutagenItemId : SItemUniqueId, enable : bool, bonusSkillLevel : int)
-	{
-		var i, count : int;
-		var color : ESkillColor;
-		
-		count = 1;
-		
-		for (i=0; i < mutagenSlots.Size(); i+=1)
-		{
-			if (mutagenSlots[i].item == mutagenItemId)
-			{
-				
-				color = owner.GetInventory().GetSkillMutagenColor( mutagenItemId );
-				count += GetGroupBonusCount(color, mutagenSlots[i].skillGroupID);
-				break;
-			}
-		}
 	
-		if(enable)
+	private final function MutagensSyngergyBonusUpdate( skillGroupID : int, skillLevel : int )
+	{
+		var i : int;
+
+		if( skillGroupID != -1 )
 		{
-			owner.AddAbilityMultiple(GetMutagenBonusAbilityName(mutagenItemId), count * bonusSkillLevel);
+			MutagensSyngergyBonusUpdateSingle( skillGroupID, skillLevel );
 		}
 		else
 		{
-			owner.RemoveAbilityMultiple(GetMutagenBonusAbilityName(mutagenItemId), count * bonusSkillLevel);
+			for( i=0; i<mutagenSlots.Size(); i+=1 )
+			{
+				MutagensSyngergyBonusUpdateSingle( mutagenSlots[i].skillGroupID, skillLevel );
+			}
 		}
 	}
 	
+	
+	private final function MutagensSyngergyBonusUpdateSingle( skillGroupID : int, skillLevel : int )
+	{
+		var current : SMutagenBonusAlchemy19;
+		var color : ESkillColor;
+		var mutagenItemID : SItemUniqueId;
+		var delta : int;
+		
+		if( skillGroupID < 0 )
+		{
+			return;
+		}
+		
+		
+		mutagenItemID = GetMutagenItemIDFromGroupID( skillGroupID );
+		
+		if( owner.GetInventory().IsIdValid( mutagenItemID ) )
+		{			
+			current.abilityName = GetMutagenBonusAbilityName( mutagenItemID );
+			
+			if( skillLevel > 0 )
+			{
+				color = owner.GetInventory().GetSkillMutagenColor( mutagenItemID );
+				current.count = skillLevel * GetSkillGroupColorCount(color, skillGroupID);
+			}
+		}
+		
+		
+		if( current.abilityName != mutagenBonuses[skillGroupID].abilityName )
+		{
+			
+			if( IsNameValid( mutagenBonuses[skillGroupID].abilityName ) && mutagenBonuses[skillGroupID].count > 0 )
+			{
+				owner.RemoveAbilityMultiple( mutagenBonuses[skillGroupID].abilityName, mutagenBonuses[skillGroupID].count );
+			}
+			
+			
+			if( IsNameValid( current.abilityName ) && current.count > 0 )
+			{
+				owner.AddAbilityMultiple( current.abilityName, current.count );
+			}
+		}
+		
+		else if( IsNameValid( current.abilityName ) )
+		{
+			
+			delta = current.count - mutagenBonuses[skillGroupID].count;
+			
+			if( delta > 0 )
+			{
+				owner.AddAbilityMultiple( current.abilityName, delta );
+			}
+			else if( delta < 0 )
+			{
+				owner.RemoveAbilityMultiple( current.abilityName, -delta );
+			}
+		}
+		
+		
+		mutagenBonuses[skillGroupID] = current;
+	}
+		
 	
 	public final function GetMutagenBonusAbilityName(mutagenItemId : SItemUniqueId) : name
 	{
@@ -587,6 +802,20 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	
 	
 	
+	public final function GetSkillGroupIdFromSkill( skillType : ESkill ) : int
+	{
+		var i : int;
+		
+		for(i=0; i<skillSlots.Size(); i+=1)
+		{
+			if(skillSlots[i].socketedSkill == skillType)
+			{
+				return skillSlots[i].groupID;
+			}
+		}
+		
+		return -1;
+	}
 	
 	public final function GetSkillGroupIdFromSkillSlotId(skillSlotId : int) : int
 	{
@@ -601,6 +830,21 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		
 		return -1;
+	}
+	
+	public final function GetMutagenItemIDFromGroupID( skillGroupID : int ) : SItemUniqueId
+	{
+		var i : int;
+		
+		for( i=0; i<mutagenSlots.Size(); i+=1 )
+		{
+			if( mutagenSlots[i].skillGroupID == skillGroupID )
+			{
+				return mutagenSlots[i].item;
+			}
+		}
+		
+		return GetInvalidUniqueId();
 	}
 	
 	public function GetMutagenSlotIDFromGroupID(groupID : int) : int
@@ -625,17 +869,6 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			case SC_Red: return LINK_BONUS_RED;
 		}
 	}
-	
-	public final function GetGroupBonusCount(commonColor : ESkillColor, groupID : int) : int
-	{
-		var groupColorCount : int;
-		var item : SItemUniqueId;
-		
-		groupColorCount = GetSkillGroupColorCount(commonColor, groupID);
-		
-		
-			return groupColorCount;
-	}	
 	
 	
 	public final function GetSkillGroupColor(groupID : int) : ESkillColor
@@ -700,7 +933,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		for(i=0; i<skillSlots.Size(); i+=1)
 		{
-			if(skillSlots[i].unlocked && skillSlots[i].groupID == groupID && CanUseSkill(skillSlots[i].socketedSkill))
+			if(skillSlots[i].unlocked && skillSlots[i].groupID == groupID && skillSlots[i].socketedSkill != S_SUndefined )
 			{
 				skillColors.PushBack(GetSkillColor(skillSlots[i].socketedSkill));
 			}
@@ -1350,20 +1583,22 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			return;
 			
 		
-		tree = GetSkillPathType(skill);
-		
-		learnedAll = true;
-		for(i=0; i<skills.Size(); i+=1)
+		if( !isTemporary )
 		{
-			if(skills[i].skillPath == tree && skills[i].level == 0)
+			learnedAll = true;
+			tree = GetSkillPathType(skill);
+			for(i=0; i<skills.Size(); i+=1)
 			{
-				learnedAll = false;
-				break;
+				if( skills[i].skillPath == tree && ( skills[i].level == 0 || skills[i].isTemporary ) )
+				{
+					learnedAll = false;
+					break;
+				}
 			}
+			
+			if(learnedAll)
+				theGame.GetGamerProfile().AddAchievement(EA_Dendrology);
 		}
-		
-		if(learnedAll)
-			theGame.GetGamerProfile().AddAchievement(EA_Dendrology);
 		
 		
 		if(ShouldProcessTutorial('TutorialCharDevBuySkill'))
@@ -1403,6 +1638,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		
 		skills[skill].level += 1;
+		skills[skill].isTemporary = isTemporary;
 		
 		
 		if(!skills[skill].isCoreSkill)
@@ -1717,6 +1953,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var cost : float;
 		var mutagen : W3Mutagen21_Effect;
 		var min, max : SAbilityAttributeValue;
+		var signEntity : W3SignEntity;
 		
 		if(FactsDoesExist("debug_fact_stamina_boy"))
 			return 0;
@@ -1740,7 +1977,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if(owner == GetWitcherPlayer() && GetStat(BCS_Stamina, true) <= 0.f)
 		{
-			GetWitcherPlayer().GetSignEntity(GetWitcherPlayer().GetCurrentlyCastSign()).OnSignAborted(true);
+			signEntity = GetWitcherPlayer().GetSignEntity(GetWitcherPlayer().GetCurrentlyCastSign());
+			
+			
+			if( !( ( W3QuenEntity ) signEntity ) || !owner.HasBuff( EET_Mutation11Buff ) )
+			{
+				signEntity.OnSignAborted(true);
+			}
 		}
 		
 		return cost;
@@ -1936,62 +2179,73 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	private final function InitSkillSlots()
+	private final function InitSkillSlots( isFromLoad : bool )
 	{
 		var slot : SSkillSlot;
 		var dm : CDefinitionsManagerAccessor;
 		var main : SCustomNode;
-		var i, tmpInt : int;
+		var i, j : int;
+		var inGame : bool;
+		var xmlSlots : array< SSkillSlot >;
 	
 		dm = theGame.GetDefinitionsManager();
-		main = dm.GetCustomDefinition('skill_slots');
+		main = dm.GetCustomDefinition( 'skill_slots' );
 		
-		for(i=0; i<main.subNodes.Size(); i+=1)
+		for( i=0; i<main.subNodes.Size(); i+=1 )
 		{
-			if(!dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'id', slot.id))			
+			if( !dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'id', slot.id ) )			
 			{
-				LogAssert(false, "W3PlayerAbilityManager.InitSkillSlots: slot definition is not valid!");
+				LogAssert( false, "W3PlayerAbilityManager.InitSkillSlots: slot definition is not valid!" );
 				continue;
 			}
 						
-			if(!dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'unlockedOnLevel', slot.unlockedOnLevel))
+			if( !dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'unlockedOnLevel', slot.unlockedOnLevel ) )
+			{
 				slot.unlockedOnLevel = 0;
+			}
 			
-			if(!dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'group', slot.groupID))
+			if( !dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'group', slot.groupID ) )
+			{
 				slot.groupID = -1;
+			}
+	
 			
-			if(dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'neighbourUp', tmpInt))
-				slot.neighbourUp = tmpInt;
-			else
-				slot.neighbourUp = -1;
-				
-			if(dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'neighbourDown', tmpInt))
-				slot.neighbourDown = tmpInt;
-			else
-				slot.neighbourDown = -1;
-				
-			if(dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'neighbourLeft', tmpInt))
-				slot.neighbourLeft = tmpInt;
-			else
-				slot.neighbourLeft = -1;
-				
-			if(dm.GetCustomNodeAttributeValueInt(main.subNodes[i], 'neighbourRight', tmpInt))
-				slot.neighbourRight = tmpInt;
-			else
-				slot.neighbourRight = -1;
-				
-			
-			totalSkillSlotsCount = Max(totalSkillSlotsCount, slot.id);
-			LogChannel('CHR', "Init W3PlayerAbilityManager, totalSkillSlotsCount "+totalSkillSlotsCount);
-			skillSlots.PushBack(slot);
+			totalSkillSlotsCount = Max( totalSkillSlotsCount, slot.id );
+			LogChannel( 'CHR', "Init W3PlayerAbilityManager, totalSkillSlotsCount " + totalSkillSlotsCount );
+			xmlSlots.PushBack( slot );
 			
 			slot.id = -1;
 			slot.unlockedOnLevel = 0;
-			slot.neighbourUp = -1;
-			slot.neighbourDown = -1;
-			slot.neighbourLeft = -1;
-			slot.neighbourRight = -1;
 			slot.groupID = -1;
+		}
+		
+		if( !isFromLoad )
+		{
+			
+			skillSlots = xmlSlots;
+		}
+		else
+		{
+			
+			for( i=0; i<xmlSlots.Size(); i+=1 )
+			{
+				
+				inGame = false;
+				for( j=0; j<skillSlots.Size(); j+=1 )
+				{
+					if( xmlSlots[ i ].id == skillSlots[ j ].id )
+					{
+						inGame = true;
+						break;
+					}
+				}
+				
+				
+				if( !inGame )
+				{
+					skillSlots.PushBack( xmlSlots[ i ] );
+				}
+			}
 		}
 	}
 	
@@ -2061,7 +2315,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	
 	public final function EquipSkill(skill : ESkill, slotID : int) : bool
 	{
-		var idx, i : int; // Elys // Triangle passive skills
+		var idx : int;
+		var i : int; // Elys // Triangle passive skills
 		var prevColor : ESkillColor;
 		
 		if(!HasLearnedSkill(skill) || IsCoreSkill(skill))
@@ -2106,13 +2361,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			return false;
 		
 		
-		if ( CanUseSkill(S_Alchemy_s19) )
-			MutagensSyngergyBonusProcess(false, GetSkillLevel(S_Alchemy_s19));
-			
+		skill = skillSlots[idx].socketedSkill;	
+		if( skill == S_SUndefined )
+		{
+			return false;
+		}
 		
-		prevColor = GetSkillGroupColor(skillSlots[idx].groupID);
-		skill = skillSlots[idx].socketedSkill;
+		
 		skillSlots[idx].socketedSkill = S_SUndefined;
+		prevColor = GetSkillGroupColor(skillSlots[idx].groupID);
 		LinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);
 		OnSkillUnequip(skill);
 		
@@ -2155,6 +2412,10 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var foodBuff : W3Effect_WellFed;
 		var commonMenu : CR4CommonMenu;
 		var guiMan : CR4GuiManager;
+		var shrineBuffs : array<CBaseGameplayEffect>;
+		var shrineTimeLeft, highestShrineTime : float;
+		var shrineEffectIndex : int;
+		var hud : CR4ScriptedHud;
 		
 		
 		if(IsCoreSkill(skill))
@@ -2197,8 +2458,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if ( CanUseSkill(S_Alchemy_s19) )
 		{
-			MutagensSyngergyBonusProcess(false, GetSkillLevel(S_Alchemy_s19));
-			MutagensSyngergyBonusProcess(true, GetSkillLevel(S_Alchemy_s19));
+			MutagensSyngergyBonusUpdate( GetSkillGroupIdFromSkill( skill ), GetSkillLevel(S_Alchemy_s19) );
 		}
 		else if(skill == S_Alchemy_s20)
 		{
@@ -2232,6 +2492,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				charStats.AddAbilityMultiple( GetSkillAbilityName( skill ), (GetSkillLevel( skill ) * mutagens.Size() ));
 			}
 		}		
+		else if(skill == S_Alchemy_s06)
+		{
+			hud = (CR4ScriptedHud)theGame.GetHud();
+			if ( hud )
+			{
+				hud.OnRelevantSkillChanged( skill, true );
+			}
+		}
 		else if(skill == S_Magic_s11)		
 		{
 			((W3YrdenEntity) (witcher.GetSignEntity(ST_Yrden))).SkillEquipped(skill);
@@ -2248,7 +2516,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		else if(skill == S_Alchemy_s19)
 		{
-		
+			MutagensSyngergyBonusUpdate( -1, GetSkillLevel(S_Alchemy_s19) );
 		}
 		else if(skill == S_Perk_01)
 		{
@@ -2273,12 +2541,37 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if(battleTrance)
 				battleTrance.OnPerk11Equipped();
 		}
+		else if( skill == S_Perk_14 )
+		{
+			highestShrineTime = 0.f;
+			shrineBuffs = GetWitcherPlayer().GetShrineBuffs();
+			for( i = 0; i<shrineBuffs.Size() ; i+=1 )
+			{
+				shrineTimeLeft = shrineBuffs[i].GetDurationLeft();
+				if( shrineTimeLeft > highestShrineTime )
+				{
+					highestShrineTime = shrineTimeLeft;
+					shrineEffectIndex = i;
+				}
+			}
+			for( i = 0; i<shrineBuffs.Size() ; i+=1 )
+			{
+				if( i != shrineEffectIndex )
+				{
+					GetWitcherPlayer().RemoveEffect( shrineBuffs[i] );
+				}
+			}
+		}
 		else if(skill == S_Perk_19 && witcher.HasBuff(EET_BattleTrance))
 		{
 			skillLevel = FloorF(witcher.GetStat(BCS_Focus));
 			witcher.RemoveAbilityMultiple(thePlayer.GetSkillAbilityName(S_Sword_5), skillLevel);
 			witcher.AddAbilityMultiple(thePlayer.GetSkillAbilityName(S_Perk_19), skillLevel);
 		}		
+		else if(skill == S_Perk_20)
+		{
+			thePlayer.SkillReduceBombAmmoBonus();
+		}
 		else if(skill == S_Perk_22)
 		{
 			GetWitcherPlayer().UpdateEncumbrance();
@@ -2326,6 +2619,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var foodBuff : W3Effect_WellFed;
 		var commonMenu : CR4CommonMenu;
 		var guiMan : CR4GuiManager;
+		var hud : CR4ScriptedHud;
 		
 		
 		if(IsCoreSkill(skill))
@@ -2385,6 +2679,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				charStats.RemoveAbilityMultiple( GetSkillAbilityName( S_Alchemy_s13 ), ( GetSkillLevel( skill ) * mutagens.Size() ));
 			}
 		}
+		else if(skill == S_Alchemy_s06)
+		{
+			hud = (CR4ScriptedHud)theGame.GetHud();
+			if ( hud )
+			{
+				hud.OnRelevantSkillChanged( skill, false );
+			}
+		}
 		else if(skill == S_Alchemy_s20)
 		{
 			owner.RemoveBuff(EET_IgnorePain);
@@ -2417,8 +2719,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			thePlayer.ChangeAlchemyItemsAbilities(false);
 		}
 		else if(skill == S_Alchemy_s19)
-		{
-			MutagensSyngergyBonusProcess(false, GetSkillLevel(skill));
+		{			
+			MutagensSyngergyBonusUpdate( -1, 0 );
 		}
 		else if(skill == S_Perk_01)
 		{
@@ -2426,15 +2728,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		else if(skill == S_Perk_05)
 		{
-			SetPerkArmorBonus(S_Perk_05);
+			UpdatePerkArmorBonus(S_Perk_05, 0);	
 		}
 		else if(skill == S_Perk_06)
 		{
-			SetPerkArmorBonus(S_Perk_06);
+			UpdatePerkArmorBonus(S_Perk_06, 0);	
 		}
 		else if(skill == S_Perk_07)
 		{
-			SetPerkArmorBonus(S_Perk_07);
+			UpdatePerkArmorBonus(S_Perk_07, 0);	
 		}
 		else if(skill == S_Perk_11)
 		{
@@ -2442,6 +2744,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if(battleTrance)
 				battleTrance.OnPerk11Unequipped();
 		}		
+		else if( skill == S_Perk_15 )
+		{
+			foodBuff = (W3Effect_WellFed)owner.GetBuff( EET_WellFed );
+			if( foodBuff )
+			{
+				foodBuff.OnPerk15Unequipped();
+			}
+		}
 		else if(skill == S_Perk_19 && owner.HasBuff(EET_BattleTrance))
 		{
 			skillLevel = FloorF(owner.GetStat(BCS_Focus));
@@ -2468,59 +2778,77 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if ( CanUseSkill(S_Alchemy_s19) )
 		{
-			MutagensSyngergyBonusProcess(false, GetSkillLevel(S_Alchemy_s19));
-			MutagensSyngergyBonusProcess(true, GetSkillLevel(S_Alchemy_s19));
+			MutagensSyngergyBonusUpdate( GetSkillGroupIdFromSkill( skill ), GetSkillLevel(S_Alchemy_s19) );
 		}
 	}
 	
 	
-	public final function SetPerkArmorBonus(skill : ESkill)
+	public final function SetPerkArmorBonus(skill : ESkill, optional spawnPlayerEntity : W3PlayerWitcher )
 	{
 		var item : SItemUniqueId;
 		var armors : array<SItemUniqueId>;
 		var light, medium, heavy, i, cnt : int;
 		var armorType : EArmorType;
 		var witcher : W3PlayerWitcher;
+		var inventory : CInventoryComponent;
 		
 		if(skill != S_Perk_05 && skill != S_Perk_06 && skill != S_Perk_07)
-			return;
-	
-		witcher = GetWitcherPlayer();
-		armors.Resize(4);
-		
-		if(witcher.inv.GetItemEquippedOnSlot(EES_Armor, item))
-			armors[0] = item;
-			
-		if(witcher.inv.GetItemEquippedOnSlot(EES_Boots, item))
-			armors[1] = item;
-			
-		if(witcher.inv.GetItemEquippedOnSlot(EES_Pants, item))
-			armors[2] = item;
-			
-		if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, item))
-			armors[3] = item;
-		
-		light = 0;
-		medium = 0;
-		heavy = 0;
-		for(i=0; i<armors.Size(); i+=1)
 		{
-			armorType = witcher.inv.GetArmorType(armors[i]);
-			if(armorType == EAT_Light)
-				light += 1;
-			else if(armorType == EAT_Medium)
-				medium += 1;
-			else if(armorType == EAT_Heavy)
-				heavy += 1;
+			return;
 		}
 		
-		if(skill == S_Perk_05)
-			cnt = light;
-		else if(skill == S_Perk_06)
-			cnt = medium;
+		if( !CanUseSkill( skill ) )
+		{
+			cnt = 0;
+		}
 		else
-			cnt = heavy;
+		{
+			if( spawnPlayerEntity ) 
+			{
+				witcher = spawnPlayerEntity;
+			}
+			else
+			{
+				witcher = GetWitcherPlayer();
+			}
 			
+			armors.Resize(4);
+			
+			if(witcher.GetItemEquippedOnSlot(EES_Armor, item))
+				armors[0] = item;
+				
+			if(witcher.GetItemEquippedOnSlot(EES_Boots, item))
+				armors[1] = item;
+				
+			if(witcher.GetItemEquippedOnSlot(EES_Pants, item))
+				armors[2] = item;
+				
+			if(witcher.GetItemEquippedOnSlot(EES_Gloves, item))
+				armors[3] = item;
+			
+			light = 0;
+			medium = 0;
+			heavy = 0;
+			inventory = witcher.GetInventory();
+			for(i=0; i<armors.Size(); i+=1)
+			{
+				armorType = inventory.GetArmorType(armors[i]);
+				if(armorType == EAT_Light)
+					light += 1;
+				else if(armorType == EAT_Medium)
+					medium += 1;
+				else if(armorType == EAT_Heavy)
+					heavy += 1;
+			}
+			
+			if(skill == S_Perk_05)
+				cnt = light;
+			else if(skill == S_Perk_06)
+				cnt = medium;
+			else
+				cnt = heavy;
+		}
+		
 		UpdatePerkArmorBonus(skill, cnt);		
 	}
 	
@@ -2636,8 +2964,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			
 			if ( CanUseSkill(S_Alchemy_s19) )
 			{
-				MutagensSyngergyBonusProcess(false, prevLevel);
-				MutagensSyngergyBonusProcess(true, currLevel);
+				MutagensSyngergyBonusUpdate( -1, currLevel );
 			}
 		}
 		else if(skill == S_Alchemy_s20)
@@ -3028,6 +3355,918 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
+	public function DEBUG_DevelopAndEquipMutation( mut : EPlayerMutationType )
+	{
+		var player : W3PlayerWitcher;
+		var tempInt : int;
+		
+		player = GetWitcherPlayer();
+		
+		tempInt = GetMutationIndex( mut );
+		mutations[ tempInt ].progress.overallProgress = 100;
+		mutations[ tempInt ].progress.blueUsed = mutations[ tempInt ].progress.blueRequired;
+		mutations[ tempInt ].progress.greenUsed = mutations[ tempInt ].progress.greenRequired;
+		mutations[ tempInt ].progress.redUsed = mutations[ tempInt ].progress.redRequired;
+		mutations[ tempInt ].progress.skillpointsUsed = mutations[ tempInt ].progress.skillpointsRequired;
+		OnMutationFullyResearched( mut );
+		
+		DEBUG_SetEquippedMutation( mut );
+	}
+	
+	
+	
+	
+	
+	public final function ResetMutationsDev()
+	{
+		var i : int;
+		
+		
+		for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+		{
+			UnequipSkill( mutationUnlockedSlotsIndexes[ i ] );
+		}
+		
+		
+		SetEquippedMutation( EPMT_None );
+		
+		
+		for( i=0; i<mutations.Size(); i+=1 )
+		{
+			mutations[i].progress.redUsed = 0;
+			mutations[i].progress.blueUsed = 0;
+			mutations[i].progress.greenUsed = 0;
+			mutations[i].progress.skillpointsUsed = 0;
+			mutations[i].progress.overallProgress = -1;	
+		}
+	}
+	
+	public final function GetMutationsUsedSkillPoints() : int
+	{
+		var total, i : int;
+		
+		total = 0;
+		for( i=0; i<mutations.Size(); i+=1 )
+		{
+			total += mutations[i].progress.skillpointsUsed;
+		}
+		
+		return total;
+	}
+	
+	
+	private final function LoadMutationData()
+	{
+		var xmlMutations : array< SMutation >;
+		var i, j : int;
+		var foundInXML : bool;
+		
+		LoadMutationDataFromXML( xmlMutations );
+		
+		
+		for( i=mutations.Size()-1; i>=0; i-=1 )
+		{
+			foundInXML = false;
+			
+			
+			for( j=xmlMutations.Size()-1; j>=0; j-=1 )
+			{
+				if( mutations[ i ].type == xmlMutations[ j ].type )
+				{
+					mutations[ i ].progress.redRequired = xmlMutations[ j ].progress.redRequired;
+					mutations[ i ].progress.blueRequired = xmlMutations[ j ].progress.blueRequired;
+					mutations[ i ].progress.greenRequired = xmlMutations[ j ].progress.greenRequired;
+					mutations[ i ].progress.skillpointsRequired = xmlMutations[ j ].progress.skillpointsRequired;
+					mutations[ i ].progress.overallProgress = -1;
+					mutations[ i ].localizationNameKey = xmlMutations[ j ].localizationNameKey;
+					mutations[ i ].localizationDescriptionKey = xmlMutations[ j ].localizationDescriptionKey;
+					mutations[ i ].iconPath = xmlMutations[ j ].iconPath;
+					mutations[ i ].soundbank = xmlMutations[ j ].soundbank;
+					
+					mutations[ i ].colors.Clear();
+					mutations[ i ].requiredMutations.Clear();
+					
+					mutations[ i ].requiredMutations = xmlMutations[ j ].requiredMutations;
+					mutations[ i ].colors = xmlMutations[ j ].colors;
+					
+					xmlMutations.EraseFast( j );
+					foundInXML = true;
+					break;
+				}
+			}
+			
+			
+			if( !foundInXML )
+			{
+				
+				if( mutations[ i ].progress.skillpointsUsed > 0 )
+				{
+					GetWitcherPlayer().AddPoints( ESkillPoint, mutations[ i ].progress.skillpointsUsed, false );
+				}
+				
+				mutations.EraseFast( i );
+			}
+		}
+		
+		
+		for( i=0; i<xmlMutations.Size(); i+=1 )
+		{
+			mutations.PushBack( xmlMutations[ i ] );
+		}
+	}
+	
+	private final function LoadMutationDataFromXML( out xmlMutations : array< SMutation > )
+	{
+		var dm : CDefinitionsManagerAccessor;
+		var main, subNode : SCustomNode;
+		var xmlMutation : SMutation;
+		var i, tmpInt, j : int;
+		var tmpName : name;
+		var tmpStr : string;
+		var skillColor : ESkillColor;
+		
+		dm = theGame.GetDefinitionsManager();
+		main = dm.GetCustomDefinition( 'mutations' );
+		
+		xmlMutation.progress.redUsed = 0;
+		xmlMutation.progress.blueUsed = 0;
+		xmlMutation.progress.greenUsed = 0;
+		xmlMutation.progress.skillpointsUsed = 0;
+		xmlMutation.progress.overallProgress = -1;
+			
+		
+		for( i=0; i<main.subNodes.Size(); i+=1 )
+		{
+			dm.GetCustomNodeAttributeValueName( main.subNodes[ i ], 'type_name', tmpName );
+			xmlMutation.type = MutationNameToType( tmpName );
+			
+			dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'redMutagenPoints', tmpInt );
+			xmlMutation.progress.redRequired = tmpInt;
+			
+			dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'blueMutagenPoints', tmpInt );
+			xmlMutation.progress.blueRequired = tmpInt;
+			
+			dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'greenMutagenPoints', tmpInt );
+			xmlMutation.progress.greenRequired = tmpInt;
+			
+			dm.GetCustomNodeAttributeValueInt( main.subNodes[ i ], 'skillPoints', tmpInt );
+			xmlMutation.progress.skillpointsRequired = tmpInt;
+			
+			dm.GetCustomNodeAttributeValueName( main.subNodes[ i ], 'localizationNameKey_name', tmpName );
+			xmlMutation.localizationNameKey = tmpName;
+			
+			dm.GetCustomNodeAttributeValueName( main.subNodes[ i ], 'localizationDescriptionKey_name', tmpName );
+			xmlMutation.localizationDescriptionKey = tmpName;
+			
+			dm.GetCustomNodeAttributeValueName( main.subNodes[ i ], 'iconPath_name', tmpName );
+			xmlMutation.iconPath = tmpName;
+			
+			dm.GetCustomNodeAttributeValueString( main.subNodes[ i ], 'soundbank', tmpStr );
+			xmlMutation.soundbank = tmpStr;
+			
+			
+			subNode = dm.GetCustomDefinitionSubNode( main.subNodes[ i ], 'colors' );
+			for( j=0; j<subNode.values.Size(); j+=1 )
+			{
+				skillColor = SkillColorStringToType( subNode.values[ j ] );
+				if( skillColor == SC_Blue || skillColor == SC_Red || skillColor == SC_Green )
+				{
+					xmlMutation.colors.PushBack( skillColor );
+				}
+			}
+			
+			
+			subNode = dm.GetCustomDefinitionSubNode( main.subNodes[ i ], 'required_mutations' );
+			for( j=0; j<subNode.values.Size(); j+=1 )
+			{
+				xmlMutation.requiredMutations.PushBack( MutationNameToType( subNode.values[ j ] ) );
+			}
+			
+			xmlMutations.PushBack( xmlMutation );
+			
+			xmlMutation.colors.Clear();
+			xmlMutation.requiredMutations.Clear();
+		}
+	}
+	
+	public final function SetEquippedMutation( mutationType : EPlayerMutationType ) : bool
+	{
+		if( mutationType == EPMT_None && !( ( CR4Player ) owner ).IsInCombat() )
+		{
+			if( equippedMutation != EPMT_None )
+			{
+				OnMutationUnequippedPre( equippedMutation );				
+			}
+			
+			equippedMutation = EPMT_None;
+			MutationsDisable();
+			
+			return true;
+		}
+		else if( CanEquipMutation( mutationType ) )
+		{
+			if( equippedMutation != EPMT_None )
+			{
+				OnMutationUnequippedPre( equippedMutation );
+			}
+			
+			MutationsEnable();
+			equippedMutation = mutationType;
+			OnMutationEquippedPost( equippedMutation );
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public final function DEBUG_SetEquippedMutation( mutationType : EPlayerMutationType )
+	{
+		if( mutationType == EPMT_None )
+		{
+			if( equippedMutation != EPMT_None )
+			{
+				OnMutationUnequippedPre( equippedMutation );
+				MutationsDisable();
+			}
+			
+			equippedMutation = EPMT_None;
+		}
+		else
+		{
+			if( equippedMutation != EPMT_None )
+			{
+				OnMutationUnequippedPre( equippedMutation );
+			}
+			
+			MutationsEnable();
+			equippedMutation = mutationType;
+			OnMutationEquippedPost( equippedMutation );
+		}
+	}
+	
+	
+	private final function OnMutationUnequippedPre( mutationType : EPlayerMutationType )
+	{
+		var bank			: string;
+		var i 				: int;
+		var buffs			: array< CBaseGameplayEffect >;
+		
+		
+		bank = GetMutationSoundBank( mutationType );
+		if( bank != "" && theSound.SoundIsBankLoaded( bank ) )
+		{
+			theSound.SoundUnloadBank( bank );
+		}
+		
+		if( mutationType == EPMT_Mutation5 )
+		{
+			owner.RemoveBuff( EET_Mutation5 );
+		}
+		else if( mutationType == EPMT_Mutation10 )
+		{
+			owner.RemoveBuff( EET_Mutation10 );
+			owner.StopEffect( 'mutation_10' );
+		}
+		else if( mutationType == EPMT_Mutation12 )
+		{
+			buffs = GetWitcherPlayer().GetDrunkMutagens( "Mutation12" );
+			for( i=buffs.Size()-1; i>=0; i-=1 )
+			{
+				owner.RemoveEffect( buffs[i] );
+			}
+		}
+		
+		owner.RemoveBuff( EET_Mutation3 );
+		
+		
+		theGame.MutationHUDFeedback( MFT_PlayHide );
+	}
+	
+	
+	private final function OnMutationEquippedPost( mutationType : EPlayerMutationType )
+	{
+		var tutEquipping : W3TutorialManagerUIHandlerStateMutationsEquipping;
+		var tutEquipped : W3TutorialManagerUIHandlerStateMutationsEquippedAfter;
+		var bank : string;
+		
+		
+		bank = GetMutationSoundBank( mutationType );
+		if( bank != "" )
+		{
+			theSound.SoundLoadBank( bank, true );
+		}
+		
+		UpdateMutationSkillSlots();
+		
+		if( GetWitcherPlayer().IsMutationActive( EPMT_Mutation10 ) && GetStat( BCS_Toxicity ) != 0 && owner.IsInCombat() )
+		{
+			owner.AddEffectDefault( EET_Mutation10, NULL, "Mutation 10" );
+		}
+		
+		
+		if( ShouldProcessTutorial( 'TutorialMutationsEquippingOnlyOne' ) )
+		{
+			tutEquipping = ( W3TutorialManagerUIHandlerStateMutationsEquipping ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+			if( tutEquipping )
+			{
+				tutEquipping.OnMutationEquippedPost();
+			}
+			
+			tutEquipped = ( W3TutorialManagerUIHandlerStateMutationsEquippedAfter ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+			if( tutEquipped )
+			{
+				tutEquipped.OnMutationEquippedPost();
+			}
+			
+			GameplayFactsAdd( "tutorial_mutations_equipped_mutation" );
+		}
+	}
+	
+	public final function GetMutationSoundBank( mut : EPlayerMutationType ) : string
+	{
+		var idx : int;
+		
+		idx = GetMutationIndex( mut );
+		if( idx == -1 )
+		{
+			return "";
+		}
+		
+		return mutations[idx].soundbank;
+	}
+	
+	private final function MutationsEnable()
+	{
+		var witcher : W3PlayerWitcher;
+		
+		witcher = GetWitcherPlayer();
+		
+		
+		
+		
+		
+		
+		
+		
+		UpdateMutationSkillSlots();
+	}
+	
+	private final function MutationsDisable()
+	{
+		UpdateMutationSkillSlots();
+	}
+	
+	public final function GetEquippedMutationType() : EPlayerMutationType
+	{
+		return equippedMutation;
+	}
+	
+	public final function CanEquipMutation( mutationType : EPlayerMutationType ) : bool
+	{
+		
+		if( mutationType == EPMT_MutationMaster )
+		{
+			return false;
+		}
+		
+		if( !IsMutationResearched( mutationType ) )
+		{
+			return false;
+		}
+
+		if( ( ( CR4Player ) owner ).IsInCombat() )
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public final function CanResearchMutation( mutationType : EPlayerMutationType ) : bool
+	{
+		var curMutation : SMutation;
+		var curRequiredMutations : array< EPlayerMutationType >;
+		var i, count : int;
+		
+		if( owner.IsInCombat() )
+		{
+			return false;
+		}
+		
+		curMutation = GetMutation( mutationType );
+		curRequiredMutations = curMutation.requiredMutations;
+		count = curRequiredMutations.Size();
+		
+		for( i = 0; i < count; i += 1 )
+		{
+			if( !IsMutationResearched( curRequiredMutations[i] ) )
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public final function GetMutationColors( mutationType : EPlayerMutationType ) : array< ESkillColor >
+	{
+		var idx : int;
+		var colors : array< ESkillColor >;
+		
+		idx = GetMutationIndex( mutationType );
+		if( idx == -1 )
+		{
+			return colors;
+		}
+		
+		if( mutations[idx].progress.redRequired > 0 )
+		{
+			colors.PushBack( SC_Red );
+		}
+		if( mutations[idx].progress.greenRequired > 0 )
+		{
+			colors.PushBack( SC_Green );
+		}
+		if( mutations[idx].progress.blueRequired > 0 )
+		{
+			colors.PushBack( SC_Blue );
+		}
+		
+		return colors;
+	}
+	
+	public final function IsMutationResearched( mutationType : EPlayerMutationType ) : bool
+	{
+		return GetMutationResearchProgress( mutationType ) >= 100;
+	}
+	
+	
+	public final function GetMutationResearchProgress( mutationType : EPlayerMutationType ) : int
+	{
+		var mutation : SMutation;
+		var idx, researchedMutations, stage : int;
+		var progress, progressRequired : float;
+	
+		idx = GetMutationIndex( mutationType );
+		if( idx == -1 )
+		{
+			return 0;
+		}
+		
+		mutation = mutations[ idx ];	
+		
+		
+		if( mutation.type == EPMT_MutationMaster )
+		{
+			researchedMutations = GetResearchedMutationsCount();
+			stage = GetMasterMutationStage();
+			
+			
+			progress = researchedMutations - GetMutationsRequiredForMasterStage( stage );
+			progressRequired = GetMutationsRequiredForMasterStage( stage + 1 ) - GetMutationsRequiredForMasterStage( stage );
+		}
+		else
+		{
+			
+			if( mutation.progress.overallProgress >= 0 )
+			{
+				return mutation.progress.overallProgress;
+			}
+			
+			progress = mutation.progress.redUsed + mutation.progress.blueUsed + mutation.progress.greenUsed + mutation.progress.skillpointsUsed;
+			progressRequired = mutation.progress.redRequired + mutation.progress.blueRequired + mutation.progress.greenRequired + mutation.progress.skillpointsRequired;
+		}
+		
+		
+		progress = FloorF( ( 100 * progress ) / progressRequired );
+		
+		
+		mutations[ idx ].progress.overallProgress = ( int )progress;
+		
+		return ( int )progress;
+	}
+	
+	
+	public final function GetMutationsRequiredForMasterStage( stage : int ) : int
+	{
+		var dm : CDefinitionsManagerAccessor;
+		var min, max : SAbilityAttributeValue;
+		var attributeName : name;
+		
+		switch( stage )
+		{
+			case 1:
+				attributeName = 'mutationsRequiredForSlot1';
+				break;
+			case 2:
+				attributeName = 'mutationsRequiredForSlot2';
+				break;
+			case 3:
+				attributeName = 'mutationsRequiredForSlot3';
+				break;
+			case 4:
+				attributeName = 'mutationsRequiredForSlot4';
+				break;
+			default:
+				return 0;		
+		}
+		
+		dm = theGame.GetDefinitionsManager();
+		dm.GetAbilityAttributeValue('Mutation Master', attributeName, min, max);
+		return (int)min.valueAdditive;
+	}
+	
+	public final function MutationSystemEnable( enable : bool )
+	{
+		isMutationSystemEnabled = enable;
+	}
+	
+	public final function IsMutationSystemEnabled() : bool
+	{
+		return isMutationSystemEnabled;
+	}
+	
+	public final function GetMasterMutationStage() : int
+	{
+		var idx, researchedMutations, i : int;
+		
+		idx = GetMutationIndex( EPMT_MutationMaster );
+		if( idx == -1 )
+		{
+			return 0;
+		}
+	
+		researchedMutations = GetResearchedMutationsCount();
+		
+		for( i=4; i>0; i-= 1)
+		{
+			if(researchedMutations >= GetMutationsRequiredForMasterStage( i ) )
+			{
+				return i;
+			}
+		}
+		
+		return 0;
+	}
+	
+	public final function GetResearchedMutationsCount() : int
+	{
+		var researchedMutations, i : int;
+		
+		researchedMutations = 0;
+		for( i=0; i<mutations.Size(); i+=1 )
+		{
+			if( mutations[ i ].type != EPMT_MutationMaster && GetMutationResearchProgress( mutations[ i ].type ) == 100 )
+			{
+				researchedMutations += 1;
+			}
+		}
+		
+		return researchedMutations;
+	}
+	
+	
+	private final function GetMutationIndex( mutationType : EPlayerMutationType ) : int
+	{
+		var i : int;
+		
+		if( mutationType == EPMT_None )
+		{
+			return -1;
+		}
+	
+		for( i=0; i<mutations.Size(); i+=1 )
+		{
+			if( mutations[ i ].type == mutationType )
+				return i;
+		}
+		
+		return -1;
+	}
+	
+	public final function GetMutation( mutationType : EPlayerMutationType ) : SMutation
+	{
+		var null : SMutation;
+		var idx : int;
+		
+		idx = GetMutationIndex( mutationType );
+		if( idx != -1 )
+		{
+			return mutations[ idx ];
+		}
+	
+		return null;
+	}
+	
+	public final function GetMutations() : array< SMutation >
+	{
+		return mutations;
+	}
+	
+	public final function MutationResearchWithSkillPoints( mutation : EPlayerMutationType, skillPoints : int ) : bool
+	{
+		var witcher : W3PlayerWitcher;
+		var availableSkillPoints, idx, progress : int;
+		
+		
+		witcher = GetWitcherPlayer();
+		if( owner != witcher )
+		{
+			return false;
+		}
+	
+		
+		idx = GetMutationIndex( mutation );
+		if( idx == -1 )
+		{
+			return false;
+		}
+		
+		
+		if( mutations[ idx ].progress.skillpointsRequired == 0 )
+		{
+			return false;
+		}
+	
+		
+		if( skillPoints <= 0 )
+		{
+			return false;
+		}
+		
+		
+		availableSkillPoints = witcher.levelManager.GetPointsFree( ESkillPoint );
+		if( availableSkillPoints < skillPoints )
+		{
+			return false;
+		}
+	
+		
+		if( mutations[ idx ].progress.skillpointsRequired <= mutations[ idx ].progress.skillpointsUsed )
+		{
+			return false;
+		}
+	
+		
+		if( mutations[ idx ].progress.skillpointsUsed + skillPoints > mutations[ idx ].progress.skillpointsRequired )
+		{
+			return false;
+		}
+	
+		
+		witcher.levelManager.SpendPoints( ESkillPoint, skillPoints );
+		mutations[ idx ].progress.skillpointsUsed += skillPoints;
+		mutations[ idx ].progress.overallProgress = -1;	
+		
+		
+		progress = GetMutationResearchProgress( mutation );
+		if( progress == 100 )
+		{
+			OnMutationFullyResearched( mutation );
+		}
+		
+		return true;
+	}
+	
+	public final function MutationResearchWithItem( mutation : EPlayerMutationType, item : SItemUniqueId ) : bool
+	{
+		var witcher : W3PlayerWitcher;
+		var idx, redPoints, bluePoints, greenPoints, progress : int;
+		
+		
+		witcher = GetWitcherPlayer();
+		if( owner != witcher )
+		{
+			return false;
+		}
+	
+		
+		idx = GetMutationIndex( mutation );
+		if( idx == -1 )
+		{
+			return false;
+		}
+		
+		
+		if( !witcher.inv.IsIdValid( item ) )
+		{
+			return false;
+		}
+		
+		
+		if( mutations[ idx ].progress.blueRequired + mutations[ idx ].progress.redRequired + mutations[ idx ].progress.greenRequired == 0 )
+		{
+			return false;
+		}
+		
+		
+		redPoints = witcher.inv.GetMutationResearchPoints( SC_Red, item );
+		greenPoints = witcher.inv.GetMutationResearchPoints( SC_Green, item );
+		bluePoints = witcher.inv.GetMutationResearchPoints( SC_Blue, item );
+		
+		
+		if(redPoints < 0 || greenPoints < 0 || bluePoints < 0 )
+		{
+			return false;
+		}
+		
+		
+		if( redPoints + greenPoints + bluePoints == 0 )
+		{
+			return false;
+		}
+		
+		
+		if( ( redPoints > 0 && mutations[ idx ].progress.redRequired == 0 ) && ( bluePoints > 0 && mutations[ idx ].progress.blueRequired == 0 ) && ( greenPoints > 0 && mutations[ idx ].progress.greenRequired == 0 ) )
+		{
+			return false;
+		}
+	
+		
+		if( ( redPoints > 0 && mutations[ idx ].progress.redRequired <= mutations[ idx ].progress.redUsed ) && ( bluePoints > 0 && mutations[ idx ].progress.blueRequired <= mutations[ idx ].progress.blueUsed ) && ( greenPoints > 0 && mutations[ idx ].progress.greenRequired <= mutations[ idx ].progress.greenUsed ) )
+		{
+			return false;
+		}
+	
+		
+		witcher.inv.RemoveItem( item );
+		mutations[ idx ].progress.redUsed += redPoints;
+		mutations[ idx ].progress.greenUsed += greenPoints;
+		mutations[ idx ].progress.blueUsed += bluePoints;
+		mutations[ idx ].progress.overallProgress = -1;	
+		
+		
+		progress = GetMutationResearchProgress( mutation );
+		if( progress == 100 )
+		{
+			OnMutationFullyResearched( mutation );
+		}
+		
+		return true;
+	}
+	
+	public final function GetMutationNameLocalizationKey( mutationType : EPlayerMutationType ) : name
+	{
+		var idx : int;
+		
+		idx = GetMutationIndex( mutationType );
+		if( idx < 0 )
+		{
+			return '';
+		}
+		
+		return mutations[ idx ].localizationNameKey;
+	}
+	
+	public final function GetMutationDescriptionLocalizationKey( mutationType : EPlayerMutationType ) : name
+	{
+		var idx : int;
+		
+		idx = GetMutationIndex( mutationType );
+		if( idx < 0 )
+		{
+			return '';
+		}
+		
+		return mutations[ idx ].localizationDescriptionKey;
+	}
+
+	
+	
+	private final function OnMutationFullyResearched( mutationType : EPlayerMutationType )
+	{
+		var idx, firstLockedSlotIdx, i : int;
+		var attributeName : name;
+		var min, max : SAbilityAttributeValue;
+		var tutEquip : W3TutorialManagerUIHandlerStateMutationsEquipping;
+		
+		
+		idx = GetMutationIndex( EPMT_MutationMaster );
+		if( idx < 0 )
+		{
+			return;
+		}
+		
+		
+		GetMutationResearchProgress( EPMT_MutationMaster );
+		
+		UpdateMutationSkillSlots();
+		
+		
+		theGame.GetGamerProfile().AddAchievement( EA_SchoolOfTheMutant );
+		
+		
+		if( GetResearchedMutationsCount() == 1 && !theGame.GetTutorialSystem().AreMessagesEnabled() )
+		{
+			SetEquippedMutation( mutationType );
+		}
+		
+		
+		if( ShouldProcessTutorial( 'TutorialMutationsEquipping' ) )
+		{
+			tutEquip = ( W3TutorialManagerUIHandlerStateMutationsEquipping ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+			if( tutEquip )
+			{
+				tutEquip.OnMutationFullyResearched();
+			}
+		}
+	}
+	
+	private final function UpdateMutationSkillSlots()
+	{
+		var i : int;
+		var skillType : ESkill;
+		var skillColor : ESkillColor;
+		var mutationColors : array< ESkillColor >;
+		var mutType : EPlayerMutationType;
+		
+		UpdateMutationSkillSlotsLocks();
+				
+		mutType = GetEquippedMutationType();
+		if( mutType != EPMT_None )
+		{
+			
+			mutationColors = GetMutationColors( mutType );
+			for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+			{
+				
+				skillType = skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].socketedSkill;
+				if( skillType != S_SUndefined )
+				{
+					
+					skillColor = GetSkillColor( skillType );					
+					if( !mutationColors.Contains( skillColor ) )
+					{
+						UnequipSkill( GetSkillSlotID( skillType ) );
+					}
+				}
+			}
+		}
+		else
+		{
+			
+			for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+			{
+				skillType = skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].socketedSkill;
+				UnequipSkill( GetSkillSlotID( skillType ) );
+			}
+		}
+	}
+	
+	private final function UpdateMutationSkillSlotsLocks()
+	{
+		var i, researchedCount, masterStage, unlockedCount : int;
+		var tutEquip : W3TutorialManagerUIHandlerStateMutationsUnlockedSkillSlot;
+		
+		
+		if( GetEquippedMutationType() == EPMT_None )
+		{
+			for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+			{
+				skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked = false;
+			}
+		}		
+		else
+		{
+			researchedCount = GetResearchedMutationsCount();
+			masterStage = GetMasterMutationStage();
+			
+			for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+			{
+				if( masterStage >= i+1 && researchedCount >= GetMutationsRequiredForMasterStage( i+1 ) )
+				{
+					skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked = true;
+					
+					if( ShouldProcessTutorial( 'TutorialMutationsMasterLevelUp' ) )
+					{
+						tutEquip = ( W3TutorialManagerUIHandlerStateMutationsUnlockedSkillSlot ) theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+						if( tutEquip )
+						{
+							tutEquip.OnMutationSkillSlotUnlocked();
+						}
+					}
+				}
+				else
+				{
+					skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked = false;
+				}
+			}
+		}
+		
+		if( ShouldProcessTutorial( 'TutorialMutationsAdditionalSkillSlot' ) )
+		{
+			unlockedCount = 0;
+			for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+			{
+				if( skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked )
+				{
+					unlockedCount += 1;
+				}
+			}
+			GameplayFactsSet( "tutorial_mutations_unlocked_skill_slots", unlockedCount );
+		}
+	}
+	
 	
 	
 	
@@ -3055,6 +4294,16 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		LogChannel('DEBUG_SKILLS',"");
 	}
+	
+	public final function DEBUG_PrintMutationSkillSlotsLocks()
+	{
+		var i : int;
+		
+		for( i=0; i<mutationUnlockedSlotsIndexes.Size(); i+=1 )
+		{
+			LogMutation( "Slot [" + mutationUnlockedSlotsIndexes[ i ] + "] = " + skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked );
+		}
+	}	
 // Elys start
 
 	// Triangle passive skills This one looks like Elys
@@ -3184,10 +4433,6 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		totalSkillSlotsCount += 1;
 		slot.id = totalSkillSlotsCount;
 		slot.unlockedOnLevel = 0;
-		slot.neighbourUp = -1;
-		slot.neighbourDown = -1;
-		slot.neighbourLeft = -1;
-		slot.neighbourRight = -1;
 		slot.groupID = -1;
 		slot.unlocked = true;
 		skillSlots.PushBack(slot);
@@ -3210,4 +4455,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 exec function dbgskillslots()
 {
 	thePlayer.DBG_SkillSlots();
+}
+
+exec function dbgmutslots()
+{
+	((W3PlayerAbilityManager)thePlayer.abilityManager).DEBUG_PrintMutationSkillSlotsLocks();
 }

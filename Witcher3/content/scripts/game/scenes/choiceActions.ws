@@ -18,7 +18,7 @@ function GetDialogActionIcons(flag : int) : array<EDialogActionIcon>
 	if(flag & DialogAction_AXII)				ret.PushBack(DialogAction_AXII);
 	if(flag & DialogAction_CONTENT_MISSING)		ret.PushBack(DialogAction_CONTENT_MISSING);
 	if(flag & DialogAction_BRIBE)				ret.PushBack(DialogAction_BRIBE);
-	if(flag & DialogAction_INTIMIDATION)		ret.PushBack(DialogAction_INTIMIDATION);
+	if(flag & DialogAction_HOUSE)				ret.PushBack(DialogAction_HOUSE);
 	if(flag & DialogAction_PERSUASION)			ret.PushBack(DialogAction_PERSUASION);
 	if(flag & DialogAction_GETBACK)				ret.PushBack(DialogAction_GETBACK);
 	if(flag & DialogAction_GAME_DICES)			ret.PushBack(DialogAction_GAME_DICES);
@@ -333,6 +333,11 @@ class CBetChoiceAction extends CStorySceneChoiceLineActionScripted
 class CGetBackChoiceAction extends CStorySceneChoiceLineActionScripted
 {
 	function GetActionIcon() : EDialogActionIcon 	{ return DialogAction_GETBACK; }
+}
+
+class CHouseChoiceAction extends CStorySceneChoiceLineActionScripted
+{
+	function GetActionIcon() : EDialogActionIcon 	{ return DialogAction_HOUSE; }
 }
 
 class CAuctionSceneChoiceAction extends CStorySceneChoiceLineActionScripted

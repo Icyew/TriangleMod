@@ -19,14 +19,14 @@ state HighLevelQuests in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 		isClosing = false;
 		
-		ShowHint(DESCRIPTION, 0.3, 0.6, ETHDT_Input);
+		ShowHint(DESCRIPTION, POS_QUESTS_X, POS_QUESTS_Y, ETHDT_Input);
 	}
 			
 	event OnLeaveState( nextStateName : name )
 	{
 		isClosing = true;
 		
-		CloseHint(DESCRIPTION);
+		CloseStateHint(DESCRIPTION);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(DESCRIPTION);
 		

@@ -18,6 +18,20 @@ class W3CraftsmanComponent extends W3MerchantComponent
 {
 	editable var craftsmanData : array<SCraftsman>;
 
+	public function GetMapPinType() : name
+	{
+		var i, size : int;		
+		size = craftsmanData.Size();
+		for ( i = 0; i < size; i += 1 )
+		{
+			if ( craftsmanData[i].level == ECL_Arch_Master )
+			{
+				return 'Archmaster';
+			}
+		}
+		return super.GetMapPinType();
+	}
+	
 	public function GetCraftsmanLevel( type : ECraftsmanType ) : ECraftsmanLevel
 	{
 		var i, size : int;		
@@ -152,6 +166,10 @@ class W3CraftsmanComponent extends W3MerchantComponent
 			
 			case ECL_Grand_Master:
 				owner.AddTag('Master');
+			break;
+				
+			case ECL_Arch_Master:
+				owner.AddTag('Archmaster');
 			break;
 		}
 	}

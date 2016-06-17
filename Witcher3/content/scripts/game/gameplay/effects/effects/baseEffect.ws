@@ -18,7 +18,6 @@ class CBaseGameplayEffect extends CObject
 	protected var timeLeft : float;								
 	protected var pauseCounters : array<SBuffPauseLock>;		
 	protected var isActive : bool;								
-	protected var usesCustomCounter : bool;						
 	private   var resistStat : ECharacterDefenseStats;			
 	protected var resistance : float;	 						
 	protected var creatorPowerStat : SAbilityAttributeValue;	
@@ -306,12 +305,10 @@ class CBaseGameplayEffect extends CObject
 	{
 		var durationResistance : float;
 		var min, max : SAbilityAttributeValue;
-		var dm : CDefinitionsManagerAccessor;
 		
 		if(duration == 0)
 		{
-			dm = theGame.GetDefinitionsManager();
-			dm.GetAbilityAttributeValue(abilityName, 'duration', min, max);
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue(abilityName, 'duration', min, max);
 			duration = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 		}
 		
@@ -411,7 +408,10 @@ class CBaseGameplayEffect extends CObject
 		{				
 			
 			if(!effectManager.IsPlayingFX(targetEffectName))
+			{
+				target.DestroyEffectIfActive(targetEffectName);
 				target.PlayEffect(targetEffectName);
+			}
 				
 			
 			effectManager.AddPlayedFX(targetEffectName, sourceName);
@@ -540,16 +540,28 @@ class CBaseGameplayEffect extends CObject
 		var thisVal, otherVal : float;
 		
 		
+		if( isPotionEffect && e.isPotionEffect && e.sourceName == "alchemy_s4" )
+		{
+			return EI_Override;
+		}
+		
+		
 		if(sourceName != e.sourceName)
+		{
 			return EI_Undefined;
+		}
 
 		thisVal = GetEffectStrength();
 		otherVal = e.GetEffectStrength();
 		
 		if(thisVal > otherVal)
+		{
 			return EI_Override;
+		}
 		else if(thisVal < otherVal)
+		{
 			return EI_Pass;				
+		}
 		else
 		{
 			
@@ -604,10 +616,7 @@ class CBaseGameplayEffect extends CObject
 	
 	
 	
-	
-	public function CheckCustomCounter()
-	{}
-	
+		
 	
 	public function OnTimeUpdated(dt : float)
 	{	
@@ -740,7 +749,10 @@ class CBaseGameplayEffect extends CObject
 	public function GetDurationLeft() : float							{return timeLeft;}	
 	
 	
-	public function GetInitialDuration() : float						{return duration;}	
+	public function GetInitialDurationAfterResists() : float			{return duration;}	
+	
+	
+	public function GetInitialDuration() : float 						{return initialDuration;}
 	
 	
 	public function GetCreator() : CGameplayEntity
@@ -752,9 +764,10 @@ class CBaseGameplayEffect extends CObject
 	public function IsNegative() : bool									{return isNegative;}
 	public function IsNeutral() : bool									{return isNeutral;}
 	public function ShowOnHUD() : bool									{return showOnHUD;}
+	public function SetShowOnHUD( b : bool )							{ showOnHUD = b; }
+	public function GetShowOnHUD() : bool								{return showOnHUD;}
 	public function GetIcon() : string									{return iconPath;}
 	public function IsActive() : bool									{return isActive;}	
-	public function UsesCustomCounter() : bool							{return usesCustomCounter;}
 	public function GetEffectNameLocalisationKey() : string				
 	{
 		var str: string;
@@ -873,5 +886,33 @@ class CBaseGameplayEffect extends CObject
 	public function GetEffectValue() : SAbilityAttributeValue
 	{
 		return effectValue;
+	}
+	
+	public function IsAddedByPlayer() : bool
+	{
+		var gpEnt : CGameplayEntity;
+		var sign : W3SignEntity;
+		var petard : W3Petard;
+		
+		gpEnt = GetCreator();
+		
+		if( gpEnt == thePlayer )
+		{
+			return true;
+		}
+		
+		petard = (W3Petard)gpEnt;
+		if( petard && petard.GetOwner() == thePlayer )
+		{
+			return true;
+		}
+		
+		sign = (W3SignEntity)gpEnt;
+		if( sign && sign.GetOwner() == thePlayer )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }

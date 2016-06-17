@@ -21,7 +21,7 @@ state MeditationWait in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 	event OnLeaveState( nextStateName : name )
 	{
-		CloseHint(WAIT);
+		CloseStateHint(WAIT);
 		
 		super.OnLeaveState(nextStateName);
 	}

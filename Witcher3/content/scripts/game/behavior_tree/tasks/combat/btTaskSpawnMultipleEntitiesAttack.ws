@@ -313,6 +313,7 @@ class CBTTaskSpawnMultipleEntitiesAttack extends CBTTaskSpawnEntityAttack
 	{
 		m_shouldSpawn = false;
 		m_canComplete = false;
+		m_entitiesSpawned = 0;
 	}
 }
 
@@ -387,6 +388,15 @@ class CBTTaskSpawnMultipleEntities3StateAttack extends CBTTaskSpawnMultipleEntit
 	
 	latent function Main() : EBTNodeStatus
 	{
+		if ( !entityTemplate )
+		{
+			entityTemplate = ( CEntityTemplate ) LoadResourceAsync( ressourceName );
+		}
+		
+		if ( !entityTemplate )
+		{
+			return BTNS_Failed;
+		}
 		
 		while( !m_shouldSpawn )
 		{
@@ -614,13 +624,13 @@ class CBTTaskSpawnMultipleEntities3StateAttack extends CBTTaskSpawnMultipleEntit
 	{
 		var l_entity 	: CEntity;
 		var l_newPos	: Vector;
+		var l_loopTime 	: float;
 		
 		if ( !theGame.GetWorld().NavigationFindSafeSpot( _SpawnPos, spawnEntityRadius, spawnEntityRadius*3, l_newPos ) )
 		{
 			if ( decreaseLoopTimePerFailedCreateEntity > 0 )
 			{
-				loopTime -= decreaseLoopTimePerFailedCreateEntity;
-				endTime = localTime + loopTime;
+				endTime -= decreaseLoopTimePerFailedCreateEntity;
 			}
 			Log("Not enough space to spawn FX entity from TaskSpawnMultipleEntitiesAttack.");
 			return NULL;
@@ -638,6 +648,7 @@ class CBTTaskSpawnMultipleEntities3StateAttack extends CBTTaskSpawnMultipleEntit
 		GetNPC().SetBehaviorVariable( 'AttackEnd', 1, true );
 		m_shouldSpawn = false;
 		m_canComplete = false;
+		m_entitiesSpawned = 0;
 	}
 }
 

@@ -163,7 +163,7 @@ class CR4TestMenu extends CR4MenuBase
 					enhancements.PushBack( info );
 				}
 			}
-			theGame.GetGuiManager().UpdateSceneEntityItems( items, enhancements );
+			
 		}
 	}
 

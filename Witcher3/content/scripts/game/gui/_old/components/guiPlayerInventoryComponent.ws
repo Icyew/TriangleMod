@@ -10,6 +10,9 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 	default _filterType = IFT_Weapons;
 	private var _currentItemCategoryType : name;
 	default _currentItemCategoryType = '';
+
+	public var stashMode : bool;
+	default stashMode = false;	
 	
 	public var bPaperdoll : bool;
 	default bPaperdoll = false;	
@@ -21,9 +24,21 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 	default ignorePosition = false;
 	
 	public var filterTagList : array<name>;
-		
+	public var filterForbiddenTagList : array<name>;
+
+	public var overrideQuestItemFilters : bool;
+	default overrideQuestItemFilters = false;
+	
+	public var previewItems    : array<SItemUniqueId>;
+	public var dyePreviewSlots : array<SItemUniqueId>;
+	
 	protected function InvalidateItems( items : array<SItemUniqueId> ) 
 	{
+	}
+	
+	public function SetOverrideQuestItemFilters( enable : bool )
+	{	
+		overrideQuestItemFilters = enable;
 	}
 	
 	public function SetShopInvCmp(targetShopInvCmp:W3GuiShopInventoryComponent):void
@@ -260,6 +275,18 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		var equipedItemStats	: array<SAttributeTooltip>;
 		var attributesList      : CScriptedFlashArray;
 		var addDescription		: string;
+		var itemLevel			: int;
+		
+		var isSetBonus1Active	 : bool;
+		var isSetBonus2Active	 : bool;
+		var setBonusDescription1 : string;
+		var setBonusDescription2 : string;
+		var setBonusText	     : string;
+		var setBonusText2		 : string;
+		var paramString			 : array<string>;
+		
+		var setAttribute 	  : CScriptedFlashObject;
+		var setAttributesList : CScriptedFlashArray;
 		
 		htmlNewline = "&#10;";
 		
@@ -288,7 +315,7 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		}
 		
 		tmpStr = FloatToStringPrec( weightValue, 2 );
-		weight = GetLocStringByKeyExt("attribute_name_weight") + ": " + tmpStr;
+		weight = GetLocStringByKeyExt("attribute_name_weight") + "  " + tmpStr;
 		
 		itemName = GetLocStringByKeyExt(_inv.GetItemLocalizedNameByName(craftedItemName));
 		itemDesc = GetLocStringByKeyExt(_inv.GetItemLocalizedDescriptionByName(craftedItemName));
@@ -297,9 +324,40 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		rarity = GetItemRarityDescriptionFromInt(minQuality);
 		type = GetLocStringByKeyExt("item_category_" + dm.GetItemCategory(craftedItemName));
 		
-		enhancementSlots = dm.GetItemEnhancementSlotCount( craftedItemName );		
-
+		setBonusText = "";
+		setBonusText2 = "";
 		
+		if ( dm.IsItemSetItem( craftedItemName ) ) 
+		{
+			GetWitcherPlayer().GetSetBonusStatusByName( craftedItemName, setBonusDescription1, setBonusDescription2, isSetBonus1Active, isSetBonus2Active );
+			
+			if( setBonusDescription1!="" && setBonusDescription2!="" )
+			{				
+				if ( !dm.ItemHasTag( craftedItemName, 'SetBonusPiece' ) )
+				{
+					setBonusText = setBonusText + "<font color='#FF0000'>" + GetLocStringByKeyExt( "tooltip_set_bonus_not_avilable_yet" ) + "</font><br/>";
+				}
+				
+				setBonusText = setBonusText + "<font color='#b7ae8c'>" + StrUpperUTF( GetLocStringByKeyExt( "crafting_bonus_title" ) ) + "</font><br/><br/>";
+				
+				paramString.PushBack( (string)( theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS ) );
+				setBonusText = setBonusText + "<font color='#9f977a'>" + GetLocStringByKeyExtWithParams( "crafting_bonus_set_title",,, paramString ) + ":</font><br/>";
+				setBonusText = setBonusText + "<font color='#818181'>" + setBonusDescription1 + "</font>";
+				
+				if( setBonusDescription2 != "" )
+				{
+					paramString.Clear();
+					paramString.PushBack( (string)( theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS ) );
+					setBonusText2 ="<font color='#9f977a'>" + GetLocStringByKeyExtWithParams( "crafting_bonus_set_title",,, paramString ) + ":</font><br/>";
+					setBonusText2 = setBonusText2 + "<font color='#818181'>" + setBonusDescription2 + "</font>";
+				}
+				
+				targetObject.SetMemberFlashString( "SetBonusDescription", setBonusText );
+				targetObject.SetMemberFlashString( "SetBonusDescription2", setBonusText2 );
+			}
+		}
+		
+		enhancementSlots = dm.GetItemEnhancementSlotCount( craftedItemName );
 		itemSlot = GetSlotForItemByCategory(itemCategory);
 		wplayer.GetItemEquippedOnSlot(itemSlot, equipedItemId);
 		playerInv = thePlayer.GetInventory();
@@ -313,6 +371,14 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		
 		dontCompare = itemCategory == 'potion' || itemCategory == 'petard' || itemCategory == 'oil';
 		playerInv.GetItemPrimaryStatFromName(craftedItemName, primaryStatLabel, primaryStatValue, primaryStatName);
+		
+		if ( FactsQuerySum("NewGamePlus") > 0 )
+		{
+			if ( theGame.params.NewGamePlusLevelDifference() > 0 )
+			{
+				primaryStatValue += IncreaseNGPPrimaryStatValue(itemCategory);
+			}
+		}
 		
 		primaryStatDiff = "none";
 		primaryStatDiffValue = 0;
@@ -343,7 +409,15 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		
 		if ( dm.IsItemAnyArmor(craftedItemName) || dm.IsItemBolt(craftedItemName) || dm.IsItemWeapon(craftedItemName) )
 		{
-			requiredLevel = _inv.GetItemLevelColor( theGame.GetDefinitionsManager().GetItemLevelFromName( craftedItemName ) ) + GetLocStringByKeyExt( 'panel_inventory_item_requires_level' ) + " " + theGame.GetDefinitionsManager().GetItemLevelFromName( craftedItemName ) + "</font>";
+			itemLevel = theGame.GetDefinitionsManager().GetItemLevelFromName( craftedItemName );
+			if ( FactsQuerySum("NewGamePlus") > 0 )
+			{
+				if ( theGame.params.NewGamePlusLevelDifference() > 0 )
+				{
+					itemLevel += theGame.params.NewGamePlusLevelDifference();
+				}
+			}
+			requiredLevel = _inv.GetItemLevelColor( itemLevel ) + GetLocStringByKeyExt( 'panel_inventory_item_requires_level' ) + " " + itemLevel + "</font>";
 			targetObject.SetMemberFlashString("requiredLevel", requiredLevel);
 		}
 		
@@ -374,6 +448,11 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 			addDescription += "<font color=\"#AAFFFC\">" + (minQuality - 1) + " - " + (maxQuality - 1) + " " + GetLocStringByKeyExt("panel_crafting_number_random_attributes") + "</font>";
 		}
 		
+		if ( theGame.GetGuiManager().GetShowItemNames() )
+		{
+			itemDesc = "<font color=\"#FFDB00\">Item Name: '" + craftedItemName + "'</font><br><br>" + itemDesc;
+		}
+		
 		targetObject.SetMemberFlashString("additionalDescription", addDescription);
 		targetObject.SetMemberFlashString("itemName", itemName);
 		targetObject.SetMemberFlashString("itemDescription", itemDesc);
@@ -390,6 +469,37 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		targetObject.SetMemberFlashString("PrimaryStatDiffStr", primaryStatDiffStr);
 	}
 	
+	private final function IncreaseNGPPrimaryStatValue( category : name ) : int
+	{
+		var min, max : SAbilityAttributeValue;
+		
+		if ( category == 'steelsword' ) 
+		{	
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('autogen_fixed_steel_dmg', 'SlashingDamage', min, max);
+			return RoundMath((theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL) * max.valueBase);
+		}
+		else if ( category == 'silversword' ) 
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('autogen_fixed_silver_dmg', 'SilverDamage', min, max);
+			return RoundMath((theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL) * max.valueBase);
+		}
+		else if ( category == 'armor' ) 
+		{	
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('autogen_fixed_armor_armor', 'armor', min, max);
+			return RoundMath((theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL) * max.valueBase);
+		}
+		else if ( category == 'boots' || category == 'pants' ) 
+		{				
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('autogen_fixed_pants_armor', 'armor', min, max);
+			return RoundMath((theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL) * max.valueBase);
+		}
+		else if ( category == 'gloves' ) 
+		{			
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('autogen_fixed_gloves_armor', 'armor', min, max);
+			return RoundMath((theGame.params.GetNewGamePlusLevel() - theGame.params.NEW_GAME_PLUS_MIN_LEVEL) * max.valueBase);
+		}	
+		return 0;
+	}
 	
 	
 	
@@ -415,6 +525,12 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		var isDefaultBolt		  : bool;
 		var canDrop				  : bool;
 		var dropBlockedByTutorial : bool;
+		var isQuest				  : bool;
+		var transferBlocked		  : bool;
+		var targetGridSection     : int;
+		var uiData 				  : SInventoryItemUIData;
+		var iconPath			  : string;
+		var pos, curr, max		  : int;
 		
 		super.SetInventoryFlashObjectForItem( itemId, flashObject );
 		
@@ -448,13 +564,128 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 			canDrop = !_inv.ItemHasTag(itemId, 'NoDrop') && !_inv.ItemHasTag(itemId,'Quest') && !dropBlockedByTutorial && !isDefaultBolt;
 		}
 		
-		if (ignorePosition)
+		if ( ignorePosition )
 		{
 			flashObject.SetMemberFlashInt( "gridPosition", -1 );
 		}
 		
+		if ( previewItems.Size() > 0 )
+		{
+			flashObject.SetMemberFlashBool( "isPreviewItem", previewItems.Contains( itemId ) );
+		}
+		
+		if( itemName == 'q705_tissue_extractor' )
+		{
+			curr = thePlayer.GetTissueExtractorChargesCurr();
+			max = thePlayer.GetTissueExtractorChargesMax();
+			iconPath = _inv.GetItemIconPathByUniqueID(itemId);
+			
+			if( curr >= max )
+			{			
+				pos = StrFindLast( iconPath, "." );
+				iconPath = StrLeft( iconPath, pos );
+				iconPath += "_full.png";
+			}
+			
+			flashObject.SetMemberFlashString( "iconPath", iconPath );
+		}
+		
 		flashObject.SetMemberFlashBool( "canDrop", canDrop );
-		flashObject.SetMemberFlashBool( "disableAction", itemNotForSale );
+		
+		if (stashMode)
+		{
+			transferBlocked = _inv.IsItemQuest( itemId ) || _inv.IsItemAlchemyItem( itemId ); 
+			flashObject.SetMemberFlashBool( "disableAction", transferBlocked );
+		}
+		else
+		{
+			flashObject.SetMemberFlashBool( "disableAction", itemNotForSale );
+		}
+		
+		isQuest = _inv.IsItemQuest( itemId );
+		
+		
+		if( ( _inv.IsItemAnyArmor( itemId ) || _inv.ItemHasTag( itemId, 'ArmorUpgrade' ) || _inv.ItemHasTag( itemId, 'ArmorReapairKit' ) || _inv.IsItemDye( itemId ) ) && !isQuest )
+		{
+			targetGridSection = 1;
+		}
+		else
+		if( _inv.IsItemWeapon( itemId ) || _inv.ItemHasTag( itemId, 'WeaponUpgrade' ) || _inv.ItemHasTag( itemId, 'WeaponReapairKit' ) || _inv.IsItemBolt( itemId ) ||  _inv.IsItemUsable( itemId ) || _inv.IsQuickSlotItem( itemId ) )
+		{
+			targetGridSection = 0;
+		}
+		
+		else if( _inv.IsItemOil( itemId ) )
+		{
+			targetGridSection = 0;
+		}
+		else if( _inv.IsItemPotion( itemId ) && !_inv.IsItemFood(itemId ) )
+		{
+			targetGridSection = 1;
+		}
+		else if( _inv.IsItemBomb( itemId ) )
+		{
+			targetGridSection = 2;
+		}
+		
+		else if( isQuest && !_inv.IsItemTrophy( itemId ) )
+		{
+			targetGridSection = 0;
+		}
+		
+		else if( _inv.IsItemFood( itemId ) )
+		{
+			targetGridSection = 0;
+		}
+		else if( _inv.IsItemHorseItem( itemId ) || _inv.IsItemTrophy( itemId ) )
+		{
+			targetGridSection = 1;
+		}
+		
+		else if( _inv.ItemHasTag( itemId, 'AlchemyIngredient' ) )
+		{
+			targetGridSection = 1;
+			
+			if ( _inv.ItemHasTag( itemId, 'MutagenIngredient' ) )
+			{
+				flashObject.SetMemberFlashInt( "sortGroup", 1);
+			}
+			else
+			{
+				flashObject.SetMemberFlashInt( "sortGroup", 0);
+			}
+		}
+		else if ( _inv.ItemHasTag( itemId, 'CraftingIngredient' ) )
+		{
+			targetGridSection = 0;
+		}
+		
+		else
+		{
+			targetGridSection = 1;
+			
+		}
+		
+		if( _inv.ItemHasTag( itemId, 'Painting' ) )
+		{
+			flashObject.SetMemberFlashInt( "sortGroup", 1);
+		}
+		else
+		if( _inv.ItemHasTag( itemId, 'ReadableItem' ) )
+		{
+			flashObject.SetMemberFlashInt( "sortGroup", 2);
+		}
+		
+		flashObject.SetMemberFlashInt( "sectionId", targetGridSection );
+		
+		if( itemName == 'q705_tissue_extractor' && thePlayer.GetTissueExtractorChargesCurr() >= thePlayer.GetTissueExtractorChargesMax() )
+		{
+			
+			
+			
+			
+			flashObject.SetMemberFlashBool( "isNew", true );
+		}
 	}
 	
 	function GetOnlyMiscItems( out items : array<SItemUniqueId> ) : void
@@ -503,7 +734,7 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 	
 	
 	
-	protected function ShouldShowItem( item : SItemUniqueId ):bool
+	public function ShouldShowItem( item : SItemUniqueId ):bool
 	{
 		var itemCategory : name;
 		var itemName : name;
@@ -523,10 +754,16 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 			return false;
 		}
 		
-		if ( _filterType != IFT_QuestItems && _inv.ItemHasTag( item, 'Quest' ) && !isHorseItem(item) ) 
+		if ( ! filterByForbiddenTagsList( item ) )
 		{
 			return false;
-		}
+		}		
+		
+		if ( !overrideQuestItemFilters && _filterType != IFT_QuestItems && _inv.ItemHasTag( item, 'Quest' ) && !isHorseItem(item) ) 
+		{
+			return false;
+		}			
+		
 		itemName = _inv.GetItemName(item);
 		itemCategory = _inv.GetItemCategory( item );
 		if ( itemCategory == 'schematic' ) 
@@ -543,6 +780,7 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		
 	}
 	
+	
 	private function filterByTagsList( item : SItemUniqueId ):bool
 	{
 		var i, len:int;
@@ -556,6 +794,21 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		}
 		return true;
 	}
+
+	
+	private function filterByForbiddenTagsList( item : SItemUniqueId ):bool
+	{
+		var i, len:int;
+		len = filterForbiddenTagList.Size();
+		for (i = 0; i < len; i+=1)
+		{
+			if (_inv.ItemHasTag(item, filterForbiddenTagList[i]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}	
 	
 	private function CheckShowItemByCategory( item : SItemUniqueId, itemCategory : name ) : bool 
 	{
@@ -602,33 +855,99 @@ class W3GuiPlayerInventoryComponent extends W3GuiBaseInventoryComponent
 		return false;
 	}
 	
+	public function GetNewFlagForTabs( filters : array <EInventoryFilterType> ) : array<bool>
+	{
+		var i, iCount    : int;
+		var j, jCount    : int;
+		var newFlags     : array<bool>;
+		var curItem      : SItemUniqueId;
+		var curFilter 	 : EInventoryFilterType;
+		var rawItems   	 : array<SItemUniqueId>;
+		var uiData   	 : SInventoryItemUIData;
+		var cachedFilter : EInventoryFilterType;
+		
+		_inv.GetAllItems( rawItems );
+		newFlags.Resize( EnumGetMax( 'EInventoryFilterType' ) + 1 );
+		iCount = rawItems.Size();
+		jCount = filters.Size();
+		
+		cachedFilter = _filterType;
+		
+		for( i = 0; i < iCount; i += 1 )
+		{
+			curItem = rawItems[i];
+			
+			for( j = 0; j < jCount; j += 1 )
+			{
+				_filterType = filters[j];
+				
+				if( ShouldShowItem( curItem ) )
+				{
+					uiData = _inv.GetInventoryItemUIData( curItem );
+					
+					if( uiData.isNew )
+					{
+						newFlags[_filterType] = true;
+						jCount-=1;
+						filters.Erase( j );
+						
+						if( filters.Size() > 0 )
+						{
+							break;
+						}
+						else
+						{
+							return newFlags;
+						}
+					}
+				}
+			}
+		}
+		
+		_filterType = cachedFilter;
+		
+		return newFlags;
+	}
+	
 	private function CheckIfShouldShowItem( item : SItemUniqueId ) : bool
 	{
 		var shouldShow : bool;
+		var isJunk     : bool;
+		var isTrophy   : bool;
 		
 		shouldShow = false;
+		
+		isTrophy = _inv.IsItemTrophy( item );
+		isJunk = ( !isItemReadable(item) && !isFoodItem(item) && ! isIngredientItem( item ) && !isWeaponItem( item ) && ! isArmorItem( item ) && ! isAlchemyItem( item ) && !isUpgradeItem( item ) && !isItemSchematic( item ) && !isToolItem(item) && !isHorseItem( item ) && !isTrophy );
+		
 		switch( _filterType )
 		{
-			case IFT_Default:
-				shouldShow = !isItemReadable(item) && !isFoodItem(item) && ! isIngredientItem( item ) && ! isQuestItem( item ) && !isWeaponItem( item ) && ! isArmorItem( item ) && ! isAlchemyItem( item ) && !isUpgradeItem( item ) && !isItemSchematic( item ) && !isToolItem(item) && !isHorseItem( item );
-				break;
 			case IFT_QuestItems:
-				shouldShow = isQuestItem( item ) && !isHorseItem( item );
+				shouldShow =  ( isJunk || isQuestItem( item ) || ( isItemReadable( item )  ) ) && ( !isQuickslotItem( item ) || isQuestItem( item ) ) && !isTrophy;
+				break;
+			case IFT_Default:
+				shouldShow = isFoodItem( item ) || isHorseItem( item );
 				break;
 			case IFT_Ingredients:
-				shouldShow = isIngredientItem( item );
+				shouldShow = isIngredientItem( item ) && !IsItemDye( item );
 				break;
 			case IFT_Weapons:
-				shouldShow = isWeaponItem( item ) || isArmorItem( item ) || isUpgradeItem( item ) || isHorseItem( item ) || isToolItem(item);
+				shouldShow = isWeaponItem( item ) || isArmorItem( item ) || isUpgradeItem( item ) || isToolItem( item ) || isItemUsable( item ) || isQuickslotItem( item ) || IsItemDye( item );
 				break;
 			case IFT_Books:
 				shouldShow = !isQuestItem( item ) && isItemReadable( item );
 				break;
 			case IFT_AlchemyItems:
-				shouldShow = isAlchemyItem( item ) || isFoodItem(item) ;
+				shouldShow = isAlchemyItem( item ) && !isFoodItem( item ) && !isItemUsable( item ) && !IsItemDye( item );
 				break;
 			case IFT_AllExceptHorseItem:
 				shouldShow = !isHorseItem( item );
+				break;
+			case IFT_HorseItems:
+				shouldShow = isHorseItem( item );
+				break;
+			case IFT_Armors:
+				shouldShow = ( ( isArmorItem( item ) && _inv.GetItemCategory( item ) == '' ) || ( isArmorItem( item ) && _inv.GetItemCategory( item ) == _currentItemCategoryType ) );
 				break;
 			case IFT_None:
 				shouldShow = true;

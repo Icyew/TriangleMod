@@ -15,12 +15,12 @@ class CBTCondIsTargetThePlayer extends IBehTreeTask
 		return GetTarget() == thePlayer;
 	}
 	
-	function GetTarget() : CActor
+	function GetTarget() : CNode
 	{
 		if ( useCombatTarget )
 			return GetCombatTarget();
 		else
-			return (CActor)GetActionTarget();
+			return GetActionTarget();
 	}
 
 };

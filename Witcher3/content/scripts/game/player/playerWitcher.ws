@@ -16,11 +16,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private saved var alchemyRecipes 					: array<name>; 					
 	
 	
-	private 			var levelupAbilities	: array< name >;
+	private saved var booksRead 						: array<name>; 					
+	
+	
 	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;	  // Triangle attack combos
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
 	private saved 		var cannotUseUndyingSkill : bool;						
+	
+	
+	protected saved			var amountOfSetPiecesEquipped			: array<int>;
 	
 	
 	public				var canSwitchFocusModeTarget	: bool;
@@ -35,8 +40,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private				var signOwner					: W3SignOwnerPlayer;
 	private				var usedQuenInCombat			: bool;
 	public				var yrdenEntities				: array<W3YrdenEntity>;
+	public saved		var m_quenReappliedCount		: int;
 	
 	default				equippedSign	= ST_Aard;
+	default				m_quenReappliedCount = 1;
 	
 	
 	
@@ -66,6 +73,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private 			var remainingBombThrowDelaySlot1	: float;
 	private 			var remainingBombThrowDelaySlot2	: float;
 	private 			var previouslyUsedBolt : SItemUniqueId;				
+	private		  saved var questMarkedSelectedQuickslotItems : array< SSelectedQuickslotItem >;
 	
 	default isThrowingItem = false;
 	default remainingBombThrowDelaySlot1 = 0.f;
@@ -81,7 +89,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
-	protected var skillBonusPotionEffect			: CBaseGameplayEffect;			
+	protected saved var skillBonusPotionEffect			: CBaseGameplayEffect;			
 	
 	
 	public saved 		var levelManager 				: W3LevelManager;
@@ -94,6 +102,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private				var medallionController		: W3MedallionController;
 	
 	
+	
+	
 	public 				var bShowRadialMenu	: bool;	
 
 	private 			var _HoldBeforeOpenRadialMenuTime : float;
@@ -104,7 +114,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	protected saved	var horseManagerHandle			: EntityHandle;		
+	
+
 	private var isInitialized : bool;
+	private var timeForPerk21 : float;
 	
 		default isInitialized = false;
 		
@@ -143,9 +156,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		AddAnimEventCallback( 'ProjectileThrow',	'OnAnimEvent_Throwable'	);
 		AddAnimEventCallback( 'OnWeaponReload',		'OnAnimEvent_Throwable'	);
-		AddAnimEventCallback( 'ProjectileAttach',	'OnAnimEvent_Throwable' );			
+		AddAnimEventCallback( 'ProjectileAttach',	'OnAnimEvent_Throwable' );
+		AddAnimEventCallback( 'Mutation11AnimEnd',	'OnAnimEvent_Mutation11AnimEnd' );
+		AddAnimEventCallback( 'Mutation11ShockWave', 'OnAnimEvent_Mutation11ShockWave' );
 		
-		theTelemetry.LogWithName( TE_HERO_SPAWNED );
+
+		
+		amountOfSetPiecesEquipped.Resize( EnumGetMax( 'EItemSetType' ) + 1 );
 		
 		runewordInfusionType = ST_None;
 		
@@ -187,9 +204,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 			AddAlchemyRecipe('Recipe for Specter Oil 1',true,true);
 			AddAlchemyRecipe('Recipe for Necrophage Oil 1',true,true);
 			AddAlchemyRecipe('Recipe for Alcohest 1',true,true);
-			
-			
-			AddStartingSchematics();			
 		}
 		else
 		{
@@ -199,6 +213,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			CheckHairItem();
 		}
 		
+		
+		AddStartingSchematics();
+
 		super.OnSpawned( spawnData );
 		
 		
@@ -210,108 +227,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 		AddAlchemyRecipe('Recipe for Greater mutagen blue',true,true);
 		
 		AddCraftingSchematic('Starting Armor Upgrade schematic 1',true,true);
-				
-		levelupAbilities.PushBack('Lvl1');
-		levelupAbilities.PushBack('Lvl1');
-		levelupAbilities.PushBack('Lvl2');
-		levelupAbilities.PushBack('Lvl3');
-		levelupAbilities.PushBack('Lvl4');
-		levelupAbilities.PushBack('Lvl5');
-		levelupAbilities.PushBack('Lvl6');
-		levelupAbilities.PushBack('Lvl7');
-		levelupAbilities.PushBack('Lvl8');
-		levelupAbilities.PushBack('Lvl9');
-		levelupAbilities.PushBack('Lvl10');
-		levelupAbilities.PushBack('Lvl11');
-		levelupAbilities.PushBack('Lvl12');
-		levelupAbilities.PushBack('Lvl13');
-		levelupAbilities.PushBack('Lvl14');
-		levelupAbilities.PushBack('Lvl15');
-		levelupAbilities.PushBack('Lvl16');
-		levelupAbilities.PushBack('Lvl17');
-		levelupAbilities.PushBack('Lvl18');
-		levelupAbilities.PushBack('Lvl19');
-		levelupAbilities.PushBack('Lvl20');
-		levelupAbilities.PushBack('Lvl21');
-		levelupAbilities.PushBack('Lvl22');
-		levelupAbilities.PushBack('Lvl23');
-		levelupAbilities.PushBack('Lvl24');
-		levelupAbilities.PushBack('Lvl25');
-		levelupAbilities.PushBack('Lvl26');
-		levelupAbilities.PushBack('Lvl27');
-		levelupAbilities.PushBack('Lvl28');
-		levelupAbilities.PushBack('Lvl29');
-		levelupAbilities.PushBack('Lvl30');
-		levelupAbilities.PushBack('Lvl31');
-		levelupAbilities.PushBack('Lvl32');
-		levelupAbilities.PushBack('Lvl33');
-		levelupAbilities.PushBack('Lvl34');
-		levelupAbilities.PushBack('Lvl35');
-		levelupAbilities.PushBack('Lvl36');
-		levelupAbilities.PushBack('Lvl37');
-		levelupAbilities.PushBack('Lvl38');
-		levelupAbilities.PushBack('Lvl39');
-		levelupAbilities.PushBack('Lvl40');
-		levelupAbilities.PushBack('Lvl41');
-		levelupAbilities.PushBack('Lvl42');
-		levelupAbilities.PushBack('Lvl43');
-		levelupAbilities.PushBack('Lvl44');
-		levelupAbilities.PushBack('Lvl45');
-		levelupAbilities.PushBack('Lvl46');
-		levelupAbilities.PushBack('Lvl47');
-		levelupAbilities.PushBack('Lvl48');
-		levelupAbilities.PushBack('Lvl49');
-		levelupAbilities.PushBack('Lvl50');
-		levelupAbilities.PushBack('Lvl51');
-		levelupAbilities.PushBack('Lvl52');
-		levelupAbilities.PushBack('Lvl53');
-		levelupAbilities.PushBack('Lvl54');
-		levelupAbilities.PushBack('Lvl55');
-		levelupAbilities.PushBack('Lvl56');
-		levelupAbilities.PushBack('Lvl57');
-		levelupAbilities.PushBack('Lvl58');
-		levelupAbilities.PushBack('Lvl59');
-		levelupAbilities.PushBack('Lvl60');
-		levelupAbilities.PushBack('Lvl61');
-		levelupAbilities.PushBack('Lvl62');
-		levelupAbilities.PushBack('Lvl63');
-		levelupAbilities.PushBack('Lvl64');
-		levelupAbilities.PushBack('Lvl65');
-		levelupAbilities.PushBack('Lvl66');
-		levelupAbilities.PushBack('Lvl67');
-		levelupAbilities.PushBack('Lvl68');
-		levelupAbilities.PushBack('Lvl69');
-		levelupAbilities.PushBack('Lvl70');
-		levelupAbilities.PushBack('Lvl71');
-		levelupAbilities.PushBack('Lvl72');
-		levelupAbilities.PushBack('Lvl73');
-		levelupAbilities.PushBack('Lvl74');
-		levelupAbilities.PushBack('Lvl75');
-		levelupAbilities.PushBack('Lvl76');
-		levelupAbilities.PushBack('Lvl77');
-		levelupAbilities.PushBack('Lvl78');
-		levelupAbilities.PushBack('Lvl79');
-		levelupAbilities.PushBack('Lvl80');
-		levelupAbilities.PushBack('Lvl81');
-		levelupAbilities.PushBack('Lvl82');
-		levelupAbilities.PushBack('Lvl83');
-		levelupAbilities.PushBack('Lvl84');
-		levelupAbilities.PushBack('Lvl85');
-		levelupAbilities.PushBack('Lvl86');
-		levelupAbilities.PushBack('Lvl87');
-		levelupAbilities.PushBack('Lvl88');
-		levelupAbilities.PushBack('Lvl89');
-		levelupAbilities.PushBack('Lvl90');
-		levelupAbilities.PushBack('Lvl91');
-		levelupAbilities.PushBack('Lvl92');
-		levelupAbilities.PushBack('Lvl93');
-		levelupAbilities.PushBack('Lvl94');
-		levelupAbilities.PushBack('Lvl95');
-		levelupAbilities.PushBack('Lvl96');
-		levelupAbilities.PushBack('Lvl97');
-		levelupAbilities.PushBack('Lvl98');
-		levelupAbilities.PushBack('Lvl99');
-		levelupAbilities.PushBack('Lvl100');
 		
 		
 		if( inputHandler )
@@ -326,7 +241,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			abilityManager.GainStat(BCS_Toxicity, 0);		
 		}		
 		
-		levelManager.PostInit(this, spawnData.restored);
+		levelManager.PostInit(this, spawnData.restored, true);
 		
 		SetBIsCombatActionAllowed( true );		
 		SetBIsInputAllowed( true, 'OnSpawned' );				
@@ -385,11 +300,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		if(spawnData.restored)
-			ApplyPatchFixes();
-		
-		if(!newGamePlusInitialized && FactsQuerySum("NewGamePlus") > 0)
 		{
-			NewGamePlusInitialize();
+			ApplyPatchFixes();
+		}
+		else
+		{
+			
+			FactsAdd( "new_game_started_in_1_20" );
 		}
 		
 		if ( FactsQuerySum("NewGamePlus") > 0 )
@@ -420,6 +337,21 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		HACK_UnequipWolfLiver();
+		
+		
+		if( HasBuff( EET_GryphonSetBonusYrden ) )
+		{
+			RemoveBuff( EET_GryphonSetBonusYrden, false, "GryphonSetBonusYrden" );
+		}
+		
+		if( spawnData.restored )
+		{
+			
+			UpdateEncumbrance();
+			
+			
+			RemoveBuff( EET_Mutation11Immortal );
+		}
 		
 		isInitialized = true;
 	}
@@ -476,6 +408,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			if ( man.ApplyHorseUpdateOnSpawn() )
 			{
+				
+				UpdateEncumbrance();
+				
 				RemoveTimer( 'DelayedHorseUpdate' );
 			}
 		}
@@ -485,10 +420,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		super.OnAbilityAdded(abilityName);
 		
-		if(HasAbility('Runeword 4 _Stats', true))
+		if( HasAbility('Runeword 4 _Stats', true) )
+		{
 			StartVitalityRegen();
+		}
 			
-		if ( GetStat(BCS_Focus, true) >= GetStatMax(BCS_Focus) && abilityName == 'Runeword 8 _Stats' && !HasBuff(EET_Runeword8) )
+		if ( abilityName == 'Runeword 8 _Stats' && GetStat(BCS_Focus, true) >= GetStatMax(BCS_Focus) && !HasBuff(EET_Runeword8) )
 		{
 			AddEffectDefault(EET_Runeword8, this, "equipped item");
 		}
@@ -515,6 +452,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		AddCraftingSchematic('Steel ingot schematic 1',				true, true);
 		AddCraftingSchematic('Steel plate schematic',				true, true);
 		AddCraftingSchematic('Dark iron ingot schematic',			true, true);
+		AddCraftingSchematic('Dark iron plate schematic',			true, true);
 		AddCraftingSchematic('Dark steel ingot schematic',			true, true);
 		AddCraftingSchematic('Dark steel ingot schematic 1',		true, true);
 		AddCraftingSchematic('Dark steel plate schematic',			true, true);
@@ -530,12 +468,36 @@ statemachine class W3PlayerWitcher extends CR4Player
 		AddCraftingSchematic('Dwimeryte ingot schematic',			true, true);
 		AddCraftingSchematic('Dwimeryte ingot schematic 1',			true, true);
 		AddCraftingSchematic('Dwimeryte plate schematic',			true, true);
+		AddCraftingSchematic('Infused dust schematic',				true, true);
+		AddCraftingSchematic('Infused shard schematic',				true, true);
+		AddCraftingSchematic('Infused crystal schematic',			true, true);
+
+		if ( theGame.GetDLCManager().IsEP2Available() )
+		{
+			AddCraftingSchematic('Draconide infused leather schematic',	true, true);
+			AddCraftingSchematic('Nickel ore schematic',				true, true);
+			AddCraftingSchematic('Cupronickel ore schematic',			true, true);
+			AddCraftingSchematic('Copper ore schematic',				true, true);
+			AddCraftingSchematic('Copper ingot schematic',				true, true);
+			AddCraftingSchematic('Copper plate schematic',				true, true);
+			AddCraftingSchematic('Green gold ore schematic',			true, true);
+			AddCraftingSchematic('Green gold ore schematic 1',			true, true);
+			AddCraftingSchematic('Green gold ingot schematic',			true, true);
+			AddCraftingSchematic('Green gold plate schematic',			true, true);
+			AddCraftingSchematic('Orichalcum ore schematic',			true, true);
+			AddCraftingSchematic('Orichalcum ore schematic 1',			true, true);
+			AddCraftingSchematic('Orichalcum ingot schematic',			true, true);
+			AddCraftingSchematic('Orichalcum plate schematic',			true, true);
+			AddCraftingSchematic('Dwimeryte enriched ore schematic',	true, true);
+			AddCraftingSchematic('Dwimeryte enriched ingot schematic',	true, true);
+			AddCraftingSchematic('Dwimeryte enriched plate schematic',	true, true);
+		}
 	}
 	
 	private final function ApplyPatchFixes()
 	{
 		var cnt, transmutationCount, mutagenCount, i : int;
-		var transmutationAbility : name;
+		var transmutationAbility, itemName : name;
 		var pam : W3PlayerAbilityManager;
 		var slotId : int;
 		var offset : float;
@@ -543,6 +505,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var mutagen : W3Mutagen_Effect;
 		var skill : SSimpleSkill;
 		var spentSkillPoints, swordSkillPointsSpent, alchemySkillPointsSpent, perkSkillPointsSpent, pointsToAdd : int;
+		var mutagens : array< W3Mutagen_Effect >;
 		
 		if(FactsQuerySum("ClearingPotionPassiveBonusFix") < 1)
 		{
@@ -591,6 +554,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(FactsQuerySum("DontShowRecipePinTut") < 1)
 		{
+			FactsAdd( "DontShowRecipePinTut" );
 			TutorialScript('alchemyRecipePin', '');
 			TutorialScript('craftingRecipePin', '');
 		}
@@ -645,9 +609,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			theGame.GetJournalManager().ActivateEntryByScriptTag('TutorialJournalEnchanting', JS_Active);
 		}
-		
-		
-		levelManager.FixMaxLevel();	
 
 		
 		if(HasAbility('sword_s19') && FactsQuerySum("Patch_Sword_s19") < 1)
@@ -680,19 +641,48 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
+		if( HasAbility( 'sword_s19' ) )
+		{
+			RemoveAbilityAll( 'sword_s19' );
+		}
+		
+		
 		if(FactsQuerySum("Patch_Armor_Type_Glyphwords") < 1)
 		{
 			pam = (W3PlayerAbilityManager)abilityManager;
 			
-			pam.SetPerkArmorBonus(S_Perk_05);
-			pam.SetPerkArmorBonus(S_Perk_06);
-			pam.SetPerkArmorBonus(S_Perk_07);				
+			pam.SetPerkArmorBonus( S_Perk_05, this );
+			pam.SetPerkArmorBonus( S_Perk_06, this );
+			pam.SetPerkArmorBonus( S_Perk_07, this );
 			
 			FactsAdd("Patch_Armor_Type_Glyphwords");
 		}
+		else if( FactsQuerySum("154999") < 1 )
+		{
+			
+			pam = (W3PlayerAbilityManager)abilityManager;
+			
+			pam.SetPerkArmorBonus( S_Perk_05, this );
+			pam.SetPerkArmorBonus( S_Perk_06, this );
+			pam.SetPerkArmorBonus( S_Perk_07, this );
+			
+			FactsAdd("154999");
+		}
+		
+		if( FactsQuerySum( "Patch_Decoction_Buff_Icons" ) < 1 )
+		{
+			mutagens = GetMutagenBuffs();
+			for( i=0; i<mutagens.Size(); i+=1 )
+			{
+				itemName = DecoctionEffectTypeToItemName( mutagens[i].GetEffectType() );				
+				mutagens[i].OverrideIcon( itemName );
+			}
+			
+			FactsAdd( "Patch_Decoction_Buff_Icons" );
+		}
 	}
 	
-	public final function RestoreQuen(quenHealth : float, quenDuration : float) : bool
+	public final function RestoreQuen( quenHealth : float, quenDuration : float, optional alternate : bool ) : bool
 	{
 		var restoredQuen 	: W3QuenEntity;
 		
@@ -700,9 +690,20 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			restoredQuen = (W3QuenEntity)theGame.CreateEntity( signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
 			restoredQuen.Init( signOwner, signs[ST_Quen].entity, true );
+			
+			if( alternate )
+			{
+				restoredQuen.SetAlternateCast( S_Magic_s04 );
+			}
+			
 			restoredQuen.OnStarted();
 			restoredQuen.OnThrowing();
-			restoredQuen.OnEnded();
+			
+			if( !alternate )
+			{
+				restoredQuen.OnEnded();
+			}
+			
 			restoredQuen.SetDataFromRestore(quenHealth, quenDuration);
 			
 			return true;
@@ -716,12 +717,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 		return isInitialized;
 	}
 	
-	private final function NewGamePlusInitialize()
+	private function NewGamePlusInitialize()
 	{
 		var questItems : array<name>;
 		var horseManager : W3HorseManager;
 		var horseInventory : CInventoryComponent;
 		var i, missingLevels, expDiff : int;
+		
+		super.NewGamePlusInitialize();
 		
 		
 		horseManager = (W3HorseManager)EntityHandleGet(horseManagerHandle);
@@ -821,6 +824,12 @@ statemachine class W3PlayerWitcher extends CR4Player
     	
     	craftingSchematics.Clear();
     	AddStartingSchematics();
+    	
+    	
+    	for( i=0; i<amountOfSetPiecesEquipped.Size(); i+=1 )
+    	{
+			amountOfSetPiecesEquipped[i] = 0;
+		}
 
     	
     	inv.AddAnItem('Clearing Potion', 1, true, false, false);
@@ -828,6 +837,7 @@ statemachine class W3PlayerWitcher extends CR4Player
     	
     	inv.RemoveItemByName('q203_broken_eyeofloki', -1);
     	horseInventory.RemoveItemByName('q203_broken_eyeofloki', -1);
+    	
     	
     	NewGamePlusReplaceViperSet(inv);
     	NewGamePlusReplaceViperSet(horseInventory);
@@ -839,6 +849,12 @@ statemachine class W3PlayerWitcher extends CR4Player
     	NewGamePlusReplaceBearSet(horseInventory);
     	NewGamePlusReplaceEP1(inv);
     	NewGamePlusReplaceEP1(horseInventory);
+    	NewGamePlusReplaceEP2WitcherSets(inv);
+    	NewGamePlusReplaceEP2WitcherSets(horseInventory);
+    	NewGamePlusReplaceEP2Items(inv);
+    	NewGamePlusReplaceEP2Items(horseInventory);
+    	NewGamePlusMarkItemsToNotAdjust(inv);
+    	NewGamePlusMarkItemsToNotAdjust(horseInventory);
     	
     	
     	inputHandler.ClearLocksForNGP();
@@ -848,42 +864,74 @@ statemachine class W3PlayerWitcher extends CR4Player
     	buffRemovedImmunities.Clear();
     	
     	newGamePlusInitialized = true;
+    	
+    	
+    	m_quenReappliedCount = 1;
 	}
 		
+	private final function NewGamePlusMarkItemsToNotAdjust(out inv : CInventoryComponent)
+	{
+		var ids		: array<SItemUniqueId>;
+		var i 		: int;
+		var n		: name;
+		
+		inv.GetAllItems(ids);
+		for( i=0; i<ids.Size(); i+=1 ) 
+		{
+			inv.SetItemModifierInt(ids[i], 'NGPItemAdjusted', 1);
+		}
+	}
+	
 	private final function NewGamePlusReplaceItem( item : name, new_item : name, out inv : CInventoryComponent)
 	{
 		var i, j 					: int;
 		var ids, new_ids, enh_ids 	: array<SItemUniqueId>;
+		var dye_ids					: array<SItemUniqueId>;
 		var enh					 	: array<name>;
 		var wasEquipped 			: bool;
 		var wasEnchanted 			: bool;
-		var enchantName				: name;
+		var wasDyed					: bool;
+		var enchantName, colorName	: name;
 		
 		if ( inv.HasItem( item ) )
 		{
 			ids = inv.GetItemsIds(item);
 			for (i = 0; i < ids.Size(); i += 1)
 			{
-				inv.GetItemEnhancementItems(ids[i], enh);
-				wasEnchanted = inv.IsItemEnchanted(ids[i]);
+				inv.GetItemEnhancementItems( ids[i], enh );
+				wasEnchanted = inv.IsItemEnchanted( ids[i] );
 				if ( wasEnchanted ) 
-					enchantName = inv.GetEnchantment(ids[i]);
+					enchantName = inv.GetEnchantment( ids[i] );
 				wasEquipped = IsItemEquipped( ids[i] );
-				inv.RemoveItem(ids[i], 1);
-				new_ids = inv.AddAnItem(new_item, 1, true, true, false);
+				wasDyed = inv.IsItemColored( ids[i] );
+				if ( wasDyed )
+				{
+					colorName = inv.GetItemColor( ids[i] );
+				}
+				
+				inv.RemoveItem( ids[i], 1 );
+				new_ids = inv.AddAnItem( new_item, 1, true, true, false );
 				if ( wasEquipped )
 				{
 					EquipItem( new_ids[0] );
 				}
 				if ( wasEnchanted )
 				{
-					inv.EnchantItem(new_ids[0], enchantName, getEnchamtmentStatName(enchantName));
+					inv.EnchantItem( new_ids[0], enchantName, getEnchamtmentStatName(enchantName) );
 				}
 				for (j = 0; j < enh.Size(); j += 1)
 				{
-					enh_ids = inv.AddAnItem(enh[j], 1, true, true, false);
-					inv.EnhanceItemScript(new_ids[0], enh_ids[0]);
+					enh_ids = inv.AddAnItem( enh[j], 1, true, true, false );
+					inv.EnhanceItemScript( new_ids[0], enh_ids[0] );
 				}
+				if ( wasDyed )
+				{
+					dye_ids = inv.AddAnItem( colorName, 1, true, true, false );
+					inv.ColorItem( new_ids[0], dye_ids[0] );
+					inv.RemoveItem( dye_ids[0], 1 );
+				}
+				
+				inv.SetItemModifierInt( new_ids[0], 'NGPItemAdjusted', 1 );
 			}
 		}
 	}
@@ -1097,6 +1145,95 @@ statemachine class W3PlayerWitcher extends CR4Player
 		NewGamePlusReplaceItem('EP1 Viper School silver sword', 'NGP EP1 Viper School silver sword', inv);
 	}
 	
+	private final function NewGamePlusReplaceEP2WitcherSets(out inv : CInventoryComponent)
+	{
+		NewGamePlusReplaceItem('Lynx Armor 4', 'NGP Lynx Armor 4', inv);
+		NewGamePlusReplaceItem('Gryphon Armor 4', 'NGP Gryphon Armor 4', inv);
+		NewGamePlusReplaceItem('Bear Armor 4', 'NGP Bear Armor 4', inv);
+		NewGamePlusReplaceItem('Wolf Armor 4', 'NGP Wolf Armor 4', inv);
+		NewGamePlusReplaceItem('Red Wolf Armor 1', 'NGP Red Wolf Armor 1', inv);
+		
+		NewGamePlusReplaceItem('Lynx Gloves 5', 'NGP Lynx Gloves 5', inv);
+		NewGamePlusReplaceItem('Gryphon Gloves 5', 'NGP Gryphon Gloves 5', inv);
+		NewGamePlusReplaceItem('Bear Gloves 5', 'NGP Bear Gloves 5', inv);
+		NewGamePlusReplaceItem('Wolf Gloves 5', 'NGP Wolf Gloves 5', inv);
+		NewGamePlusReplaceItem('Red Wolf Gloves 1', 'NGP Red Wolf Gloves 1', inv);
+		
+		NewGamePlusReplaceItem('Lynx Pants 5', 'NGP Lynx Pants 5', inv);
+		NewGamePlusReplaceItem('Gryphon Pants 5', 'NGP Gryphon Pants 5', inv);
+		NewGamePlusReplaceItem('Bear Pants 5', 'NGP Bear Pants 5', inv);
+		NewGamePlusReplaceItem('Wolf Pants 5', 'NGP Wolf Pants 5', inv);
+		NewGamePlusReplaceItem('Red Wolf Pants 1', 'NGP Red Wolf Pants 1', inv);
+		
+		NewGamePlusReplaceItem('Lynx Boots 5', 'NGP Lynx Boots 5', inv);
+		NewGamePlusReplaceItem('Gryphon Boots 5', 'NGP Gryphon Boots 5', inv);
+		NewGamePlusReplaceItem('Bear Boots 5', 'NGP Bear Boots 5', inv);
+		NewGamePlusReplaceItem('Wolf Boots 5', 'NGP Wolf Boots 5', inv);
+		NewGamePlusReplaceItem('Red Wolf Boots 1', 'NGP Red Wolf Boots 1', inv);
+		
+		
+		NewGamePlusReplaceItem('Lynx School steel sword 4', 'NGP Lynx School steel sword 4', inv);
+		NewGamePlusReplaceItem('Gryphon School steel sword 4', 'NGP Gryphon School steel sword 4', inv);
+		NewGamePlusReplaceItem('Bear School steel sword 4', 'NGP Bear School steel sword 4', inv);
+		NewGamePlusReplaceItem('Wolf School steel sword 4', 'NGP Wolf School steel sword 4', inv);
+		NewGamePlusReplaceItem('Red Wolf School steel sword 1', 'NGP Red Wolf School steel sword 1', inv);
+		
+		NewGamePlusReplaceItem('Lynx School silver sword 4', 'NGP Lynx School silver sword 4', inv);
+		NewGamePlusReplaceItem('Gryphon School silver sword 4', 'NGP Gryphon School silver sword 4', inv);
+		NewGamePlusReplaceItem('Bear School silver sword 4', 'NGP Bear School silver sword 4', inv);
+		NewGamePlusReplaceItem('Wolf School silver sword 4', 'NGP Wolf School silver sword 4', inv);
+		NewGamePlusReplaceItem('Red Wolf School silver sword 1', 'NGP Red Wolf School silver sword 1', inv);
+	}
+	
+	private final function NewGamePlusReplaceEP2Items(out inv : CInventoryComponent)
+	{
+		NewGamePlusReplaceItem('Guard Lvl1 Armor 3', 'NGP Guard Lvl1 Armor 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl1 A Armor 3', 'NGP Guard Lvl1 A Armor 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 Armor 3', 'NGP Guard Lvl2 Armor 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 A Armor 3', 'NGP Guard Lvl2 A Armor 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt Armor 3', 'NGP Knight Geralt Armor 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt A Armor 3', 'NGP Knight Geralt A Armor 3', inv);
+		NewGamePlusReplaceItem('q702_vampire_armor', 'NGP q702_vampire_armor', inv);
+		
+		NewGamePlusReplaceItem('Guard Lvl1 Gloves 3', 'NGP Guard Lvl1 Gloves 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl1 A Gloves 3', 'NGP Guard Lvl1 A Gloves 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 Gloves 3', 'NGP Guard Lvl2 Gloves 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 A Gloves 3', 'NGP Guard Lvl2 A Gloves 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt Gloves 3', 'NGP Knight Geralt Gloves 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt A Gloves 3', 'NGP Knight Geralt A Gloves 3', inv);
+		NewGamePlusReplaceItem('q702_vampire_gloves', 'NGP q702_vampire_gloves', inv);
+		
+		NewGamePlusReplaceItem('Guard Lvl1 Pants 3', 'NGP Guard Lvl1 Pants 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl1 A Pants 3', 'NGP Guard Lvl1 A Pants 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 Pants 3', 'NGP Guard Lvl2 Pants 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 A Pants 3', 'NGP Guard Lvl2 A Pants 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt Pants 3', 'NGP Knight Geralt Pants 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt A Pants 3', 'NGP Knight Geralt A Pants 3', inv);
+		NewGamePlusReplaceItem('q702_vampire_pants', 'NGP q702_vampire_pants', inv);
+		
+		NewGamePlusReplaceItem('Guard Lvl1 Boots 3', 'NGP Guard Lvl1 Boots 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl1 A Boots 3', 'NGP Guard Lvl1 A Boots 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 Boots 3', 'NGP Guard Lvl2 Boots 3', inv);
+		NewGamePlusReplaceItem('Guard Lvl2 A Boots 3', 'NGP Guard Lvl2 A Boots 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt Boots 3', 'NGP Knight Geralt Boots 3', inv);
+		NewGamePlusReplaceItem('Knight Geralt A Boots 3', 'NGP Knight Geralt A Boots 3', inv);
+		NewGamePlusReplaceItem('q702_vampire_boots', 'NGP q702_vampire_boots', inv);
+		
+		NewGamePlusReplaceItem('Serpent Steel Sword 1', 'NGP Serpent Steel Sword 1', inv);
+		NewGamePlusReplaceItem('Serpent Steel Sword 2', 'NGP Serpent Steel Sword 2', inv);
+		NewGamePlusReplaceItem('Serpent Steel Sword 3', 'NGP Serpent Steel Sword 3', inv);
+		NewGamePlusReplaceItem('Guard lvl1 steel sword 3', 'NGP Guard lvl1 steel sword 3', inv);
+		NewGamePlusReplaceItem('Guard lvl2 steel sword 3', 'NGP Guard lvl2 steel sword 3', inv);
+		NewGamePlusReplaceItem('Knights steel sword 3', 'NGP Knights steel sword 3', inv);
+		NewGamePlusReplaceItem('Hanza steel sword 3', 'NGP Hanza steel sword 3', inv);
+		NewGamePlusReplaceItem('Toussaint steel sword 3', 'NGP Toussaint steel sword 3', inv);
+		NewGamePlusReplaceItem('q702 vampire steel sword', 'NGP q702 vampire steel sword', inv);
+		
+		NewGamePlusReplaceItem('Serpent Silver Sword 1', 'NGP Serpent Silver Sword 1', inv);
+		NewGamePlusReplaceItem('Serpent Silver Sword 2', 'NGP Serpent Silver Sword 2', inv);
+		NewGamePlusReplaceItem('Serpent Silver Sword 3', 'NGP Serpent Silver Sword 3', inv);
+	}
+	
 	public function GetEquippedSword(steel : bool) : SItemUniqueId
 	{
 		var item : SItemUniqueId;
@@ -1233,8 +1370,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 	function OnRadialMenuItemChoose( selectedItem : string ) 
 	{
 		var iSlotId : int;
+		var item : SItemUniqueId;
 		
-		if ( selectedItem != "Slot3" )
+		if ( selectedItem != "Crossbow" )
 		{
 			if ( rangedWeapon && rangedWeapon.GetCurrentStateName() != 'State_WeaponWait' )
 				OnRangedForceHolster( true, false );
@@ -1248,20 +1386,57 @@ statemachine class W3PlayerWitcher extends CR4Player
 				theGame.RequestMenuWithBackground( 'MeditationClockMenu', 'CommonMenu' );
 				break;			
 			case "Slot1":
-				SelectQuickslotItem(EES_Petard1);
-				break;			
+				GetItemEquippedOnSlot( EES_Petard1, item );
+				if( thePlayer.inv.IsIdValid( item ) )
+				{
+					SelectQuickslotItem( EES_Petard1 );
+				}
+				else
+				{
+					SelectQuickslotItem( EES_Petard2 );
+				}
+				break;
+				
 			case "Slot2":
-				SelectQuickslotItem(EES_Petard2);
-				break;			
-			case "Slot3":
+				GetItemEquippedOnSlot( EES_Petard2, item );
+				if( thePlayer.inv.IsIdValid( item ) )
+				{
+					SelectQuickslotItem( EES_Petard2 );
+				}
+				else
+				{
+					SelectQuickslotItem( EES_Petard1 );
+				}
+				break;
+				
+			case "Crossbow":
 				SelectQuickslotItem(EES_RangedWeapon);
 				break;
-			case "Slot4":
-				SelectQuickslotItem(EES_Quickslot1); 
+				
+			case "Slot3":
+				GetItemEquippedOnSlot( EES_Quickslot1, item );
+				if( thePlayer.inv.IsIdValid( item ) )
+				{
+					SelectQuickslotItem( EES_Quickslot1 );
+				}
+				else
+				{
+					SelectQuickslotItem( EES_Quickslot2 );
+				}
 				break;
-			case "Slot5": 
-				SelectQuickslotItem(EES_Quickslot2);
+				
+			case "Slot4": 
+				GetItemEquippedOnSlot( EES_Quickslot2, item );
+				if( thePlayer.inv.IsIdValid( item ) )
+				{
+					SelectQuickslotItem( EES_Quickslot2 );
+				}
+				else
+				{
+					SelectQuickslotItem( EES_Quickslot1 );
+				}
 				break;
+				
 			default:
 				SetEquippedSign(SignStringToEnum( selectedItem ));
 				FactsRemove("SignToggled");
@@ -1468,6 +1643,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		itemCurrDurablity = inv.GetItemDurability(usedOnItem);
 		itemAttribute = inv.GetItemAttributeValue ( rapairKitId, 'repairValue' );
 		
+		if( itemCurrDurablity >= itemMaxDurablity )
+		{
+			return;
+		}
+		
 		if ( inv.IsItemAnyArmor ( usedOnItem )|| inv.IsItemWeapon( usedOnItem ) )
 		{			
 			
@@ -1504,130 +1684,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 		
 	
-	public function GetOilAppliedOnSword(steel : bool) : name
+	public function ApplyOil( oilId : SItemUniqueId, usedOnItem : SItemUniqueId ) : bool
 	{
-		var hasItem : bool;
-		var sword   : SItemUniqueId;
+		var tutStateOil : W3TutorialManagerUIHandlerStateOils;		
 		
-		if(steel)
-			hasItem = GetItemEquippedOnSlot(EES_SteelSword, sword);
-		else
-			hasItem = GetItemEquippedOnSlot(EES_SilverSword, sword);
-			
-		if(!hasItem)
-			return '';	
-		
-		return inv.GetSwordOil(sword);
-	}
-	
-	
-	public function IsEquippedSwordUpgradedWithOil(steel : bool, optional oilName : name) : bool
-	{
-		var sword : SItemUniqueId;
-		var i, minAbs, maxAbs : int;
-		var hasItem : bool;
-		var abilities, swordAbilities : array<name>;
-		var dm : CDefinitionsManagerAccessor;
-		var weights : array<float>;
-	
-		if(steel)
-			hasItem = GetItemEquippedOnSlot(EES_SteelSword, sword);
-		else
-			hasItem = GetItemEquippedOnSlot(EES_SilverSword, sword);
-				
-		if(hasItem)	
-		{
-			inv.GetItemAbilities(sword, swordAbilities);
-			dm = theGame.GetDefinitionsManager();
-			
-			if(IsNameValid(oilName))
-			{				
-				dm.GetItemAbilitiesWithWeights(oilName, true, abilities, weights, minAbs, maxAbs);
-								
-				for(i=0; i<abilities.Size(); i+=1)
-				{
-					if(dm.AbilityHasTag(abilities[i], theGame.params.OIL_ABILITY_TAG))
-					{
-						if(swordAbilities.Contains(abilities[i]))
-						{
-							
-							return true;
-						}					
-					}
-				}
-			}
-			else
-			{
-				
-				for(i=0; i<swordAbilities.Size(); i+=1)
-				{
-					if(dm.AbilityHasTag(swordAbilities[i], theGame.params.OIL_ABILITY_TAG))
-						return true;
-				}
-			}
-		}
-		
-		
-		return false;
-	}
-	
-	
-	public function ApplyOil( oilId : SItemUniqueId, usedOnItem : SItemUniqueId )
-	{
-		var oilAbilities : array<name>;
-		var i : int;
-		var ammo, ammoBonus : float;
-		var dm : CDefinitionsManagerAccessor;
-		var swordEquipped, swordHeld, steel : bool;
-		var tutStateOil : W3TutorialManagerUIHandlerStateOils;
-		var sword : CWitcherSword;
-				
-		if(!CanApplyOilOnItem(oilId, usedOnItem))
-			return;
-				
-		dm = theGame.GetDefinitionsManager();
-		inv.GetItemAbilitiesWithTag(oilId, theGame.params.OIL_ABILITY_TAG, oilAbilities);
-		swordEquipped = IsItemEquipped(usedOnItem);
-		swordHeld     = IsItemHeld(usedOnItem);
-		steel = inv.IsItemSteelSwordUsableByPlayer(usedOnItem);
-		
-		
-		RemoveOilBuff(steel);
-		RemoveItemOil(usedOnItem);
-
-		
-		for(i=0; i<oilAbilities.Size(); i+=1)
-		{
-			inv.AddItemCraftedAbility(usedOnItem, oilAbilities[i]);
-				
-			
-			if(swordEquipped)
-			{
-				AddAbility(oilAbilities[i]);
-			}
-		}
-
-		if(swordEquipped)
-		{
-			sword = (CWitcherSword) inv.GetItemEntityUnsafe(usedOnItem);
-			sword.ApplyOil( inv );
-		}
-				
-		
-		
-		ammo = CalculateAttributeValue(inv.GetItemAttributeValue(oilId, 'ammo'));
-		if(CanUseSkill(S_Alchemy_s06))
-		{
-			ammoBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s06, 'ammo_bonus', false, false));
-			ammo *= 1 + ammoBonus * GetSkillLevel(S_Alchemy_s06);
-		}
-		inv.SetItemModifierInt(usedOnItem, 'oil_charges', RoundMath(ammo));
-		inv.SetItemModifierInt(usedOnItem, 'oil_max_charges', RoundMath(ammo));
-				
-		LogOils("Added oil <<" + inv.GetItemName(oilId) + ">> to <<" + inv.GetItemName(usedOnItem) + ">>");
-		
-		
-		SetFailedFundamentalsFirstAchievementCondition(true);
+		if( !super.ApplyOil( oilId, usedOnItem ))
+			return false;
 				
 		
 		if(ShouldProcessTutorial('TutorialOilCanEquip3'))
@@ -1639,13 +1701,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
-		if ( swordHeld )
-		{
-			
-			AddOilBuff(steel);
+		return true;
+	}
+	
+	private final function RemoveExtraOilsFromItem( item : SItemUniqueId )
+	{
+		var oils : array< CBaseGameplayEffect >;
+		var i, cnt : int;
+		var buff : W3Effect_Oil;
+	
+		oils = GetBuffs( EET_Oil );
+		for( i=0; i<oils.Size(); i+=1 )
+		{			
+			buff = (W3Effect_Oil) oils[ i ];
+			if( buff && buff.GetSwordItemId() == item )
+			{
+				cnt += 1;
+			}
 		}
-		
-		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnOilApplied );
+		while( cnt > 1 )
+		{
+			inv.RemoveOldestOilFromItem( item );
+			cnt -= 1;
+		}
 	}
 	
 	
@@ -1661,9 +1739,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var quen : W3QuenEntity;
 		var attackRange : CAIAttackRange;
 		var attackerMovementAdjustor : CMovementAdjustor;
-		var dist, distToAttacker, actionHeading, attackerHeading : float;
+		var dist, distToAttacker, actionHeading, attackerHeading, currAdrenaline, adrenReducedDmg, focus : float;
 		var attackName : name;
 		var useQuenForBleeding : bool;
+		var min, max : SAbilityAttributeValue;
+		var skillLevel : int;
 		
 		super.ReduceDamage(damageData);
 		
@@ -1693,8 +1773,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			attackRange = theGame.GetAttackRangeForEntity( actorAttacker, attackName );
 			attackerMovementAdjustor = actorAttacker.GetMovingAgentComponent().GetMovementAdjustor();
 			if( ( AbsF(dist) < 150 && attackName != 'stomp' && attackName != 'anchor_special_far' && attackName != 'anchor_far' ) 
-				|| ( ( attackName == 'stomp' || attackName == 'anchor_special_far' || attackName == 'anchor_far' ) 
-					&& distToAttacker > attackRange.rangeMax * 0.75 ) )
+				|| ( ( attackName == 'stomp' || attackName == 'anchor_special_far' || attackName == 'anchor_far' ) && distToAttacker > attackRange.rangeMax * 0.75 ) )
 			{
 				if ( theGame.CanLog() )
 				{
@@ -1704,9 +1783,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 				damageData.SetWasDodged();
 			}
 			
-			else if (!(damageData.IsActionEnvironment() || damageData.IsDoTDamage()) && CanUseSkill(S_Sword_s09))
+			else if( !damageData.IsActionEnvironment() && !damageData.IsDoTDamage() && CanUseSkill( S_Sword_s09 ) )
 			{
-				damageData.processedDmg.vitalityDamage *= 1 - ( CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, true)) * GetSkillLevel(S_Sword_s09) );
+				skillLevel = GetSkillLevel( S_Sword_s09 );
+				if( skillLevel == GetSkillMaxLevel( S_Sword_s09 ) )
+				{
+					damageData.SetAllProcessedDamageAs(0);
+					damageData.SetWasDodged();
+				}
+				else
+				{
+					damageData.processedDmg.vitalityDamage *= 1 - CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, true)) * skillLevel;
+				}
+				
 				if ( theGame.CanLog() )
 				{
 					LogDMHits("W3PlayerWitcher.ReduceDamage: skill S_Sword_s09 reduced damage while dodging", damageData );
@@ -1723,6 +1812,81 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 			quen.OnTargetHit( damageData );
 		}	
+		
+		
+		if( HasBuff( EET_GryphonSetBonusYrden ) )
+		{
+			min = GetAttributeValue( 'gryphon_set_bns_dmg_reduction' );
+			damageData.processedDmg.vitalityDamage *= 1 - min.valueAdditive;
+		}
+		
+		
+		if( IsMutationActive( EPMT_Mutation5 ) && !IsAnyQuenActive() && !damageData.IsDoTDamage() )
+		{
+			focus = GetStat( BCS_Focus );
+			currAdrenaline = FloorF( focus );
+			if( currAdrenaline >= 1 )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation5', 'mut5_dmg_red_perc', min, max );
+				adrenReducedDmg = ( currAdrenaline * min.valueAdditive );
+				damageData.processedDmg.vitalityDamage *= 1 - adrenReducedDmg;
+				
+				
+				theGame.MutationHUDFeedback( MFT_PlayOnce );
+				
+				if( focus >= 3.f )
+				{
+					PlayEffect( 'mutation_5_stage_03' );
+				}
+				else if( focus >= 2.f )
+				{
+					PlayEffect( 'mutation_5_stage_02' );
+				}
+				else
+				{
+					PlayEffect( 'mutation_5_stage_01' );
+				}
+			}
+		}
+		
+		
+		if(!damageData.GetIgnoreImmortalityMode())
+		{
+			if(!((W3PlayerWitcher)this))
+				Log("");
+			
+			
+			if( IsInvulnerable() )
+			{
+				if ( theGame.CanLog() )
+				{
+					LogDMHits("CActor.ReduceDamage: victim Invulnerable - no damage will be dealt", damageData );
+				}
+				damageData.SetAllProcessedDamageAs(0);
+				return;
+			}
+			
+			if(actorAttacker && damageData.DealsAnyDamage() )
+				actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
+			
+			
+			if( IsImmortal() )
+			{
+				if ( theGame.CanLog() )
+				{
+					LogDMHits("CActor.ReduceDamage: victim is Immortal, clamping damage", damageData );
+				}
+				damageData.processedDmg.vitalityDamage = ClampF(damageData.processedDmg.vitalityDamage, 0, GetStat(BCS_Vitality)-1 );
+				damageData.processedDmg.essenceDamage  = ClampF(damageData.processedDmg.essenceDamage, 0, GetStat(BCS_Essence)-1 );
+				return;
+			}
+		}
+		else
+		{
+			
+			if(actorAttacker && damageData.DealsAnyDamage() )
+				actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
+		}
 	}
 	
 	timer function UndyingSkillCooldown(dt : float, id : int)
@@ -1732,7 +1896,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	event OnTakeDamage( action : W3DamageAction)
 	{
-		var currVitality, hpTriggerTreshold : float;
+		var currVitality, rgnVitality, hpTriggerTreshold : float;
 		var healingFactor : float;
 		var abilityName : name;
 		var abilityCount, maxStack, itemDurability : float;
@@ -1741,48 +1905,64 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var mutagenQuen : W3SignEntity;
 		var equipped : array<SItemUniqueId>;
 		var i : int;
+		var killSourceName : string;
+		var aerondight	: W3Effect_Aerondight;
 	
 		currVitality = GetStat(BCS_Vitality);
 		
 		
 		if(action.processedDmg.vitalityDamage >= currVitality)
 		{
+			killSourceName = action.GetBuffSourceName();
 			
-			if(!cannotUseUndyingSkill && FloorF(GetStat(BCS_Focus)) >= 1 && CanUseSkill(S_Sword_s18) && HasBuff(EET_BattleTrance))
-			{
-				healingFactor = CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_factor', false, true) );
-				healingFactor *= GetStatMax(BCS_Vitality);
-				healingFactor *= GetStat(BCS_Focus);
-				healingFactor *= 1 + CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_bonus', false, true) ) * (GetSkillLevel(S_Sword_s18) - 1);
-				ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality));
-				action.processedDmg.vitalityDamage = GetStatMax(BCS_Vitality) - healingFactor;
-				DrainFocus(GetStat(BCS_Focus));
-				RemoveBuff(EET_BattleTrance);
-				cannotUseUndyingSkill = true;
-				AddTimer('UndyingSkillCooldown', CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'trigger_delay', false, true) ), false, , , true);
-			}
-			else
-			{
+			
+			if( killSourceName != "Quest" && killSourceName != "Kill Trigger" && killSourceName != "Trap" && killSourceName != "FallingDamage" )
+			{			
 				
-				equipped = GetEquippedItems();
-				
-				for(i=0; i<equipped.Size(); i+=1)
+				if(!cannotUseUndyingSkill && FloorF(GetStat(BCS_Focus)) >= 1 && CanUseSkill(S_Sword_s18) && HasBuff(EET_BattleTrance) )
 				{
-					if ( !inv.IsIdValid( equipped[i] ) )
+					healingFactor = CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_factor', false, true) );
+					healingFactor *= GetStatMax(BCS_Vitality);
+					healingFactor *= GetStat(BCS_Focus);
+					healingFactor *= 1 + CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_bonus', false, true) ) * (GetSkillLevel(S_Sword_s18) - 1);
+					ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality));
+					DrainFocus(GetStat(BCS_Focus));
+					RemoveBuff(EET_BattleTrance);
+					cannotUseUndyingSkill = true;
+					AddTimer('UndyingSkillCooldown', CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'trigger_delay', false, true) ), false, , , true);
+				}
+				
+				else if( IsMutationActive( EPMT_Mutation11 ) && !HasBuff( EET_Mutation11Debuff ) && !IsInAir() )
+				{
+					theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation11', 'health_prc', min, max );
+
+					action.SetAllProcessedDamageAs( 0 );
+					
+					OnMutation11Triggered();					
+				}
+				else
+				{
+					
+					equipped = GetEquippedItems();
+					
+					for(i=0; i<equipped.Size(); i+=1)
 					{
-						continue;
-					}
-					itemDurability = inv.GetItemDurability(equipped[i]);
-					if(inv.ItemHasAbility(equipped[i], 'MA_Reinforced') && itemDurability > 0)
-					{
-						
-						inv.SetItemDurabilityScript(equipped[i], MaxF(0, itemDurability - action.processedDmg.vitalityDamage) );
-						
-						
-						action.processedDmg.vitalityDamage = 0;
-						ForceSetStat(BCS_Vitality, 1);
-						
-						break;
+						if ( !inv.IsIdValid( equipped[i] ) )
+						{
+							continue;
+						}
+						itemDurability = inv.GetItemDurability(equipped[i]);
+						if(inv.ItemHasAbility(equipped[i], 'MA_Reinforced') && itemDurability > 0)
+						{
+							
+							inv.SetItemDurabilityScript(equipped[i], MaxF(0, itemDurability - action.processedDmg.vitalityDamage) );
+							
+							
+							action.processedDmg.vitalityDamage = 0;
+							ForceSetStat(BCS_Vitality, 1);
+							
+							break;
+						}
 					}
 				}
 			}
@@ -1844,8 +2024,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 				AddAbility(abilityName, true);
 			}
 		}
-
-		return super.OnTakeDamage(action);
+		
+		if(HasBuff(EET_Trap) && !action.IsDoTDamage() && action.attacker.HasAbility( 'mon_dettlaff_monster_base' ))
+		{
+			action.AddEffectInfo(EET_Knockdown);
+			RemoveBuff(EET_Trap, true);
+		}		
+		
+		super.OnTakeDamage(action);
+		
+		
+		if( !action.WasDodged() && action.DealtDamage() && inv.ItemHasTag( inv.GetCurrentlyHeldSword(), 'Aerondight' ) && !action.IsDoTDamage() && !( (W3Effect_Toxicity) action.causer ) )
+		{
+			aerondight = (W3Effect_Aerondight)GetBuff( EET_Aerondight );
+			if( aerondight && aerondight.GetCurrentCount() != 0 )
+			{
+				aerondight.ReduceAerondightStacks();
+			}
+		}
+		
+		
+		if( !action.WasDodged() && action.DealtDamage() && !( (W3Effect_Toxicity) action.causer ) )
+		{
+			RemoveBuff( EET_Mutation3 );
+		}
 	}
 	
 	
@@ -1856,8 +2058,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	event OnStartFistfightMinigame()
 	{
-		super.OnStartFistfightMinigame();
+		var i : int;
+		var buffs : array< CBaseGameplayEffect >;
+		
+		
 		effectManager.RemoveAllPotionEffects();
+		
+		abilityManager.DrainToxicity(GetStatMax( BCS_Toxicity ));
+		
+		buffs = GetBuffs( EET_WellFed );
+		for( i=buffs.Size()-1; i>=0; i-=1 )
+		{
+			RemoveEffect( buffs[i] );
+		}
+		
+		
+		buffs.Clear();
+		buffs = GetBuffs( EET_WellHydrated );
+		for( i=buffs.Size()-1; i>=0; i-=1 )
+		{
+			RemoveEffect( buffs[i] );
+		}
+		
+		super.OnStartFistfightMinigame();
 	}
 	
 	event OnEndFistfightMinigame()
@@ -1866,23 +2089,37 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 	
 	
-	public function GetCriticalHitChance(isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory) : float
+	public function GetCriticalHitChance( isLightAttack : bool, isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory, isBolt : bool ) : float
 	{
 		var ret : float;
 		var thunder : W3Potion_Thunderbolt;
+		var min, max : SAbilityAttributeValue;
 		
-		ret = super.GetCriticalHitChance(isHeavyAttack, target, victimMonsterCategory);
-		
-		
-		
+		ret = super.GetCriticalHitChance( isLightAttack, isHeavyAttack, target, victimMonsterCategory, isBolt );
 		
 		
 		
 		
-		thunder = (W3Potion_Thunderbolt)GetBuff(EET_Thunderbolt);
-		if(thunder && thunder.GetBuffLevel() == 3 && GetCurWeather() == EWE_Storm)
+		
+		
+		
+		thunder = ( W3Potion_Thunderbolt )GetBuff( EET_Thunderbolt );
+		if( thunder && thunder.GetBuffLevel() == 3 && GetCurWeather() == EWE_Storm )
 		{
 			ret += 1.0f;
+		}
+		
+		
+		if( isBolt && IsMutationActive( EPMT_Mutation9 ) )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('Mutation9', 'critical_hit_chance', min, max);
+			ret += min.valueMultiplicative;
+		}
+		
+		
+		if( isBolt && CanUseSkill( S_Sword_s07 ) )
+		{
+			ret += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s07, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s07);
 		}
 			
 		return ret;
@@ -1898,7 +2135,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
 		
-		if(inv.ItemHasOilApplied(weaponId) && GetStat(BCS_Focus) >= 3 && CanUseSkill(S_Alchemy_s07))
+		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && GetStat( BCS_Focus ) >= 3 && CanUseSkill( S_Alchemy_s07 ) )
 		{
 			monsterBonusType = MonsterCategoryToAttackPowerBonus( victimMonsterCategory );
 			oilBonus = inv.GetItemAttributeValue( weaponId, monsterBonusType );
@@ -1939,7 +2176,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
-	 event OnPocessActionPost(action : W3DamageAction)
+	 event OnProcessActionPost(action : W3DamageAction)
 	{
 		var attackAction : W3Action_Attack;
 		var rendLoad : float;
@@ -1953,10 +2190,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var items : array<SItemUniqueId>;
 		var weaponEnt : CEntity;
 		
-		super.OnPocessActionPost(action);
+		super.OnProcessActionPost(action);
 		
 		attackAction = (W3Action_Attack)action;
 		actorVictim = (CActor)action.victim;
+		
+		if( !actorVictim.IsAlive() )
+		{
+			return false;
+		}
+		
 		if(attackAction)
 		{
 			if(attackAction.IsActionMelee())
@@ -1990,6 +2233,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 					if ( CanUseSkill(S_Sword_s20) )
 					{
 						value += GetSkillAttributeValue(S_Sword_s20, 'focus_gain', false, true) * GetSkillLevel(S_Sword_s20);
+					}
+					
+					
+					if( IsMutationActive( EPMT_Mutation3 ) && IsRequiredAttitudeBetween( this, action.victim, true ) && !action.victim.HasTag( 'Mutation3InvalidTarget' ) && !attackAction.IsParried() && !attackAction.WasDodged() && !attackAction.IsCountered() && !inv.IsItemFists( attackAction.GetWeaponId() ) && !attackAction.WasDamageReturnedToAttacker() && attackAction.DealtDamage() )
+					{
+						AddEffectDefault( EET_Mutation3, this, "", false );
 					}
 					
 					GainStat(BCS_Focus, 0.1f * (1 + CalculateAttributeValue(value)) );
@@ -2106,7 +2355,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(CanUseSkill(S_Sword_s12) && attackAction.IsCriticalHit() && actorVictim)
 				{
 					
-					abs = actorVictim.GetAbilities(false);
+					actorVictim.GetCharacterStats().GetAbilities(abs, false);
 					dm = theGame.GetDefinitionsManager();
 					for(i=abs.Size()-1; i>=0; i-=1)
 					{
@@ -2127,10 +2376,23 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
+		if( IsMutationActive( EPMT_Mutation10 ) && ( action.IsActionMelee() || action.IsActionWitcherSign() ) )
+		{
+			PlayEffect( 'mutation_10_energy' );
+		}
+		
+		
 		if(CanUseSkill(S_Perk_18) && ((W3Petard)action.causer) && action.DealsAnyDamage() && !action.IsDoTDamage())
 		{
 			value = GetSkillAttributeValue(S_Perk_18, 'focus_gain', false, true);
 			GainStat(BCS_Focus, CalculateAttributeValue(value));
+		}		
+		
+		
+		if( attackAction && IsHeavyAttack( attackAction.GetAttackName() ) && !IsUsingHorse() && attackAction.DealtDamage() && IsSetBonusActive( EISB_Lynx_1 ) && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() && ( inv.IsItemSteelSwordUsableByPlayer( attackAction.GetWeaponId() ) || inv.IsItemSilverSwordUsableByPlayer( attackAction.GetWeaponId() ) ) )
+		{
+			AddEffectDefault( EET_LynxSetBonus, NULL, "HeavyAttack" );
+			SoundEvent( "ep2_setskill_lynx_activate" );
 		}		
 	}
 	
@@ -2194,6 +2456,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		var quenEntity, glyphQuen : W3QuenEntity;
 		var focus, stamina : float;
+		var glowTargets, moTargets, actors : array< CActor >;
+		var delays : array< float >;
+		var rand, i : int;
+		var isHostile, isAlive, isUnconscious : bool;
 		
 		super.OnCombatStart();
 		
@@ -2214,6 +2480,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			AddAbility(GetBuff(EET_Mutagen15).GetAbilityName(), false);
 		}
+		
+		
+		mutation12IsOnCooldown = false;
 		
 		
 		quenEntity = (W3QuenEntity)signs[ST_Quen].entity;		
@@ -2262,12 +2531,117 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		MeditationForceAbort(true);
+		
+		
+		
+
+		
+		if( IsMutationActive( EPMT_Mutation4 ) )
+		{
+			AddEffectDefault( EET_Mutation4, this, "combat start", false );
+		}
+		else if( IsMutationActive( EPMT_Mutation5 ) && GetStat( BCS_Focus ) >= 1.f )
+		{
+			AddEffectDefault( EET_Mutation5, this, "", false );
+		}
+		
+		else if( IsMutationActive( EPMT_Mutation7 ) )
+		{
+			
+				
+				RemoveTimer( 'Mutation7CombatStartHackFixGo' );
+				
+				
+				AddTimer( 'Mutation7CombatStartHackFix', 1.f, true, , , , true );
+			
+		}
+		else if( IsMutationActive( EPMT_Mutation8 ) )
+		{
+			theGame.MutationHUDFeedback( MFT_PlayRepeat );
+		}
+		
+		else if( IsMutationActive( EPMT_Mutation10 ) )
+		{
+			
+			PlayEffect( 'mutation_10' );
+			
+			
+			PlayEffect( 'critical_toxicity' );
+			AddTimer( 'Mutation10StopEffect', 5.f );
+		}
+	}
+	
+	timer function Mutation7CombatStartHackFix( dt : float, id : int )
+	{
+		var actors : array< CActor >;
+		
+		actors = GetEnemies();
+		
+		if( actors.Size() > 0 )
+		{
+			
+			AddTimer( 'Mutation7CombatStartHackFixGo', 0.5f );
+			RemoveTimer( 'Mutation7CombatStartHackFix' );
+		}
+	}
+	
+	timer function Mutation7CombatStartHackFixGo( dt : float, id : int )
+	{
+		var actors : array< CActor >;
+		
+		if( IsMutationActive( EPMT_Mutation7 ) )
+		{
+			actors = GetEnemies();
+			
+			if( actors.Size() > 1 )
+			{		
+				AddEffectDefault( EET_Mutation7Buff, this, "Mutation 7, combat start" );			
+			}
+		}
+	}
+	
+	public final function IsInFistFight() : bool
+	{
+		var enemies : array< CActor >;
+		var i, j : int;
+		var invent : CInventoryComponent;
+		var weapons : array< SItemUniqueId >;
+		
+		if( IsInFistFightMiniGame() )
+		{
+			return true;
+		}
+		
+		enemies = GetEnemies();
+		for( i=0; i<enemies.Size(); i+=1 )
+		{
+			weapons.Clear();
+			invent = enemies[i].GetInventory();
+			weapons = invent.GetHeldWeapons();
+			
+			for( j=0; j<weapons.Size(); j+=1 )
+			{
+				if( invent.IsItemFists( weapons[j] ) )
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	timer function Mutation10StopEffect( dt : float, id : int )
+	{
+		StopEffect( 'critical_toxicity' );
 	}
 	
 	
 	event OnCombatFinished()
 	{
 		var mut17 : W3Mutagen17_Effect;
+		var inGameConfigWrapper : CInGameConfigWrapper;
+		var disableAutoSheathe : bool;
 		
 		super.OnCombatFinished();
 		
@@ -2315,6 +2689,34 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
+		RemoveBuff( EET_Mutation3 );
+		
+		
+		RemoveBuff( EET_Mutation4 );
+		
+		
+		RemoveBuff( EET_Mutation5 );
+		
+		
+		RemoveBuff( EET_Mutation7Buff );
+		RemoveBuff( EET_Mutation7Debuff );
+			
+		if( IsMutationActive( EPMT_Mutation7 ) )
+		{
+			theGame.MutationHUDFeedback( MFT_PlayHide );
+		}
+		else if( IsMutationActive( EPMT_Mutation8 ) )
+		{
+			theGame.MutationHUDFeedback( MFT_PlayHide );
+		}
+		
+		
+		RemoveBuff( EET_Mutation10 );
+		
+		
+		RemoveBuff( EET_LynxSetBonus );
+		
+		
 		if(GetStat(BCS_Focus) > 0)
 		{
 			AddTimer('DelayedAdrenalineDrain', theGame.params.ADRENALINE_DRAIN_AFTER_COMBAT_DELAY, , , , true);
@@ -2328,11 +2730,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 		theGame.GetGamerProfile().ResetStat(ES_FinesseKills);
 		
 		LogChannel( 'OnCombatFinished', "OnCombatFinished: DelayedSheathSword timer added" ); 
-		if ( ShouldAutoSheathSwordInstantly() )
-			AddTimer( 'DelayedSheathSword', 0.5f );
-		else
-			AddTimer( 'DelayedSheathSword', 2.f );
-			
+		
+		
+		inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+		disableAutoSheathe = inGameConfigWrapper.GetVarValue( 'Gameplay', 'DisableAutomaticSwordSheathe' );			
+		if( !disableAutoSheathe )
+		{
+			if ( ShouldAutoSheathSwordInstantly() )
+				AddTimer( 'DelayedSheathSword', 0.5f );
+			else
+				AddTimer( 'DelayedSheathSword', 2.f );
+		}
+		
 		OnBlockAllCombatTickets( false ); 
 		
 		
@@ -2341,6 +2750,47 @@ statemachine class W3PlayerWitcher extends CR4Player
 		SetSpellSwordSign(ST_None); //Triangle spell sword 'discharge' sign power skill bonus damage thing
 		
 		
+		
+		
+		
+	}
+	
+	public function PlayHitEffect( damageAction : W3DamageAction )
+	{
+		var hitReactionType		: EHitReactionType;
+		var isAtBack			: bool;
+		
+		
+		if( damageAction.GetMutation4Triggered() )
+		{
+			hitReactionType = damageAction.GetHitReactionType();
+			isAtBack = IsAttackerAtBack( damageAction.attacker );
+			
+			if( hitReactionType != EHRT_Heavy )
+			{
+				if( isAtBack )
+				{
+					damageAction.SetHitEffect( 'light_hit_back_toxic', true );					
+				}
+				else
+				{
+					damageAction.SetHitEffect( 'light_hit_toxic' );
+				}
+			}
+			else
+			{
+				if( isAtBack )
+				{
+					damageAction.SetHitEffect( 'heavy_hit_back_toxic' ,true );
+				}
+				else
+				{
+					damageAction.SetHitEffect( 'heavy_hit_toxic' );
+				}
+			}
+		}
+		
+		super.PlayHitEffect( damageAction );
 	}
 	
 	timer function DelayedAdrenalineDrain(dt : float, id : int)
@@ -2726,6 +3176,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 	event OnPerformSpecialAttack( isLightAttack : bool, enableAttack : bool ){}	
 	
+	public final function GetEnemies() : array< CActor >
+	{
+		var actors, actors2 : array<CActor>;
+		var i : int;
+		
+		
+		actors = GetWitcherPlayer().GetHostileEnemies();
+		ArrayOfActorsAppendUnique( actors, GetWitcherPlayer().GetMoveTargets() );
+		
+		
+		thePlayer.GetVisibleEnemies( actors2 );
+		ArrayOfActorsAppendUnique( actors, actors2 );
+		
+		for( i=actors.Size()-1; i>=0; i-=1 )
+		{
+			if( !IsRequiredAttitudeBetween( actors[i], this, true ) )
+			{
+				actors.EraseFast( i );
+			}
+		}
+		
+		return actors;
+	}
+	
 	event OnPlayerTickTimer( deltaTime : float )
 	{
 		super.OnPlayerTickTimer( deltaTime );
@@ -2733,7 +3207,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if ( !IsInCombat() )
 		{
 			fastAttackCounter = 0;
-			heavyAttackCounter = 0;
+			heavyAttackCounter = 0;			
 		}		
 	}
 	
@@ -2898,7 +3372,681 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	event OnMutation11Triggered()
+	{
+		var min, max : SAbilityAttributeValue;
+		var healValue : float;
+		var quenEntity : W3QuenEntity;
+		
+		
+		if( IsSwimming() || IsDiving() || IsSailing() || IsUsingHorse() || IsUsingBoat() || IsUsingVehicle() || IsUsingExploration() )
+		{
+			
+			ForceSetStat( BCS_Vitality, GetStatMax( BCS_Vitality ) );
+			
+			
+			theGame.MutationHUDFeedback( MFT_PlayOnce );
+			
+			
+			GCameraShake( 1.0f, , , , true, 'camera_shake_loop_lvl1_1' );
+			AddTimer( 'StopMutation11CamShake', 2.f );
+			
+			
+			theGame.VibrateControllerVeryHard( 2.f );
+			
+			
+			Mutation11ShockWave( true );
+			
+			
+			AddEffectDefault( EET_Mutation11Debuff, NULL, "Mutation 11 Debuff", false );
+		}
+		else
+		{
+			AddEffectDefault( EET_Mutation11Buff, this, "Mutation 11", false );
+		}
+	}
 	
+	timer function StopMutation11CamShake( dt : float, id : int )
+	{
+		theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );
+	}
+	
+	private var mutation12IsOnCooldown : bool;
+	
+	public final function AddMutation12Decoction()
+	{
+		var params : SCustomEffectParams;
+		var buffs : array< EEffectType >;
+		var existingDecoctionBuffs : array<CBaseGameplayEffect>;
+		var i : int;
+		var effectType : EEffectType;
+		var decoctions : array< SItemUniqueId >;
+		var tmpName : name;
+		var min, max : SAbilityAttributeValue;
+		
+		if( mutation12IsOnCooldown )
+		{
+			return;
+		}
+		
+		
+		existingDecoctionBuffs = GetDrunkMutagens( "Mutation12" );
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation12', 'maxcap', min, max );
+		if( existingDecoctionBuffs.Size() >= min.valueAdditive )
+		{
+			return;
+		}
+		
+		
+		mutation12IsOnCooldown = true;		
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation12', 'cooldown', min, max );
+		AddTimer( 'Mutation12Cooldown', CalculateAttributeValue( min ) );
+		
+		
+		decoctions = inv.GetItemsByTag( 'Mutagen' );
+		
+		
+		for( i=decoctions.Size()-1; i>=0; i-=1 )
+		{
+			inv.GetPotionItemBuffData( decoctions[i], effectType, tmpName );
+			if( HasBuff( effectType ) )
+			{
+				decoctions.EraseFast( i );
+				continue;
+			}
+			buffs.PushBack( effectType );
+		}
+		
+		
+		if( buffs.Size() == 0 )
+		{
+			for( i=EET_Mutagen01; i<=EET_Mutagen28; i+=1 )
+			{
+				if( !HasBuff( i ) )
+				{
+					buffs.PushBack( i );
+				}
+			}
+		}
+		
+		
+		buffs.Remove( EET_Mutagen16 );
+		buffs.Remove( EET_Mutagen24 );
+		
+		
+		if( buffs.Size() == 0 )
+		{
+			return;
+		}
+		
+		
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation12', 'duration', min, max );
+		params.effectType = buffs[ RandRange( buffs.Size() ) ];
+		params.creator = this;
+		params.sourceName = "Mutation12";
+		params.duration = min.valueAdditive;
+		AddEffectCustom( params );
+		( ( W3Mutagen_Effect ) GetBuff( params.effectType, params.sourceName ) ).OverrideIcon( DecoctionEffectTypeToItemName( params.effectType ) );
+		
+		
+		if ( !IsEffectActive( 'invisible' ) )
+		{
+			PlayEffect( 'use_potion' );
+		}
+		
+		theGame.MutationHUDFeedback( MFT_PlayOnce );
+	}
+	
+	timer function Mutation12Cooldown( dt : float, id : int )
+	{
+		mutation12IsOnCooldown = false;
+	}
+	
+	
+	public final function HasResourcesToStartAnyMutationResearch() : bool
+	{
+		var greenPoints, redPoints, bluePoints, count : int;
+		var itemIDs : array< SItemUniqueId >;
+		
+		if( levelManager.GetPointsFree( ESkillPoint ) > 0 )
+		{
+			return true;
+		}
+		
+		
+		count = inv.GetItemQuantityByName( 'Greater mutagen green' );
+		if( count > 0 )
+		{
+			itemIDs = inv.GetItemsByName( 'Greater mutagen green' );
+			greenPoints = inv.GetMutationResearchPoints( SC_Green, itemIDs[0] );
+			if( greenPoints > 0 )
+			{
+				return true;
+			}
+		}	
+		count = inv.GetItemQuantityByName( 'Greater mutagen red' );
+		if( count > 0 )
+		{
+			itemIDs.Clear();
+			itemIDs = inv.GetItemsByName( 'Greater mutagen red' );
+			redPoints = inv.GetMutationResearchPoints( SC_Red, itemIDs[0] );
+			if( redPoints > 0 )
+			{
+				return true;
+			}
+		}		
+		count = inv.GetItemQuantityByName( 'Greater mutagen blue' );
+		if( count > 0 )
+		{
+			itemIDs.Clear();
+			itemIDs = inv.GetItemsByName( 'Greater mutagen blue' );
+			bluePoints = inv.GetMutationResearchPoints( SC_Blue, itemIDs[0] );
+			if( bluePoints > 0 )
+			{
+				return true;
+			}
+		}		
+		
+		return false;
+	}
+	
+	
+	public final function Mutation11StartAnimation()
+	{
+		
+		thePlayer.ActionPlaySlotAnimationAsync( 'PLAYER_SLOT', 'geralt_mutation_11', 0.2, 0.2 );
+		
+		
+		BlockAllActions( 'Mutation11', true );
+		
+		
+		loopingCameraShakeAnimName = 'camera_shake_loop_lvl1_1';
+		GCameraShake( 1.0f, , , , true, loopingCameraShakeAnimName );
+		
+		
+		theGame.VibrateControllerVeryHard( 15.f );
+		
+		
+		storedInteractionPriority = GetInteractionPriority();
+		SetInteractionPriority( IP_Max_Unpushable );
+	}
+	
+	event OnAnimEvent_Mutation11ShockWave( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
+	{
+		Mutation11ShockWave( false );
+	}
+	
+	private final function Mutation11ShockWave( skipQuenSign : bool )
+	{
+		var action : W3DamageAction;
+		var ents : array< CGameplayEntity >;
+		var i, j : int;
+		var damages : array< SRawDamage >;
+	
+		
+		FindGameplayEntitiesInSphere(ents, GetWorldPosition(), 5.f, 1000, '', FLAG_OnlyAliveActors + FLAG_ExcludeTarget + FLAG_Attitude_Hostile + FLAG_Attitude_Neutral, this);
+		
+		if( ents.Size() > 0 )
+		{
+			damages = theGame.GetDefinitionsManager().GetDamagesFromAbility( 'Mutation11' );
+		}
+		
+		
+		for(i=0; i<ents.Size(); i+=1)
+		{
+			action = new W3DamageAction in theGame;
+			action.Initialize( this, ents[i], NULL, "Mutation11", EHRT_Heavy, CPS_SpellPower, false, false, true, false );
+			
+			for( j=0; j<damages.Size(); j+=1 )
+			{
+				action.AddDamage( damages[j].dmgType, damages[j].dmgVal );
+			}
+			
+			action.SetCannotReturnDamage( true );
+			action.SetProcessBuffsIfNoDamage( true );
+			action.AddEffectInfo( EET_KnockdownTypeApplicator );
+			action.SetHitAnimationPlayType( EAHA_ForceYes );
+			action.SetCanPlayHitParticle( false );
+			
+			theGame.damageMgr.ProcessAction( action );
+			delete action;
+		}
+		
+		
+		
+		
+		
+		mutation11QuenEntity = ( W3QuenEntity )GetSignEntity( ST_Quen );
+		if( !mutation11QuenEntity )
+		{
+			mutation11QuenEntity = (W3QuenEntity)theGame.CreateEntity( GetSignTemplate( ST_Quen ), GetWorldPosition(), GetWorldRotation() );
+			mutation11QuenEntity.CreateAttachment( this, 'quen_sphere' );
+			AddTimer( 'DestroyMutation11QuenEntity', 2.f );
+		}
+		mutation11QuenEntity.PlayHitEffect( 'quen_impulse_explode', mutation11QuenEntity.GetWorldRotation() );
+		
+		if( !skipQuenSign )
+		{
+			
+			PlayEffect( 'mutation_11_second_life' );
+			
+			
+			RestoreQuen( 1000000.f, 10.f, true );
+		}
+	}
+	
+	private var mutation11QuenEntity : W3QuenEntity;
+	private var storedInteractionPriority : EInteractionPriority;
+	
+	timer function DestroyMutation11QuenEntity( dt : float, id : int )
+	{
+		if( mutation11QuenEntity )
+		{
+			mutation11QuenEntity.Destroy();
+		}
+	}
+	
+	event OnAnimEvent_Mutation11AnimEnd( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )
+	{
+		if( animEventType == AET_DurationEnd )
+		{
+			
+			BlockAllActions( 'Mutation11', false );			
+			
+			
+			theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );
+			
+			
+			theGame.StopVibrateController();
+			
+			
+			SetInteractionPriority( storedInteractionPriority );
+			
+			
+			RemoveBuff( EET_Mutation11Buff, true );
+		}
+		else if ( animEventType == AET_DurationStart || animEventType == AET_DurationStartInTheMiddle )
+		{
+			
+			SetBehaviorVariable( 'AIControlled', 0.f );
+		}
+	}
+		
+	public final function MutationSystemEnable( enable : bool )
+	{
+		( ( W3PlayerAbilityManager ) abilityManager ).MutationSystemEnable( enable );
+	}
+	
+	public final function IsMutationSystemEnabled() : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).IsMutationSystemEnabled();
+	}
+	
+	public final function GetMutation( mutationType : EPlayerMutationType ) : SMutation
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).GetMutation( mutationType );
+	}
+	
+	public final function IsMutationActive( mutationType : EPlayerMutationType) : bool
+	{
+		var swordQuality : int;
+		var sword : SItemUniqueId;
+		
+		if( GetEquippedMutationType() != mutationType )
+		{
+			return false;
+		}
+		
+		switch( mutationType )
+		{
+			case EPMT_Mutation4 :
+			case EPMT_Mutation5 :
+			case EPMT_Mutation7 :
+			case EPMT_Mutation8 :
+			case EPMT_Mutation10 :
+			case EPMT_Mutation11 :
+			case EPMT_Mutation12 :
+				if( IsInFistFight() )
+				{
+					return false;
+				}
+		}
+		
+		if( mutationType == EPMT_Mutation1 )
+		{
+			sword = inv.GetCurrentlyHeldSword();			
+			swordQuality = inv.GetItemQuality( sword );
+			
+			
+			if( swordQuality < 3 )
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+		
+	public final function SetEquippedMutation( mutationType : EPlayerMutationType ) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).SetEquippedMutation( mutationType );
+	}
+	
+	public final function GetEquippedMutationType() : EPlayerMutationType
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).GetEquippedMutationType();
+	}
+	
+	public final function CanEquipMutation(mutationType : EPlayerMutationType) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).CanEquipMutation( mutationType );
+	}
+	
+	public final function CanResearchMutation( mutationType : EPlayerMutationType ) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).CanResearchMutation( mutationType );
+	}
+	
+	public final function IsMutationResearched(mutationType : EPlayerMutationType) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).IsMutationResearched( mutationType );
+	}
+	
+	public final function GetMutationResearchProgress(mutationType : EPlayerMutationType) : int
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).GetMutationResearchProgress( mutationType );
+	}
+	
+	public final function GetMasterMutationStage() : int
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).GetMasterMutationStage();
+	}
+	
+	public final function MutationResearchWithSkillPoints(mutation : EPlayerMutationType, skillPoints : int) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).MutationResearchWithSkillPoints( mutation, skillPoints );
+	}
+	
+	public final function MutationResearchWithItem(mutation : EPlayerMutationType, item : SItemUniqueId) : bool
+	{
+		return ( ( W3PlayerAbilityManager ) abilityManager ).MutationResearchWithItem( mutation, item );
+	}
+	
+	public final function GetMutationLocalizedName( mutationType : EPlayerMutationType ) : string
+	{
+		var pam : W3PlayerAbilityManager;
+		var locKey : name;
+	
+		pam = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
+		locKey = pam.GetMutationNameLocalizationKey( mutationType );
+		
+		return GetLocStringByKeyExt( locKey );
+	}
+	
+	public final function GetMutationLocalizedDescription( mutationType : EPlayerMutationType ) : string
+	{
+		var pam : W3PlayerAbilityManager;
+		var locKey : name;
+		var arrStr : array< string >;
+		var dm : CDefinitionsManagerAccessor;
+		var min, max, sp : SAbilityAttributeValue;
+		var tmp, tmp2, tox, critBonusDamage, val : float;
+		var stats, stats2 : SPlayerOffenseStats;
+		var buffPerc, exampleEnemyCount, debuffPerc : int;
+	
+		pam = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
+		locKey = pam.GetMutationDescriptionLocalizationKey( mutationType );
+		dm = theGame.GetDefinitionsManager();
+		
+		switch( mutationType )
+		{
+			case EPMT_Mutation1 :
+				dm.GetAbilityAttributeValue('Mutation1', 'dmg_bonus_factor', min, max);							
+				arrStr.PushBack( NoTrailZeros( RoundMath( 100 * min.valueAdditive ) ) );
+				break;
+				
+			case EPMT_Mutation2 :
+				sp = GetPowerStatValue( CPS_SpellPower );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation2', 'crit_chance_factor', min, max );
+				arrStr.PushBack( NoTrailZeros( RoundMath( 100 * ( min.valueAdditive + sp.valueMultiplicative * min.valueMultiplicative ) ) ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation2', 'crit_damage_factor', min, max );
+				critBonusDamage = sp.valueMultiplicative * min.valueMultiplicative;
+				
+				arrStr.PushBack( NoTrailZeros( RoundMath( 100 * critBonusDamage ) ) );
+				break;
+				
+			case EPMT_Mutation3 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation3', 'attack_power', min, max );
+				tmp = min.valueMultiplicative;
+				arrStr.PushBack( NoTrailZeros( RoundMath( 100 * tmp ) ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation3', 'maxcap', min, max );
+				arrStr.PushBack( NoTrailZeros( RoundMath( 100 * tmp * min.valueAdditive ) ) );
+				break;
+				
+			case EPMT_Mutation4 :
+				
+				dm.GetAbilityAttributeValue( 'AcidEffect', 'DirectDamage', min, max );
+				tmp2 = 100 * min.valueAdditive;
+				dm.GetAbilityAttributeValue( 'AcidEffect', 'duration', min, max );
+				tmp2 *= min.valueAdditive;
+				arrStr.PushBack( NoTrailZeros( tmp2 ) );
+				
+				
+				tox = GetStat( BCS_Toxicity );
+				if( tox > 0 )
+				{
+					tmp = RoundMath( tmp2 * tox );
+				}
+				else
+				{
+					tmp = tmp2;
+				}
+				arrStr.PushBack( NoTrailZeros( tmp ) );
+				
+				
+				tox = GetStatMax( BCS_Toxicity );
+				tmp = RoundMath( tmp2 * tox );
+				arrStr.PushBack( NoTrailZeros( tmp ) );
+				break;
+				
+			case EPMT_Mutation5 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation5', 'mut5_dmg_red_perc', min, max );
+				tmp = min.valueAdditive;
+				arrStr.PushBack( NoTrailZeros( 100 * tmp ) );
+				
+				
+				arrStr.PushBack( NoTrailZeros( 100 * tmp * 3 ) );
+				
+				break;
+			
+			case EPMT_Mutation6 :	
+				
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'full_freeze_chance', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );	
+				
+				
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'ForceDamage', min, max );
+				sp = GetTotalSignSpellPower( S_Magic_1 );
+				val = sp.valueAdditive + sp.valueMultiplicative * ( sp.valueBase + min.valueAdditive );
+				arrStr.PushBack( NoTrailZeros( RoundMath( val ) ) );	
+			
+				break;
+				
+			case EPMT_Mutation7 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation7Buff', 'attack_power', min, max );
+				buffPerc = (int) ( 100 * min.valueMultiplicative );
+				arrStr.PushBack( NoTrailZeros( buffPerc ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation7BuffEffect', 'duration', min, max );
+				arrStr.PushBack( NoTrailZeros( min.valueAdditive ) );
+				
+				
+				exampleEnemyCount = 11;
+				arrStr.PushBack( exampleEnemyCount );
+				
+				
+				arrStr.PushBack( buffPerc * ( exampleEnemyCount -1 ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation7Debuff', 'attack_power', min, max );
+				debuffPerc = (int) ( - 100 * min.valueMultiplicative );
+				arrStr.PushBack( NoTrailZeros( debuffPerc ) );
+				
+				
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation7Debuff', 'minCapStacks', min, max );
+				arrStr.PushBack( NoTrailZeros( debuffPerc * min.valueAdditive ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation7DebuffEffect', 'duration', min, max );
+				arrStr.PushBack( NoTrailZeros( min.valueAdditive ) );
+					
+				break;
+			
+			case EPMT_Mutation8 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation8', 'dmg_bonus', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation8', 'hp_perc_trigger', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				break;
+				
+			case EPMT_Mutation9 :
+				
+				
+				
+				
+				stats = GetOffenseStatsList( 1 );
+				arrStr.PushBack( NoTrailZeros( RoundMath( stats.crossbowSteelDmg ) ) );
+				
+				
+				stats2 = GetOffenseStatsList( 2 );
+				arrStr.PushBack( NoTrailZeros( RoundMath( stats2.crossbowSteelDmg ) ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation9', 'critical_hit_chance', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation9', 'health_reduction', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				break;
+				
+			case EPMT_Mutation10 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation10Effect', 'mutation10_stat_boost', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative * GetStatMax( BCS_Toxicity ) ) );
+				
+				break;
+				
+			case EPMT_Mutation11 :
+				
+				arrStr.PushBack( 100 );
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation11DebuffEffect', 'duration', min, max);
+				arrStr.PushBack( NoTrailZeros( min.valueAdditive ) );
+				break;
+				
+			case EPMT_Mutation12 :
+				
+				dm.GetAbilityAttributeValue( 'Mutation12', 'duration', min, max );
+				arrStr.PushBack( NoTrailZeros( min.valueAdditive ) );				
+				
+				
+				dm.GetAbilityAttributeValue( 'Mutation12', 'maxcap', min, max );
+				arrStr.PushBack( NoTrailZeros( min.valueAdditive ) );	
+				break;
+				
+			case EPMT_MutationMaster :
+				
+				arrStr.PushBack( "4" );
+				
+				break;
+		}
+		
+		return GetLocStringByKeyExtWithParams( locKey, , , arrStr );
+	}
+		
+	public final function ApplyMutation10StatBoost( out statValue : SAbilityAttributeValue )
+	{
+		var attValue 			: SAbilityAttributeValue;
+		var currToxicity		: float;
+		
+		if( IsMutationActive( EPMT_Mutation10 ) )
+		{
+			currToxicity = GetStat( BCS_Toxicity );
+			if( currToxicity > 0.f )
+			{
+				attValue = GetAttributeValue( 'mutation10_stat_boost' );
+				currToxicity *= attValue.valueMultiplicative;
+				statValue.valueMultiplicative += currToxicity;
+			}
+		}
+	}
+
+	
+	
+	
+	
+	
+
+	public final function IsBookRead( bookName : name ):bool
+	{
+		return booksRead.Contains( bookName );
+	}	
+	
+	public final function AddReadBook( bookName : name ):void
+	{
+		if( !booksRead.Contains( bookName ) )
+		{
+			booksRead.PushBack( bookName );
+		}
+	}
+	
+	public final function RemoveReadBook( bookName : name ):void
+	{
+		var idx : int = booksRead.FindFirst( bookName );
+		
+		if( idx > -1 )
+		{
+			booksRead.Erase( idx );
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	public final function GetMutagenBuffs() : array< W3Mutagen_Effect >
+	{
+		var null : array< W3Mutagen_Effect >;
+		
+		if(effectManager)
+		{
+			return effectManager.GetMutagenBuffs();
+		}
+	
+		return null;
+	}
 	
 	public function GetAlchemyRecipes() : array<name>
 	{
@@ -2980,31 +4128,45 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
-		potions = 0;
-		bombs = 0;
-		for(i=0; i<alchemyRecipes.Size(); i+=1)
+		if(recipe.cookedItemType == EACIT_Bomb)
 		{
-			m_alchemyManager.GetRecipe(alchemyRecipes[i], recipe);
-			
-			
-			if(recipe.cookedItemType == EACIT_Potion || recipe.cookedItemType == EACIT_MutagenPotion || recipe.cookedItemType == EACIT_Alcohol || recipe.cookedItemType == EACIT_Quest)
+			bombs = 0;
+			for(i=0; i<alchemyRecipes.Size(); i+=1)
 			{
-				potions += 1;
-			}
-			
-			else if(recipe.cookedItemType == EACIT_Bomb)
-			{
-				strRecipeName = NameToString(alchemyRecipes[i]);
-				recipeNameWithoutLevel = StrLeft(strRecipeName, StrLen(strRecipeName)-2);
-				if(!knownBombTypes.Contains(recipeNameWithoutLevel))
+				m_alchemyManager.GetRecipe(alchemyRecipes[i], recipe);
+				
+				
+				if(recipe.cookedItemType == EACIT_Bomb)
 				{
-					bombs += 1;
-					knownBombTypes.PushBack(recipeNameWithoutLevel);
+					strRecipeName = NameToString(alchemyRecipes[i]);
+					recipeNameWithoutLevel = StrLeft(strRecipeName, StrLen(strRecipeName)-2);
+					if(!knownBombTypes.Contains(recipeNameWithoutLevel))
+					{
+						bombs += 1;
+						knownBombTypes.PushBack(recipeNameWithoutLevel);
+					}
 				}
 			}
+			
+			theGame.GetGamerProfile().SetStat(ES_KnownBombRecipes, bombs);
 		}		
-		theGame.GetGamerProfile().SetStat(ES_KnownPotionRecipes, potions);
-		theGame.GetGamerProfile().SetStat(ES_KnownBombRecipes, bombs);
+		
+		else if(recipe.cookedItemType == EACIT_Potion || recipe.cookedItemType == EACIT_MutagenPotion || recipe.cookedItemType == EACIT_Alcohol || recipe.cookedItemType == EACIT_Quest)
+		{
+			potions = 0;
+			for(i=0; i<alchemyRecipes.Size(); i+=1)
+			{
+				m_alchemyManager.GetRecipe(alchemyRecipes[i], recipe);
+				
+				
+				if(recipe.cookedItemType == EACIT_Potion || recipe.cookedItemType == EACIT_MutagenPotion || recipe.cookedItemType == EACIT_Alcohol || recipe.cookedItemType == EACIT_Quest)
+				{
+					potions += 1;
+				}				
+			}		
+			theGame.GetGamerProfile().SetStat(ES_KnownPotionRecipes, potions);
+		}
+		
 		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_AlchemyRecipe );
 				
 		return true;
@@ -3107,7 +4269,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(catComponent)
 				{
 					catComponent.SetGameplayEffectFlag(EGEF_CatViewHiglight, true);
-					ents[i].AddTimer( 'EnemyHighlightOff', highlightTime );
+					ents[i].AddTimer( 'EnemyHighlightOff', highlightTime, , , , , true );
 				}
 			}
 		}
@@ -3139,6 +4301,25 @@ statemachine class W3PlayerWitcher extends CR4Player
 			SetCanPlayHitAnim( true );
 			PopState();
 		}
+	}
+	
+	public final function IsInDarkPlace() : bool
+	{
+		var envs : array< string >;
+		
+		if( FactsQuerySum( "tut_in_dark_place" ) )
+		{
+			return true;
+		}
+		
+		GetActiveAreaEnvironmentDefinitions( envs );
+		
+		if( envs.Contains( 'env_novigrad_cave' ) || envs.Contains( 'cave_catacombs' ) )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
@@ -3296,51 +4477,56 @@ statemachine class W3PlayerWitcher extends CR4Player
 		return false;
 	}
 	
-	public final function AddBombThrowDelay(bombId : SItemUniqueId)
+	public final function AddBombThrowDelay( bombId : SItemUniqueId )
 	{
 		var slot : EEquipmentSlots;
 		
-		slot = GetItemSlot(bombId);
+		slot = GetItemSlot( bombId );
 		
-		if(slot == EES_Unused)
+		if( slot == EES_Unused )
+		{
 			return;
+		}
 			
-		if(slot == EES_Petard1 || slot == EES_Quickslot1)
+		if( slot == EES_Petard1 || slot == EES_Quickslot1 )
 		{
 			remainingBombThrowDelaySlot1 = theGame.params.BOMB_THROW_DELAY;
-			AddTimer('BombDelay1', 0.1, true);
+			AddTimer( 'BombDelay', 0.0f, true );
 		}
-		else if(slot == EES_Petard2 || slot == EES_Quickslot2)
+		else if( slot == EES_Petard2 || slot == EES_Quickslot2 )
 		{
 			remainingBombThrowDelaySlot2 = theGame.params.BOMB_THROW_DELAY;
-			AddTimer('BombDelay2', 0.1, true);
+			AddTimer( 'BombDelay', 0.0f, true );
+		}
+		else
+		{
+			return;
 		}
 	}
 	
-	public final function GetBombDelay(slot : EEquipmentSlots) : float
+	public final function GetBombDelay( slot : EEquipmentSlots ) : float
 	{
-		if(slot == EES_Petard1 || slot == EES_Quickslot1)
+		if( slot == EES_Petard1 || slot == EES_Quickslot1 )
+		{
 			return remainingBombThrowDelaySlot1;
-		else if(slot == EES_Petard2 || slot == EES_Quickslot2)
+		}
+		else if( slot == EES_Petard2 || slot == EES_Quickslot2 )
+		{
 			return remainingBombThrowDelaySlot2;
-			
+		}
+		
 		return 0;
 	}
 	
-	timer function BombDelay1(dt : float, id : int)
+	timer function BombDelay( dt : float, id : int )
 	{
-		remainingBombThrowDelaySlot1 -= dt;
+		remainingBombThrowDelaySlot1 = MaxF( 0.f , remainingBombThrowDelaySlot1 - dt );
+		remainingBombThrowDelaySlot2 = MaxF( 0.f , remainingBombThrowDelaySlot2 - dt );
 		
-		if(remainingBombThrowDelaySlot1 <= 0)
-			RemoveTimer('BombDelay1');
-	}
-	
-	timer function BombDelay2(dt : float, id : int)
-	{
-		remainingBombThrowDelaySlot2 -= dt;
-		
-		if(remainingBombThrowDelaySlot2 <= 0)
-			RemoveTimer('BombDelay2');
+		if( remainingBombThrowDelaySlot1 <= 0.0f && remainingBombThrowDelaySlot2  <= 0.0f )
+		{
+			RemoveTimer('BombDelay');
+		}
 	}
 	
 	public function ResetCharacterDev()
@@ -3354,6 +4540,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 		// Triangle safe cleardevelop
 		Debug_ClearCharacterDevelopment();
 		levelManager.ResetCharacterDev();
+	}
+	
+	public final function ResetMutationsDev()
+	{
+		levelManager.ResetMutationsDev();
+		((W3PlayerAbilityManager)abilityManager).ResetMutationsDev();
+	}
+	
+	public final function GetHeldSword() : SItemUniqueId
+	{
+		var i : int;
+		var weapons : array< SItemUniqueId >;
+		
+		weapons = inv.GetHeldWeapons();
+		for( i=0; i<weapons.Size(); i+=1 )
+		{
+			if( inv.IsItemSilverSwordUsableByPlayer( weapons[i] ) || inv.IsItemSteelSwordUsableByPlayer( weapons[i] ) )
+			{
+				return weapons[i];
+			}
+		}
+		
+		return GetInvalidUniqueId();
 	}
 	
 	public function ConsumeItem( itemId : SItemUniqueId ) : bool
@@ -3381,11 +4590,31 @@ statemachine class W3PlayerWitcher extends CR4Player
 			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt("panel_character_popup_character_cleared") );
 			theSound.SoundEvent("gui_character_synergy_effect"); 
 		}
+		else if ( itemName == 'Restoring Potion' ) 
+		{
+			ResetMutationsDev();
+			removedItem = inv.RemoveItem( itemId, 1 );
+			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt("panel_character_popup_character_cleared") );
+			theSound.SoundEvent("gui_character_synergy_effect"); 
+		}
 		else if(itemName == 'Wolf Hour')
 		{
 			removedItem = inv.RemoveItem( itemId, 1 );
 			theSound.SoundEvent("gui_character_synergy_effect"); 
 			AddEffectDefault(EET_WolfHour, thePlayer, 'wolf hour');
+		}
+		else if ( itemName == 'q704_ft_golden_egg' )
+		{
+			AddPoints(ESkillPoint, 1, true);
+			removedItem = inv.RemoveItem( itemId, 1 );
+			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt("panel_character_popup_title_buy_skill") + "<br>" + GetLocStringByKeyExt("panel_character_availablepoints") + " +1");
+			theSound.SoundEvent("gui_character_buy_skill"); 
+		} 
+		else if ( itemName == 'mq7023_cake' )
+		{
+			this.AddAbility('mq7023_cake_vitality_bonus');
+			removedItem = inv.RemoveItem( itemId, 1 );
+			theSound.SoundEvent("gui_character_synergy_effect");
 		}
 		else
 		{
@@ -3473,6 +4702,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 		previouslyUsedBolt = GetInvalidUniqueId();
 	}
 	
+	public function GetCurrentInfiniteBoltName( optional forceBodkin : bool, optional forceHarpoon : bool ) : name
+	{
+		if(!forceBodkin && (forceHarpoon || GetCurrentStateName() == 'Swimming' || IsSwimming() || IsDiving()) )
+		{
+			return 'Harpoon Bolt';
+		}
+		return 'Bodkin Bolt';
+	}
+	
 	
 	public final function AddAndEquipInfiniteBolt(optional forceBodkin : bool, optional forceHarpoon : bool)
 	{
@@ -3492,14 +4730,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 		
 		
-		if(!forceBodkin && (forceHarpoon || GetCurrentStateName() == 'Swimming' || IsSwimming() || IsDiving()) )
-		{
-			boltItemName = 'Harpoon Bolt';
-		}
-		else
-		{
-			boltItemName = 'Bodkin Bolt';
-		}
+		boltItemName = GetCurrentInfiniteBoltName( forceBodkin, forceHarpoon );
 		
 		
 		if(boltItemName == 'Bodkin Bolt' && inv.IsIdValid(previouslyUsedBolt))
@@ -3538,14 +4769,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		m_guiManager = theGame.GetGuiManager();
 		if(m_guiManager)
-			m_guiManager.RegisterNewItem(data.ids[0]);	
+			m_guiManager.RegisterNewItem(data.ids[0]);
 	}
 		
 	
 	public final function CheckForFullyArmedAchievement()
 	{
 		if( HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_BEAR) || HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_GRYPHON) || 
-			HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_LYNX) || HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_WOLF)
+			HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_LYNX) || HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_WOLF) ||
+			HasAllItemsFromSet(theGame.params.ITEM_SET_TAG_VIPER)
 		)
 		{
 			theGame.GetGamerProfile().AddAchievement(EA_FullyArmed);
@@ -3829,6 +5061,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 				return false;
 		}
 		
+		ForceSoundAppearanceUpdate();
+		
 		return EquipItemInGivenSlot(item, slot, false, toHand);
 	}
 	
@@ -3882,6 +5116,39 @@ statemachine class W3PlayerWitcher extends CR4Player
 		items = mountableItems;
 	}
 	
+	public final function AddAndEquipItem( item : name ) : bool
+	{
+		var ids : array< SItemUniqueId >;
+		
+		ids = inv.AddAnItem( item );
+		if( inv.IsIdValid( ids[ 0 ] ) )
+		{
+			return EquipItem( ids[ 0 ] );
+		}
+		
+		return false;
+	}
+	
+	public final function AddQuestMarkedSelectedQuickslotItem( sel : SSelectedQuickslotItem )
+	{
+		questMarkedSelectedQuickslotItems.PushBack( sel );
+	}
+	
+	public final function GetQuestMarkedSelectedQuickslotItem( sourceName : name ) : SItemUniqueId
+	{
+		var i : int;
+		
+		for( i=0; i<questMarkedSelectedQuickslotItems.Size(); i+=1 )
+		{
+			if( questMarkedSelectedQuickslotItems[i].sourceName == sourceName )
+			{
+				return questMarkedSelectedQuickslotItems[i].itemID;
+			}
+		}
+		
+		return GetInvalidUniqueId();
+	}
+	
 	public final function SwapEquippedItems(slot1 : EEquipmentSlots, slot2 : EEquipmentSlots)
 	{
 		var temp : SItemUniqueId;
@@ -3897,6 +5164,21 @@ statemachine class W3PlayerWitcher extends CR4Player
 			if(pam)
 				pam.OnSwappedMutagensPost(itemSlots[slot1], itemSlots[slot2]);
 		}
+	}
+	
+	public final function GetSlotForEquippedItem( itemID : SItemUniqueId ) : EEquipmentSlots
+	{
+		var i : int;
+		
+		for( i=0; i<itemSlots.Size(); i+=1 )
+		{
+			if( itemSlots[i] == itemID )
+			{
+				return i;
+			}
+		}
+		
+		return EES_InvalidSlot;
 	}
 	
 	public function EquipItemInGivenSlot(item : SItemUniqueId, slot : EEquipmentSlots, ignoreMounting : bool, optional toHand : bool) : bool
@@ -3918,6 +5200,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var tutStateFood : W3TutorialManagerUIHandlerStateFood;
 		var tutStateSecondPotionEquip : W3TutorialManagerUIHandlerStateSecondPotionEquip;
 		var boltItem : SItemUniqueId;
+		var aerondight : W3Effect_Aerondight;
 		
 		if(!inv.IsIdValid(item))
 		{
@@ -3946,6 +5229,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
+		if( slot == EES_SilverSword && inv.ItemHasTag( item, 'Aerondight' ) )
+		{
+			AddEffectDefault( EET_Aerondight, this, "Aerondight" );
+			
+			
+			aerondight = (W3Effect_Aerondight)GetBuff( EET_Aerondight );
+			aerondight.Pause( 'ManageAerondightBuff' );
+		}		
+		
+		
 		previousItemInSlot = itemSlots[slot];
 		if( IsItemEquipped(item)) 
 		{
@@ -3972,7 +5265,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				LogAssert(false, "W3PlayerWitcher.EquipItem: Cannot equip item <<" + inv.GetItemName(item) + ">> !!");
 				return false;
 			}
-		}
+		}		
 		
 		
 		if(inv.IsItemMask(item))
@@ -4058,6 +5351,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 			PlayRuneword4FX(PW_Steel);
 			PlayRuneword4FX(PW_Silver);
 		}
+		
+		else if( ( slot == EES_Petard1 || slot == EES_Petard2 ) && inv.IsItemBomb( GetSelectedItemId() ) )
+		{
+			SelectQuickslotItem( slot );
+		}
 
 		
 		if(inv.ItemHasAbility(item, 'MA_HtH'))
@@ -4097,6 +5395,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
+		
+		UpdateItemSetBonuses( item, true );
+				
 		
 		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnItemEquipped );
 	
@@ -4240,7 +5541,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	public function UnequipItemFromSlot(slot : EEquipmentSlots, optional reequipped : bool) : bool
 	{
-		var item, bolts : SItemUniqueId;
+		var item, bolts, id : SItemUniqueId;
 		var items : array<SItemUniqueId>;
 		var retBool : bool;
 		var fistsID, bolt : array<SItemUniqueId>;
@@ -4269,7 +5570,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(slot == EES_SilverSword  || slot == EES_SteelSword)
 		{
-			RemoveOilBuff( slot == EES_SteelSword );
+			PauseOilBuffs( slot == EES_SteelSword );
 		}
 			
 		item = itemSlots[slot];
@@ -4282,6 +5583,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
+		
+		
+		if( slot == EES_SilverSword && inv.ItemHasTag( item, 'Aerondight' ) )
+		{
+			RemoveBuff( EET_Aerondight );
+		}
 		
 		
 		if(slot == EES_RangedWeapon)
@@ -4349,7 +5656,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(slot == EES_SilverSword  || slot == EES_SteelSword)
 		{
-			OnEquipMeleeWeapon(PW_None, true);
+			OnEquipMeleeWeapon(PW_None, true);			
 		}
 		
 		if(  GetSelectedItemId() == item )
@@ -4417,6 +5724,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
+		
+		UpdateItemSetBonuses( item, false );
+		
+		
+		if( inv.ItemHasTag( item, theGame.params.ITEM_SET_TAG_BONUS ) && !IsSetBonusActive( EISB_RedWolf_2 ) )
+		{
+			SkillReduceBombAmmoBonus();
+		}
+
 		if( slot == EES_Gloves )
 		{
 			thePlayer.DestroyEffect('runeword_4');
@@ -4506,6 +5822,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			encumbrance += inve.GetItemEncumbrance( items[i] );
 			
+			
+			
 		}		
 		return encumbrance;
 	}
@@ -4541,7 +5859,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if ( GetEncumbrance() >= (GetMaxRunEncumbrance(temp) + 1) )
 		{
-			if( !HasBuff(EET_OverEncumbered) )
+			if( !HasBuff(EET_OverEncumbered) && FactsQuerySum( "DEBUG_EncumbranceBoy" ) == 0 )
 			{
 				AddEffectDefault(EET_OverEncumbered, NULL, "OverEncumbered");
 			}
@@ -4904,9 +6222,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 	
 
-	public final function GetDrunkMutagens() : array<CBaseGameplayEffect>
+	public final function GetDrunkMutagens( optional sourceName : string ) : array<CBaseGameplayEffect>
 	{
-		return effectManager.GetDrunkMutagens();
+		return effectManager.GetDrunkMutagens( sourceName );
 	}
 	
 	public final function GetPotionBuffs() : array<CBaseGameplayEffect>
@@ -5007,12 +6325,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	public function ToxicityLowEnoughToDrinkPotion( slotid : EEquipmentSlots, optional itemId : SItemUniqueId ) : bool
 	{
-		var item : SItemUniqueId;
-		var maxTox : float;
-		var potionToxicity : float;
-		var toxicityOffset : float;
-		var effectType : EEffectType;
-		var customAbilityName : name;
+		var item 				: SItemUniqueId;
+		var maxTox 				: float;
+		var potionToxicity 		: float;
+		var toxicityOffset 		: float;
+		var effectType 			: EEffectType;
+		var customAbilityName 	: name;
 		
 		if(itemId != GetInvalidUniqueId())
 			item = itemId; 
@@ -5035,23 +6353,55 @@ statemachine class W3PlayerWitcher extends CR4Player
 		return true;
 	}
 	
+	public final function HasFreeToxicityToDrinkPotion( item : SItemUniqueId, effectType : EEffectType, out finalPotionToxicity : float ) : bool
+	{
+		var i : int;
+		var maxTox, toxicityOffset, adrenaline : float;
+		var costReduction : SAbilityAttributeValue;
+		
+		
+		if( effectType == EET_WhiteHoney )
+		{
+			return true;
+		}
+		
+		
+		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
+		finalPotionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
+		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+		
+		
+		if(CanUseSkill(S_Perk_13))
+		{
+			costReduction = GetSkillAttributeValue(S_Perk_13, 'cost_reduction', false, true);
+			adrenaline = FloorF(GetStat(BCS_Focus));
+			costReduction = costReduction * adrenaline;
+			finalPotionToxicity = (finalPotionToxicity - costReduction.valueBase) * (1 - costReduction.valueMultiplicative) - costReduction.valueAdditive;
+			finalPotionToxicity = MaxF(0.f, finalPotionToxicity);
+		}
+		
+		
+		if(abilityManager.GetStat(BCS_Toxicity, false) + finalPotionToxicity + toxicityOffset > maxTox )
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public function DrinkPreparedPotion( slotid : EEquipmentSlots, optional itemId : SItemUniqueId )
 	{	
-		var i, ind : int;
-		var toxicityOffset, adrenaline : float;
-		var potionToxicity, duration, hpGainValue, maxTox : float;
-		var randomPotions : array<EEffectType>;
-		var effectType : EEffectType;
-		var customAbilityName, factId : name;
-		var ret : EEffectInteract;
-		var atts : array<name>;
-		var effectsOld, effectsNew : array<CBaseGameplayEffect>;
-		var factPotionParams : W3Potion_Fact_Params;
 		var potParams : W3PotionParams;
-		var mutagenParams : W3MutagenBuffCustomParams;		
+		var potionParams : SCustomEffectParams;
+		var factPotionParams : W3Potion_Fact_Params;
+		var adrenaline, hpGainValue, duration, finalPotionToxicity : float;
+		var ret : EEffectInteract;
+		var effectType : EEffectType;
 		var item : SItemUniqueId;
-		var params, potionParams : SCustomEffectParams;
-		var costReduction : SAbilityAttributeValue;
+		var customAbilityName, factId : name;
+		var atts : array<name>;
+		var i : int;
+		var mutagenParams : W3MutagenBuffCustomParams;
 		
 		
 		if(itemId != GetInvalidUniqueId())
@@ -5066,33 +6416,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if( inv.SingletonItemGetAmmo(item) == 0 )
 			return;
-		
+			
 		
 		inv.GetPotionItemBuffData(item, effectType, customAbilityName);
-		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
-		potionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
-		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+			
 		
-		
-		if(CanUseSkill(S_Perk_13))
+		if( !HasFreeToxicityToDrinkPotion( item, effectType, finalPotionToxicity ) )
 		{
-			costReduction = GetSkillAttributeValue(S_Perk_13, 'cost_reduction', false, true);
-			adrenaline = FloorF(GetStat(BCS_Focus));
-			costReduction = costReduction * adrenaline;
-			potionToxicity = (potionToxicity - costReduction.valueBase) * (1 - costReduction.valueMultiplicative) - costReduction.valueAdditive;
-			potionToxicity = MaxF(0.f, potionToxicity);
+			return;
 		}
-		
-		
-		if(effectType != EET_WhiteHoney)
-		{
-			if(abilityManager.GetStat(BCS_Toxicity, false) + potionToxicity + toxicityOffset > maxTox )
-				return;
-		}
-		
-		
-		customAbilityName = '';
-		inv.GetPotionItemBuffData(item, effectType, customAbilityName);
 				
 		
 		if(effectType == EET_Fact)
@@ -5118,10 +6450,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 		else if(inv.ItemHasTag( item, 'Mutagen' ))
 		{
 			mutagenParams = new W3MutagenBuffCustomParams in theGame;
-			mutagenParams.toxicityOffset = toxicityOffset;
+			mutagenParams.toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
 			mutagenParams.potionItemName = inv.GetItemName(item);
 			
 			potionParams.buffSpecificParams = mutagenParams;
+			
+			if( IsMutationActive( EPMT_Mutation10 ) && !HasBuff( EET_Mutation10 ) )
+			{
+				AddEffectDefault( EET_Mutation10, this, "Mutation 10" );
+			}
 		}
 		
 		else
@@ -5156,7 +6493,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(ret == EI_Pass || ret == EI_Override || ret == EI_Cumulate)
 		{
-			abilityManager.GainStat(BCS_Toxicity, potionToxicity );
+			if( finalPotionToxicity > 0.f )
+			{
+				abilityManager.GainStat(BCS_Toxicity, finalPotionToxicity );
+			}
 			
 			
 			if(CanUseSkill(S_Perk_13))
@@ -5183,61 +6523,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				hpGainValue = ClampF(GetStatMax(BCS_Vitality) * CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s02, 'vitality_gain_perc', false, true)) * GetSkillLevel(S_Alchemy_s02), 0, GetStatMax(BCS_Vitality));
 				GainStat(BCS_Vitality, hpGainValue);
-			}
+			}			
+			
 			
 			if(CanUseSkill(S_Alchemy_s04) && !skillBonusPotionEffect && (RandF() < CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s04, 'apply_chance', false, true)) * GetSkillLevel(S_Alchemy_s04)))
 			{
-				
-				randomPotions.PushBack(EET_BlackBlood);
-				randomPotions.PushBack(EET_Blizzard);
-				randomPotions.PushBack(EET_Cat);
-				randomPotions.PushBack(EET_FullMoon);
-				randomPotions.PushBack(EET_GoldenOriole);
-				randomPotions.PushBack(EET_KillerWhale);
-				randomPotions.PushBack(EET_MariborForest);
-				randomPotions.PushBack(EET_PetriPhiltre);
-				randomPotions.PushBack(EET_Swallow);
-				randomPotions.PushBack(EET_TawnyOwl);
-				randomPotions.PushBack(EET_Thunderbolt);
-				randomPotions.PushBack(EET_WhiteRaffardDecoction);
-				
-				
-				randomPotions.Remove(effectType);
-				ind = RandRange(randomPotions.Size());
-
-				duration = BonusPotionGetDurationFromXML(randomPotions[ind]);
-				
-				if(duration > 0)
-				{
-					effectsOld = GetCurrentEffects();
-										
-					params.effectType = randomPotions[ind];
-					params.creator = this;
-					params.sourceName = SkillEnumToName(S_Alchemy_s04);
-					params.duration = duration;
-					ret = AddEffectCustom(params);
-					
-					
-					if(ret != EI_Undefined && ret != EI_Deny)
-					{
-						effectsNew = GetCurrentEffects();
-						
-						ind = -1;
-						for(i=0; i<effectsNew.Size(); i+=1)
-						{
-							if(!effectsOld.Contains(effectsNew[i]))
-							{
-								ind = i;
-								break;
-							}
-						}
-						
-						if(ind > -1)
-						{
-							skillBonusPotionEffect = effectsNew[ind];
-						}
-					}
-				}		
+				AddRandomPotionEffectFromAlch4Skill( effectType );				
 			}
 			
 			theGame.GetGamerProfile().SetStat(ES_ActivePotions, effectManager.GetPotionBuffsCount());
@@ -5251,6 +6542,80 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		SetFailedFundamentalsFirstAchievementCondition(true);
+	}
+	
+	
+	private final function AddRandomPotionEffectFromAlch4Skill( currentlyDrankPotion : EEffectType )
+	{
+		var randomPotions : array<EEffectType>;
+		var currentPotion : CBaseGameplayEffect;
+		var effectsOld, effectsNew : array<CBaseGameplayEffect>;
+		var i, ind : int;
+		var duration : float;
+		var params : SCustomEffectParams;
+		var ret : EEffectInteract;
+		
+		
+		randomPotions.PushBack( EET_BlackBlood );
+		randomPotions.PushBack( EET_Blizzard );
+		randomPotions.PushBack( EET_FullMoon );
+		randomPotions.PushBack( EET_GoldenOriole );
+		randomPotions.PushBack( EET_KillerWhale );
+		randomPotions.PushBack( EET_MariborForest );
+		randomPotions.PushBack( EET_PetriPhiltre );
+		randomPotions.PushBack( EET_Swallow );
+		randomPotions.PushBack( EET_TawnyOwl );
+		randomPotions.PushBack( EET_Thunderbolt );
+		
+		
+		randomPotions.Remove( currentlyDrankPotion );
+		
+		
+		ind = RandRange( randomPotions.Size() );
+
+		
+		if( HasBuff( randomPotions[ ind ] ) )
+		{
+			currentPotion = GetBuff( randomPotions[ ind ] );
+			currentPotion.SetTimeLeft( currentPotion.GetInitialDurationAfterResists() );
+		}
+		
+		else
+		{			
+			duration = BonusPotionGetDurationFromXML( randomPotions[ ind ] );
+			
+			if(duration > 0)
+			{
+				effectsOld = GetCurrentEffects();
+									
+				params.effectType = randomPotions[ ind ];
+				params.creator = this;
+				params.sourceName = SkillEnumToName( S_Alchemy_s04 );
+				params.duration = duration;
+				ret = AddEffectCustom( params );
+				
+				
+				if( ret != EI_Undefined && ret != EI_Deny )
+				{
+					effectsNew = GetCurrentEffects();
+					
+					ind = -1;
+					for( i=effectsNew.Size()-1; i>=0; i-=1)
+					{
+						if( !effectsOld.Contains( effectsNew[i] ) )
+						{
+							ind = i;
+							break;
+						}
+					}
+					
+					if(ind > -1)
+					{
+						skillBonusPotionEffect = effectsNew[ind];
+					}
+				}
+			}		
+		}
 	}
 	
 	
@@ -5418,7 +6783,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			theGame.GetGamerProfile().AddAchievement(EA_Immortal);
 		}
 	
-		if ( hud && currentLevel < 70 )
+		if ( hud && currentLevel < levelManager.GetMaxLevel() && FactsQuerySum( "DebugNoLevelUpUpdates" ) == 0 )
 		{
 			hud.OnLevelUpUpdate(currentLevel, show);
 		}
@@ -5468,7 +6833,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			SetCanPlayHitAnim( true );
 			this.SetBIsCombatActionAllowed( true );
 			
-			if ( this.GetFinisherVictim() && this.GetFinisherVictim().HasAbility( 'ForceFinisher' ) )
+			if ( this.GetFinisherVictim() && this.GetFinisherVictim().HasAbility( 'ForceFinisher' ) && !isInFinisher )
 			{
 				this.GetFinisherVictim().SignalGameplayEvent( 'Finisher' );
 			}
@@ -5490,7 +6855,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			else
 			{
 				
-				ResumeEffects(EET_AutoStaminaRegen, 'InsideCombatAction');
+				ResumeStaminaRegen( 'InsideCombatAction' );
 				
 				
 				
@@ -5524,12 +6889,154 @@ statemachine class W3PlayerWitcher extends CR4Player
 		else if( thrownEntity && IsThrowingItem() && thrownEntity.OnProcessThrowEvent( animEventName ) )
 		{
 			return true;
-		}	
-	}	
+		}
+	}
+	
+	event OnTaskSyncAnim( npc : CNewNPC, animNameLeft : name )
+	{
+		var tmpBool : bool;
+		var tmpName : name;
+		var damage, points, resistance : float;
+		var min, max : SAbilityAttributeValue;
+		var mc : EMonsterCategory;
+		
+		super.OnTaskSyncAnim( npc, animNameLeft );
+		
+		if( animNameLeft == 'BruxaBite' && IsMutationActive( EPMT_Mutation4 ) )
+		{
+			theGame.GetMonsterParamsForActor( npc, mc, tmpName, tmpBool, tmpBool, tmpBool );
+			
+			if( mc == MC_Vampire )
+			{
+				GetResistValue( CDS_BleedingRes, points, resistance );
+				
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'BleedingEffect', 'DirectDamage', min, max );
+				damage = MaxF( 0.f, max.valueMultiplicative * GetMaxHealth() - points );
+				
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'BleedingEffect', 'duration', min, max );
+				damage *= min.valueAdditive * ( 1 - MinF( 1.f, resistance ) );
+				
+				if( damage > 0.f )
+				{
+					npc.AddAbility( 'Mutation4BloodDebuff' );
+					ProcessActionMutation4ReturnedDamage( damage, npc, EAHA_ForceNo );					
+					npc.AddTimer( 'RemoveMutation4BloodDebuff', 15.f, , , , , true );
+				}
+			}
+		}
+	}
+	
+	
+	public function ProcessActionMutation4ReturnedDamage( damageDealt : float, attacker : CActor, hitAnimationType : EActionHitAnim, optional action : W3DamageAction ) : bool
+	{
+		var customParams				: SCustomEffectParams;
+		var currToxicity				: float;
+		var min, max, customDamageValue	: SAbilityAttributeValue;
+		var dm							: CDefinitionsManagerAccessor;
+		var animAction					: W3DamageAction;
+
+		if( damageDealt <= 0 )
+		{
+			return false;
+		}
+		
+		if( action )
+		{
+			action.SetMutation4Triggered();
+		}
+			
+		dm = theGame.GetDefinitionsManager();
+		currToxicity = GetStat( BCS_Toxicity );
+		
+		dm.GetAbilityAttributeValue( 'AcidEffect', 'DirectDamage', min, max );
+		customDamageValue.valueAdditive = damageDealt * min.valueAdditive;
+		
+		if( currToxicity > 0 )
+		{
+			customDamageValue.valueAdditive *= currToxicity;
+		}
+		
+		dm.GetAbilityAttributeValue( 'AcidEffect', 'duration', min, max );
+		customDamageValue.valueAdditive /= min.valueAdditive; 
+		
+		customParams.effectType = EET_Acid;
+		customParams.effectValue = customDamageValue;
+		customParams.duration = min.valueAdditive;
+		customParams.creator = this;
+		customParams.sourceName = 'Mutation4';
+		
+		attacker.AddEffectCustom( customParams );
+		
+		
+		animAction = new W3DamageAction in theGame;
+		animAction.Initialize( this, attacker, NULL, 'Mutation4', EHRT_Reflect, CPS_Undefined, true, false, false, false );
+		animAction.SetCannotReturnDamage( true );
+		animAction.SetCanPlayHitParticle( false );
+		animAction.SetHitAnimationPlayType( hitAnimationType );
+		theGame.damageMgr.ProcessAction( animAction );
+		delete animAction;
+		
+		theGame.MutationHUDFeedback( MFT_PlayOnce );
+		
+		return true;
+	}
+	
+	event OnPlayerActionEnd()
+	{
+		var l_i				: int;
+		var l_bed			: W3WitcherBed;
+		
+		l_i = (int)GetBehaviorVariable( 'playerExplorationAction' );
+		
+		if( l_i == PEA_GoToSleep )
+		{
+			l_bed = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );
+			BlockAllActions( 'WitcherBed', false );
+			l_bed.ApplyAppearance( "collision" );
+			l_bed.GotoState( 'WakeUp' );
+			theGame.ReleaseNoSaveLock( l_bed.m_bedSaveLock );
+			
+			
+			substateManager.m_MovementCorrectorO.disallowRotWhenGoingToSleep = false;
+		}
+		
+		super.OnPlayerActionEnd();
+	}
+	
+	event OnPlayerActionStartFinished()
+	{
+		var l_initData			: W3SingleMenuInitData;		
+		var l_i					: int;
+		
+		l_i = (int)GetBehaviorVariable( 'playerExplorationAction' );
+		
+		if( l_i == PEA_GoToSleep )
+		{
+			l_initData = new W3SingleMenuInitData in this;
+			l_initData.SetBlockOtherPanels( true );
+			l_initData.ignoreSaveSystem = true;
+			l_initData.ignoreMeditationCheck = true;
+			l_initData.setDefaultState( '' );
+			l_initData.isBonusMeditationAvailable = true;
+			l_initData.fixedMenuName = 'MeditationClockMenu';
+			
+			theGame.RequestMenuWithBackground( 'MeditationClockMenu', 'CommonMenu', l_initData );
+		}
+		
+		super.OnPlayerActionStartFinished();
+	}
 	
 	public function IsInCombatAction_SpecialAttack() : bool
 	{
 		if ( IsInCombatAction() && ( GetCombatAction() == EBAT_SpecialAttack_Light || GetCombatAction() == EBAT_SpecialAttack_Heavy ) )
+			return true;
+		else
+			return false;
+	}
+	
+	public function IsInCombatAction_SpecialAttackHeavy() : bool
+	{
+		if ( IsInCombatAction() && GetCombatAction() == EBAT_SpecialAttack_Heavy )
 			return true;
 		else
 			return false;
@@ -5541,7 +7048,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		RemoveTimer( 'ProcessAttackTimer' );
 		RemoveTimer( 'AttackTimerEnd' );
 		CastSignAbort();
-		specialAttackCamera = false;	
+		specialAttackCamera = false;
 		this.OnPerformSpecialAttack( true, false );
 	}
 	
@@ -5563,6 +7070,17 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 
 		super.OnCombatActionFriendlyEnd();
+	}
+	
+	public function GetPowerStatValue( stat : ECharacterPowerStats, optional ablName : name, optional ignoreDeath : bool ) : SAbilityAttributeValue
+	{
+		var result :  SAbilityAttributeValue;
+		
+		
+		result = super.GetPowerStatValue( stat, ablName, ignoreDeath );
+		ApplyMutation10StatBoost( result );
+		
+		return result;
 	}
 	
 	
@@ -5751,8 +7269,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	protected function ShouldPauseHealthRegenOnHit() : bool
 	{
 		
-		if( (HasBuff(EET_Swallow) && GetPotionBuffLevel(EET_Swallow) >= 3) || HasBuff(EET_Runeword8) )
+		if( ( HasBuff( EET_Swallow ) && GetPotionBuffLevel( EET_Swallow ) >= 3 ) || HasBuff( EET_Runeword8 ) || HasBuff( EET_Mutation11Buff ) )
+		{
 			return false;
+		}
 			
 		return true;
 	}
@@ -5919,7 +7439,66 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
-	public function GetOffenseStatsList() : SPlayerOffenseStats
+	public final function CalculatedArmorStaminaRegenBonus() : float
+	{
+		var armorEq, glovesEq, pantsEq, bootsEq : bool;
+		var tempItem : SItemUniqueId;
+		var staminaRegenVal : float;
+		var armorRegenVal : SAbilityAttributeValue;
+		
+		if( HasAbility( 'Glyphword 2 _Stats', true ) )
+		{
+			armorEq = inv.GetItemEquippedOnSlot( EES_Armor, tempItem );
+			glovesEq = inv.GetItemEquippedOnSlot( EES_Gloves, tempItem );
+			pantsEq = inv.GetItemEquippedOnSlot( EES_Pants, tempItem );
+			bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, tempItem );
+			
+			if ( armorEq )
+				staminaRegenVal += 0.1;
+			if ( glovesEq )
+				staminaRegenVal += 0.02;
+			if ( pantsEq )
+				staminaRegenVal += 0.1;
+			if ( bootsEq )
+				staminaRegenVal += 0.03;
+			
+		}
+		else if( HasAbility( 'Glyphword 3 _Stats', true ) )
+		{
+			staminaRegenVal = 0;
+		}
+		else if( HasAbility( 'Glyphword 4 _Stats', true ) )
+		{
+			armorEq = inv.GetItemEquippedOnSlot( EES_Armor, tempItem );
+			glovesEq = inv.GetItemEquippedOnSlot( EES_Gloves, tempItem );
+			pantsEq = inv.GetItemEquippedOnSlot( EES_Pants, tempItem );
+			bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, tempItem );
+			
+			if ( armorEq )
+				staminaRegenVal -= 0.1;
+			if ( glovesEq )
+				staminaRegenVal -= 0.02;
+			if ( pantsEq )
+				staminaRegenVal -= 0.1;
+			if ( bootsEq )
+				staminaRegenVal -= 0.03;
+		}
+		// Triangle alt stamina
+		else if (!theGame.GetTModOptions().GetAltArmorStaminaMod())
+		{
+			armorRegenVal = GetAttributeValue('staminaRegen_armor_mod');
+			staminaRegenVal = armorRegenVal.valueMultiplicative;
+		}
+		else
+		{
+			staminaRegenVal = 0;
+		}
+		// Triangle end
+		
+		return staminaRegenVal;
+	}
+	
+	public function GetOffenseStatsList( optional hackMode : int ) : SPlayerOffenseStats
 	{
 		var playerOffenseStats:SPlayerOffenseStats;
 		var steelDmg, silverDmg, elementalSteel, elementalSilver : float;
@@ -5928,7 +7507,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var attackPower	: SAbilityAttributeValue;
 		var fastCritChance, fastCritDmg : float;
 		var strongCritChance, strongCritDmg : float;
-		var fastAP, strongAP : SAbilityAttributeValue;
+		var fastAP, strongAP, min, max : SAbilityAttributeValue;
 		var item, crossbow : SItemUniqueId;
 		var value : SAbilityAttributeValue;
 		var mutagen : CBaseGameplayEffect;
@@ -6116,10 +7695,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		playerOffenseStats.silverStrongDPS = playerOffenseStats.silverStrongDPS / 1.1;
 		
 		
-		playerOffenseStats.crossbowCritChance = CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
-		if (CanUseSkill(S_Sword_s07))
-			playerOffenseStats.crossbowCritChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s07, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s07);
-			
+		playerOffenseStats.crossbowCritChance = GetCriticalHitChance( false, false, NULL, MC_NotSet, true );
+	
 		
 		playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_PIERCING;
 		if (GetItemEquippedOnSlot(EES_Bolt, item))
@@ -6159,6 +7736,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{				
 				attackPower += GetSkillAttributeValue(S_Perk_02, PowerStatEnumToName(CPS_AttackPower), false, true);
 			}
+
+			
+			if( hackMode != 1 && ( IsMutationActive( EPMT_Mutation9 ) || hackMode == 2 ) )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation9', 'damage', min, max );
+				playerOffenseStats.crossbowSteelDmg += min.valueAdditive;
+				playerOffenseStats.crossbowSilverDmg += min.valueAdditive;
+			}		
+			
 			playerOffenseStats.crossbowSteelDmg = (playerOffenseStats.crossbowSteelDmg + attackPower.valueBase) * attackPower.valueMultiplicative + attackPower.valueAdditive;
 			playerOffenseStats.crossbowSilverDmg = (playerOffenseStats.crossbowSilverDmg + attackPower.valueBase) * attackPower.valueMultiplicative + attackPower.valueAdditive;
 		}
@@ -6174,11 +7760,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	public function GetTotalWeaponDamage(weaponId : SItemUniqueId, damageTypeName : name, crossbowId : SItemUniqueId) : float
 	{
-		var damage, durRatio, durMod : float;
-		var repairObjectBonus : SAbilityAttributeValue;
+		var damage, durRatio, durMod, itemMod : float;
+		var repairObjectBonus, min, max : SAbilityAttributeValue;
 		
 		durMod = 0;
 		damage = super.GetTotalWeaponDamage(weaponId, damageTypeName, crossbowId);
+		
+		
+		if( IsMutationActive( EPMT_Mutation9 ) && inv.IsItemBolt( weaponId ) && IsDamageTypeAnyPhysicalType( damageTypeName ) )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue('Mutation9', 'damage', min, max);
+			damage += min.valueAdditive;
+		}
 		
 		
 		if(IsPhysicalResistStat(GetResistForDamage(damageTypeName, false)))
@@ -6202,6 +7795,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 				durMod = 1;
 		}
 		
+		
+		if( damageTypeName == 'SilverDamage' && inv.ItemHasTag( weaponId, 'Aerondight' ) )
+		{
+			itemMod = inv.GetItemModifierFloat( weaponId, 'PermDamageBoost' );
+			if( itemMod > 0.f )
+			{
+				damage += itemMod;
+			}
+		}
+		
 		return damage * (durMod + repairObjectBonus.valueMultiplicative);
 	}
 	
@@ -6221,6 +7824,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		if(abilityManager && abilityManager.IsInitialized())
 			return ((W3PlayerAbilityManager)abilityManager).GetSkillLevel(s);
+			
+		return -1;
+	}
+	
+	public function GetSkillMaxLevel(s : ESkill) : int
+	{
+		if(abilityManager && abilityManager.IsInitialized())
+			return ((W3PlayerAbilityManager)abilityManager).GetSkillMaxLevel(s);
 			
 		return -1;
 	}
@@ -6283,9 +7894,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 				pam.RemoveTemporarySkill(tempLearnedSignSkills[i]);
 			}
 			
-			tempLearnedSignSkills.Clear();			
-			RemoveAbilityAll(SkillEnumToName(S_Sword_s19));
-		}		
+			tempLearnedSignSkills.Clear();						
+		}
+		RemoveAbilityAll(SkillEnumToName(S_Sword_s19));
 	}
 	
 	public function RemoveTemporarySkill(skill : SSimpleSkill) : bool
@@ -6335,6 +7946,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 	
 	public function GetLevel() : int											{return levelManager.GetLevel();}
+	public function GetMaxLevel() : int											{return levelManager.GetMaxLevel();}
 	public function GetTotalExpForNextLevel() : int								{return levelManager.GetTotalExpForNextLevel();}	
 	public function GetPointsTotal(type : ESpendablePointType) : int 			{return levelManager.GetPointsTotal(type);}
 	public function IsAutoLeveling() : bool										{return autoLevel;}
@@ -6357,12 +7969,125 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		return runewordInfusionType;
 	}
+	
+	
+	public function QuenImpulse( isAlternate : bool, signEntity : W3QuenEntity, source : string, optional forceSkillLevel : int )
+	{
+		var level, i, j : int;
+		var atts, damages : array<name>;
+		var ents : array<CGameplayEntity>;
+		var action : W3DamageAction;
+		var dm : CDefinitionsManagerAccessor;
+		var skillAbilityName : name;
+		var dmg : float;
+		var min, max : SAbilityAttributeValue;
+		var pos : Vector;
+		
+		if( forceSkillLevel > 0 )
+		{
+			level = forceSkillLevel;
+		}
+		else
+		{
+			level = GetSkillLevel(S_Magic_s13);
+		}
+		
+		dm = theGame.GetDefinitionsManager();
+		skillAbilityName = GetSkillAbilityName(S_Magic_s13);
+		
+		if(level >= 2)
+		{
+			
+			dm.GetAbilityAttributes(skillAbilityName, atts);
+			for(i=0; i<atts.Size(); i+=1)
+			{
+				if(IsDamageTypeNameValid(atts[i]))
+				{
+					damages.PushBack(atts[i]);
+				}
+			}
+		}
+		
+		
+		pos = signEntity.GetWorldPosition();
+		FindGameplayEntitiesInSphere(ents, pos, 3, 1000, '', FLAG_OnlyAliveActors + FLAG_ExcludeTarget + FLAG_Attitude_Hostile + FLAG_Attitude_Neutral + FLAG_TestLineOfSight, this);
+		
+		
+		for(i=0; i<ents.Size(); i+=1)
+		{
+			action = new W3DamageAction in theGame;
+			action.Initialize(this, ents[i], signEntity, source, EHRT_Heavy, CPS_SpellPower, false, false, true, false);
+			action.SetSignSkill(S_Magic_s13);
+			action.SetCannotReturnDamage(true);
+			action.SetProcessBuffsIfNoDamage(true);
+			
+			
+			if(!isAlternate && level >= 2)
+			{
+				action.SetHitEffect('hit_electric_quen');
+				action.SetHitEffect('hit_electric_quen', true);
+				action.SetHitEffect('hit_electric_quen', false, true);
+				action.SetHitEffect('hit_electric_quen', true, true);
+			}
+			
+			if(level >= 1)
+			{
+				action.AddEffectInfo(EET_Stagger);
+			}
+			if(level >= 2)
+			{
+				for(j=0; j<damages.Size(); j+=1)
+				{
+					dm.GetAbilityAttributeValue(skillAbilityName, damages[j], min, max);
+					dmg = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
+					if( IsSetBonusActive( EISB_Bear_2 ) )
+					{
+						dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Bear_2 ), 'quen_dmg_boost', min, max );
+						dmg *= 1 + min.valueMultiplicative;						
+					}					
+					action.AddDamage(damages[j], dmg);
+				}
+			}
+			if(level == 3)
+			{
+				action.AddEffectInfo(EET_KnockdownTypeApplicator);
+			}
+			
+			theGame.damageMgr.ProcessAction( action );
+			delete action;
+		}
+		
+		
+		if(isAlternate)
+		{
+			signEntity.PlayHitEffect('quen_impulse_explode', signEntity.GetWorldRotation());
+			signEntity.EraseFirstTimeStamp();
+						
+			
+			if(level >= 2)
+			{
+				if( !IsSetBonusActive( EISB_Bear_2 ) )
+				{
+					signEntity.PlayHitEffect('quen_electric_explode', signEntity.GetWorldRotation());
+				}
+				else
+				{
+					signEntity.PlayHitEffect('quen_electric_explode_bear_abl2', signEntity.GetWorldRotation());
+				}
+			}
+		}
+		else
+		{
+			signEntity.PlayEffect('lasting_shield_impulse');
+		}		
+	}
 
 	public function OnSignCastPerformed(signType : ESignType, isAlternate : bool)
 	{
 		var items : array<SItemUniqueId>;
 		var weaponEnt : CEntity;
 		var fxName : name;
+		var pos : Vector;
 		
 		super.OnSignCastPerformed(signType, isAlternate);
 		
@@ -6393,6 +8118,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 				fxName = 'runeword_yrden';
 				
 			weaponEnt.PlayEffect(fxName);
+		}
+		
+		
+		if( IsMutationActive( EPMT_Mutation6 ) && signType == ST_Aard && !isAlternate )
+		{
+			pos = GetWorldPosition() + GetWorldForward() * 2;
+			
+			theGame.GetSurfacePostFX().AddSurfacePostFXGroup( pos, 0.f, 3.f, 2.f, 5.f, 0 );
 		}
 
 		// Triangle spell sword
@@ -6445,13 +8178,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		return false;
 	}
 	
-	public function FinishQuen(skipVisuals : bool)
+	public function FinishQuen( skipVisuals : bool, optional forceNoBearSetBonus : bool )
 	{
 		var quen : W3QuenEntity;
 		
 		quen = (W3QuenEntity)GetSignEntity(ST_Quen);
 		if(quen)
-			quen.ForceFinishQuen(skipVisuals);
+			quen.ForceFinishQuen( skipVisuals, forceNoBearSetBonus );
 	}
 	
 	
@@ -6500,6 +8233,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			sp += GetAttributeValue('spell_power_axii');
 		}
 		
+		
+		ApplyMutation10StatBoost( sp );
+	
 		return sp;
 	}
 	
@@ -6533,6 +8269,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			return theGame.GetGwintManager().GwentMstrNameToInt( cardName );
 		}
+		else if(dm.ItemHasTag( cardName , 'GwintCardSke' ))
+		{
+			return theGame.GetGwintManager().GwentSkeNameToInt( cardName );
+		}	
 		else if(dm.ItemHasTag( cardName , 'GwintCardNeutral' ))
 		{
 			return theGame.GetGwintManager().GwentNeutralNameToInt( cardName );
@@ -6550,6 +8290,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var dm : CDefinitionsManagerAccessor;
 		var cardIndex, i : int;
 		var tut : STutorialMessage;
+		var gwintManager : CR4GwintManager;
 		
 		
 		
@@ -6618,9 +8359,52 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			CheckGwentTournamentDeck();
 		}
-		else
+		
+		if( dm.ItemHasTag( cardName, 'EP2Tournament' ) )
 		{
-			return false;
+			if ( dm.ItemHasTag( cardName, 'GT1' ) )
+			{
+				FactsAdd( "EP2Tournament", 1 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT2' ) )
+			{
+				FactsAdd( "EP2Tournament", 2 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT3' ) )
+			{
+				FactsAdd( "EP2Tournament", 3 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT4' ) )
+			{
+				FactsAdd( "EP2Tournament", 4 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT5' ) )
+			{
+				FactsAdd( "EP2Tournament", 5 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT6' ) )
+			{
+				FactsAdd( "EP2Tournament", 6 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT7' ) )
+			{
+				FactsAdd( "EP2Tournament", 7 );
+			}
+			
+			CheckEP2TournamentDeck();
+		}
+		
+		gwintManager = theGame.GetGwintManager();
+		if( !gwintManager.IsDeckUnlocked( GwintFaction_Skellige ) &&
+			gwintManager.HasCardsOfFactionInCollection( GwintFaction_Skellige, false ) )
+		{
+			gwintManager.UnlockDeck( GwintFaction_Skellige );
 		}
 		
 		return true;
@@ -6716,10 +8500,46 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			CheckGwentTournamentDeck();
 		}
-		
-		else
+			
+			
+		if( dm.ItemHasTag( cardName, 'EP2Tournament' ) )
 		{
-			return false;
+			if ( dm.ItemHasTag( cardName, 'GT1' ) )
+			{
+				FactsSubstract( "EP2Tournament", 1 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT2' ) )
+			{
+				FactsSubstract( "EP2Tournament", 2 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT3' ) )
+			{
+				FactsSubstract( "EP2Tournament", 3 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT4' ) )
+			{
+				FactsSubstract( "EP2Tournament", 4 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT5' ) )
+			{
+				FactsSubstract( "EP2Tournament", 5 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT6' ) )
+			{
+				FactsSubstract( "EP2Tournament", 6 );
+			}
+			
+			else if ( dm.ItemHasTag( cardName, 'GT7' ) )
+			{
+				FactsSubstract( "EP2Tournament", 7 );
+			}
+			
+			CheckEP2TournamentDeck();
 		}
 		
 		return true;
@@ -6781,6 +8601,70 @@ statemachine class W3PlayerWitcher extends CR4Player
 			else if ( FactsDoesExist( "GwentTournamentObjective4" ) )
 			{
 				FactsRemove( "GwentTournamentObjective4" );
+			}
+		}
+	}
+	
+	function CheckEP2TournamentDeck()
+	{
+		var gwentPower			: int;
+		var neededGwentPower	: int;
+		var checkBreakpoint		: int;
+		
+		neededGwentPower = 24;
+		
+		checkBreakpoint = neededGwentPower/5;
+		gwentPower = FactsQuerySum( "EP2Tournament" );
+		
+		if ( gwentPower >= neededGwentPower )
+		{
+			if( FactsQuerySum( "HasEP2TournamentDeck") == 0 )
+			{
+				FactsAdd( "HasEP2TournamentDeck", 1 );
+			}
+			
+		}
+		else
+		{
+			if( FactsDoesExist( "HasEP2TournamentDeck" ) )
+			{
+				FactsRemove( "HasEP2TournamentDeck" );
+			}
+			
+			if ( gwentPower >= checkBreakpoint )
+			{
+				FactsAdd( "EP2TournamentObjective1", 1 );
+			}
+			else if ( FactsDoesExist( "EP2TournamentObjective1" ) )
+			{
+				FactsRemove( "EP2TournamentObjective1" );
+			}
+			
+			if ( gwentPower >= checkBreakpoint*2 )
+			{
+				FactsAdd( "EP2TournamentObjective2", 1 );
+			}
+			else if ( FactsDoesExist( "EP2TournamentObjective2" ) )
+			{
+				FactsRemove( "EP2TournamentObjective2" );
+			}
+			
+			if ( gwentPower >= checkBreakpoint*3 )
+			{
+				FactsAdd( "EP2TournamentObjective3", 1 );
+			}
+			else if ( FactsDoesExist( "EP2TournamentObjective3" ) )
+			{
+				FactsRemove( "EP2TournamentObjective3" );
+			}
+			
+			if ( gwentPower >= checkBreakpoint*4 )
+			{
+				FactsAdd( "EP2TournamentObjective4", 1 );
+			}
+			else if ( FactsDoesExist( "EP2TournamentObjective4" ) )
+			{
+				FactsRemove( "EP2TournamentObjective4" );
 			}
 		}
 	}
@@ -6858,21 +8742,27 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 	
 	
-	public function Meditate()
+	public function Meditate() : bool
 	{
 		var medState 			: W3PlayerWitcherStateMeditation;
+		var stateName 			: name;
 	
-		if (!CanMeditate() || GetCurrentStateName() == 'Meditation' || GetCurrentStateName() == 'MeditationWaiting')
-			return;
+		stateName = GetCurrentStateName();
+	
+		
+		if (!CanMeditate()  || stateName == 'MeditationWaiting' )
+			return false;
 	
 		GotoState('Meditation');
 		medState = (W3PlayerWitcherStateMeditation)GetState('Meditation');		
 		medState.SetMeditationPointHeading(GetHeading());
+		
+		return true;
 	}
 	
 	
 	public final function MeditationRestoring(simulatedTime : float)
-	{
+	{			
 		
 		if ( theGame.GetDifficultyMode() != EDM_Hard && theGame.GetDifficultyMode() != EDM_Hardcore ) 
 		{
@@ -6888,6 +8778,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		SimulateBuffTimePassing(simulatedTime);
+		
+		
+		ApplyWitcherHouseBuffs();
 	}
 	
 	var clockMenu : CR4MeditationClockMenu;
@@ -6982,6 +8875,39 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		runeword10TriggerredOnFinisher = false;
 		runeword12TriggerredOnFinisher = false;
+	}
+	
+	public function ApplyWitcherHouseBuffs()
+	{
+		var l_bed			: W3WitcherBed;
+		
+		if( FactsQuerySum( "PlayerInsideInnerWitcherHouse" ) > 0 )
+		{
+			l_bed = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );
+			
+			if( l_bed.GetWasUsed() )
+			{
+				if( l_bed.GetBedLevel() != 0 )
+				{
+					AddEffectDefault( EET_WellRested, this, "Bed Buff" );
+				}
+
+				if( FactsQuerySum( "StablesExists" ) )
+				{
+					AddEffectDefault( EET_HorseStableBuff, this, "Stables" );
+				}
+				
+				if( l_bed.GetWereItemsRefilled() )
+				{
+					theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_common_alchemy_table_buff_applied" ),, true );
+					l_bed.SetWereItemsRefilled( false );
+				}
+				
+				AddEffectDefault( EET_BookshelfBuff, this, "Bookshelf" );
+				
+				Heal( GetStatMax( BCS_Vitality ) );
+			}
+		}
 	}
 	
 	
@@ -7086,7 +9012,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 
 
-		abs = GetAbilities(false);
+		GetCharacterStats().GetAbilities(abs, false);
 		for(i=0; i<abs.Size(); i+=1)
 			RemoveAbility(abs[i]);
 
@@ -7105,10 +9031,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		delete levelManager;
 		levelManager = new W3LevelManager in this;			
 		levelManager.Initialize();
-		levelManager.PostInit(this, false);		
+		levelManager.PostInit(this, false, true);		
 
 		// Triangle re-level
-		levelManager.AddPoints(EExperiencePoint, totalExp, false, true);
+		levelManager.AddPoints(EExperiencePoint, totalExp, false);
 		DisplayHudMessage("Re-add points from places of power with addSkillPoints(# of points)");
 		/*
 		// Triangle re-level and re-point
@@ -7136,6 +9062,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 		abilityManager.PostInit();
 	}
 	
+	function Debug_BearSetBonusQuenSkills()
+	{
+		var skills	: array<ESkill>;
+		var i, slot	: int;
+		
+		skills.PushBack(S_Magic_s04);
+		skills.PushBack(S_Magic_s14);
+		
+		for(i=0; i<skills.Size(); i+=1)
+		{				
+			
+			if(GetSkillLevel(skills[i]) == 0)
+			{
+				AddSkill(skills[i]);
+			}
+			
+			slot = GetFreeSkillSlot();
+			
+			
+			EquipSkill(skills[i], slot);
+		}
+	}
+	
 	final function Debug_HAX_UnlockSkillSlot(slotIndex : int) : bool
 	{
 		if(abilityManager && abilityManager.IsInitialized())
@@ -7147,9 +9096,64 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	public function GetLevelupAbility( id : int) : name
 	{
-		return levelupAbilities[ id ];
-	}
-	
+		switch(id)
+		{
+			case 1: return 'Lvl1';
+			case 2: return 'Lvl2';
+			case 3: return 'Lvl3';
+			case 4: return 'Lvl4';
+			case 5: return 'Lvl5';
+			case 6: return 'Lvl6';
+			case 7: return 'Lvl7';
+			case 8: return 'Lvl8';
+			case 9: return 'Lvl9';
+			case 10: return 'Lvl10';
+			case 11: return 'Lvl11';
+			case 12: return 'Lvl12';
+			case 13: return 'Lvl13';
+			case 14: return 'Lvl14';
+			case 15: return 'Lvl15';
+			case 16: return 'Lvl16';
+			case 17: return 'Lvl17';
+			case 18: return 'Lvl18';
+			case 19: return 'Lvl19';
+			case 20: return 'Lvl20';
+			case 21: return 'Lvl21';
+			case 22: return 'Lvl22';
+			case 23: return 'Lvl23';
+			case 24: return 'Lvl24';
+			case 25: return 'Lvl25';
+			case 26: return 'Lvl26';
+			case 27: return 'Lvl27';
+			case 28: return 'Lvl28';
+			case 29: return 'Lvl29';
+			case 30: return 'Lvl30';
+			case 31: return 'Lvl31';
+			case 32: return 'Lvl32';
+			case 33: return 'Lvl33';
+			case 34: return 'Lvl34';
+			case 35: return 'Lvl35';
+			case 36: return 'Lvl36';
+			case 37: return 'Lvl37';
+			case 38: return 'Lvl38';
+			case 39: return 'Lvl39';
+			case 40: return 'Lvl40';
+			case 41: return 'Lvl41';
+			case 42: return 'Lvl42';
+			case 43: return 'Lvl43';
+			case 44: return 'Lvl44';
+			case 45: return 'Lvl45';
+			case 46: return 'Lvl46';
+			case 47: return 'Lvl47';
+			case 48: return 'Lvl48';
+			case 49: return 'Lvl49';
+			case 50: return 'Lvl50';
+		
+			default: return '';
+		}
+		
+		return '';
+	}	
 	
 	public function CanSprint( speed : float ) : bool
 	{
@@ -7174,6 +9178,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		return true;
+	}
+	
+	public function ManageSleeping()
+	{
+		thePlayer.RemoveBuffImmunity_AllCritical( 'Bed' );
+		thePlayer.RemoveBuffImmunity_AllNegative( 'Bed' );
+
+		thePlayer.PlayerStopAction( PEA_GoToSleep );
 	}
 	
 	
@@ -7202,6 +9214,65 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	final function PerformParryCheck( parryInfo : SParryInfo ) : bool
+	{
+		if( super.PerformParryCheck( parryInfo ) )
+		{
+			GainAdrenalineFromPerk21( 'parry' );
+			return true;
+		}
+		return false;
+	}	
+	
+	protected final function PerformCounterCheck( parryInfo: SParryInfo ) : bool
+	{
+		var fistFightCheck, isInFistFight		: bool;
+		
+		if( super.PerformCounterCheck( parryInfo ) )
+		{
+			GainAdrenalineFromPerk21( 'counter' );
+			
+			isInFistFight = FistFightCheck( parryInfo.target, parryInfo.attacker, fistFightCheck );
+			
+			if( isInFistFight && fistFightCheck )
+			{
+				FactsAdd( "statistics_fist_fight_counter" );
+				AddTimer( 'FistFightCounterTimer', 0.5f, , , , true );
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	
+	public function GainAdrenalineFromPerk21( n : name )
+	{
+		var perkStats, perkTime : SAbilityAttributeValue;
+		var targets	: array<CActor>;
+		
+		targets = GetHostileEnemies();
+		
+		if( !CanUseSkill( S_Perk_21 ) || targets.Size() == 0 )
+		{
+			return;
+		}
+		
+		perkTime = GetSkillAttributeValue( S_Perk_21, 'perk21Time', false, false );
+		
+		if( theGame.GetEngineTimeAsSeconds() >= timeForPerk21 + perkTime.valueAdditive )
+		{
+			perkStats = GetSkillAttributeValue( S_Perk_21, n , false, false );
+			GainStat( BCS_Focus, perkStats.valueAdditive );
+			timeForPerk21 = theGame.GetEngineTimeAsSeconds();
+			
+			AddEffectDefault( EET_Perk21InternalCooldown, this, "Perk21", false );
+		}	
+	}
+	
+	timer function FistFightCounterTimer( dt : float, id : int )
+	{
+		FactsRemove( "statistics_fist_fight_counter" );
+	}
 	
 	public final function IsSignBlocked(signType : ESignType) : bool
 	{
@@ -7307,6 +9378,480 @@ statemachine class W3PlayerWitcher extends CR4Player
 			EquipItem(ids[0]);
 	}
 	
+	
+	
+	
+	
+	
+	public function IsSetBonusActive( bonus : EItemSetBonus ) : bool
+	{
+		switch(bonus)
+		{
+			case EISB_Lynx_1:			return amountOfSetPiecesEquipped[ EIST_Lynx ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			case EISB_Lynx_2:			return amountOfSetPiecesEquipped[ EIST_Lynx ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS;
+			case EISB_Gryphon_1:		return amountOfSetPiecesEquipped[ EIST_Gryphon ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			case EISB_Gryphon_2:		return amountOfSetPiecesEquipped[ EIST_Gryphon ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS;
+			case EISB_Bear_1:			return amountOfSetPiecesEquipped[ EIST_Bear ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			case EISB_Bear_2:			return amountOfSetPiecesEquipped[ EIST_Bear ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS;
+			case EISB_Wolf_1:			return amountOfSetPiecesEquipped[ EIST_Wolf ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			case EISB_Wolf_2:			return amountOfSetPiecesEquipped[ EIST_Wolf ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS;
+			case EISB_RedWolf_1:		return amountOfSetPiecesEquipped[ EIST_RedWolf ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			case EISB_RedWolf_2:		return amountOfSetPiecesEquipped[ EIST_RedWolf ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS;
+			case EISB_Vampire:			return amountOfSetPiecesEquipped[ EIST_Vampire ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS;
+			default:					return false;
+		}
+	}
+	
+	public function GetSetPartsEquipped( setType : EItemSetType ) : int
+	{
+		return amountOfSetPiecesEquipped[ setType ];
+	}
+	
+	protected function UpdateItemSetBonuses( item : SItemUniqueId, increment : bool )
+	{
+		var setType : EItemSetType;
+		var tutorialStateSets : W3TutorialManagerUIHandlerStateSetItemsUnlocked;
+		var id : SItemUniqueId;
+					
+		if( !inv.IsIdValid( item ) || !inv.ItemHasTag(item, theGame.params.ITEM_SET_TAG_BONUS ) )  
+		{
+			
+			if( !IsSetBonusActive( EISB_Wolf_1 ) )
+			{
+				if( GetItemEquippedOnSlot( EES_SteelSword, id ) )
+				{
+					RemoveExtraOilsFromItem( id );
+				}
+				if( GetItemEquippedOnSlot( EES_SilverSword, id ) )
+				{
+					RemoveExtraOilsFromItem( id );
+				}
+			}
+		
+			return;
+		}
+		
+		setType = CheckSetType( item );
+		
+		if( increment )
+		{
+			amountOfSetPiecesEquipped[ setType ] += 1;
+			
+			if( amountOfSetPiecesEquipped[ setType ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS && ShouldProcessTutorial( 'TutorialSetBonusesUnlocked' ) && theGame.GetTutorialSystem().uiHandler && theGame.GetTutorialSystem().uiHandler.GetCurrentStateName() == 'SetItemsUnlocked' )
+			{
+				tutorialStateSets = ( W3TutorialManagerUIHandlerStateSetItemsUnlocked )theGame.GetTutorialSystem().uiHandler.GetCurrentState();
+				tutorialStateSets.OnSetBonusCompleted();
+			}
+		}
+		else
+		{
+			amountOfSetPiecesEquipped[ setType ] -= 1;
+		}
+		
+		
+		if( setType != EIST_Vampire && amountOfSetPiecesEquipped[ setType ] == theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS )
+		{
+			theGame.GetGamerProfile().AddAchievement( EA_ReadyToRoll );
+		}
+		
+		
+		if( !IsSetBonusActive( EISB_Wolf_1 ) )
+		{
+			if( GetItemEquippedOnSlot( EES_SteelSword, id ) )
+			{
+				RemoveExtraOilsFromItem( id );
+			}
+			if( GetItemEquippedOnSlot( EES_SilverSword, id ) )
+			{
+				RemoveExtraOilsFromItem( id );
+			}
+		}
+		
+		ManageActiveSetBonuses( setType );
+		
+		
+		ManageSetBonusesSoundbanks( setType );
+	}
+	
+	public function ManageActiveSetBonuses( setType : EItemSetType )
+	{
+		var l_i				: int;
+		
+		
+		if( setType == EIST_Lynx )
+		{
+			
+			if( HasBuff( EET_LynxSetBonus ) && !IsSetBonusActive( EISB_Lynx_1 ) )
+			{
+				RemoveBuff( EET_LynxSetBonus );
+			}
+		}
+		
+		else if( setType == EIST_Gryphon )
+		{
+			
+			if( !IsSetBonusActive( EISB_Gryphon_1 ) )
+			{
+				RemoveBuff( EET_GryphonSetBonus );
+			}
+			
+			if( IsSetBonusActive( EISB_Gryphon_2 ) && !HasBuff( EET_GryphonSetBonusYrden ) )
+			{
+				for( l_i = 0 ; l_i < yrdenEntities.Size() ; l_i += 1 )
+				{
+					if( yrdenEntities[ l_i ].GetIsPlayerInside() && !yrdenEntities[ l_i ].IsAlternateCast() )
+					{
+						AddEffectDefault( EET_GryphonSetBonusYrden, this, "GryphonSetBonusYrden" );
+						break;
+					}
+				}
+			}
+			else
+			{
+				RemoveBuff( EET_GryphonSetBonusYrden );
+			}
+		}
+	}
+	
+	public function CheckSetTypeByName( itemName : name ) : EItemSetType
+	{
+		var dm : CDefinitionsManagerAccessor;
+		
+		dm = theGame.GetDefinitionsManager();
+		
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_LYNX ) )
+		{
+			return EIST_Lynx;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_GRYPHON ) )
+		{
+			return EIST_Gryphon;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_BEAR ) )
+		{
+			return EIST_Bear;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_WOLF ) )
+		{
+			return EIST_Wolf;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_RED_WOLF ) )
+		{
+			return EIST_RedWolf;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_VAMPIRE ) )
+		{
+			return EIST_Vampire;
+		}
+		else
+		if( dm.ItemHasTag( itemName, theGame.params.ITEM_SET_TAG_VIPER ) )
+		{
+			return EIST_Viper;
+		}
+		else
+		{
+			return EIST_Undefined;
+		}
+	}
+	
+	public function CheckSetType( item : SItemUniqueId ) : EItemSetType
+	{
+		var stopLoop 	: bool;
+		var tags 		: array<name>;
+		var i 			: int;
+		var setType 	: EItemSetType;
+		
+		stopLoop = false;
+		
+		inv.GetItemTags( item, tags );
+		
+		
+		for( i=0; i<tags.Size(); i+=1 )
+		{
+			switch( tags[i] )
+			{
+				case theGame.params.ITEM_SET_TAG_LYNX:
+				case theGame.params.ITEM_SET_TAG_GRYPHON:
+				case theGame.params.ITEM_SET_TAG_BEAR:
+				case theGame.params.ITEM_SET_TAG_WOLF:
+				case theGame.params.ITEM_SET_TAG_RED_WOLF:
+				case theGame.params.ITEM_SET_TAG_VAMPIRE:
+				case theGame.params.ITEM_SET_TAG_VIPER:
+					setType = SetItemNameToType( tags[i] );
+					stopLoop = true;
+					break;
+			}		
+			if ( stopLoop )
+			{
+				break;
+			}
+		}
+		
+		return setType;
+	}
+	
+	public function GetSetBonusStatusByName( itemName : name, out desc1, desc2 : string, out isActive1, isActive2 : bool ) : EItemSetType
+	{
+		var setType : EItemSetType;
+		
+		if( theGame.GetDLCManager().IsEP2Enabled() )
+		{
+			setType = CheckSetTypeByName( itemName );
+			SetBonusStatusByType( setType, desc1, desc2, isActive1, isActive2 );
+			
+			return setType;		
+		}
+		else
+		{
+			return EIST_Undefined;
+		}
+	}
+	
+	public function GetSetBonusStatus( item : SItemUniqueId, out desc1, desc2 : string, out isActive1, isActive2 : bool ) : EItemSetType
+	{
+		var setType : EItemSetType;
+		
+		if( theGame.GetDLCManager().IsEP2Enabled() )
+		{
+			setType = CheckSetType( item );
+			SetBonusStatusByType( setType, desc1, desc2, isActive1, isActive2 );
+			
+			return setType;
+		}
+		else
+		{
+			return EIST_Undefined;
+		}
+	}
+	
+	private function SetBonusStatusByType(setType : EItemSetType, out desc1, desc2 : string, out isActive1, isActive2 : bool):void
+	{
+		var setBonus : EItemSetBonus;
+		
+		if( amountOfSetPiecesEquipped[ setType ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS )
+		{
+			isActive1 = true;			
+		}
+		
+		if( amountOfSetPiecesEquipped[ setType ] >= theGame.params.ITEMS_REQUIRED_FOR_MAJOR_SET_BONUS )
+		{
+			isActive2 = true;
+		}
+		
+		setBonus = ItemSetTypeToItemSetBonus( setType, 1 );
+		desc1 = GetSetBonusTooltipDescription( setBonus );
+		
+		setBonus = ItemSetTypeToItemSetBonus( setType, 2 );
+		desc2 = GetSetBonusTooltipDescription( setBonus );
+	}
+	
+	public function ItemSetTypeToItemSetBonus( setType : EItemSetType, nr : int ) : EItemSetBonus
+	{
+		var setBonus : EItemSetBonus;
+	
+		if( nr == 1 )
+		{
+			switch( setType )
+			{
+				case EIST_Lynx: 			setBonus = EISB_Lynx_1;		break;
+				case EIST_Gryphon: 			setBonus = EISB_Gryphon_1;	break;
+				case EIST_Bear: 			setBonus = EISB_Bear_1;		break;
+				case EIST_Wolf: 			setBonus = EISB_Wolf_1;		break;
+				case EIST_RedWolf: 			setBonus = EISB_RedWolf_1;	break;
+				case EIST_Vampire:			setBonus = EISB_Vampire;	break;
+			}
+		}
+		else
+		{
+			switch( setType )
+			{
+				case EIST_Lynx: 			setBonus = EISB_Lynx_2;		break;
+				case EIST_Gryphon: 			setBonus = EISB_Gryphon_2;	break;
+				case EIST_Bear: 			setBonus = EISB_Bear_2;		break;
+				case EIST_Wolf: 			setBonus = EISB_Wolf_2;		break;
+				case EIST_RedWolf: 			setBonus = EISB_RedWolf_2;	break;
+				case EIST_Vampire:			setBonus = EISB_Undefined;	break;
+			}
+		} 
+	
+		return setBonus;
+	}
+	
+	public function GetSetBonusTooltipDescription( bonus : EItemSetBonus ) : string
+	{
+		var finalString : string;
+		var arrString	: array<string>;
+		var dm			: CDefinitionsManagerAccessor;
+		var min, max 	: SAbilityAttributeValue;
+		var tempString	: string;
+		
+		switch( bonus )
+		{
+			case EISB_Lynx_1:			tempString = "skill_desc_lynx_set_ability1"; break;
+			case EISB_Lynx_2:			tempString = "skill_desc_lynx_set_ability2"; break;
+			case EISB_Gryphon_1:		tempString = "skill_desc_gryphon_set_ability1"; break;
+			case EISB_Gryphon_2:		tempString = "skill_desc_gryphon_set_ability2"; break;
+			case EISB_Bear_1:			tempString = "skill_desc_bear_set_ability1"; break;
+			case EISB_Bear_2:			tempString = "skill_desc_bear_set_ability2"; break;
+			case EISB_Wolf_1:			tempString = "skill_desc_wolf_set_ability2"; break;
+			case EISB_Wolf_2:			tempString = "skill_desc_wolf_set_ability1"; break;
+			case EISB_RedWolf_1:		tempString = "skill_desc_red_wolf_set_ability1"; break;
+			case EISB_RedWolf_2:		tempString = "skill_desc_red_wolf_set_ability2"; break;
+			case EISB_Vampire:			tempString = "skill_desc_vampire_set_ability1"; break;
+			default:					tempString = ""; break;
+		}
+		
+		dm = theGame.GetDefinitionsManager();
+		
+		switch( bonus )
+		{
+		case EISB_Lynx_1:
+			dm.GetAbilityAttributeValue( 'LynxSetBonusEffect', 'duration', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			dm.GetAbilityAttributeValue( 'LynxSetBonusEffect', 'lynx_dmg_boost', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive * 100 ) ); 
+			arrString.PushBack( FloatToString( min.valueAdditive * 100 * amountOfSetPiecesEquipped[ EIST_Lynx ] ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_Lynx_2:
+			dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Lynx_2 ), 'lynx_2_dmg_boost', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive * 100 ) );
+			
+			dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Lynx_2 ), 'lynx_2_adrenaline_cost', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_Gryphon_1:
+			dm.GetAbilityAttributeValue( 'GryphonSetBonusEffect', 'duration', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString ); 
+			break;		
+		case EISB_Gryphon_2:
+			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'trigger_scale', min, max );
+			arrString.PushBack( FloatToString( ( min.valueAdditive - 1 )* 100) );
+			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'staminaRegen', min, max );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100) );
+			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'spell_power', min, max );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100) );
+			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'gryphon_set_bns_dmg_reduction', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive * 100) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_Bear_1:
+			dm.GetAbilityAttributeValue( 'setBonusAbilityBear_1', 'quen_reapply_chance', min, max );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100 ) );
+			
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100 * amountOfSetPiecesEquipped[ EIST_Bear ] ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_Bear_2:
+			dm.GetAbilityAttributeValue( 'setBonusAbilityBear_2', 'quen_dmg_boost', min, max );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100 ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_RedWolf_2:
+			dm.GetAbilityAttributeValue( 'setBonusAbilityRedWolf_2', 'amount', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		case EISB_Vampire:
+			dm.GetAbilityAttributeValue( 'setBonusAbilityVampire', 'life_percent', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			arrString.PushBack( FloatToString( min.valueAdditive * amountOfSetPiecesEquipped[ EIST_Vampire ] ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
+			break;
+		default:
+			finalString = GetLocStringByKeyExtWithParams( tempString );
+		}
+		
+		return finalString;
+	}
+	
+	public function ManageSetBonusesSoundbanks( setType : EItemSetType )
+	{
+		if( amountOfSetPiecesEquipped[ setType ] >= theGame.params.ITEMS_REQUIRED_FOR_MINOR_SET_BONUS )
+		{
+			switch( setType )
+			{
+				case EIST_Lynx:
+					LoadSetBonusSoundBank( "ep2_setbonus_lynx.bnk" );
+					break;
+				case EIST_Gryphon:
+					LoadSetBonusSoundBank( "ep2_setbonus_gryphon.bnk" );
+					break;
+				case EIST_Bear:
+					LoadSetBonusSoundBank( "ep2_setbonus_bear.bnk" );
+					break;
+			}
+		}
+		else
+		{
+			switch( setType )
+			{
+				case EIST_Lynx:
+					UnloadSetBonusSoundBank( "ep2_setbonus_lynx.bnk" );
+					break;
+				case EIST_Gryphon:
+					UnloadSetBonusSoundBank( "ep2_setbonus_gryphon.bnk" );
+					break;
+				case EIST_Bear:
+					UnloadSetBonusSoundBank( "ep2_setbonus_bear.bnk" );
+					break;
+			}
+		}
+	}
+	
+	public function VampiricSetAbilityRegeneration()
+	{
+		var healthMax		: float;
+		var healthToReg		: float;
+		
+		healthMax = GetStatMax( BCS_Vitality );
+		
+		healthToReg = ( amountOfSetPiecesEquipped[ EIST_Vampire ] * healthMax ) / 100;
+		
+		PlayEffect('drain_energy_caretaker_shovel');
+		GainStat( BCS_Vitality, healthToReg );
+	}
+	
+	private function LoadSetBonusSoundBank( bankName : string )
+	{
+		if( !theSound.SoundIsBankLoaded( bankName ) )
+		{
+			theSound.SoundLoadBank( bankName, true );
+		}
+	}
+	
+	private function UnloadSetBonusSoundBank( bankName : string )
+	{
+		if( theSound.SoundIsBankLoaded( bankName ) )
+		{
+			theSound.SoundUnloadBank( bankName );
+		}
+	}
+	
+	timer function BearSetBonusQuenReapply( dt : float, id : int )
+	{
+		var newQuen		: W3QuenEntity;
+		
+		newQuen = (W3QuenEntity)theGame.CreateEntity( GetSignTemplate( ST_Quen ), GetWorldPosition(), GetWorldRotation() );
+		newQuen.Init( signOwner, GetSignEntity( ST_Quen ), true );
+		newQuen.freeFromBearSetBonus = true;
+		newQuen.OnStarted();
+		newQuen.OnThrowing();
+		newQuen.OnEnded();
+		
+		m_quenReappliedCount += 1;
+		
+		RemoveTimer( 'BearSetBonusQuenReapply');
+	}
+	
 	public final function StandaloneEp1_1()
 	{
 		var i, inc, quantityLow, randLow, quantityMedium, randMedium, quantityHigh, randHigh, startingMoney : int;
@@ -7354,14 +9899,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 		inv.AddAnItem('Greater mutagen blue', 2);
 		
 		
-		startingMoney = 20000;
+		startingMoney = 40000;
 		if(GetMoney() > startingMoney)
 		{
 			RemoveMoney(GetMoney() - startingMoney);
 		}
 		else
 		{
-			AddMoney( 20000 - GetMoney() );
+			AddMoney( 40000 - GetMoney() );
 		}
 		
 		
@@ -7801,14 +10346,581 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		theGame.GetJournalManager().ForceUntrackingQuestForEP1Savegame();
 	}
-		function Debug_FocusBoyFocusGain()
+	
+	final function Debug_FocusBoyFocusGain()
 	{
 		var focusGain : float;
-		focusGain = FactsQuerySum("debug_fact_focus_boy") ;
-		GainStat(BCS_Focus, focusGain );
+		
+		focusGain = FactsQuerySum( "debug_fact_focus_boy" ) ;
+		GainStat( BCS_Focus, focusGain );
+	}
+	
+	public final function StandaloneEp2_1()
+	{
+		var i, inc, quantityLow, randLow, quantityMedium, randMedium, quantityHigh, randHigh, startingMoney : int;
+		var pam : W3PlayerAbilityManager;
+		var ids : array<SItemUniqueId>;
+		var STARTING_LEVEL : int;
+		
+		FactsAdd( "StandAloneEP2", 1 );
+		
+		
+		inv.RemoveAllItems();
+		
+		
+		inv.AddAnItem( 'Illusion Medallion', 1, true, true, false );
+		inv.AddAnItem( 'q103_safe_conduct', 1, true, true, false );
+		
+		
+		theGame.GetGamerProfile().ClearAllAchievementsForEP2();
+		
+		
+		levelManager.Hack_EP2StandaloneLevelShrink( 35 );
+		
+		
+		levelManager.ResetCharacterDev();
+		pam = ( W3PlayerAbilityManager )abilityManager;
+		if( pam )
+		{
+			pam.ResetCharacterDev();
+		}
+		levelManager.SetFreeSkillPoints( levelManager.GetLevel() - 1 + 11 );	
+		
+		
+		inv.AddAnItem( 'Mutagen red', 4 );
+		inv.AddAnItem( 'Mutagen green', 4 );
+		inv.AddAnItem( 'Mutagen blue', 4 );
+		inv.AddAnItem( 'Lesser mutagen red', 2 );
+		inv.AddAnItem( 'Lesser mutagen green', 2 );
+		inv.AddAnItem( 'Lesser mutagen blue', 2 );
+		inv.AddAnItem( 'Greater mutagen red', 2 );
+		inv.AddAnItem( 'Greater mutagen green', 2 );
+		inv.AddAnItem( 'Greater mutagen blue', 2 );
+		
+		
+		startingMoney = 20000;
+		if( GetMoney() > startingMoney )
+		{
+			RemoveMoney( GetMoney() - startingMoney );
+		}
+		else
+		{
+			AddMoney( 20000 - GetMoney() );
+		}
+		
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Armor' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Boots' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Gloves' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Pants' );
+		EquipItem( ids[0] );
+		
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Steel Sword' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'EP2 Standalone Starting Silver Sword' );
+		EquipItem( ids[0] );
+		
+		
+		inv.AddAnItem( 'Torch', 1, true, true, false );
+		
+		
+		quantityLow = 1;
+		randLow = 3;
+		quantityMedium = 4;
+		randMedium = 4;
+		quantityHigh = 8;
+		randHigh = 6;
+		
+		inv.AddAnItem( 'Alghoul bone marrow',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Amethyst dust',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Arachas eyes',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Arachas venom',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Basilisk hide',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Basilisk venom',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Bear pelt',quantityHigh+RandRange( randHigh ) );
+		inv.AddAnItem( 'Berserker pelt',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Coal',quantityHigh+RandRange( randHigh ) );
+		inv.AddAnItem( 'Cotton',quantityHigh+RandRange( randHigh ) );
+
+
+		inv.AddAnItem( 'Deer hide',quantityHigh+RandRange( randHigh ) );
+		inv.AddAnItem( 'Diamond dust',quantityLow+RandRange( randLow ) );
+
+		inv.AddAnItem( 'Drowned dead tongue',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Drowner brain',quantityMedium+RandRange( randMedium ) );
+
+
+
+		inv.AddAnItem( 'Endriag chitin plates',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Endriag embryo',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Ghoul blood',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Goat hide',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Hag teeth',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Hardened leather',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Hardened timber',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Harpy feathers',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Horse hide',quantityLow+RandRange( randLow ) );
+
+
+
+
+
+
+		inv.AddAnItem( 'Necrophage skin',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Nekker blood',quantityHigh+RandRange( randHigh ) );
+		inv.AddAnItem( 'Nekker heart',quantityMedium+RandRange( randMedium ) );
+
+		inv.AddAnItem( 'Phosphorescent crystal',quantityLow+RandRange( randLow ) );
+		inv.AddAnItem( 'Pig hide',quantityMedium+RandRange( randMedium ) );
+
+		inv.AddAnItem( 'Rabbit pelt',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Rotfiend blood',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Sapphire dust',quantityLow+RandRange( randLow ) );
+
+
+
+		inv.AddAnItem( 'Specter dust',quantityMedium+RandRange( randMedium ) );
+
+
+
+
+
+
+
+		inv.AddAnItem( 'Water essence',quantityMedium+RandRange( randMedium ) );
+		inv.AddAnItem( 'Wolf liver',quantityHigh+RandRange( randHigh ) );
+		inv.AddAnItem( 'Wolf pelt',quantityMedium+RandRange( randMedium ) );
+		
+		inv.AddAnItem( 'Alcohest', 5 );
+		inv.AddAnItem( 'Dwarven spirit', 5 );
+	
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'Crossbow 5' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'Blunt Bolt', 100 );
+		EquipItem( ids[0] );
+		inv.AddAnItem( 'Broadhead Bolt', 100 );
+		inv.AddAnItem( 'Split Bolt', 100 );
+		
+		
+		RemoveAllAlchemyRecipes();
+		RemoveAllCraftingSchematics();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		AddAlchemyRecipe( 'Recipe for Petris Philtre 2' );
+		AddAlchemyRecipe( 'Recipe for Swallow 1' );
+		AddAlchemyRecipe( 'Recipe for Tawny Owl 1' );
+		
+		AddAlchemyRecipe( 'Recipe for White Gull 1' );
+		
+		
+		
+		
+		
+		AddAlchemyRecipe( 'Recipe for Beast Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Cursed Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Hanged Man Venom 1' );
+		AddAlchemyRecipe( 'Recipe for Hybrid Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Insectoid Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Magicals Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Necrophage Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Specter Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Vampire Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Draconide Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Ogre Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Relic Oil 1' );
+		AddAlchemyRecipe( 'Recipe for Beast Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Cursed Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Hanged Man Venom 2' );
+		AddAlchemyRecipe( 'Recipe for Hybrid Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Insectoid Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Magicals Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Necrophage Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Specter Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Vampire Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Draconide Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Ogre Oil 2' );
+		AddAlchemyRecipe( 'Recipe for Relic Oil 2' );
+		
+		
+		AddAlchemyRecipe( 'Recipe for Dancing Star 1' );
+		
+		AddAlchemyRecipe( 'Recipe for Dwimeritum Bomb 1' );
+		
+		AddAlchemyRecipe( 'Recipe for Grapeshot 1' );
+		AddAlchemyRecipe( 'Recipe for Samum 1' );
+		
+		AddAlchemyRecipe( 'Recipe for White Frost 1' );
+		
+		
+		
+		AddAlchemyRecipe( 'Recipe for Dwarven spirit 1' );
+		AddAlchemyRecipe( 'Recipe for Alcohest 1' );
+		AddAlchemyRecipe( 'Recipe for White Gull 1' );
+		
+		
+		AddStartingSchematics();
+		
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'Swallow 2' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'Thunderbolt 2' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'Tawny Owl 2' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		
+		ids = inv.AddAnItem( 'Grapeshot 2' );
+		EquipItem( ids[0] );
+		ids.Clear();
+		ids = inv.AddAnItem( 'Samum 2' );
+		EquipItem( ids[0] );
+		
+		inv.AddAnItem( 'Dwimeritum Bomb 1' );
+		inv.AddAnItem( 'Dragons Dream 1' );
+		inv.AddAnItem( 'Silver Dust Bomb 1' );
+		inv.AddAnItem( 'White Frost 2' );
+		inv.AddAnItem( 'Devils Puffball 2' );
+		inv.AddAnItem( 'Dancing Star 2' );
+		inv.AddAnItem( 'Beast Oil 1' );
+		inv.AddAnItem( 'Cursed Oil 1' );
+		inv.AddAnItem( 'Hanged Man Venom 2' );
+		inv.AddAnItem( 'Hybrid Oil 2' );
+		inv.AddAnItem( 'Insectoid Oil 2' );
+		inv.AddAnItem( 'Magicals Oil 1' );
+		inv.AddAnItem( 'Necrophage Oil 2' );
+		inv.AddAnItem( 'Ogre Oil 1' );
+		inv.AddAnItem( 'Specter Oil 1' );
+		inv.AddAnItem( 'Vampire Oil 2' );
+		inv.AddAnItem( 'Draconide Oil 2' );
+		inv.AddAnItem( 'Relic Oil 1' );
+		inv.AddAnItem( 'Black Blood 1' );
+		inv.AddAnItem( 'Blizzard 1' );
+		inv.AddAnItem( 'Cat 2' );
+		inv.AddAnItem( 'Full Moon 1' );
+		inv.AddAnItem( 'Golden Oriole 1' );
+		inv.AddAnItem( 'Killer Whale 1' );
+		inv.AddAnItem( 'Maribor Forest 1' );
+		inv.AddAnItem( 'Petris Philtre 2' );
+		inv.AddAnItem( 'White Gull 1', 3 );
+		inv.AddAnItem( 'White Honey 2' );
+		inv.AddAnItem( 'White Raffards Decoction 1' );
+		
+		
+		inv.AddAnItem( 'Mutagen 17' );	
+		inv.AddAnItem( 'Mutagen 19' );	
+		inv.AddAnItem( 'Mutagen 27' );	
+		inv.AddAnItem( 'Mutagen 26' );	
+		
+		
+		inv.AddAnItem( 'weapon_repair_kit_1', 5 );
+		inv.AddAnItem( 'weapon_repair_kit_2', 3 );
+		inv.AddAnItem( 'armor_repair_kit_1', 5 );
+		inv.AddAnItem( 'armor_repair_kit_2', 3 );
+		
+		
+		quantityMedium = 2;
+		quantityLow = 1;
+		inv.AddAnItem( 'Rune stribog lesser', quantityMedium );
+		inv.AddAnItem( 'Rune stribog', quantityLow );
+		inv.AddAnItem( 'Rune dazhbog lesser', quantityMedium );
+		inv.AddAnItem( 'Rune dazhbog', quantityLow );
+		inv.AddAnItem( 'Rune devana lesser', quantityMedium );
+		inv.AddAnItem( 'Rune devana', quantityLow );
+		inv.AddAnItem( 'Rune zoria lesser', quantityMedium );
+		inv.AddAnItem( 'Rune zoria', quantityLow );
+		inv.AddAnItem( 'Rune morana lesser', quantityMedium );
+		inv.AddAnItem( 'Rune morana', quantityLow );
+		inv.AddAnItem( 'Rune triglav lesser', quantityMedium );
+		inv.AddAnItem( 'Rune triglav', quantityLow );
+		inv.AddAnItem( 'Rune svarog lesser', quantityMedium );
+		inv.AddAnItem( 'Rune svarog', quantityLow );
+		inv.AddAnItem( 'Rune veles lesser', quantityMedium );
+		inv.AddAnItem( 'Rune veles', quantityLow );
+		inv.AddAnItem( 'Rune perun lesser', quantityMedium );
+		inv.AddAnItem( 'Rune perun', quantityLow );
+		inv.AddAnItem( 'Rune elemental lesser', quantityMedium );
+		inv.AddAnItem( 'Rune elemental', quantityLow );
+		
+		inv.AddAnItem( 'Glyph aard lesser', quantityMedium );
+		inv.AddAnItem( 'Glyph aard', quantityLow );
+		inv.AddAnItem( 'Glyph axii lesser', quantityMedium );
+		inv.AddAnItem( 'Glyph axii', quantityLow );
+		inv.AddAnItem( 'Glyph igni lesser', quantityMedium );
+		inv.AddAnItem( 'Glyph igni', quantityLow );
+		inv.AddAnItem( 'Glyph quen lesser', quantityMedium );
+		inv.AddAnItem( 'Glyph quen', quantityLow );
+		inv.AddAnItem( 'Glyph yrden lesser', quantityMedium );
+		inv.AddAnItem( 'Glyph yrden', quantityLow );
+		
+		
+		StandaloneEp2_2();
+	}
+	
+	public final function StandaloneEp2_2()
+	{
+		var horseId : SItemUniqueId;
+		var ids : array<SItemUniqueId>;
+		var ents : array< CJournalBase >;
+		var i : int;
+		var manager : CWitcherJournalManager;
+		
+		
+		inv.AddAnItem( 'Cows milk', 20 );
+		ids.Clear();
+		ids = inv.AddAnItem( 'Dumpling', 44 );
+		EquipItem( ids[0] );
+		
+		
+		inv.AddAnItem( 'Clearing Potion', 2, true, false, false );
+		
+		
+		GetHorseManager().RemoveAllItems();
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'Horse Bag 2' );
+		horseId = GetHorseManager( ).MoveItemToHorse( ids[0] );
+		GetHorseManager().EquipItem( horseId );
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'Horse Blinder 2' );
+		horseId = GetHorseManager().MoveItemToHorse( ids[0] );
+		GetHorseManager().EquipItem( horseId );
+		
+		ids.Clear();
+		ids = inv.AddAnItem( 'Horse Saddle 2' );
+		horseId = GetHorseManager().MoveItemToHorse( ids[0] );
+		GetHorseManager().EquipItem( horseId );
+		
+		manager = theGame.GetJournalManager();
+
+		
+		manager.GetActivatedOfType( 'CJournalCreature', ents );
+		for(i=0; i<ents.Size(); i+=1)
+		{
+			manager.ActivateEntry( ents[i], JS_Inactive, false, true );
+		}
+		
+		
+		ents.Clear();
+		manager.GetActivatedOfType( 'CJournalCharacter', ents );
+		for(i=0; i<ents.Size(); i+=1)
+		{
+			manager.ActivateEntry( ents[i], JS_Inactive, false, true );
+		}
+		
+		
+		ents.Clear();
+		manager.GetActivatedOfType( 'CJournalQuest', ents );
+		for(i=0; i<ents.Size(); i+=1)
+		{
+			
+			if( StrStartsWith( ents[i].baseName, "q60" ) )
+				continue;
+				
+			manager.ActivateEntry( ents[i], JS_Inactive, false, true );
+		}
+		
+		
+		manager.ActivateEntryByScriptTag( 'TutorialAard', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialAdrenaline', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialAxii', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialAxiiDialog', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCamera', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCamera_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCiriBlink', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCiriCharge', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCiriStamina', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialCounter', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialDialogClose', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialFallingRoll', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialFocus', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialFocusClues', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialFocusClues', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseRoad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSpeed0', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSpeed0_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSpeed1', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSpeed2', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSummon', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialHorseSummon_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialIgni', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalAlternateSings', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalBoatDamage', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalBoatMount', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalBuffs', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalCharDevLeveling', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalCharDevSkills', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalCrafting', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalCrossbow', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDialogGwint', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDialogShop', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDive', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDodge', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDodge_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDrawWeapon', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDrawWeapon_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalDurability', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalExplorations', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalExplorations_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalFastTravel', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalFocusRedObjects', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalGasClouds', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalHeavyAttacks', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalHorse', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalHorseStamina', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalJump', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalLightAttacks', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalLightAttacks_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMeditation', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMeditation_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMonsterThreatLevels', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMovement', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMovement_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMutagenIngredient', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalMutagenPotion', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalOils', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalPetards', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalPotions', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalPotions_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalQuestArea', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalRadial', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalRifts', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalRun', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalShopDescription', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalSignCast', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalSignCast_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalSpecialAttacks', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJournalStaminaExploration', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialJumpHang', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialLadder', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialLadderMove', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialLadderMove_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialObjectiveSwitching', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialOxygen', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialParry', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialPOIUncovered', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialQuen', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialRoll', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialRoll_pad', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialSpeedPairing', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialSprint', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialStaminaSigns', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialStealing', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialSwimmingSpeed', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialTimedChoiceDialog', JS_Active );
+		manager.ActivateEntryByScriptTag( 'TutorialYrden', JS_Active );
+		
+		inv.AddAnItem( 'Geralt Shirt', 1 );
+		inv.AddAnItem( 'Thread', 13 );
+		inv.AddAnItem( 'String', 9 );
+		inv.AddAnItem( 'Linen', 4 );
+		inv.AddAnItem( 'Silk', 6 );
+		inv.AddAnItem( 'Nigredo', 3 );
+		inv.AddAnItem( 'Albedo', 1 );
+		inv.AddAnItem( 'Rubedo', 1 );
+		inv.AddAnItem( 'Rebis', 1 );
+		inv.AddAnItem( 'Dog tallow', 4 );
+		inv.AddAnItem( 'Lunar shards', 3 );
+		inv.AddAnItem( 'Quicksilver solution', 5 );
+		inv.AddAnItem( 'Aether', 1 );
+		inv.AddAnItem( 'Optima mater', 3 );
+		inv.AddAnItem( 'Fifth essence', 2 );
+		inv.AddAnItem( 'Hardened timber', 6 );
+		inv.AddAnItem( 'Fur square', 1 );
+		inv.AddAnItem( 'Leather straps', 11 ); 
+		inv.AddAnItem( 'Leather squares', 6 ); 
+		inv.AddAnItem( 'Leather', 3 ); 
+		inv.AddAnItem( 'Hardened leather', 14 ); 
+		inv.AddAnItem( 'Chitin scale', 8 ); 
+		inv.AddAnItem( 'Draconide leather', 5 ); 
+		inv.AddAnItem( 'Infused draconide leather', 0 );
+		inv.AddAnItem( 'Steel ingot', 5 );
+		inv.AddAnItem( 'Dark iron ore', 2 );
+		inv.AddAnItem( 'Dark iron ingot', 3 );
+		inv.AddAnItem( 'Dark iron plate', 1 );
+		inv.AddAnItem( 'Dark steel ingot', 10 );
+		inv.AddAnItem( 'Dark steel plate', 6 );
+		inv.AddAnItem( 'Silver ore', 2 );
+		inv.AddAnItem( 'Silver ingot', 6 );
+		inv.AddAnItem( 'Meteorite ore', 3 );
+		inv.AddAnItem( 'Meteorite ingot', 3 );
+		inv.AddAnItem( 'Meteorite plate', 2 );
+		inv.AddAnItem( 'Meteorite silver ingot', 6 );
+		inv.AddAnItem( 'Meteorite silver plate', 5 );
+		inv.AddAnItem( 'Orichalcum ingot', 0 );
+		inv.AddAnItem( 'Orichalcum plate', 1 );
+		inv.AddAnItem( 'Dwimeryte ingot', 6 );
+		inv.AddAnItem( 'Dwimeryte plate', 5 );
+		inv.AddAnItem( 'Dwimeryte enriched ingot', 0 );
+		inv.AddAnItem( 'Dwimeryte enriched plate', 0 );
+		inv.AddAnItem( 'Emerald dust', 0 );
+		inv.AddAnItem( 'Ruby dust', 4 );
+		inv.AddAnItem( 'Ruby', 2 );
+		inv.AddAnItem( 'Ruby flawless', 1 );
+		inv.AddAnItem( 'Sapphire dust', 0 );
+		inv.AddAnItem( 'Sapphire', 0 );
+		inv.AddAnItem( 'Monstrous brain', 8 );
+		inv.AddAnItem( 'Monstrous blood', 14 );
+		inv.AddAnItem( 'Monstrous bone', 9 );
+		inv.AddAnItem( 'Monstrous claw', 14 );
+		inv.AddAnItem( 'Monstrous dust', 9 );
+		inv.AddAnItem( 'Monstrous ear', 5 );
+		inv.AddAnItem( 'Monstrous egg', 1 );
+		inv.AddAnItem( 'Monstrous eye', 10 );
+		inv.AddAnItem( 'Monstrous essence', 7 );
+		inv.AddAnItem( 'Monstrous feather', 8 );
+		inv.AddAnItem( 'Monstrous hair', 12 );
+		inv.AddAnItem( 'Monstrous heart', 7 );
+		inv.AddAnItem( 'Monstrous hide', 4 );
+		inv.AddAnItem( 'Monstrous liver', 5 );
+		inv.AddAnItem( 'Monstrous plate', 1 );
+		inv.AddAnItem( 'Monstrous saliva', 6 );
+		inv.AddAnItem( 'Monstrous stomach', 3 );
+		inv.AddAnItem( 'Monstrous tongue', 5 );
+		inv.AddAnItem( 'Monstrous tooth', 9 );
+		inv.AddAnItem( 'Venom extract', 0 );
+		inv.AddAnItem( 'Siren vocal cords', 1 );
+		
+		
+		SelectQuickslotItem( EES_RangedWeapon );
+		
+		
+		FactsAdd( 'kill_base_tutorials' );
+		
+		
+		theGame.GetTutorialSystem().RemoveAllQueuedTutorials();
+		
+		
+		FactsAdd( 'standalone_ep2' );
+		FactsRemove( "StandAloneEP2" );
+		
+		theGame.GetJournalManager().ForceUntrackingQuestForEP1Savegame();
 	}
 }
-	
+
 exec function fuqfep1()
 {
 	theGame.GetJournalManager().ForceUntrackingQuestForEP1Savegame();

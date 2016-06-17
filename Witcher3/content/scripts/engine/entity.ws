@@ -258,6 +258,7 @@ import class CEntity extends CNode
 	
 	import function GetComponentsCountByClassName( className : name ) : int;
 
+	import function GetAutoEffect() : name;
 	import function SetAutoEffect( effectName : name ) : bool; 
 	import function PlayEffect( effectName : name, optional target : CNode  ) : bool;	
 	import function PlayEffectOnBone( effectName : name, boneName : name, optional target : CNode ) : bool;
@@ -290,8 +291,20 @@ import class CEntity extends CNode
 		return false;
 	}
 	
+	public function DestroyEffectIfActive( effectName : name ) : bool
+	{
+		if( IsEffectActive(effectName, true) )
+		{
+			return DestroyEffect( effectName );
+		}
+		return false;
+	}
+	
 	
 	import function SoundEvent( eventName : string, optional boneName : name, optional isSlot : bool );
+
+	
+	import function TimedSoundEvent(duration : float, optional startEvent : string, optional stopEvent : string, optional shouldUpdateTimeParameter : bool, optional boneName : name);
 	
 	
 	import function SoundSwitch( swichGroupName : string, optional stateName : string, optional boneName : name, optional isSlot : bool );

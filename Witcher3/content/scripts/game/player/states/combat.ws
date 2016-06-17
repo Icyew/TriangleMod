@@ -332,6 +332,10 @@ state Combat in CR4Player extends ExtendedMovable
 			
 			
 		}
+		else if ( thePlayer.GetFlyingBossCamera() )
+		{
+			theGame.GetGameCamera().SetManualRotationVerTimeout( 99999 );
+		}
 		
 		if ( parent.IsThreatened() || parent.GetPlayerMode().GetForceCombatMode() )
 		{
@@ -355,7 +359,7 @@ state Combat in CR4Player extends ExtendedMovable
 		
 		
 		
-		if( parent.movementLockType == PMLT_NoRun )
+		if( parent.movementLockType == PMLT_NoRun && !GetWitcherPlayer().HasBuff( EET_Mutation11Immortal ) )
 		{			
 			if ( enemies.Size() == 1 )
 			{
@@ -375,7 +379,7 @@ state Combat in CR4Player extends ExtendedMovable
 		
 		buff = parent.GetCurrentlyAnimatedCS();
 		if ( ( ( parent.IsInCombatAction() || buff  ) && ( !parent.IsInCombat() || !( parent.moveTarget && parent.moveTarget.IsAlive() && parent.IsThreat( parent.moveTarget ) ) ) )
-				|| parent.GetPlayerCombatStance() == PCS_AlertFar )
+				|| ( parent.GetPlayerCombatStance() == PCS_AlertFar && !thePlayer.GetFlyingBossCamera() ) )
 			parent.UpdateCameraCombatActionButNotInCombat( moveData, dt );
 		
 		if ( !parent.IsInCombatAction() )
@@ -475,6 +479,13 @@ state Combat in CR4Player extends ExtendedMovable
 		var wasVisibleInCam 		: bool;
 		var moveTargetNPC			: CNewNPC;
 	
+		
+		
+		if( GetWitcherPlayer() && GetWitcherPlayer().HasBuff( EET_Mutation11Buff ) )
+		{
+			return;
+		}
+	
 		parent.findMoveTargetDistMin = 10.f;
 		moveTargetNPC = (CNewNPC)(parent.moveTarget);
 		if ( virtual_parent.GetPlayerCombatStance() == PCS_AlertNear || virtual_parent.GetPlayerCombatStance() == PCS_Guarded )
@@ -537,8 +548,8 @@ state Combat in CR4Player extends ExtendedMovable
 		}
 	
 		
-		
-		
+		if ( thePlayer.GetFlyingBossCamera() )
+			stance = PCS_AlertNear;
 		
 		if ( parent.IsGuarded() )
 			stance = PCS_Guarded;
@@ -644,8 +655,10 @@ state Combat in CR4Player extends ExtendedMovable
 	
 	event OnPreAttackEvent(animEventName : name, animEventType : EAnimationEventType, data : CPreAttackEventData, animInfo : SAnimationEventAnimInfo )
 	{
-		var res : bool;
-		var weaponEntity : CEntity;
+		var res				: bool;
+		var weaponEntity	: CItemEntity;
+		var aerondight		: W3Effect_Aerondight;
+		var weaponId		: SItemUniqueId;
 		
 		if(parent.HasAbility('Runeword 2 _Stats', true))
 		{
@@ -666,6 +679,19 @@ state Combat in CR4Player extends ExtendedMovable
 		{
 			weaponEntity = thePlayer.inv.GetItemEntityUnsafe(thePlayer.inv.GetItemFromSlot(data.weaponSlot));
 			weaponEntity.PlayEffectSingle('runeword1_fire_trail');
+		}
+		else if( parent.HasBuff( EET_Aerondight ) )
+		{
+			weaponId = thePlayer.inv.GetCurrentlyHeldSword();
+			if( thePlayer.inv.ItemHasTag( weaponId, 'Aerondight' ) )
+			{			
+				aerondight = (W3Effect_Aerondight)thePlayer.GetBuff( EET_Aerondight );
+				
+				if( aerondight.IsFullyCharged() )
+				{
+					weaponEntity.PlayEffectSingle( 'aerondight_special_trail' );
+				}
+			}
 		}
 		
 		res = virtual_parent.OnPreAttackEvent( animEventName, animEventType, data, animInfo );
@@ -740,6 +766,7 @@ state Combat in CR4Player extends ExtendedMovable
 		var playerToCamAngleDiff		: float;
 		
 		var targetCapsuleRadius 		: float;
+		var perkStats 					: SAbilityAttributeValue;
 		
 		
 		
@@ -919,6 +946,19 @@ state Combat in CR4Player extends ExtendedMovable
 				parent.DrainStamina(ESAT_Roll);
 			else
 				parent.DrainStamina(ESAT_Dodge);
+		}
+		
+		
+		if( parent.CanUseSkill(S_Perk_21) )
+		{
+			if( isRolling )
+			{
+				GetWitcherPlayer().GainAdrenalineFromPerk21( 'roll' );
+			}
+			else
+			{
+				GetWitcherPlayer().GainAdrenalineFromPerk21( 'dodge' );
+			}
 		}
 		
 		if ( dodgeDirection == PED_Forward )
@@ -1394,7 +1434,7 @@ state Combat in CR4Player extends ExtendedMovable
 			else
 				parent.SetBehaviorVariable( 'playerToTargetDistForOverlay', 50.f );
 			
-			aiStorageObject = actor.GetAIStorageObject('ReactionData');
+			aiStorageObject = actor.GetScriptStorageObject('ReactionData');
 			if ( virtual_parent.DisplayCannotAttackMessage( actor ) )
 			{
 				return false;
@@ -1726,8 +1766,8 @@ state Combat in CR4Player extends ExtendedMovable
 			if( playerAttackType == theGame.params.ATTACK_NAME_LIGHT )
 			{
 				if (npc)
-					npc.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack_Light );
-			
+					npc.SignalGameplayEventParamInt('Time2DodgeFast', (int)EDT_Attack_Light );
+				
 				if ( parent.GetCurrentStateName() == 'CombatFists' )
 				{
 					if ( parent.slideTarget )

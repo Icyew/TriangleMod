@@ -244,7 +244,7 @@ class CR4HudModuleMinimap2 extends CR4HudModuleBase
 	
 	
 	
-
+	
 	private function UpdateZoom()
 	{
 		var hud : CR4ScriptedHud;
@@ -509,7 +509,7 @@ class CR4HudModuleMinimap2 extends CR4HudModuleBase
 			}
 		}
 
-		if ( !thePlayer.IsCiri() && bDisplayDayTime )
+		if ( !thePlayer.IsCiri() && bDisplayDayTime && !thePlayer.GetWeatherDisplayDisabled() )
 		{
 			if ( m_gameHour != curGameHour)
 			{

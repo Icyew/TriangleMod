@@ -19,11 +19,9 @@ class W3Action_Attack extends W3DamageAction
 	private var attackAnimName : name;				
 	private var hitTime : float;					
 	private var weaponEntity : CItemEntity;			
-	private var isCriticalHit : bool;				
 	private var weaponSlot : name;					
 	private var boneIndex : int;					
 	private var soundAttackType : name;				
-	private var instantKill : bool;					
 	private var usedZeroStaminaPerk : bool;			
 	private var applyBuffsIfParried : bool;			
 		
@@ -55,7 +53,7 @@ class W3Action_Attack extends W3DamageAction
 		attackName = attName;
 		weaponId = weapId;
 		crossbowId = crossId;
-		canBeParried = canParry;
+		canBeParried = canParry && !attackr.HasAbility( 'UnblockableAttacks' );
 		canBeDodged = canDodge;
 		soundAttackType = 'empty';
 		boneIndex = -1;	
@@ -85,9 +83,7 @@ class W3Action_Attack extends W3DamageAction
 		soundAttackType = 'empty';
 		boneIndex = -1;
 		forceExplosionDismemberment = false;
-		weaponEntity = NULL;
-		isCriticalHit = false;
-		instantKill = false;
+		weaponEntity = NULL;		
 	}
 	
 	
@@ -117,6 +113,11 @@ class W3Action_Attack extends W3DamageAction
 			size = inv.GetItemBuffs(weaponId, buffs);
 			for( i = 0; i < size; i += 1 )
 				AddEffectInfo(buffs[i].effectType, , , buffs[i].effectAbilityName, ,buffs[i].applyChance);
+				
+			if( theGame.CanLog() && dmgTypes.Size() == 0 && buffs.Size() == 0 )
+			{
+				LogDMHits( "Weapon " + inv.GetItemName( weaponId ) + " has no damage and no buff stats defined - it will do nothing!" );
+			}
 		}
 	}
 	
@@ -184,21 +185,6 @@ class W3Action_Attack extends W3DamageAction
 		}
 	}
 	
-	public function GetHitEffect(optional isBack : bool, optional isParried : bool) : name
-	{	
-		var ret : name;
-		
-		ret = super.GetHitEffect(isBack, isParried);
-		
-		if(isCriticalHit && hitFX == ret)
-		{
-			ret = theGame.params.CRITICAL_HIT_FX;
-		}
-		
-		return ret;
-	}
-	
-	
 	function AddDamage( dmgType : name, dmgVal : float )
 	{		
 		if( theGame.GetDefinitionsManager().AbilityHasTag( attackName, theGame.params.ATTACK_NO_DAMAGE ) )
@@ -237,15 +223,11 @@ class W3Action_Attack extends W3DamageAction
 	public function SetHitTime(t : float)						{hitTime = t;}
 	public function GetHitTime() : float						{return hitTime;}	
 	public function SetWeaponEntity(e : CItemEntity)			{weaponEntity = e;}
-	public function GetWeaponEntity() : CItemEntity				{return weaponEntity;}
-	public function SetCriticalHit()							{isCriticalHit = true;}
-	public function IsCriticalHit() : bool						{return isCriticalHit;}
+	public function GetWeaponEntity() : CItemEntity				{return weaponEntity;}	
 	public function SetWeaponSlot(w : name)						{weaponSlot = w;}
 	public function GetWeaponSlot() : name						{return weaponSlot;}
 	public function SetSoundAttackType(s : name)				{soundAttackType = s;}
-	public function GetSoundAttackType() : name					{return soundAttackType;}
-	public function SetInstantKill()							{instantKill = true;}
-	public function GetInstantKill() : bool						{return instantKill;}
+	public function GetSoundAttackType() : name					{return soundAttackType;}	
 	public function UsedZeroStaminaPerk() : bool				{return usedZeroStaminaPerk;}
 	public function SetUsedZeroStaminaPerk()					{usedZeroStaminaPerk = true;}
 	public function ApplyBuffsIfParried() : bool				{return applyBuffsIfParried;}
@@ -284,8 +266,13 @@ class W3Action_Attack extends W3DamageAction
 		{
 			
 			theGame.GetMonsterParamsForActor( actorVictim, monsterCategory, temp, tmpBool, tmpBool, tmpBool);
-			actorAttacker.GetInventory().GetItemAbilities(weaponId, attributes);
-			result += actorAttacker.GetInventory().GetItemAttributeValue(weaponId, MonsterCategoryToAttackPowerBonus(monsterCategory) );
+			
+			
+			if( actorAttacker.GetInventory().ItemHasActiveOilApplied( weaponId, monsterCategory ) )
+			{
+				actorAttacker.GetInventory().GetItemAbilities(weaponId, attributes);
+				result += actorAttacker.GetInventory().GetItemAttributeValue(weaponId, MonsterCategoryToAttackPowerBonus(monsterCategory) );
+			}
 			
 			
 			playerAttacker = (CPlayer)actorAttacker;

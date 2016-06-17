@@ -23,6 +23,11 @@ quest function LaunchCreditsEP1()
 	theGame.GetGuiManager().RequestCreditsMenu(CreditsIndex_Ep1);
 }
 
+quest function LaunchCreditsEP2()
+{
+	theGame.GetGuiManager().RequestCreditsMenu(CreditsIndex_Ep2);
+}
+
 quest function MessageDialogPopup( locMessage : string )
 {
 	theGame.GetGuiManager().ShowUserDialog(UMID_QuestBlockMessage, "", locMessage, UDB_Ok);
@@ -277,7 +282,11 @@ enum EMapPinStatus
 	EMPS_Disabled
 }
 
-quest function SetMapPinStatus( type : EMapPinStatus, tag : name, set : bool )
+
+
+
+
+quest function SetMapPinStatus( type : EMapPinStatus, tag : name, set : bool, dontChangeIfKnown : bool, dontChangeIfDiscovered : bool )
 {
 	var i 			: int;
 	var mapManager 	: CCommonMapManager = theGame.GetCommonMapManager();
@@ -286,6 +295,22 @@ quest function SetMapPinStatus( type : EMapPinStatus, tag : name, set : bool )
 	{
 		return;
 	}
+	
+	if( dontChangeIfKnown )
+	{
+		if ( mapManager.IsEntityMapPinKnown( tag ) )
+		{
+			return;
+		}
+	}
+	
+	if( dontChangeIfDiscovered )
+	{
+		if ( mapManager.IsEntityMapPinDiscovered( tag ) )
+		{
+			return;
+		}
+	}	
 	
 	switch ( type )
 	{
@@ -296,6 +321,54 @@ quest function SetMapPinStatus( type : EMapPinStatus, tag : name, set : bool )
 			break;
 		case EMPS_Discovered:
 			mapManager.SetEntityMapPinDiscovered( tag, set );
+			break;
+		case EMPS_Disabled:
+			mapManager.SetEntityMapPinDisabled( tag, set );
+			break;
+	}
+}
+
+
+
+
+
+
+
+quest function SetMapPinStatusEx( type : EMapPinStatus, tag : name, set : bool, dontChangeIfKnown : bool, dontChangeIfDiscovered : bool )
+{
+	var i 			: int;
+	var mapManager 	: CCommonMapManager = theGame.GetCommonMapManager();
+	
+	if ( !mapManager )
+	{
+		return;
+	}
+	
+	if( dontChangeIfKnown )
+	{
+		if ( mapManager.IsEntityMapPinKnown( tag ) )
+		{
+			return;
+		}
+	}
+	
+	if( dontChangeIfDiscovered )
+	{
+		if ( mapManager.IsEntityMapPinDiscovered( tag ) )
+		{
+			return;
+		}
+	}	
+	
+	switch ( type )
+	{
+		case EMPS_Undefined:
+			break;
+		case EMPS_Known:
+			mapManager.SetEntityMapPinKnown( tag, set );
+			break;
+		case EMPS_Discovered:
+			mapManager.SetEntityMapPinDiscoveredScript( false, tag, set );
 			break;
 		case EMPS_Disabled:
 			mapManager.SetEntityMapPinDisabled( tag, set );
@@ -479,7 +552,6 @@ quest function AlwaysDisplayItemInfo( display : bool )
 latent quest function DisplayPortalConfirmationPopup( pauseGame : bool ) : bool
 {
 	var guiManager : CR4GuiManager;
-	var popupData : W3PortalConfirmationPopupData;
 	
 	guiManager = theGame.GetGuiManager();
 	guiManager.SetUsePortal( false, false );
@@ -491,6 +563,19 @@ latent quest function DisplayPortalConfirmationPopup( pauseGame : bool ) : bool
 	}
 	
 	return guiManager.GetUsePortal();
+}
+
+quest function DisplaySimplePopup( title : string, text : string, pauseGame : bool )
+{
+	var guiManager : CR4GuiManager;
+	
+	guiManager = theGame.GetGuiManager();
+	if ( !guiManager )
+	{
+		return;
+	}
+	
+	theGame.GetGuiManager().ShowUserDialog( UMID_NoFeedbackRequired, title, text, UDB_Ok );
 }
 
 quest function BankCollectBillOfExchangeQuest( baseBillPrice : int )
@@ -551,6 +636,22 @@ quest function BankCurrencyExchangeQuest( orensExchangeModifier : float, florens
 	inv.AddAnItem( 'Crowns', (int) sumValue, true, true );
 	
 
+}
+
+quest function FactBasedRewardQuest( baseRewardValue : int, factMultiplier : string )
+{
+    var 	   	   witcher : W3PlayerWitcher;
+	var 		   inv : CInventoryComponent;
+	var 		   finalReward : int;
+
+	witcher = GetWitcherPlayer();
+	inv = witcher.inv;
+	if( FactsQuerySum( factMultiplier ) )
+	{
+		finalReward = FactsQuerySum( factMultiplier ) * baseRewardValue;
+		thePlayer.DisplayItemRewardNotification( 'Crowns', finalReward );
+		inv.AddAnItem( 'Crowns', finalReward, true, true );
+	}
 }
 
 
@@ -1248,6 +1349,7 @@ quest function FocusSoundClueManager( tag: name, soundEffectType : EFocusModeSou
 	var entity		: CGameplayEntity;
 	var i, size 	: int;
 	var focusModeController : CFocusModeController;
+	var soundClue	: W3SavedSoundClue;
 	
 	if ( tag == '' )
 	{
@@ -1262,12 +1364,17 @@ quest function FocusSoundClueManager( tag: name, soundEffectType : EFocusModeSou
 		entity = (CGameplayEntity)nodes[i];		
 		if ( entity )
 		{
-			if (startEventOverride !='None' && stopEventOverride !='None')
+			if (startEventOverride !='None' || stopEventOverride !='None')
 			{
 				focusModeController = theGame.GetFocusModeController();
-				focusModeController.SetSoundClueEventNames(entity,startEventOverride,stopEventOverride);
+				focusModeController.SetSoundClueEventNames(entity,startEventOverride,stopEventOverride,soundEffectType);
 			}
 			entity.SetFocusModeSoundEffectType( soundEffectType );
+			soundClue = (W3SavedSoundClue)entity;
+			if ( soundClue )
+			{
+				soundClue.savedFocusModeSoundEffectType = soundEffectType;
+			}
 		}
 	}
 }
@@ -1357,11 +1464,14 @@ quest function FocusEffect( actionType : EFocusEffectActivationAction, effectNam
 	}
 }
 
-quest function FocusSetHighlight( tag : name, highlightType : EFocusModeVisibility )
+quest function FocusSetHighlight( tag : name, highlightType : EFocusModeVisibility, optional overrideCustomLogic : bool )
 {
 	var nodes			: array< CNode >;
 	var i, size 		: int;
 	var gameplayEntity 	: CGameplayEntity;
+	var container		: W3Container;
+	var poster			: W3SavedPoster;
+	var clue			: W3MonsterClue;
 
 	theGame.GetNodesByTag( tag, nodes );
 	
@@ -1372,6 +1482,25 @@ quest function FocusSetHighlight( tag : name, highlightType : EFocusModeVisibili
 		if ( gameplayEntity )
 		{
 			gameplayEntity.SetFocusModeVisibility( highlightType, true, true );
+			
+			if ( overrideCustomLogic )
+			{
+				container = (W3Container)gameplayEntity;
+				if ( container )
+				{
+					container.focusModeHighlight = highlightType;
+				}
+				poster = (W3SavedPoster)gameplayEntity;
+				if ( poster )
+				{
+					poster.savedFocusModeHighlight = highlightType;
+				}
+				clue = (W3MonsterClue)gameplayEntity;
+				if ( clue )
+				{
+					clue.OverrideVisibilityParams( highlightType );
+				}
+			}
 		}
 	}
 }
@@ -1379,15 +1508,15 @@ quest function FocusSetHighlight( tag : name, highlightType : EFocusModeVisibili
 
 
 
-quest function ChangeWeatherQuest( weatherName: name, blendTime: float, randomGen: bool )
+quest function ChangeWeatherQuest( weatherName: name, blendTime: float, randomGen: bool, questPause: bool )
 {
 	if( randomGen )
 	{
-		RequestRandomWeatherChange( blendTime );
+		RequestRandomWeatherChange( blendTime, questPause );
 	}
 	else
 	{
-		RequestWeatherChangeTo( weatherName, blendTime );
+		RequestWeatherChangeTo( weatherName, blendTime, questPause );
 	}
 }
 
@@ -1618,11 +1747,32 @@ quest function SoundEventQuest( eventName : string, saveBehavior : ESoundEventSa
 }
 
 
-quest function SoundEventOnActorQuest( actorTag : name, eventName : string )
+quest function SoundEventOnActorQuest( actorTag : name, eventName : string, oneRandomActor : bool, onlyIfAlive : bool )
 {
+	var nodes : array<CNode>;
 	var actor : CEntity;
+	var aliveActor : CActor;
 	
-	actor = ( CEntity ) theGame.GetNodeByTag( actorTag );
+	if( oneRandomActor )
+	{
+		theGame.GetNodesByTag( actorTag, nodes );
+		actor = ( CEntity ) nodes[ RandRange( nodes.Size(), 0) ];
+	}
+	else
+	{
+		actor = ( CEntity ) theGame.GetNodeByTag( actorTag );
+	}
+	
+	if( onlyIfAlive )
+	{
+		aliveActor = (CActor) actor;
+		
+		if( !aliveActor.IsAlive() )
+		{
+			return;
+		}
+	}
+	
 	actor.SoundEvent( eventName );
 }
 
@@ -1684,7 +1834,12 @@ quest function AddItemQuest( targetTag : name, itemName : name, quantity : int, 
 				{
 					LogQuest( "Quest function <<AddItemQuest>>: item name <<" + itemName + ">> is not a valid item name, skipping!");
 					skip = true;
-				}	
+				}
+				if(itemName == 'Bodkin Bolt' || itemName == 'Harpoon Bolt')
+				{
+					LogQuest( "Quest function <<AddItemQuest>>: cannot add Bodkin Bolts from Quests");
+					skip = true;
+				}
 				if(quantity < 0)
 				{
 					LogQuest( "Quest function <<AddItemQuest>>: quantity of " + quantity + "is not a valid value, skipping!");		
@@ -1716,7 +1871,12 @@ quest function AddItemQuest( targetTag : name, itemName : name, quantity : int, 
 					{
 						LogQuest( "Quest function <<AddItemQuest>>: item name <<" + items[i].itemName + ">> is not a valid item name, skipping!");
 						continue;
-					}	
+					}
+					if(items[i].itemName == 'Bodkin Bolt' || items[i].itemName == 'Harpoon Bolt')
+					{
+						LogQuest( "Quest function <<AddItemQuest>>: cannot add Bodkin Bolts from Quests");
+						continue;
+					}
 					if(items[i].quantity < 0)
 					{
 						LogQuest( "Quest function <<AddItemQuest>>: quantity of " + items[i].quantity + "is not a valid value, skipping!");		
@@ -1793,7 +1953,12 @@ quest function AddItemQuestExt( targetTag : name, items : array<SItemExt>, infor
 					{
 						LogQuest( "Quest function <<AddItemQuest>>: item name <<" + items[i].itemName.itemName + ">> is not a valid item name, skipping!");
 						continue;
-					}	
+					}
+					if(items[i].itemName.itemName == 'Bodkin Bolt' || items[i].itemName.itemName == 'Harpoon Bolt')
+					{
+						LogQuest( "Quest function <<AddItemQuest>>: cannot add Bodkin Bolts from Quests");
+						continue;
+					}
 					if(items[i].quantity < 0)
 					{
 						LogQuest( "Quest function <<AddItemQuest>>: quantity of " + items[i].quantity + "is not a valid value, skipping!");		
@@ -1830,6 +1995,119 @@ quest function AddItemQuestExt( targetTag : name, items : array<SItemExt>, infor
 		}
 	}
 }
+
+quest function EquipItemQuestByCategory( targetTag : name, category : name, unequip : bool, toHand : bool )
+{
+	var actors : array<CActor>;
+	var target : CActor;
+	var inv : CInventoryComponent;
+	var ids : array<SItemUniqueId>;
+	var a, i : int;
+	var playerWitcher : W3PlayerWitcher;
+	var itemID : SItemUniqueId;
+	
+
+	
+	if( targetTag == 'PLAYER' )
+	{
+		actors.PushBack( thePlayer );
+	}
+	else
+	{
+		theGame.GetActorsByTag( targetTag, actors );
+		if( actors.Size() <= 0 )
+		{
+			LogQuest( "EquipItemQuestByCategory: cannot find actor with tag <<" + targetTag + ">>. Aborting." );
+			return;
+		}
+	}
+	
+	
+	if( !IsNameValid( category ) )
+	{
+		LogQuest( "EquipItemQuestByCategory: category <<" + category + ">> is not valid. Aborting." );
+		return;
+	}
+	
+	for( a=0; a<actors.Size(); a+=1 )
+	{
+		target = actors[a];
+
+		inv = target.GetInventory();		
+		if( inv )
+		{
+			ids = inv.GetItemsByCategory( category );
+			
+			
+			itemID = GetInvalidUniqueId();
+			for( i=0; i<ids.Size(); i+=1 )
+			{
+				if( !inv.ItemHasTag( ids[i], 'Body' ) )
+				{
+					itemID = ids[i];
+					break;
+				}
+			}
+			
+			
+			
+			
+			
+			if( !inv.IsIdValid( itemID ) )
+			{
+				LogQuest( "EquipItemQuestByCategory: cannot (un)equip item with category(" + category + ") on <<" + target + ">>, cannot find any suitable item. Aborting function.");
+				return;
+			}
+			
+			
+			if( unequip )
+			{
+				target.UnequipItem( itemID );
+			}
+			else
+			{
+				playerWitcher = (W3PlayerWitcher)target;
+				
+				if( toHand && !inv.IsItemHeld( itemID ) )
+				{
+					if( playerWitcher )
+					{
+						if( !playerWitcher.IsItemEquipped( itemID ) )	
+						{
+							target.EquipItem( itemID, , true );
+						}
+					}
+					else
+					{
+						target.EquipItem( itemID, , true );
+					}
+				}
+				else if( !toHand && !inv.IsItemMounted( itemID ) )
+				{
+					if( playerWitcher )
+					{
+						if( !playerWitcher.IsItemEquipped( itemID ) )	
+						{
+							target.EquipItem( itemID );
+						}
+					}
+					else
+					{					
+						target.EquipItem( itemID );
+					}
+				}
+			}
+			
+			
+			ids.Clear();
+		}
+		else
+		{
+			LogQuest("EquipItemQuestByCategory: target actor <<" + target + ">> has no inventory component, cannot equip/unequip items. Function will continue.");
+		}
+	}
+}
+
 
 
 quest function EquipItemQuest( targetTag : name, itemName : name, itemCategory : name, itemTag : name, optional unequip : bool, optional toHand : bool )
@@ -2008,8 +2286,13 @@ quest function RemoveItemQuest( entityTag : name, item_name : name, item_categor
 				{
 					inv.RemoveItemByName(item_name, quantity);
 				}
-				else
+				else if( quantity == -1 )
 				{
+					inv.RemoveItemByName(item_name, quantity);
+					witcher.HorseRemoveItemByName(item_name, quantity);
+				}
+				else
+				{					
 					playerQuantity = inv.GetItemQuantityByName(item_name);
 					horseQuantity = witcher.GetHorseManager().GetInventoryComponent().GetItemQuantityByName(item_name);
 					
@@ -2032,6 +2315,11 @@ quest function RemoveItemQuest( entityTag : name, item_name : name, item_categor
 				if(entity != witcher)
 				{
 					inv.RemoveItemByCategory(item_category, quantity);
+				}
+				else if( quantity == -1 )
+				{
+					inv.RemoveItemByCategory(item_category, quantity);
+					witcher.HorseRemoveItemByCategory(item_category, quantity);
 				}
 				else
 				{
@@ -2057,6 +2345,11 @@ quest function RemoveItemQuest( entityTag : name, item_name : name, item_categor
 				if(entity != witcher)
 				{
 					inv.RemoveItemByTag(item_tag, quantity);
+				}
+				else if( quantity == -1 )
+				{
+					inv.RemoveItemByTag(item_tag, quantity);
+					witcher.HorseRemoveItemByTag(item_tag, quantity);
 				}
 				else
 				{
@@ -2271,6 +2564,27 @@ quest function SetPlayerAdrenaline(percents : int, relative : bool)
 	{
 		if(pts >= 0)
 			thePlayer.ForceSetStat(BCS_Focus, pts);
+	}
+}
+
+quest function SetPlayerToxicity(percents : int, points : float, relative : bool)
+{
+	if( points == 0 )
+	{
+		points = thePlayer.GetStatMax(BCS_Toxicity) * percents / 100;
+	}
+	
+	if(relative)
+	{
+		if(points > 0)
+			thePlayer.GainStat(BCS_Toxicity, points);
+		else if(points < 0)
+			thePlayer.DrainToxicity(-points);
+	}
+	else
+	{
+		if(points >= 0)
+			thePlayer.ForceSetStat(BCS_Toxicity, points);
 	}
 }
 
@@ -2592,6 +2906,20 @@ quest function ShowFastTravelLoadingScreen( fadeTime : float, enable : bool )
 }
 
 
+
+
+quest function SetLoadingScreenByCurrentLocation()
+{
+	var contextName : name;
+	var mapManager : CCommonMapManager;
+	
+	mapManager = theGame.GetCommonMapManager();
+	
+	contextName = mapManager.GetLocalisationNameFromAreaType( mapManager.GetCurrentJournalAreaByPosition( thePlayer.GetWorldPosition() ) );
+	theGame.SetSingleShotLoadingScreen( contextName );
+}
+
+
 quest function SwitchComponentStateQuest ( shouldBeEnabled : bool, objectTag : name, componentName : string)
 {
 	var entity    : array <CNode>;
@@ -2787,7 +3115,7 @@ quest function RememberPlayerEquipment()
 
 
 
-quest function UnequipPlayerItemsQuest(steelSword, silverSword, chestArmor, boots, gloves, pants, trophy, bombs, lures, mask, potions, quickslot, bolts, all, crossbow, equipItems, rememberEquipment : bool, excludedItems : array <SItemNameProperty>, excludeHair, secondaryWeapon : bool )
+quest function UnequipPlayerItemsQuest(steelSword, silverSword, chestArmor, boots, gloves, pants, trophy, bombs, lures, mask, potions, quickslot, bolts, all, crossbow, equipItems, rememberEquipment : bool, excludedItems : array <SItemNameProperty>, excludeHair, secondaryWeapon, forceRestore : bool )
 {
 	var player : W3PlayerWitcher;
 	var inv : CInventoryComponent;
@@ -2887,7 +3215,7 @@ quest function UnequipPlayerItemsQuest(steelSword, silverSword, chestArmor, boot
 						{
 							currentSlot = inv.GetSlotForItemId( items[i] );
 							
-							if ( !inv.GetItemEquippedOnSlot( currentSlot,  itemForSlot ) )
+							if ( !inv.GetItemEquippedOnSlot( currentSlot,  itemForSlot ) || forceRestore )
 							{
 								thePlayer.EquipItem ( items[i] );
 							}
@@ -2905,7 +3233,7 @@ quest function UnequipPlayerItemsQuest(steelSword, silverSword, chestArmor, boot
 					{
 						currentSlot = inv.GetSlotForItemId( items[i] );
 							
-						if ( !inv.GetItemEquippedOnSlot( currentSlot,  itemForSlot ) )
+						if ( !inv.GetItemEquippedOnSlot( currentSlot,  itemForSlot ) || forceRestore )
 						{
 							thePlayer.EquipItem ( items[i] );
 						}
@@ -2915,6 +3243,55 @@ quest function UnequipPlayerItemsQuest(steelSword, silverSword, chestArmor, boot
 		}
 	}
 }
+
+
+
+
+
+quest function DebugEnableShowFlag(showFlagName : EShowFlags, activate : bool)
+{	
+	DebugSetEShowFlag(showFlagName, activate);	
+}
+
+quest function DebugOverlayDisplay(overlayName : EEnvManagerModifier){
+	EnableDebugOverlayFilter(overlayName);
+}
+
+quest function DebugSetPostProcessState(postProcessName : EDebugPostProcess, activate : bool){
+	EnableDebugPostProcess(postProcessName, activate);
+	}
+
+quest function DebugDismemberNPC(npcTag : name)
+{
+	var actor	:	CActor;
+	var dismemberComp	:	CDismembermentComponent;
+	var allWounds	: array<name>;
+	var getWound	: name;
+	
+	actor = theGame.GetActorByTag(npcTag);
+	if(!actor){
+		return;
+	}else{
+		dismemberComp = (CDismembermentComponent)(actor.GetComponentByClassName('CDismembermentComponent'));
+	}
+	
+	if(!dismemberComp)
+	{
+		return;
+	}else{
+		
+		dismemberComp.GetWoundsNames(allWounds, WTF_All);
+	
+		if (allWounds.Size() > 0){
+			getWound = allWounds[RandRange(allWounds.Size())];
+		}
+	
+		actor.SetWound(getWound, true, true, true, true);
+	}
+}
+
+
+
 
 
 enum EQuestNPCStates
@@ -2949,17 +3326,17 @@ quest function ChangeNPCStateQuest(npcTag : name, npcState : EQuestNPCStates, ig
 	{
 		if( npcState == EQNS_Dead )
 		{
-			actors[i].Kill( ignoreImmortalityMode );			
+			actors[i].Kill( 'Quest', ignoreImmortalityMode );			
 		}
 		else if ( npcState == EQNS_DeadNoAgony )
 		{
 			((CNewNPC)actors[i]).DisableAgony();
-			actors[i].Kill( ignoreImmortalityMode );
+			actors[i].Kill( 'Quest', ignoreImmortalityMode );
 		}
 		else if ( npcState == EQNS_KnockedUnconscious )
 		{
 			actors[i].SetImmortalityMode(AIM_Unconscious, AIC_Default, true);
-			actors[i].Kill();	
+			actors[i].Kill( 'Quest' );	
 		}
 		else if(npcState == EQNS_Agony)
 		{
@@ -2970,7 +3347,7 @@ quest function ChangeNPCStateQuest(npcTag : name, npcState : EQuestNPCStates, ig
 			}
 			
 			actors[i].SignalGameplayEvent('ForceAgony');
-			actors[i].Kill( ignoreImmortalityMode );
+			actors[i].Kill( 'Quest', ignoreImmortalityMode );
 		}
 		else if(npcState == EQNS_Default)
 		{
@@ -2980,7 +3357,7 @@ quest function ChangeNPCStateQuest(npcTag : name, npcState : EQuestNPCStates, ig
 		else if(npcState == EQNS_DeadInstantRagdoll)
 		{
 			((CNewNPC)actors[i]).DisableAgony();
-			actors[i].Kill( ignoreImmortalityMode );
+			actors[i].Kill( 'Quest', ignoreImmortalityMode );
 			if ( actors[i].IsVulnerable() || ignoreImmortalityMode )
 				actors[i].SetKinematic(false);
 		}
@@ -3549,6 +3926,11 @@ quest function ChangeCombatStyleByTag( preferedCombatStyle : EBehaviorGraph, npc
 	for ( i=0 ; i < npcs.Size() ; i+=1 )
 	{
 		npcs[i].SignalGameplayEventParamInt('ChangePreferedCombatStyle',(int)preferedCombatStyle );
+		if ( preferedCombatStyle == EBG_Combat_Fists )
+		{
+			npcs[i].fistFightForcedFromQuest = true;
+			npcs[i].AddTimer('AddLevelBonuses', 1.0f, true, false, , true);
+		}
 	}
 }
 
@@ -3685,9 +4067,6 @@ quest function InstantMountNPC ( npcTag : name )
 	var actor 				: CActor;
 	var entities			: array<CEntity>;
 	var i 					: int;
-	var aiStorageHandler 	: CAIStorageHandler;
-	var riderData 			: CAIStorageRiderData;
-	
 	
 	theGame.GetEntitiesByTag( npcTag, entities );
 		
@@ -3706,8 +4085,6 @@ quest function InstantDismountNPC ( npcTag : name, dismountType : EDismountType 
 	var actor 				: CActor;
 	var entities			: array<CEntity>;
 	var i 					: int;
-	var aiStorageHandler 	: CAIStorageHandler;
-	var riderData 			: CAIStorageRiderData;
 	
 	if ( dismountType == 0 )
 		dismountType = DT_normal;
@@ -4283,7 +4660,7 @@ latent quest function TogglePhysicalDamageMechanismByTag( tag : name, toggle : b
 
 quest function KillPlayer(ignoreImmortalityMode : bool)
 {
-	thePlayer.Kill(ignoreImmortalityMode);
+	thePlayer.Kill( 'Quest', ignoreImmortalityMode);
 }
 
 quest function DrawableComponentVisiblityQuest( objectTag : name, componentName : name, on : bool )
@@ -5258,6 +5635,9 @@ enum EDM_MappinType
 	EDM_EP1QuestAvailableFromNonActor,
 	EDM_EP2QuestAvailable,
 	EDM_EP2QuestAvailableFromNonActor,
+	EDM_Torch,
+	EDM_HorseRaceTarget,
+	EDM_HorseRaceDummy,
 }
 
 
@@ -5324,7 +5704,16 @@ quest function EnableDynamicMappin( tag : name, optional enable : bool, optional
 		case EDM_EP2QuestAvailableFromNonActor:
 			commonMapManager.EnableDynamicMappin( tag, enable, 'QuestAvailableBaW' );
 			break;
-		
+		case EDM_Torch:
+			commonMapManager.EnableDynamicMappin( tag, enable, 'Torch' );
+			break;
+		case EDM_HorseRaceTarget:
+			commonMapManager.EnableDynamicMappin( tag, enable, 'HorseRaceTarget' );
+			break;
+		case EDM_HorseRaceDummy:
+			commonMapManager.EnableDynamicMappin( tag, enable, 'HorseRaceDummy' );
+			break;
+			
 		default:
 			break;
 		}
@@ -5537,6 +5926,7 @@ quest function PlayerSelectQuickslotItem(itemName : name, itemCategory : name, u
 	var witcher : W3PlayerWitcher;
 	var equipmentSlot : EEquipmentSlots;
 	var items : array<SItemUniqueId>;
+	var i : int;
 	
 	witcher = GetWitcherPlayer();
 	if(witcher && !((W3ReplacerCiri)thePlayer) )
@@ -5562,15 +5952,21 @@ quest function PlayerSelectQuickslotItem(itemName : name, itemCategory : name, u
 				
 				if( items.Size() > 0 )
 				{
-					equipmentSlot = witcher.GetItemSlotByItemName(thePlayer.inv.GetItemName(items[0]));
-					
-					if(equipmentSlot != EES_InvalidSlot)
+					for( i=0; i < items.Size(); i+=1 )
 					{
-						witcher.SelectQuickslotItem(equipmentSlot);
-					}
-					else
-					{
-						LogQuest("Quest function <<PlayerSelectQuickslot>>: item found for category <<" + itemCategory + ">> is not equipped on any slot - cannot select");
+						if( witcher.IsItemEquipped( items[i] ) )
+						{
+							equipmentSlot = witcher.GetItemSlotByItemName(thePlayer.inv.GetItemName(items[i]));
+							
+							if(equipmentSlot != EES_InvalidSlot)
+							{
+								witcher.SelectQuickslotItem(equipmentSlot);
+							}
+							else
+							{
+								LogQuest("Quest function <<PlayerSelectQuickslot>>: item found for category <<" + itemCategory + ">> is not equipped on any slot - cannot select");
+							}
+						}
 					}
 				}
 				
@@ -5737,6 +6133,95 @@ enum EGwentCardFaction
 	EGCF_Nilfgaard,
 	EGCF_Monsters,
 	EGCF_Scoiatael,
+	EGCG_Skellige
+}
+
+quest function IsGwentFactionPlayable( faction : EGwentCardFaction ) : bool
+{
+	var neutralCreatures : int;
+	var playerCollection : array<CollectionCard>;
+	var cardDefinitions : array<SCardDefinition>;
+	var currentDefinition : SCardDefinition;
+	var currentCollectionCard : CollectionCard;
+	var i : int;
+	var x : int;
+	var unitCardCount : int;
+	var maskResult : int;
+	
+	playerCollection = theGame.GetGwintManager().GetPlayerCollection();
+	cardDefinitions = theGame.GetGwintManager().GetCardDefs();
+	unitCardCount = 0;
+	
+	if (faction != EGCF_Neutral)
+	{
+		for (i = 0; i < playerCollection.Size(); i += 1)
+		{
+			currentCollectionCard = playerCollection[i];
+			
+			for (x = 0; x < cardDefinitions.Size(); x += 1)
+			{
+				currentDefinition = cardDefinitions[x];
+				if (currentDefinition.index == currentCollectionCard.cardID)
+				{
+					if ((int)currentDefinition.faction == (int)EGCF_Neutral || (int)currentDefinition.faction == (int)faction)
+					{
+						maskResult = currentDefinition.typeFlags & GwintType_Creature;
+						
+						if (maskResult == GwintType_Creature)
+						{
+							unitCardCount += currentCollectionCard.numCopies; 
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	return unitCardCount >= 22;
+}
+
+quest function UnlockSkelligeGwentDeck()
+{
+	var gwintManager: CR4GwintManager;
+	
+	if (!FactsDoesExist("skel_gwint_base_deck_given"))
+	{
+		gwintManager = theGame.GetGwintManager();
+		
+		FactsAdd("skel_gwint_base_deck_given");
+		
+		gwintManager.AddCardToCollection(22);
+		gwintManager.AddCardToCollection(501);
+		gwintManager.AddCardToCollection(505);
+		gwintManager.AddCardToCollection(506);
+		gwintManager.AddCardToCollection(507);
+		gwintManager.AddCardToCollection(508);
+		gwintManager.AddCardToCollection(509);
+		gwintManager.AddCardToCollection(510);
+		gwintManager.AddCardToCollection(511);
+		gwintManager.AddCardToCollection(513);
+		gwintManager.AddCardToCollection(515);
+		gwintManager.AddCardToCollection(517);
+		gwintManager.AddCardToCollection(517);
+		gwintManager.AddCardToCollection(517);
+		gwintManager.AddCardToCollection(518);
+		gwintManager.AddCardToCollection(519);
+		gwintManager.AddCardToCollection(520);
+		gwintManager.AddCardToCollection(520);
+		gwintManager.AddCardToCollection(521);
+		gwintManager.AddCardToCollection(521);
+		gwintManager.AddCardToCollection(522);
+		gwintManager.AddCardToCollection(522);
+		gwintManager.AddCardToCollection(523);
+		
+		
+		if( !gwintManager.IsDeckUnlocked( GwintFaction_Skellige ) &&
+			gwintManager.HasCardsOfFactionInCollection( GwintFaction_Skellige, false ) )
+		{
+			gwintManager.UnlockDeck( GwintFaction_Skellige );
+		}
+	}
 }
 
 quest function AddGwentCards( val : EGwentCardFaction )
@@ -5956,16 +6441,30 @@ quest function EnableFXManager( fxManagerTag : name, enable : bool )
 	}
 }
 
-quest function PlayVoicesetQuest( tag : name, voiceSet : string )
+quest function PlayVoicesetQuest( tag : name, voiceSet : string, oneRandomActor : bool )
 {
 	var actors : array<CActor>;
 	var i : int;
 	
 	theGame.GetActorsByTag( tag, actors );
 	
-	for( i = 0; i < actors.Size(); i += 1 )
+	
+	if( actors.Size() == 0 )
 	{
-		actors[i].PlayVoiceset( 100, voiceSet );
+		return;
+	}
+	
+	
+	if( oneRandomActor )
+	{
+		actors[ RandRange( actors.Size(), 0) ].PlayVoiceset( 100, voiceSet );
+	}
+	else
+	{
+		for( i = 0; i < actors.Size(); i += 1 )
+		{
+			actors[i].PlayVoiceset( 100, voiceSet );
+		}
 	}
 }
 
@@ -5993,12 +6492,12 @@ quest function Achievement_FinishedGame()
 		profile.AddAchievement(EA_FinishTheGameHard);
 }
 
-quest function SpawnAndAttachEntity( entTemplate : CEntityTemplate, attachToEntityTag : name, attachSlot : name )
+quest function SpawnAndAttachEntity( entTemplate : CEntityTemplate, attachToEntityTag : name, attachSlot : name, persistanceMode : EPersistanceMode, addedTags : array<name> )
 {
 	var ent : CEntity;
 	var parentEnt : CEntity;
 	
-	ent = theGame.CreateEntity( entTemplate, Vector(0.f,0.f,0.f) );
+	ent = theGame.CreateEntity(entTemplate, Vector(0.f,0.f,0.f), EulerAngles(0.0f, 0.0f, 0.0f), true, false, false, persistanceMode, addedTags );
 	parentEnt = theGame.GetEntityByTag( attachToEntityTag );
 	
 	ent.CreateAttachment( parentEnt, attachSlot );
@@ -6153,46 +6652,71 @@ quest function LaunchGwint()
 	theGame.RequestMenu( 'GwintGame' );
 }
 
-quest function QuestItemDisable( itemName : name , addQuestTag : bool )
+quest function QuestItemDisable( itemName : name , addQuestTag : bool, containerTag : name )
 {
-	var allItems : array<SItemUniqueId>;
-	var i : int;
-	var horseManInv : CInventoryComponent;
+	var allItems				: array<SItemUniqueId>;
+	var i 						: int;
+	var horseManInv, contInv	: CInventoryComponent;
+	var containers				: array<CEntity>;
+	var cont					: W3Container;
 	
 	
-	allItems = thePlayer.inv.GetItemsByName(itemName);
-	for(i=allItems.Size()-1; i >= 0; i-=1)
+	if( containerTag == '' )
 	{
-		if (addQuestTag)
+		allItems = thePlayer.inv.GetItemsByName( itemName );
+		
+		thePlayer.inv.ManageItemsTag( allItems, 'Quest', addQuestTag );
+		
+		
+		if( GetWitcherPlayer() )
 		{
-			thePlayer.inv.AddItemTag( allItems[i], 'Quest' );
-		}
-		else
-		{
-			thePlayer.inv.RemoveItemTag( allItems[i], 'Quest' );
+			horseManInv = GetWitcherPlayer().GetAssociatedInventory();
+			if( horseManInv )
+			{
+				allItems.Clear();
+				allItems = horseManInv.GetItemsByName( itemName );
+				horseManInv.ManageItemsTag( allItems, 'Quest', addQuestTag );
+			}
 		}
 	}
 	
-	
-	if(GetWitcherPlayer())
+	else
 	{
-		horseManInv = GetWitcherPlayer().GetAssociatedInventory();
-		if(horseManInv)
+		theGame.GetEntitiesByTag( containerTag, containers );
+		if( containers.Size() == 0 )
 		{
-			allItems.Clear();
-			allItems = horseManInv.GetItemsByName(itemName);
-			for(i=allItems.Size()-1; i >= 0; i-=1)
+			LogQuest( "QuestItemDisable - containers with given tag:" + containerTag + " don't exist." );
+		}
+		else
+		{
+			for( i = 0 ; i < containers.Size() ; i += 1 )
 			{
-				if (addQuestTag)
+				cont = (W3Container)containers[i];
+				contInv = cont.GetInventory();
+				if( !contInv )
 				{
-					horseManInv.AddItemTag( allItems[i], 'Quest' );
+					LogQuest( "QuestItemDisable - given container doesn't have any inventory component." );
 				}
 				else
 				{
-					horseManInv.RemoveItemTag( allItems[i], 'Quest' );
+					allItems = contInv.GetItemsByName( itemName );
+					if( allItems.Size() == 0 )
+					{
+						LogQuest( "QuestItemDisable - container with " + containerTag + " tag, doesn't have given item." );
+					}
+					else
+					{
+						contInv.ManageItemsTag( allItems, 'Quest', addQuestTag );
+						cont.RequestUpdateContainer();
+						
+						if( !cont.HasQuestItem() )
+						{
+							cont.StopQuestItemFx();
+						}
+					}
 				}
 			}
-		}
+		}	
 	}
 }
 
@@ -6801,7 +7325,7 @@ quest function KillWithoutAgony( killTag : name )
 
 	npc = theGame.GetNPCByTag( killTag );
 	npc.DisableAgony();
-	npc.Kill(true);
+	npc.Kill( 'Quest', true );
 }
 
 
@@ -6954,6 +7478,38 @@ quest function EnableProudWalk( enable : bool )
 	player.SetBehaviorVariable( 'proudWalk', (float)( player.proudWalk ) );
 }
 
+quest function EnableInjuredWalk( enable : bool )
+{
+	var player : CR4Player;
+
+	player = thePlayer;
+	player.injuredWalk = enable;
+	if ( enable )
+	{
+		player.SetBehaviorVariable( 'alternateWalk', 1.0f );
+	}
+	else
+	{
+		player.SetBehaviorVariable( 'alternateWalk', 0.0f );
+	}
+}
+
+quest function EnableTiedWalk( enable : bool )
+{
+	var player : CR4Player;
+
+	player = thePlayer;
+	player.tiedWalk = enable;
+	if ( enable )
+	{
+		player.SetBehaviorVariable( 'alternateWalk', 2.0f );
+	}
+	else
+	{
+		player.SetBehaviorVariable( 'alternateWalk', 0.0f );
+	}
+}
+
 quest function RecoverGeralt(dontUpdateUI : bool)
 {
 	thePlayer.inv.SingletonItemsRefillAmmoNoAlco(dontUpdateUI);
@@ -6962,8 +7518,12 @@ quest function RecoverGeralt(dontUpdateUI : bool)
 	if(GetWitcherPlayer())
 	{
 		thePlayer.ForceSetStat(BCS_Toxicity, 0.f);
-		GetWitcherPlayer().SetToxicityOffset(0.f);
 	}
+}
+
+quest function ApplyAlchemyTableBuff()
+{
+	thePlayer.inv.ManageSingletonItemsBonus();
 }
 
 quest function EnableTargetingOnActorsQ (actorsTag : name, isEnabled : bool )
@@ -7001,7 +7561,10 @@ quest function ForceManaualSaveQ ()
 	theGame.GetGuiManager().ShowUserDialog(UMID_ForceManualSaveWindow, title, message, UDB_OkCancel);
 }
 
-
+quest function ForceManaualSaveQ_Custom( title:  string, message : string )
+{
+	theGame.GetGuiManager().ShowUserDialog(UMID_ForceManualSaveWindow, title, message, UDB_OkCancel);
+}
 
 
 quest function SetHorseMountableByPlayerQ ( horseTag: name, isMountable : bool )
@@ -7128,6 +7691,7 @@ enum EHudTimeOutAction
 {
 	EHTOA_Start,
 	EHTOA_Stop,
+	EHTOA_Add,
 };
 
 quest function ManageHudTimeOut( action : EHudTimeOutAction, value : float )
@@ -7168,6 +7732,25 @@ quest function BoostPlayerLevel(toLevel : int)
 		for(i=curLvl;i<toLevel;i+=1)
 		{
 			lvlMng.AddPoints(EExperiencePoint, (lvlMng.GetTotalExpForNextLevel() - lvlMng.GetPointsTotal(EExperiencePoint)), false);
+		}	
+	}		
+}
+
+quest function BoostPlayerLevelEx(toLevel : int, notifyUI : bool )
+{
+	var curLvl, i	: int;
+	var lvlMng		: W3LevelManager;
+	
+	curLvl = thePlayer.GetLevel();
+	lvlMng = GetWitcherPlayer().levelManager;
+	
+	if(curLvl>=toLevel)
+		return;
+	else 
+	{	
+		for(i=curLvl;i<toLevel;i+=1)
+		{
+			lvlMng.AddPoints(EExperiencePoint, (lvlMng.GetTotalExpForNextLevel() - lvlMng.GetPointsTotal(EExperiencePoint)), notifyUI );
 		}	
 	}		
 }
@@ -7285,6 +7868,8 @@ quest function MarkEquippedItems(sourceName : name, allItems : bool, slots : arr
 	var items, horseItems : array<SItemUniqueId>;
 	var horseMan : W3HorseManager;
 	var slot : EEquipmentSlots;
+	var selectedQuickslotItem : SItemUniqueId;
+	var sel : SSelectedQuickslotItem;
 	
 	
 	if(!IsNameValid(sourceName))
@@ -7364,6 +7949,8 @@ quest function MarkEquippedItems(sourceName : name, allItems : bool, slots : arr
 		}
 	}
 	
+	selectedQuickslotItem = witcher.GetSelectedItemId();
+	
 	
 	for(i=0; i<items.Size(); i+=1)
 	{
@@ -7372,6 +7959,14 @@ quest function MarkEquippedItems(sourceName : name, allItems : bool, slots : arr
 			
 			slot = witcher.GetItemSlot(items[i]);
 			witcher.inv.SetItemModifierInt(items[i], sourceName, slot);
+			
+			
+			if( selectedQuickslotItem == items[i] )
+			{
+				sel.sourceName = sourceName;
+				sel.itemID = selectedQuickslotItem;
+				witcher.AddQuestMarkedSelectedQuickslotItem( sel );
+			}
 		}
 	}
 	
@@ -7387,7 +7982,7 @@ quest function ReequipMarkedItems(sourceName : name)
 	var i, j : int;
 	var items : array<SItemUniqueId>;
 	var witcher : W3PlayerWitcher;
-	var horseItem : SItemUniqueId;
+	var horseItem, selectedItemID : SItemUniqueId;
 	var tags : array<name>;
 	var slot : EEquipmentSlots;
 	var slotTag : name;
@@ -7430,30 +8025,58 @@ quest function ReequipMarkedItems(sourceName : name)
 			witcher.inv.SetItemModifierInt(items[i], sourceName, 0);
 		}
 	}
+	
+	
+	selectedItemID = witcher.GetQuestMarkedSelectedQuickslotItem( sourceName );
+	if( witcher.inv.IsIdValid( selectedItemID ) )
+	{
+		witcher.SelectQuickslotItem( witcher.GetSlotForEquippedItem( selectedItemID ) );
+	}
 }
 
-quest function AddItemTagQuest( itemName : name , itemTag : name, remove : bool )
+quest function AddItemTagQuest( itemName : name , itemTag : name, remove : bool, entityTag : name )
 {
 	var allItems : array<SItemUniqueId>;
 	var i : int;
-	var horseManInv : CInventoryComponent;
+	var horseManInv, inv : CInventoryComponent;
+	var entities : array<CEntity>;
+	
+	if( entityTag != '' )
+	{
+		theGame.GetEntitiesByTag( entityTag, entities );
+		if( entities.Size() == 0 )
+		{
+			LogQuest( "AddItemTagQuest: cannot find any entities with tag <<" + entityTag + ">>, aborting!" );
+			return;
+		}
+		inv = (CInventoryComponent) entities[0].GetComponentByClassName( 'CInventoryComponent' );
+		if( !inv )
+		{
+			LogQuest( "AddItemTagQuest: entity with tag <<" + entityTag + ">> has no inventory, aborting!" );
+			return;
+		}
+	}
+	else
+	{
+		inv = thePlayer.inv;
+	}
 	
 	
-	allItems = thePlayer.inv.GetItemsByName(itemName);
+	allItems = inv.GetItemsByName(itemName);
 	for(i=allItems.Size()-1; i >= 0; i-=1)
 	{
 		if (!remove)
 		{
-			thePlayer.inv.AddItemTag( allItems[i], itemTag );
+			inv.AddItemTag( allItems[i], itemTag );
 		}
 		else
 		{
-			thePlayer.inv.RemoveItemTag( allItems[i], itemTag );
+			inv.RemoveItemTag( allItems[i], itemTag );
 		}
 	}
 	
 	
-	if(GetWitcherPlayer())
+	if( entityTag == '' && GetWitcherPlayer() )
 	{
 		horseManInv = GetWitcherPlayer().GetAssociatedInventory();
 		if(horseManInv)
@@ -7562,4 +8185,538 @@ quest function RestoreEnchanterMoney( enchanterTag : name )
 {
 	
 	return;
+}
+
+latent quest function SetHorseMode( mode : EHorseMode )
+{
+	GetWitcherPlayer().GetHorseManager().SetHorseMode( mode );
+}
+
+latent quest function CollectItemsTHCustomQuest ( collectorTag : name, items : array<name>, uniqueTransactionId : string, keepItemsInContainer : bool, optional filterTagsList : array<name> ) : bool
+{
+	var popupData : W3ItemSelectionPopupData;
+	var itemSelectionPopup : CR4ItemSelectionPopup;
+	var inventory : CInventoryComponent;
+	var received, alreadyCollected : bool;
+	var i, collectedCount : int = 0;	
+	var result : bool;
+	var ent : CGameplayEntity;
+	var validItemFound : bool;
+	
+	ent = (CGameplayEntity)theGame.GetEntityByTag( collectorTag );
+	
+	
+	if( !ent )
+	{
+		return false;
+	}
+	
+	inventory = ent.GetInventory();		
+	theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' ); 		
+	
+	
+	popupData = new W3ItemSelectionPopupData in theGame.GetGuiManager();
+	popupData.targetInventory = inventory;
+	popupData.collectorTag = collectorTag;
+	popupData.filterTagsList = filterTagsList;
+	popupData.targetItems = items;
+	
+	theGame.RequestPopup('ItemSelectionPopup', popupData);
+
+	
+	while (popupData)
+	{
+		SleepOneFrame();
+	}
+
+	
+	for( i=0; i < items.Size(); i+=1 )
+	{
+		FactsRemove( uniqueTransactionId + "_" + items[i] );
+	}
+
+	
+	for( i=0; i < items.Size(); i+=1 )
+	{
+		if( inventory.HasItem( items[i] ) )
+		{	 
+			FactsAdd( uniqueTransactionId + "_" + items[i], 1, -1 );
+			validItemFound = true;
+			
+			if( !keepItemsInContainer )
+			{
+				inventory.RemoveItemByName( items[i], 1 );
+			}
+		}
+	}
+	
+	return validItemFound;
+}
+
+
+quest function EnableHouseDecorationQuest( decorationTag : name, enable : bool )
+{
+	var entities : array<CEntity>;
+	var entity : W3HouseDecorationBase;
+	var size, i : int;
+
+	theGame.GetEntitiesByTag( decorationTag, entities );
+	size = entities.Size();
+	
+	for( i=0; i < size; i+= 1 )
+	{
+		entity = (W3HouseDecorationBase) entities[i];
+		
+		if( entity )
+		{
+			entity.SetDecorationEnabled( enable );
+		}
+		
+	}
+
+}
+
+quest function MutationSystemEnable( enable : bool )
+{
+	GetWitcherPlayer().MutationSystemEnable( enable );
+}
+
+quest function AddSkillPoints( amount : int, dontShowOnHUD : bool )
+{
+	if( !GetWitcherPlayer() )
+	{
+		LogQuest( "AddSkillPoints: can't add skillpoints - only Geralt can have those! Aborting." );
+		return;
+	}
+	
+	if( amount <= 0 )
+	{
+		LogQuest( "AddSkillPoints: can't add skillpoints - amount (" + amount + ") has to be >0. Aborting." );
+		return;
+	}
+	
+	GetWitcherPlayer().AddPoints( ESkillPoint, amount, !dontShowOnHUD );
+}
+
+
+
+latent quest function SyncNPCHealthQuest( targetNPCTag : name, sourceNPCsTags : array<name>, useCurrentTargetHPAsBaseline : bool, killOnNoValidSources : bool  )
+{
+	var targetNPC : CNewNPC;
+	var sourceNPCs : array<CNewNPC>;
+	var searchedNPC : CNewNPC;
+	var sourceNPCNumber : int;
+	var i : int;
+	var hpSum : float;
+	var quotaModifier : float;
+	
+	targetNPC  = theGame.GetNPCByTag( targetNPCTag );
+	
+	
+	if( !targetNPC )
+	{
+		return;
+	}
+	
+	
+	for( i=0; i < sourceNPCsTags.Size() ; i+= 1 )
+	{
+		searchedNPC = theGame.GetNPCByTag( sourceNPCsTags[i] );
+		
+		if( searchedNPC )
+		{
+			sourceNPCs.PushBack( searchedNPC );
+		}
+	}
+	
+	sourceNPCNumber = sourceNPCs.Size();
+	
+	
+	if( sourceNPCNumber == 0)
+	{
+		return;
+	}
+	
+	
+	if( useCurrentTargetHPAsBaseline )
+	{
+		quotaModifier = targetNPC.GetHealthPercents();
+	}
+	
+	
+	while( targetNPC.IsAlive() )
+	{
+		hpSum = 0.0f;
+		
+		for( i=0; i < sourceNPCNumber ; i+= 1 )
+		{
+			if( sourceNPCs[i] )
+			{
+				if( sourceNPCs[i].IsAlive() )
+				{
+					hpSum += sourceNPCs[i].GetHealthPercents();
+				}
+			}
+		}		
+		
+		
+		if( hpSum == 0.0f )
+		{
+			if( killOnNoValidSources )
+			{
+				targetNPC.Kill( 'SyncNPCHealthQuest', true, thePlayer );
+			}
+			
+			return;
+		}
+		else
+		{
+			hpSum = ( hpSum / sourceNPCNumber );
+			
+			
+			if( quotaModifier <= 1.0f && quotaModifier > 0.0f )
+			{
+				hpSum = hpSum * quotaModifier;
+			}
+			
+			targetNPC.SetHealthPerc( hpSum );
+		}
+		
+		Sleep(0.5f);
+	}
+	
+}
+
+
+quest function ManuallyOpenContainerQuest( containerTag : name )
+{
+	var container : W3Container;
+	
+	container = (W3Container) theGame.GetNodeByTag( containerTag );
+	
+	if( container )
+	{
+		if( !container.IsEmpty() )
+		{
+			container.ShowLoot();
+		}
+	}
+}
+
+quest function IsEntityVisibleInCameraFrame( tag : name ) : bool
+{
+	var actor : CActor;
+	
+	actor = theGame.GetActorByTag( tag );
+	if ( thePlayer.WasVisibleInScaledFrame( actor, 1.f, 1.f ) )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
+quest function DisableWeatherDisplay( disable : bool )
+{
+	thePlayer.SetWeatherDisplayDisabled( disable );
+}
+
+
+quest function ForceBruxaSpawn( entityTag : name )
+{
+	var entities : array<CEntity>;
+	var entity : CEntity;
+	var size, i : int;
+	var comp : CDismembermentComponent;
+
+	theGame.GetEntitiesByTag( entityTag, entities );
+	size = entities.Size();
+	
+	for( i=0; i < size; i+= 1 )
+	{
+		entity = entities[i];
+		
+		if( entity )
+		{
+			theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( entity, 'ForceBruxaSpawn', -1.f , 0.5f, 3.f, -1, false, false, entity.GetWorldPosition() );
+		}
+	}
+}
+
+
+quest function EnableDismembermentQuest( entityTag : name, dismembermentName : name, enable : bool )
+{
+	var entities : array<CEntity>;
+	var entity : CEntity;
+	var size, i : int;
+	var comp : CDismembermentComponent;
+
+	theGame.GetEntitiesByTag( entityTag, entities );
+	size = entities.Size();
+	
+	for( i=0; i < size; i+= 1 )
+	{
+		entity = entities[i];
+		
+		if( entity )
+		{
+			comp = (CDismembermentComponent) entity.GetComponentByClassName( 'CDismembermentComponent' );
+			
+			if( comp )
+			{
+				if( enable )
+				{
+					if( comp.IsWoundDefined( dismembermentName ) )
+					{
+						comp.SetVisibleWound( dismembermentName, true, true, true, true );
+					}
+				}
+				else
+				{
+					comp.ClearVisibleWound();
+				}
+			}
+			
+		}
+		
+	}
+}
+
+
+quest function EditLeaderBoardQuest( boardTag : name, competitorStringKey : string, points : int )
+{
+	var boards : array<CEntity>;
+	var board : W3LeaderboardCustom;
+	var i : int;
+	
+	theGame.GetEntitiesByTag( boardTag, boards );
+	
+	if( boards.Size() == 0 )
+	{
+		return;
+	}
+	
+	if( competitorStringKey == "" )
+	{
+		return;
+	}
+	
+	for( i = 0; boards.Size() > i; i += 1 )
+	{
+		board = (W3LeaderboardCustom) boards[i];
+		
+		if (board)
+		{
+			board.AddPointToCompetitor( competitorStringKey, points );
+		}
+	}
+}
+
+quest function MandragoraMagicShow( tag : name, side : bool, up : bool )
+{
+	var entity : CEntity;
+	
+	entity = theGame.GetEntityByTag( tag );
+	
+	if ( entity )
+	{
+		if ( side )
+		{
+			entity.SetBehaviorVariable( 'side', 1 );
+		}
+		else
+		{
+			entity.SetBehaviorVariable( 'side', 0 );
+		}
+		if ( up )
+		{
+			entity.SetBehaviorVariable( 'up', 1 );
+		}
+		else
+		{
+			entity.SetBehaviorVariable( 'up', 0 );
+		}
+	}
+}
+
+
+quest function HouseDecorationProcessItemReceivalQuest( decorationEntityTag : name )
+{
+	var entity : W3HouseDecorationBase;
+	
+	entity = (W3HouseDecorationBase) theGame.GetEntityByTag( decorationEntityTag );
+
+	if( entity )
+	{
+		entity.ProcessItemReceival( true );
+	}
+}
+
+
+quest function BlockGlobalFastTravelQuest( block : bool )
+{
+	if( block  )
+	{
+		thePlayer.BlockAction( EIAB_FastTravelGlobal, 'BlockGlobalFastTravelQuest', true, true );
+	}
+	else
+	{
+		thePlayer.UnblockAction( EIAB_FastTravelGlobal, 'BlockGlobalFastTravelQuest' );	
+	}
+}
+quest function CustomShootingRangeCrossbowSetup()
+{
+	var witcher : W3PlayerWitcher;
+	var equipmentSlot : EEquipmentSlots;
+	var items : array<SItemUniqueId>;
+	var i : int;
+	
+	witcher = GetWitcherPlayer();
+	
+	if(witcher && !((W3ReplacerCiri)thePlayer) )
+	{
+		items = thePlayer.inv.GetItemsByCategory( 'crossbow' );
+		
+		if( items.Size() > 0 )
+		{
+			for( i=0; i < items.Size(); i+=1 )
+			{
+				if( witcher.IsItemEquipped( items[i] ) )
+				{
+					equipmentSlot = witcher.GetItemSlotByItemName(thePlayer.inv.GetItemName(items[i]));
+					
+					if(equipmentSlot != EES_InvalidSlot)
+					{
+						witcher.SelectQuickslotItem(equipmentSlot);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+latent quest function CustomShootingRangeHandlerQuest( collisionGroupsNames : array<name>, acceptedTags : array<name> )
+{
+
+	var cachedCamDirection 	: Vector;
+	var cachedCamPosition	: Vector;
+	var cachedOwnerPosition	: Vector;
+
+	var traceResultDists		: array<float>;
+	var tracePosFromInitial		: Vector;
+	var maxRangePos				: Vector;
+	
+	var traceManager 			: CScriptBatchQueryAccessor;
+	
+	var i, size					: int;
+	var hasResult				: bool;
+	var rayCastResult 			: SRaycastHitResult;
+	var rayCastResults 			: array<SRaycastHitResult>;	
+	var ent						: CEntity;	
+	var entityTags				: array<name>;
+	var j, tagsSize				: int;
+	
+	var distanceToPlayer 		: float;
+	
+	traceManager = theGame.GetWorld().GetTraceManager();
+	
+	cachedCamDirection = theCamera.GetCameraDirection();
+	cachedCamPosition = theCamera.GetCameraPosition();
+	cachedOwnerPosition = thePlayer.GetWorldPosition();
+	tracePosFromInitial = 0.5f * VecNormalize( cachedCamDirection ) + cachedCamPosition;
+	maxRangePos = VecNormalize( cachedCamDirection ) * theGame.params.MAX_THROW_RANGE + tracePosFromInitial;
+
+	tagsSize = acceptedTags.Size();
+
+		if ( traceManager.RayCastSync( tracePosFromInitial, maxRangePos , rayCastResults, collisionGroupsNames ) )		
+		{		
+			size =  rayCastResults.Size();
+			if ( size > 0 )
+			{	
+				
+				for ( i = 0; i < rayCastResults.Size(); i += 1 )
+				{
+					ent = rayCastResults[i].component.GetEntity();
+					
+					if(ent)
+					{
+						
+						for( j=0; j < tagsSize; j+=1 )
+						{
+							if( ent.HasTag( acceptedTags[j] ) )
+							{
+								distanceToPlayer = VecDistance2D( thePlayer.GetWorldPosition(), ent.GetWorldPosition() );
+								
+								if( distanceToPlayer > 0 )
+								{
+									Sleep( distanceToPlayer * 0.02f );
+								}
+								
+								if( FactsQuerySum( "shooting_range_"+acceptedTags[j]+"_was_hit" ) == 0 )
+								{
+									FactsAdd( "shooting_range_"+acceptedTags[j]+"_was_hit", 1, -1 );
+								}
+								
+								return;
+							}
+							
+						}
+						
+					}
+					
+				}
+			}
+		}
+}
+
+quest function ShowEP2Logo_Q( show : bool, fadeInterval : float, x : int, y : int )
+{
+	var overlayPopupRef : CR4OverlayPopup;
+	
+	overlayPopupRef = (CR4OverlayPopup) theGame.GetGuiManager().GetPopup('OverlayPopup');
+	if ( overlayPopupRef )
+	{
+		overlayPopupRef.ShowEP2Logo( show, fadeInterval, x, y );
+	}
+}
+
+exec function dupa( tag : name, side : bool, up : bool )
+{
+	var entity : CEntity;
+	
+	entity = theGame.GetEntityByTag( tag );
+	
+	if ( entity )
+	{
+		if ( side )
+		{
+			entity.SetBehaviorVariable( 'side', 1 );
+		}
+		else
+		{
+			entity.SetBehaviorVariable( 'side', 0 );
+		}
+		if ( up )
+		{
+			entity.SetBehaviorVariable( 'up', 1 );
+		}
+		else
+		{
+			entity.SetBehaviorVariable( 'up', 0 );
+		}
+	}
+}
+
+exec function walk( f : float )
+{
+	var entity : CEntity;
+	
+	entity = thePlayer.GetTarget();
+	
+	if ( entity )
+	{
+		entity.SetBehaviorVariable( 'Editor_MoveSpeed', f );
+	}
 }

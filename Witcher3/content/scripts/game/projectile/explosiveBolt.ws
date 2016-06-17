@@ -17,6 +17,8 @@ class W3ExplosiveBolt extends W3BoltProjectile
 		var i : int;
 		var waterZ : float;
 		var victim, actor : CActor;
+		var shouldPierce : bool;
+		var drawableComponent : CDrawableComponent;
 		
 		
 		if(wasShotUnderWater && hitCollisionsGroups.Contains( 'Water' ) )
@@ -27,7 +29,11 @@ class W3ExplosiveBolt extends W3BoltProjectile
 		
 		if ( !CanCollideWithVictim( victim ) )
 			return true;
-		
+			
+		if( victim.HasTag('AddRagdollCollision') && (CMovingAgentComponent)collidingComponent && !thePlayer.GetDisplayTarget())
+		{
+			return false;
+		}
 		if ( !ProcessProjectileRepulsion( pos, normal ) )
 		{			
 			
@@ -52,8 +58,17 @@ class W3ExplosiveBolt extends W3BoltProjectile
 				}
 			}
 			
-			StopProjectile();
-			isActive = false;
+			shouldPierce = ShouldPierceVictim( victim );
+			
+			if( shouldPierce )
+			{
+				Mutation9HitFX( victim );
+			}
+			else
+			{
+				StopProjectile();
+				isActive = false;
+			}
 			
 			
 			if ( hitCollisionsGroups.Contains( 'Water' ) && ! hitCollisionsGroups.Contains( 'Terrain' ) )
@@ -73,17 +88,32 @@ class W3ExplosiveBolt extends W3BoltProjectile
 			}
 			
 			
-			for(i=0; i<ents.Size(); i+=1)
+			for( i = ents.Size() - 1 ; i>=0 ; i-=1)
 			{
 				if(ents[i] == this)
 					continue;
 				
 				actor = (CActor)ents[i];
 				if(actor && !actor.IsAlive())
+				{
 					continue;
+				}
+				
+				if( GetAttitudeBetween( thePlayer, actor ) != AIA_Hostile && !actor.IsAnimal() )
+				{
+					continue;
+				}
+				
+				if( ents[i] == GetWitcherPlayer() && caster == GetWitcherPlayer() && GetWitcherPlayer().CanUseSkill( S_Perk_16 )  )
+				{
+					continue;
+				}
 				
 				super.ProcessDamageAction(ents[i], Vector(0,0,0), '');
 			}
+			
+			
+			theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'BombExplosionAction', 10.0, 50.0f, -1, -1, true); 
 			
 			
 			for(i=0; i<insideToxicClouds.Size(); i+=1)
@@ -94,7 +124,16 @@ class W3ExplosiveBolt extends W3BoltProjectile
 				}
 			}
 			
-			DestroyAfter(5);	
+			if( !shouldPierce )
+			{
+				drawableComponent = (CDrawableComponent)GetComponentByClassName('CDrawableComponent');
+				if( drawableComponent )
+				{
+					drawableComponent.SetVisible(false);
+				}
+				
+				DestroyAfter(5);	
+			}
 		}
 	}
 	

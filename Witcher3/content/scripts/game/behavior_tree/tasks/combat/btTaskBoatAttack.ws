@@ -32,7 +32,7 @@ class CBTTaskBoatAttack extends IBehTreeTask
 	{	
 		if( _EventName == 'BeingHit' )
 		{
-			GetNPC().Kill();
+			GetNPC().Kill( 'Hit when on boat' );
 		}
 		
 		return true;

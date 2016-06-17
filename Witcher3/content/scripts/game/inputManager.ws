@@ -6,12 +6,12 @@
 
 enum EInputDeviceType
 {
-	GT_Xbox1 = 0,
-	GT_PS4 = 1,
-	GT_Steam = 2,
-	GT_KeyboardMouse = 3,
-	GT_Tablet = 4,
-	GT_Unknown = 5
+	IDT_Xbox1 = 0,
+	IDT_PS4 = 1,
+	IDT_Steam = 2,
+	IDT_KeyboardMouse = 3,
+	IDT_Tablet = 4,
+	IDT_Unknown = 5
 }
 
 import class CInputManager
@@ -47,31 +47,31 @@ import class CInputManager
 	import final function GetLastUsedDeviceName() : name;
 	public final function GetLastUsedGamepadType() : EInputDeviceType
 	{
-		var deviceName:name = GetLastUsedDeviceName();
+		var deviceName:name = GetLastUsedDeviceName();				
 		
 		switch (deviceName)
 		{
 			case 'xpad':
-				return GT_Xbox1;
+				return IDT_Xbox1;
 				break;
 			case 'ps4pad':
-				return GT_PS4;
+				return IDT_PS4;
 				break;
 			case 'steampad':
-				return GT_Steam;
+				return IDT_Steam;
 				break;
 			case 'keyboardmouse':
-				return GT_KeyboardMouse;
+				return IDT_KeyboardMouse;
 				break;
 			case 'tablet':
-				return GT_Tablet;
+				return IDT_Tablet;
 				break;
 			default:
-				return GT_Unknown;
+				return IDT_Unknown;
 				break;
 		}
 		
-		return GT_Unknown;
+		return IDT_Unknown;
 	}
 	
 	import final function UsesPlaystationPad() : bool;	
@@ -129,6 +129,7 @@ import class CInputManager
 		
 		return IsReleased( action );
 	}
+	
 	
 	event OnInputDeviceChanged()
 	{

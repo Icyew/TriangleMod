@@ -20,6 +20,7 @@ class CR4LootPopup extends CR4PopupBase
 	private var m_fxSetWindowTitle 		: CScriptedFlashFunction;
 	private var m_fxSetSelectionIndex	: CScriptedFlashFunction;
 	private var m_fxSetWindowScale		: CScriptedFlashFunction;
+	private var m_fxResizeBackground	:CScriptedFlashFunction;
 	private var m_indexToSelect			: int; 							default m_indexToSelect = 0;
 	private var safeLock 				: int;							default safeLock = -1;
 	private var inputContextSet			: bool; 						default inputContextSet = false;
@@ -38,10 +39,7 @@ class CR4LootPopup extends CR4PopupBase
 		theGame.ForceUIAnalog(true);
 		theGame.GetGuiManager().RequestMouseCursor(true);
 		
-		if (theInput.LastUsedPCInput())
-		{
-			theGame.MoveMouseTo(0.4, 0.64);
-		}
+		
 		
 		if (lootPopupData && lootPopupData.targetContainer && !theGame.IsDialogOrCutscenePlaying() && !theGame.GetGuiManager().IsAnyMenu())
 		{
@@ -61,10 +59,18 @@ class CR4LootPopup extends CR4PopupBase
 			if (StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('Hud', 'HudSize'), 0) == 0)
 			{
 				targetSize = 0.85;
+				if (theInput.LastUsedPCInput())
+				{
+					theGame.MoveMouseTo(0.4, 0.63);
+				}
 			}
 			else
 			{
 				targetSize = 1;
+				if (theInput.LastUsedPCInput())
+				{
+					theGame.MoveMouseTo(0.4, 0.58);
+				}
 			}
 			
 			m_fxSetWindowScale.InvokeSelfOneArg(FlashArgNumber(targetSize));
@@ -80,6 +86,8 @@ class CR4LootPopup extends CR4PopupBase
 		m_fxSetWindowTitle = m_flashModule.GetMemberFlashFunction( "SetWindowTitle" );
 		m_fxSetSelectionIndex = m_flashModule.GetMemberFlashFunction( "SetSelectionIndex" );
 		m_fxSetWindowScale = m_flashModule.GetMemberFlashFunction( "SetWindowScale" );
+		m_fxResizeBackground = m_flashModule.GetMemberFlashFunction( "resizeBackground" );
+		
 	}
 	
 	event  OnClosingPopup()
@@ -158,6 +166,8 @@ class CR4LootPopup extends CR4PopupBase
 		var l_compareItemStats				: array<SAttributeTooltip>;
 		var l_itemTags 						: array<name>;
 		var l_typeStr 						: string;
+		var l_questTag						: string;
+		var _value							: string;
 		
 		l_containerInv.GetAllItems( l_allItems );
 		
@@ -167,7 +177,15 @@ class CR4LootPopup extends CR4PopupBase
 				l_allItems.Erase(i);
 		
 		length	= l_allItems.Size();
-		
+		if(length > 4)
+		{
+			m_fxResizeBackground.InvokeSelfOneArg(FlashArgBool(true));
+		}
+		else
+		{
+			m_fxResizeBackground.InvokeSelfOneArg(FlashArgBool(false));
+		}
+	
 		l_lootItemsFlashArray = m_flashValueStorage.CreateTempFlashArray();
 		l_lootItemsFlashArray.SetLength( length );
 		
@@ -203,8 +221,28 @@ class CR4LootPopup extends CR4PopupBase
 			{
 				l_weight = l_containerInv.GetItemEncumbrance( l_item );
 			}
+			l_questTag = "";
+			l_isQuest = false;
+			if(l_containerInv.ItemHasTag(l_item, 'Quest'))
+			{
+				l_questTag = "Quest";
+				l_isQuest = true;
+			}
 			
-			l_isQuest = l_containerInv.ItemHasTag(l_item, 'Quest');
+			if (l_containerInv.ItemHasTag(l_item, 'QuestEP1'))
+			{
+				l_questTag = "QuestEP1";
+				l_isQuest = true;
+			}
+			
+			if (l_containerInv.ItemHasTag(l_item, 'QuestEP2'))
+			{
+				l_questTag = "QuestEP2";
+				l_isQuest = true;
+			}
+			
+			
+
 			
 			l_lootItemsDataFlashObject = m_flashValueStorage.CreateTempFlashObject();
 			l_isBookRead = l_containerInv.IsBookReadByName(l_name);
@@ -217,6 +255,7 @@ class CR4LootPopup extends CR4PopupBase
 			l_lootItemsDataFlashObject.SetMemberFlashInt	( "quality", l_containerInv.GetItemQuality( l_item ) );
 			l_lootItemsDataFlashObject.SetMemberFlashBool	( "isRead", l_isBookRead );
 			l_lootItemsDataFlashObject.SetMemberFlashBool   ( "isQuestItem", l_isQuest );
+			l_lootItemsDataFlashObject.SetMemberFlashString ( "questTag", l_questTag );
 			
 			l_containerInv.GetItemTags(l_item,l_itemTags);
 			GetWitcherPlayer().GetItemEquippedOnSlot(GetSlotForItem(l_containerInv.GetItemCategory(l_item),l_itemTags, true), l_compareItem);
@@ -231,7 +270,15 @@ class CR4LootPopup extends CR4PopupBase
 			
 			l_lootItemsDataFlashObject.SetMemberFlashArray("StatsList", l_statsList);
 			
-			l_typeStr = GetLocStringByKeyExt(GetFilterTypeName( l_containerInv.GetFilterTypeByItem(l_item) )) + " / " + GetItemRarityDescription(l_item, l_containerInv);
+			if( l_containerInv.IsItemWeapon( l_item ) || l_containerInv.IsItemAnyArmor( l_item ) )
+			{
+				l_typeStr = GetItemRarityDescription(l_item, l_containerInv);
+			}
+			else
+			{
+				l_typeStr = "";
+			}
+		
 			l_lootItemsDataFlashObject.SetMemberFlashString("itemType", l_typeStr );
 			
 			if(l_containerInv.HasItemDurability(l_item))

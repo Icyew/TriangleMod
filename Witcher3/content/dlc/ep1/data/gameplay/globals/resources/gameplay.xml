@@ -38,6 +38,7 @@
 	<res alias="TutorialEP1Global" 							path="gameplay\journal\tutorial\ep1global.journal"/>
 	<res alias="TutorialEnchanterGlobal" 					path="gameplay\journal\tutorial\enchanterglobal.journal"/>
 	<res alias="TutorialJournalEnchanting" 					path="gameplay\journal\tutorial\jeenchanting.journal"/>
+	<res alias="TutorialEP1PlaythroughPass" 				path="gameplay\journal\tutorial\ep1playthroughpass.journal"/>
 	
 	<!-- Spawn names -->
 	<res alias="boar"										path="dlc\ep1\data\characters\npc_entities\monsters\wild_boar_ep1.w2ent" chunk="content4" />

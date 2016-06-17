@@ -65,6 +65,11 @@ state CombatSword in W3PlayerWitcher extends Combat
 		parent.RemoveAnimEventCallback('FinishSpecialHeavyAttack');
 		
 		parent.inv.StopItemEffect(swordId, 'rune_blast_loop');
+		
+		parent.SetBehaviorVariable( 'isPerformingSpecialAttack', 0.f );
+		parent.RemoveCustomOrientationTarget( 'SpecialAttackLight' );
+		parent.RemoveTimer( 'UpdateSpecialAttackLightHeading' );
+		parent.RemoveCustomOrientationTarget( 'SpecialAttackHeavy' );
 	}
 	
 		

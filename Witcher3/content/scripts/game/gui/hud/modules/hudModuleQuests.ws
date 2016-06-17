@@ -36,7 +36,6 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 	private var m_fxUpdateObjectiveUnhighlightAllSFF: CScriptedFlashFunction;
 	
 	private var m_fxSetSystemQuestInfo				: CScriptedFlashFunction;
-	private var m_fxSetUserQuestInfo				: CScriptedFlashFunction;
 	
 	private var m_guiManager 						: CR4GuiManager;
 	private var m_hud 								: CR4ScriptedHud;
@@ -59,13 +58,11 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 		m_fxUpdateObjectiveHighlightSFF		= flashModule.GetMemberFlashFunction( "UpdateObjectiveHighlight" );
 		m_fxUpdateObjectiveUnhighlightAllSFF= flashModule.GetMemberFlashFunction( "UpdateObjectiveUnhighlightAll" );
 		m_fxSetSystemQuestInfo				= flashModule.GetMemberFlashFunction( "SetSystemQuestInfo" );
-		m_fxSetUserQuestInfo 				= flashModule.GetMemberFlashFunction( "SetUserQuestInfo" );
 		
 		manager = theGame.GetJournalManager();
 		
 		theInput.RegisterListener( this, 'OnHighlightNextObjective', 'HighlightObjective' );
 
-		
 		UpdateQuest();
 		
 		if (m_hud)
@@ -112,7 +109,7 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 						SendObjectiveCounter( ( CJournalQuestObjective )e.journalBase );
 						break;
 					case EUET_HighlightedQuestObjective:
-						HighlightObjective( ( CJournalQuestObjective )e.journalBase, e.index );
+						HighlightObjective( ( CJournalQuestObjective )e.journalBase );
 						break;
 					}
 					m_updateEvents.Erase( i );
@@ -150,21 +147,35 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 
 	event  OnHighlightNextObjective( action : SInputAction )
 	{
+		var journalModule 	 : CR4HudModuleJournalUpdate;
 		var walkToggleAction : SInputAction;
+		var inputHandled     : bool = false;
 		
 		if ( thePlayer.IsCameraLockedToTarget() && 
 			( thePlayer.GetCurrentStateName() == 'Exploration' || thePlayer.GetCurrentStateName() == 'TraverseExploration' ) )
 		{
 			thePlayer.HardLockToTarget( false );
+			inputHandled = true;
 		}
-		else if ( thePlayer.IsActionAllowed( EIAB_HighlightObjective ) )
+		
+		if( !inputHandled && m_hud )
+		{
+			journalModule = (CR4HudModuleJournalUpdate) m_hud.GetHudModule( "JournalUpdateModule");
+			
+			if ( journalModule )
+			{
+				inputHandled = journalModule.isBookInfoShown();
+			}
+		}
+		
+		if ( !inputHandled && thePlayer.IsActionAllowed( EIAB_HighlightObjective ) )
 		{
 			walkToggleAction = theInput.GetAction('WalkToggle');
 			if ( IsReleased(action) && walkToggleAction.lastFrameValue < 0.7 && walkToggleAction.value < 0.7 )
 			{
 				if(ShouldProcessTutorial('TutorialObjectiveSwitching'))
 				{
-					FactsAdd('tut_switched_objective');
+					FactsSet( "tut_switched_objective", 1 );
 				}
 				theGame.GetJournalManager().SetPrevNextHighlightedObjective( true );
 			}
@@ -225,7 +236,6 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 		e.eventType		= EUET_HighlightedQuestObjective;
 		e.delay			= 2;
 		e.journalBase	= journalObjective;
-		e.index			= objectiveIndex;
 		m_updateEvents.PushBack( e );
 	}
 
@@ -399,8 +409,9 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 			{
 				objectiveName = "MISSING_OBJECTIVE_NAME: " + data.objectiveEntry.baseName;
 			}
-			l_flashObject.SetMemberFlashString( "name",   objectiveName + GetCounterText( data.objectiveEntry ) );
-			l_flashObject.SetMemberFlashInt(    "status", (int)data.status );
+			l_flashObject.SetMemberFlashString( "name",   objectiveName + GetQuestObjectiveCounterText( data.objectiveEntry ) );
+			l_flashObject.SetMemberFlashBool(   "isHighlighted", ( data.objectiveEntry == _highlightedObjective ) );
+			l_flashObject.SetMemberFlashBool(   "isMutuallyExclusive", data.objectiveEntry.IsMutuallyExclusive() );
 			if( m_guiManager.FindDisplayedObjectiveGUID( data.objectiveEntry.guid ) )
 			{
 				l_flashObject.SetMemberFlashBool(   "isNew",  false );
@@ -428,30 +439,25 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 			return;
 		}
 		
-		str = GetLocStringById( objective.GetTitleStringId() ) + GetCounterText( objective );
-		m_fxUpdateObjectiveCounterSFF.InvokeSelfThreeArgs( FlashArgInt( 0 ), FlashArgInt( GetObjectiveIndex( objective ) ), FlashArgString( str ) );
+		str = GetLocStringById( objective.GetTitleStringId() ) + GetQuestObjectiveCounterText( objective );
+		m_fxUpdateObjectiveCounterSFF.InvokeSelfTwoArgs( FlashArgInt( GetObjectiveIndex( objective ) ), FlashArgString( str ) );
 	}
 	
-	public function HighlightObjective( objective : CJournalQuestObjective, objectiveIndex : int )
+	var _highlightedObjective : CJournalQuestObjective;
+	
+	public function HighlightObjective( objective : CJournalQuestObjective )
 	{
-		var commonMapManager : CCommonMapManager;
-		var journalManager : CWitcherJournalManager;
-		var i : int;
-		var highlightedObjective : CJournalQuestObjective;
-		var highlightedMapPin : CJournalQuestMapPin;
-
-		commonMapManager = theGame.GetCommonMapManager();
-		journalManager = theGame.GetJournalManager();
+		_highlightedObjective = objective;
 
 		
 		m_fxUpdateObjectiveUnhighlightAllSFF.InvokeSelf();
 		
-		m_fxUpdateObjectiveHighlightSFF.InvokeSelfThreeArgs( FlashArgInt( objectiveIndex ), FlashArgBool( true ), FlashArgBool( true ) );
+		m_fxUpdateObjectiveHighlightSFF.InvokeSelfTwoArgs( FlashArgInt( GetObjectiveIndex( objective ) ), FlashArgBool( true ) );
 	}
 
 	private function ShowQuestTracker( show : bool )
 	{
-		m_fxShowTrackedQuestSFF.InvokeSelfTwoArgs( FlashArgInt( 0 ), FlashArgBool( show ) );
+		m_fxShowTrackedQuestSFF.InvokeSelfOneArg( FlashArgBool( show ) );
 	}
 
 	
@@ -469,27 +475,6 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 			}
 		}
 		return -1;
-	}
-
-	public function GetCounterText( objectiveEntry :CJournalQuestObjective ) : string
-	{
-		var language 	  : string;
-		var audioLanguage : string;
-		
-		theGame.GetGameLanguageName(audioLanguage,language);
-		
-		if ( objectiveEntry.GetCount() > 0 )
-		{
-			if (language == "AR")
-			{
-				return manager.GetQuestObjectiveCount( objectiveEntry.guid ) + "/" + objectiveEntry.GetCount() + "&nbsp;";
-			}
-			else
-			{
-				return "&nbsp;" + manager.GetQuestObjectiveCount( objectiveEntry.guid ) + "/" + objectiveEntry.GetCount();
-			}
-		}
-		return "";
 	}
 
 	protected function GetColorByQuestType( journalQuest : CJournalQuest ) : int
@@ -518,4 +503,26 @@ class CR4HudModuleQuests extends CR4HudModuleBase
 		m_bEnabled = value;
 		m_fxSetEnabledSFF.InvokeSelfOneArg( FlashArgBool( m_bEnabled ) );
 	}
+}
+
+function GetQuestObjectiveCounterText( objectiveEntry :CJournalQuestObjective ) : string
+{
+	var audioLanguage : string;
+	var language 	  : string;
+	var manager		: CWitcherJournalManager = theGame.GetJournalManager();
+			
+	theGame.GetGameLanguageName(audioLanguage,language);
+	
+	if ( objectiveEntry.GetCount() > 0 )
+	{
+		if (language == "AR")
+		{
+			return manager.GetQuestObjectiveCount( objectiveEntry.guid ) + "/" + objectiveEntry.GetCount() + "&nbsp;";
+		}
+		else
+			{
+			return "&nbsp;" + manager.GetQuestObjectiveCount( objectiveEntry.guid ) + "/" + objectiveEntry.GetCount();
+		}
+	}
+	return "";
 }

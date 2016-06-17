@@ -10,31 +10,37 @@ class W3GuiRepairInventoryComponent extends W3GuiBaseInventoryComponent
 	public var repairSwords : bool;
 	public var repairArmors : bool;
 	
-	
 	public  function SetInventoryFlashObjectForItem( item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void
 	{
-		var durabilityValue	: string;
-		var costOfService	: int;
-		var costRepairPoint : int;
-		var isEquipped      : bool;
-		var invItem 	 	: SInventoryItem;
+		var durabilityValue	  : string;
+		var costOfService	  : int;
+		var costRepairPoint   : int;
+		var isEquipped        : bool;
+		var invItem 	 	  : SInventoryItem;
+		var targetGridSection : int;
 		
 		super.SetInventoryFlashObjectForItem( item, flashObject );
 		
 		invItem = _inv.GetItem( item );
+		merchantInv.GetItemPriceRepair( invItem, costRepairPoint, costOfService );		
+		isEquipped = GetWitcherPlayer().IsItemEquipped( item );
 		
-		durabilityValue = IntToString( (int)(_inv.GetItemDurability( item ) / _inv.GetItemMaxDurability( item ) * 100 ) ) + "%";
-		
-		merchantInv.GetItemPriceRepair( invItem, costRepairPoint, costOfService );
-		
-		isEquipped = GetWitcherPlayer().IsItemEquipped(item);
-		
-		flashObject.SetMemberFlashBool( "enableComparison", _inv.CanBeCompared(item) );
-		flashObject.SetMemberFlashBool( "isEquipped",  isEquipped);
-		flashObject.SetMemberFlashString( "durability", durabilityValue );
-		flashObject.SetMemberFlashBool( "disableAction", _inv.GetItemQuality(item) > masteryLevel );
-		flashObject.SetMemberFlashInt("actionPrice", costOfService);
+		flashObject.SetMemberFlashBool( "enableComparison", _inv.CanBeCompared( item ) );
+		flashObject.SetMemberFlashBool( "isEquipped",  isEquipped);		
+		flashObject.SetMemberFlashBool( "disableAction", _inv.GetItemQuality( item ) > masteryLevel );
+		flashObject.SetMemberFlashInt( "actionPrice", costOfService );
 		flashObject.SetMemberFlashInt( "gridPosition", -1 );
+		
+		if( GetWitcherPlayer().IsItemEquipped( item ) )
+		{
+			targetGridSection = 0;
+		}
+		else
+		{
+			targetGridSection = 1;
+		}
+		
+		flashObject.SetMemberFlashInt( "sectionId", targetGridSection );
 	}
 	
 	public function GetTotalRepairCost() : int
@@ -54,7 +60,7 @@ class W3GuiRepairInventoryComponent extends W3GuiBaseInventoryComponent
 		{		
 			item = rawItems[i];
 			
-			if ( ShouldShowItem( item ) )
+			if ( ShouldShowItem( item ) && GetWitcherPlayer().IsItemEquipped( item ) )
 			{
 				invItem = _inv.GetItem( item );
 				merchantInv.GetItemPriceRepair( invItem, costRepairPoint, costOfService );
@@ -94,21 +100,21 @@ class W3GuiRepairInventoryComponent extends W3GuiBaseInventoryComponent
 	
 	function RepairAllItems( priceModiffier : float )
 	{
-		var items : array<SItemUniqueId>;
+		var items     : array<SItemUniqueId>;
+		var curItemId : SItemUniqueId;
 		var i : int;
 		
 		_inv.GetAllItems(items);
 		
 		for( i = 0; i < items.Size(); i += 1 )
 		{
-			if( CanRepairItem(items[i]) )
-			{
-				if( _inv.HasItemDurability(items[i]) )
-				{					
-					if( _inv.GetItemDurability(items[i]) < _inv.GetItemMaxDurability(items[i]) )
-					{
-						RepairItem(items[i], priceModiffier);
-					}	
+			curItemId = items[i];
+			
+			if( CanRepairItem( curItemId ) && _inv.HasItemDurability( curItemId ) && GetWitcherPlayer().IsItemEquipped( curItemId )  )
+			{					
+				if( _inv.GetItemDurability( curItemId ) < _inv.GetItemMaxDurability( curItemId ) )
+				{
+					RepairItem( curItemId, priceModiffier );
 				}	
 			}
 		}

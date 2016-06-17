@@ -109,7 +109,7 @@ class W3ItemRepairObject extends CR4MapPinEntity
 		
 		if(ShouldProcessTutorial('TutorialRepairObjects'))
 		{
-			FactsAdd("tut_repair_interaction",1);
+			FactsSet("tut_repair_interaction",1);
 		}
 	}
 	

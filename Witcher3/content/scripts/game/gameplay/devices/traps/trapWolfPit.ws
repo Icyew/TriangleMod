@@ -20,7 +20,7 @@ class W3TrapWolfPit extends W3Trap
 		var l_actor	: CActor;
 		l_actor = (CActor) activator.GetEntity();
 		
-		l_actor.Kill(true);
+		l_actor.Kill( 'Trap', true );
 	}	
 	
 }

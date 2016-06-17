@@ -295,6 +295,21 @@ class CAIMonsterIdleSniff extends CAIMonsterIdleAction
 };
 
 
+class CAIMonsterIdleTail extends CAIMonsterIdleAction
+{
+	default aiTreeName = "resdef:ai\idle/monster_idle_action_slot";
+
+	function Init()
+	{
+		super.Init();
+		
+		params.cooldown = 20.0;
+		params.loopTime = 10.0;
+		params.actionName = 'Tail';
+	}
+};
+
+
 
 
 class CAIMonsterIdleFlyBarrel extends CAIMonsterFlyIdleAction

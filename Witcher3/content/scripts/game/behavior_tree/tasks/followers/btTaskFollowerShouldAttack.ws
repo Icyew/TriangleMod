@@ -7,14 +7,12 @@
 
 class CBTTasFollowerShouldAttack extends IBehTreeTask
 {
-	protected var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CHumanAICombatStorage;
 	
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 	}
 	
 	

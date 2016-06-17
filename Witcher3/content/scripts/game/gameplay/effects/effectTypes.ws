@@ -110,6 +110,17 @@ enum EEffectInteract
 	EI_Cumulate				
 }
 
+function EffectInteractionSuccessfull( e : EEffectInteract ) : bool
+{
+	if( e == EI_Undefined || e == EI_Deny )
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+
 
 
 
@@ -264,7 +275,35 @@ EET_Unused1,
 	EET_Weaken,
 	
 	EET_Tangled,					
-	EET_Runeword8
+	EET_Runeword8,
+	EET_LynxSetBonus,
+	EET_GryphonSetBonus,
+	EET_GryphonSetBonusYrden,
+	EET_POIGorA10,
+	EET_Mutation7Buff,
+	EET_Mutation7Debuff,
+	EET_Mutation10,
+	EET_Perk21InternalCooldown,
+	EET_Mutation11Buff,
+	EET_Mutation11Debuff,	
+	EET_Acid,						
+	EET_WellRested,
+	EET_HorseStableBuff,
+	EET_BookshelfBuff,
+	EET_PolishedGenitals,
+	EET_Mutation12Cat,
+	EET_Mutation11Immortal,
+	EET_Aerondight,
+	EET_Trap,
+	EET_Mutation3,
+	EET_Mutation4,
+	EET_Mutation5,
+	EET_ToxicityVenom,
+	EET_BasicQuen,
+	
+	
+EET_EffectTypesSize,
+EET_ForceEnumTo16Bit = 10000
 }
 
 
@@ -434,6 +473,7 @@ function IsCriticalEffectType(type : EEffectType) : bool
 		case EET_PoisonCritical :
 		case EET_Frozen :
 		case EET_Tornado :
+		case EET_Trap :
 		case EET_Swarm :
 		case EET_Snowstorm :
 		case EET_SnowstormQ403 :
@@ -545,7 +585,7 @@ function IsCriticalEffect(e : CBaseGameplayEffect) : bool
 	if(!e)
 		return false;
 		
-	return ((W3CriticalEffect)e) || ((W3CriticalDOTEffect)e);
+	return ((W3CriticalEffect)e) || ((W3CriticalDOTEffect)e) || e.GetEffectType() == EET_KnockdownTypeApplicator;
 }
 
 function IsDoTEffect(e : CBaseGameplayEffect) : bool

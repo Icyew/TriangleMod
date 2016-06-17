@@ -27,7 +27,7 @@ class CR4MenuPopup extends CR4OverlayMenu
 		
 		super.OnConfigUI();
 		
-		m_fxSetBarValueSFF		= m_flashModule.GetMemberFlashFunction( "setBarValue" );
+		m_fxSetBarValueSFF = m_flashModule.GetMemberFlashFunction( "setBarValue" );
 		m_DataObject = (W3PopupData)GetMenuInitData();
 		
 		if (!m_DataObject)
@@ -36,6 +36,7 @@ class CR4MenuPopup extends CR4OverlayMenu
 		}
 		else
 		{
+			m_DataObject.OnShown();
 			m_DataObject.SetupOverlayRef(this);
 			m_BlurBackground = m_DataObject.BlurBackground;
 			m_PauseGame = m_DataObject.PauseGame;		
@@ -98,15 +99,43 @@ class CR4MenuPopup extends CR4OverlayMenu
 		m_DataObject.OnUserFeedback(NavCode);
 	}
 	
+	event  OnBookRead( bookItemId : SItemUniqueId )
+	{
+		var popupData : BookPopupFeedback;
+		var uiData    : SInventoryItemUIData;
+		
+		thePlayer.inv.ReadBook( bookItemId );
+		
+		if (thePlayer.inv.IsIdValid( bookItemId ) && !thePlayer.inv.ItemHasTag( bookItemId, 'Quest' ) )
+		{
+			
+			uiData = thePlayer.inv.GetInventoryItemUIData( bookItemId );
+			uiData.isNew = false;
+			thePlayer.inv.SetInventoryItemUIData( bookItemId, uiData );
+			
+			popupData = (BookPopupFeedback)GetMenuInitData();
+			
+			if( popupData )
+			{
+				popupData.UpdateAfterBookRead( bookItemId );
+			}
+		}
+	}
+	
 	event  OnClosingMenu()
 	{
 		var commonMenuRef : CR4CommonMenu;
 		commonMenuRef = theGame.GetGuiManager().GetCommonMenu();
 		
+		if (m_DataObject)
+		{
+			m_DataObject.OnClosing();
+		}
+		
 		if (commonMenuRef)
 		{
-			commonMenuRef.UpdateInputFeedback();
-		}
+			commonMenuRef.UpdateInputFeedback();			
+		}		
 		
 		if (m_initialized)
 		{
@@ -130,6 +159,7 @@ class CR4MenuPopup extends CR4OverlayMenu
 	{
 		if ( m_DataObject )
 		{
+			m_DataObject.OnClosing();
 			delete m_DataObject;
 		}
 		super.RequestClose();

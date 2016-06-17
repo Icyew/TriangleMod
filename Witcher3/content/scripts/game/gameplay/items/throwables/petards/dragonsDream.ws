@@ -24,6 +24,19 @@ class W3DragonsDream extends W3Petard
 			gasEntity.SetExplodingTargetDamages(GetExplodingTargetDamages());
 			gasEntity.SetFromBomb(GetOwner());
 			gasEntity.SetIsFromClusterBomb(isCluster);
+			gasEntity.SetFriendlyFire( friendlyFire );
+
+			
+			if( GetWitcherPlayer().CanUseSkill( S_Perk_16 ) )
+			{
+				gasEntity.SetWasPerk16Active( true );
+			}
+			
+			
+			if( (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill(S_Perk_20) )
+			{
+				gasEntity.SetPerk20DamageMultiplierOn();
+			}
 		}
 	}
 	

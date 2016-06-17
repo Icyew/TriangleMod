@@ -48,7 +48,8 @@ enum EIngameMenuConstants
 	IGMC_Simulate_Import 	= 	2048,
 	IGMC_Import_Save		= 	4096,
 	IGMC_EP1_Save			=   8192,
-	IGMC_New_game_plus		=   16384
+	IGMC_New_game_plus		=   16384,
+	IGMC_EP2_Save			=   32768,
 }
 
 struct newGameConfig
@@ -82,7 +83,6 @@ class CR4IngameMenu extends CR4MenuBase
 	private var m_fxForceEnterCurEntry	: CScriptedFlashFunction;
 	private var m_fxForceBackgroundVis	: CScriptedFlashFunction;
 	private var m_fxSetHardwareCursorOn : CScriptedFlashFunction;
-	
 	private var m_fxSetExpansionText	: CScriptedFlashFunction;
 	
 	protected var loadConfPopup			: W3ApplyLoadConfirmation;
@@ -100,6 +100,7 @@ class CR4IngameMenu extends CR4MenuBase
 	
 	protected var isInLoadselector		: bool; default isInLoadselector = false;
 	protected var swapAcceptCancelChanged : bool; default swapAcceptCancelChanged = false;
+	protected var alternativeRadialInputChanged : bool; default alternativeRadialInputChanged = false;
 	protected var EnableUberMovement : bool; default EnableUberMovement = false;
 	
 	protected var shouldRefreshKinect	: bool; default shouldRefreshKinect = false;
@@ -134,8 +135,7 @@ class CR4IngameMenu extends CR4MenuBase
 	{
 		var initDataObject 		: W3MenuInitData;
 		var commonIngameMenu 	: CR4CommonIngameMenu;
-		var commonMainMenu 		: CR4CommonMainMenu;
-		var commonMainMenuEp1	: CR4CommonMainMenuEp1;
+		var commonMainMenuBase	: CR4CommonMainMenuBase;
 		var deathScreenMenu 	: CR4DeathScreenMenu;
 		var audioLanguageName 	: string;
 		var tempLanguageName 	: string;
@@ -162,7 +162,6 @@ class CR4IngameMenu extends CR4MenuBase
 		m_fxForceEnterCurEntry = m_flashModule.GetMemberFlashFunction( "forceEnterCurrentEntry" );
 		m_fxForceBackgroundVis = m_flashModule.GetMemberFlashFunction( "setForceBackgroundVisible" );
 		m_fxSetHardwareCursorOn = m_flashModule.GetMemberFlashFunction( "setHardwareCursorOn" );
-		
 		m_fxSetExpansionText = m_flashModule.GetMemberFlashFunction( "setExpansionText" );
 		
 		m_structureCreator = new IngameMenuStructureCreator in this;
@@ -187,8 +186,7 @@ class CR4IngameMenu extends CR4MenuBase
 		}
 		
 		commonIngameMenu = (CR4CommonIngameMenu)(GetParent());
-		commonMainMenu = (CR4CommonMainMenu)(GetParent());
-		commonMainMenuEp1 = (CR4CommonMainMenuEp1)(GetParent());
+		commonMainMenuBase = (CR4CommonMainMenuBase)(GetParent());
 		deathScreenMenu = (CR4DeathScreenMenu)(GetParent());
 		
 		if (commonIngameMenu)
@@ -203,21 +201,14 @@ class CR4IngameMenu extends CR4MenuBase
 				return true;
 			}
 		}
-		else if (commonMainMenu || commonMainMenuEp1)
+		else if (commonMainMenuBase)
 		{
 			isMainMenu = true;
 			panelMode = false;
 			mInGameConfigWrapper.ActivateScriptTag('mainMenu');
 			mInGameConfigWrapper.DeactivateScriptTag('inGame');
 			
-			if (theGame.GetDLCManager().IsEP1Available() && theGame.GetInGameConfigWrapper().GetVarValue('Hidden', 'HasSeenEP1WelcomeMessage') == "false")
-			{
-				theGame.GetInGameConfigWrapper().SetVarValue('Hidden', 'HasSeenEP1WelcomeMessage', "true");
-				
-				showBigMessage();
-			}
-			
-			
+			StartShowingCustomDialogs();
 			
 			if (theGame.GetDLCManager().IsEP1Available())
 			{
@@ -234,7 +225,8 @@ class CR4IngameMenu extends CR4MenuBase
 			}
 			else
 			{
-				ep2StatusText = GetLocStringByKeyExt("expansion_status_coming_soon");
+				
+				ep2StatusText = GetLocStringByKeyExt("expansion_status_available");
 			}
 			
 			m_fxSetExpansionText.InvokeSelfTwoArgs(FlashArgString(ep1StatusText), FlashArgString(ep2StatusText));
@@ -395,7 +387,8 @@ class CR4IngameMenu extends CR4MenuBase
 			}
 			else
 			{
-				ep2StatusText = GetLocStringByKeyExt("expansion_status_coming_soon");
+				
+				ep2StatusText = GetLocStringByKeyExt("expansion_status_available");
 			}
 			
 			m_fxSetExpansionText.InvokeSelfTwoArgs(FlashArgString(ep1StatusText), FlashArgString(ep2StatusText));
@@ -422,8 +415,7 @@ class CR4IngameMenu extends CR4MenuBase
 	public function ReopenMenu()
 	{
 		var commonInGameMenu : CR4CommonIngameMenu;
-		var commonMainMenu : CR4CommonMainMenu;
-		var commonMainMenuEp1 : CR4CommonMainMenuEp1;
+		var commonMainMenuBase : CR4CommonMainMenuBase;
 		
 		commonInGameMenu = (CR4CommonIngameMenu)m_parentMenu;
 		if(commonInGameMenu)
@@ -431,16 +423,10 @@ class CR4IngameMenu extends CR4MenuBase
 			commonInGameMenu.reopenRequested = true;
 		}
 		
-		commonMainMenuEp1 = (CR4CommonMainMenuEp1)m_parentMenu;
-		if (commonMainMenuEp1)
+		commonMainMenuBase = (CR4CommonMainMenuBase)m_parentMenu;
+		if ( commonMainMenuBase )
 		{
-			commonMainMenuEp1.reopenRequested = true;
-		}
-		
-		commonMainMenu = (CR4CommonMainMenu)m_parentMenu;
-		if (commonMainMenu)
-		{
-			commonMainMenu.reopenRequested = true;
+			commonMainMenuBase.reopenRequested = true;
 		}
 		
 		CloseMenu();
@@ -449,8 +435,7 @@ class CR4IngameMenu extends CR4MenuBase
 	event  OnClosingMenu()
 	{
 		var commonInGameMenu : CR4CommonIngameMenu;
-		var commonMainMenu : CR4CommonMainMenu;
-		var commonMainMenuEp1 : CR4CommonMainMenuEp1;
+		var commonMainMenuBase : CR4CommonMainMenuBase;
 		var deathScreenMenu : CR4DeathScreenMenu;
 		var controlsFeedbackModule : CR4HudModuleControlsFeedback;
 		var interactionModule : CR4HudModuleInteractions;
@@ -532,17 +517,10 @@ class CR4IngameMenu extends CR4MenuBase
 			return true;
 		}
 		
-		commonMainMenu = (CR4CommonMainMenu)m_parentMenu;
-		if (commonMainMenu)
+		commonMainMenuBase = (CR4CommonMainMenuBase)m_parentMenu;
+		if ( commonMainMenuBase )
 		{
-			commonMainMenu.ChildRequestCloseMenu();
-			return true;
-		}
-		
-		commonMainMenuEp1 = (CR4CommonMainMenuEp1)m_parentMenu;
-		if (commonMainMenuEp1)
-		{
-			commonMainMenuEp1.ChildRequestCloseMenu();
+			commonMainMenuBase.ChildRequestCloseMenu();
 			return true;
 		}
 		
@@ -757,26 +735,42 @@ class CR4IngameMenu extends CR4MenuBase
 		SetIgnoreInput(false);
 	}
 	
-	protected function showBigMessage():void
+	private function StartShowingCustomDialogs()
+	{
+		if (theGame.GetDLCManager().IsEP1Available() && theGame.GetInGameConfigWrapper().GetVarValue('Hidden', 'HasSeenEP1WelcomeMessage') == "false")
+		{
+			theGame.GetInGameConfigWrapper().SetVarValue('Hidden', 'HasSeenEP1WelcomeMessage', "true");
+			prepareBigMessage( 1 );
+		}
+		if (theGame.GetDLCManager().IsEP2Available() && theGame.GetInGameConfigWrapper().GetVarValue('Hidden', 'HasSeenEP2WelcomeMessage') == "false")
+		{
+			theGame.GetInGameConfigWrapper().SetVarValue('Hidden', 'HasSeenEP2WelcomeMessage', "true");
+			prepareBigMessage( 2 );
+		}
+	}
+	
+	protected function prepareBigMessage( epIndex : int ):void
 	{
 		var l_DataFlashObject 		: CScriptedFlashObject;
 		
 		l_DataFlashObject = m_flashValueStorage.CreateTempFlashObject();
-		l_DataFlashObject.SetMemberFlashString( "tfTitle1", GetLocStringByKeyExt("ep1_installed_information_title_1") );
-		l_DataFlashObject.SetMemberFlashString( "tfTitle2", GetLocStringByKeyExt("ep1_installed_information_title_2") );
+
+		l_DataFlashObject.SetMemberFlashInt( "index", epIndex );
+		l_DataFlashObject.SetMemberFlashString( "tfTitle1", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_1") );
+		l_DataFlashObject.SetMemberFlashString( "tfTitle2", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_2") );
 		
-		l_DataFlashObject.SetMemberFlashString( "tfTitlePath1", GetLocStringByKeyExt("ep1_installed_information_title_path_1") );
-		l_DataFlashObject.SetMemberFlashString( "tfTitlePath2", GetLocStringByKeyExt("ep1_installed_information_title_path_2") );
-		l_DataFlashObject.SetMemberFlashString( "tfTitlePath3", GetLocStringByKeyExt("ep1_installed_information_title_path_3") );
+		l_DataFlashObject.SetMemberFlashString( "tfTitlePath1", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_1") );
+		l_DataFlashObject.SetMemberFlashString( "tfTitlePath2", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_2") );
+		l_DataFlashObject.SetMemberFlashString( "tfTitlePath3", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_3") );
 		
-		l_DataFlashObject.SetMemberFlashString( "tfDescPath1", GetLocStringByKeyExt("ep1_installed_information_title_path_1_description") );
-		l_DataFlashObject.SetMemberFlashString( "tfDescPath2", GetLocStringByKeyExt("ep1_installed_information_title_path_2_description") );
-		l_DataFlashObject.SetMemberFlashString( "tfDescPath3", GetLocStringByKeyExt("ep1_installed_information_title_path_3_description") );
+		l_DataFlashObject.SetMemberFlashString( "tfDescPath1", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_1_description") );
+		l_DataFlashObject.SetMemberFlashString( "tfDescPath2", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_2_description") );
+		l_DataFlashObject.SetMemberFlashString( "tfDescPath3", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_title_path_3_description") );
 		
-		l_DataFlashObject.SetMemberFlashString( "tfWarning", GetLocStringByKeyExt("ep1_installed_information_warning_level") );
-		l_DataFlashObject.SetMemberFlashString( "tfGoodLuck", GetLocStringByKeyExt("ep1_installed_information_good_luck") );
+		l_DataFlashObject.SetMemberFlashString( "tfWarning", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_warning_level") );
+		l_DataFlashObject.SetMemberFlashString( "tfGoodLuck", GetLocStringByKeyExt("ep" + epIndex + "_installed_information_good_luck") );
 		
-		m_flashValueStorage.SetFlashObject( "ingamemenu.bigMessage", l_DataFlashObject );
+		m_flashValueStorage.SetFlashObject( "ingamemenu.bigMessage" + epIndex, l_DataFlashObject );
 	}
 	
 	
@@ -883,6 +877,11 @@ class CR4IngameMenu extends CR4MenuBase
 		if (optionName == 'SwapAcceptCancel')
 		{
 			swapAcceptCancelChanged = true;
+		}
+		
+		if (optionName == 'AlternativeRadialMenuInputMode')
+		{
+			alternativeRadialInputChanged = true;
 		}
 		
 		if (optionName == 'EnableUberMovement')
@@ -1002,6 +1001,9 @@ class CR4IngameMenu extends CR4MenuBase
 		{
 			hud.RefreshHudConfiguration();
 		}
+		
+		thePlayer.SetAutoCameraCenter( inGameConfigBufferedWrapper.GetVarValue( 'Gameplay', 'AutoCameraCenter' ) );
+		thePlayer.SetEnemyUpscaling( inGameConfigBufferedWrapper.GetVarValue( 'Gameplay', 'EnemyUpscaling' ) );
 	}
 	
 	event  OnNavigatedBack()
@@ -1009,6 +1011,7 @@ class CR4IngameMenu extends CR4MenuBase
 		var lowestDifficultyUsed : EDifficultyMode;
 		var hud : CR4ScriptedHud;
 		var overlayPopupRef : CR4OverlayPopup;
+		var radialMenuModule : CR4HudModuleRadialMenu;
 		var confirmResult : int;
 		
 		hud = (CR4ScriptedHud)(theGame.GetHud());
@@ -1045,6 +1048,20 @@ class CR4IngameMenu extends CR4MenuBase
 			if (overlayPopupRef)
 			{
 				overlayPopupRef.UpdateAcceptCancelSwaping();
+			}
+		}
+		
+		if (alternativeRadialInputChanged)
+		{
+			alternativeRadialInputChanged = false;
+			
+			if (hud)
+			{
+				radialMenuModule =  (CR4HudModuleRadialMenu)hud.GetHudModule( "RadialMenuModule" );
+				if (radialMenuModule)
+				{
+					radialMenuModule.UpdateInputMode();
+				}
 			}
 		}
 		
@@ -1523,7 +1540,12 @@ class CR4IngameMenu extends CR4MenuBase
 		{
 			fetchNewGameConfigFromTag(optionsArray);
 			
-			if ((optionsArray & IGMC_EP1_Save) == IGMC_EP1_Save)
+			if ((optionsArray & IGMC_EP2_Save) == IGMC_EP2_Save)
+			{
+				
+				theGame.InitStandaloneDLCLoading('bob_000_000', currentNewGameConfig.difficulty);
+			}
+			else if ((optionsArray & IGMC_EP1_Save) == IGMC_EP1_Save)
 			{
 				
 				theGame.InitStandaloneDLCLoading('ep1', currentNewGameConfig.difficulty);

@@ -30,7 +30,6 @@ class BTTaskSetMorph extends IBehTreeTask
 	public var ratioOnDeactivate	: float;
 	public var timeOnDeactivate		: float;	
 	
-	private var m_component			: CMorphedMeshManagerComponent;
 	private var m_morphIsLaunched	: bool;
 	
 	
@@ -60,17 +59,24 @@ class BTTaskSetMorph extends IBehTreeTask
 	
 	
 	private final function StartMorph( _Ratio : float, _Time : float)
-	{		
+	{
+		var components	: array<CComponent>;
+		var i 			: int;
+		
 		if ( m_morphIsLaunched ) 
 			return;
 		
-		if( !m_component )		
-			m_component = GetNPC().GetMorphedMeshManagerComponent();
-			
-		if( m_component.GetMorphBlend() == _Ratio )
-			return;
-			
-		m_component.SetMorphBlend( _Ratio, _Time );
+		components = GetNPC().GetComponentsByClassName( 'CMorphedMeshManagerComponent' );
+		if ( components.Size() > 0 )
+		{
+			for ( i = 0 ; i < components.Size() ; i += 1 )
+			{
+				if( ( ( CMorphedMeshManagerComponent ) components[i] ).GetMorphBlend() != _Ratio )
+				{
+					( ( CMorphedMeshManagerComponent ) components[i] ).SetMorphBlend( _Ratio, _Time );
+				}	
+			}
+		}
 	}
 
 }

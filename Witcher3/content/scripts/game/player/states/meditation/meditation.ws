@@ -106,9 +106,16 @@ state Meditation in W3PlayerWitcher extends MeditationBase
 				changedContext = false;
 			}
 			
-			
-			virtual_parent.SetBehaviorVariable('MeditateWithIgnite', 0);
-			actionSuccess = virtual_parent.PlayerStartAction(PEA_Meditation);
+			if( !((W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' )).GetWasUsed() )
+			{
+				
+				virtual_parent.SetBehaviorVariable('MeditateWithIgnite', 0);
+				actionSuccess = virtual_parent.PlayerStartAction(PEA_Meditation);
+			}
+			else
+			{
+				actionSuccess = true;
+			}
 		}
 		else
 		{
@@ -196,8 +203,8 @@ state Meditation in W3PlayerWitcher extends MeditationBase
 	
 	public latent function StopMeditation()
 	{
-		var campFire : CLightEntitySimple;
-		var commonMenuRef : CR4CommonMenu;
+		var commonMenuRef 	: CR4CommonMenu;
+		var l_bed			: W3WitcherBed;
 	
 		cameraIsLeavingState = true;
 		
@@ -209,11 +216,26 @@ state Meditation in W3PlayerWitcher extends MeditationBase
 			{
 				commonMenuRef.CloseMenu();
 			}
-		}
+		}		
 	
 		virtual_parent.SetBehaviorVariable('HasCampfire', 0);
-		virtual_parent.PlayerStopAction(PEA_Meditation);
-					
+		
+		l_bed = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );
+		
+		if( !l_bed.GetWasUsed() )
+		{
+			virtual_parent.PlayerStopAction(PEA_Meditation);
+		}
+		else
+		{
+			virtual_parent.PlayerStopAction( PEA_GoToSleep );
+		}
+		
+		if( l_bed.GetWasUsed() )
+		{
+			l_bed.SetWasUsed( false );
+		}
+		
 		
 		if(changedContext)
 		{

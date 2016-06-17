@@ -96,7 +96,6 @@ class W3Effect_StaminaDrainSwimming extends CBaseGameplayEffect
 	{
 		super.OnEffectRemoved();
 		
-		target.ResumeEffects(EET_AutoStaminaRegen, 'SwimmingStaminaDrain');
-		target.ResumeEffects(EET_AutoSwimmingStaminaRegen, 'SwimmingStaminaDrain');
+		target.ResumeStaminaRegen( 'SwimmingStaminaDrain' );
 	}
 }

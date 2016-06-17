@@ -26,15 +26,16 @@ class CBTTaskSpawnAnim extends IBehTreeTask
 	public var initialAppearance		: name;
 	public var setAppearanceTo 			: name;
 	public var playFXOnAnimEvent		: bool;
-	public var animEventNameActivator	: name;
+	public var animEventNameActivator	: name;	
 	public var monitorGroundContact		: bool;
 	public var dealDamageOnAnimEvent	: name;
+	public var becomeVisibleOnAnimEvent : name;
 	public var tagToBeDamaged			: name;
 	
 	private var spawned 				: bool;
 	private var canPlayHitAnim			: bool;
 	private var animEventOccured		: bool;
-	
+	private var isVisible				: bool;
 	
 	default spawnCondition		= SC_PlayerInRange;
 	default spawned 			= false;
@@ -68,6 +69,13 @@ class CBTTaskSpawnAnim extends IBehTreeTask
 	{
 		var npc 	: CNewNPC = GetNPC();
 		canPlayHitAnim = npc.CanPlayHitAnim();
+		
+		if( IsNameValid( becomeVisibleOnAnimEvent ) )
+		{
+			npc.SetGameplayVisibility( false );
+			isVisible = false;
+		}
+		
 		return BTNS_Active;
 	}
 	
@@ -289,13 +297,18 @@ class CBTTaskSpawnAnim extends IBehTreeTask
 		spawned 			= false;
 		animEventOccured 	= false;
 		npc.SetCanPlayHitAnim( canPlayHitAnim );
+		
+		if( IsNameValid( becomeVisibleOnAnimEvent ) && !isVisible )
+		{
+			npc.SetGameplayVisibility( true );
+		}
 	}
 	
 	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
 	{
 		var npc : CNewNPC = GetNPC();
 		
-		if ( animEventName == animEventNameActivator )
+		if( animEventName == animEventNameActivator )
 		{
 			animEventOccured = true;
 			if( setAppearanceTo )
@@ -308,8 +321,13 @@ class CBTTaskSpawnAnim extends IBehTreeTask
 			}
 			return true;
 		}
-		
-		if ( IsNameValid( dealDamageOnAnimEvent ) && animEventName == dealDamageOnAnimEvent )
+		else if( IsNameValid( becomeVisibleOnAnimEvent ) && animEventName == becomeVisibleOnAnimEvent )
+		{
+			npc.SetGameplayVisibility( true );
+			isVisible = true;
+		}
+
+		if( IsNameValid( dealDamageOnAnimEvent ) && animEventName == dealDamageOnAnimEvent )
 		{
 			DealDamage();
 			return true;
@@ -358,20 +376,21 @@ class CBTTaskSpawnAnimDef extends IBehTreeTaskDefinition
 {
 	default instanceClass = 'CBTTaskSpawnAnim';
 
-	editable var useSwarms				: bool;
-	editable var manageGravity 			: bool;
-	editable var spawnCondition			: ESpawnCondition;
-	editable var distToActors 			: float;
-	editable var delayMain				: float;
-	editable var raiseEventName			: name;
-	editable var dealDamageOnAnimEvent	: CBehTreeValCName;
-	editable var fxName 				: CBehTreeValCName;
-	editable var initialAppearance 		: name;
-	editable var setAppearanceTo		: name;
-	editable var playFXOnAnimEvent 		: CBehTreeValBool;
-	editable var animEventNameActivator : CBehTreeValCName;
-	editable var monitorGroundContact	: CBehTreeValBool;
-	editable var tagToBeDamaged			: name;
+	editable var useSwarms					: bool;
+	editable var manageGravity 				: bool;
+	editable var spawnCondition				: ESpawnCondition;
+	editable var distToActors 				: float;
+	editable var delayMain					: float;
+	editable var raiseEventName				: name;
+	editable var dealDamageOnAnimEvent		: CBehTreeValCName;
+	editable var fxName 					: CBehTreeValCName;
+	editable var initialAppearance 			: name;
+	editable var setAppearanceTo			: name;
+	editable var playFXOnAnimEvent 			: CBehTreeValBool;
+	editable var animEventNameActivator 	: CBehTreeValCName;
+	editable var monitorGroundContact		: CBehTreeValBool;
+	editable var becomeVisibleOnAnimEvent 	: CBehTreeValCName;
+	editable var tagToBeDamaged				: name;
 	
 	default spawnCondition			= SC_PlayerInRange;
 	default manageGravity 			= false;

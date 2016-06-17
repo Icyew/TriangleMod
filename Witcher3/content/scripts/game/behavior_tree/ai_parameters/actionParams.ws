@@ -284,14 +284,18 @@ class CAIMoveAlongPathWithCompanionParams extends CAIMoveAlongPathParams
 	editable var progressWhenCompanionIsAhead		: bool;
 	editable var progressOnlyWhenCompanionIsAhead	: bool;
 	editable var matchCompanionSpeed				: bool;
+	editable var allowLeaderToRideOff				: bool;
+	editable var moveTypeAfterMaxDistance			: EMoveType;
 	
-	default matchCompanionSpeed				= true;
-	default companionTag 					= 'PLAYER';
-	default maxDistance 					= 10.0f;
-	default minDistance 					= 4.0f;
-	default companionOffset					= -3.0f;
-	default progressWhenCompanionIsAhead 	= false;
-	default progressOnlyWhenCompanionIsAhead = false;
+	default matchCompanionSpeed						= true;
+	default companionTag 							= 'PLAYER';
+	default maxDistance 							= 10.0f;
+	default minDistance 							= 4.0f;
+	default companionOffset							= -3.0f;
+	default progressWhenCompanionIsAhead 			= false;
+	default progressOnlyWhenCompanionIsAhead 		= false;
+	default allowLeaderToRideOff					= false;
+	default moveTypeAfterMaxDistance				= MT_Run;
 };
 
 
@@ -433,14 +437,18 @@ class CAIRiderMoveAlongPathWithCompanionActionParams extends CAIRiderMoveAlongPa
 	editable var progressWhenCompanionIsAhead		: bool;
 	editable var progressOnlyWhenCompanionIsAhead	: bool;
 	editable var matchCompanionSpeed				: bool;
+	editable var allowLeaderToRideOff				: bool;
+	editable var moveTypeAfterMaxDistance			: EMoveType;
 	
-	default matchCompanionSpeed				= true;	
-	default companionTag 					= 'PLAYER';
-	default maxDistance 					= 15.0f;
-	default minDistance 					= 8.0f;
-	default companionOffset					= -9.0f;
-	default progressWhenCompanionIsAhead 	= false;
-	default progressOnlyWhenCompanionIsAhead = false;
+	default matchCompanionSpeed						= true;	
+	default companionTag 							= 'PLAYER';
+	default maxDistance 							= 15.0f;
+	default minDistance 							= 8.0f;
+	default companionOffset							= -9.0f;
+	default progressWhenCompanionIsAhead 			= false;
+	default progressOnlyWhenCompanionIsAhead 		= false;
+	default allowLeaderToRideOff					= false;
+	default moveTypeAfterMaxDistance				= MT_Run;
 	
 	
 	
@@ -455,6 +463,8 @@ class CAIRiderMoveAlongPathWithCompanionActionParams extends CAIRiderMoveAlongPa
 		moveAlongPathParams.companionOffset 					= companionOffset;
 		moveAlongPathParams.progressWhenCompanionIsAhead 		= progressWhenCompanionIsAhead;
 		moveAlongPathParams.progressOnlyWhenCompanionIsAhead 	= progressOnlyWhenCompanionIsAhead;
+		moveAlongPathParams.allowLeaderToRideOff				= allowLeaderToRideOff;
+		moveAlongPathParams.moveTypeAfterMaxDistance			= moveTypeAfterMaxDistance;
 	}
 };
 
@@ -960,6 +970,78 @@ class CAIActionLoop extends IAIActionTree
 };
 
 
+class CAISyannaCompanionBehavior extends IAIBaseAction
+{
+	editable inlined var params : CAISyannaCompanionBehaviorParams;
+	editable var useCustomSteering		: bool;
+	editable var customSteeringGraph	: CMoveSteeringBehavior;
+	default useCustomSteering 	= true;
+	
+	default aiTreeName = "dlc\bob\data\gameplay\trees\scripted_actions\syanna_companion.w2behtree";
+
+	function Init()
+	{
+		params = new CAISyannaCompanionBehaviorParams in this;
+		params.OnCreated();
+		
+		customSteeringGraph 	= LoadSteeringGraph( "dlc\bob\data\gameplay\behaviors\steering\syanna_follow.w2steer" );
+		params.followDistance 	= 0.25;
+		params.moveType 		= MT_Sprint;
+	}
+};
+
+class CAISyannaCompanionBehaviorParams extends IAIActionParameters
+{  
+	editable var targetTag 					: CName;
+	editable var moveType 					: EMoveType;
+	editable var keepDistance 				: bool;
+	editable var followDistance 			: float;
+	editable var moveSpeed 					: float;
+	editable var followTargetSelection 		: bool;
+	editable var teleportToCatchup			: bool;
+	editable var cachupDistance				: float;
+	editable var rotateToWhenAtTarget		: bool;
+	
+	editable var idleTimeToPlaySlotAnim 	: float;
+	editable var slotAnimCooldown			: float;
+	editable var slotName					: name;
+	editable var animName_1_start			: CName;
+	editable var animName_1_loop			: CName;
+	editable var animName_1_stop			: CName;
+	editable var animName_2_start			: CName;
+	editable var animName_2_loop			: CName;
+	editable var animName_2_stop			: CName;
+	editable var animName_3_start			: CName;
+	editable var animName_3_loop			: CName;
+	editable var animName_3_stop			: CName;
+	editable var animName_4_start			: CName;
+	editable var animName_4_loop			: CName;
+	editable var animName_4_stop			: CName;
+	
+	default targetTag 				= "PLAYER";
+	default moveType 				= MT_Walk;
+	default moveSpeed 				= 1.0;
+	default followDistance 			= 2.0;
+	default keepDistance 			= true;
+	default followTargetSelection 	= true;
+	default teleportToCatchup		= true;
+	default cachupDistance			= 30.0;
+	default rotateToWhenAtTarget	= true;
+	
+	default idleTimeToPlaySlotAnim = 10.0;
+	default slotAnimCooldown = 5.0;
+	default slotName = "NPC_ANIM_SLOT";
+	
+	hint rotateToWhenAtTarget = "After reaching the follow distance, NPC will rotate towards the target";
+	hint animName_1_start = "Fill ALL animation names, even if you have only one.";
+	hint animName_1_loop = "Fill ALL animation names, even if you have only one.";
+	hint animName_1_end = "Fill ALL animation names, even if you have only one.";
+	
+	function Init()
+	{
+		super.Init();
+	}
+};
 
 
 
@@ -1199,6 +1281,12 @@ class CAIChangeBehaviorGraphDecorator extends IActionDecorator
 class CAIScaredActionDecorator extends IActionDecorator
 {
 	default aiTreeName = "resdef:ai\scripted_actions\scared_action_decorator.w2behtree";
+}
+
+
+class CAICustomSpawnActionDecorator extends IActionDecorator
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\npc_banshee_summon_spawn.w2behtree";
 }
 
 

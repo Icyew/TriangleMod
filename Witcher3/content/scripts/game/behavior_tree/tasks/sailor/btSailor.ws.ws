@@ -8,19 +8,17 @@
 class CBTTaskSailorMountBoat extends IBehTreeTask
 {
 	var boatTag 			: name;
-	var aiStorageHandler 	: CAIStorageHandler;
+	var riderData 			: CAIStorageRiderData;
 	var instantMount		: bool;
 	
 	function Initialize()
-	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		aiStorageHandler.Get();
+	{
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
     latent function Main() : EBTNodeStatus
     {        
         var actor       : CActor = GetActor();
-        var riderData 	: CAIStorageRiderData;
+        
         var boatEntity	: CEntity;
         var mountType	: EMountType = MT_instant;
         
@@ -30,7 +28,6 @@ class CBTTaskSailorMountBoat extends IBehTreeTask
 		{
 			return BTNS_Failed;
 		}
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
 		EntityHandleSet( riderData.sharedParams.boat, boatEntity );
 		
 		if ( instantMount == false )
@@ -70,19 +67,16 @@ class CBTTaskSailorMountBoatDef extends IBehTreeTaskDefinition
 
 class CBTTaskSailorDismountBoat extends IBehTreeTask
 {
-	var aiStorageHandler 	: CAIStorageHandler;
+	 var riderData 	: CAIStorageRiderData;
 	
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		aiStorageHandler.Get();
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
     latent function Main() : EBTNodeStatus
     {
         var actor       : CActor = GetActor();
-        var riderData 	: CAIStorageRiderData;
-        riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
+       
         actor.SignalGameplayEventParamInt( 'RidingManagerDismountBoat', DT_instant );
 		
 		while ( true )
@@ -113,16 +107,11 @@ class CBTTaskSailorDismountBoatDef extends IBehTreeTaskDefinition
 
 class CBTTaskCondIsMountedOnBoat extends IBehTreeTask
 {
-	var aiStorageHandler 	: CAIStorageHandler;
 	var riderData 	: CAIStorageRiderData;
-	
 	
 	function IsAvailable() : bool
 	{
-		if ( !riderData )
-			riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
-			
-		if ( riderData && riderData.sharedParams && EntityHandleGet( riderData.sharedParams.boat ) )
+		if ( riderData.sharedParams && EntityHandleGet( riderData.sharedParams.boat ) )
 		{
 			return true;
 		}
@@ -131,10 +120,8 @@ class CBTTaskCondIsMountedOnBoat extends IBehTreeTask
 	}
 	
 	function Initialize()
-	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		aiStorageHandler.Get();
+	{
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 

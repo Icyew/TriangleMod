@@ -38,6 +38,7 @@ statemachine import abstract class CPlayer extends CActor
 	private				var bIsInputAllowed				: bool;
 	public 				var bIsFirstAttackInCombo		: bool;
 	protected			var bIsInHitAnim				: bool;
+	import				var enemyUpscaling				: bool;
 	
 	public editable		var FarZoneDistMax				: float;
 	public editable 	var DangerZoneDistMax			: float;
@@ -126,6 +127,7 @@ statemachine import abstract class CPlayer extends CActor
 	public 				var movementLockType			: EPlayerMovementLockType;
 	public	 			var scriptedCombatCamera 		: bool;
 	public				var modifyPlayerSpeed			: bool;
+	public saved		var autoCameraCenterToggle 		: bool;
 	
 	default interiorCamera = false;
 	default scriptedCombatCamera =  true;
@@ -237,6 +239,9 @@ statemachine import abstract class CPlayer extends CActor
 			inputHandler = new CPlayerInput in this;
 			
 		inputHandler.Initialize(spawnData.restored );
+		SetAutoCameraCenter( ((CInGameConfigWrapper)theGame.GetInGameConfigWrapper()).GetVarValue( 'Gameplay', 'AutoCameraCenter' ) );
+
+		SetEnemyUpscaling( ((CInGameConfigWrapper)theGame.GetInGameConfigWrapper()).GetVarValue( 'Gameplay', 'EnemyUpscaling' ) );
 		
 		if( !IsNameValid(GetCurrentStateName()) )
 		{
@@ -267,7 +272,7 @@ statemachine import abstract class CPlayer extends CActor
 		AddAnimEventCallback('HideMedallion',		'OnAnimEvent_HideMedallion');
 		
 		
-		ResumeEffects(EET_AutoStaminaRegen, 'Sprint');
+		ResumeStaminaRegen( 'Sprint' );
 	}
 	
 	
@@ -908,9 +913,15 @@ statemachine import abstract class CPlayer extends CActor
 	function EnableBroadcastPresence( enable : bool )
 	{
 		if ( enable )
+		{
 			theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'PlayerPresenceAction', -1.f , 10.0f, 3.f, -1, true); 
+			theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'PlayerPresenceActionFar', -1.f , 20.0f, 3.f, -1, true); 
+		}
 		else
+		{
 			theGame.GetBehTreeReactionManager().RemoveReactionEvent(this, 'PlayerPresenceAction');
+			theGame.GetBehTreeReactionManager().RemoveReactionEvent(this, 'PlayerPresenceActionFar');
+		}
 	}
 	
 	function RemoveReactions()
@@ -942,6 +953,12 @@ statemachine import abstract class CPlayer extends CActor
 		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( thePlayer, 'PlayerInScene', -1.f, 60.0f, -1, -1, true ); 
 		PushState( 'PlayerDialogScene' );		
 
+	}
+
+	event OnBlockingSceneStarted_OnIntroCutscene( scene: CStoryScene )
+	{
+		SetImmortalityMode( AIM_Invulnerable, AIC_Scene );
+		SetTemporaryAttitudeGroup( 'geralt_friendly', AGP_Scenes);
 	}
 	
 	event OnBlockingSceneEnded( optional output : CStorySceneOutput)
@@ -1144,13 +1161,13 @@ statemachine import abstract class CPlayer extends CActor
 			BreakPheromoneEffect();
 			RemoveTimer( 'DisableSprintingTimer' );
 			AddTimer('SprintingTimer', 0.01, true);
-			thePlayer.PauseEffects(EET_AutoStaminaRegen, 'Sprint', true );
+			PauseStaminaRegen( 'Sprint' );
 		}
 		else 
 		{
 			sprintingTime = 0.0f;
 			theGame.GetBehTreeReactionManager().RemoveReactionEvent( thePlayer, 'PlayerSprintAction' ); 
-			thePlayer.ResumeEffects(EET_AutoStaminaRegen, 'Sprint');
+			ResumeStaminaRegen( 'Sprint' );
 			EnableSprintingCamera( false );
 		}
 		
@@ -1417,7 +1434,7 @@ statemachine import abstract class CPlayer extends CActor
 		{
 			if( RaiseEvent('CombatActionFriendly') )
 			{
-				SetBIsInCombatActionFriendly( true );
+				SetBIsInCombatActionFriendly( true ); 
 				return true;
 			}
 		}
@@ -1979,6 +1996,15 @@ statemachine import abstract class CPlayer extends CActor
 	{
 		return true;
 	}
+	
+	import function SetEnemyUpscaling( b : bool );
+	import public function GetEnemyUpscaling() : bool;
+	
+	public function SetAutoCameraCenter( on : bool ) { autoCameraCenterToggle = on; }
+	public function GetAutoCameraCenter() : bool
+	{
+		return autoCameraCenterToggle || IsCameraLockedToTarget();
+	}
 
 	public function SetVehicleCachedSign( sign : ESignType ) { vehicleCachedSign = sign; }
 	public function GetVehicleCachedSign() : ESignType { return vehicleCachedSign; }
@@ -2143,7 +2169,83 @@ statemachine import abstract class CPlayer extends CActor
 		enemiesSize = actors.Size();
 		
 		for( i = 0; i < enemiesSize; i += 1 )
-			actors[i].Kill(false, this);					
+			actors[i].Kill( 'Debug', false, this);					
+	}
+	
+	public function DebugTeleportToPin( optional posX : float , optional posY : float )
+	{
+		var mapManager 		: CCommonMapManager = theGame.GetCommonMapManager();
+		var rootMenu		: CR4Menu;
+		var mapMenu			: CR4MapMenu;
+		var currWorld		: CWorld = theGame.GetWorld();
+		var destWorldPath	: string;
+		var id				: int;
+		var area			: int;
+		var type			: int;
+		var position		: Vector;
+		var rotation 		: EulerAngles;
+		var goToCurrent		: Bool = false;
+		
+		rootMenu = (CR4Menu)theGame.GetGuiManager().GetRootMenu();
+		
+		if ( rootMenu )
+		{
+			mapMenu = (CR4MapMenu)rootMenu.GetSubMenu();
+			
+			if ( mapMenu )
+			{
+				position.X = posX;
+				position.Y = posY;
+				destWorldPath = mapManager.GetWorldPathFromAreaType( mapMenu.GetShownMapType() );
+				
+				if ( mapMenu.IsCurrentAreaShown() )
+				{
+					goToCurrent = true;
+				}
+				
+				rootMenu.CloseMenu();
+			}
+		}
+		else
+		{	
+			mapManager.GetUserMapPinByIndex( 0, id, area, position.X, position.Y, type );		
+			destWorldPath = mapManager.GetWorldPathFromAreaType( area );
+			
+			if (destWorldPath == "" || destWorldPath == currWorld.GetPath() )
+			{
+				goToCurrent = true;
+			}
+		}
+		
+		if ( goToCurrent )
+		{
+			currWorld.NavigationComputeZ(position, -500.f, 500.f, position.Z);
+			currWorld.NavigationFindSafeSpot(position, 0.5f, 20.f, position);
+				
+			Teleport( position );
+		
+			if ( !currWorld.NavigationComputeZ(position, -500.f, 500.f, position.Z) )		
+			{
+				AddTimer( 'DebugWaitForNavigableTerrain', 1.f, true );
+			}
+		}
+		else
+		{
+			theGame.ScheduleWorldChangeToPosition( destWorldPath, position, rotation );
+			AddTimer( 'DebugWaitForNavigableTerrain', 1.f, true, , , true );
+		}
+	}
+	
+	timer function DebugWaitForNavigableTerrain( delta : float, id : int )
+	{
+		var position 	: Vector = GetWorldPosition();
+		
+		if ( theGame.GetWorld().NavigationComputeZ(position, -1000.f, 1000.f, position.Z) )
+		{
+			RemoveTimer( 'DebugWaitForNavigableTerrain' );
+			theGame.GetWorld().NavigationFindSafeSpot(position, 0.5f, 20.f, position);
+			Teleport( position );
+		}
 	}
 	
 	event OnHitByObstacle( obstacleComponent : CComponent )

@@ -5,7 +5,6 @@
 /***********************************************************************/
 class CBTTaskRainReaction extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var reactionDataStorage : CAIStorageReactionData;
 	
 	function IsAvailable() : bool
@@ -27,9 +26,7 @@ class CBTTaskRainReaction extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 }
 

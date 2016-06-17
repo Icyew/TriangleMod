@@ -10,31 +10,25 @@ class CBTTaskAnimalSetIsScared extends IBehTreeTask
 {
 	var value 				: bool;
 	var setOnDeactivate 	: bool;
-	var aiStorageHandler 	: CAIStorageHandler;
+	var animalData		 	: CAIStorageAnimalData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var animalData 	: CAIStorageAnimalData;
 		if ( setOnDeactivate == false )
 		{
-			animalData 			= (CAIStorageAnimalData)aiStorageHandler.Get();
 			animalData.scared 	= value;
 		}
 		return BTNS_Active;
 	}
 	function OnDeactivate()
 	{
-		var animalData 	: CAIStorageAnimalData;
 		if ( setOnDeactivate )
 		{
-			animalData 			= (CAIStorageAnimalData)aiStorageHandler.Get();
 			animalData.scared 	= value;
 		}
 	}
 	function Initialize()
 	{
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'AnimalData', '*CAIStorageAnimalData', this );
-		aiStorageHandler.Get();
+		animalData = (CAIStorageAnimalData)RequestStorageItem( 'AnimalData', 'CAIStorageAnimalData' );
 	}
 }
 
@@ -51,32 +45,20 @@ class CBTTaskAnimalSetIsScaredDef extends IBehTreeHorseTaskDefinition
 
 class CBTCondAnimalIsScared extends IBehTreeTask
 {	
-	var aiStorageHandler : CAIStorageHandler;
+	var animalData 	: CAIStorageAnimalData;
 	function IsAvailable() : bool
 	{
-		var animalData 	: CAIStorageAnimalData;
-		
-		if( GetNPC().GetAttitudeGroup() == 'animals' || GetNPC().GetAttitudeGroup() == 'AG_small_animals' )
-		{
-			
-		}
-		
-		animalData 			= (CAIStorageAnimalData)aiStorageHandler.Get();
 		return animalData.scared;
 	}
 	function OnListenedGameplayEvent( eventName : name ) : bool
 	{
-		var animalData 	: CAIStorageAnimalData;
-		animalData 			= (CAIStorageAnimalData)aiStorageHandler.Get();
 		animalData.scared 	= true;
 		
 		return true;
 	}
 	function Initialize()
 	{
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'AnimalData', '*CAIStorageAnimalData', this );
-		aiStorageHandler.Get();
+		animalData = (CAIStorageAnimalData)RequestStorageItem( 'AnimalData', 'CAIStorageAnimalData' );
 	}
 };
 

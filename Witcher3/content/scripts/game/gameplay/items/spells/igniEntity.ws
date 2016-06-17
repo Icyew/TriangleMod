@@ -279,8 +279,7 @@ state IgniCast in W3IgniEntity extends NormalCast
 {
 	event OnThrowing()
 	{
-		var player : CR4Player;
-		var cost, stamina : float;
+		var player			: CR4Player;
 		
 		if( super.OnThrowing() )
 		{
@@ -289,18 +288,16 @@ state IgniCast in W3IgniEntity extends NormalCast
 			ProcessThrow();
 			
 			player = caster.GetPlayer();
-			if(player == caster.GetActor() && player && player.CanUseSkill(S_Perk_09))
+			
+			if( player )
 			{
-				cost = player.GetStaminaActionCost(ESAT_Ability, SkillEnumToName( parent.skillEnum ), 0);
-				stamina = player.GetStat(BCS_Stamina, true);
-				
-				if(cost > stamina)
-					player.DrainFocus(1);
-				else
-					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+				parent.ManagePlayerStamina();
+				parent.ManageGryphonSetBonusBuff();
 			}
-			else
+			else 
+			{
 				caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+			}
 		}
 	}
 	

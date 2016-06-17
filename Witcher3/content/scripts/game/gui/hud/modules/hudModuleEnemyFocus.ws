@@ -24,21 +24,22 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 	
 	
 	
-	private	var m_fxSetEnemyName			: CScriptedFlashFunction;
-	private	var m_fxSetEnemyHealth			: CScriptedFlashFunction;
-	private	var m_fxSetEnemyStamina			: CScriptedFlashFunction;
-	private	var m_fxSetEssenceDamage		: CScriptedFlashFunction;
-	private	var m_fxSetDodgeFeedback		: CScriptedFlashFunction;
-	private	var m_fxSetAttitude				: CScriptedFlashFunction;
-	private	var m_fxIsHuman					: CScriptedFlashFunction;
-	private	var m_fxSetBossOrDead			: CScriptedFlashFunction;
-	private	var m_fxSetContraHint			: CScriptedFlashFunction;
-	private	var m_fxSetShowHardLock			: CScriptedFlashFunction;
-	private	var m_fxSetEnemyLevel			: CScriptedFlashFunction;
-	private var m_fxSetNPCQuestIcon			: CScriptedFlashFunction;
-	private var m_fxSetDamageText			: CScriptedFlashFunction;
-	private var m_fxHideDamageText			: CScriptedFlashFunction;
-	private var m_fxSetGeneralVisibility	: CScriptedFlashFunction;
+	private	var m_fxSetEnemyName				: CScriptedFlashFunction;
+	private	var m_fxSetEnemyHealth				: CScriptedFlashFunction;
+	private	var m_fxSetEnemyStamina				: CScriptedFlashFunction;
+	private	var m_fxSetEssenceDamage			: CScriptedFlashFunction;
+	private	var m_fxSetDodgeFeedback			: CScriptedFlashFunction;
+	private	var m_fxSetAttitude					: CScriptedFlashFunction;
+	private	var m_fxIsHuman						: CScriptedFlashFunction;
+	private	var m_fxSetBossOrDead				: CScriptedFlashFunction;
+	private	var m_fxSetShowHardLock				: CScriptedFlashFunction;
+	private	var m_fxSetEnemyLevel				: CScriptedFlashFunction;
+	private var m_fxSetNPCQuestIcon				: CScriptedFlashFunction;
+	private var m_fxSetDamageText				: CScriptedFlashFunction;
+	private var m_fxHideDamageText				: CScriptedFlashFunction;
+	private var m_fxSetGeneralVisibility		: CScriptedFlashFunction;
+	private var m_fxSetMutationEightVisibility	: CScriptedFlashFunction;
+
 	private	var m_mcNPCFocus				: CScriptedFlashSprite;
 	
 	private var m_lastTarget				: CGameplayEntity;
@@ -50,6 +51,8 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 	private var m_lastEnemyDifferenceLevel	: string;
 	private var m_lastEnemyLevelString		: string;
 	private var m_lastDodgeFeedbackTarget	: CActor;
+	private var m_lastEnemyName				: string;
+	private var m_lastUseMutation8Icon		: bool;
 	
 	
 	
@@ -62,22 +65,22 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		
 		flashModule 			= GetModuleFlash();
 		
-		m_fxSetEnemyName		= flashModule.GetMemberFlashFunction( "setEnemyName" );
-		m_fxSetEnemyHealth		= flashModule.GetMemberFlashFunction( "setEnemyHealth" );
-		m_fxSetEnemyStamina		= flashModule.GetMemberFlashFunction( "setEnemyStamina" );
-		m_fxSetEssenceDamage	= flashModule.GetMemberFlashFunction( "setEssenceDamage" );
-		m_fxSetDodgeFeedback	= flashModule.GetMemberFlashFunction( "setDodgeFeedback" );
-		m_fxSetDamageText		= flashModule.GetMemberFlashFunction( "setDamageText" );
-		m_fxHideDamageText		= flashModule.GetMemberFlashFunction( "hideDamageText" );
-		m_fxSetAttitude			= flashModule.GetMemberFlashFunction( "setAttitude" );
-		m_fxIsHuman				= flashModule.GetMemberFlashFunction( "setStaminaVisibility" );		
-		m_fxSetBossOrDead		= flashModule.GetMemberFlashFunction( "SetBossOrDead" );		
-		m_fxSetContraHint		= flashModule.GetMemberFlashFunction( "setContraHint" );
-		m_fxSetShowHardLock		= flashModule.GetMemberFlashFunction( "setShowHardLock" );
-		m_fxSetEnemyLevel		= flashModule.GetMemberFlashFunction( "setEnemyLevel" );
-		m_fxSetNPCQuestIcon		= flashModule.GetMemberFlashFunction( "setNPCQuestIcon" );
-		m_fxSetGeneralVisibility= flashModule.GetMemberFlashFunction( "SetGeneralVisibility" );
-		m_mcNPCFocus 			= flashModule.GetChildFlashSprite( "mcNPCFocus" );
+		m_fxSetEnemyName				= flashModule.GetMemberFlashFunction( "setEnemyName" );
+		m_fxSetEnemyHealth				= flashModule.GetMemberFlashFunction( "setEnemyHealth" );
+		m_fxSetEnemyStamina				= flashModule.GetMemberFlashFunction( "setEnemyStamina" );
+		m_fxSetEssenceDamage			= flashModule.GetMemberFlashFunction( "setEssenceDamage" );
+		m_fxSetDodgeFeedback			= flashModule.GetMemberFlashFunction( "setDodgeFeedback" );
+		m_fxSetDamageText				= flashModule.GetMemberFlashFunction( "setDamageText" );
+		m_fxHideDamageText				= flashModule.GetMemberFlashFunction( "hideDamageText" );
+		m_fxSetAttitude					= flashModule.GetMemberFlashFunction( "setAttitude" );
+		m_fxIsHuman						= flashModule.GetMemberFlashFunction( "setStaminaVisibility" );		
+		m_fxSetBossOrDead				= flashModule.GetMemberFlashFunction( "SetBossOrDead" );		
+		m_fxSetShowHardLock				= flashModule.GetMemberFlashFunction( "setShowHardLock" );
+		m_fxSetEnemyLevel				= flashModule.GetMemberFlashFunction( "setEnemyLevel" );
+		m_fxSetNPCQuestIcon				= flashModule.GetMemberFlashFunction( "setNPCQuestIcon" );
+		m_fxSetGeneralVisibility		= flashModule.GetMemberFlashFunction( "SetGeneralVisibility" );
+		m_fxSetMutationEightVisibility 	= flashModule.GetMemberFlashFunction( "displayMutationEight" );
+		m_mcNPCFocus 					= flashModule.GetChildFlashSprite( "mcNPCFocus" );
 		
 		super.OnConfigUI();
 		
@@ -114,10 +117,18 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		m_lastDodgeFeedbackTarget = target;
 	}
 	
+	
+	public function DisplayMutationEight( value : bool ) :void
+	{
+		m_fxSetMutationEightVisibility.InvokeSelfOneArg( FlashArgBool ( value ) );
+	}
+	
+	
 	public function SetGeneralVisibility( showEnemyFocus : bool, showName : bool )
 	{
 		m_fxSetGeneralVisibility.InvokeSelfTwoArgs( FlashArgBool( showEnemyFocus ), FlashArgBool( showName ) );
 	}
+	
 	
 	
 	public function ShowDamageType(valueType : EFloatingValueType, value : float, optional stringParam : string)
@@ -237,6 +248,11 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		var marginLeftTop : Vector;
 		var marginRightBottom : Vector;
 		var hud : CR4ScriptedHud;
+		var extraOffset					: int;
+		var herbTag						: name;
+		var herbEntity					: W3Herb;
+		var definitionManager 			: CDefinitionsManagerAccessor;
+		var useMutation8Icon			: bool;
 		
 		
 		l_targetNonActor = thePlayer.GetDisplayTarget();
@@ -373,7 +389,8 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 			if ( l_isDifferentTarget || m_nameInterval < 0  )
 			{
 				m_nameInterval = 0.25; 
-				m_fxSetEnemyName.InvokeSelfOneArg( FlashArgString( l_target.GetDisplayName() ) );
+				
+				UpdateName( l_target.GetDisplayName() );
 			}
 
 			
@@ -405,6 +422,14 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				m_fxSetEnemyLevel.InvokeSelfTwoArgs( FlashArgString( l_currentEnemyDifferenceLevel ), FlashArgString( l_currentEnemyLevelString ) );
 				m_lastEnemyDifferenceLevel = l_currentEnemyDifferenceLevel;
 				m_lastEnemyLevelString     = l_currentEnemyLevelString;
+			}
+			
+			
+			useMutation8Icon = GetWitcherPlayer().IsMutationActive( EPMT_Mutation8 ) && !l_target.IsImmuneToMutation8Finisher();
+			if ( m_lastUseMutation8Icon != useMutation8Icon )
+			{
+				DisplayMutationEight( useMutation8Icon );
+				m_lastUseMutation8Icon = useMutation8Icon;
 			}
 			
 			
@@ -457,7 +482,6 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				
 				ShowElement( true ); 
 				
-				m_fxSetEnemyName.InvokeSelfOneArg( FlashArgString( "" ) );
 				m_fxSetAttitude.InvokeSelfOneArg( FlashArgInt( 0 ) );
 				m_fxSetEnemyLevel.InvokeSelfTwoArgs( FlashArgString( "none" ), FlashArgString( "" ) );
 
@@ -471,9 +495,56 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 			}		
 		
 			
+			
+			
+			
+			
+			
+			herbEntity = (W3Herb)l_targetNonActor;
+			if ( herbEntity )
+			{
+				extraOffset = 140; 
+				m_nameInterval -= timeDelta;
+				if ( l_isDifferentTarget || m_nameInterval < 0  )
+				{
+					m_nameInterval = 0.25; 
+
+					herbEntity.GetStaticMapPinTag( herbTag );
+					if ( herbTag )
+					{
+						definitionManager = theGame.GetDefinitionsManager();
+						if ( definitionManager )
+						{
+							UpdateName( GetLocStringByKeyExt( definitionManager.GetItemLocalisationKeyName( herbTag ) ) );
+						}
+					}
+					else
+					{
+						UpdateName( "" );
+					}
+				}
+			}
+			else
+			{
+				if ( l_isDifferentTarget )
+				{
+					UpdateName( "" );
+				}
+			}
+
+			
+			useMutation8Icon = false;
+			if ( m_lastUseMutation8Icon != useMutation8Icon )
+			{
+				DisplayMutationEight( useMutation8Icon );
+				m_lastUseMutation8Icon = useMutation8Icon;
+			}
+
+			
 			if ( GetBaseScreenPosition( l_targetScreenPos, l_targetNonActor ) )
 			{
 				l_targetScreenPos.Y -= 10;
+				l_targetScreenPos.Y -= extraOffset;
 
 				marginLeftTop     = hud.GetScaleformPoint( screenMargin,     screenMargin );
 				marginRightBottom = hud.GetScaleformPoint( 1 - screenMargin, 1 - screenMargin );
@@ -520,13 +591,17 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				ShowElement( false );
 			}
 		}
+	}	
+	
+	public function UpdateName( enemyName : string )
+	{
+		if ( m_lastEnemyName != enemyName )
+		{
+			m_lastEnemyName = enemyName;
+			m_fxSetEnemyName.InvokeSelfOneArg( FlashArgString( m_lastEnemyName ) );
+		}
 	}
 	
-	public function SetContraHint( set : bool )
-	{
-		m_fxSetContraHint.InvokeSelfOneArg( FlashArgBool( set ) );
-	}	
-
 	public function SetShowHardLock( set : bool )
 	{
 		m_fxSetShowHardLock.InvokeSelfOneArg( FlashArgBool( set ) );
@@ -597,16 +672,6 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		
 		m_fxSetNPCQuestIcon.InvokeSelfOneArg( FlashArgString( questIcon ) );
 	}
-}
-
-exec function contraHint( set : bool )
-{
-	var hud : CR4ScriptedHud;
-	var module : CR4HudModuleEnemyFocus;
-
-	hud = (CR4ScriptedHud)theGame.GetHud();
-	module = (CR4HudModuleEnemyFocus)hud.GetHudModule("EnemyFocusModule");
-	module.SetContraHint( set );
 }
 
 exec function dodgeFeedback()

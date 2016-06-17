@@ -32,7 +32,7 @@ state ExtendedMovable in CR4Player extends Movable
 		parent.RemoveAnimEventCallback('CombatStanceLeft');
 		parent.RemoveAnimEventCallback('CombatStanceRight');
 		
-		parent.ResumeEffects(EET_AutoStaminaRegen, 'Sprint');
+		parent.ResumeStaminaRegen( 'Sprint' );
 		
 		super.OnLeaveState(nextStateName);
 	}
@@ -90,8 +90,36 @@ state ExtendedMovable in CR4Player extends Movable
 	}
 	
 	var cameraChanneledSignEnabled : bool;
+	
+	private var m_shouldEnableAutoRotation : bool;
+	
 	event OnGameCameraTick( out moveData : SCameraMovementData, dt : float )
-	{
+	{	
+		var camera : CCustomCamera;
+		var angleDist : float;
+		
+		camera = (CCustomCamera)theCamera.GetTopmostCameraObject();
+		
+		if( theInput.LastUsedGamepad() )
+		{
+			angleDist = AngleDistance( parent.GetHeading(), camera.GetHeading() );
+			
+			if( thePlayer.GetAutoCameraCenter() || ( !m_shouldEnableAutoRotation && thePlayer.GetIsSprinting() && AbsF(angleDist) <= 30.0f ) )
+			{
+				m_shouldEnableAutoRotation = true;
+			}
+			else if( m_shouldEnableAutoRotation && !thePlayer.GetAutoCameraCenter() && ( camera.IsManualControledHor() || !thePlayer.GetIsSprinting() ) )
+			{
+				m_shouldEnableAutoRotation = false;
+			}
+		}
+		else
+		{
+			m_shouldEnableAutoRotation = thePlayer.GetAutoCameraCenter();
+		}
+		
+		camera.SetAllowAutoRotation( m_shouldEnableAutoRotation );
+		
 		if( virtual_parent.OnGameCameraTick( moveData, dt ) )
 		{
 			return true;
@@ -131,6 +159,9 @@ state ExtendedMovable in CR4Player extends Movable
 		var playerToTargetAngles : EulerAngles;
 		var playerToTargetPitch : float;
 		var _tempVelocity : float;
+		var playerChestPosition, displayTargetChestPosition : Vector;
+		var boneIdx : int = -1;
+		var actorDispTarget : CActor;
 		
 		theGame.GetGameCamera().ChangePivotRotationController( 'CombatInterior' );
 		theGame.GetGameCamera().ChangePivotDistanceController( 'Default' );
@@ -147,7 +178,7 @@ state ExtendedMovable in CR4Player extends Movable
 		moveData.pivotPositionController.SetDesiredPosition( parent.GetWorldPosition(), interiorCameraDesiredPositionMult); 
 		moveData.pivotDistanceController.SetDesiredDistance( 3.5f );
 		
-		if ( parent.IsCameraLockedToTarget() )
+		if ( parent.IsCameraLockedToTarget() && !thePlayer.GetFlyingBossCamera())
 		{
 			if ( parent.GetDisplayTarget() )
 			{
@@ -168,6 +199,66 @@ state ExtendedMovable in CR4Player extends Movable
 			{
 				playerToTargetAngles = VecToRotation( playerToTargetVector );
 				playerToTargetPitch = playerToTargetAngles.Pitch + 10;
+				
+				
+				
+				moveData.pivotRotationController.SetDesiredPitch( playerToTargetPitch * -1, 0.5f );
+			}
+		}
+		else if ( parent.IsCameraLockedToTarget() && thePlayer.GetFlyingBossCamera())
+		{
+			if ( parent.GetDisplayTarget() )
+			{
+				boneIdx = parent.GetTorsoBoneIndex();
+				if ( boneIdx > 0 )
+				{
+					playerChestPosition = parent.GetBoneWorldPositionByIndex( boneIdx );
+				}
+				else
+				{
+					playerChestPosition = parent.GetWorldPosition();
+				}
+				
+				actorDispTarget = (CActor)parent.GetDisplayTarget();
+				
+				boneIdx = -1;
+				
+				if( actorDispTarget )
+				{
+					boneIdx = actorDispTarget.GetTorsoBoneIndex();
+				}
+				
+				if ( boneIdx > 0 )
+				{
+					displayTargetChestPosition = parent.GetDisplayTarget().GetBoneWorldPositionByIndex( boneIdx );
+				}
+				else
+				{
+					displayTargetChestPosition = parent.GetDisplayTarget().GetWorldPosition();
+				}
+				
+				playerToTargetVector = displayTargetChestPosition - playerChestPosition;
+				
+				moveData.pivotRotationController.SetDesiredHeading( VecHeading( playerToTargetVector ), 0.5f );
+			}
+			else
+				moveData.pivotRotationController.SetDesiredHeading( moveData.pivotRotationValue.Yaw, 0.5f );
+			
+			if ( AbsF( playerToTargetVector.Z ) <= 2.f )
+			{
+				if ( parent.IsGuarded() )
+					moveData.pivotRotationController.SetDesiredPitch( -10.f );
+				else
+					moveData.pivotRotationController.SetDesiredPitch( -10.f );
+			}
+			else if ( AbsF( playerToTargetVector.Z ) >= 2.f )
+			{
+				moveData.pivotRotationController.SetDesiredPitch( 3.f );
+			}
+			else
+			{
+				playerToTargetAngles = VecToRotation( playerToTargetVector );
+				playerToTargetPitch = playerToTargetAngles.Pitch - 10;
 				
 				
 				

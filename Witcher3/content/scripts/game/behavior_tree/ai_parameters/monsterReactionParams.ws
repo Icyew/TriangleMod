@@ -172,6 +172,23 @@ class CAIActionMoveOut extends CAIMonsterActionSubtree
 };
 
 
+class CAIActionTauntAndMoveOut extends CAIMonsterActionSubtree
+{	
+	default reactionPriority 		= 20;
+	default actionEventName 		= 'PlayerPresenceAction';
+	default actionCooldownDistance 	= 2;
+	default actionCooldownTimeout 	= 1;
+		
+	default disallowOutsideOfGuardArea 			= true;
+	default forwardAvailabilityToReactionTree 	= true;
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionTauntAndMoveOut in this;
+		reactionLogicTree.OnCreated();		
+	}
+};
+
+
 class CAIActionMoveInPack extends CAIMonsterActionSubtree
 {
 	public editable var chanceToFollowPack : float;
@@ -273,6 +290,13 @@ class CAINpcReactionMoveOut extends CAINpcReaction
 {	
 	default aiTreeName = "resdef:ai\reactions\reaction_move_out";
 };
+
+
+class CAINpcReactionTauntAndMoveOut extends CAINpcReaction
+{	
+	default aiTreeName = "gameplay\trees\reactions\reaction_taunt_and_move_out.w2behtree";
+};
+
 
 class CAINpcReactionMoveInPack extends CAINpcReaction
 {	

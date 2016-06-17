@@ -49,6 +49,7 @@ class W3GuiSocketsInventoryComponent extends W3GuiPlayerInventoryComponent
 	
 	public  function SetInventoryFlashObjectForItem( item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void
 	{
+		var targetGridSection : int;
 		var invItem : SInventoryItem;
 		var isEquipped : bool;
 		
@@ -62,6 +63,17 @@ class W3GuiSocketsInventoryComponent extends W3GuiPlayerInventoryComponent
 		flashObject.SetMemberFlashInt("actionPrice", merchantInv.GetItemPriceRemoveUpgrade( invItem ));
 		flashObject.SetMemberFlashInt( "gridPosition", -1 );
 		flashObject.SetMemberFlashBool( "isEquipped",  isEquipped);
+		
+		if( GetWitcherPlayer().IsItemEquipped( item ) )
+		{
+			targetGridSection = 0;
+		}
+		else
+		{
+			targetGridSection = 1;
+		}
+		
+		flashObject.SetMemberFlashInt( "sectionId", targetGridSection );
 	}
 	
 	private function addSocketsListInfo(item : SItemUniqueId, out flashObject : CScriptedFlashObject) : void

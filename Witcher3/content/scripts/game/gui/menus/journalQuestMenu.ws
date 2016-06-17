@@ -27,15 +27,22 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 	var bDisplayCompleted				: bool;
 	default bDisplayCompleted			= false;
 	
+	private var m_initSelection : bool;
+	default m_initSelection = false;
+	
 	var lastSelectedQuestTag			: name;
 	private var m_fxSetTrackedQuest 	: CScriptedFlashFunction;
 	private var m_fxSetTrackedObj		: CScriptedFlashFunction;
 	
 	private var m_fxSetTitle			: CScriptedFlashFunction;
 	private var m_fxSetText				: CScriptedFlashFunction;
-	
+		
 	private var m_fxSetExpansionTexture : CScriptedFlashFunction;
 	private var m_fxUpdateExpansionIcon : CScriptedFlashFunction;
+		
+	
+	
+	
 	
 	
 	event  OnConfigUI()
@@ -49,15 +56,19 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		
 		FactsAdd("tutorial_journal_opened", 1, 1);
 		
-		m_fxSetTrackedQuest = m_flashModule.GetMemberFlashFunction("setCurrentlyTrackedQuest");
-		m_fxSetTrackedObj = m_flashModule.GetMemberFlashFunction("setCurrentlyTrackedObjective");
-		m_fxSetTitle = m_flashModule.GetMemberFlashFunction("setTitle");
-		m_fxSetText = m_flashModule.GetMemberFlashFunction("setText");
+		m_fxSetTrackedQuest 		= m_flashModule.GetMemberFlashFunction("setCurrentlyTrackedQuest");
+		m_fxSetTrackedObj 			= m_flashModule.GetMemberFlashFunction("setCurrentlyTrackedObjective");
+		m_fxSetTitle 				= m_flashModule.GetMemberFlashFunction("setTitle");
+		m_fxSetText 				= m_flashModule.GetMemberFlashFunction("setText");
+		
+		
 		m_fxSetExpansionTexture = m_flashModule.GetMemberFlashFunction("setExpansionTexture");
 		m_fxUpdateExpansionIcon = m_flashModule.GetMemberFlashFunction("updateExpansionIcon");
 		
 		m_fxSetExpansionTexture.InvokeSelfTwoArgs( FlashArgInt( 1 ), FlashArgString( GetEpTextureName( 1 ) ) );
 		m_fxSetExpansionTexture.InvokeSelfTwoArgs( FlashArgInt( 2 ), FlashArgString( GetEpTextureName( 2 ) ) );
+		
+		m_initSelection = true;
 		
 		GetQuests();
 		PopulateData();
@@ -290,7 +301,7 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 			
 			if( l_questStatus != JS_Inactive )
 			{
-				l_questsFlashArray.PushBackFlashObject(generateFlashObjectForQuest(l_quest));
+				l_questsFlashArray.PushBackFlashObject( generateFlashObjectForQuest( l_quest, m_initSelection ) );
 				
 				l_questIsTracked = ( (m_journalManager.GetTrackedQuest().guid == l_quest.guid) && ( l_questStatus == JS_Active ) );
 				l_Tag = l_quest.GetUniqueScriptTag();
@@ -311,6 +322,8 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		{
 			m_fxShowSecondaryModulesSFF.InvokeSelfOneArg(FlashArgBool(false));
 		}
+		
+		m_initSelection = false;
 	}
 	
 	private function GetEpTag( targetQuest : CJournalQuest ) : string
@@ -328,7 +341,7 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		return "";
 	}
 	
-	private function generateFlashObjectForQuest(targetQuest : CJournalQuest) : CScriptedFlashObject
+	private function generateFlashObjectForQuest( targetQuest : CJournalQuest, optional initSelection : bool  ) : CScriptedFlashObject
 	{
 		var l_questsDataFlashObject : CScriptedFlashObject;
 		var l_questStatus			: EJournalStatus;
@@ -346,10 +359,13 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		var l_questIsNew			: bool;
 		
 		var l_areaTag				: string;
+		var l_questLevel			: string;
+		var l_RecommendedDiff		: string;
 		var l_questTitle			: string;
 		var l_dropdownLabel			: string;
 		var questName				: string;
 		var difficultyColor 		: string;
+		var isDeadlyDiff			: bool;
 		
 		var l_questIsTracked		: bool;
 		
@@ -386,7 +402,7 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 				{
 					questLevel = NameToInt( questLevels.GetValueAtAsName(1,j) );
 					
-					if(FactsQuerySum("NewGamePlus") > 0)
+					if(FactsQuerySum("NewGamePlus") > 0 && questLevel > 1)
 						questLevel += theGame.params.GetNewGamePlusLevel();
 				}
 			}
@@ -401,14 +417,14 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 			theGame.GetTutorialSystem().uiHandler.OnOpeningMenu( GetMenuName() );
 		}
 		
-		if 		( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { difficultyColor = "<font color='#E02626'>"; }	
-		else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { difficultyColor = "<font color='#D95050'>"; }
-		else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { difficultyColor = "<font color='#76E376'>"; }
-		else	{ difficultyColor = "<font color='#969696'>"; }		
+		if 		( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { difficultyColor = "<font color='#d61010'>"; isDeadlyDiff = true; }
+		else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { difficultyColor = "<font color='#d68f29'>"; isDeadlyDiff = false;}
+		else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { difficultyColor = "<font color='#ffffff'>"; isDeadlyDiff = false; }
+		else	{ difficultyColor = "<font color='#969696'>"; isDeadlyDiff = false; }		
 		
 		if (l_GroupTag != '')
 		{
-			l_areaTag = "<font color='#7A7A7A'>" + GetLocStringByKeyExt(l_GroupTag) + "</font>";
+			l_areaTag = GetLocStringByKeyExt(l_GroupTag);
 		}
 		else
 		{
@@ -416,8 +432,16 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		}
 		
 		if ( questName != "" && questLevel > 1 ) 
-			l_areaTag 			= l_areaTag + "<font color='#7A7A7A'> | </font>" + difficultyColor + GetLocStringByKeyExt('panel_item_required_level') + " " + questLevel + "</font>";
-		
+			l_questLevel = difficultyColor + questLevel + "</font>";
+			
+		if( questLevel <=1)
+		{
+			l_RecommendedDiff =  "";
+		}
+		else
+		{
+			l_RecommendedDiff =  difficultyColor + GetLocStringByKeyExt('panel_item_required_level') + " " + questLevel + "</font>";
+		}
 		l_questWorld = targetQuest.GetWorld();
 		
 		if (l_questStatus == JS_Active)
@@ -461,10 +485,25 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		{
 			LogChannel('JOURNAL_ERROR',"There is no unique script tag for quest "+l_questTitle);
 		}
+		
+		l_questsDataFlashObject.SetMemberFlashString( "title", GetLocStringById( targetQuest.GetTitleStringId() ) );
+		l_questsDataFlashObject.SetMemberFlashString( "description", GetDescription( targetQuest ) );
+		
 		l_questsDataFlashObject.SetMemberFlashUInt(  "tag", NameToFlashUInt(l_Tag) );
 		l_questsDataFlashObject.SetMemberFlashString(  "dropDownLabel", l_dropdownLabel );
 		l_questsDataFlashObject.SetMemberFlashUInt(  "dropDownTag",  NameToFlashUInt(l_GroupTag) );
-		l_questsDataFlashObject.SetMemberFlashBool(  "dropDownOpened", IsCategoryOpened( l_GroupTag ) );
+		
+		if (initSelection)
+		{
+			l_questsDataFlashObject.SetMemberFlashBool(  "dropDownOpened", l_questIsTracked );
+			l_questsDataFlashObject.SetMemberFlashBool( "selected", l_questIsTracked );
+			
+		}
+		else
+		{
+			l_questsDataFlashObject.SetMemberFlashBool(  "dropDownOpened", IsCategoryOpened( l_GroupTag ) );
+			l_questsDataFlashObject.SetMemberFlashBool( "selected", ( l_Tag == currentTag ) );
+		}
 		
 		l_questsDataFlashObject.SetMemberFlashInt( "isStory", l_questType ); 
 		l_questsDataFlashObject.SetMemberFlashInt( "epIndex", targetQuest.GetContentType() );
@@ -473,11 +512,18 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		l_questsDataFlashObject.SetMemberFlashInt( "questWorld", l_questWorld );
 		l_questsDataFlashObject.SetMemberFlashInt( "curWorld", currentArea );
 		
-		l_questsDataFlashObject.SetMemberFlashBool( "selected", ( l_Tag == currentTag ) );
+		
 		l_questsDataFlashObject.SetMemberFlashInt( "status", l_questStatus );
+		l_questsDataFlashObject.SetMemberFlashString( "questArea", l_GroupTag );
+		
 		l_questsDataFlashObject.SetMemberFlashBool( "tracked", l_questIsTracked );
 		l_questsDataFlashObject.SetMemberFlashString(  "label", l_questTitle );
 		l_questsDataFlashObject.SetMemberFlashString( "secondLabel", l_areaTag );
+		l_questsDataFlashObject.SetMemberFlashString( "area", l_questLevel );
+		l_questsDataFlashObject.SetMemberFlashString( "reqdifficulty", l_RecommendedDiff );
+		l_questsDataFlashObject.SetMemberFlashBool( "isdeadlydifficulty", isDeadlyDiff );
+		
+		
 		
 		return l_questsDataFlashObject;
 	}
@@ -633,6 +679,7 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 	function GetAreaName( questEntry : CJournalQuest ) : name
 	{
 		var l_questArea						: name;
+		
 		switch ( questEntry.GetWorld() )
 		{
 			case AN_Undefined:
@@ -666,6 +713,9 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 				break;
 			case AN_Velen:
 				l_questArea = 'panel_journal_filters_area_velen';
+				break;
+			case (EAreaName)AN_Dlc_Bob:
+				l_questArea = 'panel_journal_filters_area_bob';
 				break;
 		}
 		return l_questArea;
@@ -753,14 +803,16 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		var l_quest : CJournalQuest;
 		var description : string;
 		var title : string;
+	
 		
 		
 		l_quest = (CJournalQuest)m_journalManager.GetEntryByTag( entryName );
 		description = GetDescription( l_quest );
 		title = GetLocStringById( l_quest.GetTitleStringId());	
-		
+
 		m_fxSetTitle.InvokeSelfOneArg(FlashArgString(title));
 		m_fxSetText.InvokeSelfOneArg(FlashArgString(description));
+			
 	}	
 
 	function UpdateItems( tag : name )

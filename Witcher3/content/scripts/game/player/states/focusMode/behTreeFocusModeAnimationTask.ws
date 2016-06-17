@@ -68,7 +68,7 @@ class CBehTreeFocusModeAnimationTask extends IBehTreeTask
 			npc = GetNPC();		
 			
 			npc.GetRootAnimatedComponent().FreezePose();
-			npc.Kill();
+			npc.Kill( 'Combat Focus Mode' );
 			return true;
 		}
 		return false;

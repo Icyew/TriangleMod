@@ -173,6 +173,7 @@ function ArraySortNames(out names : array<name>)
 {
 	var i, j, size : int;
 	var ret : array<name>;
+	var found : bool;
 	
 	if(names.Size() <= 0)
 		return;
@@ -182,13 +183,21 @@ function ArraySortNames(out names : array<name>)
 	
 	for(i=1; i<size; i+=1)
 	{
+		found = false;
+		
 		for(j=0; j<ret.Size(); j+=1)
 		{
 			if( StrCmp( StrLower(NameToString(names[i])), StrLower(NameToString(ret[j]))) < 0 )
 			{
 				ret.Insert(j, names[i]);
+				found = true;
 				break;
 			}
+		}
+		
+		if ( !found )
+		{
+			ret.PushBack(names[i]);
 		}
 	}
 	
@@ -310,6 +319,21 @@ function ArrayOfActorsAppend(out first : array<CActor>, second : array<CActor>)
 }
 
 
+function ArrayOfActorsAppendUnique(out first : array<CActor>, second : array<CActor>)
+{
+	var i, s : int;
+	
+	s = second.Size();
+	for(i=0; i<s; i+=1)
+	{
+		if( !first.Contains( second[i] ) )
+		{
+			first.PushBack(second[i]);
+		}
+	}
+}
+
+
 function ArrayOfActorsAppendArrayOfGameplayEntities(out first : array< CActor >, second : array< CGameplayEntity >)
 {
 	var i, s : int;
@@ -405,5 +429,45 @@ function ArrayOfNamesRemoveAll(out arr : array<name>, item : name)
 			return;
 			
 		arr.Erase(i);
+	}
+}
+
+
+function ArrayOfStringsRemove( toRemoveFrom : array< string >, toRemove : array< string > ) : array < string >
+{
+	var i : int;
+	var ret : array< string >;
+	
+	for( i=0; i<toRemoveFrom.Size(); i+=1 )
+	{
+		if( !toRemove.Contains( toRemoveFrom[i] ) )
+		{
+			ret.PushBack( toRemoveFrom[i] );
+		}
+	}
+	
+	return ret;
+}
+
+
+function ArrayOfStringsRemoveDuplicatesRO( out arr : array< string > )
+{
+	var i,j : int;
+	
+	if( arr.Size() < 2 )
+	{
+		return;
+	}
+	
+	for( i=arr.Size()-2; i>=0; i-= 1 )
+	{
+		for( j=arr.Size()-1; j>i; j-=1 )
+		{
+			if( arr[j] == arr[i] )
+			{
+				arr.EraseFast( i );
+				break;
+			}
+		}
 	}
 }

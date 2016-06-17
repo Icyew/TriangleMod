@@ -2282,7 +2282,7 @@ state Exploration in W3HorseComponent
 		
 		actor = (CActor)parent.GetEntity();
 		
-		return actor && actor.GetBaseAttitudeGroup() != 'animals_peaceful' && parent.controllable;
+		return actor && actor.GetBaseAttitudeGroup() != 'animals_peacefull' && parent.controllable;
 	}
 	
 	private function MaintainCameraVariables( dt : float )

@@ -72,7 +72,9 @@ class IngameMenuStructureCreator
 			}
 			
 			
-			if ((theGame.CanStartStandaloneDLC('ep1') && theGame.GetDLCManager().IsEP1Available()) || theGame.GetDLCManager().IsNewGamePlusAvailable())
+			if ( ( theGame.CanStartStandaloneDLC('ep1') && theGame.GetDLCManager().IsEP1Available() ) ||
+				(  theGame.CanStartStandaloneDLC('bob_000_000') && theGame.GetDLCManager().IsEP2Available() ) ||
+				   theGame.GetDLCManager().IsNewGamePlusAvailable() )
 			{
 				l_DataFlashObject = CreateMenuItem("NewGame", "panel_newgame", NameToFlashUInt('NewGame'), IGMActionType_MenuHolder, false, "panel_newgame");
 				l_ChildMenuFlashArray = CreateNewGameListArray();
@@ -220,6 +222,16 @@ class IngameMenuStructureCreator
 			l_optionChildList.PushBackFlashObject(l_DataFlashObject);
 		}
 		
+		if (theGame.CanStartStandaloneDLC('bob_000_000') && theGame.GetDLCManager().IsEP2Available())
+		{
+			l_DataFlashObject = CreateMenuItem("NewGame", "new_game_ep2", NameToFlashUInt('NewGameEP2'), IGMActionType_MenuHolder, false, "newgame_difficulty");
+			l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP2_Save);
+			l_DataFlashObject.SetMemberFlashArray( "subElements", l_ChildMenuFlashArray );
+			l_DataFlashObject.SetMemberFlashString( "description", GetLocStringByKeyExt("panel_mainmenu_start_ep2_description") );
+			
+			l_optionChildList.PushBackFlashObject(l_DataFlashObject);
+		}
+		
 		
 		if (theGame.GetDLCManager().IsNewGamePlusAvailable())
 		{
@@ -256,7 +268,11 @@ class IngameMenuStructureCreator
 		
 		var lastHolder 				: bool;
 		
-		if ((tag & IGMC_EP1_Save) == IGMC_EP1_Save)
+		if ((tag & IGMC_EP2_Save) == IGMC_EP2_Save)
+		{
+			lastHolder = true;
+		}
+		else if ((tag & IGMC_EP1_Save) == IGMC_EP1_Save)
 		{
 			lastHolder = true;
 		}

@@ -65,7 +65,8 @@ enum ECraftsmanLevel
 	ECL_Undefined,
 	ECL_Journeyman,
 	ECL_Master,
-	ECL_Grand_Master
+	ECL_Grand_Master,
+	ECL_Arch_Master
 }
 
 function ParseCraftsmanTypeStringToEnum(s : string) : ECraftsmanType
@@ -89,6 +90,7 @@ function ParseCraftsmanLevelStringToEnum(s : string) : ECraftsmanLevel
 		case "Journeyman" : return ECL_Journeyman;
 		case "Master" : return ECL_Master;
 		case "Grand Master" : return ECL_Grand_Master;
+		case "Arch Master" : return ECL_Arch_Master;
 	}
 	
 	return ECL_Undefined;
@@ -114,6 +116,7 @@ function CraftsmanLevelToLocalizationKey(type : ECraftsmanLevel) : string
 		case ECL_Journeyman : return "panel_shop_crating_level_journeyman";
 		case ECL_Master : return "panel_shop_crating_level_master";
 		case ECL_Grand_Master: return "panel_shop_crating_level_grand_master";
+		case ECL_Arch_Master: return "panel_shop_crating_level_arch_master";
 		default: return "";
 	}
 	return "";
@@ -176,17 +179,20 @@ function IsCraftingSchematic(recipeName : name) : bool
 {
 	var dm : CDefinitionsManagerAccessor;
 	var main : SCustomNode;
-	var schematicNode : SCustomNode;
-	var i, tmpInt : int;
-	var tmpName : name;
+	var i : int;
 
 	if(!IsNameValid(recipeName))
 		return false;
 
 	dm = theGame.GetDefinitionsManager();
-	if ( dm.GetSubNodeByAttributeValueAsCName( schematicNode, 'crafting_schematics', 'name_name', recipeName ) )
+	main = dm.GetCustomDefinition('alchemy_recipes');
+	
+	for(i=0; i<main.subNodes.Size(); i+=1)
 	{
-		return true;
+		if ( dm.GetSubNodeByAttributeValueAsCName( main.subNodes[i], 'crafting_schematics', 'name_name', recipeName ) && recipeName == recipeName )
+		{
+			return true;
+		}
 	}
 	
 	return false;

@@ -7,7 +7,6 @@
 
 class CBTTaskResetAttitudes extends IBehTreeTask
 {
-	protected var storageHandler 		: CAIStorageHandler;
 	protected var reactionDataStorage 	: CAIStorageReactionData;
 	
 	function OnActivate() : EBTNodeStatus
@@ -24,9 +23,7 @@ class CBTTaskResetAttitudes extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 }
 

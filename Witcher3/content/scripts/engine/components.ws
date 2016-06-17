@@ -350,12 +350,26 @@ import class CDropPhysicsComponent extends CComponent
      									  optional curveName : name  ) : bool;
 }
 
+
+
+enum EDismembermentEffectTypeFlags
+{ 
+	DETF_Base		= 1, 
+	DETF_Igni		= 2, 
+	DETF_Aaard		= 4, 
+	DETF_Yrden		= 8, 
+	DETF_Quen		= 16,
+	DETF_Mutation6	= 32, 
+};
+
+
+
 import class CDismembermentComponent extends CComponent
 {
 	import final function IsWoundDefined( woundName : name ) : bool;
 	import final function SetVisibleWound( woundName : name, optional spawnEntity : bool, optional createParticles : bool,
 															 optional dropEquipment : bool, optional playSound : bool,
-															 optional direction : Vector, optional playEffect : bool );
+															 optional direction : Vector, optional playedEffectsMask : int );
 	import final function ClearVisibleWound();
 	import final function GetVisibleWoundName() : name;
 	import final function CreateWoundParticles( woundName : name ) : bool;

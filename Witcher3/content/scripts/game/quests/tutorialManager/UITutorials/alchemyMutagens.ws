@@ -22,7 +22,7 @@ state AlchemyMutagens in W3TutorialManagerUIHandler extends TutHandlerBaseState
 			
 	event OnLeaveState( nextStateName : name )
 	{
-		CloseHint(MUTAGENS);
+		CloseStateHint(MUTAGENS);
 		super.OnLeaveState(nextStateName);
 	}
 		
@@ -35,7 +35,7 @@ state AlchemyMutagens in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		if(theGame.GetDefinitionsManager().IsRecipeForMutagenPotion(recipeName))
 		{		
-			ShowHint(MUTAGENS, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y);
+			ShowHint(MUTAGENS, POS_ALCHEMY_X, POS_ALCHEMY_Y);
 		}
 	}
 }

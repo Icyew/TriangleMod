@@ -65,6 +65,7 @@ class CAIMonsterDefaults extends CAIBaseMonsterDefaults
 	editable inlined var deathTree 	: CAIMonsterDeath;	
 	
 	editable var spawnEntityAtDeath	: bool;
+	editable var morphInCombat 		: bool;
 	editable var entityToSpawn		: name;
 	
 	function Init()
@@ -121,6 +122,34 @@ class CAITrollDefaults extends CAIMonsterDefaults
 		
 		idleDecoratorTree = new CAIMonsterIdleDecoratorTroll in this;
 		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAISharleyDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree.params.IncreaseHitCounterOnlyOnMelee = false;
+		combatTree.params.combatLogicTree = new CAISharleyCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorTroll in this;
+		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAIVampiressDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree.params.combatLogicTree = new CAIVampiressCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
 	}
 };
 
@@ -212,6 +241,20 @@ class CAIIceGiantDefaults extends CAIMonsterDefaults
 	{
 		super.Init();
 		combatTree.params.combatLogicTree = new CAIIceGiantCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorGiant in this;
+		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAIIceGiantEp2Defaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIIceGiantEp2CombatLogic in this;
 		combatTree.params.combatLogicTree.OnCreated();
 		
 		idleDecoratorTree = new CAIMonsterIdleDecoratorGiant in this;
@@ -531,6 +574,22 @@ class CAILessogDefaults extends CAIMonsterDefaults
 };
 
 
+class CAISpriganDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAISpriganCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		deathTree = new CAIMonsterDeath in this;
+		deathTree.OnCreated();
+		deathTree.params.playFXOnDeactivate = 'respawn_dissapear';
+		deathTree.params.disableCollision = true;
+		deathTree.params.destroyAfterAnimDelay = 10;
+	}
+};
+
+
 class CAIHimDefaults extends CAIMonsterDefaults
 {
 	function Init()
@@ -577,6 +636,29 @@ class CAIBlackSpiderDefaults extends CAIMonsterDefaults
 		combatTree.params.combatLogicTree = new CAIBlackSpiderCombatLogic in this;
 		combatTree.params.combatLogicTree.OnCreated();
 		combatLogicParams = ((CAIBlackSpiderCombatLogicParams)combatTree.params.combatLogicTree.params);
+		combatLogicParams.minChargeDist = 3.0;
+		combatLogicParams.maxChargeDist = 4.0;
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorArachas in this;
+		idleDecoratorTree.OnCreated();
+		
+		deathTree.params.disableCollisionOnAnim	= true;
+		deathTree.params.disableCollision 		= true;
+		deathTree.params.disableCollisionDelay	= 0;
+	}
+};
+
+
+class CAIBlackSpiderEP2Defaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		var combatLogicParams : CAIBlackSpiderEP2CombatLogicParams;
+		
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBlackSpiderEP2CombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatLogicParams = ((CAIBlackSpiderEP2CombatLogicParams)combatTree.params.combatLogicTree.params);
 		combatLogicParams.minChargeDist = 3.0;
 		combatLogicParams.maxChargeDist = 4.0;
 		
@@ -685,6 +767,28 @@ class CAIWerewolfDefaults extends CAIMonsterDefaults
 };
 
 
+class CAIBigbadwolfDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBigbadwolfCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'WerewolfKnockDownFinisher';
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorWerewolf in this;
+		idleDecoratorTree.OnCreated();
+		
+		deathTree = new CAIMonsterDefeated in this;
+		deathTree.OnCreated();
+		
+		deathTree.params.disableCollisionOnAnim = true;
+		deathTree.params.disableCollision 		= true;
+		deathTree.params.disableCollisionDelay 	= 0.5;
+	}
+};
+
+
 class CAIKatakanDefaults extends CAIMonsterDefaults
 {
 	function Init()
@@ -695,6 +799,20 @@ class CAIKatakanDefaults extends CAIMonsterDefaults
 		
 		
 		
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorKatakan in this;
+		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAIFlederDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIFlederCombatLogic in this;
+		combatTree.params.Init();
 		
 		idleDecoratorTree = new CAIMonsterIdleDecoratorKatakan in this;
 		idleDecoratorTree.OnCreated();
@@ -752,6 +870,57 @@ class CAIWyvernDefaults extends CAIFlyingMonsterDefaults
 		
 		flyingWander = new CAIDynamicFlyingWanderWyvern in this;
 		flyingWander.OnCreated();
+	}
+};
+
+
+class CAIDracolizardDefaults extends CAIFlyingMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIDracolizardCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorWyvern in this;
+		idleDecoratorTree.OnCreated();		
+		
+		axiiTree.params.landingGroundOffset = 2;
+		
+		
+		
+		flyingWander = new CAIDynamicFlyingWanderWyvern in this;
+		flyingWander.OnCreated();
+	}
+};
+
+
+class CAIGravierDefaults extends CAIMonsterDefaults
+{
+	default canSwim = false;
+	default canBury = true;
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIGravierCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'DrownerKnockDownFinisher';
+		
+		spawnTree = new CAIMonsterSpawnFlying in this;
+		spawnTree.OnCreated();
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorDrowner in this;
+		idleDecoratorTree.OnCreated();
+		
+		idleTree = new CAIAmphibiousDynamicWander in this;
+		idleTree.OnCreated();
+		
+		deathTree.params.disableCollisionOnAnim = true;
+		deathTree.params.disableCollision 		= true;
+		deathTree.params.disableCollisionDelay 	= 2;
+		spawnEntityAtDeath  = true;
+		entityToSpawn 		= 'rotfiend_explode';
+		deathTree.params.playFXOnActivate = 'spikes_explode';
 	}
 };
 
@@ -815,6 +984,25 @@ class CAIWitch2Defaults extends CAIMonsterDefaults
 };
 
 
+class CAIWightDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIWightCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'GravehagKnockDownFinisher';
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorGravehag in this;
+		idleDecoratorTree.OnCreated();
+		
+		deathTree.params.disableCollisionOnAnim = true;
+		deathTree.params.disableCollision 		= true;
+		deathTree.params.disableCollisionDelay 	= 2;
+	}
+};
+
+
 class CAIFugasDefaults extends CAIMonsterDefaults
 {
 	function Init()
@@ -871,6 +1059,45 @@ class CAIBoarDefaults extends CAIMonsterDefaults
 };
 
 
+class CAIBoarEP2Defaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBoarEP2CombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'BoarKnockDownFinisher';
+	}
+};
+
+
+class CAIPantherDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIPantherCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'BoarKnockDownFinisher';
+	}
+};
+
+
+
+class CAIKikimoreDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIKikimoreCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'BoarKnockDownFinisher';
+	}
+};
+
+
+
+
 class CAIToadDefaults extends CAIMonsterDefaults
 {
 	function Init()
@@ -881,6 +1108,140 @@ class CAIToadDefaults extends CAIMonsterDefaults
 		
 		deathTree.params.disableCollision 				= true;
 		deathTree.params.disableCollisionDelay 			= 0;
+	}
+};
+
+
+
+class CAIScolopendromorphDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIScolopendromorphCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		idleDecoratorTree = new CAIScolopendromorphIdleDecorator in this;
+		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAIBroomDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBroomCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+	}
+};
+
+
+class CAIArchesporDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIArchesporCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		idleDecoratorTree = new CAIEchinopsIdleDecorator in this;
+		idleDecoratorTree.OnCreated();
+	}
+};
+
+
+class CAIDettlaffDefaults extends CAIMonsterDefaults
+{
+	default morphInCombat = true;
+	
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIDettlaffCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+	}	
+};
+
+
+class CAIDettlaffVampireDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIDettlaffVampireCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+	}
+};
+
+
+class CAIFairytaleWitchDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIFairytaleWitchCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+	}
+};
+
+
+class CAIBarghestDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBarghestCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		combatTree.params.criticalState.params.FinisherAnim = 'WolfKnockDownFinisher';
+		
+		deathTree.params.disableCollision 				= true;
+		deathTree.params.disableCollisionDelay 			= 0;
+	}
+};
+
+
+class CAIDettlaffFlederDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIFlederCombatLogic in this;
+		combatTree.params.Init();
+		
+		idleDecoratorTree = new CAIMonsterIdleDecoratorKatakan in this;
+		idleDecoratorTree.OnCreated();
+		
+		deathTree.params.destroyAfterAnimDelay = 1.f;
+	}
+};
+
+
+class CAIDettlaffVampiressDefaults extends CAIMonsterDefaults
+{
+	function Init()
+	{
+		super.Init();
+		
+		combatTree.params.combatLogicTree = new CAIVampiressCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		
+		deathTree.params.destroyAfterAnimDelay = 1.f;
+	}
+};
+
+
+class CAIBansheeDefaults extends CAIMonsterDefaults
+{
+	default canKeepDistance 	= true;
+	default ignoreReachability 	= false;
+	
+	function Init()
+	{
+		super.Init();
+		combatTree.params.combatLogicTree = new CAIBansheeCombatLogic in this;
+		combatTree.params.combatLogicTree.OnCreated();
+		
+		deathTree.params.destroyAfterAnimDelay = 10.0f;
 	}
 };
 
@@ -1160,6 +1521,12 @@ class CAIGravehagCombatLogicParams extends CAIMonsterCombatLogicParams
 };
 
 
+class CAISharleyCombatLogicParams extends CAIMonsterCombatLogicParams
+{
+	editable inlined var prioritizePlayerAsTarget : bool;
+};
+
+
 class CAIFlyingMonsterCombatLogic extends CAIMonsterCombatLogic
 {
 };
@@ -1177,9 +1544,45 @@ class CAITrollCombatLogic extends CAIMonsterCombatLogic
 };
 
 
+class CAISharleyCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_sharley_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAISharleyCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIVampiressCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_bruxa_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
 class CAIIceGiantCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_ice_giant_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIIceGiantEp2CombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_giant_ep2_logic.w2behtree";
 
 	function Init()
 	{
@@ -1337,7 +1740,19 @@ class CAIGryphonCombatLogic extends CAIFlyingMonsterCombatLogic
 class CAILessogCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_lessog_logic";
+	
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
 
+
+class CAISpriganCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_sprigan_logic.w2behtree";
+	
 	function Init()
 	{
 		params = new CAIMonsterCombatLogicParams in this;
@@ -1431,6 +1846,18 @@ class CAIWerewolfCombatLogic extends CAIMonsterCombatLogic
 };
 
 
+class CAIBigbadwolfCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_bigbadwolf_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
 class CAIKatakanCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_katakan_logic";
@@ -1439,6 +1866,30 @@ class CAIKatakanCombatLogic extends CAIMonsterCombatLogic
 	{
 		params = new CAIMonsterCombatLogicParams in this;
 		params.Init();
+	}
+};
+
+
+class CAIFlederCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_fleder_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.Init();
+	}
+};
+
+
+class CAIBansheeCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_banshee_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
 	}
 };
 
@@ -1503,6 +1954,18 @@ class CAIBlackSpiderCombatLogic extends CAIMonsterCombatLogic
 };
 
 
+class CAIBlackSpiderEP2CombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_black_spider_ep2_logic";
+
+	function Init()
+	{
+		params = new CAIBlackSpiderEP2CombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
 class CAIArachasCombatLogicParams extends CAIMonsterCombatLogicParams
 {
 	editable var minChargeDist : float;
@@ -1517,6 +1980,19 @@ class CAIArachasCombatLogicParams extends CAIMonsterCombatLogicParams
 
 
 class CAIBlackSpiderCombatLogicParams extends CAIMonsterCombatLogicParams
+{
+	editable var minChargeDist : float;
+	editable var maxChargeDist : float;
+	
+	function Init()
+	{
+		minChargeDist = 7.0;
+		maxChargeDist = 8.0;
+	}
+};
+
+
+class CAIBlackSpiderEP2CombatLogicParams extends CAIMonsterCombatLogicParams
 {
 	editable var minChargeDist : float;
 	editable var maxChargeDist : float;
@@ -1565,6 +2041,30 @@ class CAIWyvernCombatLogic extends CAIMonsterCombatLogic
 };
 
 
+class CAIDracolizardCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dracolizard_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIGravierCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_gravier_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
 class CAIFoglingDopplegangerCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_fogling_doppelganger_logic";
@@ -1580,6 +2080,18 @@ class CAIFoglingDopplegangerCombatLogic extends CAIMonsterCombatLogic
 class CAIGravehagCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_gravehag_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIWightCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_wight_logic";
 
 	function Init()
 	{
@@ -1690,9 +2202,143 @@ class CAIBoarCombatLogic extends CAIMonsterCombatLogic
 	}
 };
 
+
+class CAIBoarEP2CombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_boar_ep2_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+
+class CAIPantherCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_panther_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIKikimoreCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_kikimore_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+
 class CAIToadCombatLogic extends CAIMonsterCombatLogic
 {
 	default aiTreeName = "resdef:ai\monsters/monster_toad_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIArchesporCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_echinops_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIFairytaleWitchCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_fairytale_witch_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIScolopendromorphCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_scolopendromorph_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIBroomCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_broom_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIDettlaffVampireCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_dettlaff_vampire_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIBarghestCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "resdef:ai\monsters/monster_barghest_logic";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.Init();
+	}
+};
+
+
+class CAIDettlaffCombatLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_dettlaff_logic.w2behtree";
+
+	function Init()
+	{
+		params = new CAIMonsterCombatLogicParams in this;
+		params.OnCreated();
+	}
+};
+
+class CAIDettlaffTornadoLogic extends CAIMonsterCombatLogic
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\dettlaff_tornado_logic.w2behtree";
 
 	function Init()
 	{
@@ -1763,17 +2409,30 @@ class CAIMonsterSpawn extends CAISubTree
 
 class CAIMonsterSpawnParams extends CAISubTreeParameters
 {
-	editable var fxName					: name;
-	editable var animEventNameActivator	: name;
-	editable var playFXOnAnimEvent		: bool;
-	editable var monitorGroundContact 	: bool;
-	editable var dealDamageOnAnimEvent	: name;
+	editable var fxName						: name;
+	editable var animEventNameActivator		: name;
+	editable var playFXOnAnimEvent			: bool;
+	editable var monitorGroundContact 		: bool;
+	editable var dealDamageOnAnimEvent		: name;
+	editable var becomeVisibleOnAnimEvent 	: name;
 };
 
 
 class CAIMonsterSpawnDefault extends CAIMonsterSpawn
 {
 	default aiTreeName = "resdef:ai\monster_spawn_default";
+
+	function Init()
+	{
+		params = new CAIMonsterSpawnParams in this;
+		params.OnCreated();
+	}
+};
+
+
+class CAIMonsterSpawnFleder extends CAIMonsterSpawn
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\monster_fleder_spawn.w2behtree";
 
 	function Init()
 	{

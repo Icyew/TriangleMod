@@ -31,20 +31,22 @@ abstract class W3Mutagen_Effect extends CBaseGameplayEffect
 		super.OnEffectAdded(customParams);
 		
 		mutParams = (W3MutagenBuffCustomParams)customParams;
-		if(mutParams)
-		{
-			toxicityOffset = mutParams.toxicityOffset;
-			witcher.AddToxicityOffset(toxicityOffset);
-		}
-		else
-		{
-			toxicityOffset = 0;
-		}
+		toxicityOffset = mutParams.toxicityOffset;
+		witcher.AddToxicityOffset(toxicityOffset);
 		
 		if(witcher.CanUseSkill(S_Alchemy_s13))
 		{
 			witcher.AddAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
 		}
+		
+		
+		OverrideIcon( mutParams.potionItemName );		
+	}
+	
+	
+	public function OverrideIcon( itemName : name )
+	{
+		iconPath = theGame.GetDefinitionsManager().GetItemIconPath( itemName );
 	}
 	
 	event OnEffectRemoved()
@@ -57,6 +59,13 @@ abstract class W3Mutagen_Effect extends CBaseGameplayEffect
 		if(witcher.CanUseSkill(S_Alchemy_s13))
 		{
 			witcher.RemoveAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
+		}
+		
+		target.RemoveAbilityAll( abilityName );
+
+		if( target.HasBuff( EET_Mutation10 ) && target.GetStat( BCS_Toxicity ) == 0.f )
+		{
+			target.RemoveBuff( EET_Mutation10 );
 		}
 		
 		super.OnEffectRemoved();

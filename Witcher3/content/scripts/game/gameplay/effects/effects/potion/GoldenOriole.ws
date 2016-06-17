@@ -6,7 +6,6 @@
 
 
 
-
 class W3Potion_GoldenOriole extends CBaseGameplayEffect
 {
 	default effectType = EET_GoldenOriole;

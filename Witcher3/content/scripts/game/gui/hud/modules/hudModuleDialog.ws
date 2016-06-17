@@ -33,14 +33,14 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 	
 	
 	private var m_LastNegotiationResult		: ENegotiationResult;
-	private var currentReward				: name;
+	private var currentRewardName			: name;
 	private var currentRewardMultiply		: float;
 	private var isBet 						: bool;
 	private var isReverseHaggling 			: bool;
 	public var isPopupOpened 				: bool;
 	private var isGwentMode 				: bool;
 	public var anger 						: float;
-	private var currentGold					: int;			
+	private var currentReward				: int;			
 	private var minimalHagglingReward		: int;			
 	private var maxHaggleValue 				: int;			
 	private var NPCsPrettyClose				: float;		
@@ -217,9 +217,20 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		
 		lastSetChoices = choices;
 		
+
+
+
+
+
+
+
+
+
+		
 		for ( i = 0; i < lastSetChoices.Size(); i += 1 )
 		{
 			choiceFlashObject = flashValueStorage.CreateTempFlashObject();
+			choiceFlashObject.SetMemberFlashInt( "prefix",      i + 1 );
 			choiceFlashObject.SetMemberFlashString( "name",     lastSetChoices[ i ].description );
 			choiceFlashObject.SetMemberFlashInt( "icon",     	lastSetChoices[ i ].dialogAction );		
 			choiceFlashObject.SetMemberFlashBool( "read",     	lastSetChoices[ i ].previouslyChoosen == false );		
@@ -246,6 +257,19 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 			choiceFlashArray.SetElementFlashObject( i, choiceFlashObject );
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		if (allowContentMissingDialog && hasContentMissing && !theGame.IsContentAvailable(missingContent))
 		{
 			progress = theGame.ProgressToContentAvailable(missingContent);
@@ -256,7 +280,10 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		flashValueStorage.SetFlashArray( "hud.dialog.choices", choiceFlashArray );
 		
 		
-		SetGwentMode( false );
+		if ( choices.Size() > 0 )
+		{
+			SetGwentMode( false );
+		}
 	}
 
 	function OnDialogChoiceTimeoutSet(timeOutPercent : float)
@@ -281,42 +308,53 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		m_fxSkipConfirmHideSFF.InvokeSelf();
 	}
 	
-	function OpenMonsterHuntNegotiationPopup( rewardName : name, minimalGold : int, alwaysSuccessful : bool  )
+	function OpenMonsterHuntNegotiationPopup( rewardName : name, minimalGold : int, alwaysSuccessful : bool, optional isItemReward : bool  )
 	{
-		var popupData : DialogueMonsterBarganingSliderData;
-		var rewrd						: SReward;
-		var maxMult : float;		
-				
+		var popupData   : DialogueMonsterBarganingSliderData;
+		var rewrd	    : SReward;
+		var maxMult     : float;
+		var rewardValue : int;
+		
 		if(theGame.GetTutorialSystem() && theGame.GetTutorialSystem().IsRunning())		
 		{
 			theGame.GetTutorialSystem().uiHandler.OnOpeningMenu('MonsterHuntNegotiationMenu');
 		}
 		
 		popupData = new DialogueMonsterBarganingSliderData in this;
-		
 		popupData.ScreenPosX = 0.05;
 		popupData.ScreenPosY = 0.5;
 		
 		theGame.GetReward( rewardName, rewrd );
-		currentReward = rewardName;
+		currentRewardName = rewardName;
 		isBet = false;
 		isReverseHaggling = false;
 		isPopupOpened = true;
 		m_fxSetBarValueSFF.InvokeSelfOneArg(FlashArgNumber(0));
 		
-		
 		popupData.SetMessageTitle( GetLocStringByKeyExt("panel_hud_dialogue_title_negotiation"));
 		popupData.dialogueRef = this;
 		popupData.BlurBackground = false; 
-		popupData.m_DisplayGreyBackground = false;		
+		popupData.m_DisplayGreyBackground = false;
+		popupData.alternativeRewardType = isItemReward;
+		
+		if( isItemReward && rewrd.items.Size() > 0 )
+		{
+			
+			rewardValue = rewrd.items[0].amount;
+		}
+		else
+		{
+			rewardValue = minimalGold;
+		}
 		
 		if( anger == 0 ) 
-		{
+		{			
 			currentRewardMultiply = 1.f;
-			minimalHagglingReward = FloorF(minimalGold);
-			maxMult = RandRangeF(0.5, 0.2);						
-			maxHaggleValue = FloorF( minimalGold * (1.f + maxMult) );
-			currentGold = minimalHagglingReward;
+			minimalHagglingReward = FloorF(rewardValue);
+			maxMult = RandRangeF(0.5, 0.35);						
+			maxHaggleValue = FloorF( rewardValue * (1.f + maxMult) );
+			currentReward = minimalHagglingReward;
+			
 			if ( alwaysSuccessful )
 			{
 				NPCsPrettyClose = 1.f + maxMult;
@@ -324,31 +362,31 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 			}
 			else
 			{
-				NPCsPrettyClose = 1.f + RandRangeF(0.7, 0.f) * maxMult;		
+				NPCsPrettyClose = 1.f + RandRangeF(0.7, 0.2f) * maxMult;		
 				NPCsTooMuch = NPCsPrettyClose + 0.3 * maxMult;				
 			}
 			
 			LogHaggle("");
 			LogHaggle("Haggling for " + rewardName);
-			LogHaggle("min/base gold: " + minimalGold);
+			LogHaggle("min/base gold: " + rewardValue);
 			LogHaggle("max bar value: " + maxHaggleValue);
-			LogHaggle("default bar value (1.0): " + NoTrailZeros(currentGold));
-			LogHaggle("deal/pretty close border (" + NoTrailZeros(NPCsPrettyClose) + "): " + NoTrailZeros(NPCsPrettyClose * minimalGold));
-			LogHaggle("pretty close/too much border (" + NoTrailZeros(NPCsTooMuch) + "): " + NoTrailZeros(NPCsTooMuch * minimalGold));
+			LogHaggle("default bar value (1.0): " + NoTrailZeros(currentReward));
+			LogHaggle("deal/pretty close border (" + NoTrailZeros(NPCsPrettyClose) + "): " + NoTrailZeros(NPCsPrettyClose * rewardValue));
+			LogHaggle("pretty close/too much border (" + NoTrailZeros(NPCsTooMuch) + "): " + NoTrailZeros(NPCsTooMuch * rewardValue));
 			LogHaggle("");
 			
 			popupData.currentValue = minimalHagglingReward;
 		}
 		else
 		{
-			popupData.currentValue = currentGold;
+			popupData.currentValue = currentReward;
 		}
 		
-		popupData.minValue = minimalGold;
-		
-		popupData.baseValue = minimalGold;
+		popupData.minValue = rewardValue;
+		popupData.baseValue = rewardValue;
 		popupData.anger = anger;
 		popupData.maxValue = maxHaggleValue;
+		
 		theGame.RequestMenu('PopupMenu', popupData);		
 	}
 	
@@ -386,7 +424,7 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 			currentRewardMultiply = 1.f;					
 			maxHaggleValue = FactsQuerySum( LowestPriceControlFact );
 			minimalHagglingReward = FloorF( maxHaggleValue * lowestPriceModifier );
-			currentGold = maxHaggleValue;
+			currentReward = maxHaggleValue;
 			
 			NPCsPrettyClose	= 1.0f * bestBarginModifier;
 			NPCsTooMuch = NPCsPrettyClose * 0.7f;
@@ -402,7 +440,7 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		}
 		else
 		{
-			popupData.currentValue = currentGold;
+			popupData.currentValue = currentReward;
 		}
 		
 		popupData.minValue = minimalHagglingReward;
@@ -437,7 +475,7 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		popupData.ScreenPosY = 0.65;
 		
 		theGame.GetReward( rewardName, rewrd );
-		currentReward = rewardName;
+		currentRewardName = rewardName;
 		currentRewardMultiply = 0;
 		isBet = true;
 		isReverseHaggling = false;
@@ -467,16 +505,16 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		}
 	}
 
-	function DialogueSliderDataPopupResult( value : float, optional monsterBarganingPopupMenuParent : CR4MenuPopup )
+	function DialogueSliderDataPopupResult( value : float, optional isItemReward : bool )
 	{
-		var rewrd						: SReward;
-		var a : float;
+		var rewrd : SReward;
+		var a     : float;
 		
-		theGame.GetReward( currentReward, rewrd );
+		theGame.GetReward( currentRewardName, rewrd );
 		
 		if( isReverseHaggling )
 		{	
-			currentGold = FloorF(value);
+			currentReward = FloorF(value);
 			currentRewardMultiply = (value - minimalHagglingReward) / (maxHaggleValue-minimalHagglingReward);
 			
 			if( currentRewardMultiply < NPCsTooMuch )
@@ -517,13 +555,22 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 			{
 				currentRewardMultiply = ( value / rewrd.gold ) * 2; 
 				thePlayer.RemoveMoney( RoundF( value ) ); 
-				thePlayer.SetRewardMultiplier(currentReward, currentRewardMultiply);
+				thePlayer.SetRewardMultiplier(currentRewardName, currentRewardMultiply);
 				isBet = false;
 			}
 			else
 			{
-				currentGold = FloorF(value);
-				currentRewardMultiply = ( value / rewrd.gold );
+				currentReward = FloorF(value);
+				
+				if( isItemReward && rewrd.items.Size() > 0)
+				{
+					currentRewardMultiply = value / rewrd.items[0].amount;
+				}
+				else
+				{
+					currentRewardMultiply = value / rewrd.gold;
+				}
+				
 				LogHaggle("Offering " + NoTrailZeros(value) + ", mult of " + NoTrailZeros(currentRewardMultiply));
 				
 				if( currentRewardMultiply > NPCsTooMuch )
@@ -545,7 +592,8 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 					m_LastNegotiationResult = WeHaveDeal;
 					anger = 0;
 					LogHaggle("Deal!");
-					thePlayer.SetRewardMultiplier(currentReward, currentRewardMultiply);
+					
+					thePlayer.SetRewardMultiplier(currentRewardName, currentRewardMultiply, isItemReward);
 				}
 				LogHaggle("");
 				
@@ -556,7 +604,7 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 					anger = 0;
 					LogHaggle("NPC is furious - game over.");
 					LogHaggle("");
-					thePlayer.SetRewardMultiplier(currentReward, 1.f);
+					thePlayer.SetRewardMultiplier(currentRewardName, 1.f);
 				}
 				
 				isBet = false;
@@ -567,7 +615,6 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		{
 			theGame.GetTutorialSystem().uiHandler.OnClosingMenu('MonsterHuntNegotiationMenu');
 		}
-		
 		
 		m_fxSetBarValueSFF.InvokeSelfOneArg(FlashArgNumber(anger));
 		isPopupOpened = false;
@@ -630,7 +677,7 @@ class BettingSliderData extends DialogueSliderData
 				theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt("panel_shop_notification_not_enough_money") );
 				return;
 			}
-
+			
 			dialogueRef.DialogueSliderDataPopupResult( currentValue );
 			ClosePopup();
 		}
@@ -643,6 +690,7 @@ class DialogueMonsterBarganingSliderData extends DialogueSliderData
 {	
 	public var baseValue:int;
 	public var anger:float;
+	public var alternativeRewardType:bool;
 
 	protected  function GetContentRef() : string 
 	{
@@ -660,7 +708,7 @@ class DialogueMonsterBarganingSliderData extends DialogueSliderData
 		{
 			if( dialogueRef.IsPopupOpened() )
 			{
-				dialogueRef.DialogueSliderDataPopupResult( currentValue, PopupRef );
+				dialogueRef.DialogueSliderDataPopupResult( currentValue, alternativeRewardType );
 				ClosePopup();
 			}
 		}
@@ -673,6 +721,7 @@ class DialogueMonsterBarganingSliderData extends DialogueSliderData
 		l_flashObject = super.GetGFxData(parentFlashValueStorage);
 		l_flashObject.SetMemberFlashInt("baseValue", baseValue );
 		l_flashObject.SetMemberFlashNumber("anger", anger );
+		l_flashObject.SetMemberFlashBool("alternativeRewardType", alternativeRewardType );		
 		return l_flashObject;
 	}
 }

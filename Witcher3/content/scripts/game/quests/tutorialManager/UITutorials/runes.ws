@@ -16,24 +16,16 @@ state Runes in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 	event OnEnterState( prevStateName : name )
 	{
-		var highlights : array<STutorialHighlight>;
-		
 		super.OnEnterState(prevStateName);
 		
-		highlights.Resize(1);
-		highlights[0].x = 0.06;
-		highlights[0].y = 0.145;
-		highlights[0].width = 0.06;
-		highlights[0].height = 0.09;
-			
-		ShowHint(SELECT, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite, highlights);
+		ShowHint( SELECT, .5f, POS_INVENTORY_Y, ETHDT_Infinite, GetHighlightInvTabWeapons() );
 	}
 			
 	event OnLeaveState( nextStateName : name )
 	{
-		CloseHint(SELECT);
-		CloseHint(RUNE);
-		CloseHint(SWORD);
+		CloseStateHint(SELECT);
+		CloseStateHint(RUNE);
+		CloseStateHint(SWORD);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(SELECT);
 		theGame.GetTutorialSystem().MarkMessageAsSeen(SWORD);
@@ -46,27 +38,27 @@ state Runes in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		if(IsCurrentHint(SELECT) && thePlayer.inv.ItemHasTag(itemId, 'WeaponUpgrade'))
 		{
 			
-			CloseHint(SELECT);
-			ShowHint(RUNE, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+			CloseStateHint(SELECT);
+			ShowHint(RUNE, .5f, POS_INVENTORY_Y, ETHDT_Infinite);
 		}
 		else if(IsCurrentHint(RUNE) && !thePlayer.inv.ItemHasTag(itemId, 'WeaponUpgrade'))
 		{
 			
-			CloseHint(RUNE);
-			ShowHint(SELECT, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+			CloseStateHint(RUNE);
+			ShowHint(SELECT, .5f, POS_INVENTORY_Y, ETHDT_Infinite);
 		}
 	}
 	
 	event OnSelectingSword()
 	{
-		CloseHint(RUNE);
-		ShowHint(SWORD, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+		CloseStateHint(RUNE);
+		ShowHint(SWORD, .5f, POS_INVENTORY_Y, ETHDT_Infinite);
 	}
 	
 	event OnSelectingSwordAborted()
 	{
-		CloseHint(SWORD);
-		ShowHint(RUNE, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+		CloseStateHint(SWORD);
+		ShowHint(RUNE, .5f, POS_INVENTORY_Y, ETHDT_Infinite);
 	}
 	
 	event OnUpgradedItem()

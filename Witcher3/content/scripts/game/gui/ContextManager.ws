@@ -12,7 +12,8 @@ class W3UIContext extends CObject
 	protected var m_managerRef    : W3ContextManager;
 
 	
-	public function HandleUserFeedback(keyName:string) {}
+	public function HandleUserFeedback(keyName:string) {}	
+	public function UpdateContext() {}
 	
 	public function Deactivate() 
 	{

@@ -6,6 +6,7 @@
 class CR4HudModuleMedallion extends CR4HudModuleBase 
 {	
 	private var		m_fxSetFocusPointsSFF			: CScriptedFlashFunction;
+	
 	private var		m_fxSetVitalitySFF				: CScriptedFlashFunction;
 	private var		m_fxSetMedallionActiveSFF		: CScriptedFlashFunction;
 	private var		m_fxSetMedallionThresholdSFF	: CScriptedFlashFunction;
@@ -33,9 +34,11 @@ class CR4HudModuleMedallion extends CR4HudModuleBase
 
 		flashModule = GetModuleFlash();	
 		m_fxSetFocusPointsSFF			= flashModule.GetMemberFlashFunction( "setFocusPoints" );
+		
 		m_fxSetVitalitySFF				= flashModule.GetMemberFlashFunction( "setVitality" );
 		m_fxSetMedallionActiveSFF		= flashModule.GetMemberFlashFunction( "setMedallionActive" );
 		m_fxSetMedallionThresholdSFF	= flashModule.GetMemberFlashFunction( "setMedallionThreshold" );
+		
 
 		
 	}
@@ -63,12 +66,14 @@ class CR4HudModuleMedallion extends CR4HudModuleBase
 	{
 		var curFocusPoints : int = FloorF( GetWitcherPlayer().GetStat( BCS_Focus ) );
 		
+		
 		if ( m_focusPoints != curFocusPoints )
 		{
 			m_focusPoints = curFocusPoints;
 			
-			m_fxSetFocusPointsSFF.InvokeSelfOneArg( FlashArgInt( m_focusPoints) );
+			m_fxSetFocusPointsSFF.InvokeSelfOneArg( FlashArgInt( m_focusPoints ) );
 		}
+		
 	}
 	
 	private function UpdateVitality()

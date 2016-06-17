@@ -741,11 +741,11 @@ state Null in W3VehicleCombatManager
 	
 	function StartItemAction()
 	{
-		if( rider.GetInventory().IsItemBomb( rider.GetSelectedItemId() ) && rider.inv.SingletonItemGetAmmo( rider.GetSelectedItemId() ) > 0 )
+		if( rider.GetInventory().IsItemBomb( rider.GetSelectedItemId() ) && rider.inv.SingletonItemGetAmmo( rider.GetSelectedItemId() ) > 0 && rider.IsActionAllowed( EIAB_ThrowBomb ) )
 		{
 			parent.GotoState( 'ThrowBomb' );
 		}
-		else if( rider.GetInventory().IsItemCrossbow( rider.GetSelectedItemId() ) )
+		else if( rider.GetInventory().IsItemCrossbow( rider.GetSelectedItemId() ) && rider.IsActionAllowed( EIAB_Crossbow ) )
 		{
 			rider.SetBehaviorVariable( 'actionType', (int)EHCA_ShootCrossbow );
 			rider.rangedWeapon = ( Crossbow )( rider.GetInventory().GetItemEntityUnsafe( rider.GetSelectedItemId() ) );

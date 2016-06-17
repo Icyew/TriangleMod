@@ -18,18 +18,57 @@ class BTTaskAddRemoveAbility extends IBehTreeTask
 	
 	
 	
-	var abilityName			: name;
-	var allowMultiple		: bool;
-	var removeAbility		: bool;
-	var onDeactivate		: bool;
-	var onAnimEventName		: name;
+	public var abilityName					: name;
+	public var allowMultiple				: bool;
+	public var removeAbility				: bool;
+	public var delayUntilInCameraFrame 		: bool;
+	public var onDeactivate					: bool;
+	public var onAnimEventName				: name;
+	
+	private var eventReceived 				: bool;
+	
+	
 	
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		if( !onDeactivate ) Execute();
+		if( !onDeactivate && !delayUntilInCameraFrame ) Execute();
 		return BTNS_Active;
 	}
+	
+	
+	
+	
+	latent function Main() : EBTNodeStatus
+	{
+		var res 	: bool;
+		var actor 	: CActor = GetActor();
+		
+		if ( delayUntilInCameraFrame )
+		{
+			while ( !res )
+			{
+				if ( thePlayer.WasVisibleInScaledFrame( actor, 1.f, 1.f ) )
+				{
+					if ( IsNameValid( onAnimEventName ) && eventReceived )
+					{
+						Execute();
+						res = true;
+					}
+					else
+					{
+						Execute();
+						res = true;
+					}
+				}
+				Sleep( 0.25f );
+			}
+		}
+		
+		return BTNS_Active;
+	}
+	
+	
 	
 	
 	function OnDeactivate()
@@ -38,11 +77,17 @@ class BTTaskAddRemoveAbility extends IBehTreeTask
 	}
 	
 	
+	
+	
 	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
 	{
 		if ( IsNameValid( onAnimEventName ) && animEventName == onAnimEventName )
 		{
-			Execute();
+			eventReceived = true;
+			if ( !delayUntilInCameraFrame )
+			{
+				Execute();
+			}
 			return true;
 		}
 		return false;
@@ -72,11 +117,12 @@ class BTTaskAddRemoveAbilityDef extends IBehTreeTaskDefinition
 	
 	
 	
-	editable var abilityName		: name;
-	editable var allowMultiple		: bool;
-	editable var removeAbility		: bool;
-	editable var onDeactivate		: bool;
-	editable var onAnimEventName	: name;
+	editable var abilityName				: name;
+	editable var allowMultiple				: bool;
+	editable var removeAbility				: bool;
+	editable var delayUntilInCameraFrame 	: bool;
+	editable var onDeactivate				: bool;
+	editable var onAnimEventName			: name;
 	
 	default allowMultiple = true;
 	

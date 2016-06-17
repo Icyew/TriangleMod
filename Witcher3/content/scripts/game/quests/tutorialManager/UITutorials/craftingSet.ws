@@ -14,7 +14,7 @@ state CraftingSet in W3TutorialManagerUIHandler extends TutHandlerBaseState
 			
 	event OnLeaveState( nextStateName : name )
 	{
-		CloseHint(SET);
+		CloseStateHint(SET);
 		
 		
 		if(theGame.GetTutorialSystem().HasSeenTutorial(SET))
@@ -23,7 +23,6 @@ state CraftingSet in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	
 	event OnCraftedSetItem()
 	{
-		ShowHint(SET, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Input);
-		theGame.GetTutorialSystem().MarkMessageAsSeen(SET);
+		ShowHint( SET, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Input, , , , true );		
 	}
 }

@@ -43,7 +43,8 @@ EACIT_Substance,
 	EACIT_Bolt,
 	EACIT_MutagenPotion,
 	EACIT_Alcohol,
-	EACIT_Quest
+	EACIT_Quest,
+	EACIT_Dye
 }
 
 struct SCookable
@@ -64,6 +65,7 @@ function AlchemyCookedItemTypeStringToEnum(nam : string) : EAlchemyCookedItemTyp
 		case "mutagen_potion" 	: return EACIT_MutagenPotion;
 		case "alcohol"			: return EACIT_Alcohol;
 		case "quest"			: return EACIT_Quest;
+		case "dye"				: return EACIT_Dye;
 		default	     			: return EACIT_Undefined;
 	}
 }
@@ -80,6 +82,7 @@ function AlchemyCookedItemTypeEnumToName( type : EAlchemyCookedItemType) : name
 		case EACIT_MutagenPotion 	: return 'mutagen_potion';
 		case EACIT_Alcohol 			: return 'alcohol';
 		case EACIT_Quest			: return 'quest';
+		case EACIT_Dye				: return 'dye';
 		default	     				: return '___'; 
 	}
 }
@@ -96,6 +99,7 @@ function AlchemyCookedItemTypeToLocKey( type : EAlchemyCookedItemType ) : string
 		case EACIT_MutagenPotion 	: return "panel_inventory_filter_type_decoctions";
 		case EACIT_Alcohol 			: return "panel_inventory_filter_type_alcohols";
 		case EACIT_Quest 			: return "panel_button_worldmap_showquests";
+		case EACIT_Dye				: return "item_category_dye";
 		default	     				: return "";
 	}
 }
@@ -120,17 +124,20 @@ function IsAlchemyRecipe(recipeName : name) : bool
 {
 	var dm : CDefinitionsManagerAccessor;
 	var main : SCustomNode;
-	var recipeNode : SCustomNode;
-	var i, tmpInt : int;
-	var tmpName : name;
+	var i : int;
 
 	if(!IsNameValid(recipeName))
 		return false;
 
 	dm = theGame.GetDefinitionsManager();
-	if ( dm.GetSubNodeByAttributeValueAsCName( recipeNode, 'alchemy_recipes', 'name_name', recipeName ) )
+	main = dm.GetCustomDefinition('alchemy_recipes');
+		
+	for(i=0; i<main.subNodes.Size(); i+=1)
 	{
-		return true;
+		if ( dm.GetSubNodeByAttributeValueAsCName( main.subNodes[i], 'alchemy_recipes', 'name_name', recipeName ) && recipeName == recipeName )
+		{
+			return true;
+		}
 	}
 	
 	return false;

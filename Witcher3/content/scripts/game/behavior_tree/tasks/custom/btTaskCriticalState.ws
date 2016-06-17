@@ -15,8 +15,6 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 	
 	private var currentCS : ECriticalStateType;		
 	
-	protected var storageHandler 		: CAIStorageHandler;
-	
 	function IsAvailable () : bool
 	{
 		if ( forceActivate )
@@ -46,6 +44,7 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 		var nextBuffType : ECriticalStateType;
 		var owner : CNewNPC;
 		var forceRemoveCurrentBuff : bool;
+		var tempB : bool;
 		
 		owner = GetNPC();
 		
@@ -57,6 +56,10 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 		
 		nextBuff = owner.ChooseNextCriticalBuffForAnim();
 		nextBuffType = GetBuffCriticalType(nextBuff);
+		if ( nextBuffType == ECST_BurnCritical && owner.HasAbility( 'BurnNoAnim' ) )
+		{
+			tempB = true;
+		}
 		
 		
 		
@@ -69,8 +72,9 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			forceRemoveCurrentBuff = false;
 		}
 		
-		owner.CriticalStateAnimStopped(forceRemoveCurrentBuff);		
-				
+		owner.CriticalStateAnimStopped(forceRemoveCurrentBuff);
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( owner, 'RecoveredFromCriticalEffect', -1, 30.0f, -1.f, -1, true ); 
+		
 		activate = false;
 		
 		if(!nextBuff)
@@ -79,7 +83,7 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			currBuff = owner.GetCurrentlyAnimatedCS();
 			CriticalBuffDisallowPlayAnimation(currBuff);
 		}
-		else
+		else if ( !tempB && !owner.HasAbility( 'ablIgnoreSigns' ) )
 		{
 			forceActivate = true;
 		}
@@ -113,8 +117,10 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			
 			
 			if ( receivedBuffType == ECST_BurnCritical && npc.HasAbility( 'BurnNoAnim' ) )
+			{
+				npc.SignalGameplayEvent('CSBurningNoAnim');
 				return false;
-			
+			}
 			
 			if ( npc.HasAbility( 'ablIgnoreSigns' ) )
 				return false;
@@ -128,13 +134,22 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			activate = true;
 			activateTimeStamp = GetLocalTime();
 			
-			if ( isActive ) 
+			if( isActive ) 
 			{
-				currentBuffPriority = CalculateCriticalStateTypePriority(currentCS);
-				receivedBuffPriority = CalculateCriticalStateTypePriority(receivedBuffType);
-				
-				if ( receivedBuffPriority > currentBuffPriority )
-					Complete(true);
+				if( IsStagger( receivedBuffType ) && IsStagger( currentCS ) )
+				{
+					Complete( true );
+				}
+				else
+				{
+					currentBuffPriority = CalculateCriticalStateTypePriority( currentCS );
+					receivedBuffPriority = CalculateCriticalStateTypePriority( receivedBuffType );
+					
+					if ( receivedBuffPriority > currentBuffPriority )
+					{
+						Complete( true );
+					}
+				}
 			}
 		}
 		else if ( gameEventName == 'RagdollFromHorse'  )
@@ -154,6 +169,11 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 		res = GetNPC().SignalGameplayEventReturnInt('AI_ShouldBeScaredOnOverlay',-1);
 		
 		return res > 0;
+	}
+	
+	private function IsStagger( type : ECriticalStateType ) : bool
+	{
+		return type == ECST_Stagger || type == ECST_LongStagger;
 	}
 }
 

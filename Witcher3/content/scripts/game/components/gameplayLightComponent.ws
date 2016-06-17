@@ -29,8 +29,15 @@ import class CGameplayLightComponent extends CInteractionComponent
 	{
 		if ( activator == thePlayer )
 		{
-			if(!thePlayer.CanPerformPlayerAction(isEnabledInCombat))
+			if( thePlayer.tiedWalk )
+			{
 				return false;
+			}
+			
+			if( !thePlayer.CanPerformPlayerAction(isEnabledInCombat) )
+			{
+				return false;
+			}
 			
 			thePlayer.AddAnimEventChildCallback(this,'SetLight','OnAnimEvent_SetLight');
 			thePlayer.AddAnimEventChildCallback(this,'UnlockInteraction','OnAnimEvent_UnlockInteraction');

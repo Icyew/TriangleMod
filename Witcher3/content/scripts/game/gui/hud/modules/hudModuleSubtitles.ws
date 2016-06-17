@@ -47,13 +47,49 @@ class CR4HudModuleSubtitles extends CR4HudModuleBase
 			htmlString = "";
 		}
 		m_fxAddSubtitleSFF.InvokeSelfThreeArgs( FlashArgInt( id ), FlashArgString( speakerNameDisplayText ), FlashArgString( htmlString ) );
+		
+		AddSubtitleToPosterHack( speakerNameDisplayText, htmlString );
 	}
 	
 	event  OnSubtitleRemoved( id : int )
 	{
 		m_fxRemoveSubtitleSFF.InvokeSelfOneArg( FlashArgInt( id ) );
+		
+		RemoveSubtitleFromPosterHack();
 	}
 	
+	private function AddSubtitleToPosterHack( speakerNameDisplayText : string, htmlString : string )
+	{
+		var manager : CR4GuiManager;
+		var posterMenu : CR4PosterMenu;
+		
+		manager = theGame.GetGuiManager();
+		if ( manager )
+		{
+			posterMenu = (CR4PosterMenu)manager.GetRootMenu();
+			if ( posterMenu )
+			{
+				posterMenu.AddSubtitle( speakerNameDisplayText, htmlString );
+			}
+		}
+	}
+	
+	private function RemoveSubtitleFromPosterHack()
+	{
+		var manager : CR4GuiManager;
+		var posterMenu : CR4PosterMenu;
+		
+		manager = theGame.GetGuiManager();
+		if ( manager )
+		{
+			posterMenu = (CR4PosterMenu)manager.GetRootMenu();
+			if ( posterMenu )
+			{
+				posterMenu.RemoveSubtitle();
+			}
+		}
+	}
+
 	protected function UpdateScale( scale : float, flashModule : CScriptedFlashSprite ) : bool
 	{		
 		m_fxUpdateWidthSFF.InvokeSelfOneArg( FlashArgNumber( theGame.GetUIHorizontalFrameScale() ) );
@@ -80,4 +116,26 @@ exec function hud_remsub()
 	hud = (CR4ScriptedHud)theGame.GetHud();
 	subtitlesModule = (CR4HudModuleSubtitles)hud.GetHudModule("SubtitlesModule");
 	subtitlesModule.OnSubtitleRemoved( 1 );
+}
+
+exec function asub()
+{
+	var hud : CR4ScriptedHud;
+	
+	hud = (CR4ScriptedHud)theGame.GetHud();
+	if ( hud )
+	{
+		hud.OnSubtitleAdded( 123, "Geralt", "Raz dwa trzy, test napisów", false );
+	}
+}
+
+exec function rsub()
+{
+	var hud : CR4ScriptedHud;
+	
+	hud = (CR4ScriptedHud)theGame.GetHud();
+	if ( hud )
+	{
+		hud.OnSubtitleRemoved( 123 );
+	}
 }

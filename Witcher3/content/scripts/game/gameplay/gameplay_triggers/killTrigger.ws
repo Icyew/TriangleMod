@@ -31,7 +31,7 @@ class W3KillTrigger extends CEntity
 			}
 			else
 			{
-				actor.Kill();
+				actor.Kill( 'Kill Trigger' );
 			}
 		}
 	}
@@ -46,13 +46,13 @@ class W3KillTrigger extends CEntity
 		{
 			if( postponeTillStoppedFalling && postponedTillOnGroundMPAC[i].IsFalling() == false)
 			{
-				((CActor)postponedTillOnGroundMPAC[i].GetEntity()).Kill();
+				((CActor)postponedTillOnGroundMPAC[i].GetEntity()).Kill( 'Kill Trigger' );
 				postponedTillOnGroundMPAC.EraseFast(i);
 				continue;
 			}
 			if( postponeTillOnGround && postponedTillOnGroundMPAC[i].IsOnGround())
 			{
-				((CActor)postponedTillOnGroundMPAC[i].GetEntity()).Kill();
+				((CActor)postponedTillOnGroundMPAC[i].GetEntity()).Kill( 'Kill Trigger' );
 				postponedTillOnGroundMPAC.EraseFast(i);
 				continue;
 			}
@@ -61,7 +61,7 @@ class W3KillTrigger extends CEntity
 			
 			if(postponeTillinWater && actor.IsSwimming())
 			{
-				actor.Kill();
+				actor.Kill( 'Kill Trigger' );
 				postponedTillOnGroundMPAC.EraseFast(i);
 				continue;
 			}

@@ -15,7 +15,6 @@ class CBehTreeTaskRequiredItems extends IBehTreeTask
 	public var chooseSilverIfPossible : bool;
 	public var destroyProjectileOnDeactivate : bool;
 	
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CHumanAICombatStorage;
 	
 	private var processLeftItem : bool;
@@ -350,8 +349,7 @@ class CBehTreeTaskRequiredItems extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 }
@@ -379,10 +377,187 @@ class CBehTreeTaskRequiredItemsDef extends IBehTreeTaskDefinition
 
 
 
+
+class IBehTreeTaskProcessProjectile extends IBehTreeTask
+{
+	public var destroyProjectileOnDeactivate : bool;
+	
+	protected var combatDataStorage : CHumanAICombatStorage;
+	
+	protected var takeProjectile : bool;
+	protected var projTemplate : CEntityTemplate;
+	
+	function OnDeactivate()
+	{
+		if ( destroyProjectileOnDeactivate )
+		{
+			InitializeCombatDataStorage();
+			((CHumanAICombatStorage)combatDataStorage).DetachAndDestroyProjectile();
+		}
+	}
+	
+	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
+	{
+		if ( animEventName == 'DestroyProjectile' )
+		{
+			InitializeCombatDataStorage();
+			combatDataStorage.SetProjectile( NULL );
+		}
+		return false;
+	}
+	
+	function InitializeCombatDataStorage()
+	{
+		if ( !combatDataStorage )
+		{
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
+		}
+	}
+}
+
+abstract class IBehTreeTaskProcessProjectileDef extends IBehTreeTaskDefinition
+{
+	editable var destroyProjectileOnDeactivate : bool;
+	editable var projTemplate : CEntityTemplate;
+	
+}
+
+
+class CBehTreeTaskProcessArrows extends IBehTreeTaskProcessProjectile
+{
+	latent function Main() : EBTNodeStatus
+	{
+		while ( isActive )
+		{
+			SleepOneFrame();
+			if ( takeProjectile )
+			{
+				TakeBowArrow();
+				takeProjectile = false;
+			}
+		}
+		
+		return BTNS_Active;
+	}
+
+	function OnListenedGameplayEvent( eventName : name ) : bool
+	{
+		if ( eventName == 'TakeBowArrow' )
+		{
+			InitializeCombatDataStorage();
+			if ( !combatDataStorage.GetProjectile() )
+			{
+				takeProjectile = true;
+			}
+		}
+		if ( eventName == 'DestroyArrow' )
+		{
+			InitializeCombatDataStorage();
+			combatDataStorage.DetachAndDestroyProjectile();
+		}
+		return false;
+	}
+	
+	function TakeBowArrow()
+	{
+		var arrowRot : EulerAngles;
+		var arrowPos : Vector;
+		var arrow : W3ArrowProjectile;
+		var inv : CInventoryComponent;
+		
+		InitializeCombatDataStorage();
+		
+		if ( !projTemplate || combatDataStorage.GetProjectile() )
+		{
+			return;
+		}	
+		
+		arrow = (W3ArrowProjectile)theGame.CreateEntity( projTemplate, GetActor().GetWorldPosition());
+		
+		arrow.CreateAttachment(GetActor(), 'r_weapon_arrow');
+		
+		combatDataStorage.SetProjectile(arrow);
+	}
+}
+
+class CBehTreeTaskProcessArrowsDef extends IBehTreeTaskProcessProjectileDef
+{
+	default instanceClass = 'CBehTreeTaskProcessArrows';
+
+	function InitializeEvents()
+	{
+		super.InitializeEvents();
+		listenToAnimEvents.PushBack( 'DestroyArrow' );
+		listenToAnimEvents.PushBack( 'TakeBowArrow' );
+	}
+}
+
+
+
+
+class CBehTreeTaskProcessCrossbowBolts extends IBehTreeTaskProcessProjectile
+{
+	protected var bolt : W3AdvancedProjectile;
+	
+	latent function Main() : EBTNodeStatus
+	{
+		InitializeCombatDataStorage();
+	
+		while ( isActive )
+		{
+			SleepOneFrame();
+			if ( takeProjectile )
+			{
+				PutBoltInHand();
+				takeProjectile = false;
+			}
+		}
+		
+		return BTNS_Active;
+	}
+	
+	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
+	{
+		if ( animEventName == 'PutBoltInHand' )
+		{
+			takeProjectile = true;
+		}
+		else if ( animEventName == 'PutBoltInCrossbow' )
+		{
+			if( bolt )
+			{
+				bolt.BreakAttachment();
+				bolt.CreateAttachment( GetActor().GetInventory().GetItemEntityUnsafe( GetActor().GetInventory().GetItemFromSlot( 'r_weapon' ) ), 'bolt_slot' );
+			}
+		}
+		else if ( animEventName == 'ReloadCrossbow' )
+		{	
+			combatDataStorage.SetProjectile( bolt );
+		}
+			
+		return super.OnAnimEvent( animEventName, animEventType, animInfo );
+	}
+	
+	function PutBoltInHand()
+	{
+		bolt = (W3ArrowProjectile)theGame.CreateEntity( projTemplate, GetActor().GetWorldPosition());
+		bolt.CreateAttachment( GetActor(), 'l_weapon' );
+		
+		if( GetActor().HasTag( 'tracks_bolts' ) )
+			bolt.AddTag( 'tracked_bolt' );
+	}
+}
+
+class CBehTreeTaskProcessCrossbowBoltsDef extends IBehTreeTaskProcessProjectileDef
+{
+	default instanceClass = 'CBehTreeTaskProcessCrossbowBolts';
+}
+
+
+
+
 class CBehTreeTaskSheathWeapons extends IBehTreeTask
 {
-	protected var storageHandler : CAIStorageHandler;
-	
 	private var processLeftItem : bool;
 	private var processRightItem : bool;
 	
@@ -525,9 +700,7 @@ class CBehTreeTaskConditionalSheathWeapons extends CBehTreeTaskSheathWeapons
 	
 	function Initialize()
 	{
-		storageHandler = new CAIStorageHandler in this;
-		storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-		reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+		reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 	}
 }
 

@@ -70,14 +70,25 @@ class W3AnimatedContainer extends W3Container
 	
 	public function OnContainerClosed()
 	{
-		if(!HasQuestItem())
-			StopEffect('quest_highlight_fx');	
+		var effectName : name;
+
+		if ( !HasQuestItem() )
+		{
+			StopEffect( 'quest_highlight_fx' );	
+		}
+
 		if ( isPlayingInteractionAnim )
 		{
 			thePlayer.PlayerStopAction( interactionAnim );	
 		}
+		
+		effectName = this.GetAutoEffect();
+		if ( effectName != '' )
+		{
+			this.StopEffect( effectName );
+		}
+
 		super.OnContainerClosed();
-			
 	}
 	
 	

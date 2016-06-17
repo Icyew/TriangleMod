@@ -22,6 +22,9 @@ class W3Petard extends CThrowable
 	protected editable var loopParams						: SPetardParams;
 	protected editable var dodgeable						: bool;
 	protected editable var audioImpactName					: name;
+	protected editable var ignoreBombSkills					: bool;
+	protected editable var enableTrailFX 					: bool;
+	protected editable var alignToNormal					: bool;
 	
 		hint initialBlastRadius = "Radius in which targets are collected when petard explodes";
 		hint loopEffectRadius = "Radius for the lasting effect";
@@ -33,25 +36,33 @@ class W3Petard extends CThrowable
 		hint dismemberOnKill = "If set then if Actor is killed by this petard it will dismember";
 		hint clusterFX = "Name of FX to play when bomb cleaves into clusters";
 		hint friendlyFire = "If set then the one who created bomb explosion will also be affected by it";
+		hint enableTrailFX = "If set then trail fx will be played on projectile release";
+		hint alignToNormal = "If set entity will align it's Z axis with collision normal";
+		
 	
+	private const var FX_TRAIL 						: name;								
+	private const var FX_CLUSTER 					: name;								
 	
-	private const var FX_TRAIL 						: name;						
-	private const var FX_CLUSTER 					: name;						
-	
-	protected var itemName							: name;						
-	private var targetPos 							: Vector;					
-	private var isProximity							: bool;						
-	private var isInWater							: bool;						
-	private var isInDeepWater  						: bool;						
-	private var isStuck								: bool;						
-	protected var isCluster							: bool;						
-	private var justPlayingFXs						: array<name>;				
-	protected var loopDuration						: float;					
-	protected var snapCollisionGroupNames 			: array<name>;				
-	protected var stopCollisions					: bool;						
-	protected var previousTargets					: array<CGameplayEntity>;	
-	protected var targetsSinceLastCheck				: array<CGameplayEntity>;	
-	private var	wasInTutorialTrigger				: bool;						
+	protected var itemName							: name;								
+	private var targetPos 							: Vector;							
+	private var isProximity							: bool;								
+	private var isInWater							: bool;								
+	private var isInDeepWater  						: bool;								
+	private var isStuck								: bool;								
+	protected var isCluster							: bool;								
+	private var justPlayingFXs						: array<name>;						
+	protected var loopDuration						: float;							
+	protected var snapCollisionGroupNames 			: array<name>;						
+	protected var stopCollisions					: bool;								
+	protected var previousTargets					: array<CGameplayEntity>;			
+	protected var targetsSinceLastCheck				: array<CGameplayEntity>;			
+	private var	wasInTutorialTrigger				: bool;								
+	private var decalRemainingTimes					: array< SPetardShownDecals > ;		
+	protected var impactNormal						: Vector;
+	protected saved var hasImpactFireDamage			: bool;
+	protected saved var hasImpactFrostDamage		: bool;
+	protected saved var hasLoopFireDamage			: bool;
+	protected saved var hasLoopFrostDamage			: bool;
 	
 		default isStuck = false;
 		default isCluster = false;
@@ -62,6 +73,7 @@ class W3Petard extends CThrowable
 		default FX_TRAIL = 'fx_trail';
 		default FX_CLUSTER = 'fx_cluster_cleave';
 		default dodgeable = true;
+		default enableTrailFX = true;
 		
 	
 	
@@ -280,8 +292,10 @@ class W3Petard extends CThrowable
 			
 			if( thePlayer.inv.GetItemQuantity(itemId) < 1 )		
 				thePlayer.ClearSelectedItemId();
-			else
+			else if( !GetWitcherPlayer().IsSetBonusActive( EISB_Wolf_2 ) )
+			{
 				GetWitcherPlayer().AddBombThrowDelay(itemId);
+			}
 				
 			if(GetOwner() == GetWitcherPlayer())
 				GetWitcherPlayer().FailFundamentalsFirstAchievementCondition();
@@ -295,9 +309,22 @@ class W3Petard extends CThrowable
 		var target : CActor = thePlayer.GetTarget();
 		var actorsInAoE : array<CActor>;
 		var i : int;
+		var collisionGroups : array<name>;
 
 		BreakAttachment();
-		ShootProjectileAtPosition( 20.0f, 15.0f, targetPos, theGame.params.MAX_THROW_RANGE );
+		if( target.HasTag('AddRagdollCollision'))
+		{
+			collisionGroups.PushBack('Ragdoll');
+			collisionGroups.PushBack('Terrain');
+			collisionGroups.PushBack('Static');
+			collisionGroups.PushBack('Water');
+			collisionGroups.PushBack('Destructible');			
+			ShootProjectileAtPosition( 20.0f, 15.0f, targetPos, theGame.params.MAX_THROW_RANGE, collisionGroups);
+		}
+		else
+		{
+			ShootProjectileAtPosition( 20.0f, 15.0f, targetPos, theGame.params.MAX_THROW_RANGE );
+		}
 		
 		if(isFromAimThrow && ShouldProcessTutorial('TutorialThrowHold'))
 		{
@@ -331,7 +358,10 @@ class W3Petard extends CThrowable
 			((CNewNPC)target).OnIncomingProjectile( true );
 		}
 		
-		PlayEffectSingle(FX_TRAIL);
+		if ( enableTrailFX )
+		{
+			PlayEffectSingle(FX_TRAIL);
+		}
 		wasThrown = true;
 	}
 	
@@ -342,15 +372,19 @@ class W3Petard extends CThrowable
 	
 	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
 	{
-		var depthTestPos, petardPos, collisionPos, collisionNormal : Vector;
+		var depthTestPos, petardPos, collisionPos, collisionNormal, yVec : Vector;
 		var template : CEntityTemplate;
 		var npc : CNewNPC;
 		var victim : CActor;
 		var entity : CEntity;
+		var rot : EulerAngles;
+		var rotMatrix, m1, m2, m3 : Matrix;
 		
 		if(stopCollisions)
 			return true;
-			
+		
+		OnImpact();
+		
 		if(collidingComponent)
 			entity = collidingComponent.GetEntity();
 		
@@ -367,6 +401,8 @@ class W3Petard extends CThrowable
 		if ( !CanCollideWithVictim( victim ) )
 			return true;
 		
+		impactNormal = normal;
+		
 		
 		if ( npc && npc.HasAbility( 'RepulseProjectiles' ) )
 		{
@@ -376,6 +412,8 @@ class W3Petard extends CThrowable
 			this.Init( npc );
 			return true;
 		}
+		
+		victim.SignalGameplayEvent( 'HitByBomb' );	
 		
 		
 		if( itemName == 'Grapeshot 2' || itemName == 'Grapeshot 3' )
@@ -432,11 +470,30 @@ class W3Petard extends CThrowable
 		{
 			ProcessEffect( pos, (CGameplayEntity)entity );
 		}
+		
+		if( alignToNormal )
+		{
+			
+			
+			
+			m1 = MatrixBuildFromDirectionVector( normal );
+			m2 = MatrixBuiltRotation( EulerAngles( -90, 0, 0 ) );
+			m3 = m1 * m2;
+			rot = MatrixGetRotation( m3 );
+			
+			TeleportWithRotation( GetWorldPosition(), rot );
+			
+		}
 	}
+	
+	
 	
 	protected function StopFlying()
 	{		
-		StopEffect(FX_TRAIL);
+		if( enableTrailFX )
+		{
+			StopEffect(FX_TRAIL);
+		}
 		stopCollisions = true;
 		StopProjectile();
 	}
@@ -466,11 +523,11 @@ class W3Petard extends CThrowable
 	
 	public function ProcessEffect( optional explosionPosition : Vector, optional collidedTarget : CGameplayEntity )
 	{
-		var targets : array< CGameplayEntity >;
+		var targets, additionalTargets : array< CGameplayEntity >;
 		var i : int;
 		var victimTags, attackerTags : array<name>;
 		var dist, camShakeStr, camShakeStrFrac : float;
-		var temp : bool;
+		var temp, isPerk16Active : bool;
 		var phantom : CPhantomComponent;
 		var meshes : array<CComponent>;
 		var mesh : CMeshComponent;
@@ -499,19 +556,19 @@ class W3Petard extends CThrowable
 			mesh.SetVisible(false);
 			mesh.SetEnabled(false);
 		}
-
 		
-		if(!isCluster && (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill(S_Alchemy_s11) && !HasTag('Snowball'))
+		
+		if(!isCluster && !ignoreBombSkills && (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill(S_Alchemy_s11) && !HasTag('Snowball'))
 		{
 			ProcessClusterBombs();
 			return;
 		}
-
+		
 		if ( explosionPosition == Vector( 0, 0, 0 ) )
 		{
 			explosionPosition = this.GetWorldPosition();
 		}
-
+		
 		
 		explosionPosition = explosionPosition + Vector( 0.0f, 0.0f, 0.1f );
 		FindGameplayEntitiesInSphere(targets, explosionPosition, impactParams.range, 1000, '', FLAG_TestLineOfSight);	
@@ -522,8 +579,30 @@ class W3Petard extends CThrowable
 			FindGameplayEntitiesInSphere(targets, explosionPosition, impactParams.range, 1000, '', FLAG_TestLineOfSight);	
 		}
 		
+		
+		if ( itemName == 'Silver Dust Bomb 1' || itemName == 'Silver Dust Bomb 2' || itemName == 'Silver Dust Bomb 3' )
+		{
+			FindGameplayEntitiesInSphere(additionalTargets, explosionPosition, impactParams.range * 1.5, 1000, 'vampire', FLAG_TestLineOfSight);	
+		}
+		
+		if ( additionalTargets.Size() > 0 )
+		{
+			for ( i = 0 ; i < additionalTargets.Size() ; i += 1 )
+			{
+				if ( !targets.Contains( additionalTargets[i] ) )
+				{
+					targets.PushBack( additionalTargets[i] );
+				}
+			}
+		}
+		
 		if(collidedTarget && !targets.Contains(collidedTarget))
 			targets.PushBack(collidedTarget);
+			
+		if( caster == GetWitcherPlayer() && GetWitcherPlayer().CanUseSkill( S_Perk_16 ) )
+		{
+			isPerk16Active = true;
+		}
 		
 		for( i=targets.Size() - 1; i >= 0; i -= 1)
 		{		
@@ -555,14 +634,24 @@ class W3Petard extends CThrowable
 					
 					if( !targets[i].HasTag( 'TargetableByBomb' ) )
 					{
-						targets.Erase(i);
+						targets.EraseFast(i);
 					}
 				}
 				
 			}
-			if ( targets[ i ] == this )
+			
+			if ( targets[i] == GetWitcherPlayer() && isPerk16Active )
 			{
-				targets.Erase(i);
+				targets.EraseFast( i );
+			}	
+			else if ( targets[ i ] == this )
+			{
+				targets.EraseFast(i);
+			}
+			
+			else if( targets[i] == thePlayer && GetOwner() == thePlayer && (W3WhiteFrost)this )
+			{
+				targets.EraseFast(i);
 			}
 		}
 		
@@ -588,7 +677,7 @@ class W3Petard extends CThrowable
 		}
 		
 		
-		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'BombExplosionAction', 10.0, 20.0f, -1, -1, true); 
+		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( this, 'BombExplosionAction', 10.0, 50.0f, -1, -1, true); 
 		
 		
 		ProcessEffectPlayFXs(true);
@@ -631,7 +720,7 @@ class W3Petard extends CThrowable
 		
 		
 		AddTimer('OnTimeEnded', loopDuration, false, , , true);
-		AddTimer('Loop', 0.05, true, , , true);	
+		AddTimer('Loop', 0.1f, true, , , true);	
 	}
 	
 	protected function LoopComponentsEnable(enable : bool)
@@ -675,32 +764,35 @@ class W3Petard extends CThrowable
 		targets.Remove(this);
 		
 		
+		if( GetOwner() == thePlayer && GetWitcherPlayer().CanUseSkill( S_Perk_16 ) )
+		{
+			targets.Remove( thePlayer );
+		}
+
+		
 		targetsSinceLastCheck.Resize(targets.Size());
 		for(i=0; i<targetsSinceLastCheck.Size(); i+=1)
 		{
 			targetsSinceLastCheck[i] = targets[i];
 		}
 		
-		for(i=0; i<targetsSinceLastCheck.Size(); i+=1)
-			ProcessTargetInArea( targetsSinceLastCheck[i], dt);
+		
+		ProcessMechanicalEffect( targetsSinceLastCheck, false, dt );
+		
 		
 		for(i=0; i<previousTargets.Size(); i+=1)
+		{
 			if(!targetsSinceLastCheck.Contains( previousTargets[i] ))
+			{
 				ProcessTargetOutOfArea( previousTargets[i] );
+			}
+		}
 		
 		previousTargets.Clear();
 		previousTargets = targetsSinceLastCheck;
 		
 		
-		thePlayer.GetVisualDebug().AddSphere(GetRandomName(), loopParams.range, GetWorldPosition(), true, Color(0,0,255), 0.2);
-	}
-	
-	protected function ProcessTargetInArea(actor : CGameplayEntity, dt : float)
-	{	
-		var targets : array<CGameplayEntity>;
-	
-		targets.PushBack(actor);
-		ProcessMechanicalEffect(targets, false, dt);
+		
 	}
 	
 	
@@ -766,6 +858,7 @@ class W3Petard extends CThrowable
 		var params : SPetardParams;
 		var i : int;
 		var fx : array<name>;
+		var decalRandomID : int;
 	
 		if(isImpact)
 			params = impactParams;
@@ -799,6 +892,87 @@ class W3Petard extends CThrowable
 		
 		for(i=0; i<fx.Size(); i+=1)
 			PlayEffectInternal(fx[i]);
+			
+		
+		if( params.decalComponentNames.Size() > 0 )
+		{
+			decalRemainingTimes.Resize( params.decalComponentNames.Size() );
+			
+			if( params.decalComponentUseRandom )		
+			{
+				decalRandomID = RandRange( 0 , params.decalComponentNames.Size() );
+				ShowDecalComponent( decalRandomID, params );
+			}
+			else										
+			{
+				for( i=0; i<params.decalComponentNames.Size(); i+= 1)
+				{
+					ShowDecalComponent( i, params );
+				}
+			}
+		}
+	}
+	
+	private function ShowDecalComponent ( decalID : int, params : SPetardParams )
+	{
+		var decalComp : CDecalComponent;
+		var decalScale : Vector;
+		var scaleModifier : float;
+		
+		decalComp = ( CDecalComponent ) GetComponent( params.decalComponentNames[ decalID ] );
+					
+		if( decalComp )
+		{
+			if( params.decalComponentScaleModifier )
+			{
+				scaleModifier = params.decalComponentScaleModifier;
+				scaleModifier = RandRangeF( scaleModifier, -scaleModifier);
+				
+				decalScale = decalComp.GetLocalScale();
+				decalScale = decalScale * ( 1 + scaleModifier );
+				
+				decalComp.SetScale( decalScale );
+			}
+
+			decalComp.SetVisible( true ) ;
+			decalRemainingTimes[ decalID ].remainingShowTime = params.decalComponentVisibleTimes[ decalID ];
+			decalRemainingTimes[ decalID ].componentName = params.decalComponentNames[ decalID ];
+		}
+	}
+	
+	 event OnImpact()
+	{
+		var j : int;
+		
+		
+		for(j=0; j<impactParams.damages.Size(); j+=1)
+		{
+			if(impactParams.damages[j].dmgVal > 0)
+			{
+				if(impactParams.damages[j].dmgType == theGame.params.DAMAGE_NAME_FIRE)
+				{
+					hasImpactFireDamage = true;
+				}
+				else if(impactParams.damages[j].dmgType == theGame.params.DAMAGE_NAME_FROST)						
+				{
+					hasImpactFrostDamage = true;
+				}
+			}
+		}
+		for(j=0; j<loopParams.damages.Size(); j+=1)
+		{
+			if(loopParams.damages[j].dmgVal > 0)
+			{
+				if(loopParams.damages[j].dmgType == theGame.params.DAMAGE_NAME_FIRE)
+				{
+					hasLoopFireDamage = true;
+				}
+				else if(loopParams.damages[j].dmgType == theGame.params.DAMAGE_NAME_FROST)						
+				{
+					hasLoopFrostDamage = true;
+				}
+			}
+		}
 	}
 
 	
@@ -814,9 +988,10 @@ class W3Petard extends CThrowable
 		var dm : CDefinitionsManagerAccessor;
 		var actorTarget : CActor;
 		var surface	: CGameplayFXSurfacePost;		
-		var successfullBlock : bool;
+		var successfullBlock, canUsePerk20 : bool;
 		var hitType : EHitReactionType;
 		var npc : CNewNPC;
+		var DoTBuff : W3BuffDoTParams;
 		
 		
 		for(i=targets.Size()-1; i>=0; i-=1)
@@ -842,8 +1017,7 @@ class W3Petard extends CThrowable
 		}
 		
 		
-		if(action)
-			delete action;
+		
 		
 		if(isImpact)
 			params = impactParams;
@@ -863,10 +1037,10 @@ class W3Petard extends CThrowable
 		if(isImpact)
 		{
 			
-			thePlayer.GetVisualDebug().AddSphere(EffectTypeToName(RandRange(EnumGetMax('EEffectType'))), impactParams.range, GetWorldPosition(), true, Color(255,0,0), 3);
+			
 		
 			
-			if((W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill(S_Alchemy_s10) && !HasTag('Snowball'))
+			if( !ignoreBombSkills && (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill(S_Alchemy_s10) && !HasTag('Snowball'))
 			{
 				theGame.GetDefinitionsManager().GetAbilityAttributes(SkillEnumToName(S_Alchemy_s10), atts);
 				
@@ -907,7 +1081,14 @@ class W3Petard extends CThrowable
 			hitType = hitReactionType;
 		else
 			hitType = EHRT_None;
-			
+		
+		if( (W3PlayerWitcher)GetOwner() && GetWitcherPlayer().CanUseSkill( S_Perk_20 ) )
+		{
+			DoTBuff = new W3BuffDoTParams in this;
+			DoTBuff.isPerk20Active = true;
+			canUsePerk20 = true;				
+		}
+		
 		for(i=0; i<targets.Size(); i+=1)
 		{	
 			
@@ -918,18 +1099,26 @@ class W3Petard extends CThrowable
 			actorTarget = (CActor)targets[i];
 			if(!actorTarget)
 			{
-				for(j=0; j<params.damages.Size(); j+=1)
+				if( isImpact )
 				{
-					if(params.damages[j].dmgVal > 0)
+					if( hasImpactFireDamage )
 					{
-						if(params.damages[j].dmgType == theGame.params.DAMAGE_NAME_FIRE)
-						{
-							targets[i].OnFireHit(this);
-						}
-						else if(params.damages[j].dmgType == theGame.params.DAMAGE_NAME_FROST)						
-						{
-							targets[i].OnFrostHit(this);
-						}
+						targets[i].OnFireHit(this);
+					}
+					if( hasImpactFrostDamage )
+					{
+						targets[i].OnFireHit(this);
+					}
+				}
+				else
+				{
+					if( hasLoopFireDamage )
+					{
+						targets[i].OnFireHit(this);
+					}
+					if( hasLoopFrostDamage )
+					{
+						targets[i].OnFireHit(this);
 					}
 				}
 				
@@ -946,8 +1135,10 @@ class W3Petard extends CThrowable
 			}
 			
 			
-			if(!actorTarget.IsAlive())
+			if( actorTarget && !actorTarget.IsAlive() )
+			{
 				continue;
+			}
 			
 			
 			action = new W3DamageAction in theGame.damageMgr;
@@ -966,9 +1157,18 @@ class W3Petard extends CThrowable
 			}
 
 			for(j=0; j<params.buffs.Size(); j+=1)
+			{
+				
+				if( canUsePerk20 )
+				{
+					params.buffs[j].effectCustomParam = DoTBuff;
+				}
+				
 				action.AddEffectInfo(params.buffs[j].effectType, params.buffs[j].effectDuration, params.buffs[j].effectCustomValue, params.buffs[j].effectAbilityName, params.buffs[j].effectCustomParam, params.buffs[j].applyChance);
-									
+			}
+			
 			theGame.damageMgr.ProcessAction(action);
+			
 			delete action;
 						
 			
@@ -1009,7 +1209,7 @@ class W3Petard extends CThrowable
 			AddHitFacts( allVictimsTags, attackerTags, "_weapon_hit" );
 			AddHitFacts( allVictimsTags, attackerTags, "_bomb_hit" );
 			AddHitFacts( allVictimsTags, attackerTags, "_bomb_hit_type_" + PrintFactFriendlyPetardName() );
-		}			
+		}		
 	}
 	
 	
@@ -1048,6 +1248,7 @@ class W3Petard extends CThrowable
 		var atts : array<name>;
 		var distanceToTarget : float;
 		var projectileFlightTime : float;
+		var collisionGroups : array<name>;
 	
 		clusterInitPos = GetWorldPosition();
 		clusterInitPos.Z += radius + 0.15;
@@ -1075,7 +1276,19 @@ class W3Petard extends CThrowable
 			velocity = 4 + distLen/2;					
 			
 			
-			cluster.ShootProjectileAtPosition( angle, velocity, targetPosCluster, theGame.params.MAX_THROW_RANGE );
+			if( target.HasTag('AddRagdollCollision'))
+			{
+				collisionGroups.PushBack('Ragdoll');
+				collisionGroups.PushBack('Terrain');
+				collisionGroups.PushBack('Static');
+				collisionGroups.PushBack('Water');
+				collisionGroups.PushBack('Destructible');
+				cluster.ShootProjectileAtPosition( angle, velocity, targetPosCluster, theGame.params.MAX_THROW_RANGE, collisionGroups );
+			}
+			else
+			{
+				cluster.ShootProjectileAtPosition( angle, velocity, targetPosCluster, theGame.params.MAX_THROW_RANGE );
+			}
 			cluster.PlayEffectSingle(FX_TRAIL);
 			
 			if ( dodgeable )
@@ -1105,11 +1318,45 @@ class W3Petard extends CThrowable
 	protected function DestroyWhenNoFXPlayedFunction(dt : float) : bool
 	{
 		var i : int;
+		var decalComp : CDecalComponent;
+		var stillHasDecalToShow : bool;
 	
 		for(i=0; i<justPlayingFXs.Size(); i+=1)
+		{
 			if(IsEffectActive(justPlayingFXs[i]))
+			{
 				return false;
+			}
+		}
+		
+		
+		stillHasDecalToShow = false;
+		for( i = 0; i < decalRemainingTimes.Size(); i += 1 )
+		{
+			if( decalRemainingTimes[ i ].remainingShowTime > 0.f )
+			{
+				decalRemainingTimes[ i ].remainingShowTime -= dt;
 				
+				if( decalRemainingTimes[ i ].remainingShowTime > 0.f )
+				{
+					stillHasDecalToShow = true;
+				}
+				else
+				{
+					decalComp = ( CDecalComponent ) GetComponent( decalRemainingTimes[ i ].componentName );
+					if( decalComp )
+					{
+						decalComp.SetVisible( false ) ;
+					}
+				}
+			}
+		}
+		
+		if( stillHasDecalToShow )
+		{
+			return false;
+		}
+		
 		RemoveTimer('DestroyWhenNoFXPlayed');
 		DestroyAfter( 0.1f ); 
 		return true;

@@ -20,14 +20,18 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	editable var effects		: array< SYrdenEffects >;
 	editable var projTemplate	: CEntityTemplate;
 	editable var projDestroyFxEntTemplate : CEntityTemplate;
+	editable var runeTemplates	: array< CEntityTemplate >;
 
-	protected var ActorsInArea 	: array< CActor >;
+	protected var validTargetsInArea, allActorsInArea : array< CActor >;
 	protected var flyersInArea	: array< CNewNPC >;
 	
 	protected var trapDuration	: float;
 	protected var charges		: int;
+	protected var isPlayerInside : bool;
+	protected var baseModeRange : float;
 	
 	public var notFromPlayerCast : bool;
+	public var fxEntities : array< CEntity >;
 	
 	default skillEnum = S_Magic_3;
 
@@ -43,6 +47,11 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		return ST_Yrden;
 	}
 		
+	public function GetIsPlayerInside() : bool
+	{
+		return isPlayerInside;
+	}
+	
 	public function SkillUnequipped(skill : ESkill)
 	{
 		var i : int;
@@ -51,9 +60,14 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		
 		if(skill == S_Magic_s11)
 		{
-			for(i=0; i<ActorsInArea.Size(); i+=1)
-				ActorsInArea[i].RemoveBuff( EET_YrdenHealthDrain );
+			for(i=0; i<validTargetsInArea.Size(); i+=1)
+				validTargetsInArea[i].RemoveBuff( EET_YrdenHealthDrain );
 		}
+	}
+	
+	public function IsValidTarget( target : CActor ) : bool
+	{
+		return target && target.GetHealth() > 0.f && target.GetAttitude( owner.GetActor() ) == AIA_Hostile;
 	}
 	
 	public function SkillEquipped(skill : ESkill)
@@ -70,8 +84,8 @@ statemachine class W3YrdenEntity extends W3SignEntity
 			params.sourceName = "yrden_mode0";
 			params.isSignEffect = true;
 			
-			for(i=0; i<ActorsInArea.Size(); i+=1)
-				ActorsInArea[i].AddEffectCustom(params);
+			for(i=0; i<validTargetsInArea.Size(); i+=1)
+				validTargetsInArea[i].AddEffectCustom(params);
 		}
 	}
 
@@ -93,11 +107,12 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	{
 		var i : int;
 		
-		for(i=0; i<ActorsInArea.Size(); i+=1)
-			ActorsInArea[i].SignalGameplayEventParamObject('LeavesYrden', this );
+		for(i=0; i<validTargetsInArea.Size(); i+=1)
+			validTargetsInArea[i].SignalGameplayEventParamObject('LeavesYrden', this );
 		
-		ActorsInArea.Clear();
+		validTargetsInArea.Clear();
 		flyersInArea.Clear();
+		allActorsInArea.Clear();
 	}
 	
 	protected function GetSignStats()
@@ -108,6 +123,7 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		
 		chargesAtt = owner.GetSkillAttributeValue(skillEnum, 'charge_count', false, true);
 		trapDurationAtt = owner.GetSkillAttributeValue(skillEnum, 'trap_duration', false, true);
+		baseModeRange = CalculateAttributeValue( owner.GetSkillAttributeValue(skillEnum, 'range', false, true) );
 		
 		trapDurationAtt += owner.GetActor().GetTotalSignSpellPower(skillEnum);
 		trapDurationAtt.valueMultiplicative -= 1;	
@@ -145,14 +161,26 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	
 	protected latent function Place(trapPos : Vector)
 	{
-		var trapPosTest, trapPosResult, collisionNormal : Vector;
+		var trapPosTest, trapPosResult, collisionNormal, scale : Vector;
 		var rot : EulerAngles;
 		var witcher : W3PlayerWitcher;
+		var trigger : CComponent;
+		var min, max : SAbilityAttributeValue;
 		
 		witcher = GetWitcherPlayer();
 		witcher.yrdenEntities.PushBack(this);
 		
-		DisablePreviousYrdens();		
+		DisablePreviousYrdens();
+		
+		if( GetWitcherPlayer().IsSetBonusActive( EISB_Gryphon_2 ) )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'trigger_scale', min, max );
+			
+			trigger = GetComponent( "Slowdown" );
+			scale = trigger.GetLocalScale() * min.valueAdditive;			
+			
+			trigger.SetScale( scale );
+		}
 		
 		
 		Detach();
@@ -233,6 +261,8 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		var i : int;
 		var areas : array<CComponent>;
 		
+		isPlayerInside = false;
+		
 		super.CleanUp();
 		StopAllEffects();
 		
@@ -241,10 +271,18 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		for(i=0; i<areas.Size(); i+=1)
 			areas[i].SetEnabled(false);
 		
-		for(i=0; i<ActorsInArea.Size(); i+=1)
+		for(i=0; i<validTargetsInArea.Size(); i+=1)
 		{
-			ActorsInArea[i].BlockAbility('Flying', false);
+			validTargetsInArea[i].BlockAbility('Flying', false);
 		}
+		
+		for( i=0; i<fxEntities.Size(); i+=1 )
+		{
+			fxEntities[i].StopAllEffects();
+			fxEntities[i].DestroyAfter( 5.f );
+		}
+		
+		UpdateGryphonSetBonusYrdenBuff();
 		ClearActorsInArea();
 		DestroyAfter(3);
 	}
@@ -271,6 +309,43 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	event OnVisualDebug( frame : CScriptedRenderFrame, flag : EShowFlags, selected : bool )
 	{
 	}
+	
+	protected function UpdateGryphonSetBonusYrdenBuff()
+	{
+		var player : W3PlayerWitcher;
+		var i : int;
+		var isPlayerInYrden, hasBuff : bool;
+		
+		player = GetWitcherPlayer();
+		hasBuff = player.HasBuff( EET_GryphonSetBonusYrden );
+		
+		if ( player.IsSetBonusActive( EISB_Gryphon_2 ) ) 
+		{
+			isPlayerInYrden = false;
+			
+			for( i=0 ; i < player.yrdenEntities.Size() ; i+=1 )
+			{
+				if( !player.yrdenEntities[i].IsAlternateCast() && player.yrdenEntities[i].isPlayerInside )
+				{
+					isPlayerInYrden = true;
+					break;
+				}
+			}
+			
+			if( isPlayerInYrden && !hasBuff )
+			{
+				player.AddEffectDefault( EET_GryphonSetBonusYrden, NULL, "GryphonSetBonusYrden" );
+			}
+			else if( !isPlayerInYrden && hasBuff )
+			{
+				player.RemoveBuff( EET_GryphonSetBonusYrden, false, "GryphonSetBonusYrden" );
+			}
+		}
+		else if( hasBuff )
+		{
+			player.RemoveBuff( EET_GryphonSetBonusYrden, false, "GryphonSetBonusYrden" );
+		}
+	}
 }
 
 state YrdenCast in W3YrdenEntity extends NormalCast
@@ -293,7 +368,7 @@ state YrdenChanneled in W3YrdenEntity extends Channeling
 		super.OnEnterState( prevStateName );
 		
 		caster.OnDelayOrientationChange();
-		caster.GetActor().PauseEffects( EET_AutoStaminaRegen, 'SignCast' );
+		caster.GetActor().PauseStaminaRegen( 'SignCast' );
 		ChannelYrden();
 	}
 	
@@ -306,7 +381,7 @@ state YrdenChanneled in W3YrdenEntity extends Channeling
 		
 		parent.StopEffect( 'yrden_cast' );
 		
-		caster.GetActor().ResumeEffects( EET_AutoStaminaRegen, 'SignCast' );
+		caster.GetActor().ResumeStaminaRegen( 'SignCast' );
 		
 		parent.GotoState( 'YrdenShock' );
 	}
@@ -375,7 +450,7 @@ state YrdenShock in W3YrdenEntity extends Active
 		var i, size : int;
 		var target : CActor;
 		var hitEntity : CEntity;
-		var shot : bool;
+		var shot, validTargetsUpdated : bool;
 			
 		parent.Place(parent.GetWorldPosition());
 		
@@ -385,25 +460,19 @@ state YrdenShock in W3YrdenEntity extends Active
 		
 		Sleep(1.f);
 		
-		while( parent.ActorsInArea.Size() == 0 )
-		{
-			
-			Sleep( 0.2f );
-		}
-		
 		while( parent.charges > 0 )
 		{
 			hitEntity = NULL;
 			shot = false;
-			size = parent.ActorsInArea.Size();
+			size = parent.validTargetsInArea.Size();
 			if ( size > 0 )
 			{
 				do
 				{
-					target = parent.ActorsInArea[RandRange(size)];
+					target = parent.validTargetsInArea[RandRange(size)];
 					if(target.GetHealth() <= 0.f || target.IsInAgony() )
 					{
-						parent.ActorsInArea.Remove(target);
+						parent.validTargetsInArea.Remove(target);
 						size -= 1;
 						target = NULL;
 					}
@@ -417,11 +486,36 @@ state YrdenShock in W3YrdenEntity extends Active
 			}
 			
 			if(hitEntity)
+			{
 				Sleep(2.f);		
+			}
 			else if(shot)
+			{
 				Sleep(0.1f);	
+			}
 			else
-				Sleep(1.f);		
+			{
+				validTargetsUpdated = false;
+				
+				
+				if( parent.validTargetsInArea.Size() == 0 )
+				{				
+					for( i=0; i<parent.allActorsInArea.Size(); i+=1 )
+					{
+						if( parent.IsValidTarget( parent.allActorsInArea[i] ) )
+						{
+							parent.validTargetsInArea.PushBack( parent.allActorsInArea[i] );
+							validTargetsUpdated = true;
+						}
+					}
+				}
+				
+				
+				if( !validTargetsUpdated )
+				{
+					Sleep(1.f);		
+				}
+			}
 		}
 		
 		parent.GotoState( 'Discharged' );
@@ -433,14 +527,20 @@ state YrdenShock in W3YrdenEntity extends Active
 		var projectile : CProjectileTrajectory;		
 		
 		target = (CNewNPC)(activator.GetEntity());
-		if ( parent.charges && target && target.GetHealth() > 0.f && target.GetAttitude( caster.GetActor() ) == AIA_Hostile && !parent.ActorsInArea.Contains(target) )
+		
+		if( target && !parent.allActorsInArea.Contains( target ) )
 		{
-			if( parent.ActorsInArea.Size() == 0 )
+			parent.allActorsInArea.PushBack( target );
+		}
+		
+		if ( parent.charges && parent.IsValidTarget( target ) && !parent.validTargetsInArea.Contains(target) )
+		{
+			if( parent.validTargetsInArea.Size() == 0 )
 			{
 				parent.PlayEffect( parent.effects[parent.fireMode].activateEffect );
 			}
 			
-			parent.ActorsInArea.PushBack( target );
+			parent.validTargetsInArea.PushBack( target );			
 			
 			target.OnYrdenHit( caster.GetActor() );
 			
@@ -499,11 +599,11 @@ state YrdenShock in W3YrdenEntity extends Active
 		
 		if ( target && parent.charges && target.GetAttitude( thePlayer ) == AIA_Hostile )
 		{
-			parent.ActorsInArea.Erase( parent.ActorsInArea.FindFirst( target ) );
+			parent.validTargetsInArea.Erase( parent.validTargetsInArea.FindFirst( target ) );
 			target.SignalGameplayEventParamObject('LeavesYrden', parent );
 		}
 		
-		if ( parent.ActorsInArea.Size() <= 0 )
+		if ( parent.validTargetsInArea.Size() <= 0 )
 		{
 			parent.StopEffect( parent.effects[parent.fireMode].activateEffect );
 		}
@@ -705,8 +805,7 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 {
 	event OnEnterState( prevStateName : name )
 	{
-		var player : CR4Player;
-		var cost, stamina : float;
+		var player				: CR4Player;
 		
 		super.OnEnterState( prevStateName );
 		
@@ -718,18 +817,16 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 		if(!parent.notFromPlayerCast)
 		{
 			player = caster.GetPlayer();
-			if(player == caster.GetActor() && player && player.CanUseSkill(S_Perk_09))
+			
+			if( player )
 			{
-				cost = player.GetStaminaActionCost(ESAT_Ability, SkillEnumToName( parent.skillEnum ), 0);
-				stamina = player.GetStat(BCS_Stamina, true);
-				
-				if(cost > stamina)
-					player.DrainFocus(1);
-				else
-					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+				parent.ManagePlayerStamina();
+				parent.ManageGryphonSetBonusBuff();
 			}
 			else
+			{
 				caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+			}
 		}
 	}
 	
@@ -744,10 +841,16 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 	{
 		var i, size : int;
 		
-		size = parent.ActorsInArea.Size();
+		size = parent.validTargetsInArea.Size();
 		for( i = 0; i < size; i += 1 )
 		{
-			parent.ActorsInArea[i].RemoveBuff( EET_YrdenHealthDrain );
+			parent.validTargetsInArea[i].RemoveBuff( EET_YrdenHealthDrain );
+		}
+		
+		for( i=0; i<virtual_parent.fxEntities.Size(); i+=1 )
+		{
+			virtual_parent.fxEntities[i].StopAllEffects();
+			virtual_parent.fxEntities[i].DestroyAfter( 5.f );
 		}
 	}
 	
@@ -784,57 +887,44 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 	
 	private function CreateTrap()
 	{
-		var components : array<CComponent>;
 		var i, size : int;
-		var outZDiff : float;
-		var currPosition : Vector;
+		var worldPos : Vector;
+		var isSetBonus2Active : bool;
+		var worldRot : EulerAngles;
+		var polarAngle, yrdenRange, unitAngle : float;
+		var runePositionLocal, runePositionGlobal : Vector;
+		var entity : CEntity;
+		var min, max : SAbilityAttributeValue;
 		
-		components = parent.GetComponentsByClassName( 'CEffectDummyComponent' );
-		size = components.Size();
+		isSetBonus2Active = GetWitcherPlayer().IsSetBonusActive( EISB_Gryphon_2 );
+		worldPos = virtual_parent.GetWorldPosition();
+		worldRot = virtual_parent.GetWorldRotation();
+		yrdenRange = virtual_parent.baseModeRange;
+		size = virtual_parent.runeTemplates.Size();
+		unitAngle = 2 * Pi() / size;
 		
-		for ( i = 0 ; i < size ; i+=1 )
-		{		
-			currPosition = components[i].GetLocalPosition();
-			if ( Trace( components[i], outZDiff ) )
-			{
-				currPosition.Z += outZDiff;
-			}
-			currPosition.Z += 0.1f;
-			components[i].SetPosition( currPosition );
-			
-			switch ( components[i].GetName() )
-			{
-				case "CEffectDummyComponent0": parent.PlayEffect( 'rune_00' , components[i] ); break;
-				case "CEffectDummyComponent1": parent.PlayEffect( 'rune_01' , components[i] ); break;
-				case "CEffectDummyComponent2": parent.PlayEffect( 'rune_02' , components[i] ); break;
-				case "CEffectDummyComponent3": parent.PlayEffect( 'rune_03' , components[i] ); break;
-				case "CEffectDummyComponent4": parent.PlayEffect( 'rune_04' , components[i] ); break;
-				case "CEffectDummyComponent5": parent.PlayEffect( 'rune_05' , components[i] ); break;
-				case "CEffectDummyComponent6": parent.PlayEffect( 'rune_06' , components[i] ); break;
-				default: break;
-			}
-		}
-	}
-	
-	private function Trace( comp: CComponent, out outZDiff : float ) : bool
-	{
-		var currPosition, outPosition, outNormal, tempPosition1, tempPosition2 : Vector;
-		
-		currPosition = comp.GetWorldPosition();
-		
-		tempPosition1 = currPosition;
-		tempPosition1.Z -= 5;
-		
-		tempPosition2 = currPosition;
-		tempPosition2.Z += 2;
-		
-		if ( theGame.GetWorld().StaticTrace( tempPosition2, tempPosition1, outPosition, outNormal ) )
+		if( isSetBonus2Active )
 		{
-			outZDiff = outPosition.Z - currPosition.Z;
-			return true;
+			virtual_parent.PlayEffect( 'ability_gryphon_set' );
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'trigger_scale', min, max );
+			yrdenRange *= min.valueAdditive;
 		}
 		
-		return false;
+		for( i=0; i<size; i+=1 )
+		{
+			polarAngle = unitAngle * i;
+			
+			runePositionLocal.X = yrdenRange * CosF( polarAngle );
+			runePositionLocal.Y = yrdenRange * SinF( polarAngle );
+			runePositionLocal.Z = 0.f;
+			
+			runePositionGlobal = worldPos + runePositionLocal;			
+			runePositionGlobal = TraceFloor( runePositionGlobal );
+			runePositionGlobal.Z += 0.05f;		
+			
+			entity = theGame.CreateEntity( virtual_parent.runeTemplates[i], runePositionGlobal, worldRot );
+			virtual_parent.fxEntities.PushBack( entity );
+		}
 	}
 	
 	entry function YrdenSlowdown_Loop()
@@ -881,27 +971,27 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 				npc = parent.flyersInArea[i];
 				if(!npc.IsFlying())
 				{
-					parent.ActorsInArea.PushBack(npc);
+					parent.validTargetsInArea.PushBack(npc);
 					npc.BlockAbility('Flying', true);
 					parent.flyersInArea.EraseFast(i);
 				}
 			}
 			
-			for(i=0; i<parent.ActorsInArea.Size(); i+=1)
+			for(i=0; i<parent.validTargetsInArea.Size(); i+=1)
 			{			
 				
-				parent.ActorsInArea[i].GetResistValue(CDS_ShockRes, pts, prc);
+				parent.validTargetsInArea[i].GetResistValue(CDS_ShockRes, pts, prc);
 				if(prc < 1)
-					parent.ActorsInArea[i].AddEffectCustom(params);			
+					parent.validTargetsInArea[i].AddEffectCustom(params);			
 				
 				
 				if(thePlayer.CanUseSkill(S_Magic_s11))
 				{
-					parent.ActorsInArea[i].AddEffectCustom(paramsDrain);
+					parent.validTargetsInArea[i].AddEffectCustom(paramsDrain);
 				}
 				
 				
-				parent.ActorsInArea[i].OnYrdenHit( casterActor );
+				parent.validTargetsInArea[i].OnYrdenHit( casterActor );
 			}
 			
 			SleepOneFrame();
@@ -915,17 +1005,27 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 		
 		target = (CNewNPC)(activator.GetEntity());
 		casterActor = caster.GetActor();
-		if ( target && target.IsAlive() && target.GetAttitude( casterActor ) == AIA_Hostile && !parent.ActorsInArea.Contains(target))
+		if( (W3PlayerWitcher)activator.GetEntity() )
+		{
+			parent.isPlayerInside = true;
+		}
+		
+		if( target && !parent.allActorsInArea.Contains( target ) )
+		{
+			parent.allActorsInArea.PushBack( target );
+		}
+		
+		if ( parent.IsValidTarget( target ) && !parent.validTargetsInArea.Contains(target))
 		{
 			if (!target.IsFlying())
 			{
 				
-				if( parent.ActorsInArea.Size() == 0 )
+				if( parent.validTargetsInArea.Size() == 0 )
 				{
 					parent.PlayEffect( parent.effects[parent.fireMode].activateEffect );
 				}
 				
-				parent.ActorsInArea.PushBack( target );		
+				parent.validTargetsInArea.PushBack( target );		
 				target.SignalGameplayEventParamObject('EntersYrden', parent );
 				target.BlockAbility('Flying', true);
 			}
@@ -933,7 +1033,11 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 			{
 				parent.flyersInArea.PushBack(target);
 			}
-		}		
+		}
+		if( parent.isPlayerInside && GetWitcherPlayer().IsSetBonusActive( EISB_Gryphon_2 ) )
+		{
+			parent.UpdateGryphonSetBonusYrdenBuff();
+		}
 	}
 	
 	event OnAreaExit( area : CTriggerAreaComponent, activator : CComponent )
@@ -942,23 +1046,32 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 		var i : int;
 		
 		target = (CNewNPC)(activator.GetEntity());
+	
+		if( (W3PlayerWitcher)activator.GetEntity() )
+		{
+			parent.isPlayerInside = false;
+		}
 		if( target )
 		{
-			i = parent.ActorsInArea.FindFirst( target );
+			i = parent.validTargetsInArea.FindFirst( target );
 			if( i >= 0 )
 			{
 				target.RemoveBuff( EET_YrdenHealthDrain );
 				
-				parent.ActorsInArea.Erase( i );
+				parent.validTargetsInArea.Erase( i );
 			}
 			target.SignalGameplayEventParamObject('LeavesYrden', parent );
 			target.BlockAbility('Flying', false);
 			parent.flyersInArea.Remove(target);
 		}
 		
-		if ( parent.ActorsInArea.Size() == 0 )
+		if ( parent.validTargetsInArea.Size() == 0 )
 		{
 			parent.StopEffect( parent.effects[parent.fireMode].activateEffect );
+		}
+		if( !parent.isPlayerInside )
+		{
+			parent.UpdateGryphonSetBonusYrdenBuff();
 		}
 	}
 }

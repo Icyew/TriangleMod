@@ -112,19 +112,16 @@ struct SFxOnAnimEvent
 
 class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 {
-	public var resourceName : name;
+	public var resourceName 			: name;
 	
-	private var effectEntityTemplate : CEntityTemplate;
+	private var fxOnAnimEvent 			: array<SFxOnAnimEvent>;
+	private var effectEntityTemplate 	: CEntityTemplate;
+	private var entity 					: CEntity;
+	private var dealDmgOnDeactivate 	: bool;
+	private var couldntLoadResource 	: bool;
+	private var effectHitName			: name;
 	
-	private var dealDmgOnDeactivate : bool;
 	
-	private var couldntLoadResource : bool;
-	
-	private var effectHitName		: name;
-	
-	private var entity 		: CEntity;
-	
-	private var fxOnAnimEvent : array<SFxOnAnimEvent>;
 	
 	var foundPos			: bool;
 	var pos					: Vector;
@@ -148,6 +145,7 @@ class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 			return BTNS_Failed;
 		}
 		
+		super.Main();
 		return BTNS_Active;
 	}
 	
@@ -159,6 +157,7 @@ class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 			dealDmgOnDeactivate = false;
 		}
 		
+		foundPos = false;
 		super.OnDeactivate();
 	}
 	
@@ -233,6 +232,7 @@ class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 			if (!foundPos)
 			{
 				GetEffectPositionAndRotation(pos, rot);
+				foundPos = true;
 			}
 			
 			entity = theGame.CreateEntity( effectEntityTemplate, pos, rot );
@@ -259,17 +259,43 @@ class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 	
 	function OnGameplayEvent( eventName : name ) : bool
 	{
-		var witcher : W3PlayerWitcher = GetWitcherPlayer();
+		var witcher 	: W3PlayerWitcher = GetWitcherPlayer();
+		var damageData	: W3DamageAction;
 		
-		if ( eventName == 'DamageInstigated' )
+		if ( eventName == 'HitActionReaction' )
 		{
-			if ( IsNameValid( effectHitName ) && ( GetLocalTime() > fxTimeCooldown ))
+			hitActionReactionEventReceived = true;
+			hitTimeStamp = GetLocalTime();
+			if ( hitActionReactionEventReceived && damageInstigatedEventReceived && IsNameValid( effectHitName ) 
+				&& GetLocalTime() > fxTimeCooldown && GetLocalTime() < hitTimeStamp + 0.5 )
 			{
+				hitActionReactionEventReceived = false;
+				damageInstigatedEventReceived = false;
 				if ( witcher == GetCombatTarget() && ( witcher.IsQuenActive( true ) || witcher.IsQuenActive( false ) ) )
 					return false;
 				
 				fxTimeCooldown = GetLocalTime() + applyFXCooldown;
 				entity.PlayEffect(effectHitName);
+			}
+		}
+		if ( eventName == 'DamageInstigated' )
+		{
+			damageData = ( W3DamageAction ) GetEventParamObject();
+			if ( !damageData.IsDoTDamage() )
+			{
+				damageInstigatedEventReceived = true;
+				hitTimeStamp = GetLocalTime();
+				if ( hitActionReactionEventReceived && damageInstigatedEventReceived && IsNameValid( effectHitName ) 
+					&& GetLocalTime() > fxTimeCooldown && GetLocalTime() < hitTimeStamp + 0.5 )
+				{
+					hitActionReactionEventReceived = false;
+					damageInstigatedEventReceived = false;
+					if ( witcher == GetCombatTarget() && ( witcher.IsQuenActive( true ) || witcher.IsQuenActive( false ) ) )
+						return false;
+					
+					fxTimeCooldown = GetLocalTime() + applyFXCooldown;
+					entity.PlayEffect(effectHitName);
+				}
 			}
 		}
 		
@@ -284,10 +310,12 @@ class CBTTaskMagicMeleeAttack extends CBTTaskMagicAttack
 		var l_entity		: CEntity;
 		var i 				: int;
 		
+		if (!foundPos)
+		{
+			GetEffectPositionAndRotation(pos, rot);
+			foundPos = true;
+		}
 		
-		GetEffectPositionAndRotation(pos, rot);
-		
-		foundPos = true;
 		
 		l_entity = theGame.CreateEntity( effectEntityTemplate, pos, rot );
 		
@@ -380,6 +408,7 @@ class CBTTaskMagicFXAttack extends CBTTaskMagicAttack
 			return BTNS_Failed;
 		}
 		
+		super.Main();
 		return BTNS_Active;
 	}
 	
@@ -463,6 +492,7 @@ class CBTTaskMagicBomb extends CBTTaskAttack
 			return BTNS_Failed;
 		}
 		
+		super.Main();
 		return BTNS_Active;
 	}
 	

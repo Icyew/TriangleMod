@@ -10,15 +10,22 @@
 
 class W3Campfire extends CGameplayEntity
 {
-
+	editable var dontCheckForNPCs : bool;
+	
 	event OnSpawned( spawnData : SEntitySpawnData )
 	{
-		AddTimer('CheckForNPCs', 3.0, true);
+		if( !dontCheckForNPCs )
+		{
+			AddTimer('CheckForNPCs', 3.0, true);
+		}
 	}
 
 	event OnDestroyed()
 	{
-		RemoveTimer('CheckForNPCs');
+		if( !dontCheckForNPCs )
+		{
+			RemoveTimer('CheckForNPCs');
+		}
 	}
 	
 		

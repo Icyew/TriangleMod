@@ -65,6 +65,7 @@ class W3QuestCond_EntityComponentEnabled extends CQuestScriptedCondition
 {
 	editable var tag			: name;
 	editable var componentName	: name;
+	editable var inverted		: bool;
 	
 	var entity					: CEntity;
 	var component				: CComponent;
@@ -114,7 +115,14 @@ class W3QuestCond_EntityComponentEnabled extends CQuestScriptedCondition
 			}
 			if ( component )
 			{
-				return component.IsEnabled();
+				if( inverted )
+				{
+					return !component.IsEnabled();
+				}
+				else
+				{
+					return component.IsEnabled();
+				}
 			}
 		}
 		else if ( !listener )

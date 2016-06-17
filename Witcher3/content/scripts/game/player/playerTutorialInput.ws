@@ -109,7 +109,7 @@ class W3PlayerTutorialInput extends CPlayerInput
 			signSkill = SignEnumToSkillEnum( thePlayer.GetEquippedSign() );
 			if( signSkill != S_SUndefined && !thePlayer.HasStaminaToUseSkill( signSkill, false ) )
 			{
-				FactsAdd("tut_stamina_sign");
+				FactsSet( "tut_stamina_sign", 1 );
 			}
 		}
 	}
