@@ -331,11 +331,10 @@ function AddCharacterStat(tag : string, varKey:name, locKey:string, iconTag:stri
 		sp = GetWitcherPlayer().GetAttributeValue(varKey);
 		valueAbility = sp.valueAdditive + sp.valueMultiplicative * GetWitcherPlayer().GetStatMax(BCS_Stamina);
 	
-		// Triangle alt stamina
-		if (!theGame.GetTModOptions().GetAltArmorStaminaMod())
-		{
 		valueAbility *= 1 + GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
-		}
+		// Triangle alt stamina
+		valueAbility += theGame.GetTModOptions().GetStaminaRegenBonus();
+		valueAbility *= theGame.GetTModOptions().GetStaminaRegenMult();
 		// Triangle end
 		valueStr = NoTrailZeros(RoundMath(valueAbility)) + "/" + GetLocStringByKeyExt("per_second"); 
 	}

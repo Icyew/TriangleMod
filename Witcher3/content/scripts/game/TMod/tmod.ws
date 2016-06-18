@@ -47,6 +47,11 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'StaminaRegenMult' ) );
 	}
 
+	public function GetStaminaRegenBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'StaminaRegenBonus' ) );
+	}
+
 	public function GetLightAttackComboDecay() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboDecay' ) ); 

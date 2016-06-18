@@ -3009,7 +3009,8 @@ import abstract class CActor extends CGameplayEntity
 			
 			effectName = damageAction.GetHitEffect(IsAttackerAtBack(damageAction.attacker), !damageAction.DealsAnyDamage());
 		}
-		
+
+		// Triangle resolve TODO check r4players 'getCombatAction' to give super armor during attacks if you have focus point
 		if(IsNameValid(effectName))
 			PlayEffect(effectName);
 			
