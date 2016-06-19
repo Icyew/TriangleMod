@@ -9400,9 +9400,6 @@ statemachine abstract import class CR4Player extends CPlayer
 		var stage	 			: EButtonStage 				= this.BufferButtonStage;
 		var s					: SNotWorkingOutFunctionParametersHackStruct1;
 		var allSteps 			: bool						= this.BufferAllSteps;
-		var TMod				: TModOptions; // Triangle alt stamina
-
-		TMod = theGame.GetTModOptions(); // Triangle alt stamina
 
 		if ( IsInCombatActionFriendly() )
 		{
@@ -9472,7 +9469,7 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							if (!TMod.GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_LightAttack))
+							if (!theGame.GetTModOptions().GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_LightAttack))
 							{
 								DrainStamina(ESAT_LightAttack);
 							
@@ -9511,7 +9508,7 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							if (TMod.GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack))
+							if (!theGame.GetTModOptions().GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack))
 							{
 								DrainStamina(ESAT_HeavyAttack);
 							
