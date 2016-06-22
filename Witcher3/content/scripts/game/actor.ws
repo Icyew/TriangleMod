@@ -1195,7 +1195,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	import final function SetAnimationTimeMultiplier( mult : float );
 		
-	
+
 	public function SetAnimationSpeedMultiplier( mul : float, optional overrideExistingId : int ) : int
 	{
 		var causer : SAnimMultiplyCauser;
@@ -1230,14 +1230,81 @@ import abstract class CActor extends CGameplayEntity
 		
 		return causer.id;
 	}
-	
-	
+
+	// Triangle armor bonuses
+	private var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
+	private var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 0;
+	public function TopBaseAnimationMultiplierCauserMul() : float
+	{
+		var causer : SAnimMultiplyCauser;
+		if (baseAnimationMultiplierCausers.Size() > 0) {
+			causer = baseAnimationMultiplierCausers[baseAnimationMultiplierCausers.Size() - 1];
+			if (causer.mul > 0)
+				return causer.mul;
+		}
+
+		return 1;
+	}
+
+	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int ) : int
+	{
+		var causer : SAnimMultiplyCauser;
+		var finalMul : float;
+		var i, size : int;
+
+		if( overrideExistingId != -1 ) {
+			size = baseAnimationMultiplierCausers.Size();
+			for(i = 0; i < size; i += 1) {
+				if( baseAnimationMultiplierCausers[i].id == overrideExistingId ) {
+					causer = baseAnimationMultiplierCausers[i];
+					baseAnimationMultiplierCausers.Remove(causer);
+					baseAnimationMultiplierCausers.PushBack(causer);
+					causer.mul = mul;
+					SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
+					return causer.id;
+				}
+			}
+		}
+		
+		causer.mul = mul;
+		causer.id = nextFreeBaseAnimMultCauserId;
+		nextFreeBaseAnimMultCauserId += 1;
+		baseAnimationMultiplierCausers.PushBack( causer );
+		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
+		
+		return causer.id;
+	}
+
+	public function ResetBaseAnimationMultiplierCauser( id : int )
+	{
+		var i : int;
+		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
+			if (baseAnimationMultiplierCausers[i].id == id) {
+				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
+				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+				break;
+			}
+		}
+	}
+
+	public function ClearBaseAnimationMultiplierCausers()
+	{
+		baseAnimationMultiplierCausers.Clear();
+		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+	}
+	// Triangle end
+
 	private function CalculateFinalAnimationSpeedMultiplier() : float
 	{
+		// Triangle armor bonuses
+		var baseMultiplier : float;
+
+		baseMultiplier = TopBaseAnimationMultiplierCauserMul();
 		if(animationMultiplierCausers.Size() > 0)
-			return animationMultiplierCausers[animationMultiplierCausers.Size()-1].mul;
+			return animationMultiplierCausers[animationMultiplierCausers.Size()-1].mul * baseMultiplier;
 		
-		return 1;
+		return baseMultiplier;
+		// Triangle end
 	}
 	
 	
@@ -1266,6 +1333,7 @@ import abstract class CActor extends CGameplayEntity
 	{
 		animationMultiplierCausers.Clear();
 		SetAnimationTimeMultiplier( 1.0f );
+		baseAnimationMultiplierCausers.Clear(); // Triangle armor bonuses
 	}
 	
 	
@@ -3010,7 +3078,7 @@ import abstract class CActor extends CGameplayEntity
 			effectName = damageAction.GetHitEffect(IsAttackerAtBack(damageAction.attacker), !damageAction.DealsAnyDamage());
 		}
 
-		// Triangle resolve TODO check r4players 'getCombatAction' to give super armor during attacks if you have focus point
+		// Triangle TODO check r4players 'getCombatAction' to give super armor during attacks if you have focus point
 		if(IsNameValid(effectName))
 			PlayEffect(effectName);
 			

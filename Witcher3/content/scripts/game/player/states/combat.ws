@@ -1023,9 +1023,9 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.SetCustomRotation( 'Dodge', GetDodgeHeading( playerEvadeType ), 0.0f, 0.1f, false );
 		
 		if (  turnInPlaceBeforeDodge )
-			Sleep( 0.4f );
+			Sleep( 0.4f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
 		else
-			Sleep( 0.3f );
+			Sleep( 0.3f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
 
 		
 		if ( parent.bLAxisReleased )
@@ -1039,7 +1039,7 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.BindMovementAdjustmentToEvent( 'Dodge', 'Dodge' );
 		parent.AddTimer( 'UpdateDodgeInfoTimer', 0, true );	
 
-		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f );
+		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
 		parent.RemoveTimer( 'UpdateDodgeInfoTimer' );
 		
 		

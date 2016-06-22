@@ -37,6 +37,54 @@ class TModOptions
 			return 0;
 	}
 
+	public function GetArmorSpeedBonus(inventory : CInventoryComponent, action : EBufferActionType) : float
+	{
+		var speedBonus, speedPenalty, tempMod : float;
+		var tempItem : SItemUniqueId;
+		var armorEq, glovesEq, pantsEq, bootsEq : bool;
+
+		if (action != EBAT_Dodge && action != EBAT_Roll) {
+			return 1.0;
+		}
+
+		speedBonus = 1.0;
+		speedPenalty = 1.0;
+		if (inventory.GetItemEquippedOnSlot(EES_Armor, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
+			tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ChestEvasionMod') ) / 100;
+			if (inventory.GetArmorType(tempItem) == EAT_Heavy)
+				speedPenalty += tempMod;
+			else
+				speedBonus += tempMod;
+		}
+
+		if (inventory.GetItemEquippedOnSlot(EES_Pants, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
+			tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PantsEvasionMod') ) / 100;
+			if (inventory.GetArmorType(tempItem) == EAT_Heavy)
+				speedPenalty += tempMod;
+			else
+				speedBonus += tempMod;
+		}
+
+		if (inventory.GetItemEquippedOnSlot(EES_Gloves, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
+			tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'GlovesBootsEvasionMod') ) / 100;
+			if (inventory.GetArmorType(tempItem) == EAT_Heavy)
+				speedPenalty += tempMod;
+			else
+				speedBonus += tempMod;
+		}
+
+		if (inventory.GetItemEquippedOnSlot(EES_Boots, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
+			tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'GlovesBootsEvasionMod') ) / 100;
+			if (inventory.GetArmorType(tempItem) == EAT_Heavy)
+				speedPenalty += tempMod;
+			else
+				speedBonus += tempMod;
+		}
+
+		speedPenalty = 1 / speedPenalty;
+		return speedBonus * speedPenalty;
+	}
+
 	public function GetHeavyAttackDamageMod() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackDmgMod' ) );

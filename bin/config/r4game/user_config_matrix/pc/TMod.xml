@@ -8,6 +8,9 @@
 				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
 				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
 				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
+				<Entry varId="ChestEvasionMod"					value="1" />
+				<Entry varId="PantsEvasionMod"					value="1" />
+				<Entry varId="GlovesBootsEvasionMod"			value="1" />
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
 				<Entry varId="StaminaRegenBonus"				value="5.0"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
@@ -22,6 +25,9 @@
 			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsAttackCost" 		 displayName="Extra armor stamina cost per weight level for Attacks - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestEvasionMod"				 displayName="Dodge/roll speed % bonus for chest." 										displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PantsEvasionMod"				 displayName="Dodge/roll speed % bonus for pants." 										displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionMod"		 	 displayName="Dodge/roll speed % bonus for gloves/boots."						 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="StaminaRegenMult"		 		 displayName="Total stamina regen multiplier"								 			displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="StaminaRegenBonus"				 displayName="Additive stamina regen bonus"								 				displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />

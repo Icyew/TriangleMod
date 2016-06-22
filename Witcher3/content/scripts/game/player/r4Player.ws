@@ -220,6 +220,9 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	private var phantomWeaponMgr : CPhantomWeaponManager;
 	
+	// Triangle armor bonuses
+	private var expectingCombatActionEnd	: array < int >;
+	// Triangle end
 	
 
 	function EnablePCMode( flag : bool )
@@ -9406,7 +9409,6 @@ statemachine abstract import class CR4Player extends CPlayer
 			RaiseEvent('CombatActionFriendlyEnd');
 		}
 		
-		
 		if ( ( action != EBAT_SpecialAttack_Heavy && action != EBAT_ItemUse )
 			|| ( action == EBAT_SpecialAttack_Heavy && stage == BS_Pressed ) 
 			|| ( action == EBAT_ItemUse && stage != BS_Released )  )
@@ -9780,6 +9782,9 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if (actionResult)
 		{
+			// Triangle armor bonuses
+			expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetArmorSpeedBonus(this.GetInventory(), action)));
+			// Triangle end
 			SetCombatAction( action ) ;
 			
 			if(GetWitcherPlayer().IsInFrenzy())
@@ -9789,6 +9794,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		return true;		
 	}
 	
+
 	public function CleanCombatActionBuffer()
 	{
 		BufferCombatAction = EBAT_EMPTY;
@@ -11902,7 +11908,13 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var item : SItemUniqueId;
 		var combatActionType : float;
-		
+
+		// Triangle armor bonuses
+		if (expectingCombatActionEnd.Size() > 0) {
+			ResetBaseAnimationMultiplierCauser(expectingCombatActionEnd[0]);
+			expectingCombatActionEnd.Remove(expectingCombatActionEnd[0]);
+		}
+		// Triangle end
 		super.OnCombatActionEnd();
 		
 		
@@ -12118,6 +12130,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var buff : CBaseGameplayEffect;
 		
+		ClearBaseAnimationMultiplierCausers(); // Triangle armor bonuses
 		buff = ChooseCurrentCriticalBuffForAnim();
 		SetCombatAction( EBAT_EMPTY );
 		
@@ -12171,7 +12184,6 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		this.AddTimer('FreeTickets',3.f,false);
-		
 		
 		
 	}
