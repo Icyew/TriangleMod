@@ -8,9 +8,9 @@
 				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
 				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
 				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
-				<Entry varId="ChestEvasionMod"					value="20" />
-				<Entry varId="PantsEvasionMod"					value="10" />
-				<Entry varId="GlovesBootsEvasionMod"			value="2.5" />
+				<Entry varId="ChestEvasionMod"					value="1" />
+				<Entry varId="PantsEvasionMod"					value="1" />
+				<Entry varId="GlovesBootsEvasionMod"			value="1" />
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
 				<Entry varId="StaminaRegenBonus"				value="5.0"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
