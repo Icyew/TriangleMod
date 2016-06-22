@@ -1478,6 +1478,8 @@ class W3DamageManagerProcessor extends CObject
 					criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackCounter();
 				}
 				// Triangle end
+
+				criticalDamageBonus += actorAttacker.GetAttributeValue('critical_hit_damage_bonus_per_focus_pnt') * thePlayer.GetStat(BCS_Focus); // Triangle armor styles
 			}
 			
 			
