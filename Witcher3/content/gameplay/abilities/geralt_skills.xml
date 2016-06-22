@@ -61,9 +61,9 @@
 		<perk_8 is_ability="true" /> 
         <!-- Triangle default skills -->
         <!-- armor styles -->
-        <perk_5 is_ability="true" />
-        <perk_6 is_ability="true" />
-        <perk_7 is_ability="true" />
+        <perk_5 is_ability="true" /> <!-- Triangle armor styles -->
+        <perk_6 is_ability="true" /> <!-- Triangle armor styles -->
+        <perk_7 is_ability="true" /> <!-- Triangle armor styles -->
       </ability>
       <!-- skills not known at the beggining of the game - added only for testing purposes -->
       <ability name="GeraltSkills_Testing">
@@ -659,13 +659,14 @@
 		</ability>
 		<ability name="perk_5">
 			<tags>perk_5</tags>
-			<critical_hit_chance_fast_style type="add" min="0.25" />
+			<critical_hit_damage_bonus_per_focus_pnt type="add" min="0.07" /> <!-- Triangle armor styles -->
 			<attack_power_fast_style type="mult" min="0.05" />
 		</ability>
 		<ability name="perk_6">
 			<tags>perk_6</tags>
 			<spell_power type="mult" min="0.05" />
-			<staminaRegen type="mult" min="0.05" />
+      <attack_power type="mult" min="0.05" /> <!-- Triangle armor styles -->
+      <!-- <staminaRegen type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
 		</ability>
 		<ability name="perk_7">
 			<tags>perk_7</tags>

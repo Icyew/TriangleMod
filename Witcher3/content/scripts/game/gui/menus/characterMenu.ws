@@ -2313,14 +2313,22 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'attack_power_fast_style', false, true);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle armor styles
+				baseString = "Each piece of light armor increases light attack damage by " + RoundMath(ability.valueMultiplicative*100) + "% ";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'critical_hit_damage_bonus_per_focus_pnt', false, true);
+				baseString += "and critical hit damage by " + RoundMath(ability.valueAdditive*100) + "% per adrenaline point.";
+				// Triangle end
 				break;
 			case S_Perk_06:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'spell_power', false, true);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
+				baseString = "Each piece of medium armor increases spell power by " + RoundMath(ability.valueMultiplicative*100) + "% "; // Triangle armor styles
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'staminaRegen', false, true);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle armor styles
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'attack_power', false, true);
+				baseString += "and attack power by " + RoundMath(ability.valueMultiplicative*100) + "%.";
+				// Triangle end
 				break;
 			case S_Perk_07:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_07, 'vitality', false, true);
