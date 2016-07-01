@@ -15,8 +15,10 @@
 				<Entry varId="StaminaRegenBonus"				value="5.0"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
-				<Entry varId="LightAttackComboDecay"			value="4"	/>
-				<Entry varId="HeavyAttackComboDecay"			value="8"	/>
+				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
+				<Entry varId="HeavyAttackComboBonus"			value="0.1  "/>
+				<Entry varId="LightAttackComboDecay"			value="3"	/>
+				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -32,8 +34,10 @@
 			<Var id="StaminaRegenBonus"				 displayName="Additive stamina regen bonus"								 				displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboBonus"			 displayName="Extra light attack speed % per light attack combo"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboBonus"			 displayName="Extra total heavy damage multiplier (additive) per heavy attack combo"	displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
     </Group>
     <Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">

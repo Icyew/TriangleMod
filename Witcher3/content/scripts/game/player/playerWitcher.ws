@@ -18,8 +18,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	private saved var booksRead 						: array<name>; 					
 	
-	
-	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;	  // Triangle attack combos
+	// Triangle attack combos
+	// Heavy attack dmg is calculated after counter inc, so we need to keep track of prev counter
+	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;
+	private				var prevHeavyAttackCounter										: int;
+	// Triangle end
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
 	private saved 		var cannotUseUndyingSkill : bool;						
@@ -3167,6 +3170,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if (actionResult)
 		{
+			// Triangle attack combos
+			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
+				RemoveTimer('FastAttackCounterDecay');
+				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetLightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+			}
+			// Triangle end
 			SetCombatAction( action ) ;
 		}
 		
@@ -3223,6 +3232,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var attackTypeName : name;
 		var TMod : TModOptions;
 		var maxLightCombo, maxHeavyCombo : float;
+		var null : ETickGroup;
 	
 		ret = super.PrepareAttackAction(hitTarget, animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity, attackAction);
 		
@@ -3239,24 +3249,26 @@ statemachine class W3PlayerWitcher extends CR4Player
 				maxLightCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s21));
 				maxHeavyCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s04));
 				TMod = theGame.GetTModOptions();
-				if(!IsHeavyAttack(attackTypeName))
+				if(!IsHeavyAttack(attackTypeName) && attackTypeName != 'sword_s1')
 				{
 					if (fastAttackCounter < maxLightCombo && CanUseSkill(S_Sword_s21))
-					fastAttackCounter += 1;
-					AddTimer('FastAttackCounterDecay', TMod.GetLightAttackComboDecay());
+						fastAttackCounter += 1;
+					AddTimer('FastAttackCounterDecay', TMod.GetLightAttackComboDecay(), false, false, null, false, true);
 				}
 				
 				if(IsHeavyAttack(attackTypeName))
 				{
-					if (heavyAttackCounter < maxHeavyCombo && CanUseSkill(S_Sword_s04))
-					heavyAttackCounter += 1;
-					AddTimer('HeavyAttackCounterDecay', TMod.GetHeavyAttackComboDecay());
+					if (heavyAttackCounter < maxHeavyCombo && CanUseSkill(S_Sword_s04)) {
+						prevHeavyAttackCounter = heavyAttackCounter;
+						heavyAttackCounter += 1;
+					}
+					AddTimer('HeavyAttackCounterDecay', TMod.GetHeavyAttackComboDecay(), false, false, null, false, true);
 				}
 
 				// Triangle TODO move somewhere else
 				/*if(attackAction.GetSignSkill() != S_SUndefined && attackAction.GetSignSkill() != S_Magic_3)
 					signAttackCounter += 1;*/
-			}		
+			}
 			// Triangle end
 		}
 		
@@ -3301,6 +3313,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 	public function GetHeavyAttackCounter() : int
 	{
 		return heavyAttackCounter;
+	}
+
+	// Triangle attack combos
+	public function GetPrevHeavyAttackCounter() : int
+	{
+		return prevHeavyAttackCounter;
 	}
 	
 	public function GetCraftingSchematicsNames() : array<name>		{return craftingSchematics;}

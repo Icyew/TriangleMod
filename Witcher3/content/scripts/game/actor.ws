@@ -2509,6 +2509,7 @@ import abstract class CActor extends CGameplayEntity
 				hudModuleDamageType = EFVT_None;
 			}			
 		
+			ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) );
 			// Triangle attack combos
 			witcherPlayer = (W3PlayerWitcher)action.attacker;
 			if(witcherPlayer)
@@ -2530,7 +2531,6 @@ import abstract class CActor extends CGameplayEntity
 				}*/
 			}
 			// Triangle end
-			ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) );
 		}
 		
 		
@@ -5376,7 +5376,15 @@ import abstract class CActor extends CGameplayEntity
 		phantomStrike = false;
 		weaponEntity = GetInventory().GetItemEntityUnsafe(weaponId);
 		
-		
+		// Triangle attack combos
+		if (this == thePlayer && hitTargets.Size() == 0) {
+			if (IsLightAttack(attackActionName) && !GetWitcherPlayer().IsDoingSpecialAttack(false)) {
+				GetWitcherPlayer().AddTimer('FastAttackCounterDecay', 0);
+			} else if (IsHeavyAttack(attackActionName)) {
+				GetWitcherPlayer().AddTimer('HeavyAttackCounterDecay', 0);
+			}
+		}
+		// Triangle end
 		for(i=0; i<hitTargets.Size(); i+=1)
 		{				
 			Attack(hitTargets[i], animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity);

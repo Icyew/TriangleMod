@@ -220,8 +220,8 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	private var phantomWeaponMgr : CPhantomWeaponManager;
 	
-	// Triangle armor bonuses
-	private var expectingCombatActionEnd	: array < int >;
+	// Triangle attack combos armor bonuses
+	protected var expectingCombatActionEnd	: array < int >;
 	// Triangle end
 	
 
@@ -445,7 +445,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	var visibleActors			: array< CActor >;
 	var visibleActorsTime		: array< float >;
 	
-	
+
 		
 	event OnSpawned( spawnData : SEntitySpawnData )
 	{
@@ -8273,10 +8273,11 @@ statemachine abstract import class CR4Player extends CPlayer
 		}
 		
 		// Triangle attack combos light attack combo
+		// Triangle TODO dead light combos give attack speed now
 		witcherPlayer = (W3PlayerWitcher)this;
 		if(witcherPlayer && !isHeavyAttack && CanUseSkill(S_Sword_s21))
 		{
-			critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * witcherPlayer.GetLightAttackCounter();	
+			// critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * witcherPlayer.GetLightAttackCounter();	
 		}
 		// Triangle end
 		
@@ -9782,8 +9783,18 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if (actionResult)
 		{
-			// Triangle armor bonuses
-			expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetArmorSpeedBonus(this.GetInventory(), action)));
+			// Triangle attack combos armor bonuses
+			if ((W3PlayerWitcher)this) {
+				switch (action) {
+					case EBAT_Dodge:
+					case EBAT_Roll:
+						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
+						break;
+					case EBAT_LightAttack:
+						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetLightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+						break;
+				}
+			}
 			// Triangle end
 			SetCombatAction( action ) ;
 			
@@ -11909,10 +11920,12 @@ statemachine abstract import class CR4Player extends CPlayer
 		var item : SItemUniqueId;
 		var combatActionType : float;
 
-		// Triangle armor bonuses
-		if (expectingCombatActionEnd.Size() > 0) {
-			ResetBaseAnimationMultiplierCauser(expectingCombatActionEnd[0]);
-			expectingCombatActionEnd.Remove(expectingCombatActionEnd[0]);
+		// Triangle attack combos armor bonuses
+		if ((W3PlayerWitcher)this) {
+			if (expectingCombatActionEnd.Size() > 0) {
+				ResetBaseAnimationMultiplierCauser(expectingCombatActionEnd[0]);
+				expectingCombatActionEnd.Remove(expectingCombatActionEnd[0]);
+			}
 		}
 		// Triangle end
 		super.OnCombatActionEnd();
@@ -11957,6 +11970,11 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if(GetBehaviorVariable('combatActionType') == (int)CAT_SpecialAttack)
 		{
+			// Triangle attack combos
+			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Light) {
+				this.AddTimer('FastAttackCounterDecay', theGame.GetTModOptions().GetLightAttackComboDecay());
+			}
+			// Triangle end
 			theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );
 			OnSpecialAttackHeavyActionProcess();
 		}
@@ -12130,7 +12148,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var buff : CBaseGameplayEffect;
 		
-		ClearBaseAnimationMultiplierCausers(); // Triangle armor bonuses
+		ClearBaseAnimationMultiplierCausers(); // Triangle attack combos
 		buff = ChooseCurrentCriticalBuffForAnim();
 		SetCombatAction( EBAT_EMPTY );
 		
