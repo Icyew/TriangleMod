@@ -37,6 +37,7 @@ class TModOptions
 			return 0;
 	}
 
+	// triangle TODO dead code for now
 	public function GetArmorSpeedBonus(inventory : CInventoryComponent, action : EBufferActionType) : float
 	{
 		var speedBonus, speedPenalty, tempMod : float;
@@ -98,6 +99,16 @@ class TModOptions
 	public function GetStaminaRegenBonus() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'StaminaRegenBonus' ) );
+	}
+
+	public function GetLightAttackComboBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboBonus' ) );
+	}
+
+	public function GetHeavyAttackComboBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboBonus' ) );
 	}
 
 	public function GetLightAttackComboDecay() : float

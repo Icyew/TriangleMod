@@ -54,6 +54,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 	private var m_lastEnemyName				: string;
 	private var m_lastUseMutation8Icon		: bool;
 	
+	private var m_comboStrBufferLength		: int; default m_comboStrBufferLength = 0; // Triangle attack combos
 	
 	
 	event  OnConfigUI()
@@ -178,15 +179,16 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				color = 0xFFF0F0;
 				break;
 		}
+		m_comboStrBufferLength = FloorF(StrLen(NoTrailZeros(CeilF(value)))*3) + FloorF(StrLen(label)*2) + 6; // Triangle attack combos
 		SetDamageText(label, CeilF(value), color);
 	}
 	
 	// Triangle attack combos
 	public function ShowComboType(comboType : EFloatingValueType, value : float)
 	{
-		var label, valueStr:string;
-		var color:float;
-		var hud:CR4ScriptedHud;
+		var label : string;
+		var color : float;
+		var hud : CR4ScriptedHud;
 
 		// No combo!
 		if (value == 0)
@@ -198,11 +200,11 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 			return;
 		}
 
-		// move the text out of the way so it doesn't overlap with damage
-		label = "							  x";
+		// Hack that moves text out of the way so it doesn't overlap with damage
+		label = SpaceFill("x", m_comboStrBufferLength + 1, ESFM_JustifyRight);
 		if (comboType == EFVT_LightCombo)
 		{
-			color = 0xFF9900;
+			color = 0xFF66FF;
 		}
 		else if (comboType == EFVT_HeavyCombo)
 		{

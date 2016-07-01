@@ -164,8 +164,8 @@
       <!-- Strength Training -->
       <ability name="sword_s4">
         <tags>sword_s4,attack_heavy</tags>
-		<attack_power type="mult" min="0.05" />
-        <critical_hit_damage_bonus type="add" min="0.06" /> <!-- Triangle attack combos -->
+		<!-- <attack_power type="mult" min="0.05" /> --> <!-- Triangle attack combos -->
+        <!-- <critical_hit_damage_bonus type="add" min="0.06" /> --> <!-- Triangle attack combos -->
         <max_combo type="add" min="1" /> <!-- Triangle attack combos -->
       </ability>
 	  
@@ -269,9 +269,9 @@
       <!-- Muscle Memory -->
       <ability name="sword_s21">
         <tags>sword_s21,attack_light</tags>
-		<attack_power type="mult" min="0.05" />
-        <critical_hit_chance type="add" min="0.05" /> <!-- Triangle attack combos -->
-        <max_combo type="add" min="1" /> <!-- Triangle attack combos -->
+		<!-- <attack_power type="mult" min="0.05" /> --> <!-- Triangle attack combos -->
+        <!-- <critical_hit_chance type="add" min="0.05" /> --> <!-- Triangle attack combos -->
+        <max_combo type="add" min="2" /> <!-- Triangle attack combos -->
       </ability>
 	  
       <!--#################################### Signs Path #####################################-->

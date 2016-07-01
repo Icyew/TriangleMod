@@ -57,7 +57,7 @@ contentPath="$modPath/Witcher3/content"
 scriptPath="$contentPath/scripts"
 batPath="$modPath/pack.bat"
 binPath="$modPath/bin"
-studioPath="$modPath/ScriptStudio"
+studioPath="$modPath/../ScriptStudio"
 
 if test -e "$studioPath/scripts/local/"; then
 	rm -r "$studioPath/scripts/local/";

@@ -1472,10 +1472,11 @@ class W3DamageManagerProcessor extends CObject
 				}
 
 				// Triangle attack combos heavy attack combo bonus
+				// Triangle TODO dead code for now. heavy combo gives damage multiplier
 				witcherPlayer = (W3PlayerWitcher)playerAttacker;
 				if(witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s04))
 				{
-					criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackCounter();
+					// criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackCounter();
 				}
 				// Triangle end
 
@@ -1690,7 +1691,7 @@ class W3DamageManagerProcessor extends CObject
 		}
 		// Triangle heavy attack simplify
 		if(playerAttacker && attackAction && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-			finalDamage *= TMod.GetHeavyAttackDamageMod();
+			finalDamage *= TMod.GetHeavyAttackDamageMod() + TMod.GetHeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
 		// Triangle end
 			
 		

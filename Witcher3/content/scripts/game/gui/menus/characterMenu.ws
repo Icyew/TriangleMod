@@ -1872,7 +1872,12 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s04:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle attack combos
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, false) * skillLevel;
+				baseString = "Each strong attack hit increases the next strong attack's total damage multiplier by " + NoTrailZeros(theGame.GetTModOptions().GetHeavyAttackComboBonus()*100) + 
+					"%. Combo resets after " + NoTrailZeros(theGame.GetTModOptions().GetHeavyAttackComboDecay()) + "s or on missing a heavy attack. Max combo is "
+					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle end
 				break;
 			case S_Sword_s05:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s05, 'dmg_per_sec', false, false)) * skillLevel;
@@ -1963,7 +1968,12 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s21:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle attack combos
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, false) * skillLevel;
+				baseString = "Each light attack hit increases the next light attack's speed by " + NoTrailZeros(theGame.GetTModOptions().GetLightAttackComboBonus()) + 
+					"%. Combo resets after " + NoTrailZeros(theGame.GetTModOptions().GetLightAttackComboDecay()) + "s or on missing a light attack. Max combo is "
+					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle end
 				break;
 			default:
 				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);
