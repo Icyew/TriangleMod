@@ -3235,11 +3235,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var null : ETickGroup;
 	
 		ret = super.PrepareAttackAction(hitTarget, animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity, attackAction);
-		
+
+
 		if(!ret)
 			return false;
 		
-		
+
 		if(attackAction.IsActionMelee())
 		{			
 			// Triangle attack combos
@@ -3251,6 +3252,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 				TMod = theGame.GetTModOptions();
 				if(!IsHeavyAttack(attackTypeName) && attackTypeName != 'sword_s1')
 				{
+					attackAction.isWeak = isWeak;
+					isWeak = false;
 					if (fastAttackCounter < maxLightCombo && CanUseSkill(S_Sword_s21))
 						fastAttackCounter += 1;
 					AddTimer('FastAttackCounterDecay', TMod.GetLightAttackComboDecay(), false, false, null, false, true);
@@ -3258,6 +3261,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 				if(IsHeavyAttack(attackTypeName))
 				{
+					attackAction.isWeak = isWeak;
+					isWeak = false;
 					if (heavyAttackCounter < maxHeavyCombo && CanUseSkill(S_Sword_s04)) {
 						prevHeavyAttackCounter = heavyAttackCounter;
 						heavyAttackCounter += 1;
@@ -3271,7 +3276,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 			// Triangle end
 		}
-		
+
 		// AddTimer('SignAttackCounterDecay',5.0); // Triangle TODO // Triangle attack combos
 		
 		return true;
@@ -7464,6 +7469,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var staminaRegenVal : float;
 		var armorRegenVal : SAbilityAttributeValue;
 		
+		// Triangle TODO alt stamina glphwords should change stamina cost, not regen
 		if( HasAbility( 'Glyphword 2 _Stats', true ) )
 		{
 			armorEq = inv.GetItemEquippedOnSlot( EES_Armor, tempItem );

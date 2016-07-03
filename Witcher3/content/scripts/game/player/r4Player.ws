@@ -222,6 +222,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	// Triangle attack combos armor bonuses
 	protected var expectingCombatActionEnd	: array < int >;
+	public var isWeak						: bool; default isWeak = false; // If true, deal less damage on sword hit
 	// Triangle end
 	
 
@@ -9405,6 +9406,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		var s					: SNotWorkingOutFunctionParametersHackStruct1;
 		var allSteps 			: bool						= this.BufferAllSteps;
 
+		isWeak = false; // Triangle alt stamina
+
 		if ( IsInCombatActionFriendly() )
 		{
 			RaiseEvent('CombatActionFriendlyEnd');
@@ -9472,19 +9475,13 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							if (!theGame.GetTModOptions().GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_LightAttack))
-							{
-								DrainStamina(ESAT_LightAttack);
-							
-							
-								thePlayer.BreakPheromoneEffect();
-								// Triangle technically this could return false and it'd drain stamina without successfully attacking... but I don't care!
-								actionResult = OnPerformAttack(theGame.params.ATTACK_NAME_LIGHT);
-							}
-							else
-							{
-								actionResult = false;
-							}
+							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_LightAttack);
+							DrainStamina(ESAT_LightAttack);
+						
+						
+							thePlayer.BreakPheromoneEffect();
+							// Triangle technically this could return false and it'd drain stamina without successfully attacking... but I don't care!
+							actionResult = OnPerformAttack(theGame.params.ATTACK_NAME_LIGHT);
 							// end Triangle
 							//target.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack );
 					} break;
@@ -9511,19 +9508,13 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							if (!theGame.GetTModOptions().GetAltArmorStaminaMod() || thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack))
-							{
-								DrainStamina(ESAT_HeavyAttack);
-							
-							
-							
-								thePlayer.BreakPheromoneEffect();		
-								actionResult = this.OnPerformAttack(theGame.params.ATTACK_NAME_HEAVY);
-							}
-							else
-							{
-								actionResult = false;
-							}
+							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack);
+							DrainStamina(ESAT_HeavyAttack);
+						
+						
+						
+							thePlayer.BreakPheromoneEffect();		
+							actionResult = this.OnPerformAttack(theGame.params.ATTACK_NAME_HEAVY);
 							// end Triangle
 							//target.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack );
 					} break;

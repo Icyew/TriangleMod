@@ -2509,12 +2509,18 @@ import abstract class CActor extends CGameplayEntity
 				hudModuleDamageType = EFVT_None;
 			}			
 		
-			ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) );
+			// Triangle alt stamina
+			attackAction = (W3Action_Attack)action;
+			if (attackAction.isWeak) {
+				ShowFloatingValue(EFVT_Triangle, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) , "Weak!");
+			} else {
+				ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT));
+			}
+			// Triangle end
 			// Triangle attack combos
 			witcherPlayer = (W3PlayerWitcher)action.attacker;
 			if(witcherPlayer)
 			{
-				attackAction = (W3Action_Attack)action;
 				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))
 				{
 					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetLightAttackCounter(), false);

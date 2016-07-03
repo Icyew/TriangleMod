@@ -15,7 +15,8 @@ enum EFloatingValueType
 	// Triangle attack combos
 	EFVT_LightCombo,
 	EFVT_HeavyCombo,
-	EFVT_SignCombo
+	EFVT_SignCombo,
+	EFVT_Triangle
 }
 
 class CR4HudModuleEnemyFocus extends CR4HudModuleBase
@@ -139,7 +140,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		var hud:CR4ScriptedHud;
 		
 		
-		if(valueType != EFVT_InstantDeath && valueType != EFVT_Buff && value == 0.f)
+		if(valueType != EFVT_InstantDeath && valueType != EFVT_Buff && valueType != EFVT_Triangle && value == 0.f) // Triangle alt stamina
 			return;
 
 		hud = (CR4ScriptedHud)theGame.GetHud();
@@ -174,6 +175,12 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				label = GetLocStringByKeyExt(stringParam);
 				color = 0xFFF0F0;
 				break;
+			// Trianlge alt stamina
+			case EFVT_Triangle:
+				label = stringParam;
+				color = 0xC20404;
+				break;
+			// Triangle end
 			default:
 				label = GetLocStringByKeyExt("");
 				color = 0xFFF0F0;
@@ -191,7 +198,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		var hud : CR4ScriptedHud;
 
 		// No combo!
-		if (value == 0)
+		if (value == 0.f)
 			return;
 
 		hud = (CR4ScriptedHud)theGame.GetHud();

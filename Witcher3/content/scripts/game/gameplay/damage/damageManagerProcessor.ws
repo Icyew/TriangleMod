@@ -1649,6 +1649,15 @@ class W3DamageManagerProcessor extends CObject
 			
 		finalIncomingDamage = finalDamage;
 			
+		// Triangle heavy attack simplify alt stamina attack combos
+		if(playerAttacker && attackAction) {
+			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
+				finalDamage *= TMod.GetHeavyAttackDamageMod() + TMod.GetHeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
+			if (attackAction.isWeak)
+				finalDamage *= TMod.GetWeakDamageMod();
+		}
+		// Triangle end
+
 		if(finalDamage > 0.f)
 		{
 			
@@ -1689,10 +1698,6 @@ class W3DamageManagerProcessor extends CObject
 			
 			finalDamage *= ( 1+fistfightDamageMult );
 		}
-		// Triangle heavy attack simplify
-		if(playerAttacker && attackAction && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-			finalDamage *= TMod.GetHeavyAttackDamageMod() + TMod.GetHeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
-		// Triangle end
 			
 		
 		burning = (W3Effect_Burning)action.causer;

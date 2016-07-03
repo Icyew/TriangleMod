@@ -24,6 +24,7 @@ class W3Action_Attack extends W3DamageAction
 	private var soundAttackType : name;				
 	private var usedZeroStaminaPerk : bool;			
 	private var applyBuffsIfParried : bool;			
+	public var isWeak : bool; default isWeak = false; // Triangle alt stamina
 		
 	
 	
