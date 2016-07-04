@@ -10697,13 +10697,55 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	
+	// Triangle alt stamina
+	public function ShouldDrainFocus(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float) : bool
+	{
+		return !super.HasStaminaToUseAction(action, abilityName, dt, multiplier) && HasFocusToUseAction(action, abilityName, dt, multiplier);
+	}
+
+	// Triangle alt stamina
+	public function DrainFocusByStaminaAction(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float)
+	{
+		if (ShouldDrainFocus(action, abilityName, dt, multiplier)) {
+			if (multiplier == 0)
+				multiplier = 1;
+			DrainFocus(T_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt)));
+		}
+	}
+
+	// Triangle alt stamina 
+	public function HasFocusToUseAction(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float) : bool
+	{
+		// Whitelist of stamina actions that can drain focus by default
+		switch (action) {
+			case ESAT_LightAttack:
+			case ESAT_HeavyAttack:
+			case ESAT_Dodge:
+			case ESAT_Roll:
+			case ESAT_Evade:
+			case ESAT_Sprint:
+			case ESAT_Swimming:
+			case ESAT_Jump:
+				break;
+			default:
+				return false;
+		}
+		if (theGame.GetTModOptions().GetFocusPerMaxStamina() <= 0)
+			return false;
+
+		if (multiplier == 0)
+			multiplier = 1;
+
+		return GetStat(BCS_Focus) >= T_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt));
+	}
 	
 	public function HasStaminaToUseAction(action : EStaminaActionType, optional abilityName : name, optional dt :float, optional multiplier : float) : bool
 	{
 		var cost : float;
 		var ret : bool;
 		
-		ret = super.HasStaminaToUseAction(action, abilityName, dt, multiplier);
+		ret = super.HasStaminaToUseAction(action, abilityName, dt, multiplier) || HasFocusToUseAction(action, abilityName, dt, multiplier); // Triangle alt stamina
+	
 	
 		if(!ret)
 		{
@@ -10907,7 +10949,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		ret = ( CanUseSkill(skill) && (abilityManager.GetStat(BCS_Stamina, signHack) >= cost) );
 		
 		
-		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1)
+		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1) // Triangle TODO rage management
 		{
 			ret = true;
 		}

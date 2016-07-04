@@ -478,7 +478,7 @@ state AardCircleCast in W3AardEntity extends NormalCast
 				stamina = player.GetStat(BCS_Stamina, true);
 				
 				if(cost > stamina)
-					player.DrainFocus(1);
+					player.DrainFocus(1); // Triangle TODO rage management
 				else
 					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
 			}	

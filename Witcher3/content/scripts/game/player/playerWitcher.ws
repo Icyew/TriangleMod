@@ -3145,7 +3145,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						
+						isWeak = !HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( false, true );
 					} break;
 					
@@ -9195,11 +9195,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			else
 				return false;
 		}
-		if( GetCurrentStateName() != 'Swimming' && GetStat(BCS_Stamina) <= 0 )
-		{
-			SetSprintActionPressed(false,true);
-			return false;
-		}
+		// Triangle alt stamina running out of stamina and focus doesn't end sprint
+		// if( GetCurrentStateName() != 'Swimming' && GetStat(BCS_Stamina) <= 0)
+		// {
+		// 	SetSprintActionPressed(false,true);
+		// 	return false;
+		// }
+		// Triangle end
 		
 		return true;
 	}

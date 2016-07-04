@@ -1959,6 +1959,11 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		if(FactsDoesExist("debug_fact_stamina_boy"))
 			return 0;
 			
+		// Triangel alt stamina
+		if (owner == GetWitcherPlayer()) {
+			GetWitcherPlayer().DrainFocusByStaminaAction(action, abilityName, dt, costMult);
+		}
+		// Triangle end
 		cost = super.DrainStamina(action, fixedCost, fixedDelay, abilityName, dt, costMult);
 		
 		if(cost > 0 && dt > 0)

@@ -541,7 +541,7 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 				
 				if( l_cost > l_stamina )
 				{
-					l_player.DrainFocus(1);
+					l_player.DrainFocus(1); // Triangle TODO rage management
 					SetUsedFocus( true );
 				}
 				else

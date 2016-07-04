@@ -150,6 +150,11 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'StaminaRegenBonus' ) );
 	}
 
+	public function GetFocusPerMaxStamina() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'FocusPerMaxStamina' ) );
+	}
+
 	public function GetWeakDamageMod() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'WeakDamageMod' ) );
