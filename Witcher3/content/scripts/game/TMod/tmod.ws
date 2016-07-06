@@ -199,9 +199,9 @@ class TModOptions
 		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'LinearDownscaling' );
 	}
 
-	public function ShouldScaleAnimals() : bool
+	public function DontScaleAnimals() : bool
 	{
-		return !theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'DontScaleAnimals' );
+		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'DontScaleAnimals' );
 	}
 
 	public function GetUpscalingFactor() : float

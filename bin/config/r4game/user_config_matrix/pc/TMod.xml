@@ -86,14 +86,14 @@
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
-			<Var id="AreLevelOptionsEnabled"		 displayName="Use custom leveling options? Disabling reverts to vanilla"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LinearUpscaling"				 displayName="Scale weaker enemies up to: x*PlayerLevel + (1-x)*EnemyLevel"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LinearDownscaling"				 displayName="Scale stronger enemies down to: y*PlayerLevel + (1-y)*EnemyLevel"	displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="DontScaleAnimals"		 		 displayName="Exclude animals from linear scaling (not flat and jitter)"		displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="UpscalingFactor" 		 		 displayName="Upscaling factor (x):"								 			displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 			displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 		displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="			displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AreLevelOptionsEnabled"		 displayName="Use custom leveling options? Does not affect exp"							displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearUpscaling"				 displayName="Scale weaker enemies up to: x*PlayerLevel + (1-x)*EnemyLevel"				displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearDownscaling"				 displayName="Scale stronger enemies down to: y*PlayerLevel + (1-y)*EnemyLevel"			displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DontScaleAnimals"		 		 displayName="Exclude animals from level scaling (includes wolves and boars)"			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="UpscalingFactor" 		 		 displayName="Upscaling factor (x):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 				displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
     </Group>
 

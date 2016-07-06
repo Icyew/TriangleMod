@@ -1109,8 +1109,77 @@ statemachine import class CNewNPC extends CActor
 	
 	var fistFightForcedFromQuest : bool; 
 	
-	// Triangle level scaling separated this out for clarity
-	timer function AddLevelBonusesVanilla (dt : float, id : int)
+	// Triangle level scaling
+	public function LinearInterpolate ( playerLevel : int, opponentLevel : int, t : float) : float
+	{
+		return t * playerLevel + (1 - t) * opponentLevel;
+	}
+
+	// Triangle level scaling recalculate enemy level with scaling options. Called when level is set via SetLevel only!
+	public function CalculateLevel () : int
+	{
+		var newLevel, playerLevel, opponentLevel, levelJitter : int;
+		var TMod : TModOptions;
+
+		TMod = theGame.GetTModOptions();
+		playerLevel = thePlayer.GetLevel();
+		opponentLevel = currentLevel;
+		newLevel = opponentLevel;
+
+		// Just in case!
+		if (!TMod.AreLevelOptionsEnabled())
+			return newLevel;
+
+		if (thePlayer.IsCiri())
+			return newLevel;
+
+		if (TMod.DontScaleAnimals() && ( GetSfxTag() == 'sfx_wolf' || HasAbility('mon_boar_base') || IsAnimal() ))
+			return newLevel;
+
+		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
+		if (GetNPCType() == ENGT_Guard)
+		{
+			opponentLevel = thePlayer.GetLevel() + 13;
+			newLevel = opponentLevel;
+		}
+
+		if (TMod.IsUpscalingOn() && opponentLevel < playerLevel)
+		{
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetUpscalingFactor()));
+		}
+		else if (TMod.IsDownscalingOn() && opponentLevel > playerLevel)
+		{
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetDownscalingFactor()));
+		}
+
+		newLevel += TMod.GetFlatLevelBonus();
+
+		levelJitter = TMod.GetLevelJitter();
+		if (levelJitter != prevJitterOption)
+		{
+			if (levelJitter > 0)
+				cachedJitter = RandRange(levelJitter*2) - levelJitter;
+			else
+				cachedJitter = 0;
+
+			prevJitterOption = levelJitter;
+		}
+		newLevel += cachedJitter;
+
+		return newLevel;
+	}
+	
+	// Triangle level scaling Not currently using this anymore. I know I should delete dead code, but eeehh
+	private function AddRemoveAbilityMultiple(abilityName : name, count : int)
+	{
+		if (count > 0)
+			AddAbilityMultiple(abilityName, count);
+		else if (count < 0)
+			RemoveAbilityMultiple(abilityName, count);
+	}
+
+	// Triangle level scaling add level bonuses with TMod options
+	timer function AddLevelBonuses (dt : float, id : int)
 	{
 		var ciriEntity  		: W3ReplacerCiri;
 		var ignoreLowLevelCheck : bool;
@@ -1137,7 +1206,13 @@ statemachine import class CNewNPC extends CActor
 		levelBonusesComputedAtPlayerLevel = playerLevel;
 		
 		ciriEntity = (W3ReplacerCiri)thePlayer;
-		npcLevel = currentLevel;
+		// Triangle level scaling
+		if (theGame.GetTModOptions().AreLevelOptionsEnabled()) {
+			npcLevel = CalculateLevel();
+		} else {
+			npcLevel = currentLevel;
+		}
+		// Triangle end
 		npcGroupType = GetNPCType();
 		ignoreLowLevelCheck = thePlayer.GetEnemyUpscaling() && ( npcGroupType == ENGT_Enemy || npcGroupType == ENGT_Quest );
 		
@@ -1304,181 +1379,6 @@ statemachine import class CNewNPC extends CActor
 			}	 
 			
 		}
-	}
-		
-	// Triangle level scaling
-	public function LinearInterpolate ( playerLevel : int, opponentLevel : int, t : float) : float
-	{
-		return t * playerLevel + (1 - t) * opponentLevel;
-	}
-
-	// Triangle level scaling recalculate enemy level with scaling options. Called when level is set via SetLevel only!
-	public function CalculateLevel () : int
-	{
-		var newLevel, playerLevel, opponentLevel, levelJitter : int;
-		var TMod : TModOptions;
-
-		TMod = theGame.GetTModOptions();
-		playerLevel = thePlayer.GetLevel();
-		opponentLevel = currentLevel;
-		newLevel = opponentLevel;
-
-		// Just in case!
-		if (!TMod.AreLevelOptionsEnabled())
-			return newLevel;
-
-		if (thePlayer.IsCiri())
-			return newLevel;
-
-		if (!TMod.ShouldScaleAnimals() && ( GetSfxTag() == 'sfx_wolf' || HasAbility('mon_boar_base') || IsAnimal() ))
-			return newLevel;
-
-		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
-		if (GetNPCType() == ENGT_Guard)
-		{
-			opponentLevel = thePlayer.GetLevel() + 13;
-			newLevel = opponentLevel;
-		}
-
-		if (TMod.IsUpscalingOn() && opponentLevel < playerLevel)
-		{
-			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetUpscalingFactor()));
-		}
-		else if (TMod.IsDownscalingOn() && opponentLevel > playerLevel)
-		{
-			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetDownscalingFactor()));
-		}
-
-		newLevel += TMod.GetFlatLevelBonus();
-
-		levelJitter = TMod.GetLevelJitter();
-		if (levelJitter != prevJitterOption)
-		{
-			if (levelJitter > 0)
-				cachedJitter = RandRange(levelJitter*2) - levelJitter;
-			else
-				cachedJitter = 0;
-
-			prevJitterOption = levelJitter;
-		}
-		newLevel += cachedJitter;
-
-		return newLevel;
-	}
-	
-	// Triangle level scaling
-	private function AddRemoveAbilityMultiple(abilityName : name, count : int)
-	{
-		if (count > 0)
-			AddAbilityMultiple(abilityName, count);
-		else if (count < 0)
-			RemoveAbilityMultiple(abilityName, count);
-	}
-
-	// Triangle level scaling add level bonuses with TMod options
-	public function AddLevelBonusesTMod()
-	{
-		var lvlDiff, numBonusesToAdd : int;
-		var ciriEntity  : W3ReplacerCiri;
-		var TMod : TModOptions;
-		var calculatedLevel : int;
-		
-		// Triangle
-		TMod = theGame.GetTModOptions();
-		calculatedLevel = CalculateLevel();
-		numBonusesToAdd = calculatedLevel - GetLevel();
-		
-		ciriEntity = (W3ReplacerCiri)thePlayer;
-		
-		if( ( ( GetNPCType() != ENGT_Guard ) && ( calculatedLevel + (int)CalculateAttributeValue(GetAttributeValue('level',,true)) < 2 ) ) ) return;
-		if ( HasAbility('NPCDoNotGainBoost') ) return;
-		
-		if ( HasAbility(theGame.params.ENEMY_BONUS_DEADLY) ) RemoveAbility(theGame.params.ENEMY_BONUS_DEADLY); else
-		if ( HasAbility(theGame.params.ENEMY_BONUS_HIGH) ) RemoveAbility(theGame.params.ENEMY_BONUS_HIGH); else
-		if ( HasAbility(theGame.params.ENEMY_BONUS_LOW) ) RemoveAbility(theGame.params.ENEMY_BONUS_LOW); else
-		if ( HasAbility(theGame.params.MONSTER_BONUS_DEADLY) ) RemoveAbility(theGame.params.MONSTER_BONUS_DEADLY); else
-		if ( HasAbility(theGame.params.MONSTER_BONUS_HIGH) ) RemoveAbility(theGame.params.MONSTER_BONUS_HIGH); else
-		if ( HasAbility(theGame.params.MONSTER_BONUS_LOW) ) RemoveAbility(theGame.params.MONSTER_BONUS_LOW);
-			
-		if ( IsHuman() && GetStat( BCS_Essence, true ) < 0 )
-		{
-			AddRemoveAbilityMultiple(theGame.params.ENEMY_BONUS_PER_LEVEL, numBonusesToAdd);
-			
-			if ( thePlayer.IsCiri() && theGame.GetDifficultyMode() == EDM_Hardcore && !HasAbility('CiriHardcoreDebuffHuman') ) AddAbility('CiriHardcoreDebuffHuman');
-
-			if ( !ciriEntity ) 
-			{
-				lvlDiff = calculatedLevel - thePlayer.GetLevel();
-				if	  ( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { if ( !HasAbility(theGame.params.ENEMY_BONUS_DEADLY) ) { AddAbility(theGame.params.ENEMY_BONUS_DEADLY, true); AddBuffImmunity(EET_Blindness, 'DeadlyEnemy', true); AddBuffImmunity(EET_WraithBlindness, 'DeadlyEnemy', true); } }  
-				else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { if ( !HasAbility(theGame.params.ENEMY_BONUS_HIGH) ) AddAbility(theGame.params.ENEMY_BONUS_HIGH, true);}
-				else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { }
-				else					  { if ( !HasAbility(theGame.params.ENEMY_BONUS_LOW) ) AddAbility(theGame.params.ENEMY_BONUS_LOW, true); }	  
-			}	
-		}
-		else
-		{
-			if ( GetStat( BCS_Vitality, true ) > 0 ) // if monster, but based on vitality ( animal )
-			{
-				if ( !ciriEntity ) 
-				{
-					lvlDiff = calculatedLevel - thePlayer.GetLevel();
-					if	  ( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { if ( !HasAbility(theGame.params.ENEMY_BONUS_DEADLY) ) { AddAbility(theGame.params.ENEMY_BONUS_DEADLY, true); AddBuffImmunity(EET_Blindness, 'DeadlyEnemy', true); AddBuffImmunity(EET_WraithBlindness, 'DeadlyEnemy', true); } }  
-					else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { if ( !HasAbility(theGame.params.ENEMY_BONUS_HIGH) ) AddAbility(theGame.params.ENEMY_BONUS_HIGH, true);}
-					else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { }
-					else					  { if ( !HasAbility(theGame.params.ENEMY_BONUS_LOW) ) AddAbility(theGame.params.ENEMY_BONUS_LOW, true); }	  
-					
-					AddRemoveAbilityMultiple(theGame.params.ENEMY_BONUS_PER_LEVEL, numBonusesToAdd);
-				}
-			} else
-			{
-			
-				if ( (int)CalculateAttributeValue( GetAttributeValue('armor') ) > 0 )
-				{
-					if ( GetIsMonsterTypeGroup() )
-					{
-						AddRemoveAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP_ARMORED, numBonusesToAdd);
-					} else
-					{
-						AddRemoveAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_ARMORED, numBonusesToAdd);
-					}
-				}
-				else
-				{
-					if ( GetIsMonsterTypeGroup() )
-					{
-						AddRemoveAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP, numBonusesToAdd);
-					} else
-					{
-						AddRemoveAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL, numBonusesToAdd);
-					}
-				}
-				
-				if ( thePlayer.IsCiri() && theGame.GetDifficultyMode() == EDM_Hardcore && !HasAbility('CiriHardcoreDebuffMonster') ) AddAbility('CiriHardcoreDebuffMonster');
-					
-				if ( !ciriEntity ) 
-				{
-					lvlDiff = calculatedLevel - thePlayer.GetLevel();
-					if	  ( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { if ( !HasAbility(theGame.params.MONSTER_BONUS_DEADLY) ) { AddAbility(theGame.params.MONSTER_BONUS_DEADLY, true); AddBuffImmunity(EET_Blindness, 'DeadlyEnemy', true); AddBuffImmunity(EET_WraithBlindness, 'DeadlyEnemy', true); } }  
-					else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { if ( !HasAbility(theGame.params.MONSTER_BONUS_HIGH) ) AddAbility(theGame.params.MONSTER_BONUS_HIGH, true); }
-					else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { }
-					else					  { if ( !HasAbility(theGame.params.MONSTER_BONUS_LOW) ) AddAbility(theGame.params.MONSTER_BONUS_LOW, true); }	  
-				}
-			}
-		}
-	}
-
-		// Triangle level scaling
-	timer function AddLevelBonuses (dt : float, id : int)
-	{
-		var TMod : TModOptions;
-		
-		RemoveTimer('AddLevelBonuses');
-
-		TMod = theGame.GetTModOptions();
-		if (!TMod.AreLevelOptionsEnabled())
-			AddLevelBonusesVanilla();
-		else
-			AddLevelBonusesTMod();
 	}
 	
 	public function SetParentEncounter( encounter : CEncounter )
@@ -2121,7 +2021,7 @@ statemachine import class CNewNPC extends CActor
 	
 	public final function GetLevelFromLocalVar() : int
 	{
-		return CalculateLevel(); // Triangle level scaling
+		return currentLevel;
 	}
 	
 	function GetExperienceDifferenceLevelName( out strLevel : string ) : string
@@ -2337,8 +2237,6 @@ statemachine import class CNewNPC extends CActor
 		var lvlDiff : int;
 		var modDamage, modArmor, modVitality, modOther : float;
 		var stats : CCharacterStats;
-		//Triangle level scaling
-		var actualLevel : int;
 		
 		if ( grantNoExperienceAfterKill || HasAbility('Zero_XP' ) || GetNPCType() == ENGT_Guard ) return 0;
 		
@@ -2407,14 +2305,13 @@ statemachine import class CNewNPC extends CActor
 		if( thePlayer.GetEnemyUpscaling() && npcLevelToUpscaledLevelDifference > 0 ) currentLevel -= npcLevelToUpscaledLevelDifference;
 		if( FactsQuerySum("NewGamePlus") > 0 ) currentLevel -= theGame.params.GetNewGamePlusLevel();
 		
-		actualLevel = GetLevel(); //Triangle level scaling replaces currentLevel Triangle TODO perform similar check as above with actualLevel?
 		
 		if  ( IsHuman() ) 
 		{
-			if ( exp > 1 + ( actualLevel * 2 ) ) { exp = 1 + ( actualLevel * 2 ); } // Triangle level scaling
+			if ( exp > 1 + ( currentLevel * 2 ) ) { exp = 1 + ( currentLevel * 2 ); }
 		} else
 		{
-			if ( exp > 5 + ( actualLevel * 4 ) ) { exp = 5 + ( actualLevel * 4 ); } // Triangle level scaling
+			if ( exp > 5 + ( currentLevel * 4 ) ) { exp = 5 + ( currentLevel * 4 ); }
 		}
 				
 		
@@ -2429,9 +2326,9 @@ statemachine import class CNewNPC extends CActor
 		
 		
 		if( ( FactsQuerySum("NewGamePlus") > 0 ) )
-			lvlDiff = actualLevel - thePlayer.GetLevel() + theGame.params.GetNewGamePlusLevel(); // Triangle level scaling
+			lvlDiff = currentLevel - thePlayer.GetLevel() + theGame.params.GetNewGamePlusLevel();
 		else
-			lvlDiff = actualLevel - thePlayer.GetLevel(); // Triangle level scaling
+			lvlDiff = currentLevel - thePlayer.GetLevel();
 		if 		( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY ) { exp = 25 + exp * 1.5; }	
 		else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )  { exp = exp * 1.05; }
 		else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )  { }
