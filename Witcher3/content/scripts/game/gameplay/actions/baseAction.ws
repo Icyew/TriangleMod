@@ -26,13 +26,14 @@ import class CDamageData extends CBaseDamage
 	import var momentum  	: Vector ;
 	
 	
-	import var causer 		: IScriptable;				
+	import var causer 		: IScriptable;							
 	import var attacker 	: CGameplayEntity ;
 	import var victim   	: CGameplayEntity ;
 	
 	import var hitReactionAnimRequested				: bool;
 	import var additiveHitReactionAnimRequested		: bool;
 	import var customHitReactionRequested			: bool;
+	import var isDoTDamage							: bool;			
 	
 	var isActionMelee : bool;	
 }
@@ -59,7 +60,6 @@ class W3DamageAction extends CDamageData
 	protected var shouldProcessBuffsIfNoDamage : bool;				
 	private var ignoreImmortalityMode : bool;						
 	private var dealtFireDamage : bool;								
-	protected var isDoTDamage : bool;								
 	protected var isHeadShot : bool;								
 	protected var killedBySingleHit : bool;							
 	protected var ignoreArmor : bool;								
@@ -71,6 +71,13 @@ class W3DamageAction extends CDamageData
 	protected var parryStagger : bool;								
 	protected var bouncedArrow : bool;								
 	protected var forceExplosionDismemberment : bool;					
+	protected var isCriticalHit : bool;								
+	protected var instantKill : bool;								
+	protected var instantKillFloater : bool;						
+	protected var instantKillCooldownIgnore : bool;					
+	protected var wasFrozen	: bool;									
+	protected var mutation4Triggered : bool;						
+	protected var didReturnDamageToAttacker : bool;					
 	
 	
 	private var DOTdt : float;										
@@ -146,6 +153,7 @@ class W3DamageAction extends CDamageData
 		additiveHitReactionAnimRequested = false;
 		customHitReactionRequested = false;
 		isActionMelee = false;
+		isCriticalHit = false;
 		
 		dmgInfos.Clear();
 		effectInfos.Clear();
@@ -183,23 +191,45 @@ class W3DamageAction extends CDamageData
 		parryStagger = false;
 		bouncedArrow = false;
 		forceExplosionDismemberment = false;
+		instantKill = false;
+		instantKillFloater = false;
+		instantKillCooldownIgnore = false;
+		wasFrozen = false;
 	}
 	
 	
 	public function SetSignSkill(skill : ESkill)
 	{
-		if(isActionWitcherSign)
-			signSkill = skill;
+		signSkill = skill;
 	}
 		
 	
 	public function GetSignSkill() : ESkill
 	{
-		if(isActionWitcherSign)
-			return signSkill;
+		return signSkill;
+	}
+
+	public function GetSignType() : ESignType
+	{	
+		if( signSkill == S_Magic_1 )
+		{
+			return ST_Aard;
+		}
+		else if( signSkill == S_Magic_2 )
+		{
+			return ST_Igni;
+		}
+		else if( signSkill == S_Magic_3 || signSkill == S_Magic_s03)
+		{
+			return ST_Yrden;
+		}
+		else if( signSkill == S_Magic_4 || signSkill == S_Magic_s04 || signSkill == S_Magic_s13)
+		{
+			return ST_Quen;
+		}	
 		
-		return S_SUndefined;
-	}	
+		return ST_None;
+	}
 	
 	
 	function AddDamage( dmgType : name, dmgVal : float )
@@ -323,6 +353,21 @@ class W3DamageAction extends CDamageData
 		return effectTypes.Size();
 	}
 	
+	public function HasBuff( type : EEffectType ) : bool
+	{
+		var i : int;
+		
+		for ( i=0 ; i < effectInfos.Size() ; i+=1 )
+		{
+			if( effectInfos[i].effectType == type )
+			{
+				return true;
+			}
+		}
+			
+		return false;
+	}
+	
 	
 	public function GetDTs( out dmgTypes : array< SRawDamage > ) : int
 	{
@@ -391,6 +436,7 @@ class W3DamageAction extends CDamageData
 	public function CanPlayHitParticle() : bool					{return canPlayHitParticle;}
 	public function SetCanPlayHitParticle(b : bool)				{canPlayHitParticle = b;}
 	public function GetBuffSourceName() : string				{return buffSourceName;}
+	public function SetBuffSourceName( s : string )				{buffSourceName = s;}
 	public function GetCannotReturnDamage() : bool				{return cannotReturnDamage;}
 	public function SetCannotReturnDamage(b : bool)				{cannotReturnDamage = b;}
 	public function ClearDamage()								{dmgInfos.Clear();}
@@ -417,12 +463,27 @@ class W3DamageAction extends CDamageData
 		return DOTdt;
 	}
 	
-	public function GetHitEffect(optional isBack : bool, optional isParried : bool) : name
+	public function GetHitEffect( optional isBack : bool, optional isParried : bool ) : name
 	{		
-		if(!isBack && !isParried)			return hitFX;
-		else if(isBack && !isParried)		return hitBackFX;			
-		else if(!isBack && isParried)		return hitParriedFX;
-		else								return hitBackParriedFX;		
+		if( isBack && !isParried )
+		{
+			return hitBackFX;			
+		}
+		else if( !isBack && isParried )
+		{
+			return hitParriedFX;
+		}
+		else if( isBack && isParried )
+		{
+			return hitBackParriedFX;
+		}
+		
+		if( isCriticalHit && !IsActionWitcherSign() )
+		{
+			return theGame.params.CRITICAL_HIT_FX;
+		}
+		
+		return hitFX;
 	}
 	
 	public function SetHitEffect(newFX : name, optional isBack : bool, optional isParried : bool)
@@ -592,6 +653,29 @@ class W3DamageAction extends CDamageData
 	public final function GetUnderwaterDisplayDamageHack() : bool	{return underwaterDisplayDamageHack;}
 	public final function SetBouncedArrow()						{bouncedArrow = true;}
 	public final function IsBouncedArrow() : bool				{return bouncedArrow;}
+	public final function IsCriticalHit() : bool				{return isCriticalHit;}
+	public final function SetInstantKillFloater()				{instantKillFloater = true;}
+	public final function GetInstantKillFloater() : bool		{return instantKillFloater;}
+	public final function SetInstantKill()						{instantKill = true;}
+	public final function GetInstantKill() : bool				{return instantKill;}
+	public final function SetIgnoreInstantKillCooldown()		{instantKillCooldownIgnore = true;}
+	public final function GetIgnoreInstantKillCooldown() : bool {return instantKillCooldownIgnore;}
+	public final function SetWasFrozen() 						{wasFrozen = true;}
+	public final function GetWasFrozen() : bool					{return wasFrozen;}
+	public final function SetMutation4Triggered()				{mutation4Triggered = true;}
+	public final function GetMutation4Triggered() : bool		{return mutation4Triggered;}
+	public final function WasDamageReturnedToAttacker() : bool  {return didReturnDamageToAttacker;}
+	public final function SetWasDamageReturnedToAttacker( b : bool ) {didReturnDamageToAttacker = b;}
+
+	public final function SetCriticalHit()
+	{
+		isCriticalHit = true;
+		
+		if( ( W3PlayerWitcher )attacker && GetWitcherPlayer().IsMutationActive(EPMT_Mutation2) && IsActionWitcherSign() )
+		{
+			theGame.MutationHUDFeedback( MFT_PlayOnce );
+		}
+	}
 	
 	public final function GetDamageValue(damageName : name) : float
 	{
@@ -615,5 +699,23 @@ class W3DamageAction extends CDamageData
 			ret += dmgInfos[i].dmgVal;
 				
 		return ret;
+	}
+	
+	public final function IsMutation2PotentialKill() : bool
+	{
+		var isOk : bool;
+		var burning : W3Effect_Burning;
+		
+		
+		isOk = ( attacker == thePlayer && IsActionWitcherSign() && IsCriticalHit() && GetWitcherPlayer().IsMutationActive(EPMT_Mutation2) );
+		
+		
+		if( !isOk )
+		{
+			burning = ( W3Effect_Burning ) causer;
+			isOk = burning && burning.IsFromMutation2();
+		}
+		
+		return isOk;
 	}
 }

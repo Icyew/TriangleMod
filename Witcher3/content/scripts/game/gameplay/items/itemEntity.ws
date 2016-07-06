@@ -83,6 +83,36 @@ import class CItemEntity extends CEntity
 	
 	event OnItemCollision( object : CObject, physicalActorindex : int, shapeIndex : int )
 	{
+		var victim : CGameplayEntity;
+		var owner : CActor;
+		var ent : CEntity;
+		var component : CComponent;
+		component = (CComponent) object;
+		if( !component )
+		{
+			return false;
+		}
+		
+		ent = component.GetEntity();
+		owner = (CActor)GetParentEntity();
+		
+		if ( ent != this && owner && ent != owner )
+		{
+			victim = (CGameplayEntity)component.GetEntity();
+			
+			if ( victim )
+			{
+				if ( physicalActorindex == 0 && shapeIndex == 0 && ((CMovingAgentComponent)component).HasRagdoll() )
+					return false;
+					
+				owner.OnCollisionFromItem(victim, this);
+			}
+			return true;
+		}	
+	}
+	
+	event OnGiantWeaponCollision( object : CObject, physicalActorindex : int, shapeIndex : int )
+	{
 		var victim : CActor;
 		var owner : CActor;
 		var ent : CEntity;
@@ -105,7 +135,7 @@ import class CItemEntity extends CEntity
 				if ( physicalActorindex == 0 && shapeIndex == 0 && ((CMovingAgentComponent)component).HasRagdoll() )
 					return false;
 					
-				owner.OnCollisionFromItem(victim, this);
+				owner.OnCollisionFromGiantWeapon(victim, this);
 			}
 			return true;
 		}	
@@ -151,22 +181,22 @@ class W3UsableItem extends CItemEntity
 	{
 		if ( !wasOnHiddenCalled )
 		{
-			OnHidden( this );
+			OnHidden( GetParentEntity() );
 		}
 	}
 	event OnUsed( usedBy : CEntity )
 	{
 		var i : int;
 		
-		
-		
-		
-		blockedActions.PushBack( EIAB_Parry );
-		blockedActions.PushBack( EIAB_Counter );
-		
-		for( i = 0; i < blockedActions.Size(); i += 1)
+		if( usedBy == thePlayer )
 		{
-			thePlayer.BlockAction( blockedActions[i], 'UsableItem' );
+			blockedActions.PushBack( EIAB_Parry );
+			blockedActions.PushBack( EIAB_Counter );
+			
+			for( i = 0; i < blockedActions.Size(); i += 1)
+			{
+				thePlayer.BlockAction( blockedActions[i], 'UsableItem' );
+			}
 		}
 	}
 	
@@ -176,7 +206,10 @@ class W3UsableItem extends CItemEntity
 		
 		wasOnHiddenCalled = true;
 		
-		thePlayer.BlockAllActions( 'UsableItem', false );
+		if( hiddenBy == thePlayer )
+		{
+			thePlayer.BlockAllActions( 'UsableItem', false );
+		}
 	}
 	
 	function SetVisibility( isVisible : bool )
@@ -201,27 +234,70 @@ class W3UsableItem extends CItemEntity
 	
 class W3LightSource extends W3UsableItem
 {
+	var worldName : String;
+	
 	event OnUsed( usedBy : CEntity )
 	{
 		blockedActions.PushBack( EIAB_HeavyAttacks );
 		blockedActions.PushBack( EIAB_SpecialAttackHeavy );
 		
-		
 		super.OnUsed( usedBy );
 		
-		thePlayer.UnblockAction( EIAB_Signs, 'UsableItem' );
-
-		this.PlayEffect( 'light_on' );
-		thePlayer.AddTag(theGame.params.TAG_OPEN_FIRE);
+		worldName =  theGame.GetWorld().GetDepotPath();
+		if( StrFindFirst( worldName, "bob" ) < 0 )
+		{
+			this.PlayEffect( 'light_on' );
+		}
+		else
+		{
+			this.PlayEffect( 'light_on_bob' );
+		}
+		
+		if( usedBy == thePlayer )
+		{
+			thePlayer.UnblockAction( EIAB_Signs, 'UsableItem' );
+			thePlayer.AddTag( theGame.params.TAG_OPEN_FIRE );
+		}
 	}
 
 	event OnHidden( usedBy : CEntity )
 	{
-		thePlayer.RemoveTag(theGame.params.TAG_OPEN_FIRE);
+		if( usedBy == thePlayer )
+		{
+			thePlayer.RemoveTag( theGame.params.TAG_OPEN_FIRE );
+		}
 		
 		super.OnHidden ( usedBy );
-		this.StopEffect( 'light_on' );		
-	}	
+		this.StopEffect( 'light_on' );	
+		this.StopEffect( 'light_on_bob' );	
+	}
+}
+
+class W3ShieldUsableItem extends W3UsableItem
+{
+	editable var factAddedOnUse : string;
+	editable var factValue : int;
+	editable var factTimeValid : int;
+	editable var removeFactOnHide : bool;
+	
+	var i : int;
+	
+	event OnUsed( usedBy : CEntity )
+	{
+		for( i = 0; i < blockedActions.Size(); i += 1)
+		{
+			thePlayer.BlockAction( blockedActions[i], 'UsableItem' );
+		}
+		FactsAdd( factAddedOnUse, factValue, factTimeValid );
+	}
+	
+	event OnHidden( hiddenBy : CEntity )
+	{
+		if( removeFactOnHide )
+		{
+			FactsRemove( factAddedOnUse );		
+		}
+	}
 }
 
 class W3QuestUsableItem extends W3UsableItem

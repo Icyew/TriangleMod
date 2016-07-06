@@ -37,7 +37,9 @@ class W3NonPlayerAbilityManager extends W3AbilityManager
 		
 		
 		if ( ! isFromLoad )
+		{
 			npc.AddTimer('AddLevelBonuses', 0.1, true, false, , true);
+		}
 		
 		ret = super.Init(ownr,cStats, isFromLoad, diff);
 		if(!ret)
@@ -50,7 +52,14 @@ class W3NonPlayerAbilityManager extends W3AbilityManager
 	}
 	
 	public function PostInit(){}
-	protected function OnVitalityChanged(){}
+	protected function OnVitalityChanged()
+	{
+		( (CNewNPC)owner ).SetNpcHealthBar();
+	}
+	protected function OnEssenceChanged()
+	{
+		( (CNewNPC)owner ).SetNpcHealthBar();
+	}
 	protected function OnToxicityChanged(){}
 	protected function OnFocusChanged(){}
 	protected function OnAirChanged(){}
@@ -70,7 +79,7 @@ class W3NonPlayerAbilityManager extends W3AbilityManager
 		var abilityTags : array<name>;
 		var bonus : SWeatherBonus;
 	
-		abs = owner.GetAbilities(false);
+		owner.GetCharacterStats().GetAbilities(abs,false);
 		dm = theGame.GetDefinitionsManager();
 		dm.GetUniqueContainedAbilities( abs, atts );
 		

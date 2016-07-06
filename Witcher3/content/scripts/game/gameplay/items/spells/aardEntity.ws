@@ -128,6 +128,21 @@ statemachine class W3AardEntity extends W3SignEntity
 	
 	
 	
+	public final function GetDistance() : float
+	{
+		if ( owner.CanUseSkill( S_Magic_s20 ) )
+		{
+			switch( owner.GetSkillLevel( S_Magic_s20 ) )
+			{
+				case 1 : return aspects[ fireMode ].distanceUpgrade1;
+				case 2 : return aspects[ fireMode ].distanceUpgrade2;
+				case 3 : return aspects[ fireMode ].distanceUpgrade3;
+			}
+		}
+		
+		return aspects[ fireMode ].distance;
+	}
+	
 	protected function ProcessThrow_MainTick( alternateCast : bool )
 	{
 		var projectile	: W3AardProjectile;
@@ -150,27 +165,7 @@ statemachine class W3AardEntity extends W3SignEntity
 		}
 		
 		
-		if ( owner.CanUseSkill( S_Magic_s20 ) )
-		{
-			switch(owner.GetSkillLevel(S_Magic_s20))
-			{
-				case 1 :
-					distance = aspects[fireMode].distanceUpgrade1;
-					break;
-				case 2 :
-					distance = aspects[fireMode].distanceUpgrade2;
-					break;
-				case 3 :
-					distance = aspects[fireMode].distanceUpgrade3;
-					break;
-				default :
-					LogAssert(false, "W3AardEntity.ProcessThrow: S_Magic_s20 skill level out of bounds!");
-			}
-		}
-		else
-		{
-			distance = aspects[fireMode].distance;
-		}	
+		distance = GetDistance();		
 		
 		if ( owner.HasCustomAttackRange() )
 		{
@@ -283,6 +278,9 @@ statemachine class W3AardEntity extends W3SignEntity
 	public final function PlayAardFX(hitsWater : bool)
 	{
 		var dispersionLevel : int;
+		var hasMutation6 : bool;
+		
+		hasMutation6 = owner.GetPlayer().IsMutationActive(EPMT_Mutation6);
 		
 		if ( owner.CanUseSkill( S_Magic_s20 ) )
 		{
@@ -294,10 +292,13 @@ statemachine class W3AardEntity extends W3SignEntity
 				PlayEffect( effects[fireMode].baseCommonThrowEffectUpgrade1 );
 			
 				
-				if(hitsWater)
-					PlayEffect( effects[fireMode].throwEffectWaterUpgrade1 );
-				else
-					PlayEffect( effects[fireMode].throwEffectSoilUpgrade1 );
+				if(!hasMutation6)
+				{
+					if(hitsWater)
+						PlayEffect( effects[fireMode].throwEffectWaterUpgrade1 );
+					else
+						PlayEffect( effects[fireMode].throwEffectSoilUpgrade1 );
+				}
 			}
 			else if(dispersionLevel == 2)
 			{			
@@ -305,10 +306,13 @@ statemachine class W3AardEntity extends W3SignEntity
 				PlayEffect( effects[fireMode].baseCommonThrowEffectUpgrade2 );
 			
 				
-				if(hitsWater)
-					PlayEffect( effects[fireMode].throwEffectWaterUpgrade2 );
-				else
-					PlayEffect( effects[fireMode].throwEffectSoilUpgrade2 );
+				if(!hasMutation6)
+				{
+					if(hitsWater)
+						PlayEffect( effects[fireMode].throwEffectWaterUpgrade2 );
+					else
+						PlayEffect( effects[fireMode].throwEffectSoilUpgrade2 );
+				}
 			}
 			else if(dispersionLevel == 3)
 			{			
@@ -316,10 +320,13 @@ statemachine class W3AardEntity extends W3SignEntity
 				PlayEffect( effects[fireMode].baseCommonThrowEffectUpgrade3 );
 			
 				
-				if(hitsWater)
-					PlayEffect( effects[fireMode].throwEffectWaterUpgrade3 );
-				else
-					PlayEffect( effects[fireMode].throwEffectSoilUpgrade3 );
+				if(!hasMutation6)
+				{
+					if(hitsWater)
+						PlayEffect( effects[fireMode].throwEffectWaterUpgrade3 );
+					else
+						PlayEffect( effects[fireMode].throwEffectSoilUpgrade3 );
+				}
 			}
 		}
 		else
@@ -328,10 +335,13 @@ statemachine class W3AardEntity extends W3SignEntity
 			PlayEffect( effects[fireMode].baseCommonThrowEffect );
 		
 			
-			if(hitsWater)
-				PlayEffect( effects[fireMode].throwEffectWater );
-			else
-				PlayEffect( effects[fireMode].throwEffectSoil );
+			if(!hasMutation6)
+			{
+				if(hitsWater)
+					PlayEffect( effects[fireMode].throwEffectWater );
+				else
+					PlayEffect( effects[fireMode].throwEffectSoil );
+			}
 		}
 		
 		
@@ -375,6 +385,23 @@ statemachine class W3AardEntity extends W3SignEntity
 					break;
 			}
 		}
+		
+		
+		if( hasMutation6 )
+		{
+			thePlayer.PlayEffect( 'mutation_6_power' );
+			
+			if( fireMode == 0 )
+			{
+				PlayEffect( 'cone_ground_mutation_6' );
+			}
+			else
+			{
+				PlayEffect( 'blast_ground_mutation_6' );
+				
+				theGame.GetSurfacePostFX().AddSurfacePostFXGroup(GetWorldPosition(), 0.3f, 3.f, 2.f, GetDistance(), 0 );
+			}
+		}
 	}
 	
 	timer function DelayedDestroyTimer(dt : float, id : int)
@@ -412,26 +439,23 @@ state AardConeCast in W3AardEntity extends NormalCast
 {		
 	event OnThrowing()
 	{
-		var player : CR4Player;
-		var cost, stamina : float;
+		var player				: CR4Player;
 	
 		if( super.OnThrowing() )
 		{
 			parent.ProcessThrow( false );
 			
 			player = caster.GetPlayer();
-			if(player == caster.GetActor() && player && player.CanUseSkill(S_Perk_09))
+			
+			if( player )
 			{
-				cost = player.GetStaminaActionCost(ESAT_Ability, SkillEnumToName( parent.skillEnum ), 0);
-				stamina = player.GetStat(BCS_Stamina, true);
-				
-				if(cost > stamina)
-					player.DrainFocus(1);
-				else
-					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+				parent.ManagePlayerStamina();
+				parent.ManageGryphonSetBonusBuff();
 			}
 			else
+			{
 				caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
+			}
 		}
 	}
 }
@@ -454,7 +478,7 @@ state AardCircleCast in W3AardEntity extends NormalCast
 				stamina = player.GetStat(BCS_Stamina, true);
 				
 				if(cost > stamina)
-					player.DrainFocus(1);
+					player.DrainFocus(1); // Triangle TODO rage management
 				else
 					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
 			}	

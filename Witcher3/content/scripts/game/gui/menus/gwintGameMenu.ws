@@ -36,6 +36,7 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 {	
 	protected var chooseTurnPopup : W3ChooseGwintTurnPopup;
 	
+	private var m_fxSetGwintResult : CScriptedFlashFunction;
 	private var m_fxSetWhoStarts : CScriptedFlashFunction;
 	private var m_fxShowTutorial : CScriptedFlashFunction;
 	
@@ -72,6 +73,7 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 		
 		SendPlayerNames();
 		
+		m_fxSetGwintResult = m_flashModule.GetMemberFlashFunction("winGwint");
 		m_fxSetWhoStarts = m_flashModule.GetMemberFlashFunction("setFirstTurn");
 		m_fxShowTutorial = m_flashModule.GetMemberFlashFunction("showTutorial");
 		
@@ -99,6 +101,7 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 		
 		SendDecksInformation();
 		
+		theSound.SoundLoadBank( "gwint_ep2.bnk", true );
 		theSound.EnterGameState( ESGS_Gwent );
 		
 		theTelemetry.LogWithName( TE_HERO_GWENT_MATCH_STARTED );
@@ -143,7 +146,11 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 			theGame.SetFadeLock( "Gwint_EndFadeOut" );
 		}
 		gwintManager.testMatch = false;
-			
+		
+		theSound.SoundUnloadBank( "gwint_ep2.bnk" );
+		
+		
+		theGame.GetGwintManager().SetForcedFaction( GwintFaction_Neutral );
 	}
 	
 	public function OnQuitGameConfirmed()
@@ -239,11 +246,6 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 		theGame.GetGamerProfile().AddAchievement(EA_KilledIt);
 	}
 	
-	event  OnAtLeastOneCowDied():void
-	{
-		OnPlaySoundEvent("gui_gwint_cow_death");
-	}
-	
 	public function SetPlayerStarts(playerFirst:bool):void
 	{
 		m_fxSetWhoStarts.InvokeSelfOneArg(FlashArgBool(playerFirst));
@@ -276,5 +278,10 @@ class CR4GwintGameMenu extends CR4GwintBaseMenu
 		l_flashArray.PushBackFlashString(ReplaceTagsToIcons(GetLocStringByKeyExt("gwint_tut_finding_cards_desc")));
 		
 		m_flashValueStorage.SetFlashArray( "gwint.tutorial.strings", l_flashArray );
+	}
+	
+	public function EndGwintMatch( result : int )
+	{
+		m_fxSetGwintResult.InvokeSelfOneArg(FlashArgInt(result));
 	}
 }

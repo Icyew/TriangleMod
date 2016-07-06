@@ -26,6 +26,12 @@ class W3Mutagen23_Effect extends W3Mutagen_Effect
 		if(effectManager.HasAnyMutagen23ShrineBuff())
 			return true;
 		
+		
+		if( target == GetWitcherPlayer() && GetWitcherPlayer().CanUseSkill( S_Perk_14 ) && effectManager.HasAnyShrineBuff() )
+		{
+			return true;
+		}
+		
 		gameTime = theGame.GetGameTime();
 		currentHour = GameTimeHours(gameTime);
 		currentMinutes = GameTimeMinutes(gameTime);	

@@ -74,6 +74,8 @@ function GetBasicAttackDamageAttributeName(attackType : name, damageName : name)
 				return 'heavy_attack_damage_vitality';
 			case theGame.params.ATTACK_NAME_SUPERHEAVY :
 				return 'super_heavy_attack_damage_vitality';
+			case theGame.params.ATTACK_NAME_SPEED_BASED :
+				return 'light_attack_damage_vitality';
 		}
 	}
 	else
@@ -86,10 +88,27 @@ function GetBasicAttackDamageAttributeName(attackType : name, damageName : name)
 				return 'heavy_attack_damage_essence';
 			case theGame.params.ATTACK_NAME_SUPERHEAVY :
 				return 'super_heavy_attack_damage_essence';
+			case theGame.params.ATTACK_NAME_SPEED_BASED :
+				return 'light_attack_damage_essence';
 		}
 	}
 	
 	return '';
+}
+
+function IsDamageTypeAnyPhysicalType( damageName : name ) : bool
+{
+	switch( damageName )
+	{
+		case theGame.params.DAMAGE_NAME_PIERCING :
+		case theGame.params.DAMAGE_NAME_BLUDGEONING :
+		case theGame.params.DAMAGE_NAME_PHYSICAL :
+		case theGame.params.DAMAGE_NAME_RENDING :
+		case theGame.params.DAMAGE_NAME_SILVER :
+		case theGame.params.DAMAGE_NAME_SLASHING :
+			return true;
+	}
+	return false;
 }
 
 

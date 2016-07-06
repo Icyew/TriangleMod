@@ -4,17 +4,6 @@
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
 /***********************************************************************/
 
-import class CAIStorageHandler extends IScriptable
-{
-	
-	
-	import public final function Initialize( itemName : name, classId : name, owner : IScriptable ) : bool;
-	
-	import public final function InitializeExternal( itemName : name, classId : name, actor : CActor ) : bool;
-	
-	import public final function Get() : IScriptable;
-};
-
 struct CriticalStateStruct
 {
 	var CSType			:	ECriticalStateType;
@@ -23,7 +12,7 @@ struct CriticalStateStruct
 }
 
 
-class CBaseAICombatStorage extends CObject
+class CBaseAICombatStorage extends IScriptable
 {
 	
 	private var isAttacking 		: 	bool;
@@ -31,6 +20,7 @@ class CBaseAICombatStorage extends CObject
 	private var isTaunting			:	bool;
 	private var isShooting			:	bool;
 	private var isAiming			:	bool;
+	private var isInImportantAnim 	:   bool; 		
 	private var preCombatWarning	:	bool;		default preCombatWarning = true;
 	
 	
@@ -47,10 +37,10 @@ class CBaseAICombatStorage extends CObject
 		if ( value && timeStamp )
 			atackTimeStamp = timeStamp;
 	}
-	function GetIsAttacking() : bool 			{ return isAttacking; }
+	function GetIsAttacking() : bool 				{ return isAttacking; }
 	
-	function SetIsCharging( value : bool )		{ isCharging = value; }
-	function GetIsCharging() : bool 			{ return isCharging; }
+	function SetIsCharging( value : bool )			{ isCharging = value; }
+	function GetIsCharging() : bool 				{ return isCharging; }
 	
 	function SetIsTaunting( value : bool, optional timeStamp : float )
 	{ 
@@ -58,17 +48,19 @@ class CBaseAICombatStorage extends CObject
 		if ( value && timeStamp )
 			tauntTimeStamp = timeStamp;
 	}
-	function GetIsTaunting() : bool 			{ return isTaunting; }
+	function GetIsTaunting() : bool 				{ return isTaunting; }
 	
-	function GetTauntTimeStamp() : float		{ return tauntTimeStamp; }
+	function GetTauntTimeStamp() : float			{ return tauntTimeStamp; }
 	
-	function SetIsShooting( value : bool ) 		{ isShooting = value; }
-	function SetIsAiming( value : bool ) 		{ isAiming = value; }
-	function GetIsShooting() : bool 			{ return isShooting; }
-	function GetIsAiming() : bool 				{ return isAiming; }
+	function SetIsShooting( value : bool ) 			{ isShooting = value; }
+	function SetIsAiming( value : bool ) 			{ isAiming = value; }
+	function SetIsInImportantAnim( value : bool ) 	{ isInImportantAnim = value; }
+	function GetIsShooting() : bool 				{ return isShooting; }
+	function GetIsAiming() : bool 					{ return isAiming; }
+	function GetIsInImportantAnim() : bool 			{ return isInImportantAnim; }
 	
-	function SetPreCombatWarning( value : bool ) 		{ preCombatWarning = value; }
-	function GetPreCombatWarning() : bool 				{ return preCombatWarning; }
+	function SetPreCombatWarning( value : bool ) 	{ preCombatWarning = value; }
+	function GetPreCombatWarning() : bool 			{ return preCombatWarning; }
 	
 	
 	function SetCriticalState( cstate : ECriticalStateType, value : bool, timeOfChange : float )
@@ -192,6 +184,11 @@ class CBaseAICombatStorage extends CObject
 		temp.isActive = false;
 		temp.lastTimeActive = 0;
 		CSArray.PushBack( temp );
+		
+		temp.CSType = ECST_Trap;
+		temp.isActive = false;
+		temp.lastTimeActive = 0;
+		CSArray.PushBack( temp );
 	}
 }
 
@@ -236,11 +233,7 @@ class CHumanAICombatStorage extends CBaseAICombatStorage
 	
 	function CalculateCombatStylePriority( combatStyle : EBehaviorGraph ) : int
 	{
-		if ( combatStyle == EBG_Combat_Undefined )
-		{
-			return -1;
-		}
-		else if ( combatStyle == activeStyle )
+		if ( combatStyle == activeStyle )
 		{
 			if ( leaveCurrentStyle )
 				return 10;
@@ -250,6 +243,10 @@ class CHumanAICombatStorage extends CBaseAICombatStorage
 		else if ( combatStyle == preferedStyle )
 		{
 			return 60;
+		}
+		else if ( combatStyle == EBG_Combat_Undefined )
+		{
+			return -1;
 		}
 		
 		return 50;
@@ -543,6 +540,15 @@ class CExtendedAICombatStorage extends CBaseAICombatStorage
 		else 
 			return 0;
 	}
+};
+
+class CArchesporeAICombatStorage extends IScriptable
+{
+	public var myBaseEntities : array<CGameplayEntity>;
+	public var noBulbAreas : array<CAreaComponent>;
+	public var currentlyUsedBase : CGameplayEntity;
+	public var wasInitialized : bool;
+	public var manualBulbCleanup : bool;
 };
 
 struct AttackInfo

@@ -381,6 +381,25 @@ class W3MonsterClue extends W3AnimationInteractionEntity
 		}
 	}
 	
+	
+	function OverrideVisibilityParams( focusModeVisibility : EFocusModeVisibility )
+	{
+		if ( focusModeVisibility == FMV_None )
+		{
+			isVisible = false;
+		}
+		else if ( focusModeVisibility == FMV_Clue )
+		{
+			isVisible = true;
+			isVisibleAsClue = true;
+		}
+		else
+		{
+			isVisible = true;
+			isVisibleAsClue = false;		
+		}
+	}
+	
 	function ChangeAttribute( actionType : EFocusClueAttributeAction, currentValue : bool, changeFlag : bool ) : bool
 	{
 		if ( actionType == FCAA_ForceSet )
@@ -496,7 +515,7 @@ class W3MonsterClue extends W3AnimationInteractionEntity
 							recentDialogueTime = theGame.GetRecentDialogOrCutsceneEndGameTime();
 							currentTime = theGame.GetGameTime();
 							
-							if( GameTimeToSeconds(currentTime) - GameTimeToSeconds(recentDialogueTime) >= ConvertRealTimeSecondsToGameSeconds(4) )
+							if( GameTimeDTAtLeastRealSecs( currentTime, recentDialogueTime, 4 ) )
 							{
 								IndicateClue();
 								focusModeController.SetBlockVibrations( true );
@@ -967,6 +986,7 @@ class W3ClueStash extends W3MonsterClue
 	editable saved var isStashDisabled : bool; 
 	editable var stashOpenDelay : float;
 	editable var stashSpawnOffset : Vector;
+	editable var lootEntityTag : name;
 	
 	
 	saved var currentAppearance : name;
@@ -1162,6 +1182,7 @@ class W3ClueStash extends W3MonsterClue
 				if( lootEntity )
 				{
 					SetAttributes( FCAA_ForceSet , false , false , false , false , true , false ); 
+					lootEntity.AddTag( lootEntityTag );
 				}
 				
 				if (!lootEntity.IsEmpty() ) 
@@ -1254,4 +1275,25 @@ class W3DisarmClue extends W3MonsterClue
 		if (connectedTripwire) connectedTripwire.Disarm();
 		this.Destroy();
 	}
+}
+
+
+class W3SavedSoundClue extends CGameplayEntity
+{
+	saved var savedFocusModeSoundEffectType	: EFocusModeSoundEffectType;
+	
+	event OnSpawned( spawnData : SEntitySpawnData )
+	{		
+		
+		if ( spawnData.restored )
+		{
+			focusModeSoundEffectType = savedFocusModeSoundEffectType;
+		}
+		
+		else
+		{
+			savedFocusModeSoundEffectType = focusModeSoundEffectType;
+		}
+		super.OnSpawned( spawnData );
+	}	
 }

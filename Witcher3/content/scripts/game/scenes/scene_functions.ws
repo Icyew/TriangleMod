@@ -319,7 +319,7 @@ storyscene function GiveRewardToPlayer( player: CStoryScenePlayer, rewardName : 
 }
 
 
-latent storyscene function NegotiateMonsterHunt( player: CStoryScenePlayer, rewardName : name, questUniqueScriptTag : CName, alwaysSuccessful : bool ) : ENegotiationResult
+latent storyscene function NegotiateMonsterHunt( player: CStoryScenePlayer, rewardName : name, questUniqueScriptTag : CName, alwaysSuccessful : bool, isItemReward : bool ) : ENegotiationResult
 {
 	var hud : CR4ScriptedHud;
 	var dialogueModule : CR4HudModuleDialog;
@@ -334,7 +334,7 @@ latent storyscene function NegotiateMonsterHunt( player: CStoryScenePlayer, rewa
 		minimalGold = currentReward.gold;
 		
 		dialogueModule = (CR4HudModuleDialog)hud.GetHudModule("DialogModule");
-		dialogueModule.OpenMonsterHuntNegotiationPopup(rewardName, minimalGold, alwaysSuccessful );
+		dialogueModule.OpenMonsterHuntNegotiationPopup(rewardName, minimalGold, alwaysSuccessful, isItemReward );
 		while( dialogueModule.IsPopupOpened() )
 		{
 			SleepOneFrame();
@@ -508,6 +508,10 @@ storyscene function AddItemOnNPC_S ( player: CStoryScenePlayer, npc: CName, item
 	var npc_newnpc : CNewNPC;
 	var hud : CR4ScriptedHud;		
 
+	if ( !IsNameValid( item_name ) )
+	{
+		return;
+	}
 	if(quantity < 0)
 	{
 		LogQuest("Scene function AddItemOnNPC_S: quantity of <<" + item_name + ">> must be >=0, aborting!");
@@ -1025,4 +1029,76 @@ storyscene function TakeMoneyScene( player: CStoryScenePlayer, money : int, dont
 	if( !dontPlaySound )
 		theSound.SoundEvent("gui_bribe");	
 
+}
+
+
+storyscene function BankCollectBillOfExchangeScene( player: CStoryScenePlayer, baseBillPrice : int )
+{
+	var 	   witcher : W3PlayerWitcher;
+	var 	   inv     : CInventoryComponent;
+	var 	  horseInv : CInventoryComponent;
+	var 	billsCount : int;
+	
+	witcher = GetWitcherPlayer();
+	
+	inv = witcher.inv;
+	horseInv = witcher.GetHorseManager().GetInventoryComponent();
+	
+	billsCount = inv.GetItemQuantityByName('vivaldis_bill_of_exchange') + horseInv.GetItemQuantityByName('vivaldis_bill_of_exchange');
+	
+	if( billsCount > 0)
+	{
+		inv.RemoveItemByName( 'vivaldis_bill_of_exchange', -1);
+		witcher.HorseRemoveItemByName( 'vivaldis_bill_of_exchange', -1);
+		
+		
+		thePlayer.DisplayItemRewardNotification('Crowns', (int)( billsCount * baseBillPrice ) );
+		inv.AddAnItem( 'Crowns', billsCount * baseBillPrice, true, true );
+		
+	}
+	
+}
+
+storyscene function BankCurrencyExchangeScene( player: CStoryScenePlayer, orensExchangeModifier : float, florensExchangeModifier : float )
+{
+	var 	   witcher : W3PlayerWitcher;
+	var 	   inv     : CInventoryComponent;
+	var 	  horseInv : CInventoryComponent;
+	var 		     i : int;
+	var 	  sumValue :  float;
+
+	
+	witcher = GetWitcherPlayer();
+	inv = witcher.inv;
+	horseInv = witcher.GetHorseManager().GetInventoryComponent();
+		
+	sumValue += inv.GetItemQuantityByName('Orens') * orensExchangeModifier;
+	sumValue += inv.GetItemQuantityByName('Florens') * florensExchangeModifier;
+
+	sumValue += horseInv.GetItemQuantityByName('Orens') * orensExchangeModifier;
+	sumValue += horseInv.GetItemQuantityByName('Florens') * florensExchangeModifier;
+	
+	inv.RemoveItemByName( 'Orens', -1);
+	inv.RemoveItemByName( 'Florens', -1);
+	
+	witcher.HorseRemoveItemByName( 'Orens', -1);
+	witcher.HorseRemoveItemByName( 'Florens', -1);
+	
+	if(sumValue < 1.0) sumValue = 1.0;
+
+	thePlayer.DisplayItemRewardNotification('Crowns', (int) sumValue );
+	inv.AddAnItem( 'Crowns', (int) sumValue, true, true );
+	
+
+}
+
+storyscene function ShowEP2Logo_S( player: CStoryScenePlayer, show : bool, fadeInterval : float, x : int, y : int )
+{
+	var overlayPopupRef : CR4OverlayPopup;
+	
+	overlayPopupRef = (CR4OverlayPopup) theGame.GetGuiManager().GetPopup('OverlayPopup');
+	if ( overlayPopupRef )
+	{
+		overlayPopupRef.ShowEP2Logo( show, fadeInterval, x, y );
+	}
 }

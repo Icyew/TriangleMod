@@ -87,6 +87,13 @@ import class CScriptSoundSystem extends CObject
 	import function SoundSequence( sequenceName : string, sequence : array< string > );
 	import function SoundEventAddToSave( eventName : string );
 	import function SoundEventClearSaved( );
+	import function SoundEnableMusicEvents( how : bool );
+	import function SoundLoadBank( bankName : string, async : bool );
+	import function SoundUnloadBank( bankName : string );
+	import function SoundIsBankLoaded( bankName : string ) : bool;
+	import function EnableMusicDebug( enable : bool);
+	import function TimedSoundEvent(duration : float, optional startEvent : string, optional stopEvent : string, optional shouldUpdateTimeParameter : bool);
+	import function MuteSpeechUnderwater(mute : bool);
 	
 	event OnBlackscreenStart()
 	{
@@ -274,6 +281,8 @@ import class CScriptSoundSystem extends CObject
 	
 	function InitializeAreaMusic( worldArea : EAreaName )
 	{
+		SoundEvent( "stop_music" );
+		
 		switch( worldArea )
 		{
 			case AN_NMLandNovigrad:
@@ -308,7 +317,9 @@ import class CScriptSoundSystem extends CObject
 			case AN_Undefined:
 				LogAssert( false, "theSound.InitializeAreaMusic: undefined area! No music set!" );
 				break;
-			
+			case (EAreaName)AN_Dlc_Bob:
+				SoundEvent( "play_music_toussaint" );
+				break;
 			default:
 				LogAssert( false, "theSound.InitializeAreaMusic: unsupported area type <<" + worldArea + ">> passed! Music not set!" );
 				break;
@@ -660,4 +671,14 @@ exec function soundSequenceFive( sequenceName : string, sequenceElementOne : str
 	sequence.PushBack( sequenceElementFour );
 	sequence.PushBack( sequenceElementFive );
 	theSound.SoundSequence( sequenceName, sequence );
+}
+
+exec function enableMusicDebug()
+{
+	theSound.EnableMusicDebug(true);
+}
+
+exec function disableMusicDebug()
+{
+	theSound.EnableMusicDebug(false);
 }

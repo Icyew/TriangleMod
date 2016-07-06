@@ -66,9 +66,12 @@ class CBTTaskMagicCoilAttack extends CBTTaskAttack
 		
 		super.Main();
 		
-		while( !m_activated )
+		if ( IsNameValid( activateOnAnimEvent ) )
 		{
-			SleepOneFrame();
+			while ( !m_activated )
+			{
+				SleepOneFrame();
+			}
 		}
 		
 		targetPos = GetCombatTarget().GetWorldPosition();

@@ -20,6 +20,12 @@ statemachine class W3ReplacerCiri extends W3Replacer
 
 	event OnSpawned( spawnData : SEntitySpawnData )
 	{
+		
+		if ( spawnData.restored && !inputHandler )
+		{
+			spawnData.restored = false;
+		}
+	
 		super.OnSpawned( spawnData );
 		
 		
@@ -57,11 +63,6 @@ statemachine class W3ReplacerCiri extends W3Replacer
 		
 		theGame.UpdateStatsForDifficultyLevel( MinDiffMode( theGame.GetDifficultyMode(), EDM_Medium ) );
 		
-		if(!newGamePlusInitialized && FactsQuerySum("NewGamePlus") > 0)
-		{
-			NewGamePlusInitialize();
-		}
-		
 		if ( spawnData.restored )
 		{
 			
@@ -82,10 +83,12 @@ statemachine class W3ReplacerCiri extends W3Replacer
 		return isInitialized;
 	}
 	
-	private final function NewGamePlusInitialize()
+	private function NewGamePlusInitialize()
 	{
 		var questItems : array<name>;
 		var i : int;
+		
+		super.NewGamePlusInitialize();
 		
 		
 		RemoveAbility('Ciri_Q205');
@@ -321,7 +324,7 @@ statemachine class W3ReplacerCiri extends W3Replacer
 	}
 	
 	
-	function GetCriticalHitChance(isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory) : float
+	function GetCriticalHitChance( isLightAttack : bool, isHeavyAttack : bool, target : CActor, victimMonsterCategory : EMonsterCategory, isBolt : bool ) : float
 	{
 		var ret : float;
 		
@@ -329,7 +332,7 @@ statemachine class W3ReplacerCiri extends W3Replacer
 		if ( ciriPhantoms.Size() > 0 )
 			ret = 1;
 		
-		ret += super.GetCriticalHitChance(isHeavyAttack, target, victimMonsterCategory);
+		ret += super.GetCriticalHitChance( isLightAttack, isHeavyAttack, target, victimMonsterCategory, isBolt );
 		
 		return ret;
 	}
@@ -377,11 +380,11 @@ statemachine class W3ReplacerCiri extends W3Replacer
 		
 	}
 	
-	 event OnPocessActionPost(action : W3DamageAction)
+	 event OnProcessActionPost(action : W3DamageAction)
 	{
 		var attackAction : W3Action_Attack;
 		
-		super.OnPocessActionPost(action);
+		super.OnProcessActionPost(action);
 		
 		attackAction = (W3Action_Attack)action;
 		
@@ -915,18 +918,6 @@ statemachine class W3ReplacerCiri extends W3Replacer
 	
 	
 	
-		
-	
-	public final function GetOilAppliedOnSword(steel : bool) : name
-	{
-		var sword : SItemUniqueId;
-		
-		sword = GetEquippedSword(steel);
-		if(inv.IsIdValid(sword))		
-			return inv.GetSwordOil(sword);
-			
-		return '';
-	}
 	
 	
 	public function GetEquippedSword(steel : bool) : SItemUniqueId
@@ -962,105 +953,12 @@ statemachine class W3ReplacerCiri extends W3Replacer
 		return inv.IsIdValid(inv.GetItemFromSlot('r_weapon'));
 	}
 	
-	
-	public final function IsEquippedSwordUpgradedWithOil(steel : bool, optional oilName : name) : bool
-	{
-		var sword : SItemUniqueId;
-		var i, minAbs, maxAbs : int;
-		var abilities, swordAbilities : array<name>;
-		var dm : CDefinitionsManagerAccessor;
-		var weights : array<float>;
-	
-		sword = GetEquippedSword(steel);				
-		if(!inv.IsIdValid(sword))	
-			return false;
-			
-		inv.GetItemAbilities(sword, swordAbilities);
-		dm = theGame.GetDefinitionsManager();
-		
-		if(IsNameValid(oilName))
-		{				
-			dm.GetItemAbilitiesWithWeights(oilName, true, abilities, weights, minAbs, maxAbs);
-							
-			for(i=0; i<abilities.Size(); i+=1)
-			{
-				if(dm.AbilityHasTag(abilities[i], theGame.params.OIL_ABILITY_TAG))
-				{
-					if(swordAbilities.Contains(abilities[i]))
-					{
-						
-						return true;
-					}					
-				}
-			}
-		}
-		else
-		{
-			
-			for(i=0; i<swordAbilities.Size(); i+=1)
-			{
-				if(dm.AbilityHasTag(swordAbilities[i], theGame.params.OIL_ABILITY_TAG))
-					return true;
-			}
-		}
-		
-		return false;
-	}
-	
 	public function CanApplyOilOnItem(oilId : SItemUniqueId, usedOnItem : SItemUniqueId) : bool
 	{
 		if(inv.IsItemSteelSwordUsableByPlayer(usedOnItem) || inv.IsItemSilverSwordUsableByPlayer(usedOnItem))
 			return true;
 			
 		return false;
-	}
-	
-	
-	public final function ApplyOil( oilId : SItemUniqueId, usedOnItem : SItemUniqueId )
-	{
-		var oilAbilities : array<name>;
-		var i : int;
-		var ammo, ammoBonus : float;
-		var dm : CDefinitionsManagerAccessor;
-		var swordEquipped : bool;
-		var heldWeapons : array<SItemUniqueId>;
-		
-		if(!CanApplyOilOnItem(oilId, usedOnItem))
-			return;
-			
-		dm = theGame.GetDefinitionsManager();
-		inv.GetItemAbilities(oilId, oilAbilities);
-		heldWeapons = inv.GetHeldWeapons();
-		swordEquipped = heldWeapons.Contains(usedOnItem);
-		
-		
-		RemoveItemOil(usedOnItem);
-
-		
-		for(i=0; i<oilAbilities.Size(); i+=1)
-		{
-			if(dm.AbilityHasTag(oilAbilities[i], theGame.params.OIL_ABILITY_TAG))
-			{
-				inv.AddItemCraftedAbility(usedOnItem, oilAbilities[i]);
-				
-				
-				if(swordEquipped)
-					AddAbility(oilAbilities[i]);
-			} 
-		}
-		
-		
-		ammo = CalculateAttributeValue(inv.GetItemAttributeValue(oilId, 'ammo'));
-		
-		inv.SetItemModifierInt(usedOnItem, 'oil_charges', RoundMath(ammo));
-		inv.SetItemModifierInt(usedOnItem, 'oil_max_charges', RoundMath(ammo));
-				
-		LogOils("Added oil <<" + inv.GetItemName(oilId) + ">> to <<" + inv.GetItemName(usedOnItem) + ">>");
-		
-		
-		SetFailedFundamentalsFirstAchievementCondition(true);
-		
-		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnOilApplied );		
 	}
 }
 

@@ -39,8 +39,34 @@ statemachine class W3TutorialManagerUIHandler
 					listeners[i].requiredGameplayFactValueInt2 = 0;
 					listeners[i].requiredGameplayFactComparator2 = CO_Equal;
 				}
-			}
+			}		
 		}
+	}
+	
+	public final function AddNewBooksTutorial()
+	{
+		var uitut : SUITutorial;
+		
+		uitut.menuName = 'CommonMenu';
+		uitut.tutorialStateName = 'BooksCommonMenu';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 1;
+		uitut.abortOnMenuClose = true;
+		RegisterUIHint(uitut);
+		
+		uitut.menuName = 'GlossaryBooksMenu';
+		uitut.tutorialStateName = 'BooksNew';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 1;
+		uitut.abortOnMenuClose = true;
+		RegisterUIHint(uitut);
+		
+		uitut.menuName = 'GlossaryParent';
+		uitut.tutorialStateName = 'BooksCommonMenuSubmenu';
+		uitut.triggerCondition = EUITTC_OnMenuOpen;
+		uitut.priority = 40;
+		uitut.abortOnMenuClose = true;
+		RegisterUIHint(uitut);
 	}
 	
 	
@@ -108,7 +134,8 @@ statemachine class W3TutorialManagerUIHandler
 		
 		if(chosenIndex >= 0)
 		{
-			GotoState(listeners[chosenIndex].tutorialStateName);
+			LogTutorial( "UIHandler: chose new state - " + listeners[chosenIndex].tutorialStateName );
+			GotoState( listeners[chosenIndex].tutorialStateName );
 			return true;
 		}
 		
@@ -121,7 +148,7 @@ statemachine class W3TutorialManagerUIHandler
 	}
 	
 	
-	public function UnregisterUIHint(tutorialStateName : name, optional sourceName : string) : bool
+	public function UnregisterUIState(tutorialStateName : name, optional sourceName : string) : bool
 	{
 		var i : int;
 		var listenerMenu : name;
@@ -162,9 +189,30 @@ statemachine class W3TutorialManagerUIHandler
 		return false;
 	}
 	
+	
+	public final function IsStateRegistered( stateName : name ) : bool
+	{
+		var i : int;
+		
+		if( stateName == '' )
+		{
+			return false;
+		}
+		
+		for( i=0; i<listeners.Size(); i+=1 )
+		{
+			if( listeners[i].tutorialStateName == stateName )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	event OnOpeningMenu(menuName : name)
 	{
-		LogTutorial("UIHandler: OnOpeningMenu <<" + menuName + ">>");
+		
 	
 		
 		if(menuName == 'CommonMenu' || menuName == 'CommonIngameMenu')
@@ -375,7 +423,7 @@ statemachine class W3TutorialManagerUIHandler
 	
 	event OnOpenedMenu(menuName : name)
 	{
-		LogTutorial("UIHandler: OnOpenedMenu <<" + menuName + ">>");
+		
 		
 		
 		OnMenuOpened(menuName);
@@ -386,7 +434,13 @@ statemachine class W3TutorialManagerUIHandler
 		var stateName : name;
 		var i : int;
 		
-		LogTutorial("UIHandler: OnClosingMenu <<" + menuName + ">>");
+		
+		
+		
+		if( menuName == 'InventoryMenu' )
+		{
+			theGame.GameplayFactsRemove( 'panel_on_since_inv_tut' );
+		}
 		
 		
 		if(menuName == 'PopupMenu' && IsNameValid(postponedUnregisteredMenu))
@@ -420,7 +474,7 @@ statemachine class W3TutorialManagerUIHandler
 	
 	event OnClosedMenu(menuName : name)
 	{
-		LogTutorial("UIHandler: OnClosedMenu <<" + menuName + ">>");
+		
 		
 		
 		OnMenuClosed(menuName);

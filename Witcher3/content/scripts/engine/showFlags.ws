@@ -6,4 +6,7 @@
 
 
 
+
+
+import function DebugSetEShowFlag(flagName : int, activate : bool);
 

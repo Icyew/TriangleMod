@@ -65,6 +65,11 @@ state CombatSword in W3PlayerWitcher extends Combat
 		parent.RemoveAnimEventCallback('FinishSpecialHeavyAttack');
 		
 		parent.inv.StopItemEffect(swordId, 'rune_blast_loop');
+		
+		parent.SetBehaviorVariable( 'isPerformingSpecialAttack', 0.f );
+		parent.RemoveCustomOrientationTarget( 'SpecialAttackLight' );
+		parent.RemoveTimer( 'UpdateSpecialAttackLightHeading' );
+		parent.RemoveCustomOrientationTarget( 'SpecialAttackHeavy' );
 	}
 	
 		
@@ -1058,6 +1063,10 @@ state CombatSword in W3PlayerWitcher extends Combat
 					if(parent.GetStatPercents(BCS_Stamina) > 0.99f)
 					{
 						staminaCostPerSec = parent.GetStaminaActionCost(ESAT_Ability, parent.GetSkillAbilityName(S_Sword_s02), 1.0f);
+						// Triangle rend
+						if (staminaCostPerSec <= 0)
+							staminaCostPerSec = 52; // 50 is default value. 52 to avoid weird race condition with animation, so everyone gets a slightly faster rend!
+						// Triangle end
 						parent.specialHeavyChargeDuration = parent.GetStatMax(BCS_Stamina) / staminaCostPerSec;
 					}
 					
@@ -1154,6 +1163,7 @@ state CombatSword in W3PlayerWitcher extends Combat
 					virtual_parent.OnCombatActionStart();
 				
 				parent.specialAttackCamera = true;
+				parent.cachedFocusDifference = 0; // Triangle rend reset to this if rend interrupted
 			}
 		}
 		else

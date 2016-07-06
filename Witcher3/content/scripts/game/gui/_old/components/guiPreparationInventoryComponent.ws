@@ -40,7 +40,7 @@ class W3GuiPreparationInventoryComponent extends W3GuiPlayerInventoryComponent
 		
 		if (_inv.GetItemEquippedOnSlot(EES_SilverSword, weaponId))
 		{
-			oilName = _inv.GetOilNameOnSword(false);
+			oilName = _inv.GetOldestOilAppliedOnItem( weaponId, false ).GetOilItemName();
 			if (oilName != '')
 			{
 				l_flashObject = flashObject.CreateFlashObject("red.game.witcher3.menus.common.ItemDataStub");
@@ -52,7 +52,7 @@ class W3GuiPreparationInventoryComponent extends W3GuiPlayerInventoryComponent
 		
 		if (_inv.GetItemEquippedOnSlot(EES_SteelSword, weaponId))
 		{
-			oilName = _inv.GetOilNameOnSword(true);
+			oilName = _inv.GetOldestOilAppliedOnItem( weaponId, false ).GetOilItemName();
 			if (oilName != '')
 			{
 				l_flashObject = flashObject.CreateFlashObject("red.game.witcher3.menus.common.ItemDataStub");

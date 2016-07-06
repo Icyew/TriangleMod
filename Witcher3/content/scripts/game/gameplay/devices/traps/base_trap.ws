@@ -230,12 +230,24 @@ class W3Trap extends W3MonsterClue
 			m_isArmed = true;
 			ApplyAppearance( appearanceArmed );
 			UpdateInteraction();
+			
+			
+			if( GetFocusModeVisibility() != FMV_None )
+			{
+				SetFocusModeVisibility( FMV_Clue );
+			}
 		}
 		else
 		{
 			m_isArmed = false;
 			ApplyAppearance( appearanceDisarmed );
 			Deactivate();
+			
+			
+			if( GetFocusModeVisibility() != FMV_None )
+			{
+				SetFocusModeVisibility( FMV_Interactive );
+			}			
 		}
 		SetFacts();
 	}

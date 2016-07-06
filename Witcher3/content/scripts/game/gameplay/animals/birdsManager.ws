@@ -83,6 +83,23 @@ class W3Bird extends CGameplayEntity
 	}
 }
 
+class W3BirdQuest extends W3Bird
+{
+	public editable var m_focusSoundEffect : EFocusModeSoundEffectType;
+	default m_focusSoundEffect = FMSET_None;
+	
+	hint m_focusSoundEffect = "Focus sound mode for this bird.";
+
+	event OnSpawned( spawnData : SEntitySpawnData )
+	{
+		super.OnSpawned(spawnData);
+		
+		SetFocusModeSoundEffectType( m_focusSoundEffect );
+	}	
+	
+}
+
+
 
 
 
@@ -100,6 +117,7 @@ statemachine class CBirdsManager extends CGameplayEntity
 	editable var respawnDelay : float;
 	editable var respawnMinDistance : float;
 	editable var spawnOnlyInsideBirdsArea : bool; default spawnOnlyInsideBirdsArea = true;
+	editable var disableSnapToCollisions : bool;
 	
 	private var birdSpawnpoints : array<SBirdSpawnpoint>;
 	private var shouldBirdsFly : bool;
@@ -220,17 +238,7 @@ statemachine class CBirdsManager extends CGameplayEntity
 			notFlyingBirds += 1;
 		
 		shouldBirdsFly = (notFlyingBirds > 0);
-		
-		
-			
-		
-		
-		
-			
-		
 	}
-	
-	
 	
 	public function SpawnBirds(optional forced : bool)
 	{
@@ -274,12 +282,19 @@ statemachine class CBirdsManager extends CGameplayEntity
 					
 					if( (!isVisible || forced ) && VecDistance( birdSpawnpoints[i].position, theCamera.GetCameraPosition()) < spawnRange)
 					{
-						traceResult = theGame.GetWorld().StaticTrace( birdSpawnpoints[i].position, birdSpawnpoints[i].position - Vector(0,0,255), spawnPos, normal );
-						
-						
-						if( traceResult == false )
+						if( disableSnapToCollisions )
 						{
-							spawnPos = birdSpawnpoints[i].position;		
+							spawnPos = birdSpawnpoints[i].position;
+						}
+						else
+						{
+							traceResult = theGame.GetWorld().StaticTrace( birdSpawnpoints[i].position, birdSpawnpoints[i].position - Vector(0,0,255), spawnPos, normal );
+							
+							
+							if( traceResult == false )
+							{
+								spawnPos = birdSpawnpoints[i].position;		
+							}
 						}
 						
 						createEntityHelper = new CCreateEntityHelper;
@@ -599,6 +614,9 @@ state Default in CBirdsManager
 		
 			parent.birdTemplate = (CEntityTemplate)LoadResourceAsync(resource);
 		}
+		
+		
+		Sleep( 0 );
 		
 		parent.SpawnBirds(true);
 		parent.StartBirdsSpawnCheck();

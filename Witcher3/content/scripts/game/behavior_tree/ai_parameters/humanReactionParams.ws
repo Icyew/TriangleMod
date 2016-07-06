@@ -488,6 +488,54 @@ class CAIPhilippaReactionsTree extends CAINpcReactionsTree
 };
 
 
+class CAIBruxaCommonerReactionTree extends CAINpcReactionsTree
+{
+	function Init()
+	{
+		var beingHit		: CAIActionBruxaBeingHit				= new CAIActionBruxaBeingHit in this;
+		var drawSword		: CAIActionBruxaDrawSword 				= new CAIActionBruxaDrawSword in this;
+		var attack			: CAIActionBruxaAttack 					= new CAIActionBruxaAttack in this;
+		var friendlyAttack	: CAIActionBruxaFriendlyAttackAction 	= new CAIActionBruxaFriendlyAttackAction in this;
+		var castSign		: CAIActionBruxaCastSign 				= new CAIActionBruxaCastSign in this;
+		var crossbowShot 	: CAIActionBruxaCrossbowShot 			= new CAIActionBruxaCrossbowShot in this;
+		var bombExplosion 	: CAIActionBruxaBombExplosion 			= new CAIActionBruxaBombExplosion in this;
+		var playerPresence 	: CAIActionBruxaPlayerPresence 			= new CAIActionBruxaPlayerPresence in this;
+		var forcedSpawn 	: CAIActionBruxaPlayerPresenceForced 	= new CAIActionBruxaPlayerPresenceForced in this;
+		
+		
+		beingHit			.OnCreated();
+		drawSword			.OnCreated();
+		attack				.OnCreated();
+		friendlyAttack		.OnCreated();
+		castSign			.OnCreated();
+		crossbowShot		.OnCreated();
+		bombExplosion		.OnCreated();
+		playerPresence 		.OnCreated();
+		forcedSpawn 		.OnCreated();
+		
+		beingHit.forwardAvailabilityToReactionTree = true;
+		drawSword.forwardAvailabilityToReactionTree = true;
+		attack.forwardAvailabilityToReactionTree = true;
+		friendlyAttack.forwardAvailabilityToReactionTree = true;
+		castSign.forwardAvailabilityToReactionTree = true;
+		crossbowShot.forwardAvailabilityToReactionTree = true;
+		bombExplosion.forwardAvailabilityToReactionTree = true;
+		playerPresence.forwardAvailabilityToReactionTree = true;
+		forcedSpawn.forwardAvailabilityToReactionTree = true;
+		
+		reactions.PushBack( beingHit );
+		reactions.PushBack( drawSword );
+		reactions.PushBack( attack );
+		reactions.PushBack( friendlyAttack );
+		reactions.PushBack( castSign );
+		reactions.PushBack( crossbowShot );
+		reactions.PushBack( bombExplosion );
+		reactions.PushBack( playerPresence );
+		reactions.PushBack( forcedSpawn );
+	}
+}
+
+
 
 
 
@@ -885,7 +933,175 @@ class CAIQuestActionPlayerPresence extends CAIActionPlayerPresence
 		((CAINpcReactionStopAndComment)reactionLogicTree).SetParams(100,-1);
 		actionCooldownTimeout = 0;
 	}
-}
+};
+
+
+
+
+
+
+class CAIActionBruxaBeingHit extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 60;
+		actionEventName = 'BeingHitAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0;
+		disallowWhileOnHorse = false;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+class CAIActionBruxaDrawSword extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 24;
+		actionEventName = 'DrawSwordAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0.5;
+		actionFailedCooldown = 2.f;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaAttack extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 55;
+		actionEventName = 'AttackAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0.5f;
+		actionFailedCooldown = 2.f;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaFriendlyAttackAction extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 55;
+		actionEventName = 'FriendlyAttackAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0.5f;
+		actionFailedCooldown = 2.f;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaCastSign extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 55;
+		actionEventName = 'CastSignActionFar';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0.5f;
+		actionFailedCooldown = 2.f;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaCrossbowShot extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 24;
+		actionEventName = 'CrossbowShotAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0.5f;
+		actionFailedCooldown = 2.f;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaBombExplosion extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 56;
+		actionEventName = 'BombExplosionAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 0;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+	}
+};
+
+
+class CAIActionBruxaPlayerPresence extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 20; 
+		actionEventName = 'PlayerPresenceAction';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 20;
+		forwardAvailabilityToReactionTree = true;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+		
+		disableTalkInteraction = false;
+	}
+};
+
+
+class CAIActionBruxaPlayerPresenceForced extends CAINpcActionSubtree
+{
+	function Init()
+	{
+		reactionLogicTree = new CAINpcReactionBruxaSpawn in this;
+		reactionLogicTree.OnCreated();
+		
+		reactionPriority = 100;
+		actionEventName = 'ForceBruxaSpawn';
+		actionCooldownDistance = 0;
+		actionCooldownTimeout = 20;
+		forwardAvailabilityToReactionTree = true;
+		changePriorityWhileActive = true;
+		reactionPriorityWhileActive = 95;
+		
+		disableTalkInteraction = false;
+	}
+};
 
 
 
@@ -1041,7 +1257,20 @@ class CAINpcReactionRain extends CAINpcReaction
 		actionPointSelector.radius 			= 30;
 		actionPointSelector.chooseClosestAP = true;
 	}
+};
+
+
+class CAINpcReactionBruxaSpawn extends CAINpcReaction
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\reaction_bruxa_spawn.w2behtree";
 	
+	editable var activationChance 		: int;		default activationChance = 100;
+	editable var distanceToInterrupt	: int;		default distanceToInterrupt = 15.f;
+	
+	function SetParams( _activationChance : int, _stopDuration : float )
+	{
+		activationChance = _activationChance;
+	}
 };
 
 

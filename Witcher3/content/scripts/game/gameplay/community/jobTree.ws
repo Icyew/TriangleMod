@@ -21,7 +21,8 @@ enum EJobTreeType
 	EJTT_Praying, 
 	EJTT_InfantInHand,
 	EJTT_Sitting,
-	EJT_PlayingMusic
+	EJT_PlayingMusic,
+	EJTT_CatOnLap,
 }
 
 

@@ -26,7 +26,7 @@ state Betting in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		isClosing = true;
 		
-		CloseHint(DESCRIPTION);
+		CloseStateHint(DESCRIPTION);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(DESCRIPTION);
 		

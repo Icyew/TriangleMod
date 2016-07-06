@@ -47,6 +47,7 @@ class CBTTaskActivateOnlyOnce extends IBehTreeTask
 {
 	private var successOnly					: bool;	
 	private var resetWhenReattachFromPool	: bool;
+	private var resetOnGameplayEvent 		: name;
 	private var wasActivated 				: bool;
 	
 	default wasActivated = false;
@@ -78,8 +79,14 @@ class CBTTaskActivateOnlyOnce extends IBehTreeTask
 	
 	function OnListenedGameplayEvent( eventName : name ) : bool
 	{
-		if( resetWhenReattachFromPool )
+		if( eventName == 'OnReattachFromPool' && resetWhenReattachFromPool )
+		{
 			wasActivated = false;
+		}
+		else if ( eventName == resetOnGameplayEvent )
+		{
+			wasActivated = false;
+		}
 		return true;
 	}
 }
@@ -87,6 +94,7 @@ class CBTTaskActivateOnlyOnceDef extends IBehTreeTaskDefinition
 {
 	editable var successOnly				: bool;
 	editable var resetWhenReattachFromPool	: bool;
+	editable var resetOnGameplayEvent 		: name;
 	
 	default instanceClass = 'CBTTaskActivateOnlyOnce';
 	
@@ -94,6 +102,10 @@ class CBTTaskActivateOnlyOnceDef extends IBehTreeTaskDefinition
 	{
 		super.InitializeEvents();
 		listenToGameplayEvents.PushBack( 'OnReattachFromPool' );
+		if ( IsNameValid( resetOnGameplayEvent ) )
+		{
+			listenToGameplayEvents.PushBack( resetOnGameplayEvent );
+		}
 	}
 }
 

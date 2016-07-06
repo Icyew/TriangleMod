@@ -47,6 +47,8 @@ import class CDefinitionsManagerAccessor extends CObject
 	import final function ValidateRecyclingParts( listAllItemDefs : bool );
 	import final function ValidateCraftingDefinitions( listAllItemDefs : bool );
 
+	import final function AddAllItems( optional category : name , optional depot : string , optional invisibleItems : bool ) : void;
+
 	
 	public function GetItemAttributeValueNoRandom(itemName : name, playerItem : bool, attributeName : name, out min : SAbilityAttributeValue, out max : SAbilityAttributeValue)
 	{
@@ -137,6 +139,29 @@ import class CDefinitionsManagerAccessor extends CObject
 	
 	
 	
+	
+	public final function GetDamagesFromAbility( abilityName : name) : array< SRawDamage >
+	{
+		var atts : array< name >;
+		var i : int;
+		var dmg : SRawDamage;
+		var damages : array< SRawDamage >;
+		var min, max : SAbilityAttributeValue;
+		
+		GetAbilityAttributes( abilityName, atts );
+		for( i=0; i<atts.Size(); i+=1 )
+		{
+			if( IsDamageTypeNameValid( atts[i] ) )
+			{
+				GetAbilityAttributeValue( abilityName, atts[i], min, max );
+				dmg.dmgType = atts[i];
+				dmg.dmgVal = min.valueBase * min.valueMultiplicative + min.valueAdditive;
+				damages.PushBack( dmg );
+			}
+		}
+		
+		return damages;
+	}
 	
 	import final function GetAbilityAttributeValue( abilityName : name, attributeName : name, out valMin : SAbilityAttributeValue, out valMax : SAbilityAttributeValue );
 	import final function GetAbilitiesAttributeValue( abilitiesNames : array<name>, attributeName : name, out valMin : SAbilityAttributeValue, out valMax : SAbilityAttributeValue, optional tags : array<name> );
@@ -282,7 +307,19 @@ import class CDefinitionsManagerAccessor extends CObject
 		if ( (isRelicGear || isWitcherGear) && ItemHasTag(itemName, 'EP1') ) level = level - 1;
 		
 		return level;
-	}    
+	}
+	
+	public final function IsItemSetItem( itemName : name ) : bool
+	{
+		return
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_BEAR) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_GRYPHON) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_LYNX) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_WOLF) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_RED_WOLF) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_VAMPIRE ) ||
+			ItemHasTag(itemName, theGame.params.ITEM_SET_TAG_VIPER);
+	}
 	
 	
 	
@@ -323,4 +360,31 @@ import class CDefinitionsManagerAccessor extends CObject
 	import final function GetCustomNodeAttributeValueBool( out node : SCustomNode, attName : name, out val : bool) : bool;
 	
 	import final function GetCustomNodeAttributeValueFloat( out node : SCustomNode, attName : name, out val : float) : bool;
+}
+
+exec function AddAllItems( optional category : name , optional depot : string , optional invisibleItems : bool )
+{
+	var defMgr : CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();
+
+	switch (StrLower(depot))
+	{
+	case "w3":
+	case "vanilla":
+	case "vanila":
+		depot = 'W3';
+		break;
+	case "ep2":
+	case "baw":
+	case "bob":
+		depot = 'bob';
+		break;
+	case "ep1":
+	case "hos":
+		depot = 'ep1';
+		break;
+	default:
+		break;
+	}
+
+	defMgr.AddAllItems( category , depot , invisibleItems );
 }

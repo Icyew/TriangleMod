@@ -23,7 +23,6 @@ class W3GameZoneTrigger extends CEntity
 			tags = this.GetTags();
 			if ( tags.Size() > 0 )
 			{
-				
 				for ( i = 0; i < tags.Size(); i+=1 )
 				{
 					zoneName = tags[i];

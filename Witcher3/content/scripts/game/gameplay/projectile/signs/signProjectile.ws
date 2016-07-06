@@ -129,6 +129,11 @@ abstract class W3SignProjectile extends CProjectileTrajectory
 		return true;
 	}
 	
+	public function GetOwner() : W3SignOwner
+	{
+		return owner;
+	}
+	
 	function ProcessAttackRange()
 	{
 		var i, size  	: int;

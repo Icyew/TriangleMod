@@ -25,4 +25,14 @@ class W3Effect_SlowdownFrost extends CBaseGameplayEffect
 		target.ResetAnimationSpeedMultiplier(slowdownCauserId);
 		super.OnEffectRemoved();			
 	}
+		
+	event OnEffectAddedPost()
+	{
+		if( IsAddedByPlayer() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) && target != thePlayer )
+		{
+			GetWitcherPlayer().AddMutation12Decoction();
+		}
+		
+		super.OnEffectAddedPost();
+	}
 }

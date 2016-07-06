@@ -13,7 +13,7 @@
 
 state Exploration in CR4Player extends ExtendedMovable
 {
-	private var wantsToSheatheWeapon	: bool;		default	wantsToSheatheWeapon	= false;
+	private var wantsToSheatheWeapon			: bool;		default	wantsToSheatheWeapon			= false;
 	
 	
 	
@@ -28,7 +28,7 @@ state Exploration in CR4Player extends ExtendedMovable
 		theInput.SetContext( parent.GetExplorationInputContext() );
 		
 		virtual_parent.SetPlayerCombatStance( PCS_Normal, true );
-
+		
 		
 		
 		theGame.GetGuiManager().DisableHudHoldIndicator();
@@ -69,6 +69,16 @@ state Exploration in CR4Player extends ExtendedMovable
 			parent.proudWalk = true;
 		else
 			parent.proudWalk = false;
+		
+		if ( parent.GetBehaviorVariable( 'alternateWalk' ) == 1.0 )
+			parent.injuredWalk = true;
+		else
+			parent.injuredWalk = false;
+		
+		if ( parent.GetBehaviorVariable( 'alternateWalk' ) == 2.0 )
+			parent.tiedWalk = true;
+		else
+			parent.tiedWalk = false;
 		
 		
 		super.OnLeaveState( nextStateName );
@@ -140,9 +150,9 @@ state Exploration in CR4Player extends ExtendedMovable
 		parent.SetBIsInputAllowed(true, 'ExplorationInit');
 		
 		parent.AddTimer( 'ResetStanceTimer', 1.f );
-	
+		
 		parent.findMoveTargetDistMin = 10.f;
-
+		
 		InitCamera();
 		
 		parent.LockEntryFunction( false );
@@ -151,11 +161,22 @@ state Exploration in CR4Player extends ExtendedMovable
 		{
 			comp = ( (CMovingPhysicalAgentComponent) parent.GetMovingAgentComponent() );
 		}
-			
+		
 		comp.SetTerrainInfluence(0.f);
 		
 		parent.SetBehaviorVariable( 'proudWalk', (float)( parent.proudWalk ) );
-		
+		if ( parent.injuredWalk )
+		{
+			parent.SetBehaviorVariable( 'alternateWalk', 1.0f );
+		}
+		else if ( parent.tiedWalk )
+		{
+			parent.SetBehaviorVariable( 'alternateWalk', 2.0f );
+		}
+		else
+		{
+			parent.SetBehaviorVariable( 'alternateWalk', 0.0f );
+		}
 		parent.SetBehaviorMimicVariable( 'gameplayMimicsMode', (float)(int)PGMM_Default );
 		
 		
@@ -253,11 +274,12 @@ state Exploration in CR4Player extends ExtendedMovable
 		if( super.OnGameCameraTick( moveData, dt ) )
 		{
 			return true;
-		}	
+		}
 		
-		if ( m_lastUsedPCInput != theInput.LastUsedPCInput() )
+		if( m_lastUsedPCInput != theInput.LastUsedPCInput() )
 		{
 			m_lastUsedPCInput = theInput.LastUsedPCInput();
+			
 			if ( m_lastUsedPCInput )
 			{
 				theGame.GetGameCamera().SetManualRotationHorTimeout( 5 );
@@ -270,7 +292,7 @@ state Exploration in CR4Player extends ExtendedMovable
 			}
 		}
 		
-		switch ( parent.GetPlayerAction() )
+		switch( parent.GetPlayerAction() )
 		{
 			case PEA_Meditation 	: UpdateCameraMeditation( moveData, dt ); break;	
 			case PEA_ExamineGround 	: UpdateCameraClueGround( moveData, dt ); break;

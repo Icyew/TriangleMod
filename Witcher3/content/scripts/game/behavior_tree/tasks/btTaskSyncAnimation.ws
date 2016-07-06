@@ -40,7 +40,11 @@ class CBTTaskPlaySyncedAnimation extends IBehTreeTask
 		owner.SetCanPlayHitAnim( false );
 		
 		
-		owner.SetImmortalityMode( AIM_Invulnerable, AIC_Combat );
+		
+		if( !owner.WillBeUnconscious() && !owner.HasAbility( 'mon_vampiress_base' ) )
+		{
+			owner.SetImmortalityMode( AIM_Invulnerable, AIC_Combat );
+		}
 		return BTNS_Active;
 	}
 	
@@ -72,13 +76,18 @@ class CBTTaskPlaySyncedAnimation extends IBehTreeTask
 		
 		if ( completeSuccess && finisherSyncAnim )
 		{
-			GetActor().DropItemFromSlot( 'r_weapon' );
-			GetActor().DropItemFromSlot( 'l_weapon' );
-			GetActor().BreakAttachment();
-			GetNPC().DisableDeathAndAgony();
-			owner.SetImmortalityMode( AIM_None, AIC_Combat );
-			owner.Kill(false, GetWitcherPlayer() );
-			owner.RaiseEvent('FinisherDeath');
+			if( !owner.WillBeUnconscious() )
+			{
+				owner.DropItemFromSlot( 'r_weapon' );
+				owner.DropItemFromSlot( 'l_weapon' );
+				owner.BreakAttachment();
+				((CNewNPC)owner).DisableDeathAndAgony();
+				owner.SetImmortalityMode( AIM_None, AIC_Combat );
+				owner.Kill( 'Finisher', false, GetWitcherPlayer() );
+				owner.RaiseEvent('FinisherDeath');
+				
+				thePlayer.ReduceAllOilsAmmo( thePlayer.inv.GetCurrentlyHeldSword() );
+			}
 		}
 		
 		if( syncInstance && sequenceIndex > -1 )
@@ -162,8 +171,15 @@ class CBTTaskPlaySyncedAnimation extends IBehTreeTask
 		}
 		else if ( gameEventName == 'FinisherKill' && GetActor().IsAlive() )
 		{
-			thePlayer.SpawnFinisherBlood();
-			GetActor().SetHealth(0.1f);
+			if ( !GetActor().HasAbility( 'EvadeFinisher' ) )
+			{
+				thePlayer.SpawnFinisherBlood();
+				GetActor().SetHealth(0.1f);
+			}
+			else
+			{
+				GetActor().EnableCharacterCollisions( true );
+			}
 		}
 		
 		return false;

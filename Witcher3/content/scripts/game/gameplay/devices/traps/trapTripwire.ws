@@ -29,12 +29,15 @@ class W3TrapTripwire extends W3Trap
 		var l_actor	: CActor;
 		l_actor = (CActor) activator.GetEntity();
 		
-		if( l_actor && ShouldExcludeActor( l_actor ) ||  maxUseCount == 0  )
+		if( l_actor && ShouldExcludeActor( l_actor ) ||  maxUseCount == 0 )
 		{
 			return true;
 		}	
 		
-		if (m_isArmed) Activate(activator.GetEntity());
+		if ( m_isArmed && l_actor )
+		{
+			Activate( l_actor );
+		}
 	}
 	
 	

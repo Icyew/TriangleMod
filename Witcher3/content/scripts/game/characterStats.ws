@@ -446,60 +446,13 @@ import class CCharacterStats
 	
 	import final function GetAllContainedAbilities( out abilities : array< name > );
 	
-	public function AddAbilityMultiple(abilityName : name, count : int)
-	{
-		while(count > 0)
-		{
-			count -= 1;
-			AddAbility(abilityName, true);
-		}
-	}
+	import final function AddAbilityMultiple(abilityName : name, count : int);
 	
-	public function RemoveAbilityMultiple(abilityName : name, count : int)
-	{
-		while(count > 0)
-		{
-			count -= 1;
-			RemoveAbility(abilityName);
-		}
-	}
+	import final function RemoveAbilityMultiple(abilityName : name, count : int);
 	
-	public function RemoveAbilityAll(abilityName : name)
-	{
-		while ( HasAbility(abilityName) )
-		{
-			RemoveAbility(abilityName);
-		}
-	}
+	import final function RemoveAbilityAll(abilityName : name);
 	
-	public function GetAbilityCount(abilityName : name) : int
-	{
-		var i, cnt : int;
-		var all : array<name>;
-	
-		GetAbilities(all, true);
-		cnt = 0;
-		for(i=0; i<all.Size(); i+=1)
-			if(all[i] == abilityName)
-				cnt += 1;
-				
-		return cnt;
-	}
+	import final function GetAbilityCount(abilityName : name) : int;
 
-	public function GetAbilitiesWithTag(tag : name) : array<name>
-	{
-		var abs,ret : array<name>;
-		var i : int;
-		var dm : CDefinitionsManagerAccessor;
-		
-		dm = theGame.GetDefinitionsManager();
-		GetAbilities(abs, true);
-		for(i=0; i<abs.Size(); i+=1)		
-		{
-			if(dm.AbilityHasTag(abs[i], tag))
-				ret.PushBack(abs[i]);			
-		}
-		
-		return ret;
-	}
+	import final function GetAbilitiesWithTag(tag : name, out abilitiesList : array<name> );
 }

@@ -87,13 +87,64 @@ class W3WhiteFrost extends W3Petard
 		waveProjectile.SphereOverlapTest( totalTime * shaderSpeed, collisionMask );
 		
 		
-		thePlayer.GetVisualDebug().AddSphere(EffectTypeToName(RandRange(EnumGetMax('EEffectType'))), totalTime * shaderSpeed, GetWorldPosition(), true, Color(0,0,255), 0.15);
+		thePlayer.GetVisualDebug().AddSphere(EffectTypeToName(RandRange((int)EET_EffectTypesSize)), totalTime * shaderSpeed, GetWorldPosition(), true, Color(0,0,255), 0.15);
 		
 		
 		if(totalTime >= impactParams.surfaceFX.fxFadeInTime)
 		{
 			RemoveTimer('WaveProjectile');			
 			waveProjectile.Destroy();
+		}		
+	}
+	
+	protected function ProcessMechanicalEffect(targets : array<CGameplayEntity>, isImpact : bool, optional dt : float)
+	{
+		var spikeEnt : CEntity;
+		var entityTemplate : CEntityTemplate;
+		var rot : EulerAngles;
+		var pos, basePos : Vector;
+		var i : int;
+		var angle, radius : float;
+		
+		super.ProcessMechanicalEffect( targets, isImpact, dt );
+		
+		if( isImpact && impactNormal.Z >= 0.8f )
+		{
+			
+			entityTemplate = (CEntityTemplate) LoadResource( 'ice_spikes_large' );	
+			if ( entityTemplate )
+			{
+				pos = GetWorldPosition();
+				pos = TraceFloor( pos );
+				rot.Pitch = 0.f;
+				rot.Roll = 0.f;
+				rot.Yaw = 0.f;
+				
+				spikeEnt = theGame.CreateEntity( entityTemplate, pos, rot );
+				spikeEnt.DestroyAfter( 40.f );
+			}
+			
+			
+			entityTemplate = (CEntityTemplate) LoadResource( 'ice_spikes' );
+			basePos = GetWorldPosition();
+			for( i=0; i<3; i+=1 )
+			{
+				
+				radius = RandF() + 3.0;
+				
+				
+				angle = i * 2 *( Pi() / 3 ) + RandRangeF( Pi()/18, -Pi()/18 );
+				
+				pos = basePos + Vector( radius * CosF( angle ), radius * SinF( angle ), 0 );
+				pos = TraceFloor( pos );
+				
+				rot.Pitch = 0.f;
+				rot.Roll = 0.f;
+				rot.Yaw = 0.f;
+				
+				spikeEnt = theGame.CreateEntity( entityTemplate, pos, rot );
+				spikeEnt.DestroyAfter( 40.f );
+			}			
 		}
 	}
 	

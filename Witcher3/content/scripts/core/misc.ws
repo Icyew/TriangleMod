@@ -111,6 +111,7 @@ function LogInput(str : string)									{LogChannel('Input', str);}
 function LogItems(str : string)									{LogChannel('Items', str);}
 function LogLocalization(str : string)							{LogChannel('Localization', str);}
 function LogLockable(str : string)								{LogChannel('Lockable', str);}
+function LogMutation( str : string )							{ LogChannel( 'Mutations', str ); }
 function LogOils(str : string)									{LogChannel('Oils', str);}
 function LogPerks(str : string)									{LogChannel('Perks', str);}
 function LogPotions(str : string)								{LogChannel('Potions', str);}
@@ -133,6 +134,7 @@ function LogUnitAtt(str : string)								{}
 function LogItemCollision(str : string)							{LogChannel('ItemCollision', str);}
 function LogSpecialHeavy(str : string)							{LogChannel('SpecialAttackHeavy', str);}
 function LogBoat(str : string)									{LogChannel('Boat', str);}
+function LogCheats( str : string )								{LogChannel( 'Cheats', str );}
 function LogBoatFatal( str : string )
 {
 	LogBoat( "" );

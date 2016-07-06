@@ -221,9 +221,6 @@ import class CMovingPhysicalAgentComponent extends CMovingAgentComponent
 	import final function SetSwimming( flag : bool );
 	
 	
-	import final function SetWaterLevel( value : float );
-	
-	
 	import final function GetWaterLevel() : float;
 	
 	

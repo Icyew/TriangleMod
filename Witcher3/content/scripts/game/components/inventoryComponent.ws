@@ -31,6 +31,16 @@ struct SItemExt
 		default quantity = 1;
 };
 
+struct SCardSourceData
+{
+	var cardName 	: name;
+	var source 		: string;
+	var originArea	: string;
+	var originQuest	: string;
+	var details		: string;
+	var coords		: string;
+};
+
 
 import struct SItemChangedData
 {
@@ -72,7 +82,11 @@ import class CInventoryComponent extends CComponent
 
 	public function GetFundsMax() : float
 	{
-		if ( EInventoryFunds_Avg == fundsType )
+		if ( EInventoryFunds_Broke == fundsType )
+		{
+			return 0;
+		}
+		else if ( EInventoryFunds_Avg == fundsType )
 		{
 			return 5000;
 		}
@@ -84,12 +98,24 @@ import class CInventoryComponent extends CComponent
 		{
 			return 7500;
 		}
+		else if ( EInventoryFunds_RichQuickStart == fundsType )
+		{
+			return 15000;
+		}
 		return -1;
 	}
 
 	public function SetupFunds()
 	{
-		if ( EInventoryFunds_Avg == fundsType )
+		if ( EInventoryFunds_Broke == fundsType )
+		{
+			AddMoney( 0 );
+		}
+		else if ( EInventoryFunds_Poor == fundsType )
+		{
+			AddMoney( (int)( 200 * GetFundsModifier() ) );
+		}
+		else if ( EInventoryFunds_Avg == fundsType )
 		{
 			AddMoney( (int)( 500 * GetFundsModifier() ) );
 		}
@@ -97,9 +123,9 @@ import class CInventoryComponent extends CComponent
 		{
 			AddMoney( (int)( 1000 * GetFundsModifier() ) );
 		}
-		else if ( EInventoryFunds_Poor == fundsType )
+		else if ( EInventoryFunds_RichQuickStart == fundsType )
 		{
-			AddMoney( (int)( 200 * GetFundsModifier() ) );
+			AddMoney( (int)( 5000 * GetFundsModifier() ) );
 		}
 	}
 
@@ -118,6 +144,10 @@ import class CInventoryComponent extends CComponent
 			else if ( EInventoryFunds_Rich == fundsType )
 			{
 				AddMoney( (int)( 1000 * GetFundsModifier() ) );
+			}
+			else if ( EInventoryFunds_RichQuickStart == fundsType )
+			{
+				AddMoney( 1000 + (int)( 2500 * GetFundsModifier() ) );
 			}
 		}
 	}
@@ -158,7 +188,7 @@ import class CInventoryComponent extends CComponent
 		if ( amount > 0 )
 		{
 			RemoveItemByName( 'Crowns', amount );
-
+			
 			if ( thePlayer == GetEntity() )
 			{
 				theTelemetry.LogWithValue( TE_HERO_CASH_CHANGED, -amount );
@@ -393,16 +423,16 @@ import class CInventoryComponent extends CComponent
 	}
 	
 	
-	import final function GetItemQuantityByName( itemName : name, optional useAssociatedInventory : bool  ) : int;
+	import final function GetItemQuantityByName( itemName : name, optional useAssociatedInventory : bool , optional ignoreTags : array< name > ) : int;
 	
 	
-	import final function GetItemQuantityByCategory( itemCategory : name, optional useAssociatedInventory : bool  ) : int;
+	import final function GetItemQuantityByCategory( itemCategory : name, optional useAssociatedInventory : bool , optional ignoreTags : array< name > ) : int;
 
 	
-	import final function GetItemQuantityByTag( itemTag : name, optional useAssociatedInventory : bool  ) : int;
+	import final function GetItemQuantityByTag( itemTag : name, optional useAssociatedInventory : bool , optional ignoreTags : array< name > ) : int;
 
 	
-	import final function GetAllItemsQuantity( optional useAssociatedInventory : bool  ) : int;
+	import final function GetAllItemsQuantity( optional useAssociatedInventory : bool , optional ignoreTags : array< name > ) : int;
 
 	
 	public function IsEmpty(optional bSkipNoDropNoShow : bool) : bool
@@ -555,6 +585,27 @@ import class CInventoryComponent extends CComponent
 
 	
 	import final function RemoveItemTag( itemId : SItemUniqueId, tag : name ) : bool;
+	
+	
+	public final function ManageItemsTag( items : array<SItemUniqueId>, tag : name, add : bool )
+	{
+		var i		: int;
+		
+		if( add )
+		{
+			for( i = 0 ; i < items.Size() ; i += 1 )
+			{
+				AddItemTag( items[ i ], tag );
+			}
+		}
+		else
+		{
+			for( i = 0 ; i < items.Size() ; i += 1 )
+			{
+				RemoveItemTag( items[ i ], tag );
+			}
+		}
+	}
 
 	
 	import final function GetItemByItemEntity( itemEntity : CItemEntity ) : SItemUniqueId;  
@@ -642,6 +693,7 @@ import class CInventoryComponent extends CComponent
 		var itemName : name;
 		var i : int;
 		var uiData : SInventoryItemUIData;
+		var isQuestItem : bool;
 		
 		
 		if(quantity == 0)
@@ -683,9 +735,13 @@ import class CInventoryComponent extends CComponent
 		
 		if(otherInventory == thePlayer.inv)
 		{
+			isQuestItem = this.IsItemQuest( itemId );
 			theTelemetry.LogWithLabelAndValue(TE_INV_ITEM_PICKED, itemName, quantity);
-			if ( !theGame.AreSavesLocked() && ( this.IsItemQuest( itemId ) || this.GetItemQuality( itemId ) >= 4 ) )
+			
+			if ( !theGame.AreSavesLocked() && ( isQuestItem || this.GetItemQuality( itemId ) >= 4 ) )
+			{
 				theGame.RequestAutoSave( "item gained", false );
+			}
 		}
 		
 		if (refreshNewFlag)
@@ -737,10 +793,18 @@ import class CInventoryComponent extends CComponent
 	
 	public function HasItemByTag(tag : name) : bool
 	{
-		var temp : array<SItemUniqueId>;
+		var quantity : int;
 		
-		temp = GetItemsByTag(tag);
-		return temp.Size() > 0;
+		quantity = GetItemQuantityByTag( tag );
+		return quantity > 0;
+	}
+
+	public function HasItemByCategory(category : name) : bool
+	{
+		var quantity : int;
+		
+		quantity = GetItemQuantityByCategory( category );
+		return quantity > 0;
 	}
 	
 	
@@ -1452,13 +1516,13 @@ import class CInventoryComponent extends CComponent
 		return false;
 	}
 
-	function ReadBook( item : SItemUniqueId ) 
+	function ReadBook( item : SItemUniqueId, optional noNotification : bool ) 
 	{
 		
 		var bookName : name;
 		var abilitiesArray : array<name>;
 		var i : int;
-		var commonMapManager : CCommonMapManager = theGame.GetCommonMapManager();
+		var commonMapManager : CCommonMapManager = theGame.GetCommonMapManager();		
 		
 		bookName = GetItemName( item );
 		
@@ -1471,7 +1535,7 @@ import class CInventoryComponent extends CComponent
 				commonMapManager.SetEntityMapPinDiscoveredScript(true, abilitiesArray[i], true );
 			}
 		}
-		ReadBookByNameId( bookName, item,  false );
+		ReadBookByNameId( bookName, item, false, noNotification );
 		
 		
 		
@@ -1479,13 +1543,31 @@ import class CInventoryComponent extends CComponent
 		if(ItemHasTag(item, 'PerkBook'))
 		{
 			
-		}
-	
+		}	
 	}
 	
 	public function GetBookText(item : SItemUniqueId) : string 
 	{
-		return ReplaceTagsToIcons(GetLocStringByKeyExt(GetItemLocalizedNameByUniqueID(item)+"_text")); 
+		if ( GetItemName( item ) != 'Gwent Almanac' )
+		{
+			return ReplaceTagsToIcons(GetLocStringByKeyExt(GetItemLocalizedNameByUniqueID(item)+"_text")); 
+		}
+		else
+		{
+			return GetGwentAlmanacContents();
+		}
+	}
+	
+	public function GetBookTextByName( bookName : name ) : string
+	{
+		if( bookName != 'Gwent Almanac' ) 
+		{
+			return ReplaceTagsToIcons( GetLocStringByKeyExt( GetItemLocalizedNameByName( bookName ) + "_text" ) );
+		}
+		else
+		{
+			return GetGwentAlmanacContents();
+		}
 	}
 	
 	function ReadSchematicsAndRecipes( item : SItemUniqueId )
@@ -1495,7 +1577,7 @@ import class CInventoryComponent extends CComponent
 		var player : W3PlayerWitcher;
 		
 		ReadBook( item );
-
+		
 		player = GetWitcherPlayer();
 		if ( !player )
 		{
@@ -1521,8 +1603,9 @@ import class CInventoryComponent extends CComponent
 		}
 	}
 	
-	function ReadBookByName( bookName : name , unread : bool  ) 
+	function ReadBookByName( bookName : name , unread : bool, optional noNotification : bool ) 
 	{
+		var defMgr		 : CDefinitionsManagerAccessor;
 		var bookFactName : string;
 		
 		if( IsBookReadByName( bookName ) != unread )
@@ -1542,8 +1625,16 @@ import class CInventoryComponent extends CComponent
 			FactsAdd( bookFactName, 1 );
 			
 			
-			if(!IsAlchemyRecipe(bookName) && !IsCraftingSchematic(bookName))
+			defMgr = theGame.GetDefinitionsManager();
+			if(!IsAlchemyRecipe(bookName) && !IsCraftingSchematic(bookName) && !defMgr.ItemHasTag( bookName, 'Painting' ) )
+			{
 				theGame.GetGamerProfile().IncStat(ES_ReadBooks);
+				
+				if( !noNotification )
+				{
+					theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "notification_book_moved" ), 0, false );
+				}
+			}
 			
 			
 			if ( AddBestiaryFromBook(bookName) )
@@ -1554,7 +1645,7 @@ import class CInventoryComponent extends CComponent
 		}
 	}
 	
-	function ReadBookByNameId( bookName : name , itemId:SItemUniqueId,  unread : bool  ) 
+	function ReadBookByNameId( bookName : name, itemId:SItemUniqueId, unread : bool, optional noNotification : bool ) 
 	{
 		var bookFactName : string;
 		
@@ -1575,8 +1666,16 @@ import class CInventoryComponent extends CComponent
 			FactsAdd( bookFactName, 1 );
 			
 			
-			if(!IsAlchemyRecipe(bookName) && !IsCraftingSchematic(bookName))
+			if( !IsAlchemyRecipe( bookName ) && !IsCraftingSchematic( bookName ) )
+			{
 				theGame.GetGamerProfile().IncStat(ES_ReadBooks);
+				
+				if( !noNotification )
+				{					
+					
+					GetWitcherPlayer().AddReadBook( bookName );
+				}
+			}
 			
 			
 			if ( AddBestiaryFromBook(bookName) )
@@ -1589,7 +1688,7 @@ import class CInventoryComponent extends CComponent
 	
 	private function AddBestiaryFromBook( bookName : name ) : bool
 	{
-		var i, j, r : int;
+		var i, j, r, len : int;
 		var manager : CWitcherJournalManager;
 		var resource : array<CJournalResource>;
 		var entryBase : CJournalBase;
@@ -1724,12 +1823,67 @@ import class CInventoryComponent extends CComponent
 				resource.PushBack( (CJournalResource)LoadResource( "BestiaryKatakan" ) ); 
 				GetWitcherPlayer().AddAlchemyRecipe('Recipe for Mutagen 1');
 				break;
+			
+			case 'bestiary_sharley_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiarySharley" ) ); 
+				break;
+			case 'bestiary_barghest_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryBarghest" ) ); 
+				break;
+			case 'bestiary_garkain_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryGarkain" ) ); 
+				break;
+			case 'bestiary_alp_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryAlp" ) ); 
+				break;
+			case 'bestiary_bruxa_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryBruxa" ) ); 
+				break;
+			case 'bestiary_spriggan_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiarySpriggan" ) ); 
+				break;
+			case 'bestiary_fleder_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryFleder" ) ); 
+				break;
+			case 'bestiary_wight_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryWicht" ) ); 
+				break;
+			case 'bestiary_dracolizard_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryDracolizard" ) ); 
+				break;
+			case 'bestiary_panther_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryPanther" ) ); 
+				break;
+			case 'bestiary_kikimore_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryKikimoraWarrior" ) ); 
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryKikimoraWorker" ) ); 
+				break;
+			case 'bestiary_scolopendromorph_book':
+			case 'mq7023_fluff_book_scolopendromorphs':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryScolopendromorph" ) ); 
+				break;
+			case 'bestiary_archespore_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryArchespore" ) ); 
+				break;
+			case 'bestiary_protofleder_book':
+				resource.PushBack( (CJournalResource)LoadResource( "BestiaryProtofleder" ) ); 
+				break;
 			default: 
 				return false;
 		}
 		
 		
-		for (r=0; r < resource.Size(); r += 1 )
+		
+		
+		len = resource.Size();
+		if( len > 0)
+		{
+			
+			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "panel_hud_journal_entry_bestiary_new" ), 0, true );
+			theSound.SoundEvent("gui_ingame_new_journal");
+		}
+		
+		for (r=0; r < len; r += 1 )
 		{
 			if ( !resource[ r ] )
 			{
@@ -1741,10 +1895,6 @@ import class CInventoryComponent extends CComponent
 			{
 				manager.ActivateEntry( entryBase, JS_Active );
 				manager.SetEntryHasAdvancedInfo( entryBase, true );
-				
-				
-				theGame.GetGuiManager().ShowNotification(GetLocStringByKeyExt("panel_hud_journal_entry_bestiary_new"));
-				theSound.SoundEvent("gui_ingame_new_journal");
 				
 				
 				manager.GetAllChildren( entryBase, childGroups );
@@ -1832,6 +1982,46 @@ import class CInventoryComponent extends CComponent
 		return w;
 	}
 	
+	public function GetCurrentlyHeldSword() : SItemUniqueId
+	{
+		var i	: int;
+		var w	: array<SItemUniqueId>;
+		
+		w = GetHeldWeapons();
+		
+		for( i = 0 ; i < w.Size() ; i+=1 )
+		{
+			if( IsItemSteelSwordUsableByPlayer( w[i] ) || IsItemSilverSwordUsableByPlayer( w[i] ) )
+			{
+				return w[i];
+			}
+		}
+		
+		return GetInvalidUniqueId();		
+	}
+	
+	public function GetCurrentlyHeldSwordEntity( out ent : CItemEntity ) : bool
+	{
+		var id		: SItemUniqueId;
+		
+		id = GetCurrentlyHeldSword();
+		
+		if( IsIdValid( id ) )
+		{
+			ent = GetItemEntityUnsafe( id );
+			
+			if( ent )
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	public function GetHeldWeaponsWithCategory( category : name, out items : array<SItemUniqueId> )
 	{
 		var i : int;
@@ -1883,7 +2073,7 @@ import class CInventoryComponent extends CComponent
 		
 		for ( i = 0; i < parts.Size(); i += 1 )
 		{
-			if ( ECL_Grand_Master == level )
+			if ( ECL_Grand_Master == level || ECL_Arch_Master == level )
 			{
 				currentAdded = AddAnItem( parts[i].itemName, parts[i].quantity );
 			}
@@ -1965,7 +2155,7 @@ import class CInventoryComponent extends CComponent
 		var owner : CActor;
 		var bag : W3ActorRemains;
 		var template : CEntityTemplate;
-		var tabbags : array <name>;
+		var bagtags : array <name>;
 		var bagPosition : Vector;
 		var tracedPosition, tracedNormal : Vector;
 				
@@ -1987,7 +2177,7 @@ import class CInventoryComponent extends CComponent
 		if(!bag)
 		{
 			template = (CEntityTemplate)LoadResource("lootbag");
-			tabbags.PushBack('lootbag');
+			bagtags.PushBack('lootbag');
 			
 			
 			bagPosition = owner.GetWorldPosition();
@@ -1995,7 +2185,7 @@ import class CInventoryComponent extends CComponent
 			{
 				bagPosition = tracedPosition;
 			}
-			bag = (W3ActorRemains)theGame.CreateEntity(template, bagPosition, owner.GetWorldRotation(), true, false, false, PM_Persist,tabbags);
+			bag = (W3ActorRemains)theGame.CreateEntity(template, bagPosition, owner.GetWorldRotation(), true, false, false, PM_Persist,bagtags);
 		}
 	
 		
@@ -2119,103 +2309,158 @@ import class CInventoryComponent extends CComponent
 		return retVal;
 	}
 	
+	
+	
+	
+	
 		
 	public function CanItemHaveOil(id : SItemUniqueId) : bool
 	{
 		return IsItemSteelSwordUsableByPlayer(id) || IsItemSilverSwordUsableByPlayer(id);
 	}
 	
-	public function ItemHasOilApplied(id : SItemUniqueId) : bool
+	public final function RemoveAllOilsFromItem( id : SItemUniqueId )
 	{
-		var dm : CDefinitionsManagerAccessor;
 		var i : int;
-		var abs : array<name>;
+		var oils : array< W3Effect_Oil >;
+		var actor : CActor;
 		
-		GetItemAbilities(id, abs);
-		dm = theGame.GetDefinitionsManager();
-		
-		for(i=0; i<abs.Size(); i+=1)
+		actor = ( CActor ) GetEntity();
+		oils = GetOilsAppliedOnItem( id );
+		for( i = oils.Size() - 1; i >= 0; i -= 1 )
 		{
-			if(dm.AbilityHasTag(abs[i], theGame.params.OIL_ABILITY_TAG))
-				return true;
+			actor.RemoveEffect( oils[ i ] );
 		}
+	}
+	
+	public final function GetActiveOilsAppliedOnItemCount( id : SItemUniqueId ) : int
+	{
+		var oils : array< W3Effect_Oil >;
+		var i, count : int;
+		
+		count = 0;
+		oils = GetOilsAppliedOnItem( id );
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			if( oils[ i ].GetAmmoCurrentCount() > 0 )
+			{
+				count += 1;
+			}
+		}
+		return count;
+	}
+	
+	public final function RemoveOldestOilFromItem( id : SItemUniqueId )
+	{
+		var buffToRemove : W3Effect_Oil;
+		var actor : CActor;
+		
+		actor = ( CActor ) GetEntity();
+		if(! actor )
+			return;
 			
+		buffToRemove = GetOldestOilAppliedOnItem(id, false);
+		
+		if(buffToRemove)
+		{
+			actor.RemoveEffect( buffToRemove );
+		}
+	}
+	
+	public final function GetOilsAppliedOnItem( id : SItemUniqueId ) : array< W3Effect_Oil >
+	{
+		var i : int;
+		var oils : array< CBaseGameplayEffect >;
+		var buff : W3Effect_Oil;
+		var ret : array < W3Effect_Oil >;
+		var actor : CActor;
+		
+		actor = ( CActor ) GetEntity();
+		if(! actor )
+			return ret;
+			
+		oils = actor.GetBuffs( EET_Oil );
+		for( i = oils.Size() - 1; i >= 0; i -= 1 )
+		{
+			buff = ( W3Effect_Oil ) oils[ i ];
+			if(buff && buff.GetSwordItemId() == id )
+			{
+				ret.PushBack( buff );
+			}
+		}
+		
+		return ret;
+	}
+	
+	public final function GetNewestOilAppliedOnItem( id : SItemUniqueId, onlyShowable : bool ) : W3Effect_Oil
+	{
+		return GetOilAppliedOnItemInternal( id, onlyShowable, true );
+	}
+	
+	public final function GetOldestOilAppliedOnItem( id : SItemUniqueId, onlyShowable : bool ) : W3Effect_Oil
+	{
+		return GetOilAppliedOnItemInternal( id, onlyShowable, false );
+	}
+	
+	private final function GetOilAppliedOnItemInternal( id : SItemUniqueId, onlyShowable : bool, newest : bool ) : W3Effect_Oil
+	{
+		var oils : array< W3Effect_Oil >;
+		var i, lastIndex : int;
+		
+		oils = GetOilsAppliedOnItem( id );
+		lastIndex = -1;
+		
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			if( onlyShowable && !oils[i].GetShowOnHUD() )
+			{
+				continue;
+			}
+			
+			if( lastIndex == -1 )
+			{
+				lastIndex = i;
+			}
+			else if( newest && oils[i].GetQueueTimer() < oils[lastIndex].GetQueueTimer() )
+			{
+				lastIndex = i;
+			}
+			else if( !newest && oils[i].GetQueueTimer() > oils[lastIndex].GetQueueTimer() )
+			{
+				lastIndex = i;
+			}
+		}
+		
+		if( lastIndex == -1 )
+		{
+			return NULL;
+		}
+		
+		return oils[lastIndex];
+	}
+	
+	public final function ItemHasAnyActiveOilApplied( id : SItemUniqueId ) : bool
+	{
+		return GetActiveOilsAppliedOnItemCount( id );
+	}
+	
+	public final function ItemHasActiveOilApplied( id : SItemUniqueId, monsterCategory : EMonsterCategory ) : bool
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		
+		oils = GetOilsAppliedOnItem( id );
+		for( i=0; i<oils.Size(); i+=1 )
+		{
+			if( oils[ i ].GetMonsterCategory() == monsterCategory && oils[ i ].GetAmmoCurrentCount() > 0 )
+			{
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
-	public function GetSwordOil(sword : SItemUniqueId):name
-	{
-		var i, tempI     : int;		
-		var tempAF 	     : array<float>;
-		var dm           : CDefinitionsManagerAccessor;
-		var oilAbility   : name;
-		var isSteelSword : bool;
-		var itemCategory : name;
-		var swordAbilities, oilAbs, items, items2 : array<name>;
-		
-		if (!IsIdValid(sword))
-		{
-			return '';
-		}
-		itemCategory = GetItemCategory(sword);
-		if (itemCategory == 'steelsword')
-		{
-			isSteelSword = true;
-		}
-		else if (itemCategory == 'silversword')
-		{
-			isSteelSword = false;
-		}
-		else
-		{
-			
-			return '';
-		}
-		
-		GetItemAbilities(sword, swordAbilities);
-		dm = theGame.GetDefinitionsManager();
-		oilAbility = '';
-		for(i=0; i<swordAbilities.Size(); i+=1)
-		{
-			if(dm.AbilityHasTag(swordAbilities[i], theGame.params.OIL_ABILITY_TAG))
-			{
-				oilAbility = swordAbilities[i];
-				break;
-			}
-		}
-		
-		if(!IsNameValid(oilAbility))
-			return ''; 
-			
-		
-		if(isSteelSword)
-			items = dm.GetItemsWithTag('SteelOil');
-		else
-			items = dm.GetItemsWithTag('SilverOil');
-			
-		
-		if( ( W3ReplacerCiri ) thePlayer )
-		{
-			items2 = dm.GetItemsWithTag( 'SilverOil' );
-			ArrayOfNamesAppend( items, items2 );
-		}
-			
-		
-		for(i=0; i<items.Size(); i+=1)
-		{
-			dm.GetItemAbilitiesWithWeights(items[i], GetEntity() == thePlayer, oilAbs, tempAF, tempI, tempI);
-			if(oilAbs.Contains(oilAbility))
-			{
-				return items[i];
-			}
-		}
-		
-		LogAssert(false, "W3PlayerWitcher.GetOilAppliedOnSword: sword has some oil but this oil is not defined in XMLs!");
-		return '';
-	}
-	
-	
-		
 	
 	
 	
@@ -2311,7 +2556,7 @@ import class CInventoryComponent extends CComponent
 		var attributeString : string;
 		
 		
-		if(!IsItemPotion(potionId))
+		if(!( IsItemPotion(potionId) || IsItemFood(potionId) ) )
 			return;
 			
 		
@@ -2634,22 +2879,31 @@ import class CInventoryComponent extends CComponent
 		var oilAbilities, oilAttributes : array<name>;
 		var weights : array<float>;
 		var i, j : int;
+		var tmpI, tmpJ : int;
 		
 		var idx			  : int;
 		var oilStatsCount : int;
 		var oilName  	  : name;
 		var oilStats 	  : array<SAttributeTooltip>;
 		var oilStatFirst  : SAttributeTooltip;
+		var oils		  : array< W3Effect_Oil >;
 		
 		GetItemBaseAttributes(itemId, attributes);
 		
 		
-		oilName = GetSwordOil(itemId);
-		if (oilName != '')
+		oils = GetOilsAppliedOnItem( itemId );
+		dm = theGame.GetDefinitionsManager();
+		for( i=0; i<oils.Size(); i+=1 )
 		{
-			dm = theGame.GetDefinitionsManager();
-			dm.GetItemAbilitiesWithWeights(oilName, GetEntity() == thePlayer, oilAbilities, weights, i, j);
+			oilName = oils[ i ].GetOilItemName();
+			
+			oilAbilities.Clear();
+			weights.Clear();
+			dm.GetItemAbilitiesWithWeights(oilName, GetEntity() == thePlayer, oilAbilities, weights, tmpI, tmpJ);
+			
+			oilAttributes.Clear();
 			oilAttributes = dm.GetAbilitiesAttributes(oilAbilities);
+			
 			oilStatsCount = oilAttributes.Size();
 			for (idx = 0; idx < oilStatsCount; idx+=1)
 			{
@@ -2897,20 +3151,6 @@ import class CInventoryComponent extends CComponent
 			}
 		}
 		return false;
-	}
-	public function GetOilNameOnSword(steel:bool):name
-	{
-		var player : W3PlayerWitcher;
-			
-		player = ((W3PlayerWitcher)GetEntity());
-		if(player)
-		{
-			return player.GetOilAppliedOnSword(steel);
-		}
-		else
-		{
-			return '';
-		}
 	}
 	
 	
@@ -3222,9 +3462,35 @@ import class CInventoryComponent extends CComponent
 	
 	
 	
-	public final function SingletonItemRefillAmmo(id : SItemUniqueId)
+	public final function SingletonItemRefillAmmo( id : SItemUniqueId, optional alchemyTableUsed : bool )
 	{
-		SetItemModifierInt(id, 'ammo_current', SingletonItemGetMaxAmmo(id));
+		var l_bed		: W3WitcherBed;
+		var refilledByBed : bool;
+		
+		refilledByBed = false;
+		
+		
+		if( FactsQuerySum( "PlayerInsideOuterWitcherHouse" ) >= 1 && FactsQuerySum( "AlchemyTableExists" ) >= 1 && !IsItemMutagenPotion( id ) )
+		{
+			l_bed = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );
+			
+			if( l_bed.GetWasUsed() || alchemyTableUsed )
+			{
+				SetItemModifierInt( id, 'ammo_current', SingletonItemGetMaxAmmo(id) + theGame.params.QUANTITY_INCREASED_BY_ALCHEMY_TABLE ) ;
+				refilledByBed = true;
+				if( !l_bed.GetWereItemsRefilled() )
+				{
+					l_bed.SetWereItemsRefilled( true );
+				}
+			}			
+		}
+		
+		
+		if( !refilledByBed && SingletonItemGetAmmo( id ) < SingletonItemGetMaxAmmo( id ) )
+		{
+			SetItemModifierInt(id, 'ammo_current', SingletonItemGetMaxAmmo(id));
+		}
+		
 		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnAmmoChanged );
 	}
 	
@@ -3233,10 +3499,14 @@ import class CInventoryComponent extends CComponent
 		var amount : int;
 		
 		if(ItemHasTag(id, theGame.params.TAG_INFINITE_AMMO))
+		{
 			amount = -1;
-		else			
+		}
+		else
+		{
 			amount = Clamp(quantity, 0, SingletonItemGetMaxAmmo(id));
-				
+		}
+		
 		SetItemModifierInt(id, 'ammo_current', amount);
 		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnAmmoChanged );
 	}
@@ -3258,7 +3528,7 @@ import class CInventoryComponent extends CComponent
 		theGame.GetGlobalEventsManager().OnScriptedEvent( SEC_OnAmmoChanged );
 	}
 	
-	public function SingletonItemsRefillAmmo()
+	public function SingletonItemsRefillAmmo( optional alchemyTableUsed : bool ) : bool
 	{
 		var i : int;
 		var singletonItems : array<SItemUniqueId>;
@@ -3268,7 +3538,7 @@ import class CInventoryComponent extends CComponent
 		var itemLabel : string;
 	
 		witcher = GetWitcherPlayer();
-		if(GetEntity() == witcher && HasNotFilledSingletonItem())
+		if(GetEntity() == witcher && HasNotFilledSingletonItem( alchemyTableUsed ) )
 		{
 			alco = witcher.GetAlcoholForAlchemicalItemsRefill();
 		
@@ -3277,7 +3547,8 @@ import class CInventoryComponent extends CComponent
 				
 				theGame.GetGuiManager().ShowNotification(GetLocStringByKeyExt("message_common_alchemy_items_cannot_refill"));
 				theSound.SoundEvent("gui_global_denied");
-				return;
+				
+				return false;
 			}
 			else
 			{
@@ -3295,8 +3566,10 @@ import class CInventoryComponent extends CComponent
 		singletonItems = GetSingletonItems();
 		for(i=0; i<singletonItems.Size(); i+=1)
 		{			
-			SingletonItemRefillAmmo(singletonItems[i]);
+			SingletonItemRefillAmmo( singletonItems[i], alchemyTableUsed );
 		}
+		
+		return true;
 	}
 	
 	public function SingletonItemsRefillAmmoNoAlco(optional dontUpdateUI : bool)
@@ -3311,11 +3584,11 @@ import class CInventoryComponent extends CComponent
 		witcher = GetWitcherPlayer();
 		if(!dontUpdateUI && GetEntity() == witcher && HasNotFilledSingletonItem())
 		{
-				
-				arrStr.PushBack(GetItemName(alco));
-				itemLabel = GetLocStringByKeyExt(GetItemLocalizedNameByUniqueID(alco));
-				theGame.GetGuiManager().ShowNotification( itemLabel + " - " + GetLocStringByKeyExtWithParams("message_common_alchemy_items_refilled", , , arrStr));
-				theSound.SoundEvent("gui_alchemy_brew");
+			
+			arrStr.PushBack(GetItemName(alco));
+			itemLabel = GetLocStringByKeyExt(GetItemLocalizedNameByUniqueID(alco));
+			theGame.GetGuiManager().ShowNotification( itemLabel + " - " + GetLocStringByKeyExtWithParams("message_common_alchemy_items_refilled", , , arrStr));
+			theSound.SoundEvent("gui_alchemy_brew");
 		}
 		
 		singletonItems = GetSingletonItems();
@@ -3326,15 +3599,35 @@ import class CInventoryComponent extends CComponent
 	}	
 	
 	
-	private final function HasNotFilledSingletonItem() : bool
+	private final function HasNotFilledSingletonItem( optional alchemyTableUsed : bool ) : bool
 	{
 		var i : int;
 		var singletonItems : array<SItemUniqueId>;
+		var hasLab : bool;
+		var l_bed : W3WitcherBed;
+		
+		
+		hasLab = false;
+		if( FactsQuerySum( "PlayerInsideOuterWitcherHouse" ) >= 1 && FactsQuerySum( "AlchemyTableExists" ) >= 1 )
+		{
+			l_bed = (W3WitcherBed)theGame.GetEntityByTag( 'witcherBed' );			
+			if( l_bed.GetWasUsed() || alchemyTableUsed )
+			{
+				hasLab = true;
+			}
+		}
 		
 		singletonItems = GetSingletonItems();
 		for(i=0; i<singletonItems.Size(); i+=1)
 		{			
-			if(SingletonItemGetAmmo(singletonItems[i]) < SingletonItemGetMaxAmmo(singletonItems[i]))
+			if( hasLab && !IsItemMutagenPotion( singletonItems[i] ) )
+			{
+				if(SingletonItemGetAmmo(singletonItems[i]) <= SingletonItemGetMaxAmmo(singletonItems[i]))
+				{
+					return true;
+				}
+			}
+			else if(SingletonItemGetAmmo(singletonItems[i]) < SingletonItemGetMaxAmmo(singletonItems[i]))
 			{
 				return true;
 			}
@@ -3375,21 +3668,87 @@ import class CInventoryComponent extends CComponent
 	
 	public function SingletonItemGetMaxAmmo(itemID : SItemUniqueId) : int
 	{
-		var ammo : int;
+		var ammo, i : int;
+		var perk20Bonus, min, max : SAbilityAttributeValue;
+		var atts : array<name>;
+		var canUseSkill : bool;
 		
 		ammo = RoundMath(CalculateAttributeValue(GetItemAttributeValue(itemID, 'ammo')));
 		
-		if(GetEntity() == GetWitcherPlayer() && ammo > 0)
+		if( !ItemHasTag( itemID, 'NoAdditionalAmmo' ) )
 		{
-			if(IsItemBomb(itemID) && thePlayer.CanUseSkill(S_Alchemy_s08) )
-				ammo += thePlayer.GetSkillLevel(S_Alchemy_s08);
+			if(GetEntity() == GetWitcherPlayer() && ammo > 0)
+			{
+				if(IsItemBomb(itemID) && thePlayer.CanUseSkill(S_Alchemy_s08) )
+				{
+					ammo += thePlayer.GetSkillLevel(S_Alchemy_s08);
+				}
 				
-			
-			if(thePlayer.HasBuff(EET_Mutagen03) && (IsItemBomb(itemID) || (!IsItemMutagenPotion(itemID) && IsItemPotion(itemID))) )
-				ammo += 1;
+				if(thePlayer.HasBuff(EET_Mutagen03) && (IsItemBomb(itemID) || (!IsItemMutagenPotion(itemID) && IsItemPotion(itemID))) )
+				{
+					ammo += 1;
+				}
+
+				if( GetWitcherPlayer().IsSetBonusActive( EISB_RedWolf_2 ) && !IsItemMutagenPotion(itemID) )
+				{
+					theGame.GetDefinitionsManager().GetAbilityAttributeValue( GetSetBonusAbility( EISB_RedWolf_2 ), 'amount', min, max);
+					ammo += (int)min.valueAdditive;
+				}
+							
+				
+				if( IsItemBomb( itemID ) && thePlayer.CanUseSkill( S_Perk_20 ) &&  GetItemName( itemID ) != 'Snow Ball' )
+				{
+					GetItemAttributes( itemID, atts );
+					canUseSkill = thePlayer.CanUseSkill( S_Alchemy_s10 );
+					perk20Bonus = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_20, 'stack_multiplier', false, false );
+					
+					for( i=0 ; i<atts.Size() ; i+=1 )
+					{
+						if( canUseSkill || IsDamageTypeNameValid( atts[i] ) )
+						{
+							ammo = RoundMath( ammo * perk20Bonus.valueMultiplicative );
+							break;
+						}
+					}				
+				}
+			}
 		}
-	
+		
 		return ammo;
+	}
+	
+	public function ManageSingletonItemsBonus()
+	{
+		var l_items			: array<SItemUniqueId>;
+		var l_i				: int;
+		var l_haveBombOrPot	: bool;
+		
+		l_items = GetSingletonItems();
+
+		for( l_i = 0 ; l_i < l_items.Size() ; l_i += 1 )
+		{
+			if( IsItemPotion( l_items[ l_i ] ) || IsItemBomb( l_items[ l_i ] ) )
+			{
+				l_haveBombOrPot = true;
+				if( SingletonItemGetMaxAmmo( l_items[ l_i ] ) >= SingletonItemGetAmmo( l_items[ l_i ] ) )
+				{
+					if( SingletonItemsRefillAmmo( true ) )
+					{
+						theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_common_alchemy_table_buff_applied" ),, true );
+					}
+					
+					return;
+				}
+			}
+		}
+		
+		if( !l_haveBombOrPot )
+		{
+			theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_common_alchemy_table_buff_no_items" ),, true );
+			return;
+		}
+		
+		theGame.GetGuiManager().ShowNotification( GetLocStringByKeyExt( "message_common_alchemy_table_buff_already_on" ),, true );
 	}
 	
 	
@@ -3429,7 +3788,7 @@ import class CInventoryComponent extends CComponent
 	public final function IsItemDismantleKit(item : SItemUniqueId) : bool					{return ItemHasTag(item, 'DismantleKit');}
 	public final function IsItemHorseBag(item : SItemUniqueId) : bool						{return ItemHasTag(item, 'HorseBag');}	
 	public final function IsItemReadable(item : SItemUniqueId) : bool						{return ItemHasTag(item, 'ReadableItem');}
-	public final function IsItemAlchemyItem(item : SItemUniqueId) : bool					{return IsItemOil(item) || IsItemPotion(item) || IsItemBomb(item) || ItemHasTag(item, 'QuickSlot'); }	
+	public final function IsItemAlchemyItem(item : SItemUniqueId) : bool					{return IsItemOil(item) || IsItemPotion(item) || IsItemBomb(item);  }	
 	public final function IsItemSingletonItem(item : SItemUniqueId) : bool 					{return ItemHasTag(item, theGame.params.TAG_ITEM_SINGLETON);}
 	public final function IsItemQuest(item : SItemUniqueId) : bool							{return ItemHasTag(item, 'Quest');}
 	public final function IsItemFood(item : SItemUniqueId) : bool							{return ItemHasTag(item, 'Edibles') || ItemHasTag(item, 'Drinks');}
@@ -3437,15 +3796,47 @@ import class CInventoryComponent extends CComponent
 	public final function IsItemHorseItem(item: SItemUniqueId) : bool						{return ItemHasTag(item, 'Saddle') || ItemHasTag(item, 'HorseBag') || ItemHasTag(item, 'Trophy') || ItemHasTag(item, 'Blinders'); }
 	public final function IsItemSaddle(item: SItemUniqueId) : bool							{return ItemHasTag(item, 'Saddle');}
 	public final function IsItemBlinders(item: SItemUniqueId) : bool						{return ItemHasTag(item, 'Blinders');}
+	public final function IsItemDye( item : SItemUniqueId ) : bool							{ return ItemHasTag( item, 'mod_dye' ); }
+	public final function IsItemUsable( item : SItemUniqueId ) : bool 						{ return GetItemCategory( item ) == 'usable'; }
+	public final function IsItemJunk( item : SItemUniqueId ) : bool							{ return ItemHasTag( item,'junk' ) || GetItemCategory( item ) == 'junk' ; }
+	public final function IsItemAlchemyIngredient(item : SItemUniqueId) : bool				{ return ItemHasTag( item, 'AlchemyIngredient' ); }
+	public final function IsItemCraftingIngredient(item : SItemUniqueId) : bool				{ return ItemHasTag( item, 'CraftingIngredient' ); }
+	public final function IsItemArmorReapairKit(item : SItemUniqueId) : bool				{ return ItemHasTag( item, 'ArmorReapairKit' ); }
+	public final function IsItemWeaponReapairKit(item : SItemUniqueId) : bool				{ return ItemHasTag( item, 'WeaponReapairKit' ); }
+	public final function IsQuickSlotItem( item : SItemUniqueId ) : bool 					{ return ItemHasTag( item, 'QuickSlot' ); }
+	
+	public final function IsItemNew( item : SItemUniqueId ) : bool
+	{
+		var uiData : SInventoryItemUIData;
+		
+		uiData = GetInventoryItemUIData( item );
+		return uiData.isNew;
+	}
 	
 	public final function IsItemMutagenPotion(item : SItemUniqueId) : bool
 	{
 		return IsItemPotion(item) && ItemHasTag(item, 'Mutagen');
 	}
 	
+	public final function CanItemBeColored( item : SItemUniqueId) : bool
+	{
+		if ( RoundMath( CalculateAttributeValue( GetItemAttributeValue( item, 'quality' ) ) ) == 5 )
+		{
+			return true;
+		}
+		return false;	
+	}
+
 	public final function IsItemSetItem(item : SItemUniqueId) : bool
 	{
-		return ItemHasTag(item, theGame.params.ITEM_SET_TAG_BEAR) || ItemHasTag(item, theGame.params.ITEM_SET_TAG_GRYPHON) || ItemHasTag(item, theGame.params.ITEM_SET_TAG_LYNX) || ItemHasTag(item, theGame.params.ITEM_SET_TAG_WOLF);
+		return
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_BEAR) ||
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_GRYPHON) ||
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_LYNX) ||
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_WOLF) ||
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_RED_WOLF) ||
+			ItemHasTag( item, theGame.params.ITEM_SET_TAG_VAMPIRE ) ||
+			ItemHasTag(item, theGame.params.ITEM_SET_TAG_VIPER);
 	}
 	
 	public function GetArmorType(item : SItemUniqueId) : EArmorType
@@ -3532,7 +3923,7 @@ import class CInventoryComponent extends CComponent
 			{
 				return 0.01 + GetItemWeight( item ) * GetItemQuantity( item ) * 0.2;
 			}
-			else if ( IsItemAlchemyItem( item ) || IsItemIngredient( item ) )
+			else if ( IsItemAlchemyItem( item ) || IsItemIngredient( item ) || IsItemFood( item ) || IsItemReadable( item ) )
 			{
 				return 0.0;
 			}
@@ -3808,7 +4199,7 @@ import class CInventoryComponent extends CComponent
 		var lvl, i : int;
 		var quality : int;
 		var ilMin, ilMax : int;
-
+		
 		playerLevel = GetWitcherPlayer().GetLevel();
 
 		lvl = playerLevel - 1;
@@ -3816,7 +4207,8 @@ import class CInventoryComponent extends CComponent
 		
 		if ( ( W3MerchantNPC )GetEntity() )
 		{
-			lvl = RoundF( playerLevel + RandRangeF( 4, 1 ) );
+			lvl = RoundF( playerLevel + RandRangeF( 2, 0 ) );
+			AddItemTag( item, 'AutogenUseLevelRange' );
 		}
 		else if ( rewardItem )
 		{
@@ -3891,16 +4283,17 @@ import class CInventoryComponent extends CComponent
 		if (FactsQuerySum("StandAloneEP1") > 0)
 			lvl = GetWitcherPlayer().GetLevel() - 1;
 			
+		
 		if ( FactsQuerySum("NewGamePlus") > 0 && !ItemHasTag( item, 'AutogenUseLevelRange') )
 		{	
 			if ( quality == 5 ) lvl += 2; 
 			if ( quality == 4 ) lvl += 1;
 		}
-		
+			
 		if ( lvl < 1 ) lvl = 1; 
-		if ( lvl > 70 ) lvl = 70;
+		if ( lvl > GetWitcherPlayer().GetMaxLevel() ) lvl = GetWitcherPlayer().GetMaxLevel();
 		
-		if ( ItemHasTag( item, 'PlayerSteelWeapon' ) && !ItemHasAbility( item, 'autogen_steel_base') ) 
+		if ( ItemHasTag( item, 'PlayerSteelWeapon' ) && !( ItemHasAbility( item, 'autogen_steel_base' ) || ItemHasAbility( item, 'autogen_fixed_steel_base' ) )  ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_steel_base') )
 				return;
@@ -3924,7 +4317,7 @@ import class CInventoryComponent extends CComponent
 					AddItemCraftedAbility(item, 'autogen_steel_dmg', true ); 
 			}
 		}
-		else if ( ItemHasTag( item, 'PlayerSilverWeapon' ) && !ItemHasAbility( item, 'autogen_silver_base')  ) 
+		else if ( ItemHasTag( item, 'PlayerSilverWeapon' ) && !( ItemHasAbility( item, 'autogen_silver_base' ) || ItemHasAbility( item, 'autogen_fixed_silver_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_silver_base') )
 				return;
@@ -3948,7 +4341,7 @@ import class CInventoryComponent extends CComponent
 					AddItemCraftedAbility(item, 'autogen_silver_dmg', true ); 
 			}
 		}
-		else if ( GetItemCategory( item ) == 'armor' && !ItemHasAbility( item, 'autogen_armor_base') ) 
+		else if ( GetItemCategory( item ) == 'armor' && !( ItemHasAbility( item, 'autogen_armor_base' ) || ItemHasAbility( item, 'autogen_fixed_armor_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_armor_base') )
 				return;
@@ -3972,7 +4365,7 @@ import class CInventoryComponent extends CComponent
 					AddItemCraftedAbility(item, 'autogen_armor_armor', true );		
 			}
 		}
-		else if ( ( GetItemCategory( item ) == 'boots' || GetItemCategory( item ) == 'pants' ) && !ItemHasAbility( item, 'autogen_pants_base') ) 
+		else if ( ( GetItemCategory( item ) == 'boots' || GetItemCategory( item ) == 'pants' ) && !( ItemHasAbility( item, 'autogen_pants_base' ) || ItemHasAbility( item, 'autogen_fixed_pants_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_pants_base') )
 				return;
@@ -3996,7 +4389,7 @@ import class CInventoryComponent extends CComponent
 					AddItemCraftedAbility(item, 'autogen_pants_armor', true ); 
 			}
 		}
-		else if ( GetItemCategory( item ) == 'gloves' && !ItemHasAbility( item, 'autogen_gloves_base') ) 
+		else if ( GetItemCategory( item ) == 'gloves' && !( ItemHasAbility( item, 'autogen_gloves_base' ) || ItemHasAbility( item, 'autogen_fixed_gloves_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_gloves_base') )
 				return;
@@ -4019,14 +4412,14 @@ import class CInventoryComponent extends CComponent
 				else
 					AddItemCraftedAbility(item, 'autogen_gloves_armor', true );
 			}
-		}		
+		}	
 	}
 		
 	
 	event OnItemAdded(data : SItemChangedData)
 	{
-		var i, j			: int;
-		var ent			: CGameplayEntity;
+		var i, j : int;
+		var ent	: CGameplayEntity;
 		var allCardsNames, foundCardsNames : array<name>;
 		var allStringNamesOfCards : array<string>;
 		var foundCardsStringNames : array<string>;
@@ -4038,34 +4431,56 @@ import class CInventoryComponent extends CComponent
 		var locKey : string;
 		var leaderCardsHack : array<name>;
 		
+		var hud : CR4ScriptedHud;
+		var journalUpdateModule : CR4HudModuleJournalUpdate;
+		var itemId : SItemUniqueId;
+		
+		var isItemShematic : bool;
+		
+		var ngp : bool;
+		
 		ent = (CGameplayEntity)GetEntity();
+		
+		itemId = data.ids[0];
 		
 		
 		if( data.informGui )
 		{
-			recentlyAddedItems.PushBack(data.ids[0]);
-			if( ItemHasTag(data.ids[0],'FocusObject') )
+			recentlyAddedItems.PushBack( itemId );
+			if( ItemHasTag( itemId, 'FocusObject' ) )
 			{
-				GetWitcherPlayer().GetMedallion().Activate(true,3.0);
+				GetWitcherPlayer().GetMedallion().Activate( true, 3.0);
 			} 
 		}
 		
 		
-		if ( ItemHasTag(data.ids[0], 'Autogen') ) GenerateItemLevel( data.ids[0], false );
+		if ( ItemHasTag(itemId, 'Autogen') ) 
+		{
+			GenerateItemLevel( itemId, false );
+		}
 		
 		witcher = GetWitcherPlayer();
 		
 		
 		if(ent == witcher || ((W3MerchantNPC)ent) )
 		{
+			ngp = FactsQuerySum("NewGamePlus") > 0;
 			for(i=0; i<data.ids.Size(); i+=1)
 			{
 				
 				if ( GetItemModifierInt(data.ids[i], 'ItemQualityModified') <= 0 )
 					AddRandomEnhancementToItem(data.ids[i]);
 				
-				if ( FactsQuerySum("NewGamePlus") > 0 )
+				if ( ngp )
 					SetItemModifierInt(data.ids[i], 'DoNotAdjustNGPDLC', 1);	
+				
+				itemName = GetItemName(data.ids[i]);
+				
+				if ( ngp && GetItemModifierInt(data.ids[i], 'NGPItemAdjusted') <= 0 && !ItemHasTag(data.ids[i], 'Autogen') )
+				{
+					IncreaseNGPItemlevel(data.ids[i]);
+				}
+				
 			}
 		}
 		if(ent == witcher)
@@ -4073,7 +4488,7 @@ import class CInventoryComponent extends CComponent
 			for(i=0; i<data.ids.Size(); i+=1)
 			{	
 				
-				if(ItemHasTag(data.ids[0], theGame.params.GWINT_CARD_ACHIEVEMENT_TAG) || !FactsDoesExist("fix_for_gwent_achievement_bug_121588"))
+				if( ItemHasTag( itemId, theGame.params.GWINT_CARD_ACHIEVEMENT_TAG ) || !FactsDoesExist( "fix_for_gwent_achievement_bug_121588" ) )
 				{
 					
 					leaderCardsHack.PushBack('gwint_card_emhyr_gold');
@@ -4147,20 +4562,39 @@ import class CInventoryComponent extends CComponent
 						FactsAdd("fix_for_gwent_achievement_bug_121588", 1, -1);
 				}
 				
-				itemCategory = GetItemCategory( data.ids[0] );
-				if( itemCategory == 'alchemy_recipe' ||  itemCategory == 'crafting_schematic' )
+				itemCategory = GetItemCategory( itemId );
+				isItemShematic = itemCategory == 'alchemy_recipe' ||  itemCategory == 'crafting_schematic';
+				
+				if( isItemShematic )
 				{
-					ReadSchematicsAndRecipes( data.ids[0] );
+					ReadSchematicsAndRecipes( itemId );
 				}					
 				
 				
-				if(ItemHasTag(data.ids[i], 'GwintCard'))
-						witcher.AddGwentCard(GetItemName(data.ids[i]), data.quantity);
+				if( ItemHasTag( data.ids[i], 'GwintCard'))
+				{
+					witcher.AddGwentCard(GetItemName(data.ids[i]), data.quantity);
+				}
+				
+				
+				
+				if( !isItemShematic && ( this.ItemHasTag( itemId, 'ReadableItem' ) || this.ItemHasTag( itemId, 'Painting' ) ) && !this.ItemHasTag( itemId, 'NoNotification' ) )
+				{
+					hud = (CR4ScriptedHud)theGame.GetHud();
+					if( hud )
+					{
+						journalUpdateModule = (CR4HudModuleJournalUpdate)hud.GetHudModule( "JournalUpdateModule" );
+						if( journalUpdateModule )
+						{
+							journalUpdateModule.AddQuestBookInfo( itemId );
+						}
+					}
+				}				
 			}
 		}
 		
 		
-		if(IsItemSingletonItem(data.ids[0]))
+		if( IsItemSingletonItem( itemId ) )
 		{
 			for(i=0; i<data.ids.Size(); i+=1)
 			{
@@ -4379,6 +4813,54 @@ import class CInventoryComponent extends CComponent
 		}
 	}
 	
+	public function IncreaseNGPItemlevel(item : SItemUniqueId)
+	{
+		var i, diff : int;
+		
+		diff = theGame.params.NewGamePlusLevelDifference();
+		
+		if (diff > 0)
+		{
+			if ( ItemHasTag( item, 'PlayerSteelWeapon' ) ) 
+			{	
+				for( i=0; i<diff; i+=1 ) 
+				{
+					AddItemCraftedAbility(item, 'autogen_fixed_steel_dmg', true );
+				}
+			}
+			else if ( ItemHasTag( item, 'PlayerSilverWeapon' ) ) 
+			{
+				for( i=0; i<diff; i+=1 ) 
+				{
+					AddItemCraftedAbility(item, 'autogen_fixed_silver_dmg', true ); 
+				}
+			}
+			else if ( IsItemChestArmor(item) ) 
+			{	
+				for( i=0; i<diff; i+=1 ) 
+				{
+					AddItemCraftedAbility(item, 'autogen_fixed_armor_armor', true );		
+				}
+			}
+			else if ( IsItemBoots(item) || IsItemPants(item) ) 
+			{				
+				for( i=0; i<diff; i+=1 ) 
+				{
+					AddItemCraftedAbility(item, 'autogen_fixed_pants_armor', true ); 
+				}
+			}
+			else if ( IsItemGloves(item) ) 
+			{			
+				for( i=0; i<diff; i+=1 ) 
+				{
+					AddItemCraftedAbility(item, 'autogen_fixed_gloves_armor', true );
+				}
+			}	
+		}
+		
+		SetItemModifierInt(item, 'NGPItemAdjusted', 1);
+	}
+	
 	public function GetItemQuality( itemId : SItemUniqueId ) : int
 	{
 		var itemQuality : float;
@@ -4498,6 +4980,36 @@ import class CInventoryComponent extends CComponent
 	
 	
 	
+	public final function GetMutationResearchPoints( color : ESkillColor, item : SItemUniqueId ) : int
+	{
+		var val : SAbilityAttributeValue;
+		var colorAttribute : name;
+		
+		
+		if( color == SC_None || color == SC_Yellow || !IsIdValid( item ) )
+		{
+			return 0;
+		}
+		
+		
+		switch( color )
+		{
+			case SC_Red:
+				colorAttribute = 'mutation_research_points_red';
+				break;
+			case SC_Blue:
+				colorAttribute = 'mutation_research_points_blue';
+				break;
+			case SC_Green:
+				colorAttribute = 'mutation_research_points_green';
+				break;
+		}
+		
+		
+		val = GetItemAttributeValue( item, colorAttribute );
+		
+		return ( int )val.valueAdditive;
+	}
 	
 	public function GetSkillMutagenColor(item : SItemUniqueId) : ESkillColor
 	{		
@@ -4533,6 +5045,12 @@ import class CInventoryComponent extends CComponent
 	import final function GetItemEnhancementSlotsCount( itemId : SItemUniqueId ) : int;
 	import final function GetItemEnhancementItems( itemId : SItemUniqueId, out names : array< name > );
 	import final function GetItemEnhancementCount( itemId : SItemUniqueId ) : int;
+	import final function GetItemColor( itemId : SItemUniqueId ) : name;
+	import final function IsItemColored( itemId : SItemUniqueId ) : bool;
+	import final function SetPreviewColor( itemId : SItemUniqueId, colorId : int );
+	import final function ClearPreviewColor( itemId : SItemUniqueId ) : bool;
+	import final function ColorItem( itemId : SItemUniqueId, dyeId : SItemUniqueId );
+	import final function ClearItemColor( itemId : SItemUniqueId ) : bool;
 	import final function EnchantItem( enhancedItemId : SItemUniqueId, enchantmentName : name, enchantmentStat : name ) : bool;
 	import final function GetEnchantment( enhancedItemId : SItemUniqueId ) : name;
 	import final function IsItemEnchanted( enhancedItemId : SItemUniqueId ) : bool;
@@ -4668,8 +5186,279 @@ import class CInventoryComponent extends CComponent
 			}
 		}
 	}
-}
 	
+	
+	public function GetHasValidDecorationItems( items : array<SItemUniqueId>, decoration : W3HouseDecorationBase ) : bool
+	{
+		var i, size : int;
+		
+		size = items.Size();
+		
+		
+		if(size == 0 )
+		{
+			LogChannel( 'houseDecorations', "No items with valid tag were found!" );
+			return false;
+		}
+		
+		
+		for( i=0; i < size; i+= 1 )
+		{	
+			
+			if( GetWitcherPlayer().IsItemEquipped( items[i] ) )
+			{
+				LogChannel( 'houseDecorations', "Found item is equipped, erasing..." );
+				continue;
+			}
+			
+			
+			if( IsItemQuest( items[i] ) && decoration.GetAcceptQuestItems() == false )
+			{
+				LogChannel( 'houseDecorations', "Found item is quest item, and quest items are not accepted, erasing..." );
+				continue;
+			}
+			
+			
+			if( decoration.GetItemHasForbiddenTag( items[i] ) )
+			{
+				LogChannel( 'houseDecorations', "Found item has a forbidden tag, erasing..." );
+				continue;
+			}
+			
+			LogChannel( 'houseDecorations', "Item checks out: "+ GetItemName( items[i] ) );
+			return true;
+		}
+		LogChannel( 'houseDecorations', "No valid items were found!" );
+		
+		return false;	
+	}	
+	
+	
+	function GetMissingCards() : array< name >
+	{
+		var defMgr 			: CDefinitionsManagerAccessor 	= theGame.GetDefinitionsManager();
+		var allCardNames 	: array< name > 				= defMgr.GetItemsWithTag(theGame.params.GWINT_CARD_ACHIEVEMENT_TAG);
+		var playersCards 	: array< SItemUniqueId > 		= GetItemsByTag(theGame.params.GWINT_CARD_ACHIEVEMENT_TAG);
+		var playersCardLocs	: array< string >;
+		var missingCardLocs	: array< string >;
+		var missingCards 	: array< name >;
+		var i, j 			: int;
+		var found 			: bool;
+		
+		
+		for ( i = 0; i < allCardNames.Size(); i+=1 )
+		{
+			found = false;
+			
+			for ( j = 0; j < playersCards.Size(); j+=1 )
+			{
+				if ( allCardNames[i] == GetItemName( playersCards[j] ) )
+				{
+					found = true;
+					playersCardLocs.PushBack( defMgr.GetItemLocalisationKeyName ( allCardNames[i] ) );
+					break;
+				}
+			}
+			
+			if ( !found )
+			{
+				missingCardLocs.PushBack( defMgr.GetItemLocalisationKeyName( allCardNames[i] ) );
+				missingCards.PushBack( allCardNames[i] );
+			}
+		}
+		
+		if( missingCardLocs.Size() < 2 )
+		{
+			return missingCards;
+		}
+		
+		
+		for ( i = missingCardLocs.Size()-1 ; i >= 0 ; i-=1 )
+		{
+			for ( j = 0 ; j < playersCardLocs.Size() ; j+=1 )
+			{
+				if ( missingCardLocs[i] == playersCardLocs[j] 
+					&& missingCardLocs[i] != "gwint_name_emhyr" && missingCardLocs[i] != "gwint_name_foltest"
+					&& missingCardLocs[i] != "gwint_name_francesca" && missingCardLocs[i] != "gwint_name_eredin" )
+				{
+					missingCardLocs.EraseFast( i );
+					missingCards.EraseFast( i );
+					break;
+				}
+			}
+		}
+		
+		return missingCards;
+	}
+	
+	public function FindCardSources( missingCards : array< name > ) : array< SCardSourceData >
+	{
+		var sourceCSV 			: C2dArray;
+		var sourceTable 		: array< SCardSourceData >;
+		var sourceRemaining		: array< SCardSourceData >;
+		var sourceCount, i, j	: int;
+		
+		if ( theGame.IsFinalBuild() )
+		{
+			sourceCSV = LoadCSV("gameplay\globals\card_sources.csv");
+		}
+		else
+		{
+			sourceCSV = LoadCSV("qa\card_sources.csv");
+		}
+
+		sourceCount = sourceCSV.GetNumRows();
+		sourceTable.Resize(sourceCount);
+		
+		for ( i = 0 ; i < sourceCount ; i+=1 )
+		{
+			sourceTable[i].cardName = sourceCSV.GetValueAsName("CardName",i);
+			sourceTable[i].source = sourceCSV.GetValue("Source",i);
+			sourceTable[i].originArea = sourceCSV.GetValue("OriginArea",i);
+			sourceTable[i].originQuest = sourceCSV.GetValue("OriginQuest",i);
+			sourceTable[i].details = sourceCSV.GetValue("Details",i);
+			sourceTable[i].coords = sourceCSV.GetValue("Coords",i);
+		}
+		
+		for ( i = 0 ; i < missingCards.Size() ; i+=1 )
+		{
+			for ( j = 0 ; j < sourceCount ; j+=1 )
+			{
+				if ( sourceTable[j].cardName == missingCards[i] )
+				{
+					sourceRemaining.PushBack( sourceTable[j] );
+				}
+			}
+		}
+		
+		return sourceRemaining;
+	}
+	
+	public function GetGwentAlmanacContents() : string
+	{
+		var sourcesRemaining	: array< SCardSourceData >;
+		var missingCards		: array< string >;
+		var almanacContents		: string;
+		var i 					: int;
+		var NML, Novigrad, Skellige, Prologue, Vizima, KaerMorhen, Random : int;
+
+		sourcesRemaining = FindCardSources( GetMissingCards() );
+		
+		for ( i = 0 ; i < sourcesRemaining.Size() ; i+=1 )
+		{
+			switch ( sourcesRemaining[i].originArea )
+			{
+				case "NML":
+					NML += 1;
+					break;
+				case "Novigrad":
+					Novigrad += 1;
+					break;
+				case "Skellige":
+					Skellige += 1;
+					break;
+				case "Prologue":
+					Prologue += 1;
+					break;
+				case "Vizima":
+					Vizima += 1;
+					break;
+				case "KaerMorhen":
+					KaerMorhen += 1;
+					break;
+				case "Random":
+					Random += 1;
+					break;
+				default:
+					break;
+			}
+		}
+		
+		if ( NML + Novigrad + Skellige + Prologue + Vizima + KaerMorhen + Random == 0 )
+		{
+			almanacContents = GetLocStringByKeyExt( "gwent_almanac_text" ) + "<br>";
+			almanacContents += GetLocStringByKeyExt( "gwent_almanac_completed_text" );
+		}
+		else
+		{
+			almanacContents = GetLocStringByKeyExt( "gwent_almanac_text" ) + "<br>";
+			if ( NML > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "location_name_velen" ) + ": " + NML + "<br>";
+			}
+			if ( Novigrad > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "map_location_novigrad" ) + ": " + Novigrad + "<br>";
+			}
+			if ( Skellige > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "map_location_skellige" ) + ": " + Skellige + "<br>";
+			}
+			if ( Prologue > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "map_location_prolog_village" ) + ": " + Prologue + "<br>";
+			}
+			if ( Vizima > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "map_location_wyzima_castle" ) + ": " + Vizima + "<br>";
+			}
+			if ( KaerMorhen > 0 )
+			{
+				almanacContents += GetLocStringByKeyExt( "map_location_kaer_morhen" ) + ": " + KaerMorhen + "<br>";
+			}
+			almanacContents += GetLocStringByKeyExt( "gwent_source_random" ) + ": " + Random;
+		}
+		
+		return almanacContents;
+	}
+}
+
+exec function findMissingCards( optional card : name )
+{
+	var inv					: CInventoryComponent = thePlayer.GetInventory();
+	var sourcesRemaining	: array< SCardSourceData >;
+	var missingCards		: array< name >;
+	var i 					: int;
+	var sourceLogString		: string;
+	
+	if ( card != '' )
+	{
+		missingCards.PushBack( card );
+	}
+	else
+	{
+		missingCards = inv.GetMissingCards();
+	}
+	
+	sourcesRemaining = inv.FindCardSources( missingCards );
+
+	for ( i = 0 ; i < sourcesRemaining.Size() ; i+=1 )
+	{
+		sourceLogString = sourcesRemaining[i].cardName + " is a " + sourcesRemaining[i].source ;
+		if ( sourcesRemaining[i].originArea == "Random" )
+		{
+			sourceLogString += " card from a random merchant.";
+		}
+		else
+		{
+			sourceLogString += " item in " + sourcesRemaining[i].originArea + " from ";
+			
+			if ( sourcesRemaining[i].originQuest != "" )
+			{
+				sourceLogString += sourcesRemaining[i].originQuest + " , ";
+			}
+			
+			sourceLogString += sourcesRemaining[i].details;
+		}
+		Log( sourceLogString );
+		
+		if ( sourcesRemaining[i].coords != "" )
+		{
+			Log( sourcesRemaining[i].coords ); 
+		}
+	}
+}
+
 exec function slotTest()
 {
 	var inv : CInventoryComponent = thePlayer.inv;
@@ -4937,4 +5726,7 @@ function PlayItemConsumeSound( item : SItemUniqueId ) : void
 		theSound.SoundEvent('gui_inventory_eat');
 	}
 }
+
+
+
 

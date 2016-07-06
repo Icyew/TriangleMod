@@ -11,6 +11,14 @@ class W3Effect_Bleeding extends W3DamageOverTimeEffect
 	default effectType = EET_Bleeding;
 	default resistStat = CDS_BleedingRes;
 	
+	event OnEffectAdded(optional customParams : W3BuffCustomParams)
+	{
+		super.OnEffectAdded(customParams);
+		
+		if( target == thePlayer)
+		 Log("");
+	}
+	
 	public function OnDamageDealt(dealtDamage : bool)
 	{
 		

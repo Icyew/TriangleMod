@@ -43,6 +43,11 @@ class W3ActorRemains extends W3AnimatedContainer
 			AddTimer( 'LootTimeout', theGame.params.CONTAINER_DYNAMIC_DESTROY_TIMEOUT );
 	}
 	
+	public final function GetOwner() : CActor
+	{
+		return owner;
+	}
+	
 	
 	event OnItemGiven(data : SItemChangedData)
 	{

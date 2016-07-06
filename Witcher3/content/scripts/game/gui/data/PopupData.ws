@@ -12,7 +12,8 @@ enum EQuantityTransferFunction
 	QTF_Give,
 	QTF_Take,
 	QTF_Drop,
-	QTF_Dismantle
+	QTF_Dismantle,
+	QTF_MoveToStash
 };
 
 
@@ -101,6 +102,70 @@ class W3PopupData extends CObject
 	{
 		PopupRef.RequestClose();
 	}
+	
+	public function OnClosing():void
+	{
+		var tut : STutorialMessage;
+
+		if( ( BookPopupFeedback ) this )
+		{
+			
+			if( ShouldProcessTutorial( 'TutorialBooksOpenCommonMenu' ) )
+			{
+				
+				tut.type = ETMT_Hint;
+				tut.tutorialScriptTag = 'TutorialBooksOpenCommonMenu';
+				tut.hintPositionType = ETHPT_DefaultGlobal;
+				tut.hintDurationType = ETHDT_Long;
+				tut.canBeShownInMenus = false;
+				tut.disableHorizontalResize = true;
+				tut.forceToQueueFront = true;	
+				tut.markAsSeenOnShow = true;
+
+				theGame.GetTutorialSystem().DisplayTutorial( tut );
+			}		
+		}
+		LogChannel('UI', "W3PopupData::OnClosing");
+	}
+	
+	public function OnShown():void
+	{
+		var tut : STutorialMessage;
+		var highlight : STutorialHighlight;
+		
+		if( ( BookPopupFeedback ) this )
+		{
+			
+			if( ShouldProcessTutorial( 'TutorialBooksReadingMultiple' ) )
+			{
+				
+				tut.type = ETMT_Hint;
+				tut.tutorialScriptTag = 'TutorialBooksReadingMultiple';
+				tut.journalEntryName = 'TutorialJournalBooks';
+				tut.hintPositionType = ETHPT_Custom;
+				tut.hintPosX = 0.05f;
+				tut.hintPosY = 0.55f;
+				tut.hintDurationType = ETHDT_Input;
+				tut.canBeShownInMenus = true;
+				tut.enableAcceptButton = true;
+				tut.disableHorizontalResize = true;
+				tut.forceToQueueFront = true;	
+				tut.markAsSeenOnShow = true;
+				
+				highlight.x = .3f;
+				highlight.y = .1f;
+				highlight.width = .4f;
+				highlight.height = .15f;
+				tut.highlightAreas.PushBack( highlight );
+				
+				theGame.GetTutorialSystem().DisplayTutorial( tut );
+				
+				
+				theGame.GetTutorialSystem().uiHandler.AddNewBooksTutorial();
+			}
+		}
+		LogChannel('UI', "W3PopupData::OnShown");
+	}
 }
 
 
@@ -123,6 +188,7 @@ class W3ContextMenu extends W3PopupData
 		
 		l_flashArray = parentFlashValueStorage.CreateTempFlashArray();
 		bindingsCount = actionsList.Size();
+		
 		for( i =0; i < bindingsCount; i += 1 )
 		{
 			l_flashObject = parentFlashValueStorage.CreateTempFlashObject();
@@ -131,6 +197,7 @@ class W3ContextMenu extends W3PopupData
 			l_flashObject.SetMemberFlashInt("ActionId", i); 
 			l_flashArray.PushBackFlashObject(l_flashObject);
 		}
+		
 		l_flashResultObject = parentFlashValueStorage.CreateTempFlashObject();
 		l_flashResultObject.SetMemberFlashArray("ActionsList", l_flashArray);
 		l_flashResultObject.SetMemberFlashNumber("positionX", positionX);
@@ -257,6 +324,7 @@ class QuantityPopupData extends SliderPopupData
 	public var actionType:EQuantityTransferFunction;
 	public var inventoryRef:CR4InventoryMenu;
 	public var blacksmithRef:CR4BlacksmithMenu;
+	public var craftingRef:CR4CraftingMenu;
 	
 	protected function GetPopupTitle():string
 	{
@@ -271,8 +339,7 @@ class QuantityPopupData extends SliderPopupData
 				titleText = "panel_inventory_quantity_popup_buy";
 				break;
 			case QTF_Give:
-				titleText = "panel_inventory_quantity_popup_transfer";
-				break;
+			case QTF_MoveToStash:
 			case QTF_Take:
 				titleText = "panel_inventory_quantity_popup_transfer";
 				break;
@@ -328,10 +395,19 @@ class QuantityPopupData extends SliderPopupData
 			ClosePopup();
 		}
 		else
+		if (KeyCode == "enter-gamepad_A" && craftingRef)
+		{
+			craftingRef.BuyIngredient(itemId, currentValue, false);
+		}
 		if (KeyCode == "enter-gamepad_A")
 		{
 			switch(actionType)
 			{
+				case QTF_MoveToStash:
+				
+					inventoryRef.handleMoveToStashQuantity(itemId, currentValue);
+					break;
+					
 				case QTF_Sell:
 					
 					newItemId = inventoryRef.SellItem(itemId, currentValue);
@@ -447,7 +523,119 @@ class W3DestroyItemConfPopup extends ConfirmationPopupData
 
 
 class BookPopupFeedback extends TextPopupData
-{	
+{
+	public var bookItemId     : SItemUniqueId;
+	public var inventoryRef   : CR4InventoryMenu;
+	public var singleBookMode : bool;
+	public var curInventory   : CInventoryComponent;
+
+	public  function GetGFxData( parentFlashValueStorage : CScriptedFlashValueStorage ) : CScriptedFlashObject
+	{	
+		var objResult     : CScriptedFlashObject;	
+		var objBookInfo   : CScriptedFlashObject;
+		var arrayBookList : CScriptedFlashArray;
+		
+		var itemList      : array< SItemUniqueId >;		
+		var i, count      : int;
+		var curItemId     : SItemUniqueId;
+		var itemCategory  : name;		
+		var isItemRecipe  : bool;
+		
+
+		objResult = super.GetGFxData( parentFlashValueStorage );
+		
+		if( curInventory.IsIdValid( bookItemId ) )
+		{
+			setItemProperty(bookItemId, objResult);
+			
+			objResult.SetMemberFlashString( "TextTitle", m_TextTitle );
+			objResult.SetMemberFlashString( "TextContent", m_TextContent );
+		}
+		
+		if( !singleBookMode )
+		{
+			arrayBookList = parentFlashValueStorage.CreateTempFlashArray();
+			curInventory.GetAllItems( itemList );		
+			count = itemList.Size();
+			
+			
+			
+			for( i = 0; i < count; i += 1 )
+			{
+				curItemId = itemList[i];
+				
+				if( !curInventory.IsIdValid( bookItemId ) || bookItemId != curItemId )
+				{
+					itemCategory = curInventory.GetItemCategory( curItemId );
+					isItemRecipe = itemCategory == 'crafting_schematic' || itemCategory == 'alchemy_recipe';
+					
+					
+					
+					if( !isItemRecipe && curInventory.ItemHasTag( curItemId, 'ReadableItem' ) && !curInventory.ItemHasTag( curItemId, 'NoShow' ) && !curInventory.IsBookRead( curItemId ) )
+					{
+						objBookInfo = parentFlashValueStorage.CreateTempFlashObject();
+						
+						setItemProperty( curItemId, objBookInfo );
+						objBookInfo.SetMemberFlashString( "TextTitle", GetLocStringByKeyExt( curInventory.GetItemLocalizedNameByUniqueID( curItemId ) ) );
+						objBookInfo.SetMemberFlashString( "TextContent", curInventory.GetBookText( curItemId ) );
+						
+						arrayBookList.PushBackFlashObject( objBookInfo );
+					}
+				}
+			}
+		}
+		
+		objResult.SetMemberFlashArray("newBooksList", arrayBookList);
+		
+		return objResult;
+	}
+	
+	private function setItemProperty(item: SItemUniqueId , out objResult: CScriptedFlashObject)
+	{
+		var l_questTag						: string;
+		var l_isQuest	 					: bool;
+		
+		l_questTag = "";
+		l_isQuest = false;
+		
+		if(curInventory.ItemHasTag(item, 'Quest'))
+		{
+			l_questTag = "Quest";
+			l_isQuest = true;
+		}
+		
+		if (curInventory.ItemHasTag(item, 'QuestEP1'))
+		{
+			l_questTag = "QuestEP1";
+			l_isQuest = true;
+		}
+		
+		if (curInventory.ItemHasTag(item, 'QuestEP2'))
+		{
+			l_questTag = "QuestEP2";
+			l_isQuest = true;
+		}
+		
+		objResult.SetMemberFlashString( "iconPath",  "img://" + curInventory.GetItemIconPathByUniqueID( item ) );
+		objResult.SetMemberFlashUInt( "itemId", ItemToFlashUInt( item ) );
+		objResult.SetMemberFlashBool( "isQuestItem", l_isQuest );
+		objResult.SetMemberFlashString ( "questTag", l_questTag );		
+		objResult.SetMemberFlashBool( "isNewItem", true );
+	}
+	
+	public function UpdateAfterBookRead( bookItemId : SItemUniqueId ):void
+	{
+		if( inventoryRef )
+		{
+			inventoryRef.InventoryUpdateItem( bookItemId );
+		}
+	}
+	
+	protected function  ClosePopup():void
+	{
+		super.ClosePopup();
+	}
+	
 	protected  function GetContentRef() : string 
 	{
 		return "BookPopupRef";

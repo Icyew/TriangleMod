@@ -23,16 +23,15 @@ class W3GenericSceneArea extends CGameplayEntity
 	editable var ignoreReplacers  : bool;
 	editable var includeEnemyNPCs : bool;
 	editable var includeQuestNPCs : bool;
+	editable var sceneDelay       : float;	
 	
 	var firstPlaySceneDelay : float;
 	var currentSceneDelay   : float;
-	var sceneDelay       	: float;	
-	
-	default npcSearchRange  = 5.0f;
-	default sceneDelay      = 120.0f;
-	default ignoreReplacers = true;
-	default firstPlaySceneDelay = 6.0f;
-	default sceneDelay = 180.0f;
+
+	default npcSearchRange  		= 5.0f;
+	default ignoreReplacers 		= true;
+	default firstPlaySceneDelay 	= 6.0f;
+	default sceneDelay 				= 180.0f;
 
 	event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent )
 	{

@@ -132,9 +132,14 @@ class BTTaskSpawnEntitiesAttack extends IBehTreeTask
 	var shouldStart : bool;
 	var lastSpawnTimestamp : float;
 	var spawnTimeout : float;
+	var checkDistanceOfNpcToTarget : bool;
+	var spawnEntitiesAroundOwner : bool;
 	
 	var entityTemplate : CEntityTemplate;
 	var usedPos : array<Vector>;
+	
+	default checkDistanceOfNpcToTarget = true;
+	default spawnEntitiesAroundOwner = false;
 	
 	function OnActivate() : EBTNodeStatus
 	{
@@ -176,11 +181,11 @@ class BTTaskSpawnEntitiesAttack extends IBehTreeTask
 		
 		for( i = 0; i < numberOfEntities; i += 1 )
 		{
-			if( VecDistance2D( GetNPC().GetWorldPosition(), GetCombatTarget().GetWorldPosition() ) < 7.5 )
+			if( ( VecDistance2D( GetNPC().GetWorldPosition(), GetCombatTarget().GetWorldPosition() ) < 7.5 ) && checkDistanceOfNpcToTarget )
 			{
 				break;
 			}
-		
+			
 			pos = FindPosition();
 			
 			while( !IsPositionValid( pos ) )
@@ -224,6 +229,10 @@ class BTTaskSpawnEntitiesAttack extends IBehTreeTask
 		targetPos = GetCombatTarget().GetWorldPosition();
 		randVec = VecRingRand( minDistFromTarget, maxDistFromTarget );
 		
+		if( spawnEntitiesAroundOwner )
+		{
+			targetPos = GetNPC().GetWorldPosition();
+		}
 		outPos = targetPos + randVec;
 		
 		return outPos;
@@ -277,6 +286,8 @@ class BTTaskSpawnEntitiesAttackDef extends IBehTreeTaskDefinition
 	editable var minDistFromEachOther : float;
 	editable var initialDelay : float;
 	editable var behVariableToSetOnEnd : name;
+	editable var checkDistanceOfNpcToTarget : bool;
+	editable var spawnEntitiesAroundOwner 	: bool;
 }
 
 
@@ -587,7 +598,6 @@ class BTTaskEredinCanSpawnRiftDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinCanPerformAction extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 	
 	editable var action : EBossAction;
@@ -621,8 +631,7 @@ class BTTaskEredinCanPerformAction extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -638,7 +647,6 @@ class BTTaskEredinCanPerformActionDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinSetCanPerformAction extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 	private var npc : CNewNPC;
 	
@@ -765,8 +773,7 @@ class BTTaskEredinSetCanPerformAction extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -786,7 +793,6 @@ class BTTaskEredinSetCanPerformActionDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinIsAttackAvailable extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 	
 	var attack : EBossSpecialAttacks;
@@ -798,8 +804,7 @@ class BTTaskEredinIsAttackAvailable extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -815,7 +820,6 @@ class BTTaskEredinIsAttackAvailableDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinSetIsAttackAvailable extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 	
 	var attack : EBossSpecialAttacks;
@@ -847,8 +851,7 @@ class BTTaskEredinSetIsAttackAvailable extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -868,7 +871,6 @@ class BTTaskEredinSetIsAttackAvailableDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinSetIsInSpecialAttack extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 
 	function OnActivate() : EBTNodeStatus
@@ -884,8 +886,7 @@ class BTTaskEredinSetIsInSpecialAttack extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -899,7 +900,6 @@ class BTTaskEredinSetIsInSpecialAttackDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinGetIsInSpecialAttack extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 
 	function IsAvailable () : bool
@@ -909,8 +909,7 @@ class BTTaskEredinGetIsInSpecialAttack extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 
@@ -924,7 +923,6 @@ class BTTaskEredinGetIsInSpecialAttackDef extends IBehTreeTaskDefinition
 
 class BTTaskEredinIsTaunting extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBossAICombatStorage;
 
 	function IsAvailable () : bool
@@ -934,8 +932,7 @@ class BTTaskEredinIsTaunting extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CBossAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CBossAICombatStorage)InitializeCombatStorage();
 	}
 }
 

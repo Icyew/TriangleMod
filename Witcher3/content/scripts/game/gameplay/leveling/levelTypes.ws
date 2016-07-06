@@ -23,6 +23,5 @@ struct SLevelDefinition
 	var number : int;
 	var requiredTotalExp : int;
 	var addedSkillPoints : int;
-	var addedMutationPoints : int;
-	var addedKnowledgePoints : int;
+	var requiredExp : int;
 };

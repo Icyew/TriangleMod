@@ -17,7 +17,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -169,7 +169,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/fireeater_cap_64x64.png"
 	>
-		<tags>							Quest
+		<tags>							Quest, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -184,7 +184,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/lake_shoe_64x64.png"
 	>
-		<tags>							Quest
+		<tags>							Quest, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -199,7 +199,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/huge_lake_shoe_64x64.png"
 	>
-		<tags>							Quest
+		<tags>							Quest, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -214,7 +214,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/ico_she_of_shani_64x64.png"
 	>
-		<tags>							Quest
+		<tags>							Quest, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -258,7 +258,7 @@
 		localisation_key_description	="item_name_q602_donkey_ears"
 		icon_path						="icons/inventory/quests/donkey_ears_64x64.png"
 	>
-		<tags>							Quest, NoShow
+		<tags>							Quest, NoShow, QuestEP1
 		</tags>
 		<base_abilities>				<a>Geralt_mask _Stats</a>
 		</base_abilities>
@@ -277,7 +277,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q602_von_everec_blood_64x64.png"
 	>
-		<tags>							Quest, mod_junk
+		<tags>							Quest, mod_junk, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Empty vial</parts>
 		</recycling_parts>
@@ -292,7 +292,7 @@
 		localisation_key_description	="item_desc_key"
 		icon_path						="icons/inventory/quests/q310_sewer_door_key.png"
 	>
-		<tags>							Quest, key
+		<tags>							Quest, key, QuestEP1
 		</tags>
 		<base_abilities>
 		</base_abilities>
@@ -429,7 +429,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/quests/q603_letter_64x64.png"
 	>
-		<tags>							Quest, ReadableItem, mod_book							
+		<tags>							Quest, ReadableItem, mod_book, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -444,7 +444,7 @@
 		localisation_key_description	="item_desc_q603_auctioned_painting"
 		icon_path						="icons/inventory/quests/q603_pontar_painting_64x64.png"
 	>
-		<tags>							NotTransferableToNGP, Painting
+		<tags>							NotTransferableToNGP, Painting, mq7024_picture
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -459,7 +459,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/maximilian_box_64x64.png"
 	>
-		<tags>							Quest
+		<tags>							Quest, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -474,7 +474,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll4.dds"
 	>
-		<tags>							Quest, ReadableItem, mod_book							
+		<tags>							Quest, ReadableItem, mod_book, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -702,7 +702,7 @@
 		localisation_key_description	="item_desc_q603_foltest_mask"
 		icon_path						="icons/inventory/quests/mask_foltest_64x64.png"
 	>
-		<tags>							Quest, NoShow
+		<tags>							Quest, NoShow, QuestEP1
 		</tags>
 		<base_abilities>				<a>Geralt_mask _Stats</a>
 		</base_abilities>
@@ -722,7 +722,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q603_poison_bottle_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -752,7 +752,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -766,7 +766,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -780,7 +780,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll4.dds"
 	>
-		<tags>							Quest, mod_book							
+		<tags>							Quest, mod_book, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -794,7 +794,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_rose_painting_64x64.png"
 	>
-		<tags>							Quest, mod_book, Painting							
+		<tags>							Quest, mod_book, Painting, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -808,7 +808,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_sketch_book_64x64.png"
 	>
-		<tags>							Quest							
+		<tags>							Quest, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -822,7 +822,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/books/book_1.png"
 	>
-		<tags>							Quest, ReadableItem, mod_book							
+		<tags>							Quest, ReadableItem, mod_book, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -836,7 +836,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/books/book_3.png"
 	>
-		<tags>							Quest, ReadableItem, mod_book							
+		<tags>							Quest, ReadableItem, mod_book, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -850,7 +850,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_candles_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -864,7 +864,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_chalk_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -878,7 +878,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/iron_goblet_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -892,7 +892,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_oraint_comb_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -906,7 +906,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/boy_remains-64x64.png"
 	>
-		<tags>							Quest, mod_junk
+		<tags>							Quest, mod_junk, QuestEP1
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -920,7 +920,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_olgierd_with_iris_painting_64x64.png"
 	>
-		<tags>							Quest, mod_junk, Painting							
+		<tags>							Quest, mod_junk, Painting, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -934,7 +934,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_rose_64x64.png"
 	>
-		<tags>							Quest, mod_junk							
+		<tags>							Quest, mod_junk, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -948,7 +948,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/books/book_1.png"
 	>
-		<tags>							ReadableItem, mod_book, Quest, q604_Mem_Gazebo							
+		<tags>							ReadableItem, mod_book, Quest, q604_Mem_Gazebo, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Book</parts>
 		</recycling_parts>
@@ -962,7 +962,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_bloody_towel_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Bedroom 						
+		<tags>							Quest, q604_Mem_Bedroom, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -976,7 +976,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/other/oil_lamp_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Bedroom 						
+		<tags>							Quest, q604_Mem_Bedroom, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -990,7 +990,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_dressing_gown_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Bedroom 						
+		<tags>							Quest, q604_Mem_Bedroom, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1004,7 +1004,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_small_cat_bowl_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Dinner							
+		<tags>							Quest, q604_Mem_Dinner, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1018,7 +1018,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_vodka_cup_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Fountain						
+		<tags>							Quest, q604_Mem_Fountain, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1032,7 +1032,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/flowers_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Fountain						
+		<tags>							Quest, q604_Mem_Fountain, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1046,7 +1046,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_wedding_veil.png"
 	>
-		<tags>							Quest, q604_Mem_Fountain						
+		<tags>							Quest, q604_Mem_Fountain, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1060,7 +1060,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_dog_bowl_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Dinner							
+		<tags>							Quest, q604_Mem_Dinner, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1074,7 +1074,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_fruit_bowl_64x64.png"
 	>
-		<tags>							 Quest						
+		<tags>							 Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1088,7 +1088,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_paint_palette_64x64.png"
 	>
-		<tags>							 Quest, q604_Mem_Gazebo						
+		<tags>							 Quest, q604_Mem_Gazebo, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1102,7 +1102,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/silver_teapot_64x64.png"
 	>
-		<tags>							 Quest, q604_Mem_Gazebo						
+		<tags>							 Quest, q604_Mem_Gazebo, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1116,7 +1116,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/other/cup.dds"
 	>
-		<tags>							Quest						
+		<tags>							Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1130,7 +1130,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/mug_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Cellar 						
+		<tags>							Quest, q604_Mem_Cellar, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1144,7 +1144,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/knife_bread_rusty_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Cellar 						
+		<tags>							Quest, q604_Mem_Cellar, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1158,7 +1158,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/ingredients/junk/pipe_smoking_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Cellar 						
+		<tags>							Quest, q604_Mem_Cellar, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1172,7 +1172,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll4.dds"
 	>
-		<tags>							ReadableItem, mod_book, Quest, q604_Mem_Cellar							
+		<tags>							ReadableItem, mod_book, Quest, q604_Mem_Cellar, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1186,7 +1186,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q604_tray_64x64.png"
 	>
-		<tags>							Quest, q604_Mem_Dinner							
+		<tags>							Quest, q604_Mem_Dinner, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1254,7 +1254,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q6005_nephrite_64x64.png"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1269,7 +1269,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/q6005_pianite_64x64.png"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1284,7 +1284,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/quests/mq6005_pickaxe_64x64.png"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1299,7 +1299,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll4.dds"
 	>
-		<tags>							Quest, ReadableItem							
+		<tags>							Quest, ReadableItem, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1313,7 +1313,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest							
+		<tags>							Quest, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1327,7 +1327,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key1.dds"
 	>
-		<tags>							Quest							
+		<tags>							Quest, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1341,7 +1341,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll3.dds"
 	>
-		<tags>							Quest, ReadableItem							
+		<tags>							Quest, ReadableItem, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1355,7 +1355,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/scrolls/scroll1.dds"
 	>
-		<tags>							Quest, ReadableItem						
+		<tags>							Quest, ReadableItem, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1397,7 +1397,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key1.dds"
 	>
-		<tags>							Quest							
+		<tags>							Quest, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1426,7 +1426,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll2.dds"
 	>
-		<tags>							Quest, ReadableItem					
+		<tags>							Quest, ReadableItem, QuestEP1					
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1456,7 +1456,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/books/book_2.png"
 	>
-		<tags>							ReadableItem, Quest 						
+		<tags>							ReadableItem, Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1516,7 +1516,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll6.dds"
 	>
-		<tags>							Quest, ReadableItem 						
+		<tags>							Quest, ReadableItem, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1546,7 +1546,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key1.dds"
 	>
-		<tags>							Quest							
+		<tags>							Quest, QuestEP1							
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1741,7 +1741,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll1.dds"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1815,7 +1815,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll2.dds"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1830,7 +1830,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll4.dds"
 	>
-		<tags>							ReadableItem, Quest 						
+		<tags>							ReadableItem, Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1875,7 +1875,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -1923,7 +1923,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key1.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2064,7 +2064,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/keys/key2.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2093,7 +2093,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll3.dds"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2107,7 +2107,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/keys/key1.dds"
 	>
-		<tags>							Quest 						
+		<tags>							Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2121,7 +2121,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll3.dds"
 	>
-		<tags>							ReadableItem, Quest 						
+		<tags>							ReadableItem, Quest, QuestEP1 						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2163,7 +2163,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/quests/ofir_schematics_scroll_64x64.png"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2177,7 +2177,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/quests/ofir_schematics_scroll_64x64.png"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2191,7 +2191,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/quests/ofir_schematics_scroll_64x64.png"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>
@@ -2205,7 +2205,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/quests/ofir_schematics_scroll_64x64.png"
 	>
-		<tags>							ReadableItem, Quest						
+		<tags>							ReadableItem, Quest, QuestEP1						
 		</tags>
 		<recycling_parts>				<parts count="1">Ashes</parts>
 		</recycling_parts>

@@ -38,3 +38,13 @@ function T_AddMessage(message : string)
 {
     theGame.witcherLog.AddMessage(message);
 }
+
+function T_LogMessage(message : string)
+{
+    LogChannel('TMod', message);
+}
+
+function T_StaminaCostToFocusCost(cost : float) : float
+{
+    return cost / thePlayer.GetStatMax(BCS_Stamina) * theGame.GetTModOptions().GetFocusPerMaxStamina();
+}

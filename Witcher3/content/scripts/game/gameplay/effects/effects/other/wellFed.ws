@@ -25,16 +25,31 @@ class W3Effect_WellFed extends W3RegenEffect
 		}
 	}
 	
+	event OnPerk15Unequipped()
+	{
+		SetTimeLeft( initialDuration );
+		duration = initialDuration;
+	}
+	
 	protected function CalculateDuration(optional setInitialDuration : bool)
 	{
 		var min, max : SAbilityAttributeValue;
 		
 		super.CalculateDuration(setInitialDuration);
 		
-		if(isOnPlayer && thePlayer == GetWitcherPlayer() && GetWitcherPlayer().HasRunewordActive('Runeword 6 _Stats'))
-		{
-			theGame.GetDefinitionsManager().GetAbilityAttributeValue('Runeword 6 _Stats', 'runeword6_duration_bonus', min, max);
-			duration *= 1 + min.valueMultiplicative;
+		if( isOnPlayer && GetWitcherPlayer() )
+		{	
+			
+			if( GetWitcherPlayer().CanUseSkill( S_Perk_15 ) )
+			{
+				min = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_15, 'duration', false, false );
+				duration = min.valueAdditive;
+			}
+			if( GetWitcherPlayer().HasRunewordActive( 'Runeword 6 _Stats' ) )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Runeword 6 _Stats', 'runeword6_duration_bonus', min, max);
+				duration *= 1 + min.valueMultiplicative;
+			}
 		}
 	}
 	

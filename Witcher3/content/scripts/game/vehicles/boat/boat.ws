@@ -13,7 +13,6 @@ import class W3Boat extends CGameplayEntity
 	private autobind mountInteractionComp : CInteractionComponent = "mountExplorationInteraction";
 	private autobind mountInteractionCompPassenger : CInteractionComponent = "mountExplorationInteractionPassenger";
 	
-	private var hasDrowned : bool;					default hasDrowned = false;
 	private saved var canBeDestroyed : bool;		default canBeDestroyed = true;
 	private var needEnableInteractions: bool;		default needEnableInteractions = false;
 
@@ -113,8 +112,8 @@ import class W3Boat extends CGameplayEntity
 		boatComp.IssueCommandToDismount( DT_normal );
 	}
 	
-	public function HasDrowned() : bool 		{ return hasDrowned; }
-	public function SetHasDrowned( val : bool ) 	{ hasDrowned = val; }
+	import final function HasDrowned() : bool;
+	import final function SetHasDrowned( val : bool );
 	
 	event OnStreamIn()
 	{

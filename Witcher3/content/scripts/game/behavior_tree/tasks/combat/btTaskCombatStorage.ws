@@ -5,7 +5,6 @@
 /***********************************************************************/
 class CBTTaskCombatStorage extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var combatDataStorage : CBaseAICombatStorage;
 	
 	public var setIsShooting 	: bool;
@@ -38,8 +37,7 @@ class CBTTaskCombatStorage extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 	
@@ -57,7 +55,6 @@ class CBTTaskCombatStorageDef extends IBehTreeTaskDefinition
 
 class CBehTreeTaskCombatStorageCleanup extends IBehTreeTask
 {
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CHumanAICombatStorage;
 	
 	function OnActivate() : EBTNodeStatus
@@ -74,7 +71,9 @@ class CBehTreeTaskCombatStorageCleanup extends IBehTreeTask
 		InitializeCombatDataStorage();
 		
 		combatDataStorage.SetActiveCombatStyle( EBG_Combat_Undefined );
-		combatDataStorage.SetPreCombatWarning(true);
+		combatDataStorage.SetPreCombatWarning( true );
+		combatDataStorage.SetProcessingItems( false );
+		combatDataStorage.SetProcessingRequiresIdle( false );
 		
 		npc.SetBehaviorMimicVariable( 'gameplayMimicsMode', (float)(int)GMM_Default );
 		
@@ -84,13 +83,33 @@ class CBehTreeTaskCombatStorageCleanup extends IBehTreeTask
 		
 		combatDataStorage.DetachAndDestroyProjectile();
 	}
+	
+	function OnListenedGameplayEvent( eventName : name ) : bool
+	{
+		if ( eventName == 'ItemProcessing' && isActive )
+		{
+			InitializeCombatDataStorage();
+			
+			combatDataStorage.SetProcessingItems( GetEventParamInt( 0 ) != 0 );
+			
+			return true;
+		}
+		else if ( eventName == 'ItemProcessingRequiresIdle' && isActive )
+		{
+			InitializeCombatDataStorage();
+			
+			combatDataStorage.SetProcessingRequiresIdle( GetEventParamInt( 0 ) != 0 );
+			
+			return true;
+		}
+		return false;
+	}
 
 	function InitializeCombatDataStorage()
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 }
@@ -98,16 +117,22 @@ class CBehTreeTaskCombatStorageCleanup extends IBehTreeTask
 class CBehTreeTaskCombatStorageCleanupDef extends IBehTreeTaskDefinition
 {
 	default instanceClass = 'CBehTreeTaskCombatStorageCleanup';
+	
+	public function InitializeEvents()
+	{
+		super.InitializeEvents();
+		
+		listenToGameplayEvents.PushBack( 'ItemProcessing' );
+		listenToGameplayEvents.PushBack( 'ItemProcessingRequiresIdle' );
+	}
 }
 
 
 
 class CBTTaskPreCombatWarning extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var combatDataStorage : CBaseAICombatStorage;
 	
-		
 	public var setFlagOnActivate 	: bool;
 	public var setFlagOnDectivate 	: bool;
 	
@@ -140,8 +165,7 @@ class CBTTaskPreCombatWarning extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 }
@@ -163,7 +187,6 @@ class CBTTaskPreCombatWarningDef extends IBehTreeTaskDefinition
 
 class CBTTaskGetPreCombatWarning extends IBehTreeTask
 {
-	protected var storageHandler 	: CAIStorageHandler;
 	protected var combatDataStorage : CBaseAICombatStorage;
 	
 	public var setFlagOnActivate 	: bool;
@@ -181,8 +204,7 @@ class CBTTaskGetPreCombatWarning extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 	

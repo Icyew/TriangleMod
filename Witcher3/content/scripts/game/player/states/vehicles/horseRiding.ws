@@ -104,7 +104,7 @@ state HorseRiding in CR4Player extends UseGenericVehicle
 	
 	event OnCombatStart()
 	{
-		parent.OnCombatStart();
+		virtual_parent.OnCombatStart();
 		parent.AddTimer( 'DrawWeaponIfNeeded', 0.f);
 	}
 	
@@ -121,6 +121,17 @@ state HorseRiding in CR4Player extends UseGenericVehicle
 	
 	timer function DrawWeaponIfNeeded( dt: float, id : int )
 	{
+		var disableAutoSheathe : bool;
+		var inGameConfigWrapper : CInGameConfigWrapper;
+		
+		inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+		disableAutoSheathe = inGameConfigWrapper.GetVarValue( 'Gameplay', 'DisableAutomaticSwordSheathe' );
+		if( disableAutoSheathe )
+		{
+			parent.RemoveTimer('DrawWeaponIfNeeded');
+			return;
+		}
+		
 		if( parent.IsInCombat() )
 		{
 			if ( parent.GetTarget() )
@@ -242,23 +253,52 @@ state HorseRiding in CR4Player extends UseGenericVehicle
 		
 	default trailCameraCooldown = 1.5;
 	default wasTrailCameraActive = false;
-
+	
+	private var m_shouldEnableAutoRotation : bool;
+	
 	event OnGameCameraTick( out moveData : SCameraMovementData, dt : float )
 	{	
 		var camera : CCustomCamera;
+		var angleDist : float;
+		
+		camera = (CCustomCamera)theCamera.GetTopmostCameraObject();
+		
+		
 		
 		if ( !cameraManualRotationDisabled && parent.IsCameraLockedToTarget())
 		{
-			camera = (CCustomCamera)theCamera.GetTopmostCameraObject();
 			camera.EnableManualControl(false);
 			cameraManualRotationDisabled = true;
 		}
 		else if ( cameraManualRotationDisabled && !parent.IsCameraLockedToTarget() )
 		{
-			camera = (CCustomCamera)theCamera.GetTopmostCameraObject();
 			camera.EnableManualControl(true);
 			cameraManualRotationDisabled = false;
 		}
+		
+		if( thePlayer.vehicleCbtMgrAiming && !parent.IsCameraLockedToTarget() )
+		{
+			m_shouldEnableAutoRotation = false;
+		}
+		else if( theInput.LastUsedGamepad() )
+		{
+			angleDist = AngleDistance( parent.GetHeading(), camera.GetHeading() );
+			
+			if( thePlayer.GetAutoCameraCenter() || ( !m_shouldEnableAutoRotation && thePlayer.GetIsSprinting() && AbsF(angleDist) <= 30.0f ) )
+			{
+				m_shouldEnableAutoRotation = true;
+			}
+			else if( m_shouldEnableAutoRotation && !thePlayer.GetAutoCameraCenter() && ( camera.IsManualControledHor() || !thePlayer.GetIsSprinting() ) )
+			{
+				m_shouldEnableAutoRotation = false;
+			}
+		}
+		else
+		{
+			m_shouldEnableAutoRotation = thePlayer.GetAutoCameraCenter();
+		}
+		
+		camera.SetAllowAutoRotation( m_shouldEnableAutoRotation );
 		
 		parent.UpdateLookAtTarget();
 		return vehicleCombatMgr.OnGameCameraTick( moveData, dt );

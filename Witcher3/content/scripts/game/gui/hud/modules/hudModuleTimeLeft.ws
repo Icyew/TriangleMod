@@ -38,9 +38,13 @@ class CR4HudModuleTimeLeft extends CR4HudModuleBase
 		{
 			Show( timeOut );
 		}
-		else
+		else if ( action == EHTOA_Stop )
 		{
 			Hide();
+		}
+		else if ( action == EHTOA_Add )
+		{
+			AddTime( timeOut );
 		}
 	}
 
@@ -61,6 +65,26 @@ class CR4HudModuleTimeLeft extends CR4HudModuleBase
 		ShowElement( false );
 	}
 
+	public function AddTime( timeOut : float )
+	{
+		var currentTimeOut : float;
+		var newTimeOut : float;
+		
+		currentTimeOut = thePlayer.GetCurrentTimeOut();
+		if ( currentTimeOut <= 0 )
+		{
+			
+			return;
+		}
+		newTimeOut = currentTimeOut + timeOut;
+		if ( newTimeOut > thePlayer.GetInitialTimeOut() )
+		{
+			
+			newTimeOut = thePlayer.GetInitialTimeOut();
+		}
+		thePlayer.SetCurrentTimeOut( newTimeOut );
+	}
+	
 	event OnTick(timeDelta : float)
 	{
 		var currentTimeOut : float;

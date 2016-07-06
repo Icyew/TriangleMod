@@ -80,7 +80,10 @@ enum EBehaviorGraph
 	EBG_Combat_WildHunt_Eredin,
 	EBG_Combat_Olgierd,
 	EBG_Combat_Caretaker,
-	EBG_Combat_Vampiress
+	EBG_Combat_Dettlaff_Vampire,
+	EBG_Combat_Gregoire,
+	EBG_Combat_Dettlaff_Minion
+	
 }
 
 
@@ -131,6 +134,8 @@ enum ECriticalStateType
 	ECST_Snowstorm,
 	ECST_Frozen,
 	ECST_Tornado,
+	ECST_Trap,
+	
 }
 
 
@@ -140,10 +145,11 @@ function CalculateCriticalStateTypePriority(type : ECriticalStateType) : int
 	switch(type)
 	{	
 		case ECST_Frozen :				return 130;
-		case ECST_Ragdoll :				return 120;
-		case ECST_Tornado : 			return 115;
-		case ECST_HeavyKnockdown :		return 110;
-		case ECST_Knockdown :			return 100;
+		case ECST_Ragdoll :				return 125;
+		case ECST_Tornado : 			return 120;
+		case ECST_HeavyKnockdown :		return 115;
+		case ECST_Knockdown :			return 105;
+		case ECST_Trap :				return 100;
 		case ECST_Paralyzed :			return 95;
 		case ECST_Immobilize :			return 90;
 		case ECST_Stagger :				return 80;
@@ -287,7 +293,9 @@ enum EInventoryFundsType
 	EInventoryFunds_Unlimited,
 	EInventoryFunds_Rich,
 	EInventoryFunds_Avg,
-	EInventoryFunds_Poor
+	EInventoryFunds_Poor,
+	EInventoryFunds_RichQuickStart,
+	EInventoryFunds_Broke
 }
 
 
@@ -384,7 +392,6 @@ function BehGraphIntToName( graphEnum : int ) : name
 		case EBG_Combat_Witcher							: return 'Witcher';
 		
 		case EBG_Combat_Sorceress						: return 'Sorceress';
-		case EBG_Combat_Vampiress						: return 'Vampiress';
 		
 		case EBG_Combat_WildHunt_Imlerith				: return 'Imlerith';
 		case EBG_Combat_WildHunt_Imlerith_Second_Stage	: return 'ImlerithSecondStage';
@@ -396,8 +403,14 @@ function BehGraphIntToName( graphEnum : int ) : name
 		
 		case EBG_Combat_Caretaker						: return 'Exploration';
 		
+		case EBG_Combat_Dettlaff_Vampire				: return 'DettlaffVampire';
+		
+		case EBG_Combat_Gregoire						: return 'Exploration';
+		
+		case EBG_Combat_Dettlaff_Minion					: return 'DettlaffMinion';
+		
 		case EBG_None									: return 'None';
-
+		
 		default 										: return '';
 	}
 	

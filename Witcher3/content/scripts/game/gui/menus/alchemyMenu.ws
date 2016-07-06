@@ -74,6 +74,8 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 		
 		
 		SelectFirstModule();
+		
+		m_fxSetTooltipState.InvokeSelfTwoArgs( FlashArgBool( thePlayer.upscaledTooltipState ), FlashArgBool( true ) );
 	}
 
 	event  OnClosingMenu()
@@ -141,6 +143,8 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 
 	event OnEntrySelected( tag : name ) 
 	{
+		
+		var i : int;
 		var uiState : W3TutorialManagerUIHandlerStateAlchemy;
 		
 		if (tag != '')
@@ -162,6 +166,9 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 			if(uiState)
 				uiState.SelectedRecipe(tag, m_alchemyManager.CanCookRecipe(tag) == EAE_NoException);
 		}
+		
+		
+		
 	}
 	
 	event  OnShowCraftedItemTooltip( tag : name )
@@ -270,6 +277,7 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 		var cookables				: array<SCookable>;
 		var exists					: bool;
 		var j, cookableCount		: int;
+		var minQuality, maxQuality  : int;
 
 		l_DataFlashArray = m_flashValueStorage.CreateTempFlashArray();
 		length = m_recipeList.Size();
@@ -332,12 +340,14 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 			
 			if(cookableCount > 0)
 			{
-				l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", " (" + cookableCount + ")" );
+				l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", " | " + cookableCount + " |");
 			}
 			else
 			{
 				l_DataFlashObject.SetMemberFlashString(  "categoryPostfix", "" );
 			}
+			
+			thePlayer.inv.GetItemQualityFromName( recipe.cookedItemName, minQuality, maxQuality );
 			
 			l_DataFlashObject.SetMemberFlashUInt(  "tag", NameToFlashUInt(l_Tag) );
 			l_DataFlashObject.SetMemberFlashString(  "dropDownLabel", l_GroupTitle );
@@ -347,8 +357,14 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 			
 			l_DataFlashObject.SetMemberFlashBool( "isNew", l_IsNew );
 			
+			if ( m_guiManager.GetShowItemNames() )
+			{
+				l_Title = l_Title + "<br><font color=\"#FFDB00\">'" + recipe.recipeName + "'</font>";
+			}
+			
 			l_DataFlashObject.SetMemberFlashString(  "label", l_Title );
 			l_DataFlashObject.SetMemberFlashString(  "iconPath", l_IconPath );
+			l_DataFlashObject.SetMemberFlashInt( "rarity", minQuality );
 			
 			if (canCraftResult != EAE_NoException)
 			{
@@ -520,5 +536,25 @@ class CR4AlchemyMenu extends CR4ListBaseMenu
 	{
 		
 		
+	}
+	
+	public final function IsInShop() : bool
+	{
+		var l_obj		 			: IScriptable;		
+		var l_initData				: W3InventoryInitData;
+		var m_npc					: CNewNPC;
+		
+		l_obj = GetMenuInitData();
+		l_initData = (W3InventoryInitData)l_obj;
+		if (l_initData)
+		{
+			m_npc = (CNewNPC)l_initData.containerNPC;
+		}
+		else
+		{
+			m_npc = (CNewNPC)l_obj;
+		}
+		
+		return m_npc;
 	}
 }

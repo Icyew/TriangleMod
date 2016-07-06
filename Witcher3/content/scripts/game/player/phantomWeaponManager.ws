@@ -23,8 +23,8 @@ class CPhantomWeaponManager
 	
 	default hitsToCharge = 3;
 	default timeToDischarge = 5.0;
-	default minVitalityPercToCharge = 10.0;
-	default vitalityPercLostOnDischarge = 10.0;
+	default minVitalityPercToCharge = 15.0;
+	default vitalityPercLostOnDischarge = 15.0;
 	
 	default chargedLoopedFxName = 'special_attack_charged';
 	default chargedSingleFxName = 'special_attack_ready';

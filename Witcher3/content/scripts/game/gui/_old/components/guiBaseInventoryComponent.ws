@@ -9,9 +9,12 @@
 
 abstract class W3GuiBaseInventoryComponent
 {
+	public var autoCleanNewMark:bool;
+	default autoCleanNewMark = false;
+	
 	protected var _inv : CInventoryComponent;
 	
-	protected var filteredItems : array< SItemUniqueId >;
+	
 	protected var highlightedItems : array< name >;
 	
 	private var ITEM_NEED_REPAIR_DISPLAY_VALUE : int;
@@ -135,7 +138,7 @@ abstract class W3GuiBaseInventoryComponent
 		var l_flashObject : CScriptedFlashObject;
 		
 		_inv.GetAllItems( rawItems );
-		filteredItems.Clear();
+		
 		
 		for ( i = 0; i < rawItems.Size(); i += 1 )
 		{		
@@ -143,15 +146,15 @@ abstract class W3GuiBaseInventoryComponent
 			
 			if ( ShouldShowItem( item ) )
 			{
-				filteredItems.PushBack( item );
+				
 				l_flashObject = flashObject.CreateFlashObject("red.game.witcher3.menus.common.ItemDataStub");
 				SetInventoryFlashObjectForItem( item, l_flashObject );
 				flashArray.PushBackFlashObject(l_flashObject);
 			}
 		}
-	}
+	}	
 	
-	public function HasNewFlagOnItem() : bool
+	public function HasNewFlagOnItem( optional out hasVisibleItems : bool ) : bool
 	{
 		var i : int;
 		var item : SItemUniqueId;
@@ -159,14 +162,17 @@ abstract class W3GuiBaseInventoryComponent
 		var uiData : SInventoryItemUIData;
 		
 		_inv.GetAllItems( rawItems );
-		filteredItems.Clear();
+		
+		
+		hasVisibleItems = false;
 		
 		for ( i = 0; i < rawItems.Size(); i += 1 )
-		{		
+		{
 			item = rawItems[i];
 			
 			if ( ShouldShowItem( item ) )
 			{
+				hasVisibleItems = true;
 				uiData = _inv.GetInventoryItemUIData( item );
 				
 				if (uiData.isNew)
@@ -310,6 +316,7 @@ abstract class W3GuiBaseInventoryComponent
 		var weight : float;
 		var durability : float;
 		var price : int;
+		var colorName:name;
 		
 		var i : int;
 		var highlightedItemsCount : int;
@@ -317,6 +324,7 @@ abstract class W3GuiBaseInventoryComponent
 		var quantity : int;
 		var bRead : bool;
 		var tmp: bool;
+		var chargesCount:int;
 		
 		uiData = _inv.GetInventoryItemUIData( item );
 		slotType = GetItemEquippedSlot( item );
@@ -334,18 +342,24 @@ abstract class W3GuiBaseInventoryComponent
 		{
 			if(_inv.IsItemSingletonItem(item))
 			{
-				maxAmmo = thePlayer.inv.SingletonItemGetMaxAmmo(item);
-				
-				if (maxAmmo > 0)
+				if( thePlayer.inv.SingletonItemGetMaxAmmo(item) > 0 )
 				{
-					charges = thePlayer.inv.SingletonItemGetAmmo(item) + "/" + thePlayer.inv.SingletonItemGetMaxAmmo(item);
+					chargesCount = thePlayer.inv.SingletonItemGetAmmo(item);
+					
+					if( chargesCount <= 0 )
+					{
+						charges = "<font color=\"#CC0000\">" +  chargesCount + " " +"</font>";
+					}
+					else
+					{
+						charges = "<font color=\"#DEDEDE\">" +  chargesCount +  " " +"</font>";
+					}
 				}
 				else
 				{
 					charges = "";
 				}
 				
-				quantity = 1;
 				flashObject.SetMemberFlashString( "charges",  charges);
 				flashObject.SetMemberFlashInt( "quantity", quantity);
 			}
@@ -355,6 +369,8 @@ abstract class W3GuiBaseInventoryComponent
 				flashObject.SetMemberFlashInt( "quantity", quantity);
 			}
 		}
+		
+		itemName = _inv.GetItemName(item); 
 		
 		highlightedItemsCount = highlightedItems.Size();
 		if (highlightedItemsCount > 0)
@@ -370,7 +386,7 @@ abstract class W3GuiBaseInventoryComponent
 			}
 		}		
 		
-		if( _inv.ItemHasTag(item, 'ReadableItem'))
+		if( _inv.ItemHasTag( item, 'ReadableItem' ) && !isItemSchematic( item ) )
 		{
 			bRead = _inv.IsBookRead(item);
 			
@@ -394,10 +410,23 @@ abstract class W3GuiBaseInventoryComponent
 		}
 		gridSize =  Clamp( uiData.gridSize, 1, 2 ); 
 		
+		if( _inv.IsItemColored( item ) )
+		{
+			colorName = _inv.GetItemColor( item );
+			flashObject.SetMemberFlashString( "itemColor", NameToString( colorName ) );
+		}
+		
 		flashObject.SetMemberFlashInt( "gridSize", gridSize );
 		flashObject.SetMemberFlashInt( "slotType", slotType );
 		flashObject.SetMemberFlashBool( "isNew", uiData.isNew );
-		flashObject.SetMemberFlashBool( "isOilApplied", _inv.ItemHasOilApplied(item) && !_inv.IsItemOil( item ) );
+		
+		if( autoCleanNewMark && uiData.isNew )
+		{
+			uiData.isNew = false;
+			_inv.SetInventoryItemUIData( item, uiData );
+		}
+		
+		flashObject.SetMemberFlashBool( "isOilApplied", _inv.ItemHasAnyActiveOilApplied(item) && !_inv.IsItemOil( item ) );
 		flashObject.SetMemberFlashInt( "equipped", equipped );
 		
 		flashObject.SetMemberFlashInt( "quality", _inv.GetItemQuality( item ) );
@@ -411,7 +440,8 @@ abstract class W3GuiBaseInventoryComponent
 		flashObject.SetMemberFlashBool( "isArmorUpgrade", _inv.ItemHasTag(item, 'ArmorUpgrade') );
 		flashObject.SetMemberFlashBool( "isWeaponUpgrade",  _inv.ItemHasTag(item, 'WeaponUpgrade') );
 		flashObject.SetMemberFlashBool( "isArmorRepairKit", _inv.ItemHasTag(item, 'ArmorReapairKit') );
-		flashObject.SetMemberFlashBool( "isWeaponRepairKit", _inv.ItemHasTag(item, 'WeaponReapairKit') );		
+		flashObject.SetMemberFlashBool( "isWeaponRepairKit", _inv.ItemHasTag(item, 'WeaponReapairKit') );
+		flashObject.SetMemberFlashBool( "isDye", _inv.IsItemDye( item ) );
 		
 		flashObject.SetMemberFlashBool( "showExtendedTooltip", true );
 		
@@ -469,6 +499,7 @@ abstract class W3GuiBaseInventoryComponent
 		
 		
 		flashObject.SetMemberFlashString( "category", _inv.GetItemCategory(item) );
+		
 	}
 	
 	public function GetItemQuantity( item : SItemUniqueId ):int
@@ -613,29 +644,55 @@ abstract class W3GuiBaseInventoryComponent
 		return _inv.GetItemCategory( item ) == 'crafting_schematic' || _inv.GetItemCategory( item ) == 'alchemy_recipe';
 	}
 	
+	public function isItemUsable( item : SItemUniqueId ) : bool
+	{
+		return _inv.IsItemUsable( item );
+	}
+	
+	public function IsItemDye( item : SItemUniqueId ) : bool
+	{
+		return _inv.IsItemDye( item );
+	}
+	
 	public function GetFilterTypeByItem( item : SItemUniqueId) : EInventoryFilterType
 	{
 		var filterType : EInventoryFilterType;
 		
-		if ( isItemReadable(item) && !isQuestItem( item ) )
+		if (( !isFoodItem( item ) && !isIngredientItem( item ) && !isWeaponItem( item ) && 
+			  !isArmorItem( item ) && ! isAlchemyItem( item ) && !isUpgradeItem( item ) && !isItemSchematic( item ) && 
+			  !isToolItem( item ) && !isHorseItem( item )) && !isQuickslotItem( item ) && !isItemUsable( item ) || isQuestItem( item ) )
+		{
+			return IFT_QuestItems;
+		}
+		else
+		if (isFoodItem( item ) || isHorseItem( item ))
+		{
+			return IFT_Default;
+		}
+		else
+		if( isIngredientItem( item ) && !IsItemDye( item ) )
+		{
+			return IFT_Ingredients;
+		}
+		else
+		if( isWeaponItem( item ) || isArmorItem( item ) || isUpgradeItem( item ) || isToolItem( item ) || isItemUsable( item ) || isQuickslotItem( item ) )
+		{
+			return IFT_Weapons;
+		}
+		else
+		if (!isQuestItem( item ) && isItemReadable( item ))
 		{
 			return IFT_Books;
 		}
-		else if( isQuestItem( item ) && !isHorseItem( item ) )
-		{
-			return IFT_QuestItems;
-		}			
-		else if( isIngredientItem( item ) )
-		{
-			return IFT_Ingredients;
-		}				
-		else if( isAlchemyItem( item )  ) 
+		else
+		if (isAlchemyItem( item ) && !isFoodItem(item))
 		{
 			return IFT_AlchemyItems;
-		}				
-		else if( isWeaponItem( item ) || isArmorItem( item ) || isUpgradeItem( item ) || isHorseItem(item) || isToolItem(item) )
+		}
+		else
+		if (isHorseItem( item ))
 		{
-			return IFT_Weapons;
+			return IFT_HorseItems;
 		}
 		else
 		{

@@ -18,15 +18,11 @@ class CBTCondMyHorseIsMounted extends IBehTreeTask
 {	
 	var waitForMountEnd 		: Bool;
 	var waitForDismountEnd 		: Bool;
-	var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 				: CAIStorageRiderData;
 	var returnTrueWhenNoHorse	: Bool;
 	
 	function IsAvailable() : bool
 	{
-		var owner 		: CActor = GetActor();
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		if ( !riderData || !riderData.sharedParams || !riderData.sharedParams.GetHorse() )
 		{
 			if ( returnTrueWhenNoHorse )
@@ -77,9 +73,8 @@ class CBTCondMyHorseIsMounted extends IBehTreeTask
 		return false;
 	}
 	function Initialize()
-	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+	{
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -109,13 +104,10 @@ class CBTCondMyHorseIsMountedDef extends IBehTreeRiderConditionalTaskDefinition
 
 class CBTCondRiderHasPairedHorse extends IBehTreeTask
 {	
-	var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 	: CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var owner 		: CActor = GetActor();
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
 		if ( riderData.sharedParams.GetHorse() )
 		{
 			return true;
@@ -124,8 +116,7 @@ class CBTCondRiderHasPairedHorse extends IBehTreeTask
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 	function OnListenedGameplayEvent( eventName : name ) : bool
 	{
@@ -155,37 +146,21 @@ class CBTCondRiderHasPairedHorseDef extends IBehTreeRiderConditionalTaskDefiniti
 
 class CBTCondRiderFightOnHorse extends IBehTreeTask
 {	
-	var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 	: CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var actor 		: CActor = GetActor();
-		var riderData 	: CAIStorageRiderData;
-		
-		
-		
-		
-		
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		
 		if ( riderData.sharedParams.mountStatus == VMS_mountInProgress || riderData.sharedParams.mountStatus == VMS_mounted )
 		{
 			return true;
 		}
 		
-		
-		
-		return false;
-		
-		
-		
 		return false;
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -239,7 +214,7 @@ class CBTCondIsTargetMountedDef extends IBehTreeRiderConditionalTaskDefinition
 
 class CBTCondRiderDistanceToHorse extends IBehTreeTask
 {	
-	var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	var minDistance 			: float;
 	var maxDistance 			: float;
 	function IsAvailable() : bool
@@ -260,9 +235,6 @@ class CBTCondRiderDistanceToHorse extends IBehTreeTask
 	function Check() : bool
 	{
 		var squaredDistance : float;
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		
 		if ( !riderData || !riderData.sharedParams.GetHorse() )
 		{
@@ -278,8 +250,7 @@ class CBTCondRiderDistanceToHorse extends IBehTreeTask
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData',this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -297,13 +268,10 @@ class CBTCondRiderDistanceToHorseDef extends IBehTreeRiderConditionalTaskDefinit
 
 class CBTCondRiderPlayingSyncAnim extends IBehTreeTask
 {	
-	var aiStorageHandler 	: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var riderData 		: CAIStorageRiderData;
-		var horseComp 		: CVehicleComponent;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
 		if ( riderData.sharedParams.GetHorse() )
 		{
 			return false;
@@ -319,8 +287,7 @@ class CBTCondRiderPlayingSyncAnim extends IBehTreeTask
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -334,13 +301,10 @@ class CBTCondRiderPlayingSyncAnimDef extends IBehTreeRiderConditionalTaskDefinit
 
 class CBTCondRiderIsMountInProgress extends IBehTreeTask
 {	
-	var aiStorageHandler 	: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var riderData 		: CAIStorageRiderData;
-		var horseComp 		: CVehicleComponent;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
 		if ( riderData.sharedParams.GetHorse() )
 		{
 			return false;
@@ -357,8 +321,7 @@ class CBTCondRiderIsMountInProgress extends IBehTreeTask
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -373,15 +336,11 @@ class CBTCondRiderIsMountInProgressDef extends IBehTreeRiderConditionalTaskDefin
 
 class CBTCondRiderIsDismountInProgress extends IBehTreeTask
 {
-	var aiStorageHandler 	: CAIStorageHandler;
 	private var riderData : CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var riderData		: CAIStorageRiderData;
 		var horseComp 		: CVehicleComponent;
-		
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
 		
 		if ( riderData.GetRidingManagerCurrentTask() == RMT_DismountHorse )
 		{
@@ -394,10 +353,7 @@ class CBTCondRiderIsDismountInProgress extends IBehTreeTask
 	}
 	function Initialize()
 	{		
-		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -414,20 +370,15 @@ class CBTCondRiderHasFallenFromHorse extends IBehTreeTask
 {	
 	var waitForMountEnd 		: Bool;
 	var waitForDismountEnd 		: Bool;
-	var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 				: CAIStorageRiderData;
 	
 	function IsAvailable() : bool
 	{
-		var owner 		: CActor = GetActor();
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		return riderData.sharedParams.hasFallenFromHorse;
 	}
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 };
 
@@ -443,8 +394,6 @@ class CBTCondRiderHasFallenFromHorseDef extends IBehTreeRiderConditionalTaskDefi
 
 class CBTTaskRiderCombatOnHorseDecorator extends IBehTreeTask
 {	
-	
-	
 	function OnActivate() : EBTNodeStatus
 	{	
 		return BTNS_Active;
@@ -453,12 +402,25 @@ class CBTTaskRiderCombatOnHorseDecorator extends IBehTreeTask
 	function OnGameplayEvent( eventName : name ) : bool
 	{
 		var buffType : ECriticalStateType;
+		var horseActor : CActor;
 		
 		if ( eventName == 'CriticalState' )
 		{
+			horseActor = (CActor)(GetNPC().GetUsedHorseComponent().GetEntity());
+			
+			if( horseActor && horseActor.HasAbility( 'DisableHorsePanic' ) )
+			{
+				return false;
+			}
+			
 			buffType = this.GetEventParamInt(-1);
+			
 			if ( buffType == ECST_Knockdown || buffType == ECST_HeavyKnockdown || buffType == ECST_Ragdoll || buffType == ECST_Stagger || buffType == ECST_LongStagger )
 			{
+				if( GetActor().IsImmuneToBuff( getBuffType( buffType ) ) )
+				{
+					return false;
+				}
 				GetActor().SignalGameplayEventParamInt( 'RidingManagerDismountHorse', DT_ragdoll );
 			}
 			else
@@ -470,7 +432,32 @@ class CBTTaskRiderCombatOnHorseDecorator extends IBehTreeTask
 		return false;
 	}
 	
-	
+	function getBuffType( CSType : ECriticalStateType ) : EEffectType
+	{
+		switch( CSType )
+		{
+			case ECST_Immobilize 				: return EET_Immobilized;
+			case ECST_BurnCritical 				: return EET_Burning;
+			case ECST_Knockdown 				: return EET_Knockdown;
+			case ECST_HeavyKnockdown 			: return EET_HeavyKnockdown;
+			case ECST_Blindness					: return EET_Blindness;
+			case ECST_Confusion					: return EET_Confusion;
+			case ECST_Paralyzed					: return EET_Paralyzed;
+			case ECST_Hypnotized				: return EET_Hypnotized;
+			case ECST_Stagger					: return EET_Stagger;
+			case ECST_CounterStrikeHit			: return EET_CounterStrikeHit;
+			case ECST_LongStagger				: return EET_LongStagger;
+			case ECST_Pull						: return EET_Pull;
+			case ECST_Ragdoll					: return EET_Ragdoll;
+			case ECST_PoisonCritical			: return EET_PoisonCritical;
+			case ECST_Frozen					: return EET_Frozen;
+			case ECST_Swarm						: return EET_Swarm;
+			case ECST_Snowstorm					: return EET_Snowstorm;
+			case ECST_Tornado					: return EET_Tornado;
+			case ECST_Trap						: return EET_Trap;
+			default 							: return EET_Undefined;
+		}
+	}
 }
 
 class CBTTaskRiderCombatOnHorseDecoratorDef extends IBehTreeRiderTaskDefinition
@@ -481,19 +468,15 @@ class CBTTaskRiderCombatOnHorseDecoratorDef extends IBehTreeRiderTaskDefinition
 
 class CBTTaskRiderMountHorse extends IBehTreeTask
 {	
-	var aiStorageHandler 	: CAIStorageHandler;
+	var riderData 	: CAIStorageRiderData;
 
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		aiStorageHandler.Get();
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 	function OnActivate() : EBTNodeStatus
 	{
 		var squaredDistance : float;
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get(); 
 		if ( !riderData.sharedParams.GetHorse() )
 		{
 			return BTNS_Failed;
@@ -508,8 +491,6 @@ class CBTTaskRiderMountHorse extends IBehTreeTask
 	}
 	latent function Main() : EBTNodeStatus
 	{
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
 		while ( true )
 		{
 			if ( riderData.GetRidingManagerCurrentTask() == RMT_None )
@@ -539,7 +520,7 @@ class CBTTaskRiderMountHorseDef extends IBehTreeRiderTaskDefinition
 
 class CBTTaskRiderDismountHorse extends IBehTreeTask
 {	
-	var aiStorageHandler 	: CAIStorageHandler;
+	var riderData 	: CAIStorageRiderData;
 	var endDismountDone		: bool;
 	function OnActivate() : EBTNodeStatus
 	{
@@ -548,8 +529,6 @@ class CBTTaskRiderDismountHorse extends IBehTreeTask
 	}
 	latent function Main() : EBTNodeStatus
 	{
-		var riderData 	: CAIStorageRiderData;
-		riderData		= (CAIStorageRiderData)aiStorageHandler.Get();
 		while ( true )
 		{
 			if ( riderData.GetRidingManagerCurrentTask() == RMT_None && riderData.sharedParams.mountStatus == VMS_dismounted )
@@ -564,9 +543,7 @@ class CBTTaskRiderDismountHorse extends IBehTreeTask
 
 	function Initialize()
 	{		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
-		aiStorageHandler.Get();
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -649,22 +626,16 @@ class CBTTaskRiderWaitForDismountDef extends IBehTreeRiderTaskDefinition
 class CBTTaskRiderSetFollowActionOnHorse extends IBehTreeTask
 {
 	var horseFollowAction				: CAIFollowAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseFollowAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -691,22 +662,16 @@ class CBTTaskRiderSetFollowActionOnHorseDef extends IBehTreeRiderTaskDefinition
 class CBTTaskRiderSetFollowSideBySideActionOnHorse extends IBehTreeTask
 {
 	var horseFollowSideBySideAction		: CAIFollowSideBySideAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseFollowSideBySideAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -735,22 +700,16 @@ class CBTTaskRiderSetFollowSideBySideActionOnHorseDef extends IBehTreeRiderTaskD
 class CBTTaskRiderSetDoNothingActionOnHorse extends IBehTreeTask
 {
 	var horseDoNothingAction			: CAIHorseDoNothingAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 						: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseDoNothingAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -777,22 +736,16 @@ class CBTTaskRiderSetDoNothingActionOnHorseDef extends IBehTreeRiderTaskDefiniti
 class CBTTaskRiderSetMoveToActionOnHorse extends IBehTreeTask
 {
 	var horseMoveToAction				: CAIMoveToAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 						: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseMoveToAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -819,22 +772,16 @@ class CBTTaskRiderSetMoveToActionOnHorseDef extends IBehTreeRiderTaskDefinition
 class CBTTaskRiderSetMoveAlongPathActionOnHorse extends IBehTreeTask
 {
 	var horseMoveAlongPathAction		: CAIMoveAlongPathAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 						: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseMoveAlongPathAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -861,22 +808,16 @@ class CBTTaskRiderSetMoveAlongPathActionOnHorseDef extends IBehTreeRiderTaskDefi
 class CBTTaskRiderSetMoveAlongPathWithCompanionActionOnHorse extends IBehTreeTask
 {
 	var horseMoveAlongPathAction		: CAIMoveAlongPathWithCompanionAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseMoveAlongPathAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -903,22 +844,16 @@ class CBTTaskRiderSetMoveAlongPathWithCompanionActionOnHorseDef extends IBehTree
 class CBTTaskRiderSetRaceAlongPathActionOnHorse extends IBehTreeTask
 {
 	var horseRaceAlongPathAction		: CAIRaceAlongPathAction;
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.horseScriptedActionTree = horseRaceAlongPathAction;
 		
 		return BTNS_Active;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -942,18 +877,16 @@ class CBTTaskRiderSetRaceAlongPathActionOnHorseDef extends IBehTreeRiderTaskDefi
 
 class CBTTaskRiderAdjustToHorse extends IBehTreeTask
 {
-	private var aiStorageHandler 	: CAIStorageHandler;
-	private var ticket 				: SMovementAdjustmentRequestTicket;
+	var riderData 		: CAIStorageRiderData;
+	var ticket 			: SMovementAdjustmentRequestTicket;
 	latent function Main() : EBTNodeStatus
 	{
 		var actor 				: CActor = GetActor();
 		var movementAdjustor 	: CMovementAdjustor;
-		var riderData 			: CAIStorageRiderData;
 		var dir 				: Vector;
 		var targetYaw, time		: float;
 		var squaredDistance		: float;
 		var angle 				: EulerAngles;
-		riderData				= (CAIStorageRiderData)aiStorageHandler.Get();
 		movementAdjustor 		= actor.GetMovingAgentComponent().GetMovementAdjustor();
 		if ( !riderData.sharedParams.GetHorse() )
 		{
@@ -989,10 +922,7 @@ class CBTTaskRiderAdjustToHorse extends IBehTreeTask
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 	
 };
@@ -1007,28 +937,21 @@ class CBTTaskRiderAdjustToHorseDef extends IBehTreeRiderTaskDefinition
 
 class CBTTaskRiderNotifyScriptedActionOnHorse extends IBehTreeTask
 {
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
 		riderData.sharedParams.scriptedActionPending = true;
 		
 		return BTNS_Active;
 	}
 	function OnDeactivate()
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
 		riderData.sharedParams.scriptedActionPending = false;
 	}
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -1041,23 +964,17 @@ class CBTTaskRiderNotifyScriptedActionOnHorseDef extends IBehTreeRiderTaskDefini
 
 class CBTTaskRiderNotifyHorseAboutCombatTarget extends IBehTreeTask
 {
-	private var aiStorageHandler 		: CAIStorageHandler;
+	var riderData 		: CAIStorageRiderData;
 	
 	function OnDeactivate()
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		riderData.sharedParams.combatTarget = GetCombatTarget();
 		riderData.sharedParams.GetHorse().SignalGameplayEvent('RiderCombatTargetUpdated');
 	}
 	
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -1070,14 +987,11 @@ class CBTTaskRiderNotifyHorseAboutCombatTargetDef extends IBehTreeRiderTaskDefin
 
 class CBTTaskRiderNotifyHorseAboutMounting extends IBehTreeTask
 {
-	private var aiStorageHandler 		: CAIStorageHandler;
-	private var horseComp				: W3HorseComponent;
+	var riderData 				: CAIStorageRiderData;
+	var horseComp				: W3HorseComponent;
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData 		: CAIStorageRiderData;
-		riderData			= (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		horseComp = ((CNewNPC)riderData.sharedParams.GetHorse()).GetHorseComponent();
 		
 		horseComp.OnRiderWantsToMount();
@@ -1087,10 +1001,7 @@ class CBTTaskRiderNotifyHorseAboutMounting extends IBehTreeTask
 	
 	function Initialize()
 	{
-		var riderData 		: CAIStorageRiderData;
-		
-		aiStorageHandler 	= new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 
@@ -1148,15 +1059,12 @@ class CBTTaskRiderSetCanBeFollowedDef extends IBehTreeRiderTaskDefinition
 
 class CBTTaskRiderStopAttack extends IBehTreeTask
 {
-	private var aiStorageHandler : CAIStorageHandler;
+	var riderData : CAIStorageRiderData;
 	private var horse : CNewNPC;
 	
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var riderData : CAIStorageRiderData;
-		riderData = (CAIStorageRiderData)aiStorageHandler.Get();
-		
 		horse = (CNewNPC)riderData.sharedParams.GetHorse();
 		horse.SignalGameplayEvent( 'StopAttackOnHorse' );
 		GetNPC().SetIsInHitAnim( true );
@@ -1171,10 +1079,7 @@ class CBTTaskRiderStopAttack extends IBehTreeTask
 	
 	function Initialize()
 	{
-		var riderData : CAIStorageRiderData;
-		
-		aiStorageHandler = new CAIStorageHandler in this;
-		aiStorageHandler.Initialize( 'RiderData', '*CAIStorageRiderData', this );
+		riderData = (CAIStorageRiderData)RequestStorageItem( 'RiderData', 'CAIStorageRiderData' );
 	}
 }
 

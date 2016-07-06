@@ -21,7 +21,7 @@ state Bestiary in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 		isClosing = false;
 		
-		CloseHint(OPEN_BESTIARY);
+		theGame.GetTutorialSystem().HideTutorialHint( OPEN_BESTIARY );
 		ShowHint(BESTIARY_DESCRIPTION, 0.02f, 0.65f);
 	}
 		
@@ -29,8 +29,8 @@ state Bestiary in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		isClosing = true;
 		
-		CloseHint(BESTIARY_DESCRIPTION);
-		CloseHint(BESTIARY_CLOSE);
+		CloseStateHint(BESTIARY_DESCRIPTION);
+		CloseStateHint(BESTIARY_CLOSE);
 		
 		super.OnLeaveState(nextStateName);
 	}

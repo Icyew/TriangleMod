@@ -33,6 +33,7 @@ import struct SCommonMapPinInstance
 	import var extraTag : name;
 	import var type : name;
 	import var visibleType : name;
+	import var alternateVersion : int;
 	import var position : Vector;
 	import var radius : float;
 	import var visibleRadius : float;
@@ -96,19 +97,25 @@ import abstract class CCommonMapManager extends IGameSystem
 	import final function SetEntityMapPinDiscovered( tag : name, optional set : bool );
 	import final function IsEntityMapPinDisabled( tag : name ) : bool;
 	import final function SetEntityMapPinDisabled( tag : name, optional set : bool );
-	import final function IsQuestType( type : name ) : bool;
+	import final function IsQuestPinType( type : name ) : bool;
+	import final function IsUserPinType( type : name ) : bool;
+	import final function GetUserPinNames( out names : array< name > );
 	import final function ShowKnownEntities( show : bool );
 	import final function CanShowKnownEntities() : bool;
+	import final function ShowDisabledEntities( show : bool );
+	import final function CanShowDisabledEntities() : bool;
 	import final function ShowFocusClues( optional show : bool );
 	import final function ShowHintWaypoints( optional show : bool );
 	import final function AddQuestLootContainer( container : CEntity );
 	import final function DeleteQuestLootContainer( container : CEntity );
 	import final function CacheMapPins();
 	import final function GetMapPinInstances( worldPath : string ) : array< SCommonMapPinInstance >;
+	import final function GetHighlightedMapPinTag() : name;
 	import final function TogglePathsInfo( optional toggle : bool );
 	import final function ToggleQuestAgentsInfo( optional toggle : bool );
 	import final function ToggleShopkeepersInfo( optional toggle : bool );
 	import final function ToggleInteriorInfo( optional toggle : bool );
+	import final function ToggleUserPinsInfo( optional toggle : bool );
 	import final function TogglePinsInfo( optional flags : int );
 	import final function ExportGlobalMapPins();
 	import final function ExportEntityMapPins();
@@ -120,16 +127,20 @@ import abstract class CCommonMapManager extends IGameSystem
 	import final function EnableMapPath( tag : name, enable : bool, lineWidth : float, segmentLength : float, color : Color );
 	import final function EnableDynamicMappin( tag : name, enable : bool, type : name, optional useAgents : bool );
 	import final function InvalidateStaticMapPin( entityName : name );
-	import final function ToggleUserMapPin( area : EAreaName, position : Vector ) : bool;
-	import final function GetUserMapPin( out area : int, out mapPinX : float, out mapPinY : float );
+	import final function ToggleUserMapPin( area : EAreaName, position : Vector, type : int, fromSelectionPanel : bool, out indexToAdd : int, out indexToRemove : int ) : int;
+	import final function GetUserMapPinLimits( out waypointPinLimit : int, out otherPinLimit : int ) : int;
+	import final function GetUserMapPinCount() : int;
+	import final function GetUserMapPinByIndex( index : int, out id : int, out area : int, out mapPinX : float, out mapPinY : float, out type : int ) : bool;
+	import final function GetUserMapPinIndexById( id : int ) : int;
+	import final function GetIdOfFirstUser1MapPin( id : int ) : bool;
 	import final function GetCurrentArea() : int;
 	import final function NotifyPlayerEnteredBorder( interval : float, position : Vector, rotation : EulerAngles ) : int;
 	import final function NotifyPlayerExitedBorder() : int;
 	import final function IsWorldAvailable( area : int ) : bool;
 	import final function GetWorldContentTag( area : int ) : name;
 	import final function GetWorldPercentCompleted( area : int ) : int;
-	import final function SetPinFilterVisible( pinID : name, visible : bool );
-	import final function GetPinFilterVisible( pinID : name ) : bool;
+	import final function DisableMapPin( pinName : string, disable : bool ) : bool;
+	import final function GetDisabledMapPins() : array< string >;
 
 	
 	event OnMapPinChanged()
@@ -168,6 +179,7 @@ import abstract class CCommonMapManager extends IGameSystem
 				m_guiManager.RegisterNewMappinEntry('noticeboard','noticeboard');
 			}
 			else if (	mapPinType == 'MonsterNest' ||
+						mapPinType == 'InfestedVineyard' ||
 						mapPinType == 'PlaceOfPower' ||
 						mapPinType == 'TreasureHuntMappin' ||
 						mapPinType == 'SpoilsOfWar' ||
@@ -177,7 +189,13 @@ import abstract class CCommonMapManager extends IGameSystem
 						mapPinType == 'Contraband' ||
 						mapPinType == 'ContrabandShip' ||
 						mapPinType == 'RescuingTown' ||
-						mapPinType == 'DungeonCrawl' )
+						mapPinType == 'DungeonCrawl' ||
+						mapPinType == 'Hideout' ||
+						mapPinType == 'Plegmund' ||
+						mapPinType == 'KnightErrant' ||
+						mapPinType == 'WineContract' ||
+						mapPinType == 'SignalingStake'
+					)
 			{
 				UpdateHud( mapPinType );
 				m_guiManager = theGame.GetGuiManager();
@@ -389,6 +407,7 @@ import abstract class CCommonMapManager extends IGameSystem
 	
 		types.PushBack( 'Entrance' );
 		types.PushBack( 'MonsterNest' );
+		types.PushBack( 'InfestedVineyard' );
 		types.PushBack( 'PlaceOfPower' );
 		types.PushBack( 'TreasureHuntMappin' );
 		types.PushBack( 'SpoilsOfWar' );
@@ -399,6 +418,11 @@ import abstract class CCommonMapManager extends IGameSystem
 		types.PushBack( 'ContrabandShip' );
 		types.PushBack( 'RescuingTown' );
 		types.PushBack( 'DungeonCrawl' );
+		types.PushBack( 'Hideout' );
+		types.PushBack( 'Plegmund' );
+		types.PushBack( 'KnightErrant' );
+		types.PushBack( 'WineContract' );
+		types.PushBack( 'SignalingStake' );
 	}
 	
 	function GetDiscoverableMapPinTypes( out types : array< name > )
@@ -408,16 +432,24 @@ import abstract class CCommonMapManager extends IGameSystem
 		types.PushBack( 'RoadSign' );
 		types.PushBack( 'Harbor' );
 		types.PushBack( 'MonsterNest' );
+		types.PushBack( 'InfestedVineyard' );
 		types.PushBack( 'PlaceOfPower' );
 		types.PushBack( 'MagicLamp' );
 		types.PushBack( 'TreasureHuntMappin' );
 		types.PushBack( 'PointOfInterestMappin' );
 		
 		
+		types.PushBack( 'PlayerStashDiscoverable' );
 		types.PushBack( 'Rift' );
 		types.PushBack( 'Teleport' );
 		types.PushBack( 'Whetstone' );
 		types.PushBack( 'ArmorRepairTable' );
+		types.PushBack( 'AlchemyTable' );
+		types.PushBack( 'MutagenDismantle' );
+		types.PushBack( 'Stables' );
+		types.PushBack( 'Bookshelf' );
+		types.PushBack( 'Bed' );
+		types.PushBack( 'WitcherHouse' );
 		types.PushBack( 'Entrance' );
 		types.PushBack( 'SpoilsOfWar' );
 		types.PushBack( 'BanditCamp' );
@@ -427,6 +459,11 @@ import abstract class CCommonMapManager extends IGameSystem
 		types.PushBack( 'ContrabandShip' );
 		types.PushBack( 'RescuingTown' );
 		types.PushBack( 'DungeonCrawl' );
+		types.PushBack( 'Hideout' );
+		types.PushBack( 'Plegmund' );
+		types.PushBack( 'KnightErrant' );
+		types.PushBack( 'WineContract' );
+		types.PushBack( 'SignalingStake' );
 	}
 	
 	function GetDisableableMapPinTypes( out regularTypes : array< name >, out disabledTypes : array< name > )
@@ -436,6 +473,8 @@ import abstract class CCommonMapManager extends IGameSystem
 		
 		regularTypes.PushBack(  'MonsterNest' );
 		disabledTypes.PushBack( 'MonsterNestDisabled' );
+		regularTypes.PushBack(  'InfestedVineyard' );
+		disabledTypes.PushBack( 'InfestedVineyardDisabled' );
 		regularTypes.PushBack(  'PlaceOfPower' );
 		disabledTypes.PushBack( 'PlaceOfPowerDisabled' );
 		regularTypes.PushBack(  'TreasureHuntMappin' );
@@ -456,6 +495,16 @@ import abstract class CCommonMapManager extends IGameSystem
 		disabledTypes.PushBack( 'RescuingTownDisabled' );
 		regularTypes.PushBack(  'DungeonCrawl' );
 		disabledTypes.PushBack( 'DungeonCrawlDisabled' );
+		regularTypes.PushBack(  'Hideout' );
+		disabledTypes.PushBack( 'HideoutDisabled' );
+		regularTypes.PushBack(  'Plegmund' );
+		disabledTypes.PushBack( 'PlegmundDisabled' );
+		regularTypes.PushBack(  'KnightErrant' );
+		disabledTypes.PushBack( 'KnightErrantDisabled' );
+		regularTypes.PushBack(  'WineContract' );
+		disabledTypes.PushBack( 'WineContractDisabled' );
+		regularTypes.PushBack(  'SignalingStake' );
+		disabledTypes.PushBack( 'SignalingStakeDisabled' );
 	}
 	
 	event OnStartTeleportingPlayerToPlayableArea( position : Vector, rotation : EulerAngles )
@@ -480,12 +529,20 @@ import abstract class CCommonMapManager extends IGameSystem
 		switch(type)
 		{
 			case 'MonsterNest' :
+			case 'InfestedVineyard' :
 			case 'PlaceOfPower' :
 			case 'Rift' :
 			case 'Teleport' :
 			case 'Whetstone' :
 			case 'ArmorRepairTable' :
+			case 'AlchemyTable' :
+			case 'MutagenDismantle' :
+			case 'Stables' :
+			case 'Bookshelf' :
+			case 'Bed' :
+			case 'WitcherHouse' :
 			case 'MagicLamp' :
+			case 'PlayerStashDiscoverable':
 			case '':
 				return false;
 		}
@@ -737,7 +794,7 @@ import abstract class CCommonMapManager extends IGameSystem
 		return '';
 	}
 	
-	event OnManageFastTravelAreas( enable : bool, show : bool, affectedAreas : array< int > )
+	event OnManageFastTravelAreas( operation : EQuestManageFastTravelOperation, enable : bool, show : bool, affectedAreas : array< int > )
 	{
 		var i, j : int;
 		var tags : array< name >;
@@ -751,19 +808,25 @@ import abstract class CCommonMapManager extends IGameSystem
 		}
 	}
 
-	event OnManageFastTravelPoints( enable : bool, show : bool, affectedFastTravelPoints : array< name > )
+	event OnManageFastTravelPoints( operation : EQuestManageFastTravelOperation, enable : bool, show : bool, affectedFastTravelPoints : array< name > )
 	{
 		var i : int;
 		for ( i = 0; i < affectedFastTravelPoints.Size(); i += 1 )
 		{
-			ManageFastTravelPoint( enable, show, affectedFastTravelPoints[ i ] );
+			ManageFastTravelPoint( operation, enable, show, affectedFastTravelPoints[ i ] );
 		}
 	}
 	
-	function ManageFastTravelPoint( enable : bool, show : bool, tag : name )
+	function ManageFastTravelPoint( operation : EQuestManageFastTravelOperation, enable : bool, show : bool, tag : name )
 	{
-		SetEntityMapPinDisabled( tag, !enable );
-		SetEntityMapPinDiscoveredScript(true, tag, show );
+		if ( operation == QMFT_EnableAndShow || operation == QMFT_EnableOnly )
+		{
+			SetEntityMapPinDisabled( tag, !enable );
+		}
+		if ( operation == QMFT_EnableAndShow || operation == QMFT_ShowOnly )
+		{
+			SetEntityMapPinDiscoveredScript(true, tag, show );
+		}
 	}
 	
 	
@@ -1095,6 +1158,11 @@ exec function ShowShopkeepers( show : bool )
 exec function ii()
 {
 	theGame.GetCommonMapManager().ToggleInteriorInfo( true );
+}
+
+exec function upi()
+{
+	theGame.GetCommonMapManager().ToggleUserPinsInfo( true );
 }
 
 exec function ShowPinsInfo( value : int )

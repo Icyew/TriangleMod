@@ -12,15 +12,12 @@ class CBehTreeTaskBehaviorGraph extends IBehTreeTask
 	public var graph : EBehaviorGraph;
 	public var forceHighPriority : bool;
 	
-	
-	
 	private var res : bool;
 	private var graphName : name;
 	
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CHumanAICombatStorage;
 	
-	function Evaluate() : int
+	final function Evaluate() : int
 	{
 		if( !IsAvailable() )
 		{
@@ -36,25 +33,24 @@ class CBehTreeTaskBehaviorGraph extends IBehTreeTask
 		return 50;
 	}
 	
-	function IsAvailable() : bool
+	final function IsAvailable() : bool
 	{
 		InitializeCombatDataStorage();
 		
-		if ( combatDataStorage )
-		{
-			if ( combatDataStorage.GetActiveCombatStyle() == graph && !combatDataStorage.IsLeavingStyle() )
-			{
-				return true;
-			}
-			else if ( GetNPC().CanChangeBehGraph() )
-			{
-				return true;
-			}
-		}
-		else
+		if ( !combatDataStorage )
 		{
 			return true;
 		}
+		
+		if ( combatDataStorage.GetActiveCombatStyle() == graph && !combatDataStorage.IsLeavingStyle() )
+		{
+			return true;
+		}
+		else if ( GetNPC().CanChangeBehGraph() )
+		{
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -181,8 +177,7 @@ class CBehTreeTaskBehaviorGraph extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 		}
 	}
 }

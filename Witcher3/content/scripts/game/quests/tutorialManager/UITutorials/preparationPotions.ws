@@ -42,7 +42,7 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 				skippingTabSelection = true;
 				
 				
-				ShowHint(ON_EQUIPPED, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1);
+				ShowHint(ON_EQUIPPED, POS_INVENTORY_X, POS_INVENTORY_Y-0.1);
 				
 				
 				TutorialScript('secondPotionEquip', '');
@@ -57,7 +57,7 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 				}
 				else
 				{
-					ShowHint(CAN_EQUIP, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y);
+					ShowHint(CAN_EQUIP, POS_INVENTORY_X, POS_INVENTORY_Y);
 				}
 			}
 		}
@@ -69,7 +69,7 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 			thePlayer.BlockAction(EIAB_OpenAlchemy, 'tut_forced_preparation');
 			
 			theGame.GetTutorialSystem().UnmarkMessageAsSeen(EQUIP_POTION);
-			ShowHint(CAN_EQUIP, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y);
+			ShowHint(CAN_EQUIP, POS_INVENTORY_X, POS_INVENTORY_Y);
 		}
 	}
 			
@@ -77,11 +77,11 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		isClosing = true;
 		
-		CloseHint(CAN_EQUIP);
-		CloseHint(SELECT_TAB);
-		CloseHint(EQUIP_POTION);
-		CloseHint(EQUIP_POTION_THUNDERBOLT);
-		CloseHint(ON_EQUIPPED);
+		CloseStateHint(CAN_EQUIP);
+		CloseStateHint(SELECT_TAB);
+		CloseStateHint(EQUIP_POTION);
+		CloseStateHint(EQUIP_POTION_THUNDERBOLT);
+		CloseStateHint(ON_EQUIPPED);
 		
 		if(!skippingTabSelection)
 			theGame.GetTutorialSystem().MarkMessageAsSeen(SELECT_TAB);
@@ -96,20 +96,12 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 	event OnTutorialClosed(hintName : name, closedByParentMenu : bool)
 	{
-		var highlights : array<STutorialHighlight>;		
-		
 		if(closedByParentMenu || isClosing)
 			return true;
 			
 		if(hintName == CAN_EQUIP)
 		{
-			highlights.Resize(1);
-			highlights[0].x = 0.09;
-			highlights[0].y = 0.145;
-			highlights[0].width = 0.06;
-			highlights[0].height = 0.09;
-			
-			ShowHint(SELECT_TAB, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite, highlights);
+			ShowHint( SELECT_TAB, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite, GetHighlightInvTabAlchemy() );
 		}
 		else if(hintName == ON_EQUIPPED)
 		{
@@ -125,12 +117,12 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	
 	event OnPotionTabSelected()
 	{
-		CloseHint(SELECT_TAB);
+		CloseStateHint(SELECT_TAB);
 		
 		if(isForcedThunderbolt)
-			ShowHint(EQUIP_POTION_THUNDERBOLT, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+			ShowHint(EQUIP_POTION_THUNDERBOLT, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite);
 		else
-			ShowHint(EQUIP_POTION, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y, ETHDT_Infinite);
+			ShowHint(EQUIP_POTION, POS_INVENTORY_X, POS_INVENTORY_Y, ETHDT_Infinite);
 	}
 	
 	event OnPotionEquipped(potionItemName : name)
@@ -139,10 +131,10 @@ state Potions in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		if(isForcedThunderbolt && potionItemName != 'Thunderbolt 1')
 			return false;
 	
-		CloseHint(EQUIP_POTION);
-		CloseHint(EQUIP_POTION_THUNDERBOLT);
+		CloseStateHint(EQUIP_POTION);
+		CloseStateHint(EQUIP_POTION_THUNDERBOLT);
 		theGame.GetTutorialSystem().MarkMessageAsSeen(EQUIP_POTION);
-		ShowHint(ON_EQUIPPED, theGame.params.TUT_POS_INVENTORY_X, theGame.params.TUT_POS_INVENTORY_Y-0.1);
+		ShowHint(ON_EQUIPPED, POS_INVENTORY_X, POS_INVENTORY_Y-0.1);
 	}
 }
 

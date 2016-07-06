@@ -23,6 +23,7 @@ class W3QuestCond_IsEffectActive extends CQuestScriptedCondition
 {
 	editable var effectName : name;
 	editable var entityTag  : name;
+	editable var inverted: bool;
 
 	var entity				: CEntity;
 	var listener			: W3QuestCond_IsEffectActive_Listener;
@@ -65,7 +66,14 @@ class W3QuestCond_IsEffectActive extends CQuestScriptedCondition
 	{	
 		if ( entity )
 		{
-			return entity.IsEffectActive(effectName, false);
+			if ( inverted )
+			{
+				return !entity.IsEffectActive(effectName, false);
+			}
+			else
+			{
+				return entity.IsEffectActive(effectName, false);
+			}
 		}
 		else if ( !listener )
 		{

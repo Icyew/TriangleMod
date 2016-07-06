@@ -16,11 +16,11 @@ import struct SBaseStat
 };
 
 
-struct SBlockedAbility
+import struct SBlockedAbility
 {
-	editable saved var abilityName : name;
-	editable saved var timeWhenEnabledd : float;		
-	saved var count : int;							
+	import editable saved var abilityName : name;
+	import editable saved var timeWhenEnabledd : float;		
+	import saved var count : int;							
 };
 
 
@@ -33,9 +33,9 @@ enum ESkillColor
 	SC_Yellow		
 }
 
-function LinkStringToType(str : string) : ESkillColor
+function SkillColorStringToType( str : string ) : ESkillColor
 {
-	switch(StrLower(str))
+	switch( StrLower( str ) )
 	{
 		case "blue" : 		return SC_Blue;
 		case "green" : 		return SC_Green;
@@ -57,10 +57,6 @@ struct SSkillSlot
 {
 	saved var id : int;							
 	saved var unlockedOnLevel : int;
-	saved var neighbourUp : int;				
-	saved var neighbourDown : int;
-	saved var neighbourLeft : int;
-	saved var neighbourRight : int;
 	saved var socketedSkill : ESkill;			
 	saved var unlocked : bool;					
 	saved var groupID : int;					
@@ -88,6 +84,7 @@ struct SSkill
 		  var requiredPointsSpent : int;							
 		  var priority : int;										
 		  var cost : int;											
+	saved var isTemporary : bool;									
 		  
 		  var abilityName : name;									
 		  var modifierTags : array<name>;							
@@ -136,6 +133,12 @@ struct STutorialTemporarySkill
 	var wasLearned : bool;
 	var skillType : ESkill;
 };
+
+struct SMutagenBonusAlchemy19
+{
+	var abilityName : name;
+	var count : int;
+}
 
 enum ESkillPath
 {
@@ -362,4 +365,71 @@ function IsSkillSign(skill : ESkill) : bool
 		default:
 			return false;
 	}
+}
+
+enum EPlayerMutationType
+{
+	EPMT_None,
+	EPMT_Mutation1,
+	EPMT_Mutation2,
+	EPMT_Mutation3,
+	EPMT_Mutation4,
+	EPMT_Mutation5,
+	EPMT_Mutation6,
+	EPMT_Mutation7,
+	EPMT_Mutation8,
+	EPMT_Mutation9,
+	EPMT_Mutation10,
+	EPMT_Mutation11,
+	EPMT_Mutation12,
+	EPMT_MutationMaster
+}
+
+function MutationNameToType( mutName : name ) : EPlayerMutationType
+{
+	switch( mutName )
+	{
+		case 'mutation1' : 			return EPMT_Mutation1;
+		case 'mutation2' : 			return EPMT_Mutation2;
+		case 'mutation3' :			return EPMT_Mutation3;
+		case 'mutation4' : 			return EPMT_Mutation4;
+		case 'mutation5' :			return EPMT_Mutation5;
+		case 'mutation6' : 			return EPMT_Mutation6;
+		case 'mutation7' : 			return EPMT_Mutation7;
+		case 'mutation8' : 			return EPMT_Mutation8;
+		case 'mutation9' : 			return EPMT_Mutation9;
+		case 'mutation10' : 		return EPMT_Mutation10;
+		case 'mutation11' : 		return EPMT_Mutation11;
+		case 'mutation12' : 		return EPMT_Mutation12;
+		case 'mutationMaster' : 	return EPMT_MutationMaster;
+		
+		default : 					return EPMT_None;
+	}
+	
+	return EPMT_None;
+}
+
+struct SMutationProgress
+{
+	var redUsed : int;					
+	var redRequired : int;				
+	var blueUsed : int;					
+	var blueRequired : int;				
+	var greenUsed : int;				
+	var greenRequired : int;			
+	var skillpointsUsed : int;			
+	var skillpointsRequired : int;		
+	var overallProgress : int;			
+}
+
+struct SMutation
+{
+	var type : EPlayerMutationType;								
+	var colors : array< ESkillColor >;							
+	var progress : SMutationProgress;							
+	var requiredMutations : array< EPlayerMutationType >;		
+	var localizationNameKey : name;								
+	var localizationDescriptionKey : name;						
+	var iconPath : name;										
+	var soundbank : string;										
 }

@@ -7,6 +7,7 @@ import class CR4MapPinEntity extends CGameplayEntity
 {
 	import var entityName			: name;
 	import var radius				: float;
+	import var ignoreWhenExportingMapPins : bool;
 }
 
 import class CR4FastTravelEntity extends CR4MapPinEntity
@@ -20,7 +21,12 @@ import class CR4FastTravelEntity extends CR4MapPinEntity
 class W3FastTravelEntity extends CR4FastTravelEntity
 {
 	editable var onAreaExit	   : bool; 		default onAreaExit = false;
-
+	
+	
+	editable var warningTextStringKeyOverride : string;
+	editable var onelinerSceneOverride : CStoryScene;
+	editable var overrideSceneInput : name;
+	
 	event OnSpawned( spawnData : SEntitySpawnData )
 	{	
 		
@@ -235,16 +241,32 @@ class W3FastTravelEntity extends CR4FastTravelEntity
 		{
 			mapManager.AllowSaving( false );
 			
-			text = GetLocStringByKeyExt( "panel_common_end_of_the_world" );
+			if( warningTextStringKeyOverride != "" )
+			{
+				text = text = GetLocStringByKeyExt( warningTextStringKeyOverride );
+			}
+			else
+			{
+				text = GetLocStringByKeyExt( "panel_common_end_of_the_world" );
+			}
+			
 			thePlayer.DisplayHudMessage( text );
 			thePlayer.BlockAction(EIAB_MeditationWaiting,	'EndOfTheWorld', false, false, true );
 			thePlayer.BlockAction(EIAB_MountVehicle,		'EndOfTheWorld', false, false, true );
 			thePlayer.BlockAction(EIAB_DismountVehicle,		'EndOfTheWorld', false, false, true );
 			thePlayer.BlockAction(EIAB_Explorations,		'EndOfTheWorld', false, false, true );
 			
-			if(GetWitcherPlayer())
+			if( GetWitcherPlayer() )
 			{
-				thePlayer.PlayVoiceset(100, "Input");	
+				
+				if( onelinerSceneOverride )
+				{
+					theGame.GetStorySceneSystem().PlayScene( onelinerSceneOverride, overrideSceneInput );
+				}
+				else
+				{
+					thePlayer.PlayVoiceset(100, "Input");	
+				}
 			}
 		}
 	}

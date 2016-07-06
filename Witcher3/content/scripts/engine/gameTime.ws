@@ -47,6 +47,20 @@ import function GameTimeToSeconds( time : GameTime ) : int;
 import function ScheduleTimeEvent( context : IScriptable, functionWithParams : string, date : GameTime, optional relative : bool, optional period : GameTime, optional limit : int );
 
 
+function GameTimeDTAtLeastRealSecs( timeOld : GameTime, timeNew : GameTime, dt : float ) : bool
+{
+	var difference : float;
+	
+	if( timeOld > timeNew )
+	{
+		return true;
+	}
+	
+	difference = ConvertGameSecondsToRealTimeSeconds( GameTimeToSeconds( timeNew ) - GameTimeToSeconds( timeOld ) );
+	
+	return difference >= dt;
+}
+
 function Have24HoursPassed( time1 : GameTime, time2 : GameTime ) : bool
 {
 	var difference : int;

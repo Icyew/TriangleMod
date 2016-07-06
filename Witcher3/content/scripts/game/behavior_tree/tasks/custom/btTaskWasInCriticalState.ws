@@ -13,7 +13,6 @@ class CBTTaskWasInCriticalState extends IBehTreeTask
 	var criticalState : ECriticalStateType;
 	var timeOfLastCSDeactivation : float;
 
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CBaseAICombatStorage;
 	
 	function IsAvailable() : bool
@@ -42,8 +41,7 @@ class CBTTaskWasInCriticalState extends IBehTreeTask
 	{
 		if ( !combatDataStorage )
 		{
-			storageHandler = InitializeCombatStorage();
-			combatDataStorage = (CBaseAICombatStorage)storageHandler.Get();
+			combatDataStorage = (CBaseAICombatStorage)InitializeCombatStorage();
 		}
 	}
 }

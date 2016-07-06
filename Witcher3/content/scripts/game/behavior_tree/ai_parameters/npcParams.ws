@@ -83,7 +83,8 @@ class CAINpcDefaults extends CAIDefaults
 	editable inlined var reactionTree 					: CAINpcReactionsTree;
 	editable inlined var softReactionTree 				: CAISoftReactionTree;
 	
-	editable var hasDrinkingMinigame : bool;
+	editable var hasDrinkingMinigame 	: bool;
+	editable var morphInCombat 			: bool;
 	default hasDrinkingMinigame = false;
 	var tempNpcGroupType : ENPCGroupType;
 	
@@ -606,15 +607,37 @@ abstract class IAIIdleFormationTree extends CAIIdleTree
 
 class CAIFollowLeaderTree extends IAIIdleFormationTree
 {
-	default aiTreeName = "resdef:ai\idle/follow_leader";
+	default aiTreeName 								= "resdef:ai\idle/follow_leader";
 
-	editable var leaderName : name;
+	editable var leaderName 						: name;
+	
+	editable var disableGestures 					: bool;
+	editable var removePlayedAnimationFromPool		: bool;
+	editable var gossipGesturesOnly 				: bool;
+	editable var cooldownBetweenGesture 			: float;
+	editable var chanceToPlayGesture 				: float;
+	editable var dontActivateGestureWhenNotTalking 	: bool;
+	editable var onlyOneActorGesticulatingAtATime 	: bool;
+	editable var stopGestureOnDeactivate 			: bool;
+	editable var dontOverrideRightHand 				: bool;
+	editable var dontOverrideLeftHand 				: bool;
+	
+	default disableGestures 						= true;
+	default removePlayedAnimationFromPool 			= true;
+	default cooldownBetweenGesture 					= 2.0f;
+	default chanceToPlayGesture 					= 1.0f;
+	default stopGestureOnDeactivate 				= true;
+	default onlyOneActorGesticulatingAtATime 		= true;
+	
+	hint removePlayedAnimationFromPool = "prevents repeating of the same animations in row";
+	hint gossipGesturesOnly = "plays simple, short animations";
+	hint stopGestureOnDeactivate = "stops gesture animation on deactivation of ai tree";
 };
 
 class CAIFollowLeaderParameters extends CAIIdleParameters
 {
-	editable var leaderName : name;
-	editable var formation : CFormation;
+	editable var leaderName 						: name;
+	editable var formation 							: CFormation;
 };
 
 
@@ -702,8 +725,9 @@ class CAINpcDeathParams extends CAIDeathParameters
 	editable var disableCollisionOnAnim			: bool;
 	editable var disableCollisionOnAnimDelay	: float;
 	editable var destroyAfterAnimDelay 			: float;
+	editable var disableRagdollAfter 			: float;
 	
-	default destroyAfterAnimDelay = -1;
+	default destroyAfterAnimDelay 		= -1;
 	default createReactionEvent			= 'NPCDeath';
 	default fxName 						= 'death';
 	default setAppearanceTo 			= '';
@@ -713,6 +737,12 @@ class CAINpcDeathParams extends CAIDeathParameters
 	default disableCollisionDelay		= 1.0;
 	default disableCollisionOnAnim		= true;
 	default disableCollisionOnAnimDelay = 0.5;
+};
+
+
+class CAINpcBruxaDeathParams extends CAINpcDeathParams
+{
+	editable var spawnEntityOnDeathName : name;
 };
 
 
@@ -765,6 +795,22 @@ class CAIDefeatedParams extends CAIDeathParameters
 		unconsciousTree.OnCreated();
 	}
 };
+
+
+
+class CAIBruxaNpcDeath extends CAIDeathTree
+{
+	default aiTreeName = "dlc\bob\data\gameplay\trees\death_bruxa_spawn.w2behtree";
+
+	editable inlined var params : CAINpcBruxaDeathParams;
+	
+	function Init()
+	{
+		params = new CAINpcBruxaDeathParams in this;
+		params.OnCreated();
+	}
+};
+
 
 
 

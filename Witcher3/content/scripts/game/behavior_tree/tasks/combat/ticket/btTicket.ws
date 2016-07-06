@@ -104,6 +104,7 @@ abstract class CTicketBaseAlgorithm extends ITicketAlgorithmScript
 	function ShouldAskForTicket() : bool
 	{
 		var target 				: CActor = GetCombatTarget();
+		var owner 				: CActor = GetActor();
 		var morale : float;
 		var playerState : name;
 		
@@ -124,29 +125,39 @@ abstract class CTicketBaseAlgorithm extends ITicketAlgorithmScript
 			
 			if ( resetImportanceOnSpecialCombatAction && ((W3PlayerWitcher)target) )
 			{
-				if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttack() )
+				if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttackHeavy() )
 					return false;
 			}
 			
 			if ( thePlayer.IsPerformingFinisher() )
 				return false;
+				
+			
+			
 		}
 		
-		if ( target == thePlayer.GetTarget() && GetTimeSinceMyAcquisition() < 7.f )
-			return false;
 		
-		if ( !GetNPC().CanAttackKnockeddownTarget() && ( target.HasBuff(EET_Knockdown) || target.HasBuff(EET_HeavyKnockdown) ) )
+		
+		
+		
+		if ( !( ( CNewNPC ) owner ).CanAttackKnockeddownTarget() && ( target.HasBuff(EET_Knockdown) || target.HasBuff(EET_HeavyKnockdown) ) )
 		{
 			return false;
 		}
 		
 		
-		morale = GetActor().GetStatPercents(BCS_Morale);
+		morale = owner.GetStatPercents(BCS_Morale);
 		if( morale != -1 && morale < 1.f )
 			return false;
 		
 		
-		if ( GetActor() == thePlayer.GetTarget() && thePlayer.IsInCombatAction_Attack() && !thePlayer.GetBIsInputAllowed() )
+		if ( owner == thePlayer.GetTarget() && thePlayer.IsInCombatAction_Attack() && !thePlayer.GetBIsInputAllowed() )
+		{
+			return false;
+		}
+		
+		
+		if ( target != thePlayer && !target.GetGameplayVisibility() )
 		{
 			return false;
 		}
@@ -255,22 +266,28 @@ class CTicketAttackAlgorithm extends CTicketBaseAlgorithm
 	public var overrideDefaultTicketCount 		: bool;
 	public var overridenValueWhenInFront 		: int;
 	public var overridenValueWhenInBack 		: int;
+	public var denyTicketWhenNotInFrame			: bool;
 	
 	default activationBonus = 5;
 	default threatLevelBonus = 2;
 	
 	public function CalculateTicketImportance() : float
 	{
-		var importance : float = 100.f;
+		var importance 			: float = 100.f;
+		var npc					: CNewNPC = GetNPC();
 		
-		if ( GetNPC() && GetNPC().ShouldAttackImmidiately() )
+		
+		if ( npc && npc.ShouldAttackImmidiately() )
 		{
 			overrideTicketsCount = 0;
 			return 10000;
 		}
 		
 		if ( !ShouldAskForTicket() )
-			return 0;			
+			return 0;
+		
+		if ( denyTicketWhenNotInFrame && !thePlayer.WasVisibleInScaledFrame( npc, 1.f, 1.f ) )
+			return 0;
 			
 		if ( !invertDistanceImportance )
 			importance += GetDistanceImportance();
@@ -288,7 +305,7 @@ class CTicketAttackAlgorithm extends CTicketBaseAlgorithm
 		
 		if ( overrideDefaultTicketCount )
 		{
-			if ( !GetCombatTarget().IsRotatedTowards( GetActor(), 150 ) )
+			if ( !GetCombatTarget().IsRotatedTowards( npc, 150 ) )
 			{
 				overrideTicketsCount = overridenValueWhenInBack;
 			}
@@ -308,6 +325,7 @@ class CTicketAttackAlgorithmDefinition extends CTicketBaseAlgorithmDefinition
 	editable var overridenValueWhenInFront		: CBehTreeValInt;
 	editable var overridenValueWhenInBack		: CBehTreeValInt;
 	editable var invertDistanceImportance		: bool;
+	editable var denyTicketWhenNotInFrame		: bool;
 	
 	hint invertDistanceImportance = "the npc furthest from the target will have the most importance";
 };
@@ -337,7 +355,7 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 	
 	public function CalculateTicketImportance() : float
 	{
-		var actor 				: CActor = GetActor();
+		var npc					: CNewNPC = GetNPC();
 		var target 				: CActor = GetCombatTarget();
 		var distance 			: float;
 		var proximity 			: float;
@@ -352,29 +370,29 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 		var isInTargetBack		: int;
 		var isHuman				: bool;
 		
-		if ( actor.IsHuman() )
+		if ( npc.IsHuman() )
 		{
 			isHuman = true;
 			if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttack() )
 				return 0;
 		}
 		
-		if ( !GetNPC().CanAttackKnockeddownTarget() && ( target.HasBuff(EET_Knockdown) || target.HasBuff(EET_HeavyKnockdown) ) )
+		if ( !npc.CanAttackKnockeddownTarget() && ( target.HasBuff(EET_Knockdown) || target.HasBuff(EET_HeavyKnockdown) ) )
 		{
 			return 0;
 		}
 		
 		
-		threatLevel = GetNPC().GetThreatLevel();
+		threatLevel = npc.GetThreatLevel();
 		
-		if ( actor.GetStatPercents( BCS_Essence ) > 0 )
-			hp += actor.GetStatPercents( BCS_Essence );
-		if ( actor.GetStatPercents( BCS_Vitality ) > 0 )
-			hp += actor.GetStatPercents( BCS_Vitality );
+		if ( npc.GetStatPercents( BCS_Essence ) > 0 )
+			hp += npc.GetStatPercents( BCS_Essence );
+		if ( npc.GetStatPercents( BCS_Vitality ) > 0 )
+			hp += npc.GetStatPercents( BCS_Vitality );
 		
-		morale = actor.GetStatPercents( BCS_Morale );
+		morale = npc.GetStatPercents( BCS_Morale );
 		
-		distance  = VecDistance(actor.GetWorldPosition(),target.GetWorldPosition());
+		distance  = VecDistance(npc.GetWorldPosition(),target.GetWorldPosition());
 		proximity =  distance;
 		
 		if ( distance <= desiredDistance )
@@ -391,7 +409,7 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 		
 		
 		isAttacked = 0;
-		if( actor.GetDelaySinceLastAttacked()< isAttackedStateDuration ) isAttacked = 1;
+		if( npc.GetDelaySinceLastAttacked()< isAttackedStateDuration ) isAttacked = 1;
 		
 		
 		if ( proximity > vicinityMax )
@@ -408,7 +426,7 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 		}
 		
 		isInTargetBack = 0;
-		if ( !target.IsRotatedTowards( actor, 150 ) )
+		if ( !target.IsRotatedTowards( npc, 150 ) )
 			isInTargetBack = 1;
 		
 		if ( isHuman )
@@ -421,7 +439,7 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 				overrideTicketsCount = 60;
 		}
 		
-		if( actor.HasAbility('RageActive') )
+		if( npc.HasAbility('RageActive') )
 		{
 			overrideTicketsCount = 5;
 		}
@@ -447,7 +465,7 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 		
 		if ( importance <= 100 )
 		{
-			LogChannel('CombatTicketSystem',"Warning! Ticket Importance for: "+ actor + " less then 100.");
+			LogChannel('CombatTicketSystem',"Warning! Ticket Importance for: "+ npc + " less then 100.");
 		}
 		
 		return importance;

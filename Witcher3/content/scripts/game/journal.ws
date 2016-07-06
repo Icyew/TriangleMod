@@ -45,6 +45,7 @@ import class CJournalQuestObjective extends CJournalContainer
 	import final function GetWorld() : int;
 	import final function GetCount() : int;
 	import final function GetCounterType() : eQuestObjectiveType;
+	import final function IsMutuallyExclusive() : bool;
 	import final function GetBookShortcut() : name;
 	import final function GetItemShortcut() : name;
 	import final function GetRecipeShortcut() : name;

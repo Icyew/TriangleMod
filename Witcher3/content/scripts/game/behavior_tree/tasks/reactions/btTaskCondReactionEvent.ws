@@ -30,14 +30,10 @@ class CBTTaskCondReactionEvent extends IBehTreeTask
 		eventReceived = false;
 	}
 	
-	function OnGameplayEvent( eventName : name ) : bool
+	function OnListenedGameplayEvent( _EventName : name ) : bool
 	{
-		if ( eventName == reactionEventName )
-		{
-			eventReceived = true;
-			return true;
-		}
-		return false;
+		eventReceived = true;
+		return true;
 	}
 };
 
@@ -47,13 +43,13 @@ class CBTTaskCondReactionEventDef extends IBehTreeReactionTaskDefinition
 
 	editable var reactionEventName	: name;
 	
-	function InitializeEvents()
+	function OnSpawn( taskGen : IBehTreeTask )
 	{
-		super.InitializeEvents();
-		
-		if ( IsNameValid( reactionEventName ) )
+		var task : CBTTaskCondReactionEvent;
+		task = (CBTTaskCondReactionEvent) taskGen;
+		if ( IsNameValid( task.reactionEventName ) )
 		{
-			listenToGameplayEvents.PushBack( reactionEventName );
+			ListenToGameplayEvent( task.reactionEventName );
 		}
 	}
 };

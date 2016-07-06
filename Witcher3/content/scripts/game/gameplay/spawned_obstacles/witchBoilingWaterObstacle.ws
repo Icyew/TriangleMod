@@ -31,6 +31,7 @@ class W3WitchBoilingWaterObstacle extends W3DurationObstacle
 	private editable var		loopedAttack					: bool;
 	private editable var 		playAttackEffectOnlyWhenHit 	: bool;
 	private editable var		useSeperateAttackEffectEntity 	: CEntityTemplate;
+	private editable var 		onAttackEffectCameraShakeStrength: float;
 	private editable var 		onHitCameraShakeStrength 		: float;
 	
 	private			 var 		fxEntity 						: CEntity;
@@ -88,6 +89,11 @@ class W3WitchBoilingWaterObstacle extends W3DurationObstacle
 			{
 				PlayEffect(attackEffectName);
 			}
+			
+			if ( onAttackEffectCameraShakeStrength > 0 )
+			{
+				GCameraShake( onAttackEffectCameraShakeStrength, true, l_actor.GetWorldPosition(), 30.0f );
+			}
 		}
 		
 		FindGameplayEntitiesInRange( l_entitiesInRange, this, attackRadius, 1000);
@@ -114,7 +120,7 @@ class W3WitchBoilingWaterObstacle extends W3DurationObstacle
 						delete l_damage;
 						
 						if ( onHitCameraShakeStrength > 0 )
-							GCameraShake(onHitCameraShakeStrength, true, l_actor.GetWorldPosition(), 30.0f);
+							GCameraShake( onHitCameraShakeStrength, true, l_actor.GetWorldPosition(), 30.0f );
 					}
 					if ( applyDebuffType != EET_Undefined )
 					{

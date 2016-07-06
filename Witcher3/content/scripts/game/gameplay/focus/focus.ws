@@ -107,7 +107,7 @@ import class CFocusModeController extends IGameSystem
 	import final function SetFadeParameters( NearFadeDistance : float, FadeDistanceRange : float, dimmingTIme : Float, dimmingSpeed : Float );
 	import final function EnableExtendedVisuals( enable : bool, fadeTime : float );
 	import final function SetDimming( enable : bool );
-	import final function SetSoundClueEventNames( entity : CGameplayEntity, eventStart : name, eventStop : name ) : bool;
+	import final function SetSoundClueEventNames( entity : CGameplayEntity, eventStart : name, eventStop : name, effectType : int ) : bool;
 	import final function ActivateScentClue( entity : CEntity, effectName : name, duration : float );
 	import final function DeactivateScentClue( entity : CEntity );
 	
@@ -153,9 +153,16 @@ import class CFocusModeController extends IGameSystem
 	default isInCombat					= false;
 	private var isNight					: bool;
 	default isNight						= false;
+	
+	
+	private var lastDarkPlaceCheck : float;	
+	private const var DARK_PLACE_CHECK_INTERVAL : float;
+	default DARK_PLACE_CHECK_INTERVAL = 2.f;
 
 	public function Activate()
 	{
+		lastDarkPlaceCheck = DARK_PLACE_CHECK_INTERVAL;
+	
 		if ( !ActivateFastFocus( true ) )
 		{
 			ActivateInternal();
@@ -191,6 +198,7 @@ import class CFocusModeController extends IGameSystem
 		{
 			return;
 		}
+		
 		SetActive( true );
 		EnableVisuals( true );
 		EnableExtendedVisuals( true, effectFadeTime );
@@ -203,7 +211,13 @@ import class CFocusModeController extends IGameSystem
 		{
 			activationSoundTimer = theGame.GetEngineTimeAsSeconds();
 			theSound.SoundEvent( 'expl_focus_start' );			
-		}		
+		}
+		
+		
+		if( GetWitcherPlayer().IsInDarkPlace() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) && !thePlayer.HasBuff( EET_Mutation12Cat ) )
+		{
+			thePlayer.AddEffectDefault( EET_Mutation12Cat, thePlayer, "Mutation12 Senses", false );
+		}
 	}
 
 	public function Deactivate()
@@ -269,6 +283,9 @@ import class CFocusModeController extends IGameSystem
 				module.RemoveAllFocusInteractionIcons();
 			}
 		}
+		
+		
+		thePlayer.RemoveBuff( EET_Mutation12Cat );
 	}
 
 	function CanUseFocusMode() : bool
@@ -295,6 +312,7 @@ import class CFocusModeController extends IGameSystem
 		medallionIntensity.Init( FMCES_ChooseNearest );
 		dimmingClue = NULL;
 		focusAreaIntensity = 0.0f;
+		activationSoundTimer = 0.f;
 	}
 
 	function DeInit()
@@ -371,6 +389,25 @@ import class CFocusModeController extends IGameSystem
 				if( theSound.GetCurrentGameState() != desiredAudioState )
 				{
 					theSound.EnterGameState( desiredAudioState );
+				}
+				
+				
+				if( GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) )
+				{
+					lastDarkPlaceCheck -= timeDelta;
+					if( lastDarkPlaceCheck <= 0.f )
+					{
+						lastDarkPlaceCheck = DARK_PLACE_CHECK_INTERVAL;
+					
+						if( GetWitcherPlayer().IsInDarkPlace() && !thePlayer.HasBuff( EET_Mutation12Cat ) )
+						{
+							thePlayer.AddEffectDefault( EET_Mutation12Cat, thePlayer, "Mutation12 Senses", false );
+						}
+						else if( !GetWitcherPlayer().IsInDarkPlace() && thePlayer.HasBuff( EET_Mutation12Cat ) )
+						{
+							thePlayer.RemoveBuff( EET_Mutation12Cat );
+						}
+					}
 				}
 			}
 			else

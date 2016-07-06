@@ -19,10 +19,35 @@ class CBTTaskShoot extends CBTTaskPlayAnimationEventDecorator
 		InitializeCombatDataStorage();
 		if ( !((CHumanAICombatStorage)combatDataStorage).GetProjectile() )
 		{
-			GetNPC().SignalGameplayEvent('TakeBowArrow');
-			return false;
+			return CreateProjectile();
 		}
 		return true;
+	}
+	
+	private function CreateProjectile() : bool
+	{
+		var projTemplate : CEntityTemplate;
+		var resourceName : string;
+		var arrow : W3ArrowProjectile;
+		
+		resourceName = "items\weapons\projectiles\arrows\arrow_01.w2ent";
+		projTemplate = (CEntityTemplate)LoadResource( resourceName, true );
+		
+		arrow = (W3ArrowProjectile)theGame.CreateEntity( projTemplate, GetActor().GetWorldPosition() );
+		
+		arrow.CreateAttachment( GetActor(), 'r_weapon_arrow' );
+		
+		((CHumanAICombatStorage)combatDataStorage).SetProjectile( arrow );
+		
+		if( arrow )
+		{
+			return true;
+		}
+		else
+		{
+			GetNPC().SignalGameplayEvent( 'TakeBowArrow' );
+			return false;
+		}
 	}
 	
 	function OnActivate() : EBTNodeStatus
@@ -111,6 +136,10 @@ class CBTTaskShoot extends CBTTaskPlayAnimationEventDecorator
 				{
 					entMat = targetEntity.GetLocalToWorld();
 					targetPos = VecTransform( entMat, targetEntity.aimVector );
+				}
+				else
+				{
+					targetPos = targetEntity.GetWorldPosition();
 				}
 			}
 			else

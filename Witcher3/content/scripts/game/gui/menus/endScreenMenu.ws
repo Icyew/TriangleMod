@@ -7,7 +7,7 @@
 
 
 
-class CR4EndScreenMenu extends CR4StartScreenMenu
+class CR4EndScreenMenu extends CR4StartScreenMenuBase
 {	
 	event  OnConfigUI()
 	{	

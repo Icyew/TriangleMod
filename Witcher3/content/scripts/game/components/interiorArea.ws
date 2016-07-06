@@ -52,6 +52,14 @@ import class CR4InteriorAreaComponent extends CTriggerAreaComponent
 		
 		
 		if(isDarkPlace)
+		{
 			FactsSubstract("tut_in_dark_place");
+			
+			
+			if( FactsQuerySum( "tut_in_dark_place" ) <= 0 )
+			{
+				thePlayer.RemoveBuff( EET_Mutation12Cat );
+			}
+		}
 	}
 }

@@ -200,4 +200,9 @@ class W3Effect_Burning extends W3CriticalDOTEffect
 		
 		timeLeft = 10;
 	}
+	
+	public final function IsFromMutation2() : bool
+	{
+		return sourceName == "Mutation2ExplosionValid";
+	}
 }

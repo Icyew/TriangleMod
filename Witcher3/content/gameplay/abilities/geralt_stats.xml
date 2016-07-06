@@ -165,25 +165,25 @@
         <burning_resistance_perc type="base" min="0" max="0" />
         <flying_swarm_resistance type="base" always_random="false" min="1.0" max="1.0" />
         <!-- Stamina group -->
-        <light_action_stamina_cost type="base" always_random="false" min="4" max="4" /> <!-- Triangle -->
-        <heavy_action_stamina_cost type="base" always_random="false" min="8" max="8" /> <!-- Triangle -->
+        <light_action_stamina_cost type="base" always_random="false" min="0" max="0" /> <!-- Triangle -->
+        <heavy_action_stamina_cost type="base" always_random="false" min="0" max="0" /> <!-- Triangle -->
         <parry_stamina_cost type="base" always_random="false" min="0" max="0" />
         <counter_stamina_cost type="base" always_random="false" min="0" max="0" />
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <evade_stamina_cost type="base" always_random="false" min="0" max="0" />
-        <roll_stamina_cost type="base" min="6" /> <!-- Triangle -->
+        <roll_stamina_cost type="base" min="0" /> <!-- Triangle -->
         <swimming_stamina_cost_per_sec type="base" always_random="false" min="7" max="7" /> <!-- Triangle -->
         <sprint_stamina_cost_per_sec type="base" always_random="false" min="5" max="5" /> <!-- Triangle -->
         <jump_stamina_cost type="base" always_random="false" min="9" max="9" /> <!-- Triangle -->
         <usable_item_stamina_cost type="base" always_random="false" min="0" max="0" />
         <light_action_stamina_delay type="base" always_random="false" min="1.0" max="1.0" /> <!-- Triangle -->
-        <heavy_action_stamina_delay type="base" always_random="false" min="1.0" max="1.0" /> <!-- Triangle -->
+        <heavy_action_stamina_delay type="base" always_random="false" min="1.5" max="1.5" /> <!-- Triangle -->
         <parry_stamina_delay type="base" always_random="false" min="0.5" max="0.5" />
-        <counter_stamina_delay type="base" always_random="false" min="1.0" max="1.0" /> <!-- Triangle -->
-        <dodge_stamina_delay type="base" always_random="false" min="0.2" max="0.2" /> <!-- Triangle -->
+        <counter_stamina_delay type="base" always_random="false" min="0.5" max="0.5" /> <!-- Triangle -->
+        <dodge_stamina_delay type="base" always_random="false" min="0.5" max="0.5" /> <!-- Triangle -->
         <swimming_stamina_delay type="base" always_random="false" min="0.5" max="0.5" />
-        <evade_stamina_delay type="base" always_random="false" min="0.2" max="0.2" /> <!-- Triangle -->
-        <roll_stamina_delay type="base" min="0.5" /> <!-- Triangle -->
+        <evade_stamina_delay type="base" always_random="false" min="0.5" max="0.5" /> <!-- Triangle -->
+        <roll_stamina_delay type="base" min="1.0" /> <!-- Triangle -->
         <sprint_stamina_delay type="base" always_random="false" min="0.5" max="0.5" />
         <jump_stamina_delay type="base" always_random="false" min="0.5" max="0.5" />
         <usable_item_stamina_delay type="base" always_random="false" min="0.0" max="0.0" />

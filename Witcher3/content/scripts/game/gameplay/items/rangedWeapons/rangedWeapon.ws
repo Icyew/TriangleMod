@@ -67,7 +67,7 @@ import statemachine class RangedWeapon extends CItemEntity
 			isSettingOwnerOrientation = true;
 			SetOwnerOrientation();
 		}
-	
+		
 		OnChangeTo( 'State_WeaponDraw' );
 	}
 	
@@ -104,6 +104,9 @@ import statemachine class RangedWeapon extends CItemEntity
 	
 	event OnWeaponShootStart()
 	{
+		
+		FactsAdd( "ranged_weapon_shoot_start", 1, 3 );
+		
 		
 			
 		SetBehaviorGraphVariables( 'isAimingWeapon', false );
@@ -206,9 +209,12 @@ import statemachine class RangedWeapon extends CItemEntity
 		{
 			itemId = ownerPlayer.inv.GetItemFromSlot( 'l_weapon' );
 			
-				
+			
+			if( ownerPlayer.inv.IsIdValid( itemId ) && ( ownerPlayer.inv.IsItemCrossbow( itemId ) || ownerPlayer.inv.IsItemBomb( itemId ) ) )
+			{
 				ownerPlayer.HolsterItems( true, itemId );
-
+			}
+			
 			thePlayer.BlockAllActions( 'RangedWeapon', false);
 			thePlayer.BlockAllActions( 'RangedWeaponReload', false);
 			thePlayer.BlockAllActions( 'RangedWeaponAiming', false);
@@ -685,7 +691,7 @@ class Crossbow extends RangedWeapon
 	
 	event OnForceHolster( optional forceUpperBodyAnim, instant, dropItem : bool )
 	{
-		if ( instant || ( GetCurrentStateName() != 'State_WeaponWait' && GetCurrentStateName() != 'State_WeaponHolster' ) )
+		if ( GetCurrentStateName() != 'State_WeaponWait' && ( instant || GetCurrentStateName() != 'State_WeaponHolster' ) )
 		{
 			ProcessFullBodyAnimWeight( forceUpperBodyAnim );
 			ResetOwnerAndWeapon();
@@ -1488,9 +1494,9 @@ state State_WeaponShoot in RangedWeapon
 		parent.RemoveTimer( 'HolsterWhenMovingTimer' );
 		parent.ownerPlayer.SetBehaviorVariable( 'canHolsterAfterDelay', 0.f );
 		parent.ownerPlayer.SetBehaviorVariable( 'canHolsterAfterDelayHorse', 0.f );
+
 		
-		if ( !parent.ownerPlayer.IsInCombatAction() )
-			parent.ownerPlayer.SetSlideTarget( NULL ); 
+		
 	}
 	
 	event OnProcessThrowEvent( animEventName : name )

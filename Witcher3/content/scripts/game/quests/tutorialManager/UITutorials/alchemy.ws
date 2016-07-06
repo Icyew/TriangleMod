@@ -28,8 +28,6 @@ state Alchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 	event OnEnterState( prevStateName : name )
 	{
-		var highlights : array<STutorialHighlight>;
-		
 		super.OnEnterState(prevStateName);
 		
 		isClosing = false;
@@ -60,34 +58,28 @@ state Alchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 			selectRecipe = SELECT_SOMETHING;
 		}
 		
-		highlights.Resize(1);
-		highlights[0].x = 0.41;
-		highlights[0].y = 0.51;
-		highlights[0].width = 0.27;
-		highlights[0].height = 0.13;
-		
-		ShowHint(INGREDIENTS, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, , highlights);
+		ShowHint( INGREDIENTS, POS_ALCHEMY_X, POS_ALCHEMY_Y, , GetHighlightAlchemyIngredients() );
 	}
 			
 	event OnLeaveState( nextStateName : name )
 	{
 		isClosing = true;
 		
-		CloseHint(INGREDIENTS);
-		CloseHint(COOKED_ITEM_DESC);
-		CloseHint(CATEGORIES);
-		CloseHint(selectRecipe);
-		CloseHint(COOK);
-		CloseHint(POTIONS);
-		CloseHint(PREPARATION_GO_TO);
+		CloseStateHint(INGREDIENTS);
+		CloseStateHint(COOKED_ITEM_DESC);
+		CloseStateHint(CATEGORIES);
+		CloseStateHint(selectRecipe);
+		CloseStateHint(COOK);
+		CloseStateHint(POTIONS);
+		CloseStateHint(PREPARATION_GO_TO);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(INGREDIENTS);
 		
 		if(isForcedTunderbolt)
 		{			
 			
-			theGame.GetTutorialSystem().uiHandler.UnregisterUIHint('Alchemy');
-			theGame.GetTutorialSystem().uiHandler.UnregisterUIHint('Alchemy');
+			theGame.GetTutorialSystem().uiHandler.UnregisterUIState('Alchemy');
+			theGame.GetTutorialSystem().uiHandler.UnregisterUIState('Alchemy');
 		}
 		else
 		{
@@ -99,47 +91,42 @@ state Alchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	
 	event OnTutorialClosed(hintName : name, closedByParentMenu : bool)
 	{
-		var highlights : array<STutorialHighlight>;
+		var menu : CR4AlchemyMenu;
 		
 		if(closedByParentMenu || isClosing)
 			return true;
 			
 		if(hintName == INGREDIENTS)
 		{
-			highlights.Resize(1);
-			highlights[0].x = 0.68;
-			highlights[0].y = 0.13;
-			highlights[0].width = 0.25;
-			highlights[0].height = 0.5;
-			
-			ShowHint(COOKED_ITEM_DESC, theGame.params.TUT_POS_ALCHEMY_X, 0.65, , highlights);
+			ShowHint( COOKED_ITEM_DESC, POS_ALCHEMY_X, POS_ALCHEMY_Y, , GetHighlightAlchemyItemDesc() );
 		}
 		else if(hintName == COOKED_ITEM_DESC)
 		{
-			highlights.Resize(1);
-			highlights[0].x = 0.065;
-			highlights[0].y = 0.15;
-			highlights[0].width = 0.35;
-			highlights[0].height = 0.65;
-			
-			ShowHint(CATEGORIES, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, , highlights);
+			ShowHint( CATEGORIES, POS_ALCHEMY_X, POS_ALCHEMY_Y, , GetHighlightAlchemyList() );
 		}
 		else if(hintName == CATEGORIES)
 		{
 			if(currentlySelectedRecipe == requiredRecipeName)
-				ShowHint(COOK, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Infinite);
+				ShowHint(COOK, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
 			else
-				ShowHint(selectRecipe, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Infinite);
+				ShowHint(selectRecipe, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
 		}
 		else if(hintName == POTIONS)
-		{
-			CloseHint(POTIONS);
-			ShowHint(PREPARATION_GO_TO, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Infinite);
-			
+		{		
 			if(isForcedTunderbolt)
-			{				
+			{
+				ShowHint(PREPARATION_GO_TO, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
+			
 				
 				thePlayer.UnblockAction(EIAB_OpenInventory, 'tut_forced_preparation');
+			}
+			else
+			{
+				menu = (CR4AlchemyMenu) ((CR4MenuBase)theGame.GetGuiManager().GetRootMenu()).GetLastChild();
+				if( menu && !menu.IsInShop() )
+				{
+					ShowHint(PREPARATION_GO_TO, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
+				}
 			}
 		}
 	}
@@ -150,14 +137,14 @@ state Alchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		
 		if(IsCurrentHint(selectRecipe) && IsRecipeOk(recipeName, canCook))
 		{
-			CloseHint(selectRecipe);
-			ShowHint(COOK, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Infinite);
+			CloseStateHint(selectRecipe);
+			ShowHint(COOK, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
 		}		
 		else if(IsCurrentHint(COOK) && !IsRecipeOk(recipeName, canCook))
 		{
 			
-			CloseHint(COOK);
-			ShowHint(selectRecipe, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y, ETHDT_Infinite);
+			CloseStateHint(COOK);
+			ShowHint(selectRecipe, POS_ALCHEMY_X, POS_ALCHEMY_Y, ETHDT_Infinite);
 		}
 	}
 	
@@ -183,14 +170,14 @@ state Alchemy in W3TutorialManagerUIHandler extends TutHandlerBaseState
 		else 
 		{
 			isClosing = true;	
-			CloseHint(INGREDIENTS);
-			CloseHint(COOKED_ITEM_DESC);
-			CloseHint(CATEGORIES);
-			CloseHint(selectRecipe);
-			CloseHint(COOK);
+			CloseStateHint(INGREDIENTS);
+			CloseStateHint(COOKED_ITEM_DESC);
+			CloseStateHint(CATEGORIES);
+			CloseStateHint(selectRecipe);
+			CloseStateHint(COOK);
 			isClosing = false;
 		
-			ShowHint(POTIONS, theGame.params.TUT_POS_ALCHEMY_X, theGame.params.TUT_POS_ALCHEMY_Y);
+			ShowHint(POTIONS, POS_ALCHEMY_X, POS_ALCHEMY_Y);
 			theGame.GetTutorialSystem().ActivateJournalEntry(POTIONS_JOURNAL);
 		}
 

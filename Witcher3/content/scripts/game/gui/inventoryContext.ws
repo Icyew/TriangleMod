@@ -47,10 +47,15 @@ class  W3InventoryItemContext extends W3UIContext
 		{
 			currentItemId = TargetItemId;
 			
-			updateInputFeedback();			
 		}
 		
+		updateInputFeedback();
 		
+	}
+	
+	public function UpdateContext() 
+	{
+		updateInputFeedback();
 	}
 	
 	protected function triggerTooltip():void
@@ -89,10 +94,12 @@ class  W3InventoryItemContext extends W3UIContext
 		var itemCategory : name;
 		var isItemValid  : bool;
 		var isSchematic  : bool;
+		var isArmorOrWeapon : bool;
 		var playerInv    : W3GuiBaseInventoryComponent;
 		var notificationText : string;
 		var language : string;
 		var audioLanguage : string;
+		var result : bool;
 		
 		isItemValid = invComponentRef.IsIdValid(currentItemId);
 		
@@ -105,11 +112,27 @@ class  W3InventoryItemContext extends W3UIContext
 		{
 			return;
 		}
+		
 		super.HandleUserFeedback(keyName);
 		itemsCount = invComponentRef.GetItemQuantity( currentItemId );
-		if (keyName == "gamepad_X")
+		
+		if( keyName == "gamepad_X" )
 		{
-			if ((( invComponentRef.ItemHasTag(currentItemId, 'Edibles')) || (invComponentRef.ItemHasTag(currentItemId, 'Drinks')) ) )
+			isArmorOrWeapon = invComponentRef.IsItemAnyArmor( currentItemId ) || invComponentRef.IsItemWeapon( currentItemId );
+			
+			if( isArmorOrWeapon )
+			{
+				if( invMenuRef.IsItemInPreview( currentItemId ) )
+				{
+					invMenuRef.UnPreviewItem( currentItemId );
+				}
+				else
+				{
+					invMenuRef.PreviewItem( currentItemId );
+					return;
+				}
+			}
+			if( invComponentRef.ItemHasTag(currentItemId, 'Edibles') || invComponentRef.ItemHasTag(currentItemId, 'Drinks') || invComponentRef.ItemHasTag(currentItemId, 'Consumable'))
 			{
 				invMenuRef.OnConsumeItem(currentItemId);
 			} else
@@ -124,8 +147,10 @@ class  W3InventoryItemContext extends W3UIContext
 					if(thePlayer.inv.GetItemName(currentItemId) == 'Mutagen 3')
 					{
 						invMenuRef.PaperdollUpdateAll();
-						invMenuRef.PopulateTabData(InventoryMenuTab_Potions);
+						invMenuRef.PopulateTabData( InventoryMenuTab_Potions );
 					}
+					
+					invMenuRef.UpdatePlayerStatisticsData();
 				}
 				else
 				{
@@ -141,6 +166,29 @@ class  W3InventoryItemContext extends W3UIContext
 					}
 					theSound.SoundEvent("gui_global_denied");
 					invMenuRef.showNotification(notificationText);
+				}
+			}
+			else if( invComponentRef.GetItemName( currentItemId ) == 'q705_tissue_extractor' )
+			{
+				
+				result = thePlayer.TissueExtractorDischarge();
+				
+				if( result )
+				{
+					
+					invMenuRef.ShowItemTooltip( currentItemId, 0 );
+					
+					
+					invMenuRef.PopulateTabData(InventoryMenuTab_Ingredients);
+					invMenuRef.InventoryUpdateItem( currentItemId );
+					
+					
+					invMenuRef.OnPlaySoundEvent( "gui_character_buy_skill" );
+				}
+				else
+				{
+					
+					invMenuRef.OnPlaySoundEvent( "gui_global_denied" );
 				}
 			}
 			
@@ -171,7 +219,7 @@ class  W3InventoryItemContext extends W3UIContext
 				playerInv = invMenuRef.GetCurrentInventoryComponent();
 				if (playerInv)
 				{
-					invMenuRef.ShowBookPopup(GetLocStringByKeyExt(invComponentRef.GetItemLocalizedNameByUniqueID(currentItemId)), playerInv.GetBookText(currentItemId));
+					invMenuRef.ShowBookPopup( GetLocStringByKeyExt ( invComponentRef.GetItemLocalizedNameByUniqueID( currentItemId ) ), playerInv.GetBookText( currentItemId ), currentItemId, true );
 				}
 			}
 		}
@@ -204,6 +252,7 @@ class W3InventoryGridContext extends W3InventoryItemContext
 		var isQuestItem : bool;
 		var curEquipedItem : SItemUniqueId;
 		var cantUse : bool;
+		var isArmorOrWeapon : bool;
 		
 		var buttonLabel : string;
 		
@@ -232,13 +281,35 @@ class W3InventoryGridContext extends W3InventoryItemContext
 			
 			switch (currentInventoryState)
 			{
-				case IMS_Player:				
+				case IMS_Player:
 					
-					if (invComponentRef.ItemHasTag(currentItemId, 'Painting'))
+					isArmorOrWeapon = invComponentRef.IsItemAnyArmor( currentItemId ) || invComponentRef.IsItemWeapon( currentItemId );	
+					
+					if( isArmorOrWeapon && !invComponentRef.IsItemCrossbow( currentItemId ) && !invComponentRef.IsItemBolt( currentItemId ) )
+					{
+						if( invMenuRef.IsItemInPreview( currentItemId ) )
+						{
+							AddInputBinding( "panel_button_unpreview_item", "gamepad_X", IK_X, true );
+						}
+						else
+						{
+							AddInputBinding( "panel_button_preview_item", "gamepad_X", IK_X, true );
+						}
+					}
+
+					if (invComponentRef.ItemHasTag(currentItemId, 'mod_dye'))
+					{
+						AddInputBinding("panel_button_hud_interaction_useitem", "enter-gamepad_A", IK_E, true);
+					}
+					else if( invComponentRef.GetItemName( currentItemId ) == 'q705_tissue_extractor' )
+					{
+						AddInputBinding("panel_button_hud_interaction_useitem", "gamepad_X", IK_X, true);
+					}
+					else if (invComponentRef.ItemHasTag(currentItemId, 'Painting'))
 					{
 						AddInputBinding("panel_button_common_examine", "enter-gamepad_A", IK_E, true);
 					}
-					if (invComponentRef.ItemHasTag(currentItemId, 'ReadableItem'))
+					else if (invComponentRef.ItemHasTag(currentItemId, 'ReadableItem'))
 					{
 						AddInputBinding("panel_button_inventory_read", "enter-gamepad_A", IK_E, true);
 					}
@@ -342,7 +413,11 @@ class W3InventoryGridContext extends W3InventoryItemContext
 			switch (currentInventoryState)
 			{
 				case IMS_Player:
-					if ( invComponentRef.ItemHasTag(currentItemId, 'Painting') )
+					if (invComponentRef.ItemHasTag(currentItemId, 'mod_dye'))
+					{
+						invMenuRef.OnUseDye(currentItemId);
+					}
+					else if ( invComponentRef.ItemHasTag(currentItemId, 'Painting') )
 					{
 						invMenuRef.ShowPainting(currentItemId);
 					}
@@ -450,7 +525,7 @@ class W3ExternalGridContext extends W3InventoryItemContext
 				else
 				if (isSchematic)
 				{
-					AddInputBinding("panel_button_inventory_item_info", "gamepad_L2", IK_I, true);
+					AddInputBinding("panel_button_inventory_item_info", "gamepad_L2", IK_E, true);
 				}
 			}
 		}
@@ -522,6 +597,7 @@ class W3InventoryPaperdollContext extends W3InventoryItemContext
 		
 		m_inputBindings.Clear();
 		m_contextBindings.Clear();
+		
 		if (!invMenuRef || !invComponentRef)
 		{
 			return;
@@ -552,13 +628,29 @@ class W3InventoryPaperdollContext extends W3InventoryItemContext
 		{
 			AddInputBinding("panel_button_inventory_unequip", "enter-gamepad_A", IK_Space, true);
 		}
-
+		
+		if( invMenuRef.IsSlotInPreview( currentSlot ) )
+		{
+			AddInputBinding( "panel_button_unpreview_item", "gamepad_X", IK_X, true );
+		}		
+		
 		m_managerRef.updateInputFeedback();
 	}
 	
-	public  function HandleUserFeedback(keyName:string):void 
+	public  function HandleUserFeedback( keyName : string ):void
 	{
-		super.HandleUserFeedback(keyName);
+		if( keyName == "gamepad_X" )
+		{
+			
+			if( invMenuRef.IsSlotInPreview( currentSlot ) )
+			{
+				invMenuRef.RemovePreviewFromSlot( currentSlot );
+			}
+		}
+		else
+		{
+			super.HandleUserFeedback( keyName );
+		}
 	}
 	
 	protected  function execurePrimaryAction():void

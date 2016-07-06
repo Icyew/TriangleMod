@@ -385,45 +385,6 @@ class CAINpcStyleShieldParams extends CAINpcCombatStyleParams
 
 
 
-class CAINpcVampiressCombatStyle extends CAINpcCombatStyle
-{
-	function Init()
-	{
-		super.Init();
-		params = new CAINpcStyleVampiressParams in this;
-		params.OnCreated();
-	}	
-};
-
-class CAINpcBruxaCombatStyle extends CAINpcVampiressCombatStyle
-{
-	function Init()
-	{
-		super.Init();
-	}
-}
-
-
-
-class CAINpcStyleVampiressParams extends CAINpcCombatStyleParams
-{
-	default behGraph = EBG_Combat_Vampiress;
-	default RightItemType = 'monster_weapon';
-	
-	function Init()
-	{
-		var i : int;
-		super.Init();
-		
-		combatTacticTree = new CAINpcVampiressTree in this;
-		combatTacticTree.OnCreated();
-	}
-};
-
-
-
-
-
 class CAINpcSorceressCombatStyle extends CAINpcCombatStyle
 {
 	function Init()
@@ -530,6 +491,27 @@ class CAINpcPhilippaCombatStyle extends CAINpcSorceressCombatStyle
 		params.combatTacticTree.params.InitializeSpecialActions();
 	}
 }
+
+class CAINpcLynxWitchCombatStyle extends CAINpcSorceressCombatStyle
+{
+	function Init()
+	{
+		var i : int;
+		var sorceressParams : CAINpcStyleSorceressParams;
+		
+		super.Init();
+		
+		sorceressParams = (CAINpcStyleSorceressParams)params;
+		sorceressParams.magicAttackResourceName = 'ep2_magic_attack_lightning';
+		
+		params.combatTacticTree.params.specialActions.Clear();
+		params.combatTacticTree.params.specialActions.PushBack( new CAILynxWitchCastLightningSpecialAction in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAICastRipApartSpecialAction in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAILynxWitchShootProjectilesFromGroundSpecialAction in params.combatTacticTree.params );
+		params.combatTacticTree.params.InitializeSpecialActions();
+	}
+}
+
 
 class CAINpcStyleSorceressParams extends CAINpcCombatStyleParams
 {
@@ -641,6 +623,65 @@ class CAINpcWindMageCombatStyle extends CAINpcSorcererCombatStyle
 		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWindGustSpecialAction in params.combatTacticTree.params );
 		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicSandCageSpecialAction in params.combatTacticTree.params );
 		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicShieldSpecialAction in params.combatTacticTree.params );
+		
+		
+		
+		
+		
+		params.combatTacticTree.params.InitializeSpecialActions();
+	}
+}
+
+class CAINpcWindMageCombatStyleBob extends CAINpcSorcererCombatStyle
+{
+	function Init()
+	{
+		var i : int;
+		var sorcererParams : CAINpcStyleSorcererParams;
+		
+		super.Init();
+		
+		sorcererParams = (CAINpcStyleSorcererParams)params;
+		sorcererParams.magicAttackResourceName = 'magic_attack_sand';
+		
+		params.combatTacticTree.params.specialActions.Clear();
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicSandGroundBlastSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicSandPushSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicTornadoSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWindCoilSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWindGustSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicSandCageSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicShieldSpecialActionBob in params.combatTacticTree.params );
+		
+		
+		
+		
+		
+		params.combatTacticTree.params.InitializeSpecialActions();
+	}
+}
+
+
+class CAINpcWaterMageCombatStyleBob extends CAINpcSorcererCombatStyle
+{
+	function Init()
+	{
+		var i : int;
+		var sorcererParams : CAINpcStyleSorcererParams;
+		
+		super.Init();
+		
+		sorcererParams = (CAINpcStyleSorcererParams)params;
+		sorcererParams.magicAttackResourceName = 'magic_attack_water';
+		
+		params.combatTacticTree.params.specialActions.Clear();
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWaterGroundBlastSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWaterPushSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWaterTornadoSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWaterCoilSpecialActionBob in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWindGustSpecialActionBob in params.combatTacticTree.params ); 
+		params.combatTacticTree.params.specialActions.PushBack( new CAIMagicWaterCageSpecialAction in params.combatTacticTree.params );
+		params.combatTacticTree.params.specialActions.PushBack( new CAIWaterMagicShieldSpecialActionBob in params.combatTacticTree.params );
 		
 		
 		
@@ -1367,6 +1408,47 @@ class CAINpcStyleTwoHandedSwordParams extends CAINpcCombatStyleParams
 
 
 
+class CAINpcGregoireCombatStyle extends CAINpcCombatStyle
+{
+	function Init()
+	{
+		super.Init();
+		params = new CAINpcGregoireCombatStyleParams in this;
+		params.OnCreated();
+	}	
+};
+
+class CAINpcGregoireCombatStyleParams extends CAINpcCombatStyleParams
+{
+	default RightItemType = 'steelsword';
+
+	default behGraph = EBG_Combat_Gregoire;
+	
+	function Init()
+	{
+		var i : int;
+		
+		super.Init();
+		
+		
+		combatTacticTree = new CAINpcGregoireTacticTree in this;
+		combatTacticTree.OnCreated();
+		
+		
+		defenseActions.Clear();
+		
+		defenseActions.PushBack( new CAINpcGregoireCounterAction in this );
+		
+		for ( i = 0; i < defenseActions.Size(); i+=1 )
+		{
+			defenseActions[ i ].OnCreated();
+		}
+	}
+};
+
+
+
+
 class CAINpcVesemirTutorialCombatStyle extends CAINpcCombatStyle
 {
 	function Init()
@@ -1426,6 +1508,83 @@ class CAINpcStyleOlgierdParams extends CAINpcCombatStyleParams
 		defenseActions.PushBack( new CAINpcOlgierdCounterAction in this ); 
 		defenseActions.PushBack( new CAINpcOlgierdDodgeAction in this );
 		defenseActions.PushBack( new CAINpcOlgierdCounterAfterHitAction in this );
+		
+		for ( i = 0; i < defenseActions.Size(); i+=1 )
+		{
+			defenseActions[ i ].OnCreated();
+		}
+	}
+};
+
+
+
+
+class CAINpcDettlaffVampireCombatStyle extends CAINpcCombatStyle
+{
+	function Init()
+	{
+		super.Init();
+		params = new CAINpcStyleDettlaffVampireParams in this;
+		params.OnCreated();
+	}	
+};
+
+class CAINpcStyleDettlaffVampireParams extends CAINpcCombatStyleParams
+{
+	default RightItemType = 'monster_weapon';
+	default behGraph = EBG_Combat_Dettlaff_Vampire;
+	
+	function Init()
+	{
+		var i : int;
+		
+		super.Init();
+		
+		combatTacticTree = new CAINpcDettlaffVampireTacticTree in this;
+		combatTacticTree.OnCreated();
+		
+		defenseActions.Clear();
+
+		defenseActions.PushBack( new CAINpcDettlaffVampireParryAction in this ); 
+		defenseActions.PushBack( new CAINpcDettlaffVampireCounterAction in this ); 
+		defenseActions.PushBack( new CAINpcDettlaffVampireCounterAfterHitAction in this ); 
+		
+		for ( i = 0; i < defenseActions.Size(); i+=1 )
+		{
+			defenseActions[ i ].OnCreated();
+		}
+	}
+};
+
+
+
+class CAINpcDettlaffMinionCombatStyle extends CAINpcCombatStyle
+{
+	function Init()
+	{
+		super.Init();
+		params = new CAINpcStyleDettlaffMinionParams in this;
+		params.OnCreated();
+	}	
+};
+
+class CAINpcStyleDettlaffMinionParams extends CAINpcCombatStyleParams
+{
+	default RightItemType = 'monster_weapon';
+	default behGraph = EBG_Combat_Dettlaff_Minion;
+	
+	function Init()
+	{
+		var i : int;
+		
+		super.Init();
+		
+		combatTacticTree = new CAINpcDettlaffMinionTacticTree in this;
+		combatTacticTree.OnCreated();
+		
+		defenseActions.Clear();
+		defenseActions.PushBack( new CAINpcDettlaffMinionParryAction in this ); 
+		defenseActions.PushBack( new CAINpcDettlaffMinionCounterAction in this ); 
 		
 		for ( i = 0; i < defenseActions.Size(); i+=1 )
 		{

@@ -7,6 +7,24 @@
 
 
 
+exec function m11cam( n : name )
+{
+	thePlayer.SetLoopingCameraShakeAnimName( n );
+	GetWitcherPlayer().Mutation11StartAnimation();
+}
+
+exec function mut11cooldown()
+{
+	if( FactsQuerySum( "debug_mut11_no_cooldown" ) > 0 )
+	{
+		FactsRemove( "debug_mut11_no_cooldown" );
+	}
+	else
+	{
+		FactsAdd( "debug_mut11_no_cooldown" );
+	}
+}
+
 exec function radialslotsstatus ()
 {
 	var i 				 : int;
@@ -25,6 +43,12 @@ exec function radialslotsstatus ()
 		}
 	}
 }
+
+exec function horsemode( mode : EHorseMode )
+{
+	GetWitcherPlayer().GetHorseManager().SetHorseMode( mode );
+}
+
 exec function reduceitems()
 {
 		var allItems : array<SItemUniqueId>;
@@ -38,6 +62,11 @@ exec function reduceitems()
 			thePlayer.GetInventory().RemoveItem(allItems[i], thePlayer.GetInventory().GetItemQuantity(allItems[i]) - 10 );
 			}
 		}
+}
+
+exec function enablemusicevents( enable : bool)
+{
+	theSound.SoundEnableMusicEvents(enable);
 }
 
 
@@ -305,7 +334,7 @@ exec function tuten(optional e : bool)
 	TutorialMessagesEnable(e);
 }
 
-exec function testtut(optional scriptTag : name, optional x : float, optional y : float, optional dur : float, optional dontEnableMessages : bool, optional fullscreen : bool, optional noHorResize : bool)
+exec function testtut( optional scriptTag : name, optional x : float, optional y : float, optional dur : float, optional dontEnableMessages : bool, optional fullscreen : bool, optional noHorResize : bool, optional addToJournal : bool )
 {
 	var tut : STutorialMessage;
 	
@@ -331,7 +360,6 @@ exec function testtut(optional scriptTag : name, optional x : float, optional y 
 		tut.tutorialScriptTag = scriptTag;
 		
 	tut.disableHorizontalResize = noHorResize;
-	tut.journalEntryName = tut.tutorialScriptTag;
 	tut.hintPosX = x;
 	tut.hintPosY = y;
 	
@@ -345,10 +373,13 @@ exec function testtut(optional scriptTag : name, optional x : float, optional y 
 		
 	tut.hintDurationType = ETHDT_Custom;
 	tut.canBeShownInMenus = true;
+	tut.canBeShownInDialogs = true;
 	tut.glossaryLink = true;
 	tut.forceToQueueFront = true;
-	tut.fullscreen = true;
 	tut.force = true;
+	
+	if( addToJournal )
+		tut.journalEntryName = scriptTag;
 	
 	
 	theGame.GetTutorialSystem().DisplayTutorial(tut);
@@ -441,7 +472,7 @@ exec function readabook(bookName : name)
 
 exec function changeweather(weatherName : name)
 {
-	RequestWeatherChangeTo( weatherName , 1 );
+	RequestWeatherChangeTo( weatherName , 1, false );
 }
 
 exec function showhudmess(message : string)
@@ -765,7 +796,7 @@ class W3KillTestTrigger extends CGameplayEntity
 		var i : int;
 		for( i = 0; i < actors.Size(); i+=1 )
 		{
-			actors[i].Kill();
+			actors[i].Kill( 'Debug' );
 			actors[i].SetBehaviorVariable( 'Ragdoll_Weight',1.0);
 			actors[i].RaiseForceEvent( 'Ragdoll' );
 		}
@@ -889,7 +920,7 @@ exec function printability(tag : name)
 		
 	if(actor)
 	{
-		abilities = actor.GetAbilities(true);
+		actor.GetCharacterStats().GetAbilities(abilities,true);
 		size = abilities.Size();
 		LogChannel('Ability', "");
 		LogChannel('Ability', "Logging abilities (" + size + ") of <<" + actor + ">>");
@@ -1146,7 +1177,7 @@ class W2BalanceCalc
 	{
 		var npc : CNewNPC;
 		npc = (CNewNPC)actor;
-		abilities = actor.GetAbilities(true);
+		actor.GetCharacterStats().GetAbilities(abilities, true);
 		
 		statVitality = npc.GetStatMax(BCS_Vitality);
 		statEssence = npc.GetStatMax(BCS_Essence);
@@ -1538,6 +1569,45 @@ exec function FixMovement()
 	thePlayer.SetBIsInputAllowed( true, 'execFunc_FixMovement' );
 }
 
+exec function trad()
+{
+	var arr : array<SItemUniqueId>;
+	
+	arr = thePlayer.inv.AddAnItem('White Frost 3');
+	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
+	thePlayer.EquipItem(arr[0], EES_Petard1);
+	
+	arr = thePlayer.inv.AddAnItem('Silver Dust Bomb 3');
+	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
+	
+	arr = thePlayer.inv.AddAnItem('Devils Puffball 3');
+	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
+	
+	arr = thePlayer.inv.AddAnItem('Samum 3');
+	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
+	
+	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
+	arr = thePlayer.inv.AddAnItem('Dancing Star 3');
+	thePlayer.EquipItem(arr[0], EES_Petard2);
+	
+	thePlayer.inv.AddAnItem('Tracking Bolt',9);
+	thePlayer.inv.AddAnItem('Bait Bolt',9);
+	thePlayer.inv.AddAnItem('Blunt Bolt',9);
+	thePlayer.inv.AddAnItem('Broadhead Bolt',9);
+	thePlayer.inv.AddAnItem('Target Point Bolt',9);
+	thePlayer.inv.AddAnItem('Split Bolt',9);
+	thePlayer.inv.AddAnItem('Explosive Bolt',9);
+	
+	thePlayer.inv.AddAnItem('Blunt Bolt Legendary',9);
+	thePlayer.inv.AddAnItem('Broadhead Bolt Legendary',9);
+	thePlayer.inv.AddAnItem('Target Point Bolt Legendary',9);
+	thePlayer.inv.AddAnItem('Split Bolt Legendary',9);
+	thePlayer.inv.AddAnItem('Explosive Bolt Legendary',9);
+	
+	thePlayer.inv.AddAnItem('Torch');
+	thePlayer.inv.AddAnItem('q103_bell');
+}
+
 exec function addbombs(optional notInfinite : bool)
 {	
 	var arr : array<SItemUniqueId>;
@@ -1597,8 +1667,8 @@ exec function addbombs(optional notInfinite : bool)
 	arr = thePlayer.inv.AddAnItem('Grapeshot 1');
 	thePlayer.inv.SingletonItemSetAmmo(arr[0], thePlayer.inv.SingletonItemGetMaxAmmo(arr[0]));
 	
-	thePlayer.EquipItem(arr[0], EES_Quickslot1);
-	GetWitcherPlayer().SelectQuickslotItem( EES_Quickslot1 );
+	thePlayer.EquipItem(arr[0], EES_Petard1);
+	GetWitcherPlayer().SelectQuickslotItem( EES_Petard1 );
 }
 
 exec function freezetodeath()
@@ -1647,6 +1717,7 @@ exec function addcraft()
 	thePlayer.inv.AddAnItem('Steel plate', 10);
 	thePlayer.inv.AddAnItem('Cotton', 10);
 	thePlayer.inv.AddAnItem('Oil', 10);
+	thePlayer.inv.AddAnItem('Infused shard', 10);
 	
 	GetWitcherPlayer().AddCraftingSchematic('Heavy Boots 2 schematic');
 	GetWitcherPlayer().AddCraftingSchematic('Heavy Boots 1 schematic');
@@ -2321,6 +2392,26 @@ exec function addtrophies()
 	thePlayer.inv.AddAnItem('sq108_griffin_trophy',1);
 	thePlayer.inv.AddAnItem('mq0003_noonwraith_trophy',1);
 	
+	theGame.RequestMenuWithBackground( 'InventoryMenu', 'CommonMenu' );
+}
+
+
+exec function adddye()
+{
+	thePlayer.inv.AddAnItem('Dye Default',10);
+	thePlayer.inv.AddAnItem('Dye Black',10);
+	thePlayer.inv.AddAnItem('Dye Blue',10);
+	thePlayer.inv.AddAnItem('Dye Brown',10);
+	thePlayer.inv.AddAnItem('Dye Gray',10);
+	thePlayer.inv.AddAnItem('Dye Green',10);
+	thePlayer.inv.AddAnItem('Dye Orange',10);
+	thePlayer.inv.AddAnItem('Dye Pink',10);
+	thePlayer.inv.AddAnItem('Dye Purple',10);
+	thePlayer.inv.AddAnItem('Dye Red',10);
+	thePlayer.inv.AddAnItem('Dye Turquoise',10);
+	thePlayer.inv.AddAnItem('Dye White',10);
+	thePlayer.inv.AddAnItem('Dye Yellow',10);
+
 	theGame.RequestMenuWithBackground( 'InventoryMenu', 'CommonMenu' );
 }
 
@@ -3505,6 +3596,25 @@ exec function addmutagenrecipes()
 	GetWitcherPlayer().AddAlchemyRecipe('Recipe for Mutagen 26');
 	GetWitcherPlayer().AddAlchemyRecipe('Recipe for Mutagen 27');
 	GetWitcherPlayer().AddAlchemyRecipe('Recipe for Mutagen 28');
+	
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Red to Blue');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Red to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Blue to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Blue to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Green to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Lesser Mutagen Green to Blue');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Red to Blue');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Red to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Blue to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Blue to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Green to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Mutagen Green to Blue');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Red to Blue');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Red to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Blue to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Blue to Green');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Green to Red');
+	GetWitcherPlayer().AddAlchemyRecipe('Recipe Greater Mutagen Green to Blue');
 }
 
 
@@ -5483,58 +5593,38 @@ exec function useoil(n : name, optional type : int)
 
 exec function oilstats()
 {
-	var oilName : name;
+	oilstats_internal( true );
+	oilstats_internal( false );
+}
+
+function oilstats_internal( steel : bool )
+{
 	var id : SItemUniqueId;
+	var slot : EEquipmentSlots;
+	var oils : array< W3Effect_Oil >;
+	var str : string;
+	var i : int;
 	
-	if(GetWitcherPlayer().GetItemEquippedOnSlot(EES_SteelSword, id))
+	if( steel )
 	{
-		oilName = GetWitcherPlayer().GetOilAppliedOnSword(true);
-		LogStats("=============== oil stats ==============================");
-		LogStats("Steel sword has <<" + oilName + ">> oil, with " + thePlayer.GetCurrentOilAmmo(id) + "/" + thePlayer.GetMaxOilAmmo(id) + " charges left");
+		slot = EES_SteelSword;
+		str = "Steel";
 	}
-	if(GetWitcherPlayer().GetItemEquippedOnSlot(EES_SilverSword, id))
+	else
 	{
-		oilName = GetWitcherPlayer().GetOilAppliedOnSword(false);
-		LogStats("=============== oil stats ==============================");
-		LogStats("Steel sword has <<" + oilName + ">> oil, with " + thePlayer.GetCurrentOilAmmo(id) + "/" + thePlayer.GetMaxOilAmmo(id) + " charges left");
+		slot = EES_SilverSword;
+		str = "Silver";
 	}
-}
-
-exec function oilstatsciri()
-{
-	var steelOil, silverOil : name;
 	
-	steelOil = thePlayer.GetOilAppliedOnSword(true);
-	silverOil = thePlayer.GetOilAppliedOnSword(false);
-	
-	LogStats("Oil on steel sword: <<" + steelOil + ">>");
-	LogStats("Oil on silver sword: <<" + silverOil + ">>");
-}
-
-
-exec function testoil()
-{
-	var oilId : SItemUniqueId;
-	var oilIds,weaponId : array<SItemUniqueId>;
-	var val : SAbilityAttributeValue;
-	var appliedOilItemName : name;
-	
-	weaponId = thePlayer.inv.GetItemsIds('Witcher Silver Sword');
-	oilIds = thePlayer.inv.AddAnItem('Cursed Oil 1');
-	oilId = oilIds[0];
-	
-	val = thePlayer.inv.GetItemAttributeValue(weaponId[0], 'vsHuman_attack_power');
-	LogStats("==============================================");
-	LogStats("Before oil, vsHuman_attack_power == " + NoTrailZeros(val.valueBase) + ", *" + NoTrailZeros(val.valueMultiplicative) + ", +" + NoTrailZeros(val.valueAdditive) );
-	
-	thePlayer.ApplyOil(oilId, weaponId[0]);
-	
-	val = thePlayer.inv.GetItemAttributeValue(weaponId[0], 'vsHuman_attack_power');
-	LogStats("After oil, vsHuman_attack_power == " + NoTrailZeros(val.valueBase) + ", *" + NoTrailZeros(val.valueMultiplicative) + ", +" + NoTrailZeros(val.valueAdditive) );
-		
-	appliedOilItemName = GetWitcherPlayer().GetOilAppliedOnSword(true);
-	LogStats("Currently applied oil on steel sword is: <<" + appliedOilItemName + ">>");
-	LogStats("==============================================");
+	if(GetWitcherPlayer().GetItemEquippedOnSlot(slot, id))
+	{
+		oils = GetWitcherPlayer().inv.GetOilsAppliedOnItem( id );
+		for(i=0; i<oils.Size(); i+=1)
+		{
+			LogStats( "=============== oil stats ==============================" );
+			LogStats( str + " sword has <<" + oils[ i ].GetOilItemName() + ">> oil, with " + oils[ i ].GetAmmoCurrentCount() + "/" + oils[ i ].GetAmmoMaxCount() + " charges left");
+		}
+	}	
 }
 
 exec function addSlot()
@@ -5558,34 +5648,9 @@ exec function unenchantItem()
 	thePlayer.inv.UnenchantItem( swordId );
 }
 
-exec function testoilciri()
-{
-	var swordId : SItemUniqueId;
-	var oil : array<SItemUniqueId>;
-	var steelOil, silverOil : name;
-	var ret : bool;
-	
-	oil = thePlayer.inv.AddAnItem('Hanged Man Venom 1');
-	
-	swordId = ((W3ReplacerCiri)thePlayer).GetEquippedSword(false);
-	swordId = ((W3ReplacerCiri)thePlayer).GetEquippedSword(true);
-	
-	thePlayer.ApplyOil(oil[0], swordId);
-	
-	steelOil = thePlayer.GetOilAppliedOnSword(true);
-	silverOil = thePlayer.GetOilAppliedOnSword(false);
-	
-	ret = thePlayer.IsEquippedSwordUpgradedWithOil(true, steelOil);
-	ret = thePlayer.IsEquippedSwordUpgradedWithOil(false, silverOil);
-	
-	ret = thePlayer.IsEquippedSwordUpgradedWithOil(true);
-	
-	Log("");
-}
-
 exec function playerkill(optional ignoreImmortalityMode : bool)
 {
-	thePlayer.Kill(ignoreImmortalityMode);
+	thePlayer.Kill( 'Debug', ignoreImmortalityMode );
 }
 
 exec function PlayerKinematic()
@@ -5719,13 +5784,19 @@ exec function pc_snaptonavdata(val: bool)
 
 
 exec function god()
-{	
+{
+	god_internal();
+}
+
+function god_internal()
+{
 	if( !thePlayer.IsInvulnerable() )
 	{
 		thePlayer.SetImmortalityMode( AIM_Invulnerable, AIC_Default, true );
 		thePlayer.SetCanPlayHitAnim(false);
 		thePlayer.AddBuffImmunity_AllNegative('god', true);
 		StaminaBoyInternal(true);
+		LogCheats( "God is now ON" );
 	}
 	else
 	{
@@ -5733,13 +5804,31 @@ exec function god()
 		thePlayer.SetCanPlayHitAnim(true);
 		thePlayer.RemoveBuffImmunity_AllNegative('god');
 		StaminaBoyInternal(false);
+		LogCheats( "God is now OFF" );
 	}
 }
 
 
 exec function god2()
-{	
-	thePlayer.CheatGod2( !thePlayer.IsImmortal() );
+{
+	god2_internal();
+}
+
+function god2_internal()
+{
+	var isImmortal : bool;
+	
+	isImmortal = thePlayer.IsImmortal();
+	thePlayer.CheatGod2( !isImmortal );
+	
+	if( isImmortal )
+	{
+		LogCheats( "God is now OFF" );
+	}
+	else
+	{
+		LogCheats( "God is now ON" );
+	}
 }
 
 
@@ -6034,6 +6123,7 @@ function Debug_stats(actor : CActor)
 	
 	
 	tags = npc.GetTags();
+	size = tags.Size();
 	tempString = "Tags: ";
 	for(i=0; i<size; i+=1)
 	{
@@ -6108,12 +6198,16 @@ function Debug_stats(actor : CActor)
 	if(actor != thePlayer)
 	{
 		temp = CalculateAttributeValue(actor.GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
+		LogStats("critical hit chance: " + NoTrailZeros(temp*100) + "%");
 	}
 	else
 	{
-		temp = thePlayer.GetCriticalHitChance(false, NULL, MC_NotSet);
-	}
-	LogStats("critical hit chance: " + NoTrailZeros(temp*100) + "%");
+		temp = thePlayer.GetCriticalHitChance( true, false, NULL, MC_NotSet, false );
+		LogStats( "Fast Attack critical hit chance: " + NoTrailZeros( temp*100 ) + "%" );
+		
+		temp = thePlayer.GetCriticalHitChance( false, true, NULL, MC_NotSet, false );
+		LogStats( "Heavy Attack critical hit chance: " + NoTrailZeros( temp*100 ) + "%" );
+	}	
 	
 	if(actor != thePlayer)
 	{
@@ -6198,7 +6292,7 @@ function Debug_stats(actor : CActor)
 	
 	LogStats("");
 	LogStats("Buff immunitites:");
-	size = EnumGetMax('EEffectType')+1;
+	size = (int)EET_EffectTypesSize ;
 	for(i=0; i<size; i+=1)
 	{
 		if(actor.IsImmuneToBuff(i))
@@ -6233,12 +6327,16 @@ function Debug_stats(actor : CActor)
 	}	
 	
 	
+	LogStats("Hit severity reduction = " + NoTrailZeros(CalculateAttributeValue(actor.GetAttributeValue('hit_severity'))) );
+	
+	
+	
 	LogStats("");
 	LogStats("Current buffs:");
 	buffs = actor.GetBuffs();
 	for(i=0; i<buffs.Size(); i+=1)
 	{
-		LogStats(SpaceFill(buffs[i].GetEffectType(), 25) + " isPaused= " + SpaceFill(buffs[i].IsPaused(),5,ESFM_JustifyRight) + ", duration= " + SpaceFill(NoTrailZeros(buffs[i].GetDurationLeft()), 9, ESFM_JustifyRight) + " / " + SpaceFill( NoTrailZeros(buffs[i].GetInitialDuration()), 9, ESFM_JustifyRight) );
+		LogStats( SpaceFill( buffs[i].GetEffectType(), 25 ) + " isPaused= " + SpaceFill( buffs[i].IsPaused(),5,ESFM_JustifyRight ) + ", duration= " + SpaceFill( NoTrailZeros( buffs[i].GetDurationLeft() ), 9, ESFM_JustifyRight ) + " / " + SpaceFill( NoTrailZeros( buffs[i].GetInitialDurationAfterResists() ), 9, ESFM_JustifyRight ) );
 	}
 	
 	LogStats(" ");
@@ -6257,7 +6355,7 @@ function Debug_Attributes(n : CActor)
 	if(!n)
 		return;
 		
-	abs = n.GetAbilities(true);
+	n.GetCharacterStats().GetAbilities(abs, true);
 	dm = theGame.GetDefinitionsManager();
 	atts = dm.GetAbilitiesAttributes(abs);
 	
@@ -6416,7 +6514,7 @@ exec function spawnBoat000()
 	ent = theGame.CreateEntity(template, pos, rot, true, false, false, PM_Persist );
 }
 
-exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool )
+exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int )
 {
 	var ent : CEntity;
 	var horse : CEntity;
@@ -6538,14 +6636,25 @@ exec function spawn(nam : name, optional quantity : int, optional distance : flo
 		{
 			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
 		}
+			
+		if ( level != 0 )
+		{
+			((CNewNPC)ent).SetLevel( level );
+		}
 	}
 }
 exec function likeaboss()
 {
 	if(FactsQuerySum('player_is_the_boss') > 0)
+	{
 		FactsRemove('player_is_the_boss');
+		LogCheats( "Like a Boss is now OFF" );
+	}
 	else
+	{
 		FactsAdd('player_is_the_boss');
+		LogCheats( "Like a Boss is now ON" );
+	}
 }
 
 exec function dismounttest()
@@ -6940,9 +7049,15 @@ exec function HPM(hpm : int)
 exec function weak()
 {
 	if(FactsDoesExist("debug_fact_weak"))
+	{
 		FactsRemove("debug_fact_weak");
+		LogCheats( "Weak is now OFF" );
+	}
 	else
+	{
 		FactsAdd("debug_fact_weak");	
+		LogCheats( "Weak is now ON" );
+	}
 }
 
 exec function instantMount( vehicleTag : name )
@@ -7528,10 +7643,16 @@ exec function BlockAb( actorTag : name, abilityName : name )
 
 exec function criticalboy()
 {
-	if(FactsQuerySum('debug_fact_critical_boy') > 0)
-		FactsRemove('debug_fact_critical_boy');
+	if( FactsQuerySum( 'debug_fact_critical_boy' ) > 0 )
+	{
+		FactsRemove( 'debug_fact_critical_boy' );
+		LogCheats( "Critical Boy is now OFF" );
+	}
 	else
-		FactsAdd('debug_fact_critical_boy');
+	{
+		FactsAdd( 'debug_fact_critical_boy' );
+		LogCheats( "Critical Boy is now ON" );
+	}
 }
 
 
@@ -8465,7 +8586,7 @@ function printabs_f(optional tag : name, optional fromItems : bool, optional att
 		actor = act;
 	}
 	
-	abs = actor.GetAbilities(fromItems);
+	actor.GetCharacterStats().GetAbilities(abs,fromItems);
 	
 	logStr = "** Printing abilities of <<" + actor + ">> ";
 	if(fromItems)
@@ -8599,11 +8720,11 @@ exec function giveset ( val : name )
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Gryphon Armor 3',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Gryphon Gloves 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Gryphon Gloves 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Gryphon Pants 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Gryphon Pants 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Gryphon Boots 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Gryphon Boots 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
 			break;
 		}
@@ -8615,11 +8736,11 @@ exec function giveset ( val : name )
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Lynx Armor 3',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Lynx Gloves 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Lynx Gloves 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Lynx Pants 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Lynx Pants 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Lynx Boots 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Lynx Boots 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Lynx School Crossbow',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
@@ -8633,11 +8754,11 @@ exec function giveset ( val : name )
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Bear Armor 3',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Bear Gloves 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Bear Gloves 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Bear Pants 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Bear Pants 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Bear Boots 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Bear Boots 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Bear School Crossbow',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
@@ -8651,11 +8772,11 @@ exec function giveset ( val : name )
 			GetWitcherPlayer().EquipItem(iID[0]);
 			iID = thePlayer.inv.AddAnItem( 'Wolf Armor 3',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Wolf Gloves 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Wolf Gloves 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Wolf Pants 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Wolf Pants 4',1);
 			GetWitcherPlayer().EquipItem(iID[0]);
-			iID = thePlayer.inv.AddAnItem( 'Wolf Boots 2',1);
+			iID = thePlayer.inv.AddAnItem( 'Wolf Boots 4',1);
 			break;	
 		}	
 	}
@@ -8901,78 +9022,282 @@ thePlayer.inv.AddAnItem('Witcher Silver Sword', 1);
 
 exec function addBearArmors()
 {
-thePlayer.inv.RemoveAllItems();
-thePlayer.inv.AddAnItem('Bear Armor', 1);
-thePlayer.inv.AddAnItem('Bear Armor 1', 1);
-thePlayer.inv.AddAnItem('Bear Armor 2', 1);
-thePlayer.inv.AddAnItem('Bear Armor 3', 1);
-thePlayer.inv.AddAnItem('Bear Gloves 1', 1);
-thePlayer.inv.AddAnItem('Bear Gloves 2', 1);
-thePlayer.inv.AddAnItem('Bear Pants 1', 1);
-thePlayer.inv.AddAnItem('Bear Pants 2', 1);
-thePlayer.inv.AddAnItem('Bear Boots 1', 1);
-thePlayer.inv.AddAnItem('Bear Boots 2', 1);
+	var lm : W3PlayerWitcher;
+	var exp, prevLvl, currLvl : int;
+	
+	GetWitcherPlayer().Debug_ClearCharacterDevelopment();
+	lm = GetWitcherPlayer();
+	prevLvl = lm.GetLevel();
+	currLvl = lm.GetLevel();
+		
+	while(currLvl < 60)
+	{
+		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
+		lm.AddPoints(EExperiencePoint, exp, false); 
+		currLvl = lm.GetLevel();
+		if(prevLvl == currLvl)
+			break;
+		prevLvl = currLvl;
+	}	
+	
+	thePlayer.inv.RemoveAllItems();
+	thePlayer.inv.AddAnItem('Bear Armor', 1);
+	thePlayer.inv.AddAnItem('Bear Armor 1', 1);
+	thePlayer.inv.AddAnItem('Bear Armor 2', 1);
+	thePlayer.inv.AddAnItem('Bear Armor 3', 1);
+	thePlayer.inv.AddAnItem('Bear Armor 4', 1);
+	thePlayer.inv.AddAnItem('Bear Gloves 1', 1);
+	thePlayer.inv.AddAnItem('Bear Gloves 2', 1);
+	thePlayer.inv.AddAnItem('Bear Gloves 3', 1);
+	thePlayer.inv.AddAnItem('Bear Gloves 4', 1);
+	thePlayer.inv.AddAnItem('Bear Gloves 5', 1);
+	thePlayer.inv.AddAnItem('Bear Pants 1', 1);
+	thePlayer.inv.AddAnItem('Bear Pants 2', 1);
+	thePlayer.inv.AddAnItem('Bear Pants 3', 1);
+	thePlayer.inv.AddAnItem('Bear Pants 4', 1);
+	thePlayer.inv.AddAnItem('Bear Pants 5', 1);
+	thePlayer.inv.AddAnItem('Bear Boots 1', 1);
+	thePlayer.inv.AddAnItem('Bear Boots 2', 1);
+	thePlayer.inv.AddAnItem('Bear Boots 3', 1);
+	thePlayer.inv.AddAnItem('Bear Boots 4', 1);
+	thePlayer.inv.AddAnItem('Bear Boots 5', 1);
+	
+	thePlayer.inv.AddAnItem('Bear School steel sword', 1);
+	thePlayer.inv.AddAnItem('Bear School steel sword 1', 1);
+	thePlayer.inv.AddAnItem('Bear School steel sword 2', 1);
+	thePlayer.inv.AddAnItem('Bear School steel sword 3', 1);
+	thePlayer.inv.AddAnItem('Bear School silver sword', 1);
+	thePlayer.inv.AddAnItem('Bear School silver sword 1', 1);
+	thePlayer.inv.AddAnItem('Bear School silver sword 2', 1);
+	thePlayer.inv.AddAnItem('Bear School silver sword 3', 1);
 
-thePlayer.inv.AddAnItem('Bear School steel sword', 1);
-thePlayer.inv.AddAnItem('Bear School steel sword 1', 1);
-thePlayer.inv.AddAnItem('Bear School steel sword 2', 1);
-thePlayer.inv.AddAnItem('Bear School steel sword 3', 1);
-thePlayer.inv.AddAnItem('Bear School silver sword', 1);
-thePlayer.inv.AddAnItem('Bear School silver sword 1', 1);
-thePlayer.inv.AddAnItem('Bear School silver sword 2', 1);
-thePlayer.inv.AddAnItem('Bear School silver sword 3', 1);
+	thePlayer.inv.AddAnItem('Dye Default',10);
+	thePlayer.inv.AddAnItem('Dye Black',10);
+	thePlayer.inv.AddAnItem('Dye Blue',10);
+	thePlayer.inv.AddAnItem('Dye Brown',10);
+	thePlayer.inv.AddAnItem('Dye Gray',10);
+	thePlayer.inv.AddAnItem('Dye Green',10);
+	thePlayer.inv.AddAnItem('Dye Orange',10);
+	thePlayer.inv.AddAnItem('Dye Pink',10);
+	thePlayer.inv.AddAnItem('Dye Purple',10);
+	thePlayer.inv.AddAnItem('Dye Red',10);
+	thePlayer.inv.AddAnItem('Dye Turquoise',10);
+	thePlayer.inv.AddAnItem('Dye White',10);
+	thePlayer.inv.AddAnItem('Dye Yellow',10);
+
+	EncumbranceBoy( 0 );
 }
 
 exec function addLynxArmors()
 {
-thePlayer.inv.RemoveAllItems();
-thePlayer.inv.AddAnItem('Lynx Armor', 1);
-thePlayer.inv.AddAnItem('Lynx Armor 1', 1);
-thePlayer.inv.AddAnItem('Lynx Armor 2', 1);
-thePlayer.inv.AddAnItem('Lynx Armor 3', 1);
-thePlayer.inv.AddAnItem('Lynx Gloves 1', 1);
-thePlayer.inv.AddAnItem('Lynx Gloves 2', 1);
-thePlayer.inv.AddAnItem('Lynx Pants 1', 1);
-thePlayer.inv.AddAnItem('Lynx Pants 2', 1);
-thePlayer.inv.AddAnItem('Lynx Boots 1', 1);
-thePlayer.inv.AddAnItem('Lynx Boots 2', 1);
+	var lm : W3PlayerWitcher;
+	var exp, prevLvl, currLvl : int;
+	
+	GetWitcherPlayer().Debug_ClearCharacterDevelopment();
+	lm = GetWitcherPlayer();
+	prevLvl = lm.GetLevel();
+	currLvl = lm.GetLevel();
+		
+	while(currLvl < 60)
+	{
+		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
+		lm.AddPoints(EExperiencePoint, exp, false); 
+		currLvl = lm.GetLevel();
+		if(prevLvl == currLvl)
+			break;
+		prevLvl = currLvl;
+	}	
 
-thePlayer.inv.AddAnItem('Lynx School steel sword', 1);
-thePlayer.inv.AddAnItem('Lynx School steel sword 1', 1);
-thePlayer.inv.AddAnItem('Lynx School steel sword 2', 1);
-thePlayer.inv.AddAnItem('Lynx School steel sword 3', 1);
-thePlayer.inv.AddAnItem('Lynx School silver sword', 1);
-thePlayer.inv.AddAnItem('Lynx School silver sword 1', 1);
-thePlayer.inv.AddAnItem('Lynx School silver sword 2', 1);
-thePlayer.inv.AddAnItem('Lynx School silver sword 3', 1);
+	thePlayer.inv.RemoveAllItems();
+	thePlayer.inv.AddAnItem('Lynx Armor', 1);
+	thePlayer.inv.AddAnItem('Lynx Armor 1', 1);
+	thePlayer.inv.AddAnItem('Lynx Armor 2', 1);
+	thePlayer.inv.AddAnItem('Lynx Armor 3', 1);
+	thePlayer.inv.AddAnItem('Lynx Armor 4', 1);
+	thePlayer.inv.AddAnItem('Lynx Gloves 1', 1);
+	thePlayer.inv.AddAnItem('Lynx Gloves 2', 1);
+	thePlayer.inv.AddAnItem('Lynx Gloves 3', 1);
+	thePlayer.inv.AddAnItem('Lynx Gloves 4', 1);
+	thePlayer.inv.AddAnItem('Lynx Gloves 5', 1);
+	thePlayer.inv.AddAnItem('Lynx Pants 1', 1);
+	thePlayer.inv.AddAnItem('Lynx Pants 2', 1);
+	thePlayer.inv.AddAnItem('Lynx Pants 3', 1);
+	thePlayer.inv.AddAnItem('Lynx Pants 4', 1);
+	thePlayer.inv.AddAnItem('Lynx Pants 5', 1);
+	thePlayer.inv.AddAnItem('Lynx Boots 1', 1);
+	thePlayer.inv.AddAnItem('Lynx Boots 2', 1);
+	thePlayer.inv.AddAnItem('Lynx Boots 3', 1);
+	thePlayer.inv.AddAnItem('Lynx Boots 4', 1);
+	thePlayer.inv.AddAnItem('Lynx Boots 5', 1);
+
+	thePlayer.inv.AddAnItem('Lynx School steel sword', 1);
+	thePlayer.inv.AddAnItem('Lynx School steel sword 1', 1);
+	thePlayer.inv.AddAnItem('Lynx School steel sword 2', 1);
+	thePlayer.inv.AddAnItem('Lynx School steel sword 3', 1);
+	thePlayer.inv.AddAnItem('Lynx School silver sword', 1);
+	thePlayer.inv.AddAnItem('Lynx School silver sword 1', 1);
+	thePlayer.inv.AddAnItem('Lynx School silver sword 2', 1);
+	thePlayer.inv.AddAnItem('Lynx School silver sword 3', 1);
+
+	thePlayer.inv.AddAnItem('Dye Default',10);
+	thePlayer.inv.AddAnItem('Dye Black',10);
+	thePlayer.inv.AddAnItem('Dye Blue',10);
+	thePlayer.inv.AddAnItem('Dye Brown',10);
+	thePlayer.inv.AddAnItem('Dye Gray',10);
+	thePlayer.inv.AddAnItem('Dye Green',10);
+	thePlayer.inv.AddAnItem('Dye Orange',10);
+	thePlayer.inv.AddAnItem('Dye Pink',10);
+	thePlayer.inv.AddAnItem('Dye Purple',10);
+	thePlayer.inv.AddAnItem('Dye Red',10);
+	thePlayer.inv.AddAnItem('Dye Turquoise',10);
+	thePlayer.inv.AddAnItem('Dye White',10);
+	thePlayer.inv.AddAnItem('Dye Yellow',10);
+	
+	EncumbranceBoy( 0 );
+}
+
+
+exec function testappearance()
+{
+	var ids : array<SItemUniqueId>;
+
+	thePlayer.inv.RemoveAllItems();
+	
+	thePlayer.inv.AddAnItem( 'Red Wolf Armor 1', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Armor 2', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Gloves 1', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Gloves 2', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Pants 1', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Pants 2', 1);
+	thePlayer.inv.AddAnItem( 'Red Wolf Boots 1', 1);
+    thePlayer.inv.AddAnItem( 'Red Wolf Boots 2', 1);
+
+	ids = thePlayer.inv.AddAnItem('Gryphon Armor 3', 1);
+	thePlayer.EquipItem(ids[0]);
+
+	thePlayer.inv.AddAnItem('Dye Default',1);
+	thePlayer.inv.AddAnItem('Dye Black',1);
+	thePlayer.inv.AddAnItem('Dye Blue',1);
+	thePlayer.inv.AddAnItem('Dye Brown',1);
+	thePlayer.inv.AddAnItem('Dye Gray',1);
+	thePlayer.inv.AddAnItem('Dye Green',1);
+	thePlayer.inv.AddAnItem('Dye Orange',1);
+	thePlayer.inv.AddAnItem('Dye Pink',1);
+	thePlayer.inv.AddAnItem('Dye Purple',1);
+	thePlayer.inv.AddAnItem('Dye Red',1);
+	thePlayer.inv.AddAnItem('Dye Silver',1);
+	thePlayer.inv.AddAnItem('Dye White',1);
+	thePlayer.inv.AddAnItem('Dye Yellow',1);
+
+	thePlayer.inv.AddAnItem( 'Dye Solution', 20);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Default', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Gray', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Silver', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Brown', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Red', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Green', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Blue', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Black', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye White', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Orange', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Pink', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Yellow', 1);
+	thePlayer.inv.AddAnItem( 'Recipe Dye Purple', 1);
+
+	theGame.RequestMenuWithBackground( 'InventoryMenu', 'CommonMenu' );
 }
 
 exec function addGryphonArmors()
 {
-thePlayer.inv.RemoveAllItems();
-thePlayer.inv.AddAnItem('Gryphon Armor', 1);
-thePlayer.inv.AddAnItem('Gryphon Armor 1', 1);
-thePlayer.inv.AddAnItem('Gryphon Armor 2', 1);
-thePlayer.inv.AddAnItem('Gryphon Armor 3', 1);
-thePlayer.inv.AddAnItem('Gryphon Gloves 1', 1);
-thePlayer.inv.AddAnItem('Gryphon Gloves 2', 1);
-thePlayer.inv.AddAnItem('Gryphon Pants 1', 1);
-thePlayer.inv.AddAnItem('Gryphon Pants 2', 1);
-thePlayer.inv.AddAnItem('Gryphon Boots 1', 1);
-thePlayer.inv.AddAnItem('Gryphon Boots 2', 1);
 
-thePlayer.inv.AddAnItem('Gryphon School steel sword', 1);
-thePlayer.inv.AddAnItem('Gryphon School steel sword 1', 1);
-thePlayer.inv.AddAnItem('Gryphon School steel sword 2', 1);
-thePlayer.inv.AddAnItem('Gryphon School steel sword 3', 1);
-thePlayer.inv.AddAnItem('Gryphon School silver sword', 1);
-thePlayer.inv.AddAnItem('Gryphon School silver sword 1', 1);
-thePlayer.inv.AddAnItem('Gryphon School silver sword 2', 1);
-thePlayer.inv.AddAnItem('Gryphon School silver sword 3', 1);
+	var lm : W3PlayerWitcher;
+	var exp, prevLvl, currLvl : int;
+	
+	GetWitcherPlayer().Debug_ClearCharacterDevelopment();
+	lm = GetWitcherPlayer();
+	prevLvl = lm.GetLevel();
+	currLvl = lm.GetLevel();
+		
+	while(currLvl < 60)
+	{
+		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
+		lm.AddPoints(EExperiencePoint, exp, false); 
+		currLvl = lm.GetLevel();
+		if(prevLvl == currLvl)
+			break;
+		prevLvl = currLvl;
+	}	
+
+	thePlayer.inv.RemoveAllItems();
+	thePlayer.inv.AddAnItem('Gryphon Armor', 1);
+	thePlayer.inv.AddAnItem('Gryphon Armor 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon Armor 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon Armor 3', 1);
+	thePlayer.inv.AddAnItem('Gryphon Armor 4', 1);
+	thePlayer.inv.AddAnItem('Gryphon Gloves 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon Gloves 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon Gloves 3', 1);
+	thePlayer.inv.AddAnItem('Gryphon Gloves 4', 1);
+	thePlayer.inv.AddAnItem('Gryphon Gloves 5', 1);
+	thePlayer.inv.AddAnItem('Gryphon Pants 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon Pants 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon Pants 3', 1);
+	thePlayer.inv.AddAnItem('Gryphon Pants 4', 1);
+	thePlayer.inv.AddAnItem('Gryphon Pants 5', 1);
+	thePlayer.inv.AddAnItem('Gryphon Boots 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon Boots 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon Boots 3', 1);
+	thePlayer.inv.AddAnItem('Gryphon Boots 4', 1);
+	thePlayer.inv.AddAnItem('Gryphon Boots 5', 1);
+
+	thePlayer.inv.AddAnItem('Gryphon School steel sword', 1);
+	thePlayer.inv.AddAnItem('Gryphon School steel sword 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon School steel sword 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon School steel sword 3', 1);
+	thePlayer.inv.AddAnItem('Gryphon School silver sword', 1);
+	thePlayer.inv.AddAnItem('Gryphon School silver sword 1', 1);
+	thePlayer.inv.AddAnItem('Gryphon School silver sword 2', 1);
+	thePlayer.inv.AddAnItem('Gryphon School silver sword 3', 1);
+
+
+	thePlayer.inv.AddAnItem('Dye Default',10);
+	thePlayer.inv.AddAnItem('Dye Black',10);
+	thePlayer.inv.AddAnItem('Dye Blue',10);
+	thePlayer.inv.AddAnItem('Dye Brown',10);
+	thePlayer.inv.AddAnItem('Dye Gray',10);
+	thePlayer.inv.AddAnItem('Dye Green',10);
+	thePlayer.inv.AddAnItem('Dye Orange',10);
+	thePlayer.inv.AddAnItem('Dye Pink',10);
+	thePlayer.inv.AddAnItem('Dye Purple',10);
+	thePlayer.inv.AddAnItem('Dye Red',10);
+	thePlayer.inv.AddAnItem('Dye Turquoise',10);
+	thePlayer.inv.AddAnItem('Dye White',10);
+	thePlayer.inv.AddAnItem('Dye Yellow',10);
+
+	EncumbranceBoy( 0 );
 }
 
 exec function addViperArmors()
 {
+
+	var lm : W3PlayerWitcher;
+	var exp, prevLvl, currLvl : int;
+	
+	GetWitcherPlayer().Debug_ClearCharacterDevelopment();
+	lm = GetWitcherPlayer();
+	prevLvl = lm.GetLevel();
+	currLvl = lm.GetLevel();
+		
+	while(currLvl < 60)
+	{
+		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
+		lm.AddPoints(EExperiencePoint, exp, false); 
+		currLvl = lm.GetLevel();
+		if(prevLvl == currLvl)
+			break;
+		prevLvl = currLvl;
+	}	
+
 thePlayer.inv.RemoveAllItems();
 thePlayer.inv.AddAnItem('Starting Armor', 1);
 thePlayer.inv.AddAnItem('Starting Gloves', 1);
@@ -8981,6 +9306,23 @@ thePlayer.inv.AddAnItem('Starting Boots', 1);
 
 thePlayer.inv.AddAnItem('Long Steel Sword', 1);
 thePlayer.inv.AddAnItem('Witcher Silver Sword', 1);
+
+
+	thePlayer.inv.AddAnItem('Dye Default',10);
+	thePlayer.inv.AddAnItem('Dye Black',10);
+	thePlayer.inv.AddAnItem('Dye Blue',10);
+	thePlayer.inv.AddAnItem('Dye Brown',10);
+	thePlayer.inv.AddAnItem('Dye Gray',10);
+	thePlayer.inv.AddAnItem('Dye Green',10);
+	thePlayer.inv.AddAnItem('Dye Orange',10);
+	thePlayer.inv.AddAnItem('Dye Pink',10);
+	thePlayer.inv.AddAnItem('Dye Purple',10);
+	thePlayer.inv.AddAnItem('Dye Red',10);
+	thePlayer.inv.AddAnItem('Dye Turquoise',10);
+	thePlayer.inv.AddAnItem('Dye White',10);
+	thePlayer.inv.AddAnItem('Dye Yellow',10);
+
+	EncumbranceBoy( 0 );
 }
 
 exec function addRelicArmors()
@@ -9286,9 +9628,14 @@ exec function addAllSkills(val : int, optional level : int)
 		thePlayer.AddSkill(S_Perk_11);
 		thePlayer.AddSkill(S_Perk_12);
 		thePlayer.AddSkill(S_Perk_13);
+		thePlayer.AddSkill(S_Perk_14);
+		thePlayer.AddSkill(S_Perk_15);
+		thePlayer.AddSkill(S_Perk_16);
 		thePlayer.AddSkill(S_Perk_17);
 		thePlayer.AddSkill(S_Perk_18);
 		thePlayer.AddSkill(S_Perk_19);
+		thePlayer.AddSkill(S_Perk_20);
+		thePlayer.AddSkill(S_Perk_21);
 		thePlayer.AddSkill(S_Perk_22);
 	}
 }
@@ -9305,6 +9652,8 @@ exec function secretgwint(optional deckIndex : int)
 	}
 	
 	gwintManager.testMatch = true;
+	
+	gwintManager.SetForcedFaction(GwintFaction_Neutral);
 
 	if (gwintManager.GetHasDoneTutorial())
 	{
@@ -9335,6 +9684,10 @@ exec function secretgwintAI()
 
 exec function secretdeckbuilder()
 {
+	var gwintManager:CR4GwintManager;
+	gwintManager = theGame.GetGwintManager();
+	
+	gwintManager.testMatch = true;
 	theGame.RequestMenu( 'DeckBuilder' );
 }
 
@@ -9356,6 +9709,22 @@ exec function winGwint( result : bool )
 	}
 }
 
+exec function winGwintPanel( result : int )
+{
+	var manager : CR4GuiManager;
+	var gwintMenu : CR4GwintGameMenu;
+	
+	manager = (CR4GuiManager)theGame.GetGuiManager();
+	if ( manager )
+	{
+		gwintMenu = (CR4GwintGameMenu)manager.GetRootMenu();
+		if ( gwintMenu )
+		{
+			gwintMenu.EndGwintMatch( result );
+		}
+	}
+}
+
 exec function unlockDeck( val : int)
 {
 	theGame.GetGwintManager().UnlockDeck(val);
@@ -9365,6 +9734,11 @@ exec function unlockDeck( val : int)
 exec function addCard( cardID : int )
 {
 	theGame.GetGwintManager().AddCardToCollection(cardID);
+}
+
+exec function addCardByName( cardName : name )
+{
+	GetWitcherPlayer().AddGwentCard( cardName, 1 );
 }
 
 exec function givecards ( val : name )
@@ -9439,7 +9813,35 @@ exec function givecards ( val : name )
 			break;	
 			
 		}
-		
+		case 'skellige' :
+		{
+			thePlayer.inv.AddAnItem( 'gwint_card_king_bran_bronze', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_hemdal', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_hjalmar', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_cerys', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_ermion', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_draig', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_holger_blackhand', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_madman_lugos', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_donar_an_hindar', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_udalryk', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_birna_bran', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_blueboy_lugos', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_svanrige', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_olaf', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_berserker', 4 );
+			thePlayer.inv.AddAnItem( 'gwint_card_young_berserker', 4 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_an_craite_warrior', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_tordarroch_armorsmith', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_heymaey_skald', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_light_drakkar', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_war_drakkar', 4 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_brokvar_archer', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_drummond_shieldmaiden', 4 );
+			thePlayer.inv.AddAnItem( 'gwint_card_clan_dimun_pirate', 1 );
+			thePlayer.inv.AddAnItem( 'gwint_card_cock', 3 );
+			thePlayer.inv.AddAnItem( 'gwint_card_mushroom', 3 );
+		}
 	}
 }
 
@@ -10271,6 +10673,7 @@ exec function activateAllGlossaryBeastiary()
 	activateJournalBestiaryEntryWithAlias("BestiarySilvan", manager);
 	activateJournalBestiaryEntryWithAlias("BestiaryWitches", manager);
 	activateJournalBestiaryEntryWithAlias("BestiaryGolding", manager);
+	
 }
 
 exec function testJournal()
@@ -10357,179 +10760,297 @@ exec function sysmsgtst()
 	theGame.GetGuiManager().HideUserDialog( 0);
 }
 
-exec function addgwintcards()
+exec function addgwintcards( optional deck : string )
 {
-	theGame.GetGwintManager().AddCardToCollection( 1002 );
-	theGame.GetGwintManager().AddCardToCollection( 1003 );
-	theGame.GetGwintManager().AddCardToCollection( 1004 );
-				 
-	theGame.GetGwintManager().AddCardToCollection( 2002 );
-	theGame.GetGwintManager().AddCardToCollection( 2003 );
-	theGame.GetGwintManager().AddCardToCollection( 2004 );
-				 
-	theGame.GetGwintManager().AddCardToCollection( 3002 );
-	theGame.GetGwintManager().AddCardToCollection( 3003 );
-	theGame.GetGwintManager().AddCardToCollection( 3004 );
-					
-	theGame.GetGwintManager().AddCardToCollection( 4002 );
-	theGame.GetGwintManager().AddCardToCollection( 4003 );
-	theGame.GetGwintManager().AddCardToCollection( 4004 );
+	switch (deck)
+	{
+		case "1":
+		case "NK":
+		case "Northern":
+		case "Northern Kingdoms":
+			AddDeckNK();
+			break;
+		case "2":
+		case "Nilf":
+		case "Nilfgaard":
+			AddDeckNilf();
+			break;
+		case "3":
+		case "Scoia":
+		case "Scoia'tael":
+			AddDeckScoia();
+			break;
+		case "4": 
+		case "Monst":
+		case "Monster":
+		case "Monsters":
+			AddDeckMonst();
+			break;
+		case "5":
+		case "Ske":
+		case "Skellige":
+			AddDeckSke();
+			break;
+		case "6":
+		case "Neutral":
+			AddDeckNeutral();
+			break;
+		default:
+			AddDeckNeutral();
+			AddDeckNK();
+			AddDeckNilf();
+			AddDeckScoia();
+			AddDeckMonst();
+			AddDeckSke();
+			break;
+	}	
+}
+
+function AddDeckNK()
+{
 	
-	theGame.GetGwintManager().AddCardToCollection( 0 );
-	theGame.GetGwintManager().AddCardToCollection( 1 );
-	theGame.GetGwintManager().AddCardToCollection( 2 );
-	theGame.GetGwintManager().AddCardToCollection( 3 );
-	theGame.GetGwintManager().AddCardToCollection( 4 );
-	theGame.GetGwintManager().AddCardToCollection( 5 );
-	theGame.GetGwintManager().AddCardToCollection( 6 );
-	theGame.GetGwintManager().AddCardToCollection( 7 );
-	theGame.GetGwintManager().AddCardToCollection( 8 );
-	theGame.GetGwintManager().AddCardToCollection( 9 );
-	theGame.GetGwintManager().AddCardToCollection( 10 );
-	theGame.GetGwintManager().AddCardToCollection( 11 );
-	theGame.GetGwintManager().AddCardToCollection( 12 );
-	theGame.GetGwintManager().AddCardToCollection( 13 );
-	theGame.GetGwintManager().AddCardToCollection( 14 );
-	theGame.GetGwintManager().AddCardToCollection( 15 );
-	theGame.GetGwintManager().AddCardToCollection( 16 );
-	theGame.GetGwintManager().AddCardToCollection( 100 );
-	theGame.GetGwintManager().AddCardToCollection( 101 );
-	theGame.GetGwintManager().AddCardToCollection( 102 );
-	theGame.GetGwintManager().AddCardToCollection( 103 );
-	theGame.GetGwintManager().AddCardToCollection( 105 );
-	theGame.GetGwintManager().AddCardToCollection( 106 );
-	theGame.GetGwintManager().AddCardToCollection( 107 );
-	theGame.GetGwintManager().AddCardToCollection( 108 );
-	theGame.GetGwintManager().AddCardToCollection( 109 );
-	theGame.GetGwintManager().AddCardToCollection( 111 );
-	theGame.GetGwintManager().AddCardToCollection( 112 );
-	theGame.GetGwintManager().AddCardToCollection( 113 );
-	theGame.GetGwintManager().AddCardToCollection( 114 );
-	theGame.GetGwintManager().AddCardToCollection( 115 );
-	theGame.GetGwintManager().AddCardToCollection( 116 );
-	theGame.GetGwintManager().AddCardToCollection( 120 );
-	theGame.GetGwintManager().AddCardToCollection( 121 );
-	theGame.GetGwintManager().AddCardToCollection( 125 );
-	theGame.GetGwintManager().AddCardToCollection( 130 );
-	theGame.GetGwintManager().AddCardToCollection( 135 );
-	theGame.GetGwintManager().AddCardToCollection( 136 );
-	theGame.GetGwintManager().AddCardToCollection( 140 );
-	theGame.GetGwintManager().AddCardToCollection( 145 );
-	theGame.GetGwintManager().AddCardToCollection( 146 );
-	theGame.GetGwintManager().AddCardToCollection( 150 );
-	theGame.GetGwintManager().AddCardToCollection( 151 );
-	theGame.GetGwintManager().AddCardToCollection( 152 );
-	theGame.GetGwintManager().AddCardToCollection( 160 );
-	theGame.GetGwintManager().AddCardToCollection( 170 );
-	theGame.GetGwintManager().AddCardToCollection( 175 );
-	theGame.GetGwintManager().AddCardToCollection( 200 );
-	theGame.GetGwintManager().AddCardToCollection( 201 );
-	theGame.GetGwintManager().AddCardToCollection( 202 );
-	theGame.GetGwintManager().AddCardToCollection( 203 );
-	theGame.GetGwintManager().AddCardToCollection( 205 );
-	theGame.GetGwintManager().AddCardToCollection( 206 );
-	theGame.GetGwintManager().AddCardToCollection( 207 );
-	theGame.GetGwintManager().AddCardToCollection( 208 );
-	theGame.GetGwintManager().AddCardToCollection( 209 );
-	theGame.GetGwintManager().AddCardToCollection( 210 );
-	theGame.GetGwintManager().AddCardToCollection( 211 );
-	theGame.GetGwintManager().AddCardToCollection( 212 );
-	theGame.GetGwintManager().AddCardToCollection( 213 );
-	theGame.GetGwintManager().AddCardToCollection( 214 );
-	theGame.GetGwintManager().AddCardToCollection( 215 );
-	theGame.GetGwintManager().AddCardToCollection( 217 );
-	theGame.GetGwintManager().AddCardToCollection( 218 );
-	theGame.GetGwintManager().AddCardToCollection( 219 );
-	theGame.GetGwintManager().AddCardToCollection( 220 );
-	theGame.GetGwintManager().AddCardToCollection( 221 );
-	theGame.GetGwintManager().AddCardToCollection( 230 );
-	theGame.GetGwintManager().AddCardToCollection( 231 );
-	theGame.GetGwintManager().AddCardToCollection( 235 );
-	theGame.GetGwintManager().AddCardToCollection( 236 );
-	theGame.GetGwintManager().AddCardToCollection( 240 );
-	theGame.GetGwintManager().AddCardToCollection( 241 );
-	theGame.GetGwintManager().AddCardToCollection( 245 );
-	theGame.GetGwintManager().AddCardToCollection( 250 );
-	theGame.GetGwintManager().AddCardToCollection( 255 );
-	theGame.GetGwintManager().AddCardToCollection( 260 );
-	theGame.GetGwintManager().AddCardToCollection( 261 );
-	theGame.GetGwintManager().AddCardToCollection( 265 );
-	theGame.GetGwintManager().AddCardToCollection( 300 );
-	theGame.GetGwintManager().AddCardToCollection( 301 );
-	theGame.GetGwintManager().AddCardToCollection( 302 );
-	theGame.GetGwintManager().AddCardToCollection( 303 );
-	theGame.GetGwintManager().AddCardToCollection( 305 );
-	theGame.GetGwintManager().AddCardToCollection( 306 );
-	theGame.GetGwintManager().AddCardToCollection( 307 );
-	theGame.GetGwintManager().AddCardToCollection( 308 );
-	theGame.GetGwintManager().AddCardToCollection( 309 );
-	theGame.GetGwintManager().AddCardToCollection( 310 );
-	theGame.GetGwintManager().AddCardToCollection( 311 );
-	theGame.GetGwintManager().AddCardToCollection( 312 );
-	theGame.GetGwintManager().AddCardToCollection( 313 );
-	theGame.GetGwintManager().AddCardToCollection( 320 );
-	theGame.GetGwintManager().AddCardToCollection( 321 );
-	theGame.GetGwintManager().AddCardToCollection( 322 );
-	theGame.GetGwintManager().AddCardToCollection( 325 );
-	theGame.GetGwintManager().AddCardToCollection( 326 );
-	theGame.GetGwintManager().AddCardToCollection( 330 );
-	theGame.GetGwintManager().AddCardToCollection( 331 );
-	theGame.GetGwintManager().AddCardToCollection( 332 );
-	theGame.GetGwintManager().AddCardToCollection( 335 );
-	theGame.GetGwintManager().AddCardToCollection( 336 );
-	theGame.GetGwintManager().AddCardToCollection( 337 );
-	theGame.GetGwintManager().AddCardToCollection( 340 );
-	theGame.GetGwintManager().AddCardToCollection( 341 );
-	theGame.GetGwintManager().AddCardToCollection( 342 );
-	theGame.GetGwintManager().AddCardToCollection( 343 );
-	theGame.GetGwintManager().AddCardToCollection( 344 );
-	theGame.GetGwintManager().AddCardToCollection( 350 );
-	theGame.GetGwintManager().AddCardToCollection( 351 );
-	theGame.GetGwintManager().AddCardToCollection( 352 );
-	theGame.GetGwintManager().AddCardToCollection( 355 );
-	theGame.GetGwintManager().AddCardToCollection( 360 );
-	theGame.GetGwintManager().AddCardToCollection( 365 );
-	theGame.GetGwintManager().AddCardToCollection( 366 );
-	theGame.GetGwintManager().AddCardToCollection( 367 );
-	theGame.GetGwintManager().AddCardToCollection( 400 );
-	theGame.GetGwintManager().AddCardToCollection( 401 );
-	theGame.GetGwintManager().AddCardToCollection( 402 );
-	theGame.GetGwintManager().AddCardToCollection( 403 );
-	theGame.GetGwintManager().AddCardToCollection( 405 );
-	theGame.GetGwintManager().AddCardToCollection( 407 );
-	theGame.GetGwintManager().AddCardToCollection( 410 );
-	theGame.GetGwintManager().AddCardToCollection( 413 );
-	theGame.GetGwintManager().AddCardToCollection( 415 );
-	theGame.GetGwintManager().AddCardToCollection( 417 );
-	theGame.GetGwintManager().AddCardToCollection( 420 );
-	theGame.GetGwintManager().AddCardToCollection( 423 );
-	theGame.GetGwintManager().AddCardToCollection( 425 );
-	theGame.GetGwintManager().AddCardToCollection( 427 );
-	theGame.GetGwintManager().AddCardToCollection( 430 );
-	theGame.GetGwintManager().AddCardToCollection( 433 );
-	theGame.GetGwintManager().AddCardToCollection( 435 );
-	theGame.GetGwintManager().AddCardToCollection( 437 );
-	theGame.GetGwintManager().AddCardToCollection( 440 );
-	theGame.GetGwintManager().AddCardToCollection( 443 );
-	theGame.GetGwintManager().AddCardToCollection( 445 );
-	theGame.GetGwintManager().AddCardToCollection( 447 );
-	theGame.GetGwintManager().AddCardToCollection( 450 );
-	theGame.GetGwintManager().AddCardToCollection( 451 );
-	theGame.GetGwintManager().AddCardToCollection( 452 );
-	theGame.GetGwintManager().AddCardToCollection( 453 );
-	theGame.GetGwintManager().AddCardToCollection( 455 );
-	theGame.GetGwintManager().AddCardToCollection( 456 );
-	theGame.GetGwintManager().AddCardToCollection( 457 );
-	theGame.GetGwintManager().AddCardToCollection( 460 );
-	theGame.GetGwintManager().AddCardToCollection( 461 );
-	theGame.GetGwintManager().AddCardToCollection( 462 );
-	theGame.GetGwintManager().AddCardToCollection( 463 );
-	theGame.GetGwintManager().AddCardToCollection( 470 );
-	theGame.GetGwintManager().AddCardToCollection( 471 );
-	theGame.GetGwintManager().AddCardToCollection( 472 );
-	theGame.GetGwintManager().AddCardToCollection( 475 );
-	theGame.GetGwintManager().AddCardToCollection( 476 );
-	theGame.GetGwintManager().AddCardToCollection( 477 );
+	theGame.GetGwintManager().AddCardToCollection( 1002 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1003 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1004 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1005 ); 
+	theGame.GetGwintManager().AddCardToCollection( 100 ); 
+	theGame.GetGwintManager().AddCardToCollection( 101 ); 
+	theGame.GetGwintManager().AddCardToCollection( 102 ); 
+	theGame.GetGwintManager().AddCardToCollection( 103 ); 
+	theGame.GetGwintManager().AddCardToCollection( 105 ); 
+	theGame.GetGwintManager().AddCardToCollection( 109 ); 
+	theGame.GetGwintManager().AddCardToCollection( 126 ); 
+	theGame.GetGwintManager().AddCardToCollection( 127 ); 
+	theGame.GetGwintManager().AddCardToCollection( 130 ); 
+	theGame.GetGwintManager().AddCardToCollection( 130 ); 
+	theGame.GetGwintManager().AddCardToCollection( 130 ); 
+	theGame.GetGwintManager().AddCardToCollection( 140 ); 
+	theGame.GetGwintManager().AddCardToCollection( 140 ); 
+	theGame.GetGwintManager().AddCardToCollection( 160 ); 
+	theGame.GetGwintManager().AddCardToCollection( 170 ); 
+	
+}
+
+function AddDeckNilf()
+{
+	theGame.GetGwintManager().AddCardToCollection( 2002 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2003 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2004 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2005 ); 
+	theGame.GetGwintManager().AddCardToCollection( 200 ); 
+	theGame.GetGwintManager().AddCardToCollection( 201 ); 
+	theGame.GetGwintManager().AddCardToCollection( 202 ); 
+	theGame.GetGwintManager().AddCardToCollection( 203 ); 
+	theGame.GetGwintManager().AddCardToCollection( 205 ); 
+	theGame.GetGwintManager().AddCardToCollection( 206 ); 
+	theGame.GetGwintManager().AddCardToCollection( 207 ); 
+	theGame.GetGwintManager().AddCardToCollection( 208 ); 
+	theGame.GetGwintManager().AddCardToCollection( 209 ); 
+	theGame.GetGwintManager().AddCardToCollection( 210 ); 
+	theGame.GetGwintManager().AddCardToCollection( 211 ); 
+	theGame.GetGwintManager().AddCardToCollection( 212 ); 
+	theGame.GetGwintManager().AddCardToCollection( 213 ); 
+	theGame.GetGwintManager().AddCardToCollection( 214 ); 
+	theGame.GetGwintManager().AddCardToCollection( 215 ); 
+	theGame.GetGwintManager().AddCardToCollection( 217 ); 
+	theGame.GetGwintManager().AddCardToCollection( 218 ); 
+	theGame.GetGwintManager().AddCardToCollection( 219 ); 
+	theGame.GetGwintManager().AddCardToCollection( 220 ); 
+	theGame.GetGwintManager().AddCardToCollection( 221 ); 
+	theGame.GetGwintManager().AddCardToCollection( 230 ); 
+	theGame.GetGwintManager().AddCardToCollection( 231 ); 
+	theGame.GetGwintManager().AddCardToCollection( 235 ); 
+	theGame.GetGwintManager().AddCardToCollection( 236 ); 
+	theGame.GetGwintManager().AddCardToCollection( 240 ); 
+	theGame.GetGwintManager().AddCardToCollection( 241 ); 
+	theGame.GetGwintManager().AddCardToCollection( 245 ); 
+	theGame.GetGwintManager().AddCardToCollection( 245 ); 
+	theGame.GetGwintManager().AddCardToCollection( 245 ); 
+	theGame.GetGwintManager().AddCardToCollection( 245 ); 
+	theGame.GetGwintManager().AddCardToCollection( 250 ); 
+	theGame.GetGwintManager().AddCardToCollection( 250 ); 
+	theGame.GetGwintManager().AddCardToCollection( 250 ); 
+	theGame.GetGwintManager().AddCardToCollection( 255 ); 
+	theGame.GetGwintManager().AddCardToCollection( 260 ); 
+	theGame.GetGwintManager().AddCardToCollection( 261 ); 
+	theGame.GetGwintManager().AddCardToCollection( 265 ); 
+}
+
+function AddDeckScoia()
+{
+	theGame.GetGwintManager().AddCardToCollection( 3002 ); 
+	theGame.GetGwintManager().AddCardToCollection( 3003 ); 
+	theGame.GetGwintManager().AddCardToCollection( 3004 ); 
+	theGame.GetGwintManager().AddCardToCollection( 3005 ); 
+	theGame.GetGwintManager().AddCardToCollection( 300 ); 
+	theGame.GetGwintManager().AddCardToCollection( 301 ); 
+	theGame.GetGwintManager().AddCardToCollection( 302 ); 
+	theGame.GetGwintManager().AddCardToCollection( 303 ); 
+	theGame.GetGwintManager().AddCardToCollection( 305 ); 
+	theGame.GetGwintManager().AddCardToCollection( 306 ); 
+	theGame.GetGwintManager().AddCardToCollection( 307 ); 
+	theGame.GetGwintManager().AddCardToCollection( 308 ); 
+	theGame.GetGwintManager().AddCardToCollection( 309 ); 
+	theGame.GetGwintManager().AddCardToCollection( 310 ); 
+	theGame.GetGwintManager().AddCardToCollection( 311 ); 
+	theGame.GetGwintManager().AddCardToCollection( 312 ); 
+	theGame.GetGwintManager().AddCardToCollection( 313 ); 
+	theGame.GetGwintManager().AddCardToCollection( 320 ); 
+	theGame.GetGwintManager().AddCardToCollection( 321 ); 
+	theGame.GetGwintManager().AddCardToCollection( 322 ); 
+	theGame.GetGwintManager().AddCardToCollection( 325 ); 
+	theGame.GetGwintManager().AddCardToCollection( 326 ); 
+	theGame.GetGwintManager().AddCardToCollection( 330 ); 
+	theGame.GetGwintManager().AddCardToCollection( 331 ); 
+	theGame.GetGwintManager().AddCardToCollection( 332 ); 
+	theGame.GetGwintManager().AddCardToCollection( 335 ); 
+	theGame.GetGwintManager().AddCardToCollection( 336 ); 
+	theGame.GetGwintManager().AddCardToCollection( 337 ); 
+	theGame.GetGwintManager().AddCardToCollection( 340 ); 
+	theGame.GetGwintManager().AddCardToCollection( 341 ); 
+	theGame.GetGwintManager().AddCardToCollection( 342 ); 
+	theGame.GetGwintManager().AddCardToCollection( 343 ); 
+	theGame.GetGwintManager().AddCardToCollection( 344 ); 
+	theGame.GetGwintManager().AddCardToCollection( 350 ); 
+	theGame.GetGwintManager().AddCardToCollection( 351 ); 
+	theGame.GetGwintManager().AddCardToCollection( 352 ); 
+	theGame.GetGwintManager().AddCardToCollection( 355 ); 
+	theGame.GetGwintManager().AddCardToCollection( 360 ); 
+	theGame.GetGwintManager().AddCardToCollection( 365 ); 
+	theGame.GetGwintManager().AddCardToCollection( 366 ); 
+	theGame.GetGwintManager().AddCardToCollection( 367 ); 
+	theGame.GetGwintManager().AddCardToCollection( 368 ); 
+}
+
+function AddDeckMonst()
+{
+	theGame.GetGwintManager().AddCardToCollection( 4002 ); 
+	theGame.GetGwintManager().AddCardToCollection( 4003 ); 
+	theGame.GetGwintManager().AddCardToCollection( 4004 ); 
+	theGame.GetGwintManager().AddCardToCollection( 4005 ); 
+	theGame.GetGwintManager().AddCardToCollection( 400 ); 
+	theGame.GetGwintManager().AddCardToCollection( 401 ); 
+	theGame.GetGwintManager().AddCardToCollection( 402 ); 
+	theGame.GetGwintManager().AddCardToCollection( 403 ); 
+	theGame.GetGwintManager().AddCardToCollection( 405 ); 
+	theGame.GetGwintManager().AddCardToCollection( 407 ); 
+	theGame.GetGwintManager().AddCardToCollection( 410 ); 
+	theGame.GetGwintManager().AddCardToCollection( 413 ); 
+	theGame.GetGwintManager().AddCardToCollection( 415 ); 
+	theGame.GetGwintManager().AddCardToCollection( 417 ); 
+	theGame.GetGwintManager().AddCardToCollection( 420 ); 
+	theGame.GetGwintManager().AddCardToCollection( 423 ); 
+	theGame.GetGwintManager().AddCardToCollection( 425 ); 
+	theGame.GetGwintManager().AddCardToCollection( 427 ); 
+	theGame.GetGwintManager().AddCardToCollection( 430 ); 
+	theGame.GetGwintManager().AddCardToCollection( 433 ); 
+	theGame.GetGwintManager().AddCardToCollection( 435 ); 
+	theGame.GetGwintManager().AddCardToCollection( 437 ); 
+	theGame.GetGwintManager().AddCardToCollection( 440 ); 
+	theGame.GetGwintManager().AddCardToCollection( 443 ); 
+	theGame.GetGwintManager().AddCardToCollection( 445 ); 
+	theGame.GetGwintManager().AddCardToCollection( 447 ); 
+	theGame.GetGwintManager().AddCardToCollection( 450 ); 
+	theGame.GetGwintManager().AddCardToCollection( 451 ); 
+	theGame.GetGwintManager().AddCardToCollection( 452 ); 
+	theGame.GetGwintManager().AddCardToCollection( 453 ); 
+	theGame.GetGwintManager().AddCardToCollection( 455 ); 
+	theGame.GetGwintManager().AddCardToCollection( 456 ); 
+	theGame.GetGwintManager().AddCardToCollection( 457 ); 
+	theGame.GetGwintManager().AddCardToCollection( 460 ); 
+	theGame.GetGwintManager().AddCardToCollection( 461 ); 
+	theGame.GetGwintManager().AddCardToCollection( 462 ); 
+	theGame.GetGwintManager().AddCardToCollection( 463 ); 
+	theGame.GetGwintManager().AddCardToCollection( 464 ); 
+	theGame.GetGwintManager().AddCardToCollection( 470 ); 
+	theGame.GetGwintManager().AddCardToCollection( 471 ); 
+	theGame.GetGwintManager().AddCardToCollection( 472 ); 
+	theGame.GetGwintManager().AddCardToCollection( 475 ); 
+	theGame.GetGwintManager().AddCardToCollection( 476 ); 
+	theGame.GetGwintManager().AddCardToCollection( 477 ); 
+	theGame.GetGwintManager().AddCardToCollection( 478 ); 
+}
+
+function AddDeckSke()
+{
+	theGame.GetGwintManager().AddCardToCollection( 5001 ); 
+	theGame.GetGwintManager().AddCardToCollection( 5002 ); 
+	theGame.GetGwintManager().AddCardToCollection( 501 ); 
+	theGame.GetGwintManager().AddCardToCollection( 502 ); 
+	theGame.GetGwintManager().AddCardToCollection( 503 ); 
+	theGame.GetGwintManager().AddCardToCollection( 504 ); 
+	theGame.GetGwintManager().AddCardToCollection( 505 ); 
+	theGame.GetGwintManager().AddCardToCollection( 506 ); 
+	theGame.GetGwintManager().AddCardToCollection( 507 ); 
+	theGame.GetGwintManager().AddCardToCollection( 508 ); 
+	theGame.GetGwintManager().AddCardToCollection( 509 ); 
+	theGame.GetGwintManager().AddCardToCollection( 510 ); 
+	theGame.GetGwintManager().AddCardToCollection( 511 ); 
+	theGame.GetGwintManager().AddCardToCollection( 512 ); 
+	theGame.GetGwintManager().AddCardToCollection( 513 ); 
+	theGame.GetGwintManager().AddCardToCollection( 515 ); 
+	theGame.GetGwintManager().AddCardToCollection( 515 ); 
+	theGame.GetGwintManager().AddCardToCollection( 515 ); 
+	theGame.GetGwintManager().AddCardToCollection( 517 ); 
+	theGame.GetGwintManager().AddCardToCollection( 517 ); 
+	theGame.GetGwintManager().AddCardToCollection( 517 ); 
+	theGame.GetGwintManager().AddCardToCollection( 518 ); 
+	theGame.GetGwintManager().AddCardToCollection( 519 ); 
+	theGame.GetGwintManager().AddCardToCollection( 520 ); 
+	theGame.GetGwintManager().AddCardToCollection( 520 ); 
+	theGame.GetGwintManager().AddCardToCollection( 520 ); 
+	theGame.GetGwintManager().AddCardToCollection( 521 ); 
+	theGame.GetGwintManager().AddCardToCollection( 521 ); 
+	theGame.GetGwintManager().AddCardToCollection( 521 ); 
+	theGame.GetGwintManager().AddCardToCollection( 522 ); 
+	theGame.GetGwintManager().AddCardToCollection( 522 ); 
+	theGame.GetGwintManager().AddCardToCollection( 522 ); 
+	theGame.GetGwintManager().AddCardToCollection( 523 ); 
+	theGame.GetGwintManager().AddCardToCollection( 524 ); 
+	theGame.GetGwintManager().AddCardToCollection( 525 ); 
+	theGame.GetGwintManager().AddCardToCollection( 526 ); 
+	theGame.GetGwintManager().AddCardToCollection( 527 ); 
+	theGame.GetGwintManager().AddCardToCollection( 22 ); 
+	theGame.GetGwintManager().AddCardToCollection( 22 ); 
+	theGame.GetGwintManager().AddCardToCollection( 22 ); 
+	theGame.GetGwintManager().AddCardToCollection( 23 ); 
+	theGame.GetGwintManager().AddCardToCollection( 23 ); 
+	theGame.GetGwintManager().AddCardToCollection( 23 ); 
+}
+
+function AddDeckNeutral()
+{
+	
+	theGame.GetGwintManager().AddCardToCollection( 0 ); 
+	theGame.GetGwintManager().AddCardToCollection( 0 ); 
+	theGame.GetGwintManager().AddCardToCollection( 0 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1 ); 
+	theGame.GetGwintManager().AddCardToCollection( 1 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2 ); 
+	theGame.GetGwintManager().AddCardToCollection( 2 ); 
+	theGame.GetGwintManager().AddCardToCollection( 3 ); 
+	theGame.GetGwintManager().AddCardToCollection( 4 ); 
+	theGame.GetGwintManager().AddCardToCollection( 5 ); 
+	theGame.GetGwintManager().AddCardToCollection( 6 ); 
+	theGame.GetGwintManager().AddCardToCollection( 7 ); 
+	theGame.GetGwintManager().AddCardToCollection( 8 ); 
+	theGame.GetGwintManager().AddCardToCollection( 9 ); 
+	theGame.GetGwintManager().AddCardToCollection( 10 ); 
+	theGame.GetGwintManager().AddCardToCollection( 11 ); 
+	theGame.GetGwintManager().AddCardToCollection( 12 ); 
+	theGame.GetGwintManager().AddCardToCollection( 13 ); 
+	theGame.GetGwintManager().AddCardToCollection( 14 ); 
+	theGame.GetGwintManager().AddCardToCollection( 15 ); 
+	theGame.GetGwintManager().AddCardToCollection( 16 ); 
+	theGame.GetGwintManager().AddCardToCollection( 17 ); 
+	theGame.GetGwintManager().AddCardToCollection( 18 ); 
+	theGame.GetGwintManager().AddCardToCollection( 19 ); 
+	theGame.GetGwintManager().AddCardToCollection( 19 ); 
+	theGame.GetGwintManager().AddCardToCollection( 19 ); 
+	theGame.GetGwintManager().AddCardToCollection( 20 ); 
+	
 }
 
 
@@ -10615,12 +11136,12 @@ exec function testgameprogress( perc: float )
 
 exec function makeitrain()
 {
-	RequestWeatherChangeTo('WT_Rain_Storm', 1.0);
+	RequestWeatherChangeTo('WT_Rain_Storm', 1.0, false);
 }
 
 exec function stoprain()
 {
-	RequestWeatherChangeTo('WT_Clear', 1.0);
+	RequestWeatherChangeTo('WT_Clear', 1.0, false);
 }
 
 exec function witchcraft()
@@ -11103,100 +11624,6 @@ exec function simngp(flag : bool)
 	theGame.params.SetNewGamePlusLevel(0);
 }
 
-exec function countcards()
-{
-	var j : int;
-	var gwintCards : array<SItemUniqueId>;
-	var allCardsNames, foundCardsNames : array<name>;
-	var allStringNamesOfCards : array<string>;
-	var allStringNamesOfMissingCards : array<string>;
-	var foundCardsStringNames : array<string>;
-	var itemName : name;
-	var locKey : string;
-	var dm : CDefinitionsManagerAccessor;
-	var leaderCardsHack : array<name>;	
-	
-	leaderCardsHack.PushBack('gwint_card_emhyr_gold');
-	leaderCardsHack.PushBack('gwint_card_emhyr_silver');
-	leaderCardsHack.PushBack('gwint_card_emhyr_bronze');
-	leaderCardsHack.PushBack('gwint_card_foltest_gold');
-	leaderCardsHack.PushBack('gwint_card_foltest_silver');
-	leaderCardsHack.PushBack('gwint_card_foltest_bronze');
-	leaderCardsHack.PushBack('gwint_card_francesca_gold');
-	leaderCardsHack.PushBack('gwint_card_francesca_silver');
-	leaderCardsHack.PushBack('gwint_card_francesca_bronze');
-	leaderCardsHack.PushBack('gwint_card_eredin_gold');
-	leaderCardsHack.PushBack('gwint_card_eredin_silver');
-	leaderCardsHack.PushBack('gwint_card_eredin_bronze');
-		
-	dm = theGame.GetDefinitionsManager();
-	allCardsNames = theGame.GetDefinitionsManager().GetItemsWithTag(theGame.params.GWINT_CARD_ACHIEVEMENT_TAG);
-	gwintCards = thePlayer.inv.GetItemsByTag(theGame.params.GWINT_CARD_ACHIEVEMENT_TAG);
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	for(j=0; j<allCardsNames.Size(); j+=1)
-	{
-		itemName = allCardsNames[j];
-		locKey = dm.GetItemLocalisationKeyName(allCardsNames[j]);
-		if (!allStringNamesOfCards.Contains(locKey) || (leaderCardsHack.Contains(itemName) && !allStringNamesOfCards.Contains(itemName)))
-		{
-			if (leaderCardsHack.Contains(itemName) && !allStringNamesOfCards.Contains(itemName))
-				allStringNamesOfCards.PushBack(itemName);
-			else
-				allStringNamesOfCards.PushBack(locKey);
-		}
-	}
-	
-	foundCardsNames.Clear();
-	for(j=0; j<gwintCards.Size(); j+=1)
-	{
-		itemName = thePlayer.inv.GetItemName(gwintCards[j]);
-		locKey = dm.GetItemLocalisationKeyName(itemName);
-		
-		
-		if(leaderCardsHack.Contains(itemName))
-		{
-			foundCardsStringNames.PushBack(itemName);
-		}
-		else if(!foundCardsStringNames.Contains(locKey))
-		{
-			foundCardsStringNames.PushBack(locKey);
-		}
-	}
-	
-	for(j=0; j<allStringNamesOfCards.Size(); j+=1)
-	{
-		if(!foundCardsStringNames.Contains(allStringNamesOfCards[j]))
-		{
-			allStringNamesOfMissingCards.PushBack(allStringNamesOfCards[j]);
-		}
-	}	
-	
-	LogChannel('GWENT', "-------------------------------------------------------------------");
-	LogChannel('GWENT', "Player has [ " + foundCardsStringNames.Size() + " ] unique Gwent cards");
-	LogChannel('GWENT', "Player is missing [ " + allStringNamesOfMissingCards.Size() + " ] unique Gwent cards");
-	LogChannel('GWENT', "-------------------------------------------------------------------");
-	for (j=0; j<allStringNamesOfMissingCards.Size(); j+=1)
-	{
-		LogChannel('GWENT', "Missing Card:   " + allStringNamesOfMissingCards[j]);
-	}
-	LogChannel('GWENT', "-------------------------------------------------------------------");
-}
-
 exec function addofir()
 {
 	thePlayer.inv.AddAnItem('Ofir Armor');
@@ -11324,6 +11751,149 @@ exec function Addep1Items()
 	thePlayer.inv.AddAnItem('EP1 Viper School silver sword');
 }
 
+exec function Addep2Items()
+{
+	GetWitcherPlayer().AddPoints( EExperiencePoint, 85000, false );
+
+	thePlayer.inv.AddAnItem('Guard Lvl1 Armor 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Boots 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Pants 1');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl1 Armor 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Boots 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Pants 2');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl1 Armor 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Boots 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 Pants 3');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 1');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 1');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 2');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 2');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 3');
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 3');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 Armor 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Boots 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Pants 1');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 Armor 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Boots 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Pants 2');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 Armor 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Boots 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 Pants 3');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 1');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 1');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 2');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 2');
+	
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 3');
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 3');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt Armor 1');
+	thePlayer.inv.AddAnItem('Knight Geralt Boots 1');
+	thePlayer.inv.AddAnItem('Knight Geralt Gloves 1');
+	thePlayer.inv.AddAnItem('Knight Geralt Pants 1');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt Armor 2');
+	thePlayer.inv.AddAnItem('Knight Geralt Boots 2');
+	thePlayer.inv.AddAnItem('Knight Geralt Gloves 2');
+	thePlayer.inv.AddAnItem('Knight Geralt Pants 2');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt Armor 3');
+	thePlayer.inv.AddAnItem('Knight Geralt Boots 3');
+	thePlayer.inv.AddAnItem('Knight Geralt Gloves 3');
+	thePlayer.inv.AddAnItem('Knight Geralt Pants 3');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt A Armor 1');
+	thePlayer.inv.AddAnItem('Knight Geralt A Boots 1');
+	thePlayer.inv.AddAnItem('Knight Geralt A Gloves 1');
+	thePlayer.inv.AddAnItem('Knight Geralt A Pants 1');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt A Armor 2');
+	thePlayer.inv.AddAnItem('Knight Geralt A Boots 2');
+	thePlayer.inv.AddAnItem('Knight Geralt A Gloves 2');
+	thePlayer.inv.AddAnItem('Knight Geralt A Pants 2');
+	
+	thePlayer.inv.AddAnItem('Knight Geralt A Armor 3');
+	thePlayer.inv.AddAnItem('Knight Geralt A Boots 3');
+	thePlayer.inv.AddAnItem('Knight Geralt A Gloves 3');
+	thePlayer.inv.AddAnItem('Knight Geralt A Pants 3');
+	
+	thePlayer.inv.AddAnItem('Toussaint Armor 2');
+	thePlayer.inv.AddAnItem('Toussaint Boots 2');
+	thePlayer.inv.AddAnItem('Toussaint Gloves 2');
+	thePlayer.inv.AddAnItem('Toussaint Pants 2');
+	
+	thePlayer.inv.AddAnItem('Toussaint Armor 3');
+	thePlayer.inv.AddAnItem('Toussaint Boots 3');
+	thePlayer.inv.AddAnItem('Toussaint Gloves 3');
+	thePlayer.inv.AddAnItem('Toussaint Pants 3');
+	
+	thePlayer.inv.AddAnItem('sq701_geralt_armor');
+	thePlayer.inv.AddAnItem('sq701_ravix_armor');
+	thePlayer.inv.AddAnItem('q705_mandragora_gloves');
+}
+
+exec function Addep2HorseItems()
+{
+	thePlayer.inv.AddAnItem('Toussaint saddle');
+	thePlayer.inv.AddAnItem('Toussaint saddle 2');
+	thePlayer.inv.AddAnItem('Toussaint saddle 3');
+	thePlayer.inv.AddAnItem('Toussaint saddle 4');
+	thePlayer.inv.AddAnItem('Toussaint saddle 5');
+	thePlayer.inv.AddAnItem('Toussaint saddle 6');
+	
+	thePlayer.inv.AddAnItem('Tourney Geralt Saddle');
+	thePlayer.inv.AddAnItem('Tourney Ravix Saddle');
+	
+	thePlayer.inv.AddAnItem('Toussaint horsebag');
+	
+	thePlayer.inv.AddAnItem('Toussaint horse blinders');
+	thePlayer.inv.AddAnItem('Toussaint horse blinders 2');
+	thePlayer.inv.AddAnItem('Toussaint horse blinders 3');
+	thePlayer.inv.AddAnItem('Toussaint horse blinders 4');
+	thePlayer.inv.AddAnItem('Toussaint horse blinders 5');
+	thePlayer.inv.AddAnItem('Toussaint horse blinders 6');
+	
+	thePlayer.inv.AddAnItem('Monniers horse blinders');
+	
+	thePlayer.inv.AddAnItem('q701_cyclops_trophy');
+	thePlayer.inv.AddAnItem('q702_wicht_trophy');
+	thePlayer.inv.AddAnItem('q704_garkain_trophy');
+	thePlayer.inv.AddAnItem('mq7002_spriggan_trophy');
+	thePlayer.inv.AddAnItem('mq7009_griffin_trophy');
+	thePlayer.inv.AddAnItem('mq7017_zmora_trophy');
+	thePlayer.inv.AddAnItem('mq7010_dracolizard_trophy');
+	thePlayer.inv.AddAnItem('mq7018_basilisk_trophy');
+	thePlayer.inv.AddAnItem('mh701_sharley_matriarch_trophy');
+}
+
 exec function issa( dlc : name )
 {
 	Log( "Result: " + theGame.CanStartStandaloneDLC( dlc ) );
@@ -11337,6 +11907,11 @@ exec function ssa( dlc : name )
 exec function standalone_ep1()
 {
 	GetWitcherPlayer().StandaloneEp1_1();	
+}
+
+exec function standalone_ep2()
+{
+	GetWitcherPlayer().StandaloneEp2_1();	
 }
 
 exec function censer( val : float )
@@ -11828,8 +12403,48 @@ exec function startContentEP2(contentName : string)
 		{
 			teleportPosition = Vector(310, -1029, 5);
 			break;
-		}		
+		}
+
 	
+	
+		case 'blacksmith' :
+		{
+			teleportPosition = Vector(-558, -1370, 91);
+			break;
+		}
+		
+	
+	
+		case 'th700_prison' :
+		{
+			teleportPosition = Vector(-1167.86, -819.229, 125.85);
+			break;
+		}
+
+		case 'th700_crypt' :
+		{
+			teleportPosition = Vector(-414.49, -1489.24, 90.1729);
+			break;
+		}
+		
+		case 'th700_vault' :
+		{
+			teleportPosition = Vector(-656.499, 60.7197, 4.90265);
+			break;
+		}
+
+		case 'th700_lake' :
+		{
+			teleportPosition = Vector(772.325, -162.962, 15.2514);
+			break;
+		}
+		
+		case 'th700_chapel' :
+		{
+			teleportPosition = Vector(-875.6, -1580.38, 85.1843);
+			break;
+		}
+		
 		default:
 		{
 			shouldTeleport = false;											
@@ -11842,4 +12457,1943 @@ exec function startContentEP2(contentName : string)
 	{
 		thePlayer.Teleport(teleportPosition);
 	}
+}
+
+exec function addset( set : EItemSetType, optional equip : bool, optional addExp : bool, optional clearGeralt : bool )
+{
+	var witcher : W3PlayerWitcher;
+	
+	witcher = GetWitcherPlayer();
+	FactsAdd( "DebugNoLevelUpUpdates" );
+	
+	if( clearGeralt )
+	{
+		witcher.Debug_ClearCharacterDevelopment();
+	}
+	
+	if( addExp )
+	{
+		witcher.AddPoints( EExperiencePoint, 85000, false );
+	}
+	
+	switch( set )
+	{
+		case EIST_Lynx:
+			if(equip)
+			{
+				witcher.AddAndEquipItem( 'Lynx Armor 4' );
+				witcher.AddAndEquipItem( 'Lynx Pants 5' );
+				witcher.AddAndEquipItem( 'Lynx Gloves 5' );
+				witcher.AddAndEquipItem( 'Lynx Boots 5' );
+				witcher.AddAndEquipItem( 'Lynx School steel sword 4' );
+				witcher.AddAndEquipItem( 'Lynx School silver sword 4' );
+			}
+			else
+			{
+				thePlayer.inv.AddAnItem( 'Lynx Armor 4' );
+				thePlayer.inv.AddAnItem( 'Lynx Pants 5' );
+				thePlayer.inv.AddAnItem( 'Lynx Gloves 5' );
+				thePlayer.inv.AddAnItem( 'Lynx Boots 5' );
+				thePlayer.inv.AddAnItem( 'Lynx School steel sword 4' );
+				thePlayer.inv.AddAnItem( 'Lynx School silver sword 4' );
+			}
+			break;
+		case EIST_Gryphon:
+			if(equip)
+			{
+				witcher.AddAndEquipItem( 'Gryphon Armor 4' );
+				witcher.AddAndEquipItem( 'Gryphon Pants 5' );
+				witcher.AddAndEquipItem( 'Gryphon Gloves 5' );
+				witcher.AddAndEquipItem( 'Gryphon Boots 5' );
+				witcher.AddAndEquipItem( 'Gryphon School steel sword 4' );
+				witcher.AddAndEquipItem( 'Gryphon School silver sword 4' );
+			}
+			else
+			{
+				thePlayer.inv.AddAnItem( 'Gryphon Armor 4' );
+				thePlayer.inv.AddAnItem( 'Gryphon Pants 5' );
+				thePlayer.inv.AddAnItem( 'Gryphon Gloves 5' );
+				thePlayer.inv.AddAnItem( 'Gryphon Boots 5' );
+				thePlayer.inv.AddAnItem( 'Gryphon School steel sword 4' );
+				thePlayer.inv.AddAnItem( 'Gryphon School silver sword 4' );
+			}
+			break;
+		case EIST_Bear:
+			witcher.Debug_BearSetBonusQuenSkills();
+			if(equip)
+			{
+				witcher.AddAndEquipItem( 'Bear Armor 4' );
+				witcher.AddAndEquipItem( 'Bear Pants 5' );
+				witcher.AddAndEquipItem( 'Bear Gloves 5' );
+				witcher.AddAndEquipItem( 'Bear Boots 5' );
+				witcher.AddAndEquipItem( 'Bear School steel sword 4' );
+				witcher.AddAndEquipItem( 'Bear School silver sword 4' );
+			}
+			else
+			{
+				thePlayer.inv.AddAnItem( 'Bear Armor 4' );
+				thePlayer.inv.AddAnItem( 'Bear Pants 5' );
+				thePlayer.inv.AddAnItem( 'Bear Gloves 5' );
+				thePlayer.inv.AddAnItem( 'Bear Boots 5' );
+				thePlayer.inv.AddAnItem( 'Bear School steel sword 4' );
+				thePlayer.inv.AddAnItem( 'Bear School silver sword 4' );
+			}
+			break;
+		case EIST_Wolf:
+			witcher.inv.AddAnItem( 'Grapeshot 2' );
+			witcher.inv.AddAnItem( 'Dancing Star 2' );
+			witcher.inv.AddAnItem( 'Hybrid Oil 2' );
+			witcher.inv.AddAnItem( 'Cursed Oil 2' );
+			witcher.inv.AddAnItem( 'Magical Oil 2' );
+			witcher.inv.AddAnItem( 'Specter Oil 2' );
+			if(equip)
+			{
+				witcher.AddAndEquipItem( 'Wolf Armor 4' );
+				witcher.AddAndEquipItem( 'Wolf Pants 5' );
+				witcher.AddAndEquipItem( 'Wolf Gloves 5' );
+				witcher.AddAndEquipItem( 'Wolf Boots 5' );
+				witcher.AddAndEquipItem( 'Wolf School steel sword 4' );
+				witcher.AddAndEquipItem( 'Wolf School silver sword 4' );
+			}
+			else
+			{
+				thePlayer.inv.AddAnItem( 'Wolf Armor 4' );
+				thePlayer.inv.AddAnItem( 'Wolf Pants 5' );
+				thePlayer.inv.AddAnItem( 'Wolf Gloves 5' );
+				thePlayer.inv.AddAnItem( 'Wolf Boots 5' );
+				thePlayer.inv.AddAnItem( 'Wolf School steel sword 4' );
+				thePlayer.inv.AddAnItem( 'Wolf School silver sword 4' );
+			}
+			break;
+		case EIST_RedWolf:
+			witcher.inv.AddAnItem( 'Black Blood 2' );
+			witcher.inv.AddAnItem( 'Swallow 2' );
+			witcher.inv.AddAnItem( 'Grapeshot 2' );
+			if(equip)
+			{
+				witcher.AddAndEquipItem( 'Red Wolf Armor 1' );
+				witcher.AddAndEquipItem( 'Red Wolf Pants 1' );
+				witcher.AddAndEquipItem( 'Red Wolf Gloves 1' );
+				witcher.AddAndEquipItem( 'Red Wolf Boots 1' );
+				witcher.AddAndEquipItem( 'Red Wolf School steel sword 1' );
+				witcher.AddAndEquipItem( 'Red Wolf School silver sword 1' );
+			}
+			else
+			{
+				thePlayer.inv.AddAnItem( 'Red Wolf Armor 1' );
+				thePlayer.inv.AddAnItem( 'Red Wolf Pants 1' );
+				thePlayer.inv.AddAnItem( 'Red Wolf Gloves 1' );
+				thePlayer.inv.AddAnItem( 'Red Wolf Boots 1' );
+				thePlayer.inv.AddAnItem( 'Red Wolf School steel sword 1' );
+				thePlayer.inv.AddAnItem( 'Red Wolf School silver sword 1' );
+			}
+			break;
+		case EIST_Vampire:
+			if( equip )
+			{
+				witcher.AddAndEquipItem( 'q702_vampire_boots' );
+				witcher.AddAndEquipItem( 'q702_vampire_gloves' );
+				witcher.AddAndEquipItem( 'q702_vampire_pants' );
+				witcher.AddAndEquipItem( 'q702_vampire_armor' );
+				witcher.AddAndEquipItem( 'q702 vampire steel sword' );
+				witcher.AddAndEquipItem( 'q702_vampire_mask' );
+			}
+			else
+			{
+				witcher.inv.AddAnItem( 'q702_vampire_boots' );
+				witcher.inv.AddAnItem( 'q702_vampire_gloves' );
+				witcher.inv.AddAnItem( 'q702_vampire_pants' );
+				witcher.inv.AddAnItem( 'q702_vampire_armor' );
+				witcher.inv.AddAnItem( 'q702_vampire_mask' );
+				witcher.inv.AddAnItem( 'q702 vampire steel sword' );
+			}
+	}
+}
+
+exec function muteq( number : int, optional godMode : int )
+{
+	var mut : EPlayerMutationType;
+	
+	GetWitcherPlayer().MutationSystemEnable( true );
+	mut = number;
+	( ( W3PlayerAbilityManager ) GetWitcherPlayer().abilityManager ).DEBUG_DevelopAndEquipMutation( mut );
+	
+	if( godMode == 1 )
+	{
+		god_internal();
+	}
+	else if( godMode == 2 )
+	{
+		god2_internal();
+	}
+}
+
+exec function mutall()
+{
+	mutall_internal();
+}
+
+function mutall_internal()
+{
+	var pam : W3PlayerAbilityManager;
+	var i : int;
+	
+	GetWitcherPlayer().MutationSystemEnable( true );
+	pam = ( W3PlayerAbilityManager ) GetWitcherPlayer().abilityManager;
+	for( i=12; i>0; i-=1 )
+	{
+		pam.DEBUG_DevelopAndEquipMutation( i );
+	}
+}
+
+exec function enablemutations( enable : bool )
+{
+	GetWitcherPlayer().MutationSystemEnable( enable );
+}
+
+exec function tmut( optional itemsCount : int )
+{
+	var lm : W3PlayerWitcher;
+	var i,exp : int;
+	
+	GetWitcherPlayer().MutationSystemEnable( true );
+	
+	if (itemsCount == 0)
+	{
+		itemsCount = 120;
+	}
+	
+	thePlayer.inv.AddAnItem( 'Greater mutagen blue', itemsCount );
+	thePlayer.inv.AddAnItem( 'Greater mutagen red', itemsCount );
+	thePlayer.inv.AddAnItem( 'Greater mutagen green', itemsCount );
+	
+	GetWitcherPlayer().AddPoints( ESkillPoint, itemsCount, true );
+	
+	lm = GetWitcherPlayer();
+	for( i=0; i<30; i+=1 )
+	{
+		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal( EExperiencePoint );
+		lm.AddPoints( EExperiencePoint, exp, false );
+	}
+}
+
+exec function printmut()
+{
+	var pam : W3PlayerAbilityManager;
+	var mutations : array< SMutation >;
+	var i, j : int;
+	var progress : SMutationProgress;
+	var str, tmpString : string;
+	var reqMutation : EPlayerMutationType;
+	var colorAdded : bool;
+	
+	pam = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
+	mutations = pam.GetMutations();
+	LogMutation( "==========================================================================================" );
+	LogMutation( "================================= Mutations Status =======================================" );
+	LogMutation( "==========================================================================================" );
+
+	for( i=0; i<mutations.Size(); i+=1 )
+	{
+		
+		tmpString = GetWitcherPlayer().GetMutationLocalizedName( mutations[ i ].type );
+		if( tmpString == "" )
+		{
+			tmpString = "missing localization key";
+		}
+		LogMutation( mutations[ i ].type + " - " + tmpString );
+		
+		
+		tmpString = GetWitcherPlayer().GetMutationLocalizedDescription( mutations[ i ].type );
+		if( tmpString == "" )
+		{
+			tmpString = "missing localization key";
+		}
+		LogMutation( tmpString );
+		
+		
+		str = "Mutation is ";
+		colorAdded = false;
+		if( mutations[ i ].colors.Contains( SC_Red ) )
+		{
+			str += "Red";
+			colorAdded = true;
+		}
+		if( mutations[ i ].colors.Contains( SC_Green ) )
+		{
+			if( colorAdded )
+			{
+				str += " + ";
+			}
+			str += "Green";
+			colorAdded = true;
+		}		
+		if( mutations[ i ].colors.Contains( SC_Blue ) )
+		{
+			if( colorAdded )
+			{
+				str += " + ";
+			}
+			str += "Blue";
+		}
+		if( mutations[ i ].colors.Size() == 0 )
+		{
+			str += "of no color";
+		}
+		LogMutation( str );
+		
+		
+		str = "Required mutations: ";
+		for( j=0; j<mutations[ i ].requiredMutations.Size(); j+=1 )
+		{
+			reqMutation = mutations[ i ].requiredMutations[j];
+			tmpString = GetWitcherPlayer().GetMutationLocalizedName( reqMutation );
+			if( tmpString == "" )
+			{
+				tmpString = "missing localization key";
+			}
+			str += reqMutation + "(" + tmpString + "), ";
+		}
+		if( mutations[ i ].requiredMutations.Size() == 0 )
+		{
+			str += "None";
+		}
+		LogMutation( str );
+		
+		
+		progress = mutations[ i ].progress;
+		LogMutation("Progress " + SpaceFill( pam.GetMutationResearchProgress( mutations[ i ].type ), 3, ESFM_JustifyRight) + "%     Red: " + 
+				progress.redUsed + "/" + progress.redRequired +	"     Green: " + progress.greenUsed + "/" + progress.greenRequired + 
+				"     Blue: " + progress.blueUsed + "/" + progress.blueRequired + "     SkillPoints: " + progress.skillpointsUsed + "/" + progress.skillpointsRequired );
+				
+		
+		if( mutations[ i ].type == EPMT_MutationMaster )
+		{
+			LogMutation( "Stage: " + pam.GetMasterMutationStage() );
+		}
+		
+		
+		LogMutation("");
+	}
+}
+
+exec function finishTarget()
+{
+	thePlayer.AddTimer( 'PerformFinisher', 0.0 );
+}
+
+enum EncumbranceBoyMode
+{
+	EBM_Swap,
+	EBM_On,
+	EBM_Off
+}
+
+exec function mule( optional mode : int )
+{
+	EncumbranceBoy( mode );
+}
+
+function EncumbranceBoy( mode : EncumbranceBoyMode )
+{
+	if( mode == EBM_Off || ( mode == EBM_Swap && FactsQuerySum( "DEBUG_EncumbranceBoy" ) ) )
+	{
+		FactsRemove( "DEBUG_EncumbranceBoy" );
+		GetWitcherPlayer().UpdateEncumbrance();
+		LogCheats( "Mule is now OFF" );
+	}
+	else
+	{
+		FactsAdd( "DEBUG_EncumbranceBoy" );
+		GetWitcherPlayer().RemoveAllBuffsOfType( EET_OverEncumbered );
+		LogCheats( "Mule is now ON" );
+	}
+}
+
+exec function testEP2Perks()
+{
+	var w		: W3PlayerWitcher;
+	var inv		: CInventoryComponent;
+	var ids		: array<SItemUniqueId>;
+	
+	w = GetWitcherPlayer();
+	inv = w.GetInventory();
+	
+	FactsAdd( "DebugNoLevelUpUpdates" );
+	w.AddPoints( EExperiencePoint, 25000, false );
+	
+	ids = inv.AddAnItem( 'Apple', 15, true, false, false );
+	w.EquipItem( ids[0] );
+	ids = inv.AddAnItem( 'Chicken Sandwich', 15, true, false, false );
+	w.EquipItem( ids[0] );
+	
+	ids = inv.AddAnItem( 'Explosive Bolt', 15, true, false, false);
+	w.EquipItem( ids[0] );
+	
+	ids = thePlayer.inv.AddAnItem('Grapeshot 3');
+	thePlayer.inv.SingletonItemSetAmmo(ids[0], thePlayer.inv.SingletonItemGetMaxAmmo(ids[0]));
+	ids = thePlayer.inv.AddAnItem('Dwimeritium Bomb 3');
+	thePlayer.inv.SingletonItemSetAmmo(ids[0], thePlayer.inv.SingletonItemGetMaxAmmo(ids[0]));
+	ids = thePlayer.inv.AddAnItem('Dragons Dream 3');
+	thePlayer.inv.SingletonItemSetAmmo(ids[0], thePlayer.inv.SingletonItemGetMaxAmmo(ids[0]));
+	ids = thePlayer.inv.AddAnItem('Devils Puffball 3');
+	thePlayer.inv.SingletonItemSetAmmo(ids[0], thePlayer.inv.SingletonItemGetMaxAmmo(ids[0]));
+	
+	theGame.RequestMenuWithBackground( 'CharacterMenu', 'CommonMenu' );
+}
+
+exec function mutrev( optional unlockMutations : bool )
+{
+	
+	fb3_internal( 30, 'sign' );
+	
+	
+	GetWitcherPlayer().AddAndEquipItem( 'Gnomish sword 2' );
+	
+	
+	GetWitcherPlayer().AddAndEquipItem( 'Blizzard 3' );
+	
+	
+	GetWitcherPlayer().GainStat( BCS_Focus, 3.f );
+	
+	
+	if( unlockMutations )
+	{
+		mutall_internal();
+	}
+	
+	
+	GetWitcherPlayer().AddAndEquipItem( 'Mutagen 2' );
+	
+	
+	god_internal();
+}
+
+exec function addsetrec( n : EItemSetType, optional clearInv : bool )
+{
+	var w		: W3PlayerWitcher;
+	
+	w = GetWitcherPlayer();
+
+	if( clearInv )
+	{
+		w.Debug_ClearCharacterDevelopment();
+	}
+	
+	if( w.GetLevel() < 50 )
+	{
+		w.AddPoints( EExperiencePoint, 85000, false );
+	}
+	
+	w.inv.AddAnItem('Infused shard', 30);
+	w.inv.AddMoney( 10000 );
+	
+	
+	switch( n )
+	{
+		case EIST_Lynx:
+			w.inv.AddAnItem( 'Lynx School steel sword 3' );
+			w.inv.AddAnItem( 'Lynx School steel sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Lynx School silver sword 3' );
+			w.inv.AddAnItem( 'Lynx School silver sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Lynx Armor 3' );
+			w.inv.AddAnItem( 'Witcher Lynx Jacket Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Lynx Gloves 4' );
+			w.inv.AddAnItem( 'Witcher Lynx Gloves Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Lynx Boots 4' );
+			w.inv.AddAnItem( 'Witcher Lynx Boots Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Lynx Pants 4' );
+			w.inv.AddAnItem( 'Witcher Lynx Pants Upgrade schematic 5' );
+			break;
+		case EIST_Gryphon:
+			w.inv.AddAnItem( 'Gryphon School steel sword 3' );
+			w.inv.AddAnItem( 'Gryphon School steel sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Gryphon School silver sword 3' );
+			w.inv.AddAnItem( 'Gryphon School silver sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Gryphon Armor 3' );
+			w.inv.AddAnItem( 'Witcher Gryphon Jacket Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Gryphon Gloves 4' );
+			w.inv.AddAnItem( 'Witcher Gryphon Gloves Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Gryphon Boots 4' );
+			w.inv.AddAnItem( 'Witcher Gryphon Boots Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Gryphon Pants 4' );
+			w.inv.AddAnItem( 'Witcher Gryphon Pants Upgrade schematic 5' );
+			break;
+		case EIST_Bear:
+			w.inv.AddAnItem( 'Bear School steel sword 3' );
+			w.inv.AddAnItem( 'Bear School steel sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Bear School silver sword 3' );
+			w.inv.AddAnItem( 'Bear School silver sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Bear Armor 3' );
+			w.inv.AddAnItem( 'Witcher Bear Jacket Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Bear Gloves 4' );
+			w.inv.AddAnItem( 'Witcher Bear Gloves Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Bear Boots 4' );
+			w.inv.AddAnItem( 'Witcher Bear Boots Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Bear Pants 4' );
+			w.inv.AddAnItem( 'Witcher Bear Pants Upgrade schematic 5' );
+			w.Debug_BearSetBonusQuenSkills();
+			break;
+		case EIST_Wolf:
+			w.inv.AddAnItem( 'Wolf School steel sword 3' );
+			w.inv.AddAnItem( 'Wolf School steel sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Wolf School silver sword 3' );
+			w.inv.AddAnItem( 'Wolf School silver sword Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Wolf Armor 3' );
+			w.inv.AddAnItem( 'Witcher Wolf Jacket Upgrade schematic 4' );
+			w.inv.AddAnItem( 'Wolf Gloves 4' );
+			w.inv.AddAnItem( 'Witcher Wolf Gloves Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Wolf Boots 4' );
+			w.inv.AddAnItem( 'Witcher Wolf Boots Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Wolf Pants 4' );
+			w.inv.AddAnItem( 'Witcher Wolf Pants Upgrade schematic 5' );
+			w.inv.AddAnItem( 'Grapeshot 2' );
+			w.inv.AddAnItem( 'Dancing Star 2' );
+			w.inv.AddAnItem( 'Hybrid Oil 2' );
+			w.inv.AddAnItem( 'Cursed Oil 2' );
+			w.inv.AddAnItem( 'Magical Oil 2' );
+			w.inv.AddAnItem( 'Specter Oil 2' );
+		case EIST_RedWolf:
+			w.inv.AddAnItem( 'Red Wolf School steel sword schematic 1' );
+			w.inv.AddAnItem( 'Red Wolf School silver sword schematic 1' );
+			w.inv.AddAnItem( 'Witcher Red Wolf Jacket schematic 1' );
+			w.inv.AddAnItem( 'Witcher Red Wolf Gloves schematic 1' );
+			w.inv.AddAnItem( 'Witcher Red Wolf Boots schematic 1' );
+			w.inv.AddAnItem( 'Witcher Red Wolf Pants schematic 1' );
+			w.inv.AddAnItem( 'Black Blood 2' );
+			w.inv.AddAnItem( 'Swallow 2' );
+			w.inv.AddAnItem( 'Grapeshot 2' );
+			break;
+		default:
+			break;	
+	}
+}
+
+exec function countFT()
+{
+		var mapManager : CCommonMapManager = theGame.GetCommonMapManager();
+		var arr1 : array< SAvailableFastTravelMapPin >;	
+		arr1 = mapManager.GetFastTravelPoints(true, false, false, true, true);
+		
+		Log( arr1.Size() );
+}
+
+exec function Clear()
+{
+	GetWitcherPlayer().GetInventory().RemoveAllItems();
+}
+
+exec function rainAnim()
+{
+	
+	thePlayer.ActionPlaySlotAnimationAsync( 'PLAYER_SLOT', 'geralt_mutation_11', 0.2, 0.2 );
+}
+
+exec function activateAllBestiaryEP2()
+{
+var manager : CWitcherJournalManager;
+	
+	manager = theGame.GetJournalManager();
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryPanther", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCBeastOfBeauclaire", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCPigs", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCBigBadWolf", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCEP2Boar", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryDracolizard", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCDracolizardMatriarch", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCSilverBasilisk", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiarySharley", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCSharleyMatriarch", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCSpriggan", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCSharleyCaptive", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCFTWitch", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCMQ7002Borowy", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryBarghest", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCNightmare", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCDaphne", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCRapunzel", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCBeanshee", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryGarkain", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryBruxa", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryFleder", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryAlp", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCBruxaCB", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCAlphaGarkain", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCDettlaff", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCProtofleder", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryDagonet", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryCloudGiant"	, manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryGraveir", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryWicht", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCWightCollector", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryScolopendromorph", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryPaleWidow", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryKikimoraWarrior", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryKikimoraWorker"	, manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryArchespore", manager);
+	
+	
+	activateJournalBestiaryEntryWithAlias("BestiaryDarkPixie", manager);
+	activateJournalBestiaryEntryWithAlias("BestiaryQCMoreauGolem", manager);
+}
+
+exec function addarmorEP2(armorType : string)
+{
+	if(armorType == "set")
+	{
+		thePlayer.inv.AddAnItem('Lynx Armor 4',1);
+		thePlayer.inv.AddAnItem('Gryphon Armor 4',1);
+		thePlayer.inv.AddAnItem('Bear Armor 4',1);
+		thePlayer.inv.AddAnItem('Wolf Armor 4',1);
+		thePlayer.inv.AddAnItem('Red Wolf Armor 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Armor 2',1);
+	}
+	else if(armorType == "craft")
+	{
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 3',1);
+	}
+	else if(armorType == "basic")
+	{
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Armor 2',1);
+		thePlayer.inv.AddAnItem('sq701_geralt_armor',1);
+		thePlayer.inv.AddAnItem('sq701_ravix_armor',1);
+	}
+	else if(armorType == "all")
+	{
+		thePlayer.inv.AddAnItem('Lynx Armor 4',1);
+		thePlayer.inv.AddAnItem('Gryphon Armor 4',1);
+		thePlayer.inv.AddAnItem('Bear Armor 4',1);
+		thePlayer.inv.AddAnItem('Wolf Armor 4',1);
+		thePlayer.inv.AddAnItem('Red Wolf Armor 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Armor 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 3',1);
+			
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Armor 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Armor 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Armor 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Armor 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Armor 2',1);
+		thePlayer.inv.AddAnItem('sq701_geralt_armor',1);
+		thePlayer.inv.AddAnItem('sq701_ravix_armor',1);
+	}
+	else
+	{
+		Log("temp.ws:addarmorEP2: You did not provide proper armor type, please use set, craft or all to add specific ones or all to add ALL items");
+	}
+}
+exec function addbootsEP2(armorType : string)
+{
+	if(armorType == "set")
+	{
+		thePlayer.inv.AddAnItem('Lynx Boots 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Boots 5',1);
+		thePlayer.inv.AddAnItem('Bear Boots 5',1);
+		thePlayer.inv.AddAnItem('Wolf Boots 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 2',1);
+	}
+	else if(armorType == "craft")
+	{
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Boots 3',1);
+	}
+	else if(armorType == "basic")
+	{
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Boots 2',1);
+	}
+	else if(armorType == "all")
+	{
+		thePlayer.inv.AddAnItem('Lynx Boots 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Boots 5',1);
+		thePlayer.inv.AddAnItem('Bear Boots 5',1);
+		thePlayer.inv.AddAnItem('Wolf Boots 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Boots 3',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Boots 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Boots 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Boots 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Boots 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Boots 2',1);
+	}
+	else
+	{
+		Log("You did not provide proper armor type, please use set, craft or all to add specific ones or all to add ALL items");
+	}
+}
+exec function addglovesEP2(armorType : string)
+{
+	if(armorType == "set")
+	{
+		thePlayer.inv.AddAnItem('Lynx Gloves 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Gloves 5',1);
+		thePlayer.inv.AddAnItem('Bear Gloves 5',1);
+		thePlayer.inv.AddAnItem('Wolf Gloves 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 2',1);
+	}
+	else if(armorType == "craft")
+	{
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Gloves 3',1);
+	}
+	else if(armorType == "basic")
+	{
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Gloves 2',1);
+	}
+	else if (armorType == "all")
+	{
+		thePlayer.inv.AddAnItem('Lynx Gloves 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Gloves 5',1);
+		thePlayer.inv.AddAnItem('Bear Gloves 5',1);
+		thePlayer.inv.AddAnItem('Wolf Gloves 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Gloves 3',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Gloves 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Gloves 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Gloves 2',1);
+	}
+	else
+	{
+		Log("You did not provide proper armor type, please use set, craft or all to add specific ones or all to add ALL items");
+	}
+}
+exec function addpantsEP2(armorType : string)
+{
+	if(armorType == "set")
+	{
+		thePlayer.inv.AddAnItem('Lynx Pants 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Pants 5',1);
+		thePlayer.inv.AddAnItem('Bear Pants 5',1);
+		thePlayer.inv.AddAnItem('Wolf Pants 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 2',1);
+	}
+	else if(armorType == "craft")
+	{
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Pants 3',1);
+	}
+	else if(armorType == "basic")
+	{
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Pants 2',1);
+	}
+	else if (armorType == "all")
+	{
+		thePlayer.inv.AddAnItem('Lynx Pants 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Pants 5',1);
+		thePlayer.inv.AddAnItem('Bear Pants 5',1);
+		thePlayer.inv.AddAnItem('Wolf Pants 5',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 3',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 3',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 3',1);
+		thePlayer.inv.AddAnItem('Toussaint Pants 3',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 Pants 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 2',1);
+		
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 Pants 2',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 1',1);
+		thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 2',1);
+		
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt Pants 2',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 1',1);
+		thePlayer.inv.AddAnItem('Knight Geralt A Pants 2',1);
+		thePlayer.inv.AddAnItem('Toussaint Pants 2',1);
+	}
+	else
+	{
+		Log("You did not provide proper armor type, please use set, craft or all to add specific ones or all to add ALL items");
+	}
+}
+
+exec function addEP2Set(setType : string)
+{
+	if (setType == "bear")
+	{
+		thePlayer.inv.AddAnItem('Bear Armor 4',1);
+		thePlayer.inv.AddAnItem('Bear Boots 5',1);
+		thePlayer.inv.AddAnItem('Bear Pants 5',1);
+		thePlayer.inv.AddAnItem('Bear Gloves 5',1);
+		thePlayer.inv.AddAnItem('Bear School steel sword 4',1);
+		thePlayer.inv.AddAnItem('Bear School silver sword 4',1);
+	
+	}
+	else if (setType == "lynx")
+	{
+		thePlayer.inv.AddAnItem('Lynx Armor 4',1);
+		thePlayer.inv.AddAnItem('Lynx Boots 5',1);
+		thePlayer.inv.AddAnItem('Lynx Pants 5',1);
+		thePlayer.inv.AddAnItem('Lynx Gloves 5',1);
+		thePlayer.inv.AddAnItem('Lynx School steel sword 4',1);
+		thePlayer.inv.AddAnItem('Lynx School silver sword 4',1);
+		
+	}
+	else if (setType == "gryphon")
+	{
+		thePlayer.inv.AddAnItem('Gryphon Armor 4',1);
+		thePlayer.inv.AddAnItem('Gryphon Boots 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Pants 5',1);
+		thePlayer.inv.AddAnItem('Gryphon Gloves 5',1);
+		thePlayer.inv.AddAnItem('Gryphon School steel sword 4',1);
+		thePlayer.inv.AddAnItem('Gryphon School silver sword 4',1);
+		
+	}
+	else if (setType == "wolf")
+	{
+		thePlayer.inv.AddAnItem('Wolf Armor 4',1);
+		thePlayer.inv.AddAnItem('Wolf Boots 5',1);
+		thePlayer.inv.AddAnItem('Wolf Pants 5',1);
+		thePlayer.inv.AddAnItem('Wolf Gloves 5',1);
+		thePlayer.inv.AddAnItem('Wolf School steel sword 4',1);
+		thePlayer.inv.AddAnItem('Wolf School silver sword 4',1);
+		
+	}
+	else if (setType == "manticore1")
+	{
+		thePlayer.inv.AddAnItem('Red Wolf Armor 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf School steel sword 1',1);
+		thePlayer.inv.AddAnItem('Red Wolf School silver sword 1',1);
+	}
+	else if (setType == "manticore2")
+	{
+		thePlayer.inv.AddAnItem('Red Wolf Armor 2',1);
+		thePlayer.inv.AddAnItem('Red Wolf Boots 2',1);
+		thePlayer.inv.AddAnItem('Red Wolf Pants 2',1);
+		thePlayer.inv.AddAnItem('Red Wolf Gloves 2',1);
+		thePlayer.inv.AddAnItem('Red Wolf School steel sword 2',1);
+		thePlayer.inv.AddAnItem('Red Wolf School silver sword 2',1);
+		
+	}
+	else
+	{
+		Log("No such set! Please use bear, lynx, gryphon, wolf, manticore 1 or manticore 2");
+	}
+}
+exec function addswordEP2(swordType1 : string, optional swordType2 : string)
+{
+	if(swordType1 == "steel")
+	{
+		if(swordType2 == "set")
+		{
+			thePlayer.inv.AddAnItem('Lynx School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 2',1);
+		}
+		else if(swordType2 == "craft")
+		{
+			thePlayer.inv.AddAnItem('Guard lvl1 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl2 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 3',1);
+			thePlayer.inv.AddAnItem('Hanza steel sword 3',1);
+			thePlayer.inv.AddAnItem('Toussaint steel sword 3',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 3',1);
+		}
+		else if(swordType2 == "basic")
+		{
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 1',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 2',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 1',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 2',1);
+			thePlayer.inv.AddAnItem('Unique steel sword',1);
+			thePlayer.inv.AddAnItem('Unique silver sword',1);
+			thePlayer.inv.AddAnItem('Gwent steel sword 1',1);
+			thePlayer.inv.AddAnItem('sq701 Geralt of Rivia sword',1);
+			thePlayer.inv.AddAnItem('sq701 Ravix of Fourhorn sword',1);
+			thePlayer.inv.AddAnItem('mq7001 Toussaint steel sword',1);
+			thePlayer.inv.AddAnItem('mq7007 Elven Sword',1);
+			thePlayer.inv.AddAnItem('mq7011 Cianfanelli steel sword',1);
+		}
+		else if(swordType2 == "all")
+		{
+			thePlayer.inv.AddAnItem('Lynx School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl1 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl2 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 3',1);
+			thePlayer.inv.AddAnItem('Hanza steel sword 3',1);
+			thePlayer.inv.AddAnItem('Toussaint steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 1',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 2',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 1',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 2',1);
+			thePlayer.inv.AddAnItem('Unique steel sword',1);
+			thePlayer.inv.AddAnItem('Unique silver sword',1);
+			thePlayer.inv.AddAnItem('Gwent steel sword 1',1);
+			thePlayer.inv.AddAnItem('sq701 Geralt of Rivia sword',1);
+			thePlayer.inv.AddAnItem('sq701 Ravix of Fourhorn sword',1);
+			thePlayer.inv.AddAnItem('mq7001 Toussaint steel sword',1);
+			thePlayer.inv.AddAnItem('mq7007 Elven Sword',1);
+			thePlayer.inv.AddAnItem('mq7011 Cianfanelli steel sword',1);
+		}
+		else
+		{
+			Log("You didn't provide proper sword type. Please use set, craft, basic or all.");
+		}
+	}
+	else if(swordType1 == "silver")
+	{
+		if(swordType2 == "set")
+		{
+			thePlayer.inv.AddAnItem('Lynx School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 2',1);
+		}
+		else if(swordType2 == "craft")
+		{
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 3',1);
+		}
+		else if(swordType2 == "basic")
+		{
+			Log("There are no lootable silver swords in EP2! Use set, craft or all.");
+		}
+		else if(swordType2 == "all")
+		{
+			thePlayer.inv.AddAnItem('Lynx School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 3',1);
+		}
+		else
+		{
+			Log("You didn't provide proper sword type. Please use set, craft or all.");
+		}
+	}
+	else if(swordType1 == "all")
+	{
+		if(swordType2 == "set")
+		{
+			thePlayer.inv.AddAnItem('Lynx School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 3',1);
+			thePlayer.inv.AddAnItem('Lynx School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 3',1);
+		}
+		else if(swordType2 == "craft")
+		{
+			thePlayer.inv.AddAnItem('Guard lvl1 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl2 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 3',1);
+			thePlayer.inv.AddAnItem('Hanza steel sword 3',1);
+			thePlayer.inv.AddAnItem('Toussaint steel sword 3',1);
+		}
+		else if(swordType2 == "basic")
+		{
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 1',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 2',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 1',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 2',1);
+			thePlayer.inv.AddAnItem('Unique steel sword',1);
+			thePlayer.inv.AddAnItem('Unique silver sword',1);
+			thePlayer.inv.AddAnItem('Gwent steel sword 1',1);
+			thePlayer.inv.AddAnItem('sq701 Geralt of Rivia sword',1);
+			thePlayer.inv.AddAnItem('sq701 Ravix of Fourhorn sword',1);
+			thePlayer.inv.AddAnItem('mq7001 Toussaint steel sword',1);
+			thePlayer.inv.AddAnItem('mq7007 Elven Sword',1);
+			thePlayer.inv.AddAnItem('mq7011 Cianfanelli steel sword',1);
+		}
+		else if(swordType2 == "all")
+		{
+			thePlayer.inv.AddAnItem('Lynx School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School silver sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School silver sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Silver Sword 3',1);
+			thePlayer.inv.AddAnItem('Lynx School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Gryphon School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Bear School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Wolf School steel sword 4',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 1',1);
+			thePlayer.inv.AddAnItem('Red Wolf School steel sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 1',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 2',1);
+			thePlayer.inv.AddAnItem('Serpent Steel Sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl1 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard lvl2 steel sword 3',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 3',1);
+			thePlayer.inv.AddAnItem('Hanza steel sword 3',1);
+			thePlayer.inv.AddAnItem('Toussaint steel sword 3',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 1',1);
+			thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 2',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 1',1);
+			thePlayer.inv.AddAnItem('Knights steel sword 2',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 1',1);
+			thePlayer.inv.AddAnItem('Squire steel sword 2',1);
+			thePlayer.inv.AddAnItem('Unique steel sword',1);
+			thePlayer.inv.AddAnItem('Unique silver sword',1);
+			thePlayer.inv.AddAnItem('Gwent steel sword 1',1);
+			thePlayer.inv.AddAnItem('sq701 Geralt of Rivia sword',1);
+			thePlayer.inv.AddAnItem('sq701 Ravix of Fourhorn sword',1);
+			thePlayer.inv.AddAnItem('mq7001 Toussaint steel sword',1);
+			thePlayer.inv.AddAnItem('mq7007 Elven Sword',1);
+			thePlayer.inv.AddAnItem('mq7011 Cianfanelli steel sword',1);
+		}
+		else
+		{
+			Log("You didn't provide proper sword type. Please use set, craft, basic or all.");
+		}
+	}
+	else if (swordType1 == "other")
+	{
+		thePlayer.inv.AddAnItem('Laundry stick',1);
+		thePlayer.inv.AddAnItem('Laundry pole',1);
+	}
+	else
+	{
+		Log("You didn't provide proper sword type. Please use steel, silver, other or all.");
+	}
+}
+
+exec function addQuestItemsEP2(questNumber : string)
+{
+	if(questNumber == "Q701" || "q701")
+	{
+		thePlayer.inv.AddAnItem('q701_duchess_summons',1);
+		thePlayer.inv.AddAnItem('q701_beast_picture_01',1);
+		thePlayer.inv.AddAnItem('q701_beast_picture_02',1);
+		thePlayer.inv.AddAnItem('q701_beast_picture_03',1);
+		thePlayer.inv.AddAnItem('q701_corvo_bianco_deed',1);
+		thePlayer.inv.AddAnItem('q701_victim_handkarchief',1);
+		thePlayer.inv.AddAnItem('q701_coin_pouch',1);
+		thePlayer.inv.AddAnItem('q701_swan_item',1);
+		thePlayer.inv.AddAnItem('q701_unicorn_item',1);
+		thePlayer.inv.AddAnItem('q701_cookie_lure',1);
+		thePlayer.inv.AddAnItem('q701_apple_lure',1);
+		thePlayer.inv.AddAnItem('q701_carrot_basket',1);
+		thePlayer.inv.AddAnItem('q701_grain_cup',1);
+		thePlayer.inv.AddAnItem('q701_gardens_lost_ring',1);
+		thePlayer.inv.AddAnItem('q701_crayfish_soup',1);
+		thePlayer.inv.AddAnItem('q701_pate',1);
+	}
+	else if (questNumber == "Q702" || "q702")
+	{
+		thePlayer.inv.AddAnItem('q702_wight_gland',1);
+		thePlayer.inv.AddAnItem('q702_wight_brew',1);
+		thePlayer.inv.AddAnItem('q702_wicht_key',1);
+		thePlayer.inv.AddAnItem('q702_wicht_fork',1);
+		thePlayer.inv.AddAnItem('q702_fly',1);
+		thePlayer.inv.AddAnItem('q702_leaflet',1);
+		thePlayer.inv.AddAnItem('q702_graveir_lure',1);
+		thePlayer.inv.AddAnItem('q702_victims_names',1);
+		thePlayer.inv.AddAnItem('q702_blackmail_letter',1);
+		thePlayer.inv.AddAnItem('q702_bootblack_prices',1);
+		thePlayer.inv.AddAnItem('q702_knight_oath',1);
+		thePlayer.inv.AddAnItem('q702_love_letter',1);
+		thePlayer.inv.AddAnItem('q702_marlena_father_letter',1);
+		thePlayer.inv.AddAnItem('q702_marlena_letter',1);
+		thePlayer.inv.AddAnItem('q702_mill_order',1);
+		thePlayer.inv.AddAnItem('q702_tesham_mutna_cell_letter',1);
+		thePlayer.inv.AddAnItem('q702_toy_store_closing_order',1);
+		thePlayer.inv.AddAnItem('q702_toy_store_letter',1);
+		thePlayer.inv.AddAnItem('q702_regeneration_elixir',1);
+		thePlayer.inv.AddAnItem('q702_spoon_key_message',1);
+		thePlayer.inv.AddAnItem('q702_wight_diary',1);
+		thePlayer.inv.AddAnItem('q702_comissariat',1);
+		thePlayer.inv.AddAnItem('q702_regis_biography',1);
+		thePlayer.inv.AddAnItem('q702_regis_sentences',1);
+		thePlayer.inv.AddAnItem('q702_cage_breeding_humans',1);
+		thePlayer.inv.AddAnItem('q702_monster_curses',1);
+		thePlayer.inv.AddAnItem('q702_vampire_transcript',1);
+		thePlayer.inv.AddAnItem('q702_spoon_key',1);
+		thePlayer.inv.AddAnItem('q702_secret_urn',1);
+		thePlayer.inv.AddAnItem('q702_marlena_dowry',1);
+		thePlayer.inv.AddAnItem('q702_breeding_humans',1);
+		thePlayer.inv.AddAnItem('Vampire Vision Potion',1);
+	}
+	else if (questNumber == "Q703" || "q703")
+	{
+		thePlayer.inv.AddAnItem('q703_bung',1);
+		thePlayer.inv.AddAnItem('q703_geralt_wanted_note',1);
+		thePlayer.inv.AddAnItem('q703_heart_of_toussaint',1);
+		thePlayer.inv.AddAnItem('q703_mandragora_mask_male',1);
+		thePlayer.inv.AddAnItem('q703_mandragora_mask_female',1);
+		thePlayer.inv.AddAnItem('q703_paint_bomb_red',1);
+		thePlayer.inv.AddAnItem('q703_unique_hunting_knife',1);
+		thePlayer.inv.AddAnItem('q703_wooden_hammer',1);
+		thePlayer.inv.AddAnItem('Geralt mandragora mask',1);
+	}
+	else if (questNumber == "Q704" || "q704")
+	{
+		thePlayer.inv.AddAnItem('q704_orianas_vampire_key',1);
+		thePlayer.inv.AddAnItem('q704_caretakers_letter',1);
+		thePlayer.inv.AddAnItem('q704_mages_notebook',1);
+		thePlayer.inv.AddAnItem('q704_mages_notes_01',1);
+		thePlayer.inv.AddAnItem('q704_mages_notes_02',1);
+		thePlayer.inv.AddAnItem('q704_vampire_offering',1);
+		thePlayer.inv.AddAnItem('q704_ft_bean_01',1);
+		thePlayer.inv.AddAnItem('q704_ft_bean_02',1);
+		thePlayer.inv.AddAnItem('q704_ft_bean_03',1);
+		thePlayer.inv.AddAnItem('q704_ft_riding_hoods_hood',1);
+		thePlayer.inv.AddAnItem('q704_ft_pipe',1);
+		thePlayer.inv.AddAnItem('q704_ft_golden_egg',1);
+		thePlayer.inv.AddAnItem('q704_ft_bottle_caps',1);
+		thePlayer.inv.AddAnItem('q704_ft_corkscrew',1);
+		thePlayer.inv.AddAnItem('q704_ft_fake_teeth',1);
+		thePlayer.inv.AddAnItem('q704_ft_syanna_journal',1);
+		thePlayer.inv.AddAnItem('q704_vampire_lure_bolt',1);
+		Log("You can also specify which part of Q704 intrests you - Q704A for vampire invasion or Q704B for Fairy Tale");
+	}
+	else if (questNumber == "Q704A" || "q704a")
+	{
+		thePlayer.inv.AddAnItem('q704_orianas_vampire_key',1);
+		thePlayer.inv.AddAnItem('q704_caretakers_letter',1);
+		thePlayer.inv.AddAnItem('q704_mages_notebook',1);
+		thePlayer.inv.AddAnItem('q704_mages_notes_01',1);
+		thePlayer.inv.AddAnItem('q704_mages_notes_02',1);
+		thePlayer.inv.AddAnItem('q704_vampire_offering',1);
+		thePlayer.inv.AddAnItem('q704_vampire_lure_bolt',1);
+	}
+	else if (questNumber == "Q704B" || "q704b")
+	{
+		thePlayer.inv.AddAnItem('q704_ft_bean_01',1);
+		thePlayer.inv.AddAnItem('q704_ft_bean_02',1);
+		thePlayer.inv.AddAnItem('q704_ft_bean_03',1);
+		thePlayer.inv.AddAnItem('q704_ft_riding_hoods_hood',1);
+		thePlayer.inv.AddAnItem('q704_ft_pipe',1);
+		thePlayer.inv.AddAnItem('q704_ft_golden_egg',1);
+		thePlayer.inv.AddAnItem('q704_ft_bottle_caps',1);
+		thePlayer.inv.AddAnItem('q704_ft_corkscrew',1);
+		thePlayer.inv.AddAnItem('q704_ft_fake_teeth',1);
+		thePlayer.inv.AddAnItem('q704_ft_syanna_journal',1);
+	}
+	else if (questNumber == "Q705" || "q705")
+	{
+		thePlayer.inv.AddAnItem('q705_ah_letter',1);
+		thePlayer.inv.AddAnItem('q705_dirty_clothes',1);
+		thePlayer.inv.AddAnItem('q705_soap',1);
+		thePlayer.inv.AddAnItem('q705_medal',1);
+		thePlayer.inv.AddAnItem('q705_white_roses',1);
+		thePlayer.inv.AddAnItem('q705_mandragora',1);
+		thePlayer.inv.AddAnItem('q705_prison_stash_note',1);
+		thePlayer.inv.AddAnItem('q705_hammer_chisel',1);
+		thePlayer.inv.AddAnItem('q705_pinup_poster',1);
+		thePlayer.inv.AddAnItem('q705_geralt_mask',1);
+	}
+	else if (questNumber == "SQ701" || "sq701")
+	{
+		thePlayer.inv.AddAnItem('sq701_nest',1);
+		thePlayer.inv.AddAnItem('sq701_geralt_shield',1);
+		thePlayer.inv.AddAnItem('sq701_ravix_shield',1);
+		thePlayer.inv.AddAnItem('sq701_tutorial_shield',1);
+		thePlayer.inv.AddAnItem('sq701 Geralt of Rivia sword',1);
+		thePlayer.inv.AddAnItem('sq701 Ravix of Fourhorn sword',1);
+		thePlayer.inv.AddAnItem('sq701_geralt_armor',1);
+		thePlayer.inv.AddAnItem('sq701_ravix_armor',1);
+		thePlayer.inv.AddAnItem('sq701_victory_laurels',1);
+	}
+	else if (questNumber == "SQ703" || "sq703")
+	{
+		thePlayer.inv.AddAnItem('sq703_peacock_feather',1);
+		thePlayer.inv.AddAnItem('sq703_map',1);
+		thePlayer.inv.AddAnItem('sq703_map_alternative',1);
+		thePlayer.inv.AddAnItem('sq703_safari_picture',1);
+		thePlayer.inv.AddAnItem('sq703_hunter_letter',1);
+		thePlayer.inv.AddAnItem('sq703_wife_letter',1);
+		thePlayer.inv.AddAnItem('sq703_accountance_book',1);
+	}
+	else if (questNumber == "MH701" || "mh701")
+	{
+		thePlayer.inv.AddAnItem('mh701_lost_locket',1);
+		thePlayer.inv.AddAnItem('mh701_fresh_blood',1);
+		thePlayer.inv.AddAnItem('mh701_usable_lur',1);
+		thePlayer.inv.AddAnItem('mh701_work_schedule',1);
+		thePlayer.inv.AddAnItem('mh701_wine_list',1);
+	}
+	else if (questNumber == "MQ7001" || "mq7001")
+	{
+		thePlayer.inv.AddAnItem('mq7001_louis_urn',1);
+		thePlayer.inv.AddAnItem('mq7001_margot_urn',1);
+		thePlayer.inv.AddAnItem('mq7001_gwent_poems',1);
+	}
+	else if (questNumber == "MQ7002" || "mq7002")
+	{
+		thePlayer.inv.AddAnItem('mq7002_love_letter_01',1);
+		thePlayer.inv.AddAnItem('mq7002_love_letter_02',1);
+	}
+	else if (questNumber == "MQ7004" || "mq7004")
+	{
+		thePlayer.inv.AddAnItem('mq7004_knight_item',1);
+		thePlayer.inv.AddAnItem('mq7004_scarf',1);
+		thePlayer.inv.AddAnItem('mq7004_storybook',1);
+		thePlayer.inv.AddAnItem('mq7004_note_01',1);
+		thePlayer.inv.AddAnItem('mq7004_note_02',1);
+		thePlayer.inv.AddAnItem('mq7004_note_03',1);
+	}
+	else if (questNumber == "MQ7006" || "mq7006")
+	{
+		thePlayer.inv.AddAnItem('mq7006_egg',1);
+	}
+	else if (questNumber == "MQ7007" || "mq7007")
+	{
+		thePlayer.inv.AddAnItem('mq7007_tribute_food',1);
+		thePlayer.inv.AddAnItem('mq7007_tribute_wine',1);
+		thePlayer.inv.AddAnItem('mq7007_elven_shield',1);
+		thePlayer.inv.AddAnItem('mq7007 Elven Sword',1);
+		thePlayer.inv.AddAnItem('mq7007_elven_mask',1);
+	}
+	else if (questNumber == "MQ7009" || "mq7009")
+	{
+		thePlayer.inv.AddAnItem('mq7009_painter_accessories',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose1',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose1_grif',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose2',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose2_grif',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose3',1);
+		thePlayer.inv.AddAnItem('mq7009_painting_pose3_grif',1);
+	}
+	else if (questNumber == "MQ7010" || "mq7010")
+	{
+		thePlayer.inv.AddAnItem('mq7010_still_note',1);
+	}
+	else if (questNumber == "MQ7011" || "mq7011")
+	{
+		thePlayer.inv.AddAnItem('mq7011_document',1);
+	}
+	else if (questNumber == "MQ7015" || "mq7015")
+	{
+		thePlayer.inv.AddAnItem('mq7015_reginalds_balls',1);
+		thePlayer.inv.AddAnItem('mq7015_reginalds_figurine',1);
+	}
+	else if (questNumber == "MQ7017" || "mq7017")
+	{
+		thePlayer.inv.AddAnItem('mq7017_mushroom_potion',1);
+		thePlayer.inv.AddAnItem('mq7017_pinastri_note',1);
+	}
+	else if (questNumber == "MQ7018" || "mq7018")
+	{
+		thePlayer.inv.AddAnItem('mq7018_guild_contract_letter',1);
+		thePlayer.inv.AddAnItem('mq7018_workers_letter_basilisk_alive',1);
+		thePlayer.inv.AddAnItem('mq7018_workers_letter_basilisk_dead',1);
+	}
+	else if (questNumber == "MQ7020" || "mq7020")
+	{
+		Log("No items in that quest or you provided wrong quest number! Please verify you provided the right one, you entered " + questNumber);
+	}
+	else if (questNumber == "MQ7021" || "mq7021")
+	{
+		thePlayer.inv.AddAnItem('mq7021_treasure_map',1);
+		thePlayer.inv.AddAnItem('mq7021_filter',1);
+	}
+	else if (questNumber == "MQ7023" || "mq7023")
+	{
+		thePlayer.inv.AddAnItem('mq7023_letter_yen',1);
+		thePlayer.inv.AddAnItem('mq7023_letter_triss',1);
+		thePlayer.inv.AddAnItem('mq7023_letter_neutral',1);
+		thePlayer.inv.AddAnItem('mq7023_map',1);
+		thePlayer.inv.AddAnItem('mq7023_journal_laura',1);
+		thePlayer.inv.AddAnItem('mq7023_gargoyle_hand',1);
+		thePlayer.inv.AddAnItem('mq7023_portal_key',1);
+		thePlayer.inv.AddAnItem('mq7023_megascope_crystal_2',1);
+		thePlayer.inv.AddAnItem('mq7023_megascope_crystal',1);
+		thePlayer.inv.AddAnItem('mq7023_megascope_crystal_4',1);
+		thePlayer.inv.AddAnItem('mq7023_centipede_albumen_mutated',1);
+		thePlayer.inv.AddAnItem('mq7023_fluff_book_mutations',1);
+		thePlayer.inv.AddAnItem('mq7023_fluff_book_scolopendromorphs',1);
+	}
+	else if (questNumber == "MQ7024" || "mq7024")
+	{
+		thePlayer.inv.AddAnItem('mq7024_alchemy_lab_note',1);
+	}
+	else if (questNumber == "CG700" || "cg700")
+	{
+		thePlayer.inv.AddAnItem('cg700_base_deck',1);
+		thePlayer.inv.AddAnItem('cg700_gwent_statue',1);
+		thePlayer.inv.AddAnItem('cg700_letter_monniers_brother',1);
+		thePlayer.inv.AddAnItem('cg700_letter_merchants',1);
+		thePlayer.inv.AddAnItem('cg700_letter_purist',1);
+	}
+	else if (questNumber == "FF701" || "ff701")
+	{
+		thePlayer.inv.AddAnItem('ff701_fist_fight_trophy',1);
+	}
+	else if (questNumber == "TH700" || "th700")
+	{
+		thePlayer.inv.AddAnItem('th700_prison_journal',1);
+		thePlayer.inv.AddAnItem('th700_crypt_journal',1);
+		thePlayer.inv.AddAnItem('th700_vault_journal',1);
+		thePlayer.inv.AddAnItem('th700_lake_journal',1);
+		thePlayer.inv.AddAnItem('th700_chapel_journal',1);
+		thePlayer.inv.AddAnItem('th700_lake_fluff_note1',1);
+		thePlayer.inv.AddAnItem('th700_lake_fluff_note2',1);
+		thePlayer.inv.AddAnItem('th700_lake_fluff_note3',1);
+		thePlayer.inv.AddAnItem('th700_preacher_bones',1);
+	}
+	else if (questNumber == "TH701" || "th701")
+	{
+		thePlayer.inv.AddAnItem('th701_wg_initial_note',1);
+		thePlayer.inv.AddAnItem('th701_wg_swords_note',1);
+		thePlayer.inv.AddAnItem('th701_wg_pants_note',1);
+		thePlayer.inv.AddAnItem('th701_bear_contract',1);
+		thePlayer.inv.AddAnItem('th701_bear_journal',1);
+		thePlayer.inv.AddAnItem('th701_bear_notes',1);
+		thePlayer.inv.AddAnItem('th701_cat_journal',1);
+		thePlayer.inv.AddAnItem('th701_cat_notes',1);
+		thePlayer.inv.AddAnItem('th701_cat_witcher_notes',1);
+		thePlayer.inv.AddAnItem('th701_gryphon_moreau_letter',1);
+		thePlayer.inv.AddAnItem('th701_gryphon_moreau_journal',1);
+		thePlayer.inv.AddAnItem('th701_gryphon_jerome_letter',1);
+		thePlayer.inv.AddAnItem('th701_power_core',1);
+		thePlayer.inv.AddAnItem('th701_wolf_journal',1);
+		thePlayer.inv.AddAnItem('th701_wolf_witcher_note',1);
+		thePlayer.inv.AddAnItem('th701_elven_journal',1);
+		thePlayer.inv.AddAnItem('th701_portal_crystal',1);
+		thePlayer.inv.AddAnItem('th701_coward_journal',1);
+	}
+	else
+	{
+		Log("No items in that quest or you provided wrong quest number! Please verify you provided the right one, you entered " + questNumber);
+	}
+}
+
+exec function addBooksEP2()
+{
+	thePlayer.inv.AddAnItem('q701_crayfish_soup_recipe',1);
+	thePlayer.inv.AddAnItem('q701_pate_recipe',1);
+	thePlayer.inv.AddAnItem('q701_godfryd_book',1);
+	thePlayer.inv.AddAnItem('q701_rydygier_book',1);
+	thePlayer.inv.AddAnItem('q701_1st_victim_files',1);
+	thePlayer.inv.AddAnItem('q701_2nd_victim_files',1);
+	thePlayer.inv.AddAnItem('q701_3rd_victim_files',1);
+	thePlayer.inv.AddAnItem('q701_goliath_book',1);
+	thePlayer.inv.AddAnItem('q701_gardens_invitation',1);
+	thePlayer.inv.AddAnItem('q701_wine_flier_01',1);
+	thePlayer.inv.AddAnItem('q701_wine_flier_02',1);
+	thePlayer.inv.AddAnItem('q701_wine_flier_03',1);
+	thePlayer.inv.AddAnItem('q701_corvo_bianco_book',1);
+	thePlayer.inv.AddAnItem('q701_fisherman_poetry',1);
+	thePlayer.inv.AddAnItem('q703_killing_vampires',1);
+	thePlayer.inv.AddAnItem('q703_history_of_est_est',1);
+	thePlayer.inv.AddAnItem('q703_history_of_pomino',1);
+	thePlayer.inv.AddAnItem('q703_one_handed_adalard',1);
+	thePlayer.inv.AddAnItem('q703_napkin_love_letter',1);
+	thePlayer.inv.AddAnItem('q703_letter_of_refusal',1);
+	thePlayer.inv.AddAnItem('q703_piece_of_scenario',1);
+	thePlayer.inv.AddAnItem('q704_ft_little_mermaid',1);
+	thePlayer.inv.AddAnItem('q704_ft_letter_from_dandelion',1);
+	thePlayer.inv.AddAnItem('sq701_registration_note',1);
+	thePlayer.inv.AddAnItem('sq701_vivienne_note',1);
+	thePlayer.inv.AddAnItem('sq701_rainfarn_note',1);
+	thePlayer.inv.AddAnItem('sq701_guillaume_note',1);
+	thePlayer.inv.AddAnItem('sq701_palmerin_note',1);
+	thePlayer.inv.AddAnItem('sq701_tailles_note',1);
+	thePlayer.inv.AddAnItem('sq701_anseis_note',1);
+	thePlayer.inv.AddAnItem('sq701_donimir_note',1);
+	thePlayer.inv.AddAnItem('sq701_horm_note',1);
+	thePlayer.inv.AddAnItem('sq701_horm_emhyr_dead_note',1);
+	thePlayer.inv.AddAnItem('sq701_horm_emhyr_victory_note',1);
+	thePlayer.inv.AddAnItem('sq701_fan_01_note',1);
+	thePlayer.inv.AddAnItem('sq701_fan_02_note',1);
+	thePlayer.inv.AddAnItem('sq701_fan_03_note',1);
+	thePlayer.inv.AddAnItem('lore_biography_beledals_grandfather',1);
+	thePlayer.inv.AddAnItem('mq7011_procedures_book',1);
+	thePlayer.inv.AddAnItem('mq7011_bank_book_filler_01',1);
+	thePlayer.inv.AddAnItem('mq7011_bank_flier_01',1);
+	thePlayer.inv.AddAnItem('mq7011_bank_flier_02',1);
+	thePlayer.inv.AddAnItem('mq7020_hairdresser_recipe',1);
+	thePlayer.inv.AddAnItem('mq7020_hairdresser_leaflet',1);
+	thePlayer.inv.AddAnItem('mq7020_duvall_poem',1);
+	thePlayer.inv.AddAnItem('mq7020_map',1);
+	thePlayer.inv.AddAnItem('lore_basilisk_hunts',1);
+	thePlayer.inv.AddAnItem('lore_toussaint_civil_war',1);
+	thePlayer.inv.AddAnItem('lore_toussaint_nobles',1);
+	thePlayer.inv.AddAnItem('lore_toussaint_ecology',1);
+	thePlayer.inv.AddAnItem('lore_gwent_history',1);
+}
+
+exec function activateAllCharactersEP2()
+{
+	var manager : CWitcherJournalManager;
+	
+	manager = theGame.GetJournalManager();
+	
+	activateJournalCharacterEntryWithAlias("CharactersAnnaHenrietta", manager);
+	activateJournalCharacterEntryWithAlias("CharactersDamien", manager);
+	activateJournalCharacterEntryWithAlias("CharactersDettlaff", manager);
+	activateJournalCharacterEntryWithAlias("CharactersGuillaume", manager);
+	activateJournalCharacterEntryWithAlias("CharactersMilton", manager);
+	activateJournalCharacterEntryWithAlias("CharactersOriana", manager);
+	activateJournalCharacterEntryWithAlias("CharactersRegis", manager);
+	activateJournalCharacterEntryWithAlias("CharactersPalmerin", manager);
+	activateJournalCharacterEntryWithAlias("CharactersSyanna", manager);
+	activateJournalCharacterEntryWithAlias("CharactersUkryty", manager);
+	activateJournalCharacterEntryWithAlias("CharactersVivienne", manager);
+	activateJournalCharacterEntryWithAlias("CharactersHermit", manager);
+	activateJournalCharacterEntryWithAlias("CharactersLadyOfTheLake", manager);
+	activateJournalCharacterEntryWithAlias("CharactersBarnabe", manager);
+	activateJournalCharacterEntryWithAlias("CharactersBootblack", manager);
+	activateJournalCharacterEntryWithAlias("CharactersRoach", manager);
+
+}
+
+exec function addfoodEP2()
+{
+	thePlayer.inv.AddAnItem('Bourgogne chardonnay',1);
+	thePlayer.inv.AddAnItem('Chateau mont valjean',1);
+	thePlayer.inv.AddAnItem('Bourgogne pinot noir',1);
+	thePlayer.inv.AddAnItem('Saint mathieu rouge',1);
+	thePlayer.inv.AddAnItem('Duke nicolas chardonnay',1);
+	thePlayer.inv.AddAnItem('Uncle toms exquisite blanc',1);
+	thePlayer.inv.AddAnItem('Chevalier adam pinot blanc reserve',1);
+	thePlayer.inv.AddAnItem('Prince john merlot',1);
+	thePlayer.inv.AddAnItem('Count var ochmann shiraz',1);
+	thePlayer.inv.AddAnItem('Chateau de konrad cabernet',1);
+	thePlayer.inv.AddAnItem('Geralt de rivia',1);
+	thePlayer.inv.AddAnItem('White Wolf',1);
+	thePlayer.inv.AddAnItem('Butcher of Blaviken',1);
+	thePlayer.inv.AddAnItem('Pheasant gutted',1);
+	thePlayer.inv.AddAnItem('Tarte tatin',1);
+	thePlayer.inv.AddAnItem('Ratatouille',1);
+	thePlayer.inv.AddAnItem('Baguette camembert',1);
+	thePlayer.inv.AddAnItem('Crossaint honey',1);
+	thePlayer.inv.AddAnItem('Herb toasts',1);
+	thePlayer.inv.AddAnItem('Brioche',1);
+	thePlayer.inv.AddAnItem('Flamiche',1);
+	thePlayer.inv.AddAnItem('Camembert',1);
+	thePlayer.inv.AddAnItem('Chocolate souffle',1);
+	thePlayer.inv.AddAnItem('Pate chicken livers',1);
+	thePlayer.inv.AddAnItem('Confit de canard',1);
+	thePlayer.inv.AddAnItem('Baguette fish paste',1);
+	thePlayer.inv.AddAnItem('Fish tarte',1);
+	thePlayer.inv.AddAnItem('Boeuf bourguignon',1);
+	thePlayer.inv.AddAnItem('Rillettes porc',1);
+	thePlayer.inv.AddAnItem('Onion soup',1);
+	thePlayer.inv.AddAnItem('Ham roasted',1);
+	thePlayer.inv.AddAnItem('Tomato',1);
+	thePlayer.inv.AddAnItem('Cookies',1);
+	thePlayer.inv.AddAnItem('Ginger Bread',1);
+	thePlayer.inv.AddAnItem('Magic Mushrooms',1);
+	thePlayer.inv.AddAnItem('Poison Apple',1);
+}
+
+exec function addingredientsEP2(optional junkAdd : string, optional addHerb: string)
+{
+	thePlayer.inv.AddAnItem('Draconide infused leather',1);
+	thePlayer.inv.AddAnItem('Nickel mineral',1);
+	thePlayer.inv.AddAnItem('Nickel ore',1);
+	thePlayer.inv.AddAnItem('Copper mineral',1);
+	
+	thePlayer.inv.AddAnItem('Malachite mineral',1);
+	thePlayer.inv.AddAnItem('Copper ore',1);
+	thePlayer.inv.AddAnItem('Cupronickel ore',1);
+	thePlayer.inv.AddAnItem('Copper ingot',1);
+	thePlayer.inv.AddAnItem('Copper plate',1);
+	thePlayer.inv.AddAnItem('Green gold mineral',1);
+	thePlayer.inv.AddAnItem('Green gold ore',1);
+	thePlayer.inv.AddAnItem('Green gold ingot',1);
+	thePlayer.inv.AddAnItem('Green gold plate',1);
+	thePlayer.inv.AddAnItem('Orichalcum mineral',1);
+	thePlayer.inv.AddAnItem('Orichalcum ore',1);
+	thePlayer.inv.AddAnItem('Orichalcum ingot',1);
+	thePlayer.inv.AddAnItem('Orichalcum plate',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched ore',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched ingot',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched plate',1);
+	thePlayer.inv.AddAnItem('Acid extract',1);
+	thePlayer.inv.AddAnItem('Centipede discharge',1);
+	thePlayer.inv.AddAnItem('Archespore juice',1);
+	thePlayer.inv.AddAnItem('Kikimore discharge',1);
+	thePlayer.inv.AddAnItem('Vampire blood',1);
+	thePlayer.inv.AddAnItem('Monstrous carapace',1);
+	thePlayer.inv.AddAnItem('Sharley dust',1);
+	thePlayer.inv.AddAnItem('Wight ear',1);
+	thePlayer.inv.AddAnItem('Barhest essence',1);
+	thePlayer.inv.AddAnItem('Wight hair',1);
+	thePlayer.inv.AddAnItem('Sharley heart',1);
+	thePlayer.inv.AddAnItem('Monstrous pincer',1);
+	thePlayer.inv.AddAnItem('Centipede mandible',1);
+	thePlayer.inv.AddAnItem('Dracolizard plate',1);
+	thePlayer.inv.AddAnItem('Monstrous spore',1);
+	thePlayer.inv.AddAnItem('Wight stomach',1);
+	thePlayer.inv.AddAnItem('Monstrous vine',1);
+	thePlayer.inv.AddAnItem('Archespore tendril',1);
+	thePlayer.inv.AddAnItem('Monstrous wing',1);
+	if(junkAdd == "junk")
+	{
+		thePlayer.inv.AddAnItem('Peacock feather',1);
+		thePlayer.inv.AddAnItem('Dull meteorite axe',1);
+		thePlayer.inv.AddAnItem('Broken meteorite pickaxe',1);
+		thePlayer.inv.AddAnItem('Hotel silver breadknife',1);
+		thePlayer.inv.AddAnItem('Hotel silver goblet',1);
+		thePlayer.inv.AddAnItem('Hotel silver teapot',1);
+		thePlayer.inv.AddAnItem('Hotel silver fruitbowl',1);
+		thePlayer.inv.AddAnItem('Hotel silver serving tray',1);
+		thePlayer.inv.AddAnItem('Hotel silver wine bottle',1);
+		thePlayer.inv.AddAnItem('Hotel silver cup',1);
+		thePlayer.inv.AddAnItem('Copper salt pepper shaker',1);
+		thePlayer.inv.AddAnItem('Copper mug',1);
+		thePlayer.inv.AddAnItem('Copper platter',1);
+		thePlayer.inv.AddAnItem('Copper casket',1);
+		thePlayer.inv.AddAnItem('Copper candelabra',1);
+		thePlayer.inv.AddAnItem('Cupronickel axe head',1);
+		thePlayer.inv.AddAnItem('Cupronickel pickaxe head',1);
+		thePlayer.inv.AddAnItem('Copper chain',1);
+		thePlayer.inv.AddAnItem('Green gold ruby ring',1);
+		thePlayer.inv.AddAnItem('Green gold sapphire ring',1);
+		thePlayer.inv.AddAnItem('Green gold emerald ring',1);
+		thePlayer.inv.AddAnItem('Green gold diamond ring',1);
+		thePlayer.inv.AddAnItem('Green gold amber necklace',1);
+		thePlayer.inv.AddAnItem('Green gold ruby necklace',1);
+		thePlayer.inv.AddAnItem('Green gold sapphire necklace',1);
+		thePlayer.inv.AddAnItem('Green gold emerald necklace',1);
+		thePlayer.inv.AddAnItem('Green gold diamond necklace',1);
+		thePlayer.inv.AddAnItem('Touissant knife',1);
+		thePlayer.inv.AddAnItem('Bottle caps',1);
+		thePlayer.inv.AddAnItem('Fake teeth',1);
+		thePlayer.inv.AddAnItem('Corkscrew',1);
+		thePlayer.inv.AddAnItem('Gingerbread man',1);
+		thePlayer.inv.AddAnItem('Toys rich',1);
+		thePlayer.inv.AddAnItem('Teapot teacups',1);
+		thePlayer.inv.AddAnItem('Skeletal ashes',1);
+		thePlayer.inv.AddAnItem('Magic mirror shard',1);
+		thePlayer.inv.AddAnItem('Magic dust',1);
+		thePlayer.inv.AddAnItem('Fourleaf clover',1);
+		thePlayer.inv.AddAnItem('Magic gold',1);
+	}
+	if(addHerb == "herb")
+	{
+		thePlayer.inv.AddAnItem('Winter cherry',1);
+		thePlayer.inv.AddAnItem('Holy basil',1);
+		thePlayer.inv.AddAnItem('Blue lotus',1);
+	}
+}
+
+function unlockDyeRecipes()
+{
+	thePlayer.inv.AddAnItem('Recipe Dye Gray',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Turquoise',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Brown',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Green',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Orange',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Pink',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Yellow',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Black',1);
+	thePlayer.inv.AddAnItem('Recipe Dye White',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Red',1);
+	thePlayer.inv.AddAnItem('Recipe Dye Purple',1);
+}
+
+function unlockMutagenRecipes()
+{
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Red to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Red to Green',1);
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Green to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Green to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Blue to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Lesser Mutagen Blue to Green',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Red to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Red to Green',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Green to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Green to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Blue to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Mutagen Blue to Green',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Red to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Red to Green',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Green to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Green to Blue',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Blue to Red',1);
+	thePlayer.inv.AddAnItem('Recipe Greater Mutagen Blue to Green',1);
+}
+
+function unlockQuestRecipes()
+{
+	thePlayer.inv.AddAnItem('Recipe for Sharley Lure',1);
+	thePlayer.inv.AddAnItem('Recipe for Mutation Serum',1);
+	thePlayer.inv.AddAnItem('q704_antidote_recipe',1);
+	thePlayer.inv.AddAnItem('q704_vampire_lure_bolt_recipe',1);
+}
+function unlockSwordRecipes()
+{
+	thePlayer.inv.AddAnItem('Lynx School steel sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Gryphon School steel sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Bear School steel sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Wolf School steel sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Red Wolf School steel sword schematic 1',1);
+	thePlayer.inv.AddAnItem('Red Wolf School steel sword Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Serpent Steel Sword schematic 1',1);
+	thePlayer.inv.AddAnItem('Serpent Steel Sword schematic 2',1);
+	thePlayer.inv.AddAnItem('Serpent Steel Sword schematic 3',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 A steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 A steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knights Geralt steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Squire steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Hanza steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Toussaint steel sword 3 schematic',1);
+	thePlayer.inv.AddAnItem('Lynx School silver sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Gryphon School silver sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Bear School silver sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Wolf School silver sword Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Red Wolf School silver sword schematic 1',1);
+	thePlayer.inv.AddAnItem('Red Wolf School silver sword Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Serpent Silver Sword schematic 1',1);
+	thePlayer.inv.AddAnItem('Serpent Silver Sword schematic 2',1);
+	thePlayer.inv.AddAnItem('Serpent Silver Sword schematic 3',1);
+}
+function unlockArmorRecipes()
+{
+	thePlayer.inv.AddAnItem('Witcher Lynx Jacket Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Witcher Lynx Gloves Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Lynx Boots Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Lynx Pants Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Gryphon Jacket Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Witcher Gryphon Gloves Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Gryphon Boots Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Gryphon Pants Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Bear Jacket Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Witcher Bear Gloves Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Bear Boots Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Bear Pants Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Wolf Jacket Upgrade schematic 4',1);
+	thePlayer.inv.AddAnItem('Witcher Wolf Gloves Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Wolf Boots Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Wolf Pants Upgrade schematic 5',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Jacket schematic 1',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Jacket Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Gloves schematic 1',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Gloves Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Boots schematic 1',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Boots Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Pants schematic 1',1);
+	thePlayer.inv.AddAnItem('Witcher Red Wolf Pants Upgrade schematic 2',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 Pants 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl1 A Pants 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 Pants 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Guard Lvl2 A Pants 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt Pants 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt A Armor 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt A Gloves 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt A Boots 3 schematic',1);
+	thePlayer.inv.AddAnItem('Knight Geralt A Pants 3 schematic',1);
+}
+
+function unlockMaterialRecipes()
+{
+	thePlayer.inv.AddAnItem('Draconide infused leather schematic',1);
+	thePlayer.inv.AddAnItem('Nickel ore schematic',1);
+	thePlayer.inv.AddAnItem('Cupronickel ore schematic',1);
+	thePlayer.inv.AddAnItem('Copper ore schematic',1);
+	thePlayer.inv.AddAnItem('Copper ingot schematic',1);
+	thePlayer.inv.AddAnItem('Copper plate schematic',1);
+	thePlayer.inv.AddAnItem('Green gold ore schematic',1);
+	thePlayer.inv.AddAnItem('Green gold ore schematic1 ',1);
+	thePlayer.inv.AddAnItem('Green gold ingot schematic',1);
+	thePlayer.inv.AddAnItem('Green gold plate schematic',1);
+	thePlayer.inv.AddAnItem('Orichalcum ore schematic',1);
+	thePlayer.inv.AddAnItem('Orichalcum ore schematic 1',1);
+	thePlayer.inv.AddAnItem('Orichalcum ingot schematic',1);
+	thePlayer.inv.AddAnItem('Orichalcum plate schematic',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched ore schematic',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched ingot schematic',1);
+	thePlayer.inv.AddAnItem('Dwimeryte enriched plate schematic',1);
+}
+
+exec function unlockrecipesEP2(type : string)
+{
+	if(type == "all")
+	{
+		unlockDyeRecipes();
+		unlockMutagenRecipes();
+		unlockQuestRecipes();
+		unlockSwordRecipes();
+		unlockArmorRecipes();
+		unlockMaterialRecipes();
+	}
+	else if (type == "dye")
+	{
+		unlockDyeRecipes();
+	}
+	else if (type == "mutagen")
+	{
+		unlockMutagenRecipes();
+	}
+	else if (type == "quest")
+	{
+		unlockQuestRecipes();
+	}
+	else if (type == "sword")
+	{
+		unlockSwordRecipes();
+	}
+	else if (type == "armor")
+	{
+		unlockArmorRecipes();
+	}
+	else if (type == "material")
+	{
+		unlockMaterialRecipes();
+	}
+}
+
+exec function breakSync()
+{
+	var syncInstance : CAnimationManualSlotSyncInstance;
+	var syncParent : CEntity;
+	
+	syncInstance = theGame.GetSyncAnimManager().GetSyncInstance( 0 );
+	if( syncInstance )
+	{
+		syncParent = theGame.GetSyncAnimManager().masterEntity;
+		if( syncParent )
+		{
+			syncInstance.BreakIfPossible( syncParent );
+		}
+	}
+}
+
+exec function StopEffect( fx : name, optional entityTag : name )
+{
+	var i : int;
+	var ents : array< CEntity >;
+	
+	if( entityTag != '' )
+	{
+		theGame.GetEntitiesByTag( entityTag, ents );
+	}
+	else
+	{
+		ents.PushBack( thePlayer );
+	}
+	
+	for( i=0; i<ents.Size(); i+=1 )
+	{
+		ents[i].StopEffect( fx );
+	}
+}
+
+exec function Refill()
+{
+	thePlayer.inv.SingletonItemsRefillAmmoNoAlco(true);
 }

@@ -32,7 +32,7 @@ struct SCraftingFilters
 {
 	var showCraftable : bool; default showCraftable = true;
 	var showMissingIngre : bool; default showMissingIngre = true;
-	var showAlreadyCrafted : bool; default showAlreadyCrafted = true;
+	var showAlreadyCrafted : bool; default showAlreadyCrafted = false;
 }
 
 struct SEnchantmentFilters
@@ -48,6 +48,13 @@ import struct SGuiEnhancementInfo
 {
 	import var enhancedItem : name;
 	import var enhancement : name;
+	
+	import var oilItem : name;
+	import var oil : name;
+	
+	import var dyeItem : name;
+	import var dye : name;
+	import var dyeColor : int;
 }
 
 enum EUserDialogButtons
@@ -74,7 +81,9 @@ enum EUniqueMessageIDs
 	UMID_LoadingFailedDamagedData = 865,
 	UMID_ForceManualSaveWindow = 129039,
 	UMID_GraphicsRefreshing = 9999,
-	UMID_QuestBlockMessage = 10
+	UMID_QuestBlockMessage = 10,
+	UMID_NoFeedbackRequired,
+	UMID_SkipGwintTutorial = 11
 }
 
 enum ELockedControlScheme
@@ -82,6 +91,20 @@ enum ELockedControlScheme
 	LCS_None,
 	LCS_Gamepad,
 	LCS_KbMouse
+}
+
+enum EGamepadType
+{
+	GT_Xbox,
+	GT_PS4,
+	GT_Steam
+}
+
+enum ECursorType
+{
+	CT_None,
+	CT_Default,
+	CT_Rotate
 }
 
 import class CR4GuiManager extends CGuiManager
@@ -123,7 +146,7 @@ import class CR4GuiManager extends CGuiManager
 	protected var guiSceneController : CR4GuiSceneController;
 	protected var hudEventController : CR4HudEventController;
 	
-	public var lastRequestedCreditsIndex : int;
+	private var lastRequestedCreditsIndex : int;
 	
 	saved var NewestItems : array<SItemUniqueId>;
 	saved var GlossaryEntries : array<SGlossaryEntry>;
@@ -164,13 +187,17 @@ import class CR4GuiManager extends CGuiManager
 	
 	import final function SetSceneEntityTemplate( template : CEntityTemplate , optional animationName : name );
 	import final function ApplyAppearanceToSceneEntity( appearanceName : name );
-	import final function UpdateSceneEntityItems( items : array< name >, enhancements : array< SGuiEnhancementInfo > );
+	import final function UpdateSceneEntityItems( items : array< SItemUniqueId >, enhancements : array< SGuiEnhancementInfo > );
 	import final function SetSceneCamera( cameraPosition : Vector, cameraRotation : EulerAngles );
 	import final function SetupSceneCamera( lookAtPos : Vector, cameraRotation : EulerAngles, distance : float, fov : float );
 	import final function SetEntityTransform( position : Vector, rotation : EulerAngles, scale : Vector );
 	import final function SetSceneEnvironmentAndSunPosition( envDef : CEnvironmentDefinition, sunRotation : EulerAngles );
 	import final function EnableScenePhysics( enable : bool );
 	import final function SetBackgroundTexture( texture : CResource );
+	import final function RequestClearScene();
+	
+	private var showItemNames : bool;
+	default showItemNames = false;
 	
 	event  OnGameStart( newOrRestored : bool )
 	{
@@ -214,6 +241,19 @@ import class CR4GuiManager extends CGuiManager
 	
 	event  OnFailedCreateMenu()
 	{
+	}
+	
+	private function  Update( deltaTime : float )
+	{
+		if( guiSceneController )
+		{
+			guiSceneController.Update( deltaTime );
+		}
+	}
+	
+	public function GetLastRequestedCreditsIndex() : int
+	{
+		return lastRequestedCreditsIndex;
 	}
 	
 	public function RequestCreditsMenu(creditsIndex : int)
@@ -262,7 +302,7 @@ import class CR4GuiManager extends CGuiManager
 		{
 			CraftingFilters.showCraftable = true;
 			CraftingFilters.showMissingIngre = true;
-			CraftingFilters.showAlreadyCrafted = true;
+			CraftingFilters.showAlreadyCrafted = false;
 		}
 		
 		return CraftingFilters;
@@ -282,8 +322,9 @@ import class CR4GuiManager extends CGuiManager
 		{
 			AlchemyFiltters.showCraftable = true;
 			AlchemyFiltters.showMissingIngre = true;
-			AlchemyFiltters.showAlreadyCrafted = true;
+			AlchemyFiltters.showAlreadyCrafted = false;
 		}
+		
 		
 		return AlchemyFiltters;
 	}
@@ -407,7 +448,7 @@ import class CR4GuiManager extends CGuiManager
 	
 	public function OnEnteredStartScreen() : void
 	{
-		var startScreenMenu : CR4StartScreenMenu;
+		var startScreenMenu : CR4StartScreenMenuBase;
 		
 		ignoreControllerDisconnectionEvents = true;
 		
@@ -417,7 +458,7 @@ import class CR4GuiManager extends CGuiManager
 			
 			HideUserDialog( UMID_SigningInPleaseWait );
 			
-			startScreenMenu = (CR4StartScreenMenu)(GetRootMenu());
+			startScreenMenu = (CR4StartScreenMenuBase)(GetRootMenu());
 			if( startScreenMenu )
 			{
 				startScreenMenu.setWaitingText();
@@ -489,11 +530,11 @@ import class CR4GuiManager extends CGuiManager
 	
 	public function OnSignInStarted() : void
 	{
-		var startScreenMenu : CR4StartScreenMenu;
+		var startScreenMenu : CR4StartScreenMenuBase;
 		
 		signInChangeInProgress = true;
 		
-		startScreenMenu = (CR4StartScreenMenu)(GetRootMenu());
+		startScreenMenu = (CR4StartScreenMenuBase)(GetRootMenu());
 		if (startScreenMenu)
 		{
 			startScreenMenu.setWaitingText();
@@ -507,7 +548,7 @@ import class CR4GuiManager extends CGuiManager
 	public function OnSignInCancelled() : void
 	{
 		var menuBase : CR4MenuBase;
-		var startScreenMenu : CR4StartScreenMenu;
+		var startScreenMenu : CR4StartScreenMenuBase;
 		var ingameMenu : CR4IngameMenu;
 		
 		signInChangeInProgress = false;
@@ -517,7 +558,7 @@ import class CR4GuiManager extends CGuiManager
 		
 		menuBase = (CR4MenuBase)GetRootMenu();
 		
-		startScreenMenu = (CR4StartScreenMenu)(menuBase);
+		startScreenMenu = (CR4StartScreenMenuBase)(menuBase);
 		if (startScreenMenu)
 		{
 			startScreenMenu.setStandardtext();
@@ -536,14 +577,14 @@ import class CR4GuiManager extends CGuiManager
 	public function OnSignIn():void
 	{
 		var menuBase : CR4MenuBase;
-		var startScreenMenu : CR4StartScreenMenu;
+		var startScreenMenu : CR4StartScreenMenuBase;
 		var ingameMenu : CR4IngameMenu;
 		
 		signInChangeInProgress = false;
 		
 		menuBase = (CR4MenuBase)GetRootMenu();
 		
-		startScreenMenu = (CR4StartScreenMenu)(menuBase);
+		startScreenMenu = (CR4StartScreenMenuBase)(menuBase);
 		if (startScreenMenu) 
 		{
 			startScreenMenu.startFade();
@@ -646,7 +687,14 @@ import class CR4GuiManager extends CGuiManager
 		}
 		else if (sres == RESTORE_MissingContent)
 		{
-			ShowUserDialog( UMID_LoadingFailed, "", "error_message_new_game_not_ready", UDB_Ok );
+			if( missingContent.Size() == 0 )
+			{
+				ShowUserDialog( UMID_LoadingFailed, "", "error_message_new_game_not_ready", UDB_Ok );
+			}
+			else
+			{
+				ShowProgressDialog( UMID_LoadingFailed, "", "error_message_new_game_not_ready", true, UDB_Ok, theGame.ProgressToContentAvailable( missingContent[ 0 ] ), UMPT_Content, missingContent[ 0 ] );
+			}
 		}
 		else if (sres == RESTORE_InternalError || sres == RESTORE_NoGameDefinition)
 		{
@@ -780,6 +828,10 @@ import class CR4GuiManager extends CGuiManager
 		LogChannel( 'Gui', "CR4GuiManager::OnSwipe " + swipe );
 
 		if ( theGame.IsBlackscreenOrFading() || theGame.IsDialogOrCutscenePlaying() )
+		{
+			return false;
+		}
+		if ( IsAnyMenu() )
 		{
 			return false;
 		}
@@ -1037,6 +1089,10 @@ import class CR4GuiManager extends CGuiManager
 		{
 			FinalizeConfigBuffer(actionId == UMA_Ok);
 		}
+		else if (messageId == UMID_SkipGwintTutorial)
+		{
+			thePlayer.StartGwint_TutorialOrSkip( actionId == UMA_No );
+		}
 		
 		LogChannel('SYS_MESSAGE', "UserDialogCallback; messageId: " + messageId + "; actionId: " + actionId);
 		theGame.OnUserDialogCallback( messageId, actionId );
@@ -1055,7 +1111,7 @@ import class CR4GuiManager extends CGuiManager
 		}
 	}
 	
-	public function ShowNotification(messageText : string, optional duration : float) : void
+	public function ShowNotification(messageText : string, optional duration : float, optional queue : bool ) : void
 	{
 		var notificationData : W3NotificationData;
 		var overlayPopupRef  : CR4OverlayPopup;
@@ -1066,11 +1122,23 @@ import class CR4GuiManager extends CGuiManager
 			notificationData = new W3NotificationData in this;
 			notificationData.messageText = messageText;
 			notificationData.duration = duration;
+			notificationData.queue = queue;
 			theGame.RequestPopup( 'OverlayPopup',  notificationData );
 		}
 		else
 		{
-			overlayPopupRef.ShowNotification(messageText, duration);
+			overlayPopupRef.ShowNotification( messageText, duration, queue );
+		}
+	}
+	
+	public function ClearNotificationsQueue() : void
+	{
+		var overlayPopupRef  : CR4OverlayPopup;
+		
+		overlayPopupRef = (CR4OverlayPopup)GetPopup( 'OverlayPopup' );
+		if( overlayPopupRef )
+		{
+			overlayPopupRef.ClearNotificationsQueue();
 		}
 	}
 	
@@ -1092,6 +1160,18 @@ import class CR4GuiManager extends CGuiManager
 		if (overlayPopupRef)
 		{
 			overlayPopupRef.RequestMouseCursor(showMouseCursor);
+		}
+	}
+	
+	public function SetMouseCursorType(value : int) : void
+	{
+		var notificationData : W3NotificationData;
+		var overlayPopupRef  : CR4OverlayPopup;
+		
+		overlayPopupRef = (CR4OverlayPopup)GetPopup('OverlayPopup');
+		if (overlayPopupRef)
+		{
+			overlayPopupRef.SetMouseCursorType( value );
 		}
 	}
 	
@@ -1401,6 +1481,10 @@ import class CR4GuiManager extends CGuiManager
 			
 			if (FactsQuerySum("NewGamePlus") > 0 )
 			{
+				if ( theGame.params.NewGamePlusLevelDifference() > 0 )
+				{
+					LEVEL_REQUAREMENT_GAMEPLUS += theGame.params.NewGamePlusLevelDifference();
+				}
 				arrInt.PushBack(LEVEL_REQUAREMENT_GAMEPLUS);
 			}
 			else
@@ -1466,6 +1550,22 @@ import class CR4GuiManager extends CGuiManager
 	{
 		ignoreControllerDisconnectionEvents = set;
 	}
+	
+	public function SetShowItemNames( show : bool )
+	{
+		showItemNames = show;
+	}
+	
+	public function GetShowItemNames() : bool
+	{
+		return showItemNames;
+	}
+}
+
+exec function ShowItemNames( show : bool )
+{
+	var guiMgr : CR4GuiManager = theGame.GetGuiManager();
+	guiMgr.SetShowItemNames( show );
 }
 
 exec function exePopup() : bool

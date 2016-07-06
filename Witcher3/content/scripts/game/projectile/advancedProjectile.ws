@@ -5,13 +5,15 @@
 /***********************************************************************/
 abstract class W3AdvancedProjectile extends CThrowable
 {
-	editable var projSpeed 				: float;
-	editable var projAngle 				: float;
-	editable var projDMG   				: float;
-	editable var projSilverDMG			: float;
-	editable var ignoreArmor			: bool;
-	editable var projEfect 				: EEffectType;
-	editable var persistFxAfterCollision				: bool;
+	editable var projSpeed 						: float;
+	editable var projAngle 						: float;
+	editable var projDMG   						: float;
+	editable var projSilverDMG					: float;
+	editable var ignoreArmor					: bool;
+	editable var projEfect 						: EEffectType;
+	editable var persistFxAfterCollision		: bool;
+	editable var dealDamageEvenIfDodging		: bool; 
+	var ignore : bool;
 
 	
 	
@@ -25,6 +27,8 @@ abstract class W3AdvancedProjectile extends CThrowable
 	default projDMG = 20.f;
 	default projEfect = EET_Undefined;
 	default persistFxAfterCollision = false;
+	default dealDamageEvenIfDodging = false;
+	default ignore = false;
 	
 	public function SetLifeSpan( _duration: float )
 	{
@@ -89,6 +93,17 @@ abstract class W3AdvancedProjectile extends CThrowable
 	{
 		Destroy();
 	}
+	
+	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
+	{
+		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
+		
+		if ( !dealDamageEvenIfDodging && victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
+		{
+			victim = NULL;
+			ignore = true;
+		}
+	}	
 }
 
 class W3BoulderProjectile extends W3AdvancedProjectile
@@ -123,9 +138,6 @@ class W3BoulderProjectile extends W3AdvancedProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
-		
 		
 		
 		
@@ -159,7 +171,7 @@ class W3BoulderProjectile extends W3AdvancedProjectile
 		{
 			action.AddEffectInfo(projEfect);
 		}
-		action.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, projDMG );	
+		action.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, projDMG );
 		action.SetIgnoreArmor( ignoreArmor );
 		action.SetCanPlayHitParticle(false);
 		theGame.damageMgr.ProcessAction( action );
@@ -213,10 +225,12 @@ class W3TraceGroundProjectile extends W3AdvancedProjectile
 	editable var samplingFreq : float;
 	editable var effectName : name;
 	editable var onRangedReachedDestroyAfter : float;
+	editable var deactivateOnCollisionWithVictim : bool;
 	
 	default samplingFreq = 0.05f;
 	default effectName = 'effect';
 	default onRangedReachedDestroyAfter = 5.f;
+	default deactivateOnCollisionWithVictim = true;
 
 	
 
@@ -339,9 +353,6 @@ class W3ElementalIfrytProjectile extends W3TraceGroundProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
-		
 		if ( victim && !collidedEntities.Contains(victim) )
 		{
 			action = new W3DamageAction in this;
@@ -351,7 +362,10 @@ class W3ElementalIfrytProjectile extends W3TraceGroundProjectile
 			action.SetCanPlayHitParticle(false);
 			theGame.damageMgr.ProcessAction( action );
 			collidedEntities.PushBack(victim);
-			isActive = false;
+			if ( deactivateOnCollisionWithVictim )
+			{
+				isActive = false;
+			}
 			delete action;
 		}
 		
@@ -379,19 +393,19 @@ class W3EredinFrostProjectile extends W3TraceGroundProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
-		
 		if ( victim && !collidedEntities.Contains(victim) )
 		{
 			action = new W3DamageAction in this;
 			action.Initialize((CGameplayEntity)caster,victim,this,caster.GetName(),EHRT_Heavy,CPS_SpellPower,false,true,false,false);
-			action.AddDamage(theGame.params.DAMAGE_NAME_FROST, projDMG );		
+			action.AddDamage(theGame.params.DAMAGE_NAME_FROST, projDMG );
 			action.AddEffectInfo( projEfect, 2.0 );
 			action.SetCanPlayHitParticle(false);
 			theGame.damageMgr.ProcessAction( action );
 			collidedEntities.PushBack(victim);
-			isActive = false;
+			if ( deactivateOnCollisionWithVictim )
+			{
+				isActive = false;
+			}
 			delete action;
 		}
 		
@@ -419,9 +433,6 @@ class W3ElementalDaoProjectile extends W3TraceGroundProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
-		
 		if ( victim && !collidedEntities.Contains(victim) )
 		{
 			action = new W3DamageAction in this;
@@ -430,7 +441,10 @@ class W3ElementalDaoProjectile extends W3TraceGroundProjectile
 			action.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, 200.f );	
 			theGame.damageMgr.ProcessAction( action );
 			collidedEntities.PushBack(victim);
-			isActive = false;
+			if ( deactivateOnCollisionWithVictim )
+			{
+				isActive = false;
+			}
 			delete action;
 		}
 	}
@@ -470,8 +484,6 @@ class W3StoneProjectile extends W3AdvancedProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
 		
 		if ( victim && !collidedEntities.Contains(victim) )
 		{
@@ -559,8 +571,6 @@ class W3EnvironmentProjectile extends W3AdvancedProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
 		
 		
 		
@@ -782,6 +792,24 @@ class WebLineProjectile extends PoisonProjectile
 	}	
 }
 
+class FakeProjectile extends W3AdvancedProjectile
+{
+	event OnProjectileInit()
+	{
+		isActive = true;
+	}
+	
+	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
+	{
+	}
+	
+	event OnRangeReached()
+	{
+		this.StopAllEffects();
+        this.DestroyAfter( 60.0 );
+	}
+}
+
 class PoisonProjectile extends W3AdvancedProjectile
 {
 	editable var initFxName				: name;
@@ -819,10 +847,7 @@ class PoisonProjectile extends W3AdvancedProjectile
 			victim = NULL;
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
-		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
-		
+				
 		if ( victim && !projectileHitGround && !collidedEntities.Contains(victim) )
 		{
 			VictimCollision(victim);
@@ -848,6 +873,15 @@ class PoisonProjectile extends W3AdvancedProjectile
 	protected function DealDamageToVictim( victim : CGameplayEntity )
 	{
 		var action : W3DamageAction;
+		var actorCaster, actorVictim : CActor;
+		
+		actorCaster = (CActor)caster;
+		actorVictim = (CActor)victim;
+		
+		if( actorCaster && actorVictim && GetAttitudeBetween( actorCaster, actorVictim ) != AIA_Hostile )
+		{
+			return;
+		}
 		
 		action = new W3DamageAction in theGame;
 		action.Initialize((CGameplayEntity)caster,victim,this,caster.GetName(),EHRT_Light,CPS_SpellPower,false,true,false,false);
@@ -964,24 +998,27 @@ class SpawnMultipleEntitiesPoisonProjectile extends PoisonProjectile
 
 class DebuffProjectile extends W3AdvancedProjectile
 {
-	editable var debuffType 				: EEffectType;
-	editable var hitReactionType 			: EHitReactionType;
-	editable var damageTypeName 			: name;
-	editable var destroyQuen 				: bool;
-	editable var customDuration				: float;
-	editable var initFxName 				: name;
-	editable var onCollisionFxName 			: name;
-	editable var specialFxOnVictimName 		: name;
-	editable var applyDebuffIfNoDmgWasDealt : bool;
-	editable var bounceOnVictimHit 			: bool;
-	editable var signalDamageInstigatedEvent: bool;
-	editable var destroyAfterFloat			: float;
+	editable var debuffType 					: EEffectType;
+	editable var hitReactionType 				: EHitReactionType;
+	editable var damageTypeName 				: name;
+	editable var destroyQuen 					: bool;
+	editable var customDuration					: float;
+	editable var initFxName 					: name;
+	editable var onCollisionFxName 				: name;
+	editable var specialFxOnVictimName 			: name;
+	editable var applyDebuffIfNoDmgWasDealt 	: bool;
+	editable var bounceOnVictimHit 				: bool;
+	editable var signalDamageInstigatedEvent	: bool;
+	editable var destroyAfterFloat				: float;
 	editable var stopProjectileAfterCollision	: bool;
+	editable var sendGameplayEventToVicitm 		: name;
+
 	
 	default customDuration = 3;
 	default hitReactionType = EHRT_Light;
 	default destroyAfterFloat = 5.0f;
 	default stopProjectileAfterCollision = true;
+	default dealDamageEvenIfDodging = false;
 	
 	
 	
@@ -1000,7 +1037,6 @@ class DebuffProjectile extends W3AdvancedProjectile
 	{
 		var action : W3DamageAction;
 		var params : SCustomEffectParams;
-		var ignore : bool;
 		
 		
 		if ( !isActive )
@@ -1015,11 +1051,6 @@ class DebuffProjectile extends W3AdvancedProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-		{
-			victim = NULL;
-			ignore = true;
-		}
 		
 		if ( victim && !collidedEntities.Contains(victim) )
 		{
@@ -1033,6 +1064,11 @@ class DebuffProjectile extends W3AdvancedProjectile
 				this.StopEffect( initFxName );
 			}
 			this.PlayEffect(onCollisionFxName);
+			
+			if ( IsNameValid( sendGameplayEventToVicitm ) )
+			{
+				( (CActor)victim ).SignalGameplayEvent( sendGameplayEventToVicitm );
+			}
 			
 			
 			
@@ -1069,7 +1105,7 @@ class DebuffProjectile extends W3AdvancedProjectile
 			theGame.damageMgr.ProcessAction( action );
 			if ( signalDamageInstigatedEvent )
 			{
-				((CActor)caster).SignalGameplayEvent( 'DamageInstigated' );
+				((CActor)caster).SignalGameplayEventParamObject( 'DamageInstigated', action );
 			}
 			if ( destroyQuen && ((W3PlayerWitcher)victim).IsQuenActive( false ) )
 			{
@@ -1130,7 +1166,7 @@ class W3FireballProjectile extends W3AdvancedProjectile
 
 	private var projectileHitGround : bool;
 	
-	default projDMG = 40.f;
+	default projDMG = 200.f;
 	default projEfect = EET_Burning;
 
 	event OnProjectileInit()
@@ -1156,8 +1192,6 @@ class W3FireballProjectile extends W3AdvancedProjectile
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
 		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-			victim = NULL;
 		
 		if ( victim && !hitCollisionsGroups.Contains( 'Static' ) && !projectileHitGround && !collidedEntities.Contains(victim) )
 		{
@@ -1252,6 +1286,103 @@ class W3FireballProjectile extends W3AdvancedProjectile
 		
 		this.DestroyAfter(5.f);
 	}
+	
+	function SetProjectileHitGround( b : bool )
+	{
+		projectileHitGround = b;
+	}
+}
+
+class W3DracolizardFireball extends W3FireballProjectile
+{
+	editable var range				: float;
+	editable var burningDur			: float;
+	editable var destroyAfter		: float;
+	editable var surfaceFX 			: SFXSurfacePostParams;
+	
+	protected function PlayCollisionEffect( optional victim : CGameplayEntity)
+	{
+		if ( victim == thePlayer && thePlayer.GetCurrentlyCastSign() == ST_Quen && ((W3PlayerWitcher)thePlayer).IsCurrentSignChanneled() )
+		{
+			DeactivateProjectile();
+		}
+		else
+			this.PlayEffect(onCollisionFxName);
+	}
+	
+	protected function ProjectileHitGround()
+	{
+		var ent 				: CEntity;
+		var damageAreaEntity 	: CDamageAreaEntity;
+		var actorsAround	 	: array<CActor>;
+		var i					: int;
+		var surface				: CGameplayFXSurfacePost;
+		
+		if ( spawnEntityTemplate )
+		{
+			ent = theGame.CreateEntity( spawnEntityTemplate, this.GetWorldPosition(), this.GetWorldRotation() );
+			ent.DestroyAfter(destroyAfter);
+			damageAreaEntity = (CDamageAreaEntity)ent;
+			actorsAround = GetActorsInRange( this, range, , , true );
+			for( i = 0; i < actorsAround.Size(); i += 1 )
+			{
+				DealDamageToVictim( actorsAround[i] );
+			}
+			if ( damageAreaEntity )
+			{
+				damageAreaEntity.owner = (CActor)caster;
+				SetProjectileHitGround( true );
+			}
+		}
+		
+		else
+		{
+			actorsAround = GetActorsInRange( this, range, , , true );
+			for( i = 0; i < actorsAround.Size(); i += 1 )
+			{
+				DealDamageToVictim( actorsAround[i] );
+			}
+		}
+		surface = theGame.GetSurfacePostFX();
+		surface.AddSurfacePostFXGroup( GetWorldPosition(), surfaceFX.fxFadeInTime, surfaceFX.fxLastingTime, surfaceFX.fxFadeOutTime, surfaceFX.fxRadius, surfaceFX.fxType );
+		
+		DeactivateProjectile();
+	}
+	
+	protected function DealDamageToVictim( victim : CGameplayEntity )
+	{
+		var action : W3DamageAction;
+		
+		action = new W3DamageAction in theGame;
+		action.Initialize((CGameplayEntity)caster,victim,this,caster.GetName(),EHRT_Light,CPS_SpellPower,false,true,false,false);
+		
+		if ( victim == thePlayer )
+		{
+			projDMG = projDMG - (projDMG * decreasePlayerDmgBy);
+		}
+		
+		action.AddDamage(theGame.params.DAMAGE_NAME_FIRE, projDMG );
+		action.AddEffectInfo(EET_Burning, burningDur );
+		action.SetCanPlayHitParticle(false);
+		theGame.damageMgr.ProcessAction( action );
+		delete action;
+		
+		collidedEntities.PushBack(victim);
+	}
+	
+	protected function DeactivateProjectile( optional victim : CGameplayEntity )
+	{
+		isActive = false;
+		GCameraShake( 3, 5, GetWorldPosition() );
+		this.DestroyAfter(destroyAfter);
+		PlayCollisionEffect ( victim );
+		
+	}
+	event OnRangeReached()
+	{
+		return true;
+	}
+	
 }
 
 class W3MeteorProjectile_CreateMarkerEntityHelper extends CCreateEntityHelper
@@ -1386,6 +1517,25 @@ class W3IceMeteorProjectile extends W3MeteorProjectile
 }
 
 
+class W3LightningStrikeProjectile extends W3MeteorProjectile
+{
+	protected function DealDamageToVictim( victim : CGameplayEntity )
+	{
+		var action : W3DamageAction;
+		
+		action = new W3DamageAction in this;
+		action.Initialize((CGameplayEntity)caster,victim,this,caster.GetName(),EHRT_Light,CPS_SpellPower,false,true,false,false);
+		action.AddDamage(theGame.params.DAMAGE_NAME_SHOCK , projDMG );
+		action.AddEffectInfo(EET_Paralyzed, 2.0);
+		action.SetCanPlayHitParticle(false);
+		theGame.damageMgr.ProcessAction( action );
+		delete action;
+		
+		collidedEntities.PushBack(victim);
+	}
+}
+
+
 class W3LightningBoltProjectile extends W3AdvancedProjectile
 {
 	editable var initFxName : name;
@@ -1407,8 +1557,6 @@ class W3LightningBoltProjectile extends W3AdvancedProjectile
 	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
 	{
 		
-		var ignore : bool;
-		
 		
 		if ( !isActive )
 		{
@@ -1421,12 +1569,6 @@ class W3LightningBoltProjectile extends W3AdvancedProjectile
 			victim = NULL;
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
-		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-		{
-			victim = NULL;
-			ignore = true;
-		}
 		
 		if ( victim && !projectileHitGround && !collidedEntities.Contains(victim) )
 		{
@@ -1530,8 +1672,6 @@ class W3IceSpearProjectile extends W3AdvancedProjectile
 	
 	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )
 	{
-		var ignore : bool;
-		
 		if ( !isActive )
 		{
 			return true;
@@ -1543,13 +1683,6 @@ class W3IceSpearProjectile extends W3AdvancedProjectile
 			victim = NULL;
 		
 		super.OnProjectileCollision( pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex );
-		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || 
-			( thePlayer.IsCurrentlyDodging() && ( thePlayer.IsCiri() || thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) ) )
-		{
-			victim = NULL;
-			ignore = true;
-		}
 		
 		if ( victim && !projectileHitGround && !collidedEntities.Contains( victim ) )
 		{
@@ -1692,9 +1825,6 @@ class W3SpawnMeteor extends W3AdvancedProjectile
 			victim = NULL;
 		
 		super.OnProjectileCollision(pos, normal, collidingComponent, hitCollisionsGroups, actorIndex, shapeIndex);
-		
-		if ( victim == thePlayer && ( GetAttitudeBetween( victim, caster ) == AIA_Friendly || ( thePlayer.IsCurrentlyDodging() && thePlayer.GetBehaviorVariable( 'isRolling' ) == 1.f ) ) )
-			victim = NULL;
 		
 		if ( victim && !projectileHitGround && !collidedEntities.Contains(victim) )
 		{

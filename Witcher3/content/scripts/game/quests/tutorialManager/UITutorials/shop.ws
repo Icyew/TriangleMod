@@ -31,9 +31,9 @@ state Shop in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		isClosing = true;
 		
-		CloseHint(DESCRIPTION);
-		CloseHint(BUY);
-		CloseHint(CLOSE);
+		CloseStateHint(DESCRIPTION);
+		CloseStateHint(BUY);
+		CloseStateHint(CLOSE);
 		
 		theGame.GetTutorialSystem().MarkMessageAsSeen(BUY);
 		
@@ -44,12 +44,12 @@ state Shop in W3TutorialManagerUIHandler extends TutHandlerBaseState
 	{
 		if(hintName == DESCRIPTION && !closedByParentMenu && !isClosing)
 		{
-			CloseHint(DESCRIPTION);
+			CloseStateHint(DESCRIPTION);
 			ShowHint(BUY, SHOP_POS_X, SHOP_POS_Y);
 		}
 		else if(hintName == BUY && !closedByParentMenu && !isClosing)
 		{
-			CloseHint(BUY);
+			CloseStateHint(BUY);
 			ShowHint(CLOSE, SHOP_POS_X, SHOP_POS_Y);
 		}
 	}

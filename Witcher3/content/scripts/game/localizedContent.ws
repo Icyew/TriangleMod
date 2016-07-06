@@ -259,10 +259,10 @@ function HasLolcalizationTags(s : string) : bool
 
 function GetIconByPlatform(tag : string) : string
 {
-	var icon : string;
+	var icon 	  : string;
 	var isGamepad : bool;
 	
-	isGamepad = theInput.LastUsedGamepad() || theInput.GetLastUsedGamepadType() == GT_Steam;
+	isGamepad = theInput.LastUsedGamepad() || theInput.GetLastUsedGamepadType() == IDT_Steam;
 	
 	if (tag == "GUI_GwintPass")
 	{
@@ -701,7 +701,7 @@ function GetBookTexture(tag : string) : string
 
 
 function GetIconForTag(tag : string) : string
-{
+{	
 	var icon : string;
 	
 	if(tag == "GUI_LootPanel_LootAll")				icon = GetIconForKey(IK_Pad_A_CROSS, true);
@@ -729,13 +729,16 @@ function GetIconForTag(tag : string) : string
 	else if(tag == "ICO_NoticeBoard" || tag == "ICO_Noticeboard")	icon = GetHTMLForItemICO("ICO_NoticeBoard");
 	else if(tag == "PAD_LSUp")						icon = GetHTMLForICO(GetPadFileName("LS_Up"));
 	else if(tag == "PAD_LS_LeftRight")				icon = GetHTMLForICO(GetPadFileName("LS_LeftRight"));
+	else if(tag == "PAD_RS_LeftRight")				icon = GetHTMLForICO(GetPadFileName("RS_LeftRight"));
+	else if(tag == "Cross_UpDown")  				icon = GetHTMLForICO(GetPadFileName("Cross_UpDown"));
+	else if(tag == "PAD_RS_UpDown")					icon = GetHTMLForICO(GetPadFileName("RS_UpDown"));
 	else if(tag == "ICO_DialogEnd")					icon = GetHTMLForItemICO("ICO_DialogEnd");
 	else if(tag == "GUI_RS_Press")					icon = GetHTMLForICO(GetPadFileName("RS_PRESS"));
 	else if(tag == "GUI_DPAD_LeftRight")			icon = GetHTMLForICO(GetPadFileName("Cross_LeftRight"));
 	else if(tag == "IK_LeftMouse")					icon = GetIconForKey(IK_LeftMouse);
 	else if(tag == "IK_RightMouse")					icon = GetIconForKey(IK_RightMouse);
 	else if(tag == "Mouse")							icon = GetHTMLForICO("Mouse_Pan");
-	else if(tag == "GUI_PC_Close")					icon = GetIconForKey(IK_Escape);	
+	else if(tag == "GUI_PC_Close")					icon = GetIconForKey(IK_Escape);
 	else
 	{
 		
@@ -769,28 +772,50 @@ function GetIconOrColorForTag2(tag : string) : string
 	else if(tag == "ICO_DungeonCrawl")			    icon = GetHTMLForItemICO("ICO_DungeonCrawl");
 	else if(tag == "ICO_ShopMapPin")				icon = GetHTMLForItemICO("ICO_ShopIcoPin");
 	else if(tag == "ICO_Enchanter")					icon = GetHTMLForItemICO("ICO_Enchanter", -2);
+	else if(tag == "ICO_Cammerlengo")				icon = GetHTMLForItemICO("ICO_bob_cammerlengo");
+	else if(tag == "ICO_DyeMerchant")				icon = GetHTMLForItemICO("ICO_bob_dye_merchant");
+	else if(tag == "ICO_HansaHideout")				icon = GetHTMLForItemICO("ICO_bob_hansa_hideout");
+	else if(tag == "ICO_HansaRunner")				icon = GetHTMLForItemICO("ICO_bob_hansa_runner");
+	else if(tag == "ICO_HansaSignal")				icon = GetHTMLForItemICO("ICO_bob_hansa_signal");
+	else if(tag == "ICO_InfestedVineyard")			icon = GetHTMLForItemICO("ICO_bob_infested_vineyard");
+	else if(tag == "ICO_KnightErrant")				icon = GetHTMLForItemICO("ICO_bob_knight_errant");
+	else if(tag == "ICO_Plegmund")					icon = GetHTMLForItemICO("ICO_bob_plegmund");
+	else if(tag == "ICO_WineContract")				icon = GetHTMLForItemICO("ICO_wine_contract");
+	else if(tag == "ICO_WineMerchant")				icon = GetHTMLForItemICO("ICO_bob_wine_merchant");
+	else if(tag == "ICO_Map_Pin_Normal")			icon = GetHTMLForItemICO("ICO_custom_pin_waypoint");
+	else if(tag == "ICO_Map_Pin_Special1")			icon = GetHTMLForItemICO("ICO_custom_pin_danger");
+	else if(tag == "ICO_Map_Pin_Special2")			icon = GetHTMLForItemICO("ICO_custom_pin_mark");
+	else if(tag == "ICO_Map_Pin_Special3")			icon = GetHTMLForItemICO("ICO_custom_pin_info");
+	else if(tag == "ICO_ArchMaster")				icon = GetHTMLForItemICO("ICO_bob_archmaster");
+	else if(tag == "GUI_Ingredient_Unfold_Icon")	icon = GetHTMLForItemICO("ICO_crafting_indicator");
+	else if(tag == "ICO_Vermentino")				icon = GetHTMLForItemICO("ICO_vermentino");
+	else if(tag == "ICO_Coronata")					icon = GetHTMLForItemICO("ICO_coronata");
+	else if(tag == "ICO_Belgaard")					icon = GetHTMLForItemICO("ICO_belgaard");
+	else if(tag == "ICO_Mutagen_Table")				icon = GetHTMLForItemICO("ICO_mutagen_table");
+	
+	
 	else if(tag == "IK_Tab")						icon = GetIconForKey(IK_Tab);
+	else if( tag == "GUI_PAD_Preview" )				icon = GetIconForKey( IK_Pad_A_CROSS, true );
+	else if( tag == "GUI_PC_Preview" )				icon = GetIconForKey( IK_E );
+	else if( tag == "ICO_POI_EP2_1" )				icon = GetHTMLForItemICO( "ICO_POI_EP2_1", -2 );
+	else if( tag == "ICO_POI_EP2_2" )				icon = GetHTMLForItemICO( "ICO_POI_EP2_2", -2 );	
 	else
 	{
 		
 		return GetIconOrColorForTag3(tag);
 	}
 	
-	if(icon == "")
-	{
-		LogLocalization("GetIconForTag: cannot find icon for tag <<" + tag + ">>");
-		icon = "##_" + tag + "_##";
-	}
-		
 	return icon;
 }
 
 function GetIconOrColorForTag3(tag : string) : string
 {
+	var inGameConfigWrapper : CInGameConfigWrapper;
+	var configValue : string;
 	var icon : string;
 	var isGamepad : bool;
 	
-	isGamepad = theInput.LastUsedGamepad() || theInput.GetLastUsedGamepadType() == GT_Steam;
+	isGamepad = theInput.LastUsedGamepad() || theInput.GetLastUsedGamepadType() == IDT_Steam;
 	
 	if(tag == "ICO_Armorer")						icon = GetHTMLForItemICO("ICO_minimap_armorer");
 	else if(tag == "ICO_Smith")						icon = GetHTMLForItemICO("ICO_minimap_blacksmith");
@@ -815,7 +840,14 @@ function GetIconOrColorForTag3(tag : string) : string
 	else if(tag == "ICO_FastTravel")				icon = GetHTMLForItemICO("ICO_minimap_fast_travel");
 	else if(tag == "GUI_LS_Press")					icon = GetHTMLForICO(GetPadFileName("LS_Thumb"));
 	else if(tag == "ICO_Stash")						icon = GetHTMLForItemICO("ICO_Stash");
-	
+	else if( tag == "IK_Pad_LeftThumb" )								icon = GetIconForKey( IK_Pad_LeftThumb, true );
+	else if( tag == "IK_MiddleMouse" )									icon = GetIconForKey( IK_MiddleMouse );
+	else if( tag == "GUI_Preview" && theInput.LastUsedGamepad() )		icon = GetIconForKey( IK_Pad_X_SQUARE, true );
+	else if( tag == "GUI_Preview" && !theInput.LastUsedGamepad() )		icon = GetIconForKey( IK_X );
+	else if( tag == "GUI_Sort" && theInput.LastUsedGamepad() )			icon = GetIconForKey( IK_Pad_RightThumb, true );
+	else if( tag == "GUI_Sort" && !theInput.LastUsedGamepad() )			icon = GetIconForKey( IK_F );
+	else if( tag == "GUI_Geekpage" && theInput.LastUsedGamepad() )		icon = GetIconForKey( IK_Pad_RightTrigger, true );
+	else if( tag == "GUI_Geekpage" && !theInput.LastUsedGamepad() )		icon = GetIconForKey( IK_C );
 	else if(tag == "GUI_Close" || tag == "GUI_GwintPass" || tag == "GUI_GwintZoom" || tag == "GUI_GwintChoose" || tag == "GUI_GwintLeader")
 	{
 		icon = GetIconByPlatform(tag);
@@ -834,31 +866,299 @@ function GetIconOrColorForTag3(tag : string) : string
 	}
 	else if (tag == "GUI_GwintFactionLeft")
 	{
-		if( isGamepad )
+		if(isGamepad)
 			icon = GetIconForKey(IK_Pad_LeftShoulder);
 		else
 			icon = GetIconForKey(IK_1);
 	}
 	else if (tag == "GUI_GwintFactionRight")
 	{
-		if( isGamepad )
+		if(isGamepad)
 			icon = GetIconForKey(IK_Pad_RightShoulder);
 		else
 			icon = GetIconForKey(IK_3);
 	}
 	else if (tag == "GUI_GwintPass")
 	{
-		if( isGamepad )
+		if(isGamepad)
 			icon = GetIconForKey(IK_Pad_Y_TRIANGLE);
 		else
 			icon = GetIconForKey(IK_Escape);
 	}
-	else if( IsBookTextureTag(tag) )				icon = GetBookTexture(tag);
-	
-	if(icon == "")
+	else if( tag == "GUI_Mutations_Open" )
 	{
-		LogLocalization("GetIconForTag: cannot find icon for tag <<" + tag + ">>");
-		icon = "##_" + tag + "_##";
+		if(isGamepad)
+		{
+			icon = GetIconForKey( IK_Pad_Y_TRIANGLE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_C );
+		}
+	}
+	else if( tag == "GUI_Mutation_Research" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_A_CROSS, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Space );
+		}
+	}
+	else if( tag == "GUI_Mutations_Develop" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_X_SQUARE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Space );
+		}
+	}
+	else if( tag == "GUI_Mutations_Equip" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_A_CROSS, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Enter );
+		}
+	}
+	else if( tag == "GUI_Mutations_Close" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_B_CIRCLE, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Escape );
+		}
+	}
+	else if( tag == "GUI_Mutations_Research_Accept" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_A_CROSS, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Enter );
+		}
+	}
+	else if( tag == "GUI_Read_Book" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_RightThumb );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_V );
+		}
+	}
+	else if( tag == "GUI_Inv_Read_Book" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_A_CROSS, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_E );
+		}
+	}
+	else if( tag == "GUI_Book_Read_Left_Right" )
+	{
+		icon = GetHTMLForICO( GetPadFileName( "LS_LeftRight" ) );
+	}
+	else if( tag == "GUI_Book_Read_Left" )
+	{
+		icon = GetIconForKey( IK_A );
+	}
+	else if( tag == "GUI_Book_Read_Right" )
+	{
+		icon = GetIconForKey( IK_D );
+	}
+	else if( tag == "GUI_Crafting_Buy" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_Y_TRIANGLE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_RightMouse );
+		}
+	}
+	else if( tag == "GUI_Worldmap_Zoom" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_RightTrigger );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Z );
+		}
+	}
+	else if( tag == "GUI_Map_To_Continent" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_Y_TRIANGLE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_MiddleMouse );
+		}
+	}
+	else if( tag == "GUI_Continent_To_Hub" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_Y_TRIANGLE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_MiddleMouse );
+		}
+	}
+	else if( tag == "GUI_Map_To_Any_Hub" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_A_CROSS, true );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_LeftMouse );
+		}
+	}
+	else if( tag == "GUI_Place_Pin" || tag == "GUI_PC_Open_Pin_Menu" )
+	{
+		if( isGamepad )
+		{
+			icon = GetIconForKey( IK_Pad_X_SQUARE );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_RightMouse );
+		}
+	}
+	else if( tag == "GUI_PC_Select_Pin_Type" )
+	{
+		icon = GetHTMLForICO( "Mouse_Pan" );
+	}
+	else if( tag == "GUI_PC_Confirm_Pin_Type" )
+	{
+		icon = GetIconForKey( IK_LeftMouse );
+	}
+	else if( tag == "GUI_Pad_Open_Pin_Menu" )
+	{
+		icon = GetIconForKey( IK_Pad_X_SQUARE );
+	}
+	else if( tag == "GUI_Pad_Select_Pin_Type" )
+	{
+		icon = GetHTMLForICO( GetPadFileName( "LS_LeftRight" ) );
+	}	
+	else if( tag == "GUI_Radial_Swap_Items"  || tag == "GUI_Radial_Select_Bolts" )
+	{
+		if( isGamepad )
+		{
+			inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
+			configValue = inGameConfigWrapper.GetVarValue( 'Controls', 'AlternativeRadialMenuInputMode' );
+			
+			if( configValue )
+			{
+				icon = GetHTMLForICO( GetPadFileName( "LS_LeftRight" ) );
+			}
+			else
+			{
+				icon = GetHTMLForICO( GetPadFileName( "RS_LeftRight" ) );
+			}
+		}
+		else
+		{
+			icon = GetIconForKey( IK_MiddleMouse );
+		}
+	}
+	else
+	{
+		
+		return GetIconOrColorForTag4( tag );
+	}
+	
+	return icon;
+}
+
+function GetIconOrColorForTag4( tag : string ) : string
+{
+	var icon : string;
+	
+	if( tag == "GUI_Map_Filters_Left" || tag == "GUI_Map_Filters_Pin_Left" )
+	{
+		if( theInput.LastUsedGamepad() )
+		{
+			icon = GetHTMLForICO( GetPadFileName( "Cross_Left" ) );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Left );
+		}
+	}
+	else if( tag == "GUI_Map_Filters_Right" || tag == "GUI_Map_Filters_Pin_Right" )
+	{
+		if( theInput.LastUsedGamepad() )
+		{
+			icon = GetHTMLForICO( GetPadFileName( "Cross_Right" ) );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Right );
+		}
+	}
+	else if( tag == "GUI_Map_Filters_Pin_Up" )
+	{
+		if( theInput.LastUsedGamepad() )
+		{
+			icon = GetHTMLForICO( GetPadFileName( "Cross_Up" ) );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Up );
+		}
+	}
+	else if( tag == "GUI_Map_Filters_Pin_Down" )
+	{
+		if( theInput.LastUsedGamepad() )
+		{
+			icon = GetHTMLForICO( GetPadFileName( "Cross_Down" ) );
+		}
+		else
+		{
+			icon = GetIconForKey( IK_Down );
+		}
+	}
+	else if( tag == "GUI_Map_Filters_Customize" )
+	{
+		if( theInput.LastUsedGamepad() )
+		{
+			icon = GetIconForKey( IK_Pad_LeftTrigger );
+		}
+	}
+	else if( tag == "ICO_EP2NewQuest" )
+	{
+		icon = GetHTMLForItemICO("ICO_EP2Newquest");
+	}
+	else if( IsBookTextureTag(tag) )
+	{
+		icon = GetBookTexture(tag);
 	}
 		
 	return icon;
@@ -909,8 +1209,10 @@ function GetPadFileName(type : string) : string
 			case "LS_Thumb"	:			return "ICO_PlayS_L3_hold";
 			case "RS_Thumb"	:			return "ICO_PlayS_R3_hold";
 			case "RS_PRESS"	:			return "ICO_PlayS_R3_hold";
-			case "LS_Up_Down" : 		return "ICO_PlayS_L3_scroll";
+			case "LS_Up_Down" : 		return "ICO_PlayS_L3_scroll";			
 			case "LS_LeftRight" : 		return "ICO_PlayS_L3_tabs";
+			case "RS_UpDown" : 	  		return "ICO_PlayS_R3_scroll";
+			case "RS_LeftRight" : 		return "ICO_PlayS_R3_tabs";
 			case "RS_Up" : 				return "ICO_PlayS_R3_up";
 			case "RS_Down" : 			return "ICO_PlayS_R3_down";
 			case "LS_Up" : 				return "ICO_PlayS_L3_up";
@@ -919,6 +1221,7 @@ function GetPadFileName(type : string) : string
 			case "Cross_Up" : 			return "ICO_PlayS_dpad_up";
 			case "Cross_Down" : 		return "ICO_PlayS_dpad_down";
 			case "Cross_LeftRight" :  	return "ICO_PlayS_dpad_left_right";
+			case "Cross_UpDown" :  		return "ICO_PlayS_dpad_up_down";
 			case "Back" : 				return "ICO_PlayS_Share";
 			case "Start" : 				return "ICO_PlayS_Touchpad";
 			case "RT" : 				return "ICO_PlayS_R2";
@@ -934,7 +1237,7 @@ function GetPadFileName(type : string) : string
 	}
 	else
 	{
-		if (theInput.GetLastUsedGamepadType() == GT_Steam)
+		if (theInput.GetLastUsedGamepadType() == IDT_Steam)
 		{
 			platformPrefix = "_Steam_";
 		}
@@ -952,6 +1255,8 @@ function GetPadFileName(type : string) : string
 			case "RS_PRESS"	:			return "ICO" + platformPrefix + "R_hold";
 			case "LS_Up_Down" : 		return "ICO" + platformPrefix + "L_scroll";
 			case "LS_LeftRight" : 		return "ICO" + platformPrefix + "L_tabs";
+			case "RS_UpDown" : 		    return "ICO" + platformPrefix + "R_scroll";
+			case "RS_LeftRight" :		return "ICO" + platformPrefix + "R_tabs";
 			case "RS_Up" : 				return "ICO" + platformPrefix + "R_up";
 			case "RS_Down" : 			return "ICO" + platformPrefix + "R_down";
 			case "LS_Up" : 				return "ICO" + platformPrefix + "L_up";
@@ -960,6 +1265,7 @@ function GetPadFileName(type : string) : string
 			case "Cross_Up" : 			return "ICO" + platformPrefix + "dpad_up";
 			case "Cross_Down" : 		return "ICO" + platformPrefix + "dpad_down";
 			case "Cross_LeftRight" :  	return "ICO" + platformPrefix + "dpad_left_right";
+			case "Cross_UpDown" :  		return "ICO" + platformPrefix + "dpad_up_down";
 			case "Back" : 				return "ICO" + platformPrefix + "Back";
 			case "Start" : 				return "ICO" + platformPrefix + "Start";
 			case "RT" : 				return "ICO" + platformPrefix + "RT";

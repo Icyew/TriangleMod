@@ -56,6 +56,8 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 		
 		PopulateData();
 		SelectCurrentModule();
+		
+		m_fxSetTooltipState.InvokeSelfTwoArgs( FlashArgBool( thePlayer.upscaledTooltipState ), FlashArgBool( true ) );
 	}
 	
 	event  OnGuiSceneEntitySpawned(entity : CEntity)

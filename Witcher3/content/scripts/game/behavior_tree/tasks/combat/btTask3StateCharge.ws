@@ -16,10 +16,6 @@ class CBTTask3StateCharge extends CBTTask3StateAttack
 	default bCollisionWithActor = false;
 	default isEnding 			= false;
 	
-	
-	
-	
-	
 	function IsAvailable() : bool
 	{
 		if ( theGame.GetWorld().NavigationLineTest(GetActor().GetWorldPosition(), GetCombatTarget().GetWorldPosition(), GetActor().GetRadius()) )

@@ -5,23 +5,29 @@
 /***********************************************************************/
 class CBTTaskProjectileAttack extends CBTTaskAttack
 {
-	var attackRange				: float;
-	var resourceName	 		: name;
-	var projEntity				: CEntityTemplate;
-	var wasShot 				: bool;
-	var collisionGroups 		: array<name>;
-	var dodgeable 				: bool;
-	var shootOnGround 			: bool;
-	var useLookatTarget 		: bool;
-	var startPosFrontOffset 	: float;
-	var playFXOnShootProjectile	: name;
+	var attackRange					: float;
+	var resourceName	 			: name;
+	var depotPathInsteadOfAlias		: bool;
+	var depotPath					: string;
+	var projEntity					: CEntityTemplate;
+	var wasShot 					: bool;
+	var collisionGroups 			: array<name>;
+	var homingProjectile 			: bool;
+	var dodgeable 					: bool;
+	var shootOnGround 				: bool;
+	var useLookatTarget 			: bool;
+	var startPosFrontOffset 		: float;
+	var playFXOnShootProjectile		: name;
+	var shootOnEventName 			: name;
 	var useCustomCollisionGroups	: bool;
 	var collideWithRagdoll			: bool;
 	var collideWithTerrain			: bool;
 	var collideWithStatic			: bool;
 	var collideWithWater			: bool;
+	var useCustomTargetWithTag		: bool;
+	var tagToFind					: name;
 	
-	var distance : float;
+	var distance 					: float;
 	
 	private var couldntLoadResource : bool;
 	
@@ -40,7 +46,14 @@ class CBTTaskProjectileAttack extends CBTTaskAttack
 	{
 		if ( !projEntity )
 		{
-			projEntity = (CEntityTemplate)LoadResourceAsync( resourceName );
+			if( depotPathInsteadOfAlias )
+			{
+				projEntity = (CEntityTemplate)LoadResourceAsync( depotPath, true );
+			}
+			else
+			{
+				projEntity = (CEntityTemplate)LoadResourceAsync( resourceName );
+			}
 		}
 		
 		if ( !projEntity )
@@ -85,7 +98,7 @@ class CBTTaskProjectileAttack extends CBTTaskAttack
 		
 		res = super.OnAnimEvent(animEventName,animEventType, animInfo);
 		
-		if ( animEventName == 'ShootProjectile' || animEventName == 'Throw' )
+		if ( animEventName == 'ShootProjectile' || animEventName == 'Throw' || ( IsNameValid( shootOnEventName ) && animEventName == shootOnEventName ) )
 		{
 			CreateAndShootProjectile();
 			m_Projectiles.Clear();	
@@ -153,6 +166,10 @@ class CBTTaskProjectileAttack extends CBTTaskAttack
 		{
 			combatTargetPos = GetCombatTarget().GetWorldPosition();
 		}
+		else if ( useCustomTargetWithTag )
+		{
+			combatTargetPos = theGame.GetEntityByTag( tagToFind ).GetWorldPosition();
+		}
 		else
 		{
 			combatTargetPos = GetActionTarget().GetWorldPosition();
@@ -185,7 +202,25 @@ class CBTTaskProjectileAttack extends CBTTaskAttack
 		
 		Clamp( projectileIndex, 0, m_Projectiles.Size() - 1 );
 		
-		l_projectile.ShootProjectileAtPosition( l_projectile.projAngle, l_projectile.projSpeed, targetPos, range, collisionGroups );
+		if ( homingProjectile )
+		{
+			if ( useCombatTarget )
+			{
+				l_projectile.ShootProjectileAtNode( l_projectile.projAngle, l_projectile.projSpeed, GetCombatTarget(), range, collisionGroups );
+			}
+			else
+			{
+				l_projectile.ShootProjectileAtNode( l_projectile.projAngle, l_projectile.projSpeed, GetActionTarget(), range, collisionGroups );
+			}
+		}
+		else if( useCustomTargetWithTag )
+		{
+			l_projectile.ShootProjectileAtPosition( l_projectile.projAngle, l_projectile.projSpeed, combatTargetPos, range, collisionGroups );
+		}
+		else
+		{
+			l_projectile.ShootProjectileAtPosition( l_projectile.projAngle, l_projectile.projSpeed, targetPos, range, collisionGroups );
+		}
 		
 		if ( IsNameValid( playFXOnShootProjectile ) && !l_projectile.IsEffectActive( playFXOnShootProjectile ) )
 			l_projectile.PlayEffect( playFXOnShootProjectile );
@@ -299,19 +334,27 @@ class CBTTaskProjectileAttackDef extends CBTTaskAttackDef
 	
 	editable var attackRange 				: CBehTreeValFloat;
 	editable var resourceName	 			: name;
+	editable var depotPathInsteadOfAlias	: bool;
+	editable var depotPath					: string;
 	editable var parametrizedResourceName	: CBehTreeValCName;
+	editable var homingProjectile 			: bool;
 	editable var dodgeable					: bool;
 	editable var shootOnGround				: bool;
 	editable var useLookatTarget			: bool;
 	editable var startPosFrontOffset		: float;
 	editable var playFXOnShootProjectile	: name;
+	editable var shootOnEventName 			: name;
 	editable var useCustomCollisionGroups	: bool;
 	editable var collideWithRagdoll			: bool;
 	editable var collideWithTerrain			: bool;
 	editable var collideWithStatic			: bool;
 	editable var collideWithWater			: bool;
+	editable var useCustomTargetWithTag		: bool;
+	editable var tagToFind					: name;
 	
 	var projEntity 							: CEntityTemplate;
+	
+	default depotPathInsteadOfAlias	= false;
 	
 	public function Initialize()
 	{
@@ -340,6 +383,8 @@ class CBTTaskProjectileAttackWithPrepare extends CBTTaskProjectileAttack
 {
 	var boneName : name;
 	var rawTarget : bool;
+	var shootInFront : bool;
+	var shootInFrontOffset : float;
 	
 	function OnAnimEvent( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo ) : bool
 	{
@@ -394,8 +439,11 @@ class CBTTaskProjectileAttackWithPrepare extends CBTTaskProjectileAttack
 		
 		distToTarget = VecDistance( combatTargetPos, npc.GetWorldPosition() );
 		range = attackRange;
-		
-		if( rawTarget )
+		if( shootInFront )
+		{
+			targetPos = npc.GetWorldPosition() + npc.GetHeadingVector() * MaxF( 1.0, shootInFrontOffset );
+		}
+		else if( rawTarget )
 			targetPos = combatTargetPos;
 		else if ( useLookatTarget )
 		{
@@ -447,11 +495,14 @@ class CBTTaskProjectileAttackWithPrepareDef extends CBTTaskProjectileAttackDef
 {
 	default instanceClass = 'CBTTaskProjectileAttackWithPrepare';
 
-	editable var boneName 		: name;
-	editable var rawTarget 		: bool;
-	editable var useLookAtBone 	: bool;	
-	editable var lookAtBone		: name;
+	editable var boneName 				: name;
+	editable var shootInFront 			: bool;
+	editable var shootInFrontOffset 	: float;
+	editable var rawTarget 				: bool;
+	editable var useLookAtBone 			: bool;	
+	editable var lookAtBone				: name;
 	
 	hint boneName = "Name of the bone that projectile will be attached on 'Prepare' anim event";
 	hint rawTarget = "if set to true it will take rawTarget position instead of calculating it from currentHeading + attackRange";
+	hint shootInFront = "if set to true it will pick target in front of npc, multiplied by shootInFrontOffset value";
 }

@@ -23,7 +23,6 @@ class CBTTaskCheckAttitudes extends IBehTreeTask
 	
 	private var actorToChangeAttitude : CActor;
 	
-	protected var storageHandler 		: CAIStorageHandler;
 	protected var reactionDataStorage 	: CAIStorageReactionData;
 	
 	function IsAvailable() : bool
@@ -131,9 +130,7 @@ class CBTTaskCheckAttitudes extends IBehTreeTask
 	{
 		if ( !reactionDataStorage )
 		{
-			storageHandler = new CAIStorageHandler in this;
-			storageHandler.Initialize( 'ReactionData', '*CAIStorageReactionData', this );
-			reactionDataStorage = (CAIStorageReactionData)storageHandler.Get();
+			reactionDataStorage = (CAIStorageReactionData)RequestStorageItem( 'ReactionData', 'CAIStorageReactionData' );
 		}
 	}
 }

@@ -20,6 +20,13 @@ class W3Effect_HeavyKnockdown extends W3CriticalEffect
 	default	explorationStateHandling 	= ECH_HandleNow;
 	default usesFullBodyAnim			= true;
 	
+	event OnEffectRemoved()
+	{
+		target.SetIsRecoveringFromKnockdown();
+		
+		super.OnEffectRemoved();
+	}
+	
 	public function CacheSettings()
 	{
 		super.CacheSettings();
@@ -35,7 +42,7 @@ class W3Effect_HeavyKnockdown extends W3CriticalEffect
 		blockedActions.PushBack(EIAB_Movement);
 		blockedActions.PushBack(EIAB_Fists);
 		blockedActions.PushBack(EIAB_Jump);
-		blockedActions.PushBack(EIAB_RunAndSprint);
+		
 		blockedActions.PushBack(EIAB_ThrowBomb);
 		blockedActions.PushBack(EIAB_Crossbow);
 		blockedActions.PushBack(EIAB_UsableItem);
@@ -43,7 +50,7 @@ class W3Effect_HeavyKnockdown extends W3CriticalEffect
 		blockedActions.PushBack(EIAB_Roll);
 		blockedActions.PushBack(EIAB_SwordAttack);
 		blockedActions.PushBack(EIAB_Parry);
-		blockedActions.PushBack(EIAB_Sprint);
+		
 		blockedActions.PushBack(EIAB_Explorations);
 		blockedActions.PushBack(EIAB_Counter);
 		blockedActions.PushBack(EIAB_LightAttacks);

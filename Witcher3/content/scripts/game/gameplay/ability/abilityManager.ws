@@ -9,16 +9,19 @@
 
 import abstract class W3AbilityManager extends IScriptable
 {
-	
-	
-	
-
 	import var owner : CActor;												
+	import var usedHealthType : EBaseCharacterStats;						
 	import var charStats : CCharacterStats;									
 	import saved var usedDifficultyMode : EDifficultyMode;					
 	import var difficultyAbilities : array< array< name > >;				
 	import var ignoresDifficultySettings : bool;							
 	private var overhealBonus : float;
+	
+	protected var isInitialized : bool;										
+	default isInitialized = false;											
+	import protected saved var blockedAbilities : array<SBlockedAbility>;	
+	
+	
 
 	import final function CacheStaticScriptData();
 	import final function SetInitialStats( diff : EDifficultyMode ) : bool;
@@ -28,9 +31,9 @@ import abstract class W3AbilityManager extends IScriptable
 	import final function StatAddNew( stat : EBaseCharacterStats, optional max : float );
 	import final function RestoreStat( stat : EBaseCharacterStats );
 	import final function RestoreStats();
-	import  	 function GetStat( stat : EBaseCharacterStats, optional skipLock : bool ) : float;
-	public final function GetStatMax( stat : EBaseCharacterStats ) : float;
-	public final function GetStatPercents( stat : EBaseCharacterStats ) : float;
+	import		 function GetStat( stat : EBaseCharacterStats, optional skipLock : bool ) : float;
+	import final function GetStatMax( stat : EBaseCharacterStats ) : float;
+	import final function GetStatPercents( stat : EBaseCharacterStats ) : float;
 	import final function GetStats( stat : EBaseCharacterStats, out current : float, out max : float ) : bool;
 	import final function SetStatPointCurrent( stat : EBaseCharacterStats, val : float );
 	import final function SetStatPointMax( stat : EBaseCharacterStats, val : float );
@@ -40,9 +43,9 @@ import abstract class W3AbilityManager extends IScriptable
 	import final function GetResistStat( stat : ECharacterDefenseStats, out resistStat: SResistanceValue ) : bool;
 	import final function SetResistStat( stat : ECharacterDefenseStats, out resistStat: SResistanceValue );
 	import final function ResistStatAddNew( stat : ECharacterDefenseStats );
-	import  	 function RecalcResistStat( stat : ECharacterDefenseStats );
+	import		 function RecalcResistStat( stat : ECharacterDefenseStats );
 	
-	import  	 function GetAttributeValueInternal( attributeName : name, optional tags : array< name > ) : SAbilityAttributeValue;
+	import		 function GetAttributeValueInternal( attributeName : name, optional tags : array< name > ) : SAbilityAttributeValue;
 	
 	import final function CacheDifficultyAbilities();
 	import final function UpdateStatsForDifficultyLevel( diff : EDifficultyMode );
@@ -52,13 +55,10 @@ import abstract class W3AbilityManager extends IScriptable
 	import final function GetAllStats_Debug( out stats : array< SBaseStat > ) : bool;
 	import final function GetAllResistStats_Debug( out stats : array< SResistanceValue > ) : bool;
 
-	protected var isInitialized : bool;										
-	protected saved var blockedAbilities : array<SBlockedAbility>;			
-		default isInitialized = false;										
-	
 	
 	public function PostInit();
 		
+	import private function SetCharacterStats( cStats : CCharacterStats ); 
 	
 	public function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool
 	{
@@ -71,13 +71,13 @@ import abstract class W3AbilityManager extends IScriptable
 		ignoresDifficultySettings = false;
 		
 		CacheStaticScriptData();
+		SetCharacterStats( cStats );
 		
 		owner = ownr;
-		charStats = cStats;
 		dm = theGame.GetDefinitionsManager();
 				
 		
-		charStats.GetAbilities(abs);
+		cStats.GetAbilities(abs);
 		for(i=0; i<abs.Size(); i+=1)
 		{
 			if(dm.AbilityHasTag(abs[i], theGame.params.DIFFICULTY_TAG_IGNORE))
@@ -123,8 +123,6 @@ import abstract class W3AbilityManager extends IScriptable
 	
 	public final function IsInitialized() : bool 		{return isInitialized;}
 	
-	
-	
 	public function OnOwnerRevived()
 	{
 		var i : int;
@@ -136,6 +134,17 @@ import abstract class W3AbilityManager extends IScriptable
 			if(blockedAbilities[i].timeWhenEnabledd > 0)
 				blockedAbilities.EraseFast(i);
 		}
+	}
+	
+	public final function UsesVitality() : bool
+	{
+		return usedHealthType == BCS_Vitality;
+	}
+	
+	
+	public function UsesEssence() : bool
+	{
+		return usedHealthType == BCS_Essence;
 	}
 	
 	
@@ -184,9 +193,6 @@ import abstract class W3AbilityManager extends IScriptable
 		
 		return charStats.GetAbilityAttributeValue(attributeName, abilityName);
 	}
-	
-	
-	
 		
 	
 	
@@ -227,18 +233,6 @@ import abstract class W3AbilityManager extends IScriptable
 			min = -1;
 			
 		return min;
-	}
-	
-	
-	protected final function FindBlockedAbility(abName : name) : int
-	{
-		var i : int;
-		
-		for(i=0; i<blockedAbilities.Size(); i+=1)
-			if(blockedAbilities[i].abilityName == abName)
-				return i;
-				
-		return -1;
 	}
 	
 	
@@ -299,7 +293,7 @@ import abstract class W3AbilityManager extends IScriptable
 			}
 			
 			
-			ab.count = owner.GetAbilityCount(abilityName);
+			ab.count = charStats.GetAbilityCount(abilityName);
 	
 			
 			ret = charStats.RemoveAbility(abilityName);
@@ -312,13 +306,8 @@ import abstract class W3AbilityManager extends IScriptable
 		}
 	}
 	
-	public final function IsAbilityBlocked(abilityName : name) : bool
-	{
-		return FindBlockedAbility(abilityName) >= 0;
-	}
+	import public final function IsAbilityBlocked(abilityName : name) : bool;
 		
-	
-	
 	
 	
 	
@@ -372,47 +361,13 @@ import abstract class W3AbilityManager extends IScriptable
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	public function UsedHPType() : EBaseCharacterStats
+	public final function UsedHPType() : EBaseCharacterStats
 	{
-		var j : int;
-		var hasEss, hasVit : bool;
-		
-		hasEss = HasStat( BCS_Essence ) && GetStatMax( BCS_Essence ) > 0.0f;
-		hasVit = HasStat( BCS_Vitality ) && GetStatMax( BCS_Vitality ) > 0.0f;
-
-		if(hasVit && !hasEss)
-			return BCS_Vitality;
-		else if(!hasVit && hasEss)
-			return BCS_Essence;
-		else
-			return BCS_Undefined;
+		return usedHealthType;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 		
-	
-	
-	
-	
-	
-	
-		
-	public function ForceSetStat( stat : EBaseCharacterStats, val : float )
+	public final function ForceSetStat( stat : EBaseCharacterStats, val : float )
 	{
 		var prev : float;
 			
@@ -437,31 +392,20 @@ import abstract class W3AbilityManager extends IScriptable
 			{
 				OnAirChanged();
 			}
+			else if( stat == BCS_Essence )
+			{
+				OnEssenceChanged();
+			}
 		}
 	}
 	
 	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	protected function InternalReduceStat(stat : EBaseCharacterStats, amount : float)
+	protected final function InternalReduceStat(stat : EBaseCharacterStats, amount : float)
 	{
 		SetStatPointCurrent(stat, MaxF( 0, GetStat(stat, true) - MaxF( 0, amount ) ) );
 	}
 	
-	public function DrainAir(cost : float, optional delay : float )
+	public final function DrainAir(cost : float, optional delay : float )
 	{
 		
 		if(cost > 0)
@@ -475,7 +419,7 @@ import abstract class W3AbilityManager extends IScriptable
 			owner.PauseEffects(EET_AutoAirRegen, 'AirCostDelay', false, delay);		
 	}
 	
-	public function DrainSwimmingStamina(cost : float, optional delay : float )
+	public final function DrainSwimmingStamina(cost : float, optional delay : float )
 	{
 		if(cost > 0)
 		{			
@@ -512,9 +456,9 @@ import abstract class W3AbilityManager extends IScriptable
 		if(delay > 0)
 		{
 			if(IsNameValid(abilityName))
-				owner.PauseEffects(EET_AutoStaminaRegen, abilityName, true, delay, true);
+				owner.PauseStaminaRegen( abilityName, delay );
 			else
-				owner.PauseEffects(EET_AutoStaminaRegen, StaminaActionTypeToName(action), true, delay, true);
+				owner.PauseStaminaRegen( StaminaActionTypeToName(action), delay );
 		}
 		
 		return cost;
@@ -592,31 +536,31 @@ import abstract class W3AbilityManager extends IScriptable
 		return GetAttributeRandomizedValue(min, max);
 	}
 	
-	public function DrainFocus(amount : float )
+	public final function DrainFocus(amount : float )
 	{
 		InternalReduceStat(BCS_Focus, amount);
 		OnFocusChanged();
 	}
 	
-	public function DrainMorale(amount : float )
+	public final function DrainMorale(amount : float )
 	{
 		InternalReduceStat(BCS_Morale, amount);
 		owner.StartMoraleRegen();
 	}
 	
-	public function DrainToxicity(amount : float )
+	public final function DrainToxicity(amount : float )
 	{
 		InternalReduceStat(BCS_Toxicity, amount);
 		OnToxicityChanged();
 	}
 	
 	
-	public function DrainVitality(amount : float)
+	public final function DrainVitality(amount : float)
 	{	
 		SetStatPointCurrent(BCS_Vitality, MaxF( 0, GetStat(BCS_Vitality) - MaxF(0, amount) ));
 		owner.StartVitalityRegen();
 		
-		if(GetStat(BCS_Vitality) <= 0 && owner.UsesVitality())
+		if(GetStat(BCS_Vitality) <= 0 && UsesVitality())
 		{
 			owner.SignalGameplayEvent( 'Death' );
 			owner.SetAlive(false);
@@ -626,25 +570,25 @@ import abstract class W3AbilityManager extends IScriptable
 	}
 	
 	
-	public function DrainEssence(amount : float)
+	public final function DrainEssence(amount : float)
 	{
 		SetStatPointCurrent(BCS_Essence, MaxF( 0, GetStat(BCS_Essence) - MaxF(0, amount) ) );
 		owner.StartEssenceRegen();
 		
-		if(GetStat(BCS_Essence) <= 0 && owner.UsesEssence())
+		if(GetStat(BCS_Essence) <= 0 && UsesEssence())
 		{
 			owner.SignalGameplayEvent( 'Death' );
 			owner.SetAlive(false);
 		}
+		
+		OnEssenceChanged();
 	}
 	
-	public function AddPanic( amount : float )
+	public final function AddPanic( amount : float )
 	{
 		SetStatPointCurrent( BCS_Panic, RoundF(MaxF( 0, GetStat( BCS_Panic ) - amount )) );
 		owner.StartPanicRegen();
 	}
-	
-	
 	
 	
 	public function GainStat( stat : EBaseCharacterStats, amount : float )
@@ -676,25 +620,11 @@ import abstract class W3AbilityManager extends IScriptable
 			OnToxicityChanged();
 		else if( stat == BCS_Focus )
 			OnFocusChanged();
+		else if( stat == BCS_Essence )
+			OnEssenceChanged();
 	}
 	
-	
-	
-	
-	
-	
-	
-	public function GetApplicatorParamsFor(applicator : W3ApplicatorEffect, out pwrStatValue : SAbilityAttributeValue)
-	{
-	}
-	
-	
-	
-	
-	
-	
-	
-	public function IgnoresDifficultySettings() : bool
+	public final function IgnoresDifficultySettings() : bool
 	{
 		return ignoresDifficultySettings;
 	}
@@ -703,59 +633,34 @@ import abstract class W3AbilityManager extends IScriptable
 	
 	
 	
-	protected function OnVitalityChanged();	
+	protected function OnVitalityChanged();
+	protected function OnEssenceChanged();
 	protected function OnToxicityChanged();
 	protected function OnFocusChanged();
 	protected function OnAirChanged();
 	
 	
-	public function OnAbilityAdded(abilityName : name)
+	public function OnAbilityAdded( abilityName : name )
 	{
-		var idx : int;
-	
-		if(!owner)
-			return;		
-	
-		if(IsAbilityBlocked(abilityName))
-		{
-			idx = FindBlockedAbility(abilityName);
-			blockedAbilities[idx].count += 1;			
-			charStats.RemoveAbility(abilityName);		
-			blockedAbilities[idx].count += 1;			
-		}
-		else
-		{
-			OnAbilityChanged(abilityName);
-		}
+		OnAbilityChanged( abilityName );
 	}
 	
 	
-	public function OnAbilityRemoved(abilityName : name)
+	public function OnAbilityRemoved( abilityName : name )
 	{
-		var idx : int;
+		if( abilityName == 'Runeword 4 _Stats' )
+		{
+			ResetOverhealBonus();
+		}
 		
-		if(!owner)
-			return;		
-			
-		if(IsAbilityBlocked(abilityName))
-		{
-			idx = FindBlockedAbility(abilityName);
-			blockedAbilities[idx].count -= 1;
-			
-		}
-		else
-		{
-			OnAbilityChanged(abilityName);
-			
-			if(abilityName == 'Runeword 4 _Stats')
-				ResetOverhealBonus();
-		}
+		OnAbilityChanged( abilityName );
 	}
 	
 	
-	protected function OnAbilityChanged(abilityName : name)
+	protected function OnAbilityChanged( abilityName : name )
 	{
 		var atts, tags : array<name>;
+		var attribute : name;
 		var i,size,stat, j : int;
 		var oldMax, maxVit, maxEss : float;
 		var resistStatChanged, tmpBool : bool;
@@ -763,7 +668,9 @@ import abstract class W3AbilityManager extends IScriptable
 		var val : SAbilityAttributeValue;
 		var buffs : array<CBaseGameplayEffect>;
 		var regenBuff : W3RegenEffect;
-		var cannotAddAttributes : array< name >;
+		
+		if(!owner)
+			return;		
 				
 		dm = theGame.GetDefinitionsManager();
 		dm.GetAbilityAttributes(abilityName, atts);		
@@ -778,20 +685,18 @@ import abstract class W3AbilityManager extends IScriptable
 			usedDifficultyMode = EDM_NotSet;
 		}
 		
-		
-		
-		owner.GetListOfCannotAddAttributes( cannotAddAttributes );
-		
 		for(i=0; i<size; i+=1)
 		{					
-			if ( cannotAddAttributes.Contains( atts[i] ) )
+			attribute = atts[ i ];
+			if ( ( attribute == 'vitality' && UsesEssence() )
+				|| ( attribute == 'essence' && UsesVitality() ) )
 			{
 				continue;
 			}
 		
 			
 			
-			stat = StatNameToEnum(atts[i]);
+			stat = StatNameToEnum( attribute );
 			if(stat != BCS_Undefined)
 			{
 				if(!HasStat(stat))
@@ -820,7 +725,7 @@ import abstract class W3AbilityManager extends IScriptable
 			}
 			
 			
-			stat = ResistStatNameToEnum(atts[i], tmpBool);
+			stat = ResistStatNameToEnum(attribute, tmpBool);
 			if(stat != CDS_None)
 			{
 				if ( HasResistStat( stat ) )
@@ -838,15 +743,7 @@ import abstract class W3AbilityManager extends IScriptable
 			}
 			
 			
-			stat = PowerStatNameToEnum(atts[i]);
-			if(stat != CPS_Undefined)
-			{
-				owner.UpdateApplicatorBuffs();
-				continue;
-			}
-			
-			
-			stat = RegenStatNameToEnum(atts[i]);
+			stat = RegenStatNameToEnum(attribute);
 			if(stat != CRS_Undefined && stat != CRS_UNUSED)
 			{
 				buffs = owner.GetBuffs();
@@ -870,7 +767,7 @@ import abstract class W3AbilityManager extends IScriptable
 			}
 			
 			
-			if(!ignoresDifficultySettings && atts[i] == theGame.params.DIFFICULTY_HP_MULTIPLIER)
+			if(!ignoresDifficultySettings && attribute == theGame.params.DIFFICULTY_HP_MULTIPLIER)
 			{		
 				
 
@@ -895,18 +792,20 @@ import abstract class W3AbilityManager extends IScriptable
 		}
 		
 		if(resistStatChanged)
+		{
 			owner.RecalcEffectDurations();
+		}
 	}
 	
 	
 	
 	
-	public function GetOverhealBonus() : float
+	public final function GetOverhealBonus() : float
 	{
 		return overhealBonus;
 	}
 	
-	public function ResetOverhealBonus()
+	public final function ResetOverhealBonus()
 	{
 		overhealBonus = 0;
 		thePlayer.StopEffect('runeword_4');
@@ -916,7 +815,7 @@ import abstract class W3AbilityManager extends IScriptable
 	
 	
 	
-	public function Debug_GetUsedDifficultyMode() : EDifficultyMode
+	public final function Debug_GetUsedDifficultyMode() : EDifficultyMode
 	{
 		return usedDifficultyMode;
 	}

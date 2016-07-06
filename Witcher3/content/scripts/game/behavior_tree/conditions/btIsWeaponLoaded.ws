@@ -5,7 +5,6 @@
 /***********************************************************************/
 class CBTCondIsWeaponLoaded extends IBehTreeTask
 {	
-	private var storageHandler : CAIStorageHandler;
 	protected var combatDataStorage : CHumanAICombatStorage;
 	
 	function IsAvailable() : bool
@@ -19,8 +18,7 @@ class CBTCondIsWeaponLoaded extends IBehTreeTask
 	
 	function Initialize()
 	{
-		storageHandler = InitializeCombatStorage();
-		combatDataStorage = (CHumanAICombatStorage)storageHandler.Get();
+		combatDataStorage = (CHumanAICombatStorage)InitializeCombatStorage();
 	}
 };
 

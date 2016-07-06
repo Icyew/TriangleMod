@@ -3,29 +3,61 @@
     <Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
+				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
+				<Entry varId="HeavyAttackComboBonus"			value="0.1  "/>
+				<Entry varId="LightAttackComboDecay"			value="3"	/>
+				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
+				<Entry varId="RendChargeBonus"					value="0.5"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboBonus"			 displayName="Extra light attack speed % per light attack combo"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboBonus"			 displayName="Extra total heavy damage multiplier (additive) per heavy attack combo"	displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Fully charged rend damage bonus multiplier"						 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+    </Group>
+    <Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="StaminaRegenMult"					value="1.0"	/>
+				<Entry varId="StaminaRegenBonus"				value="15"	/>
+				<Entry varId="FocusPerMaxStamina"				value="2"	/>
+				<Entry varId="BaseDodgeCost"					value="4"	/>
+				<Entry varId="BaseRollCost"						value="12"	/>
+				<Entry varId="BaseLightAttackCost"				value="4"	/>
+				<Entry varId="BaseHeavyAttackCost"				value="8"	/>
+				<Entry varId="WeakDamageMod"					value="0.3" />
 				<Entry varId="AltArmorStaminaMod"				value="1"	/>
 				<Entry varId="ChestPantsAttackCost"				value="0.8"	/>
 				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
 				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
 				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
-				<Entry varId="StaminaRegenMult"					value="2.0"	/>
-				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
-				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
-				<Entry varId="LightAttackComboDecay"			value="4"	/>
-				<Entry varId="HeavyAttackComboDecay"			value="8"	/>
+				<Entry varId="ChestEvasionMod"					value="0" />
+				<Entry varId="PantsEvasionMod"					value="0" />
+				<Entry varId="GlovesBootsEvasionMod"			value="0" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
-			<Var id="AltArmorStaminaMod"			 displayName="Use Alternate Armor Stamina Penalty"										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaminaRegenMult"		 		 displayName="Total stamina regen multiplier"								 			displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaminaRegenBonus"				 displayName="Additive stamina regen bonus"								 				displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FocusPerMaxStamina"			 displayName="Focus points per bar of max stamina (0 to disable conversion)"			displayType="SLIDER;0.00;3;30" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseDodgeCost"					 displayName="Dodge stamina cost"								 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseRollCost"					 displayName="Roll stamina cost"								 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseLightAttackCost"			 displayName="Light attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseHeavyAttackCost"			 displayName="Heavy attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WeakDamageMod"					 displayName="Damage multiplier when you have insufficient stamina"						displayType="SLIDER;0.00;1;20"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltArmorStaminaMod"			 displayName="Use alternate armor stamina penalty"										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ChestPantsAttackCost" 		 	 displayName="Extra armor stamina cost per weight level for Attacks - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsAttackCost" 		 displayName="Extra armor stamina cost per weight level for Attacks - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="StaminaRegenMult"		 		 displayName="Total stamina regen multiplier"								 			displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;15" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for chest armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PantsEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for pants armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionMod"		 	 displayName="Dodge/roll speed % bonus/penalty for gloves/boots."				 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
     </Group>
     <Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">

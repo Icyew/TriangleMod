@@ -30,12 +30,6 @@ class W3QuestCond_PlayerLevel extends CQuestScriptedCondition
 			return false;
 		}
 		
-		if(level > witcher.levelManager.GetMaxLevel())
-		{
-			LogQuest("W3QuestCond_PlayerLevel: level cannot be higher than max possible character leve (" + witcher.levelManager.GetMaxLevel() + ")");
-			return false;
-		}
-		
 		if( useComparator )
 		{
 			switch ( comparator )

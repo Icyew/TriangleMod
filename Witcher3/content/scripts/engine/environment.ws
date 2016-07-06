@@ -23,6 +23,14 @@ import function DeactivateEnvironment( environmentID : int , blendOutTime : floa
 import function ActivateQuestEnvironmentDefinition( environmentDefinition : CEnvironmentDefinition, priority : int, blendFactor : float, blendTime : float );
 
 
+import function GetActiveAreaEnvironmentDefinitions( out defs : array< string > );
+
+
+
+import function EnableDebugOverlayFilter(enumName : int);
+
+import function EnableDebugPostProcess(PostProcessName : int, activate : bool);
+
 
 
 
@@ -47,8 +55,26 @@ function AreaIsCold() : bool
 import function SetUnderWaterBrightness(val : float);
 
 import function GetWeatherConditionName() : name;
-import function RequestWeatherChangeTo( weatherName : name, blendTime : float ) : bool;
-import function RequestRandomWeatherChange( blendTime : float ) : bool;
+import function RequestWeatherChangeTo( weatherName : name, blendTime : float, questPause: bool ) : bool;
+import function RequestRandomWeatherChange( blendTime : float, questPause: bool ) : bool;
 
 import function ForceFakeEnvTime( hour : float );
 import function DisableFakeEnvTime();
+
+function TraceFloor( currPosition : Vector ) : Vector
+{
+	var outPosition, outNormal, tempPosition1, tempPosition2 : Vector;
+	
+	tempPosition1 = currPosition;
+	tempPosition1.Z -= 5;
+	
+	tempPosition2 = currPosition;
+	tempPosition2.Z += 2;
+	
+	if ( theGame.GetWorld().StaticTrace( tempPosition2, tempPosition1, outPosition, outNormal ) )
+	{
+		return outPosition;
+	}
+	
+	return currPosition;
+}

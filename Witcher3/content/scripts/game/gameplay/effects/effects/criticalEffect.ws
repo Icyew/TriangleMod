@@ -187,6 +187,27 @@ abstract class W3CriticalEffect extends CBaseGameplayEffect
 			theGame.VibrateControllerVeryHard();	
 	}
 	
+	event OnEffectAddedPost()
+	{
+		if( IsAddedByPlayer() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) && target != thePlayer )
+		{
+			GetWitcherPlayer().AddMutation12Decoction();
+		}
+		
+		super.OnEffectAddedPost();
+	}
+	
+	
+	public function CumulateWith(effect: CBaseGameplayEffect)
+	{
+		super.CumulateWith(effect);
+		
+		if( IsAddedByPlayer() && GetWitcherPlayer().IsMutationActive( EPMT_Mutation12 ) && target != thePlayer )
+		{
+			GetWitcherPlayer().AddMutation12Decoction();
+		}
+	}
+	
 	event OnEffectRemoved()
 	{
 		var i : int;

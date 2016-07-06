@@ -333,6 +333,8 @@ class CR4HudModuleItemInfo extends CR4HudModuleBase
 		var ammo : int;
 		var ammoStr : string;
 		var itemName : string;
+		var boltItem : SItemUniqueId;
+		var boltName: string;
 		var fontColor : string;
 		var icon : string;
 		var category : string;
@@ -355,10 +357,12 @@ class CR4HudModuleItemInfo extends CR4HudModuleBase
 		{
 			inventory = thePlayer.GetInventory();
 			
+			
+
 			icon = inventory.GetItemIconPathByUniqueID(item);
 			category = inventory.GetItemCategory(item);
 			
-			itemName = inventory.GetItemLocalizedNameByUniqueID(item);
+			itemName = inventory.GetItemLocalizedNameByUniqueID( item );
 			itemName = GetLocStringByKeyExt( itemName );
 			fontColor = "<font color=\"#FFFFFF\">";
 			
@@ -390,7 +394,7 @@ class CR4HudModuleItemInfo extends CR4HudModuleBase
 					{
 						fontColor = "<font color=\"#FF0000\">";
 					}				
-					ammoStr = fontColor + ammo + "/" + maxAmmo + "</font>";
+					ammoStr = fontColor + ammo + "</font>";
 				}
 				else
 				{
@@ -403,7 +407,8 @@ class CR4HudModuleItemInfo extends CR4HudModuleBase
 				{
 					GetWitcherPlayer().GetItemEquippedOnSlot(EES_Bolt, item);
 					ammo = inventory.GetItemQuantity( item );
-					
+					itemName = inventory.GetItemLocalizedNameByUniqueID( item );
+					itemName = GetLocStringByKeyExt( itemName );
 					if( inventory.ItemHasTag(item, theGame.params.TAG_INFINITE_AMMO) )
 					{
 						ammoStr = fontColor + "∞" + "</font>";
@@ -460,7 +465,7 @@ class CR4HudModuleItemInfo extends CR4HudModuleBase
 	{
 		var outKeys : array< EInputKey >;
 		switch(bindingName)
-		{
+		{ 
 			case HudItemInfoBinding_item1 :
 				theInput.GetPadKeysForAction('ThrowItem',outKeys);
 				

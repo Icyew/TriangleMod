@@ -45,8 +45,6 @@ class CBTTaskImlerithShieldDestruction extends IBehTreeTask
 	
 	function OnActivate() : EBTNodeStatus
 	{
-		var npc : CNewNPC = GetNPC();
-		
 		if( !dropShield )
 		{
 			ProcessShieldDestruction();
