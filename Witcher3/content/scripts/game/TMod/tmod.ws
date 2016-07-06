@@ -28,6 +28,11 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboDecay' ) );
 	}
 
+	public function GetRendChargeBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );
+	}
+
 	// ---- Combat End ---- //
 
 	// ---- Stamina Begin ---- //
@@ -45,12 +50,14 @@ class TModOptions
 			case ESAT_Roll:
 				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseRollCost') );
 			case ESAT_LightAttack:
-			case ESAT_Ability:
-				if (action == ESAT_LightAttack || SkillNameToEnum(abilityName) == S_Sword_s01)
-					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
+				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
 			case ESAT_HeavyAttack:
-				if (action == ESAT_HeavyAttack || SkillNameToEnum(abilityName) == S_Sword_s02) {
-					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') );
+				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') );
+			case ESAT_Ability:
+				if (SkillNameToEnum(abilityName) == S_Sword_s02) {
+					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') ) * 2; // for now, rend has 2x base stamina cost
+				} else if (SkillNameToEnum(abilityName) == S_Sword_s01) { // Triangle TODO draining stamina for whirl might not be necessary, since drain per sec already active
+					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
 				}
 				break;
 		}

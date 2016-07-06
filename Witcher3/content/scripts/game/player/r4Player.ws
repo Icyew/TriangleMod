@@ -9406,7 +9406,6 @@ statemachine abstract import class CR4Player extends CPlayer
 		var s					: SNotWorkingOutFunctionParametersHackStruct1;
 		var allSteps 			: bool						= this.BufferAllSteps;
 
-		isWeak = false; // Triangle alt stamina
 
 		if ( IsInCombatActionFriendly() )
 		{
@@ -10727,6 +10726,9 @@ statemachine abstract import class CR4Player extends CPlayer
 			case ESAT_Swimming:
 			case ESAT_Jump:
 				break;
+			case ESAT_Ability:
+				if (SkillNameToEnum(abilityName) == S_Sword_s02)
+					break;
 			default:
 				return false;
 		}
@@ -11997,13 +11999,13 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		
-		SetAttackActionName('');
+		// SetAttackActionName(''); // Triangle rend Race condition with rend causes attack name to be empty sometimes. Maybe effects other things
 		combatActionType = GetBehaviorVariable('combatActionType');
 		
 		
 		if(GetBehaviorVariable('combatActionType') == (int)CAT_SpecialAttack)
 		{
-			// Triangle attack combos
+			// Triangle attack combos Reset light attack combo timer after whirl because I forget why. But why not
 			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Light) {
 				this.AddTimer('FastAttackCounterDecay', theGame.GetTModOptions().GetLightAttackComboDecay());
 			}
@@ -12182,6 +12184,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		var buff : CBaseGameplayEffect;
 		
 		ClearBaseAnimationMultiplierCausers(); // Triangle attack combos
+		SetAttackActionName(''); // Triangle rend Moved here due to race condition with rend
 		buff = ChooseCurrentCriticalBuffForAnim();
 		SetCombatAction( EBAT_EMPTY );
 		

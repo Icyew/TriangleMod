@@ -8,6 +8,7 @@
 				<Entry varId="HeavyAttackComboBonus"			value="0.1  "/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
+				<Entry varId="RendChargeBonus"					value="0.5"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -16,6 +17,7 @@
 			<Var id="HeavyAttackComboBonus"			 displayName="Extra total heavy damage multiplier (additive) per heavy attack combo"	displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Fully charged rend damage bonus multiplier"						 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
     </Group>
     <Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">

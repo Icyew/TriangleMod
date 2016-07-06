@@ -1861,7 +1861,16 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s02, 'adrenaline_final_damage_bonus', false, false);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle rend
+				baseString = "Unleash an attack that ignores enemy Defense and increases total damage by 50% when fully charged." +
+					" Adrenaline points increase critical chance by " + NoTrailZeros(RoundMath(arg*100)) + "% and total damage by " + NoTrailZeros(RoundMath(ability.valueMultiplicative*100)) + "%.";
+				if (skillLevel >= 5){
+					baseString += "<br>Adrenaline points are refunded on a miss or a killing blow.";
+				} else {
+					baseString += "<br>Adrenaline points are refunded on a miss.";
+				}
+				baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle end
 				break;
 			case S_Sword_s03:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s03, 'instant_kill_chance', false, false)) * skillLevel;

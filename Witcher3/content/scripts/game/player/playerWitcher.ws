@@ -22,6 +22,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 	// Heavy attack dmg is calculated after counter inc, so we need to keep track of prev counter
 	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;
 	private				var prevHeavyAttackCounter										: int;
+	// Triangle rend
+	protected			var cachedFocusDifference										: float; default cachedFocusDifference = 0;
+	private				var undrainedFocusDifference									: float; default undrainedFocusDifference = 0;
 	// Triangle end
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
@@ -2198,6 +2201,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		attackAction = (W3Action_Attack)action;
 		actorVictim = (CActor)action.victim;
 		
+		// Triangle rend Need to do this even if the target dies. Possibly a bug in vanilla
+		// Didn't comment out the stuff in the original location, since I prefer not to touch what i dont need to
+		if(attackAction && attackAction.IsActionMelee() && SkillNameToEnum(attackAction.GetAttackTypeName()) == S_Sword_s02)
+		{
+			if (GetSkillLevel(S_Sword_s02) < 5 || actorVictim.IsAlive()) // Refund focus on kill if lvl 5 rend and target was killed
+				ResetCachedFocusDifference();
+			OnSpecialAttackHeavyActionProcess();
+		}
+		// Triangle rend
+
 		if( !actorVictim.IsAlive() )
 		{
 			return false;
@@ -2217,7 +2230,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					
 					
 					rendLoad = FloorF(rendLoad);					
-					DrainFocus(rendLoad);
+					// DrainFocus(rendLoad); // Triangle rend focus is already drained
 					
 					OnSpecialAttackHeavyActionProcess();
 				}
@@ -2873,19 +2886,52 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		return val;
 	}
+
+	// Triangle rend
+	public function ResetCachedFocusDifference()
+	{
+		cachedFocusDifference = 0;
+		undrainedFocusDifference = 0;
+	}
+
+	// Triangle rend
+	public function GetCachedFocusDifference() : float
+	{
+		return cachedFocusDifference;
+	}
+
+	// Triangle rend
+	public function RefundRend()
+	{
+		GainStat(BCS_Focus, cachedFocusDifference);
+		ResetCachedFocusDifference();
+	}
+
 	
 	public final timer function SpecialAttackHeavySustainCost(dt : float, id : int)
 	{
 		var focusHighlight, ratio : float;
 		var hud : CR4ScriptedHud;
 		var hudWolfHeadModule : CR4HudModuleWolfHead;		
+		var focusCost : float; // Triangle rend
 
 		
 		DrainStamina(ESAT_Ability, 0, 0, GetSkillAbilityName(S_Sword_s02), dt);
+		// Triangle rend
+		focusCost = GetStatMax(BCS_Focus) * dt / specialHeavyChargeDuration;
+		undrainedFocusDifference += focusCost;
+		if (undrainedFocusDifference >= 1 && GetStat(BCS_Focus) >= 1) {
+			DrainFocus(1);
+			undrainedFocusDifference -= 1;
+			cachedFocusDifference += 1;
+		}
+		// Triangle
 
+		// Triangle rend Moved to below
+		// if(GetStat(BCS_Stamina) <= 0)
+		// 	OnPerformSpecialAttack(false, false);
+		// Triangle end
 		
-		if(GetStat(BCS_Stamina) <= 0)
-			OnPerformSpecialAttack(false, false);
 			
 		
 		ratio = EngineTimeToFloat(theGame.GetEngineTime() - specialHeavyStartEngineTime) / specialHeavyChargeDuration;
@@ -2897,19 +2943,25 @@ statemachine class W3PlayerWitcher extends CR4Player
 		SetSpecialAttackTimeRatio(ratio);
 		
 		
-		focusHighlight = ratio * GetStatMax(BCS_Focus);
-		focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
-		focusHighlight = FloorF(focusHighlight);
+		// Triangle rend
+		// Moved this line to be after setting the ratio
+		if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
+			OnPerformSpecialAttack(false, false);
+
+		// focusHighlight = ratio * GetStatMax(BCS_Focus);
+		// focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
+		// focusHighlight = FloorF(focusHighlight);
 		
-		hud = (CR4ScriptedHud)theGame.GetHud();
-		if ( hud )
-		{
-			hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
-			if ( hudWolfHeadModule )
-			{
-				hudWolfHeadModule.LockFocusPoints((int)focusHighlight);
-			}		
-		}
+		// hud = (CR4ScriptedHud)theGame.GetHud();
+		// if ( hud )
+		// {
+		// 	hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
+		// 	if ( hudWolfHeadModule )
+		// 	{
+		// 		hudWolfHeadModule.LockFocusPoints((int)focusHighlight);
+		// 	}		
+		// }
+		// Triangle end
 	}
 	
 	public function OnSpecialAttackHeavyActionProcess()
@@ -2919,15 +2971,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		super.OnSpecialAttackHeavyActionProcess();
 
-		hud = (CR4ScriptedHud)theGame.GetHud();
-		if ( hud )
-		{
-			hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
-			if ( hudWolfHeadModule )
-			{
-				hudWolfHeadModule.ResetFocusPoints();
-			}		
-		}
+		// Triangle rend
+		RefundRend();
+		// hud = (CR4ScriptedHud)theGame.GetHud();
+		// if ( hud )
+		// {
+		// 	hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
+		// 	if ( hudWolfHeadModule )
+		// 	{
+		// 		hudWolfHeadModule.ResetFocusPoints();
+		// 	}		
+		// }
+		// Triangle end
 	}
 	
 	timer function IsSpecialLightAttackInputHeld ( time : float, id : int )
@@ -3123,7 +3178,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						
+						isWeak = false; // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( true, true );
 					} break;
 					
@@ -3145,7 +3200,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						isWeak = !HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)); // Triangle alt stamina
+						isWeak = !thePlayer.HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( false, true );
 					} break;
 					
@@ -3250,7 +3305,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				maxLightCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s21));
 				maxHeavyCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s04));
 				TMod = theGame.GetTModOptions();
-				if(!IsHeavyAttack(attackTypeName) && attackTypeName != 'sword_s1')
+				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;

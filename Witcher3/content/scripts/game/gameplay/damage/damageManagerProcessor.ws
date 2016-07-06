@@ -673,6 +673,7 @@ class W3DamageManagerProcessor extends CObject
 		var samum : CBaseGameplayEffect;
 		var signPower, min, max : SAbilityAttributeValue;
 		var aerondight : W3Effect_Aerondight;
+		var rendLoad : float; // Triangle rend
 		
 		meleeOrRanged = playerAttacker && attackAction && ( attackAction.IsActionMelee() || attackAction.IsActionRanged() );
 		redWolfSet = ( W3Petard )action.causer && ( W3PlayerWitcher )actorAttacker && GetWitcherPlayer().IsSetBonusActive( EISB_RedWolf_1 );
@@ -703,7 +704,10 @@ class W3DamageManagerProcessor extends CObject
 					
 					if( SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName() )
 					{				
-						critChance += CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
+						// Triangle rend Crit scales with adrenaline points used now
+						rendLoad = ((W3PlayerWitcher)playerAttacker).GetSpecialAttackTimeRatio() * playerAttacker.GetStatMax(BCS_Focus);
+						critChance += FloorF(rendLoad) * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
+						// Triangle end
 					}
 					
 					
@@ -930,9 +934,9 @@ class W3DamageManagerProcessor extends CObject
 			
 			
 			rendRatio = witcherAttacker.GetSpecialAttackTimeRatio();
+
 			
-			
-			rendLoad = MinF(rendRatio * playerAttacker.GetStatMax(BCS_Focus), playerAttacker.GetStat(BCS_Focus));
+			rendLoad = rendRatio * playerAttacker.GetStatMax(BCS_Focus); // Triangle rend ends now when you don't have enough focus to drain, so rendLoad can't exceed max focus
 			
 			
 			if(rendLoad >= 1)
@@ -947,7 +951,8 @@ class W3DamageManagerProcessor extends CObject
 			}
 			
 			
-			staminaRendBonus = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'stamina_max_dmg_bonus', false, true);
+			// staminaRendBonus = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'stamina_max_dmg_bonus', false, true); // Triangle rend
+			staminaRendBonus.valueMultiplicative = theGame.GetTModOptions().GetRendChargeBonus(); // Triangle rend
 			
 			for(i=0; i<dmgInfos.Size(); i+=1)
 			{
@@ -1650,6 +1655,7 @@ class W3DamageManagerProcessor extends CObject
 		finalIncomingDamage = finalDamage;
 			
 		// Triangle heavy attack simplify alt stamina attack combos
+		// Triangle TODO don't apply weak and maybe heavy attack mods to spell sword damage
 		if(playerAttacker && attackAction) {
 			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
 				finalDamage *= TMod.GetHeavyAttackDamageMod() + TMod.GetHeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();

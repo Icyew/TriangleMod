@@ -5387,6 +5387,7 @@ import abstract class CActor extends CGameplayEntity
 			if (IsLightAttack(attackActionName) && !GetWitcherPlayer().IsDoingSpecialAttack(false)) {
 				GetWitcherPlayer().AddTimer('FastAttackCounterDecay', 0);
 			} else if (IsHeavyAttack(attackActionName)) {
+				GetWitcherPlayer().RefundRend(); // Triangle rend Refund if a miss
 				GetWitcherPlayer().AddTimer('HeavyAttackCounterDecay', 0);
 			}
 		}
