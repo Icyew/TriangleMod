@@ -850,8 +850,17 @@ class W3DamageManagerProcessor extends CObject
 		var sword : SItemUniqueId;
 		var actionFreeze : W3DamageAction;
 		var aerondight	: W3Effect_Aerondight;
-		
-		
+		// Triangle enemy mutations
+		var scaleFactor : float;
+
+		if (actorAttacker && !action.IsDoTDamage() && actorAttacker.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
+			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			for(i=0; i<dmgInfos.Size(); i+=1)
+			{
+				dmgInfos[i].dmgVal = dmgInfos[i].dmgVal * scaleFactor * scaleFactor;
+			}
+		}
+		// Triangle end
 		
 		if(actorAttacker && !actorAttacker.IgnoresDifficultySettings() && !action.IsDoTDamage())
 		{
@@ -1604,7 +1613,13 @@ class W3DamageManagerProcessor extends CObject
 		if(!action.GetIgnoreArmor())
 			resistPts += CalculateAttributeValue( actorVictim.GetTotalArmor() );
 		
-		
+		// Triangle enemy mutations
+		if (actorVictim && actorVictim.HasAbility(T_EMutationEnumToName(TEM_Tough)) && T_IsPhysicalDamage(dmgType)) {
+			resistPts += theGame.GetTModOptions().GetToughArmorPerLevel() * actorVictim.GetLevel();
+			resistPerc += (1 - resistPerc) * theGame.GetTModOptions().GetToughResistance();
+		}
+		// Triangle end
+
 		resistPts = MaxF(0, resistPts - CalculateAttributeValue(armorReduction) );		
 		resistPerc -= CalculateAttributeValue(armorReductionPerc);		
 		
@@ -1663,6 +1678,7 @@ class W3DamageManagerProcessor extends CObject
 				finalDamage *= TMod.GetWeakDamageMod();
 		}
 		// Triangle end
+		// Triangle TODO switch order of point resist and perc resist so both have a larger impact
 
 		if(finalDamage > 0.f)
 		{

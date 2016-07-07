@@ -224,4 +224,63 @@ class TModOptions
 		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'LevelJitter' ) );
 	}
 	// ---- Leveling End ---- //
+
+	// ---- Enemies Begin ---- //
+	public function GetEnemyMutationChance() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'EnemyMutationChance' ) ) / 100;
+	}
+
+	public function GetNumEnemyMutationRolls() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'NumEnemyMutationRolls' ) );
+	}
+
+	public function GetRandomEnemyMutations(out results : array < name >, optional forceAbilityName : name)
+	{
+		var mutations : array < T_EMutation >;
+		var mutation : T_EMutation;
+		var i : int;
+
+		for (i = 1; i < (int)TEM_TOTAL_COUNT; i += 1) {
+			mutations.PushBack((T_EMutation)i);
+		}
+
+		for (i = 0; i < GetNumEnemyMutationRolls(); i += 1) {
+			if (RandF() < GetEnemyMutationChance()) {
+				mutation = mutations[RandRange(mutations.Size())];
+				results.PushBack(T_EMutationEnumToName(mutation));
+				mutations.Remove(mutation);
+				if (mutations.Size() == 0)
+					return;
+			}
+		}
+	}
+
+	public function GetHugeScaleFactor() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'HugeScaleFactor' ) );
+	}
+
+	public function GetToughArmorPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ToughArmorPerLevel' ) );
+	}
+
+	public function GetToughResistance() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ToughResistance' ) ) / 100;
+	}
+
+	public function GetQuickSpeedBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'QuickSpeedBonus' ) ) / 100;
+	}
+
+	public function GetResilientRegenPerLevel() : int
+	{
+		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ResilientRegenPerLevel' ) );
+	}
+
+	// ---- Enemies end ---- //
 }

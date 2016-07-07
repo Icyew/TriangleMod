@@ -6514,7 +6514,7 @@ exec function spawnBoat000()
 	ent = theGame.CreateEntity(template, pos, rot, true, false, false, PM_Persist );
 }
 
-exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int )
+exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int, optional mutation : name )
 {
 	var ent : CEntity;
 	var horse : CEntity;
@@ -6637,6 +6637,12 @@ exec function spawn(nam : name, optional quantity : int, optional distance : flo
 			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
 		}
 			
+		// Triangle enemy mutation For testing purposes
+		if (T_EMutationNameToEnum(mutation) != TEM_Undefined) {
+			((CNewNPC)ent).AddAbility(mutation);
+		}
+		// Triangle end
+
 		if ( level != 0 )
 		{
 			((CNewNPC)ent).SetLevel( level );

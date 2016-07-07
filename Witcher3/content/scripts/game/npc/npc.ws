@@ -378,6 +378,10 @@ statemachine import class CNewNPC extends CActor
 		var heading 		: float;
 		var remainingDuration : float;
 		var oldLevel : int;
+		// Triangle enemy mutations
+		var emutations : array < name >;
+		var i : int;
+		// Triangle end
 		
 		currentLevel = level;
 		levelBonusesComputedAtPlayerLevel = -1;
@@ -390,6 +394,15 @@ statemachine import class CNewNPC extends CActor
 		
 		GotoStateAuto();		
 		
+
+		// Triangle enemy mutations
+		if (npcGroupType == ENGT_Enemy && UsesEssence()) {
+			theGame.GetTModOptions().GetRandomEnemyMutations(emutations);
+			for (i = 0; i < emutations.Size(); i += 1) {
+				AddAbility(emutations[i]);
+			}	
+		}
+		// Triangle
 		
 		isTalkDisabledTemporary = false;
 		
@@ -1137,11 +1150,12 @@ statemachine import class CNewNPC extends CActor
 			return newLevel;
 
 		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
-		if (GetNPCType() == ENGT_Guard)
-		{
-			opponentLevel = thePlayer.GetLevel() + 13;
-			newLevel = opponentLevel;
-		}
+		// Disabling this for now since it looks like it was removed in a patch
+		// if (GetNPCType() == ENGT_Guard)
+		// {
+		// 	opponentLevel = thePlayer.GetLevel() + 13;
+		// 	newLevel = opponentLevel;
+		// }
 
 		if (TMod.IsUpscalingOn() && opponentLevel < playerLevel)
 		{
@@ -1178,6 +1192,58 @@ statemachine import class CNewNPC extends CActor
 			RemoveAbilityMultiple(abilityName, count);
 	}
 
+	// Triangle enemy mutations
+	public function GetMutatedDisplayName() : string
+	{
+		return T_GetMutatedPrefix(GetCharacterStats()) + GetDisplayName();
+	}
+
+	// Triangle enemy mutations
+	saved var quickAnimCauserId : int; default quickAnimCauserId = -1;
+	public function ProcessMutations()
+	{
+		var animComp : CComponent;
+		var scaleFactor, maxVit, maxEss, healthPerc : float;
+		var stats : CCharacterStats;
+		var effectParams : SCustomEffectParams;
+
+		stats = GetCharacterStats();
+
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Tough))) {
+			T_LogMessage("T_Tough!");
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
+			T_LogMessage("T_Huge!");
+			animComp = ((CEntity)this).GetComponentByClassName('CAnimatedComponent');
+			if (animComp) {
+				scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+				animComp.SetScale(Vector(scaleFactor, scaleFactor, scaleFactor, 1));
+			}
+			maxVit = GetStatMax( BCS_Vitality );
+			maxEss = GetStatMax( BCS_Essence );
+			healthPerc = GetHealthPercents();
+			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			if(maxVit > 0) {
+				abilityManager.UpdateStatMax(BCS_Vitality);
+				abilityManager.SetStatPointMax(BCS_Vitality, maxVit*scaleFactor*scaleFactor);
+			}
+			if(maxEss > 0) {
+				abilityManager.UpdateStatMax(BCS_Essence);
+				abilityManager.SetStatPointMax(BCS_Essence, maxEss*scaleFactor*scaleFactor);
+			}
+			SetHealthPerc(healthPerc);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Quick))) {
+			T_LogMessage("T_Quick!");
+			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + theGame.GetTModOptions().GetQuickSpeedBonus(), quickAnimCauserId);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Resilient))) {
+			T_LogMessage("T_Resilient!");
+			stats.RemoveAbilityAll(T_EMutationEnumToName(TEM_Resilient));
+			stats.AddAbilityMultiple(T_EMutationEnumToName(TEM_Resilient), theGame.GetTModOptions().GetResilientRegenPerLevel() * GetLevel());
+		}
+	}
+
 	// Triangle level scaling add level bonuses with TMod options
 	timer function AddLevelBonuses (dt : float, id : int)
 	{
@@ -1190,6 +1256,9 @@ statemachine import class CNewNPC extends CActor
 		var playerLevel			: int;
 		var stats				: CCharacterStats;
 		var npcGroupType		: ENPCGroupType;
+		// Triangle enemy mutations
+		var maxVit, maxEss, oldMax, scaleFactor : float;
+		// Triangle end
 		
 		RemoveTimer( 'AddLevelBonuses' );
 		
@@ -1265,6 +1334,7 @@ statemachine import class CNewNPC extends CActor
 		stats.RemoveAbilityAll(theGame.params.MONSTER_BONUS_PER_LEVEL_ARMORED );
 		stats.RemoveAbilityAll(theGame.params.MONSTER_BONUS_PER_LEVEL);
 		
+
 		if ( IsHuman() && GetStat( BCS_Essence, true ) < 0 )
 		{
 			if ( npcGroupType != ENGT_Guard )
@@ -1379,6 +1449,11 @@ statemachine import class CNewNPC extends CActor
 			}	 
 			
 		}
+
+		// Triangle enemy mutations
+		ProcessMutations();
+		// Triangle end
+
 	}
 	
 	public function SetParentEncounter( encounter : CEncounter )

@@ -490,7 +490,7 @@ import abstract class CActor extends CGameplayEntity
 				
 	
 	private saved var nextFreeAnimMultCauserId : int;							
-		default nextFreeAnimMultCauserId = 0;
+		default nextFreeAnimMultCauserId = 1; // Triangle attack combos Originally 0, which should cause a bug but I didn't confirm
 	
 	private var animationMultiplierCausers : array< SAnimMultiplyCauser >;		
 				
@@ -1231,9 +1231,9 @@ import abstract class CActor extends CGameplayEntity
 		return causer.id;
 	}
 
-	// Triangle armor bonuses
-	private var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
-	private var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 0;
+	// Triangle attack combos
+	private saved var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
+	private saved var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 1;
 	public function TopBaseAnimationMultiplierCauserMul() : float
 	{
 		var causer : SAnimMultiplyCauser;
@@ -1296,7 +1296,7 @@ import abstract class CActor extends CGameplayEntity
 
 	private function CalculateFinalAnimationSpeedMultiplier() : float
 	{
-		// Triangle armor bonuses
+		// Triangle attack combos
 		var baseMultiplier : float;
 
 		baseMultiplier = TopBaseAnimationMultiplierCauserMul();
@@ -1333,7 +1333,7 @@ import abstract class CActor extends CGameplayEntity
 	{
 		animationMultiplierCausers.Clear();
 		SetAnimationTimeMultiplier( 1.0f );
-		baseAnimationMultiplierCausers.Clear(); // Triangle armor bonuses
+		baseAnimationMultiplierCausers.Clear(); // Triangle attack combos
 	}
 	
 	
