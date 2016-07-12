@@ -68,13 +68,12 @@ if test -e "$studioPath/scripts/source/"; then
 	mkdir "$studioPath/scripts/source/";
 fi
 
-currentChanges=$(git status --porcelain)
-oldChanges=$(git diff --name-status vanilla..HEAD)
+currentChanges=$(git diff --name-status vanilla)
 
 prefix="Witcher3"
 mkdir -p "$tmpPath"
 IFS=$'\n'
-for fileWithStatus in $currentChanges $oldChanges; do
+for fileWithStatus in $currentChanges; do
 	status=$(echo "$fileWithStatus" | grep -oP "^.*?\S" | grep -o "\S")
 	file=$(echo "$fileWithStatus" | grep -o "$prefix.*$")
 	if [[ $file =~ ^$prefix ]] && ([[ $status == "M" || $status == "A" ]]); then
