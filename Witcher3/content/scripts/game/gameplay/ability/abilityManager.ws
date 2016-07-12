@@ -220,7 +220,10 @@ import abstract class W3AbilityManager extends IScriptable
 				
 				if(blockedAbilities[i].timeWhenEnabledd == 0)		
 				{
-					BlockAbility(blockedAbilities[i].abilityName, false);	
+					// Triangle enemy mutations
+					if (blockedAbilities[i].count < 123456789) // terrible hack
+						BlockAbility(blockedAbilities[i].abilityName, false);	
+					// Triangle end
 				}
 				else
 				{
@@ -232,15 +235,15 @@ import abstract class W3AbilityManager extends IScriptable
 		if(min == 1000000)
 			min = -1;
 			
-		return min;
+		return MinF(min, 0.5); // Triangle enemy mutations
 	}
 	
 	
-	public function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool
+	public function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimout : bool) : bool // Triangle enemy mutations
 	{		
-		var i : int;
+		var i, cnt, currCnt, toAdd : int; // Triangle enemy mutations
 		var ab : SBlockedAbility;
-		var min, cnt : float;
+		var min : float; // Triangle enemy mutations
 		var ret : bool;
 				
 		if(!IsNameValid(abilityName))
@@ -254,13 +257,28 @@ import abstract class W3AbilityManager extends IScriptable
 				{	
 					cnt = blockedAbilities[i].count;
 					blockedAbilities.Erase(i);					
-					if(cnt > 0)									
-						charStats.AddAbility(abilityName, cnt);					
+					// Triangle enemy mutations
+					if (cnt >= 123456789) // terrible hack
+						cnt -= 123456789;
+					currCnt = charStats.GetAbilityCount(abilityName);
+					if(cnt > currCnt)	{
+						charStats.AddAbilityMultiple(abilityName, cnt - currCnt);
+					}
+					// Triangle end
 					
 					return true;
 				}
 				else
 				{
+					// Triangle enemy mutations
+					blockedAbilities[i].timeWhenEnabledd = MaxF(blockedAbilities[i].timeWhenEnabledd, cooldown);
+					// terrible hack
+					if (cooldown <= 0 && blockedAbilities[i].count < 123456789)
+						blockedAbilities[i].count += 123456789;
+					if (unblockTimout && blockedAbilities[i].count >= 123456789)
+						blockedAbilities[i].count -= 123456789;
+					owner.AddTimer('CheckBlockedAbilities', 0, , , , true); // Triangle enemy mutations
+					// Triangle end
 					return false;
 				}
 			}
@@ -269,6 +287,7 @@ import abstract class W3AbilityManager extends IScriptable
 		if(block)
 		{
 			ab.abilityName = abilityName;
+			ab.count = 0; // Triangle enemy mutations I like to explicitly initialize things
 			
 			if(cooldown > 0)				
 			{
@@ -285,25 +304,48 @@ import abstract class W3AbilityManager extends IScriptable
 				}
 				
 				
-				owner.AddTimer('CheckBlockedAbilities', min, , , , true);
+				owner.AddTimer('CheckBlockedAbilities', MinF(min, 0.5), , , , true); // Triangle enemy mutations
 			}
 			else
 			{
 				ab.timeWhenEnabledd = -1;
+				ab.count = 123456789; // Triangle enemy mutations terrible hack. no timeouts if count >= 123456789
 			}
 			
 			
-			ab.count = charStats.GetAbilityCount(abilityName);
+			ab.count += Max(charStats.GetAbilityCount(abilityName), 0); // Triangle enemy mutations
 	
 			
-			ret = charStats.RemoveAbility(abilityName);
+			// Triangle enemy mutations
+			ret = charStats.HasAbility(abilityName);
+			charStats.RemoveAbilityAll(abilityName);
+			ret = ret && !charStats.HasAbility(abilityName);
 			blockedAbilities.PushBack(ab);
+			// Triangle end
 			return ret;
 		}
 		else
 		{
 			return false;
 		}
+	}
+
+	// Triangle enemy mutations
+	public function GetBlockedAbilityTimeRemaining(abilityName : name) : float
+	{
+		var i : int;
+		for (i = 0; i < blockedAbilities.Size(); i += 1)
+		{
+			if (blockedAbilities[i].abilityName == abilityName) {
+				if (blockedAbilities[i].count > 123456789)
+					return -1;
+				else if (blockedAbilities[i].count == 123456789 || blockedAbilities[i].count == 0)
+					return 0;
+				else
+					return blockedAbilities[i].timeWhenEnabledd;
+			}
+		}
+		return 0;
 	}
 	
 	import public final function IsAbilityBlocked(abilityName : name) : bool;
@@ -642,12 +684,24 @@ import abstract class W3AbilityManager extends IScriptable
 	
 	public function OnAbilityAdded( abilityName : name )
 	{
+		// Triangle enemy mutations
+		var mutation : T_EMutation;
+		mutation = T_EMutationNameToEnum(abilityName);
+		if (owner)
+			owner.ResumeEffects(T_EMutationEnumToEffectType(mutation), abilityName);
+		// Triangle end
 		OnAbilityChanged( abilityName );
 	}
 	
 	
 	public function OnAbilityRemoved( abilityName : name )
 	{
+		// Triangle enemy mutations
+		var mutation : T_EMutation;
+		mutation = T_EMutationNameToEnum(abilityName);
+		if (owner)
+			owner.PauseEffects(T_EMutationEnumToEffectType(mutation), abilityName);
+		// Triangle end
 		if( abilityName == 'Runeword 4 _Stats' )
 		{
 			ResetOverhealBonus();

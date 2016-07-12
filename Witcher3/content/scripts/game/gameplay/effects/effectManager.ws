@@ -662,6 +662,14 @@ class W3EffectManager
 			theGame.ReleaseNoSaveLock(criticalStateSaveLockId);
 			hasCriticalStateSaveLock = false;
 		}
+		// Triangle enemy mutations
+		if (GetCriticalBuffsCount() == 0) {
+			// terrible hacks ahead
+			// Unblock timeouts
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, 0.1, true);
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, 0.1, true);
+		}
+		// Triangle end
 	}
 	
 	
@@ -675,6 +683,18 @@ class W3EffectManager
 		
 		effectType = effect.GetEffectType();
 		
+		// Triangle enemy mutations
+		if (IsCriticalEffectType(effectType)) {
+			// terrible hacks ahead
+			// Block abilities so that the block will not timeout
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, -1);
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, -1);
+			// Set a timer that ticks down even when timeouts are blocked. These will matter when timeouts are unblocked
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, theGame.GetTModOptions().GetMinHypnoticDelay());
+			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, theGame.GetTModOptions().GetMinHypnoticDelay());
+		}
+		// Triangle end
+
 		if(!hasCriticalStateSaveLock && owner == thePlayer && IsCriticalEffectType(effectType) )
 		{
 			 theGame.CreateNoSaveLock("critical_state", criticalStateSaveLockId);

@@ -1023,9 +1023,9 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.SetCustomRotation( 'Dodge', GetDodgeHeading( playerEvadeType ), 0.0f, 0.1f, false );
 		
 		if (  turnInPlaceBeforeDodge )
-			Sleep( 0.4f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
+			Sleep( 0.4f / parent.GetAnimationTimeMultiplier()); // Triangle armor bonuses enemy mutations This stops dodges from bugging out when geralt is slowed
 		else
-			Sleep( 0.3f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
+			Sleep( 0.3f / parent.GetAnimationTimeMultiplier()); // Triangle armor bonuses enemy mutations
 
 		
 		if ( parent.bLAxisReleased )

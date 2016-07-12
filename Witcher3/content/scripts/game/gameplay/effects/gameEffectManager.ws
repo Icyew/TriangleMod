@@ -216,6 +216,13 @@ class W3GameEffectManager
 	
 		switch(effect)
 		{
+			// Triangle enemy mutations
+			case EET_TFireAura :				effects[effect] = new W3TFireAura in this;							break;
+			case EET_TFreezingAura :			effects[effect] = new W3TFreezingAura in this;						break;
+			case EET_THypnoAura :				effects[effect] = new W3THypnoAura in this;							break;
+			case EET_TInspiringAura :			effects[effect] = new W3TInspiringAura in this;						break;
+			case EET_TInspired :				effects[effect] = new W3Effect_TInspired in this;					break;
+			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
 			case EET_AutoMoraleRegen :			effects[effect] = new W3Effect_AutoMoraleRegen in this; 			break;
@@ -612,6 +619,14 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 	
 	switch(effectType)
 	{
+		// Triangle enemy mutations
+		case "TFireAuraEffect" :									type = EET_TFireAura;					break;
+		case "TFreezingAuraEffect" :								type = EET_TFreezingAura;				break;
+		case "THypnoAuraEffect" :									type = EET_THypnoAura;					break;
+		case "TInspiringAuraEffect" :								type = EET_TInspiringAura;				break;
+		case "TInspiredEffect" :									type = EET_TInspired;					break;
+		// Triangle end
+
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
 		case "AutoMoraleRegen" : 							type = EET_AutoMoraleRegen;				break;
 		case "AutoStaminaRegen" : 							type = EET_AutoStaminaRegen;			break;
@@ -810,6 +825,14 @@ function EffectTypeToName(effectType : EEffectType) : name
 {
 	switch(effectType)
 	{
+		// Triangle enemy mutations
+		case EET_TFireAura :							return 'TFireAuraEffect';
+		case EET_TFreezingAura :						return 'TFreezingAuraEffect';
+		case EET_THypnoAura :							return 'THypnoAuraEffect';
+		case EET_TInspiringAura :						return 'TInspiringAuraEffect';
+		case EET_TInspired :							return 'TInspiredEffect';
+		// Triangle end
+
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';
 		case EET_AutoMoraleRegen : 						return 'AutoMoraleRegen';
 		case EET_AutoStaminaRegen : 					return 'AutoStaminaRegen';

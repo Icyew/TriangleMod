@@ -17,18 +17,65 @@
       </ability>
 	 
     <!-- Triangle enemy mutations -->
-    <ability name="T_Tough">
-      <tags> TMod </tags>
+    <ability name="TEM_Tough">
+      <tags> TEMutation </tags>
     </ability>
-    <ability name="T_Quick">
-      <tags> TMod </tags>
+    <ability name="TEM_Quick">
+      <tags> TEMutation </tags>
     </ability>
-    <ability name="T_Huge">
-      <tags> TMod </tags>
+    <ability name="TEM_Huge">
+      <tags> TEMutation </tags>
     </ability>
-    <ability name="T_Resilient">
-      <tags> TMod </tags>
+    <ability name="TEM_Resilient">
+      <tags> TEMutation </tags>
       <essenceRegen type="add" always_random="false" min="1" max="1" />
+      <vitalityRegen type="add" always_random="false" min="1" max="1" />
+    </ability>
+    <ability name="TEM_Electric">
+      <tags> TEMutation, MonsterSkill </tags>
+      <shock_resistance type="base" always_random="false" min="100" max="100" />
+      <shock_resistance_perc type="base" min="100" max="100" />
+    </ability>
+    <ability name="TEM_Venomous">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Vampiric">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Flaming">
+      <tags> TEMutation, MonsterSkill </tags>
+      <fire_resistance type="base" always_random="false" min="100" max="100" />
+      <fire_resistance_perc type="base" min="100" max="100" />
+      <burning_resistance_perc type="add" min="1.0" max="1.0" />
+      <burning_DoT_damage_resistance_perc type="add" min="1.0" max="1.0" />
+    </ability>
+    <ability name="TEM_Freezing">
+      <tags> TEMutation, MonsterSkill </tags>
+      <frost_resistance type="base" always_random="false" min="100" max="100" />
+      <frost_resistance_perc type="base" min="100" max="100" />
+    </ability>
+    <ability name="TEM_Draining">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Haunted">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Explosive">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Hypnotic">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Inspiring">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <!-- not actually a mutation but putting it here anyways -->
+    <ability name="TEM_Inspired">
+      <tags> MonsterSkill </tags>
+      <essence type="mult" always_random="false" min="0.01" max="0.01" />
+      <vitality type="mult" always_random="false" min="0.01" max="0.01" />
+      <attack_power type="mult" always_random="false" min="0.01" max="0.01" />
+      <will_resistance_perc type="add" always_random="false" min="100" max="100" />
     </ability>
     <!-- Triangle end -->
       <!-- MONSTER OPPONENTS-->

@@ -129,6 +129,14 @@ enum EEffectType
 {
 	EET_Undefined,		
 
+	// Triangle enemy mutations
+	EET_TFireAura,
+	EET_TFreezingAura,
+	EET_THypnoAura,
+	EET_TInspiringAura,
+	EET_TInspired,
+	// Triangle end
+
 	
 	EET_AutoVitalityRegen,
 	EET_AutoStaminaRegen,
@@ -341,8 +349,9 @@ struct SApplicatorSpawnEffect
 {		
 	saved var spawnAbilityName : name;											
 	saved var spawnType : EEffectType;											
-	saved var spawnFlagsHostile, spawnFlagsNeutral, spawnFlagsFriendly : bool;	
+	saved var spawnFlagsHostile, spawnFlagsNeutral, spawnFlagsFriendly, spawnFlagsWitcher : bool;	// Triangle enemy mutations
 	saved var spawnSourceName : string;											
+	saved var spawnCustomParams : SCustomEffectParams; // Triangle enemy mutations
 };
 
 struct SPausedAutoEffect

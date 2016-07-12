@@ -1916,7 +1916,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 		currVitality = GetStat(BCS_Vitality);
 		
-		
+
+		// Triangle enemy mutations
+		if (action.DealsAnyDamage() && action.attacker.HasAbility(T_EMutationEnumToName(TEM_Draining))) {
+			DrainStamina(ESAT_FixedValue, GetStat(BCS_Stamina), 2);
+		}
+		// Triangle end
+
 		if(action.processedDmg.vitalityDamage >= currVitality)
 		{
 			killSourceName = action.GetBuffSourceName();
@@ -1931,7 +1937,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					healingFactor *= GetStatMax(BCS_Vitality);
 					healingFactor *= GetStat(BCS_Focus);
 					healingFactor *= 1 + CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_bonus', false, true) ) * (GetSkillLevel(S_Sword_s18) - 1);
-					ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality));
+					ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality)); // Triangle TODO clearly healing factor does nothing here
 					DrainFocus(GetStat(BCS_Focus));
 					RemoveBuff(EET_BattleTrance);
 					cannotUseUndyingSkill = true;
@@ -2326,6 +2332,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(!action.WasDodged() && spellSwordSign != ST_None && CanUseSkill(T_PowerSkillForSignType(spellSwordSign)))
 				{
 					// Triangle TODO is it a problem if these effects are played twice, once for the runeword?
+					// Triangle TODO play visual effects on hit
 					if(spellSwordSign == ST_Axii)
 					{
 						actorVictim.SoundEvent('sign_axii_release');
@@ -2385,7 +2392,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					if(abs.Size() > 0)
 					{
 						value = GetSkillAttributeValue(S_Sword_s12, 'duration', true, true) * GetSkillLevel(S_Sword_s12);
-						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, CalculateAttributeValue(value));
+						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, theGame.GetTModOptions().GetCripplingShotDurationPerLevel() * GetSkillLevel(S_Sword_s12)); // Triangle enemy mutations
 					}
 				}
 			}

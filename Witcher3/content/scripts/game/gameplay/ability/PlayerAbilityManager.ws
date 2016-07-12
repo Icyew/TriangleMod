@@ -1305,7 +1305,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool
+	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimeout : bool) : bool // Triangle enemy mutations match base fn
 	{
 		var i : int;
 	

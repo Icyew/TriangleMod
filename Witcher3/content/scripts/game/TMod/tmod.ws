@@ -226,6 +226,12 @@ class TModOptions
 	// ---- Leveling End ---- //
 
 	// ---- Enemies Begin ---- //
+
+	public function CanVitalityMutate() : bool
+	{
+		return !theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'MonstersOnly' );
+	}
+
 	public function GetEnemyMutationChance() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'EnemyMutationChance' ) ) / 100;
@@ -243,7 +249,8 @@ class TModOptions
 		var i : int;
 
 		for (i = 1; i < (int)TEM_TOTAL_COUNT; i += 1) {
-			mutations.PushBack((T_EMutation)i);
+			if (theGame.GetDefinitionsManager().AbilityHasTag(T_EMutationEnumToName((T_EMutation)i), 'TEMutation'))
+				mutations.PushBack((T_EMutation)i);
 		}
 
 		for (i = 0; i < GetNumEnemyMutationRolls(); i += 1) {
@@ -280,6 +287,76 @@ class TModOptions
 	public function GetResilientRegenPerLevel() : int
 	{
 		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ResilientRegenPerLevel' ) );
+	}
+
+	public function GetResilientDuration() : int
+	{
+		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ResilientDuration' ) );
+	}
+
+	public function GetElectricCooldown() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ElectricCooldown' ) );
+	}
+
+	public function GetElectricDamageRatio() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ElectricDamageRatio' ) );
+	}
+
+	public function GetFlamingMaxDamageRatio() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'FlamingDamageRatio' ) ) / 100;
+	}
+
+	public function GetVampiricHealRatio() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'VampiricHealRatio' ) );
+	}
+
+	public function GetVenomousDuration() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'VenomousDuration' ) );
+	}
+
+	public function GetExplosiveDamageRatio() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveDamageRatio' ) );
+	}
+
+	public function GetExplosiveRange() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveRange' ) );
+	}
+
+	public function GetFlamingRange() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'FlamingRange' ) );
+	}
+
+	public function GetFreezingRange() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'FreezingRange' ) );
+	}
+
+	public function GetHypnoticRange() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'HypnoticRange' ) );
+	}
+
+	public function GetMinHypnoticDelay() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'HypnoticDelay' ) );
+	}
+
+	public function GetInspiredBonus() : int
+	{
+		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'InspiredBonus' ) );
+	}
+
+	public function GetCripplingShotDurationPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'CripplingShotDurationPerLevel' ) );
 	}
 
 	// ---- Enemies end ---- //

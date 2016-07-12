@@ -6514,7 +6514,7 @@ exec function spawnBoat000()
 	ent = theGame.CreateEntity(template, pos, rot, true, false, false, PM_Persist );
 }
 
-exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int, optional mutation : name )
+exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int, optional mutation : name ) // Triangle enemy mutations param
 {
 	var ent : CEntity;
 	var horse : CEntity;
