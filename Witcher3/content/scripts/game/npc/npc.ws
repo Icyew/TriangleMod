@@ -1203,30 +1203,8 @@ statemachine import class CNewNPC extends CActor
 	// Triangle enemy mutations
 	timer function PlayElectricity(delta : float, id : int)
 	{
-		if (GetCharacterStats().HasAbility(T_EMutationEnumToName(TEM_Electric)))
-			PlayEffect('yrden_shock');
-		if (electricityEnabled){
-			AddTimer('PlayElectricity', 0.5 + RandF());
-		}
-	}
-
-	// Triangle enemy mutations
-	timer function DelayElectrify(delta : float, id : int)
-	{
-		if (IsAlive()) {
-			SetElectrified(true);
-		}
-	}
-
-	// Triangle enemy mutations
-	public function SetElectrified(enabled : bool)
-	{
-		electricityEnabled = enabled;
-		RemoveTimer('PlayElectricity');
-		RemoveTimer('DelayElectrify');
-		if (enabled) {
-			AddTimer('PlayElectricity', 0);
-		}
+		PlayEffect('yrden_shock');
+		AddTimer('PlayElectricity', 0.5 + RandF());
 	}
 
 	// Triangle enemy mutations
@@ -1370,7 +1348,6 @@ statemachine import class CNewNPC extends CActor
 
 	// Triangle enemy mutations
 	saved var quickAnimCauserId : int; default quickAnimCauserId = -1;
-	public var electricityEnabled : bool; default electricityEnabled = false;
 	public function ProcessMutations()
 	{
 		var animComp : CComponent;
@@ -1394,9 +1371,6 @@ statemachine import class CNewNPC extends CActor
 		}
 		if (stats.HasAbility(T_EMutationEnumToName(TEM_Quick))) {
 			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + theGame.GetTModOptions().GetQuickSpeedBonus(), quickAnimCauserId);
-		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Electric))) {
-			SetElectrified(true);
 		}
 		if (stats.HasAbility(T_EMutationEnumToName(TEM_Flaming))) {
 			AddTimer('FlameOn', 0);
@@ -2649,7 +2623,7 @@ statemachine import class CNewNPC extends CActor
 		var template										: CEntityTemplate;
 		var stats											: CCharacterStats;
 
-		SetElectrified(false);
+		GetCharacterStats().RemoveAbility(T_EMutationEnumToName(TEM_Electric));
 
 		stats = GetCharacterStats();
 		if (stats.HasAbility(T_EMutationEnumToName(TEM_Haunted))) {
