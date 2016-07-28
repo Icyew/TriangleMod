@@ -399,7 +399,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 			{
 				m_nameInterval = 0.25; 
 				
-				UpdateName( l_target.GetDisplayName() );
+				UpdateName( l_target.GetMutatedDisplayName() ); // Triangle enemy mutations
 			}
 
 			

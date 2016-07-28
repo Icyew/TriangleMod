@@ -372,12 +372,17 @@ statemachine import class CNewNPC extends CActor
 	
 	
 	
+	saved var hasRolledForMutations : bool; default hasRolledForMutations = false; // Triangle enemy mutations
 	event OnSpawned(spawnData : SEntitySpawnData )
 	{
 		var lvlDiff, playerLevel: int;
 		var heading 		: float;
 		var remainingDuration : float;
 		var oldLevel : int;
+		// Triangle enemy mutations
+		var emutations : array < name >;
+		var i : int;
+		// Triangle end
 		
 		currentLevel = level;
 		levelBonusesComputedAtPlayerLevel = -1;
@@ -390,6 +395,16 @@ statemachine import class CNewNPC extends CActor
 		
 		GotoStateAuto();		
 		
+
+		// Triangle enemy mutations
+		if (npcGroupType == ENGT_Enemy && (UsesEssence() || theGame.GetTModOptions().CanVitalityMutate()) && !hasRolledForMutations) {
+			theGame.GetTModOptions().GetRandomEnemyMutations(emutations);
+			for (i = 0; i < emutations.Size(); i += 1) {
+				AddAbility(emutations[i]);
+			}
+			hasRolledForMutations = true;
+		}
+		// Triangle
 		
 		isTalkDisabledTemporary = false;
 		
@@ -1137,11 +1152,12 @@ statemachine import class CNewNPC extends CActor
 			return newLevel;
 
 		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
-		if (GetNPCType() == ENGT_Guard)
-		{
-			opponentLevel = thePlayer.GetLevel() + 13;
-			newLevel = opponentLevel;
-		}
+		// Disabling this for now since it looks like it was removed in a patch
+		// if (GetNPCType() == ENGT_Guard)
+		// {
+		// 	opponentLevel = thePlayer.GetLevel() + 13;
+		// 	newLevel = opponentLevel;
+		// }
 
 		if (TMod.IsUpscalingOn() && opponentLevel < playerLevel)
 		{
@@ -1176,6 +1192,224 @@ statemachine import class CNewNPC extends CActor
 			AddAbilityMultiple(abilityName, count);
 		else if (count < 0)
 			RemoveAbilityMultiple(abilityName, count);
+	}
+
+	// Triangle enemy mutations
+	public function GetMutatedDisplayName() : string
+	{
+		return T_GetMutatedPrefix(this) + GetDisplayName();
+	}
+
+	// Triangle enemy mutations
+	timer function PlayElectricity(delta : float, id : int)
+	{
+		if (GetCharacterStats().HasAbility(T_EMutationEnumToName(TEM_Electric)))
+			PlayEffect('yrden_shock');
+		if (electricityEnabled){
+			AddTimer('PlayElectricity', 0.5 + RandF());
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function DelayElectrify(delta : float, id : int)
+	{
+		if (IsAlive()) {
+			SetElectrified(true);
+		}
+	}
+
+	// Triangle enemy mutations
+	public function SetElectrified(enabled : bool)
+	{
+		electricityEnabled = enabled;
+		RemoveTimer('PlayElectricity');
+		RemoveTimer('DelayElectrify');
+		if (enabled) {
+			AddTimer('PlayElectricity', 0);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function FlameOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3TFireAuraCustomParams;
+		if (IsAlive()) {
+			params.effectType = EET_TFireAura;
+			params.creator = this;
+			params.sourceName = T_EMutationEnumToName(TEM_Flaming);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3TFireAuraCustomParams in theGame;
+			specificParams.range = theGame.GetTModOptions().GetFlamingRange();
+			specificParams.burningDuration = 1;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function FreezeOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3TFreezingAuraCustomParams;
+		if (IsAlive()) {
+			params.effectType = EET_TFreezingAura;
+			params.creator = this;
+			params.sourceName = T_EMutationEnumToName(TEM_Freezing);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3TFreezingAuraCustomParams in theGame;
+			specificParams.range = theGame.GetTModOptions().GetFreezingRange();
+			specificParams.freezingDuration = 1;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function HypnoOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3THypnoAuraCustomParams;
+		if (IsAlive()) {
+			params.effectType = EET_THypnoAura;
+			params.creator = this;
+			params.sourceName = T_EMutationEnumToName(TEM_Hypnotic);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3THypnoAuraCustomParams in theGame;
+			specificParams.range = theGame.GetTModOptions().GetHypnoticRange();
+			specificParams.hypnoDuration = 0.25;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function InspireOn(delta : float, id : int)
+	{
+		if (IsAlive()) {
+			AddEffectDefault(EET_TInspiringAura, this, T_EMutationEnumToName(TEM_Inspiring));
+		}
+	}
+
+	// Triangle enemy mutations
+	function StartResilientRegen()
+	{
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		stats.RemoveAbilityAll(T_EMutationEnumToName(TEM_Resilient));
+		// This might be woefully inefficient but I haven't noticed any problems yet
+		stats.AddAbilityMultiple(T_EMutationEnumToName(TEM_Resilient), theGame.GetTModOptions().GetResilientRegenPerLevel() * GetLevel());
+		AddTimer('EndResilientRegen', theGame.GetTModOptions().GetResilientDuration());
+	}
+
+	// Triangle enemy mutations
+	function EndResilientRegen(delta : float, id : int)
+	{
+		GetCharacterStats().RemoveAbilityAll(T_EMutationEnumToName(TEM_Resilient));
+	}
+	
+	// Triangle enemy mutations
+	var explosionMutationTriggered : bool; default explosionMutationTriggered = false;
+	timer function ExplodeMutation(dt : float, id : int)
+	{
+		var targets : array< CGameplayEntity >;
+		var ent : CEntity;
+		var i : int;
+		var returnedAction : W3DamageAction;
+		var damage : float;
+		var powerMod : SAbilityAttributeValue;
+
+		StopEffect('critical_burning');
+		if (IsAlive()) {
+			AddTimer('AardDismemberForce',0);
+			SoundEvent('monster_rotfiend_explode');
+			ent = theGame.CreateEntity((CEntityTemplate)LoadResource('rotfiend_explode'), GetWorldPosition(), GetWorldRotation());
+			ent.DestroyAfter(5);
+			FindGameplayEntitiesInSphere(targets, GetWorldPosition() + Vector(0,0,0.1f), theGame.GetTModOptions().GetExplosiveRange(), 1000, '', FLAG_TestLineOfSight);
+			for(i = 0; i < targets.Size(); i += 1) {
+				if (IsRequiredAttitudeBetween(this, targets[i], true, true, true)) {
+					returnedAction = new W3DamageAction in this;
+					returnedAction.Initialize( this, thePlayer, NULL, 'TEM_Explode', EHRT_None, CPS_AttackPower, true, false, false, false );
+					returnedAction.SetCannotReturnDamage( true );
+					returnedAction.AddEffectInfo(EET_LongStagger);
+					returnedAction.SetProcessBuffsIfNoDamage(true);
+					
+					damage = CalculateAttributeValue(GetAttributeValue('RendingDamage',,true));
+					damage += CalculateAttributeValue(GetAttributeValue('BludgeoningDamage',,true));
+					damage += CalculateAttributeValue(GetAttributeValue('FireDamage',,true));
+					damage += CalculateAttributeValue(GetAttributeValue('ElementalDamage',,true));
+
+					powerMod = GetPowerStatValue(CPS_AttackPower, , true);
+					damage = MaxF(0, (damage + powerMod.valueBase) * powerMod.valueMultiplicative + powerMod.valueAdditive);
+
+					returnedAction.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, damage);
+					
+					theGame.damageMgr.ProcessAction(returnedAction);
+					delete returnedAction;
+					break;
+				}
+			}
+			Kill('TEM_Explode', false, thePlayer);
+		}
+	}
+
+	// Triangle enemy mutations
+	saved var isHuge : bool; default isHuge = false; // For ragdoll stuff
+	function ProcessHugeMutationSize()
+	{
+		var animComp : CComponent;
+		var scaleFactor : float;
+		if (!isHuge)
+			return;
+		animComp = ((CEntity)this).GetComponentByClassName('CAnimatedComponent');
+		if (animComp) {
+			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			animComp.SetScale(Vector(scaleFactor, scaleFactor, scaleFactor, 1));
+		}
+	}
+
+	// Triangle enemy mutations
+	saved var quickAnimCauserId : int; default quickAnimCauserId = -1;
+	public var electricityEnabled : bool; default electricityEnabled = false;
+	public function ProcessMutations()
+	{
+		var animComp : CComponent;
+		var scaleFactor, healthPerc : float;
+		var stats : CCharacterStats;
+		var effectParams : SCustomEffectParams;
+		var healthType : EBaseCharacterStats;
+
+		stats = GetCharacterStats();
+
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
+			isHuge = true;
+			ProcessHugeMutationSize();
+			healthPerc = GetHealthPercents();
+			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			healthType = T_GetHealthType(this);
+			abilityManager.UpdateStatMax(healthType);
+			abilityManager.SetStatPointMax(healthType, GetStatMax(healthType)*scaleFactor*scaleFactor);
+			SetHealthPerc(healthPerc);
+			stats.AddAbility('mon_type_huge');
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Quick))) {
+			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + theGame.GetTModOptions().GetQuickSpeedBonus(), quickAnimCauserId);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Electric))) {
+			SetElectrified(true);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Flaming))) {
+			AddTimer('FlameOn', 0);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Freezing))) {
+			AddTimer('FreezeOn', 0);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Hypnotic))) {
+			AddTimer('HypnoOn',0);
+		}
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Inspiring))) {
+			AddTimer('InspireOn',0);
+		}
 	}
 
 	// Triangle level scaling add level bonuses with TMod options
@@ -1379,6 +1613,7 @@ statemachine import class CNewNPC extends CActor
 			}	 
 			
 		}
+		ProcessMutations(); // Triangle enemy mutations
 	}
 	
 	public function SetParentEncounter( encounter : CEncounter )
@@ -2409,6 +2644,22 @@ statemachine import class CNewNPC extends CActor
 		var burningCauser 									: W3Effect_Burning;
 		var vfxEnt 											: W3VisualFx;
 		var aerondight										: W3Effect_Aerondight;
+		// Triangle enemy mutations
+		var ent												: CEntity;
+		var template										: CEntityTemplate;
+		var stats											: CCharacterStats;
+
+		SetElectrified(false);
+
+		stats = GetCharacterStats();
+		if (stats.HasAbility(T_EMutationEnumToName(TEM_Haunted))) {
+			template = (CEntityTemplate)LoadResource('wraith');
+			ent = theGame.CreateEntity(template, GetWorldPosition(), GetWorldRotation());
+			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
+			((CNewNPC)ent).SetLevel(GetLevel());
+		}
+		// Triangle end
+
 
 		ciriEntity = (W3ReplacerCiri)thePlayer;
 		witcher = GetWitcherPlayer();
@@ -2877,6 +3128,7 @@ statemachine import class CNewNPC extends CActor
 				}
 			}
 		}		
+		ProcessHugeMutationSize(); // Triangle enemy mutations This maybe does something
 	}
 	
 	
@@ -3022,6 +3274,9 @@ statemachine import class CNewNPC extends CActor
 		
 		aardedFlight = true;
 		
+		// Triangle enemy mutations
+		BlockAbility(T_EMutationEnumToName(TEM_Flaming), true, theGame.GetTModOptions().GetElectricCooldown());
+		// Triangle end
 		
 		if( !sign.GetOwner().GetPlayer() || !GetWitcherPlayer().IsMutationActive( EPMT_Mutation6 ) )
 		{
@@ -3079,6 +3334,10 @@ statemachine import class CNewNPC extends CActor
 	event OnAxiiHit( sign : W3AxiiProjectile )
 	{
 		super.OnAxiiHit(sign);
+
+		// Triangle enemy mutations
+		BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, theGame.GetTModOptions().GetElectricCooldown());
+		// Triangle end
 		
 		if ( HasAbility('ablIgnoreSigns') )
 		{
@@ -3098,6 +3357,11 @@ statemachine import class CNewNPC extends CActor
 	{
 		var horseComponent : W3HorseComponent;
 		super.OnIgniHit( sign );
+
+		// Triangle enemy mutations
+		BlockAbility(T_EMutationEnumToName(TEM_Freezing), true, theGame.GetTModOptions().GetElectricCooldown());
+		// Triangle end
+
 		
 		SignalGameplayEvent( 'IgniHitReceived' );
 		
@@ -4507,6 +4771,7 @@ statemachine import class CNewNPC extends CActor
 		{
 			SetIsInAir(false);
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	var m_storedInteractionPri : EInteractionPriority;
@@ -4523,6 +4788,7 @@ statemachine import class CNewNPC extends CActor
 			m_storedInteractionPri = currentPri;
 			SetInteractionPriority( IP_Max_Unpushable );
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	event OnNoLongerInRagdoll()
@@ -4535,6 +4801,7 @@ statemachine import class CNewNPC extends CActor
 			SetInteractionPriority( m_storedInteractionPri );
 			m_storedInteractionPri = IP_NotSet;
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	timer function DelayRagdollSwitch( td : float , id : int)
@@ -4549,6 +4816,7 @@ statemachine import class CNewNPC extends CActor
 			
 			AddEffectCustom(params);
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 
 	event OnRagdollIsAwayFromCapsule( ragdollPosition : Vector, entityPosition : Vector )
@@ -4573,10 +4841,32 @@ statemachine import class CNewNPC extends CActor
 		var hud : CR4ScriptedHud;
 		var ent : CEntity;
 		var weaponId : SItemUniqueId;
+		// Triangle enemy mutations
+		var stats : CCharacterStats;
+		var healthType : EBaseCharacterStats;
+		stats = GetCharacterStats();
+
+		healthType = T_GetHealthType(this);
+		if (!explosionMutationTriggered && stats.HasAbility(T_EMutationEnumToName(TEM_Explosive)) && action.DealsAnyDamage()
+			&& ((healthType == BCS_Essence && action.processedDmg.essenceDamage >= GetStat(healthType))
+				|| (healthType == BCS_Vitality && action.processedDmg.vitalityDamage >= GetStat(healthType)))) {
+			ForceSetStat(healthType, GetStatMax(healthType));
+			action.SetAllProcessedDamageAs(1);
+			explosionMutationTriggered = true;
+			PlayEffect('critical_burning');
+			AddTimer('ExplodeMutation', 3);
+		}
+		// Triangle end
 
 		super.OnTakeDamage(action);
 		
 		
+		// Triangle enemy mutations
+		if (action.DealsAnyDamage() && !action.IsDoTDamage() && stats.HasAbility(T_EMutationEnumToName(TEM_Resilient))) {
+			StartResilientRegen();
+		}
+		// Triangle end
+
 		if(action.IsActionMelee() && action.DealsAnyDamage())
 		{
 			witcher = (W3PlayerWitcher)action.attacker;

@@ -230,8 +230,9 @@ import abstract class CActor extends CGameplayEntity
 			abilityManager.OnAbilityRemoved(abilityName);
 	}
 
+	public function GetBlockedAbilityTimeRemaining(abilityName : name) : float									{return abilityManager.GetBlockedAbilityTimeRemaining(abilityName);} // Triangle enemy mutations
 	public final function IsAbilityBlocked(abilityName : name) : bool											{return abilityManager.IsAbilityBlocked(abilityName);}
-	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool		{return abilityManager.BlockAbility(abilityName, block, cooldown);}
+	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimeout : bool) : bool		{return abilityManager.BlockAbility(abilityName, block, cooldown, unblockTimeout);} // Triangle enemy mutations
 	
 	import public function MuteHeadAudio( mute: bool );
 	import public function CanPush( canPush: bool );
@@ -490,7 +491,7 @@ import abstract class CActor extends CGameplayEntity
 				
 	
 	private saved var nextFreeAnimMultCauserId : int;							
-		default nextFreeAnimMultCauserId = 0;
+		default nextFreeAnimMultCauserId = 1; // Triangle attack combos Originally 0, which should cause a bug but I didn't confirm
 	
 	private var animationMultiplierCausers : array< SAnimMultiplyCauser >;		
 				
@@ -1231,9 +1232,9 @@ import abstract class CActor extends CGameplayEntity
 		return causer.id;
 	}
 
-	// Triangle armor bonuses
-	private var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
-	private var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 0;
+	// Triangle attack combos
+	private saved var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
+	private saved var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 1;
 	public function TopBaseAnimationMultiplierCauserMul() : float
 	{
 		var causer : SAnimMultiplyCauser;
@@ -1296,7 +1297,7 @@ import abstract class CActor extends CGameplayEntity
 
 	private function CalculateFinalAnimationSpeedMultiplier() : float
 	{
-		// Triangle armor bonuses
+		// Triangle attack combos
 		var baseMultiplier : float;
 
 		baseMultiplier = TopBaseAnimationMultiplierCauserMul();
@@ -1333,7 +1334,7 @@ import abstract class CActor extends CGameplayEntity
 	{
 		animationMultiplierCausers.Clear();
 		SetAnimationTimeMultiplier( 1.0f );
-		baseAnimationMultiplierCausers.Clear(); // Triangle armor bonuses
+		baseAnimationMultiplierCausers.Clear(); // Triangle attack combos
 	}
 	
 	
@@ -2450,10 +2451,34 @@ import abstract class CActor extends CGameplayEntity
 		// Triangle attack combos
 		var witcherPlayer : W3PlayerWitcher;
 		var attackAction : W3Action_Attack;
+		// Triangle enemy mutations
+		var npcAttacker : CNewNPC;
+		var customParams : SCustomEffectParams;
+		var healAmount : float;
+		var healthType : EBaseCharacterStats;
 		
 		playerAttacker = (CPlayer)action.attacker;
 		wasAlive = IsAlive();
 		
+		// Triangle enemy mutations
+		npcAttacker = (CNewNPC)action.attacker;
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(T_EMutationEnumToName(TEM_Venomous))) {
+			customParams.effectType = EET_PoisonCritical;
+			customParams.creator = npcAttacker;
+			customParams.sourceName = T_EMutationEnumToName(TEM_Venomous);
+			customParams.duration = theGame.GetTModOptions().GetVenomousDuration();
+			effectManager.AddEffectCustom(customParams);
+		}
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(T_EMutationEnumToName(TEM_Vampiric)) && npcAttacker.UsesEssence()) {
+			healthType = T_GetHealthType(this);
+			if (healthType == BCS_Vitality)
+				healAmount = action.processedDmg.vitalityDamage * theGame.GetTModOptions().GetVampiricHealRatio();
+			else
+				healAmount = action.processedDmg.essenceDamage * theGame.GetTModOptions().GetVampiricHealRatio();
+			npcAttacker.GainStat(healthType, healAmount);
+			npcAttacker.ShowFloatingValue(EFVT_Heal, FloorF(healAmount), false);
+		}
+		// Triangle end
 		
 		buffs = GetBuffs(EET_Frozen);
 		for(i=0; i<buffs.Size(); i+=1)

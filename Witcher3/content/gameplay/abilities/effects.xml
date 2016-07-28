@@ -193,6 +193,20 @@
       <ability name="FireAuraEffect">
         <duration type="add" min="-1" max="-1" />
       </ability>
+      <!-- Triangle enemy mutations -->
+      <ability name="THypnoAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TFreezingAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TInspiringAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TInspiredEffect">
+        <duration type="add" min="0.25" max="0.25" />
+      </ability>
+      <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
         <hpPercDamageBonusPerHit type="add" min="0.15" />
@@ -416,6 +430,9 @@
   <custom>
     <effects>
       <!-- displayed on hud-->
+    <!-- Triangle enemy mutations -->
+    <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="effect_enhanced_weapon"  targetEffectName_name="axii_guardian" />
+    <!-- Triangle end -->
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
 	  <effect name_name="WraithBlindnessEffect"  	defaultAbilityName_name="WraithBlindnessEffect" 	iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="stunned_ghost" />
       <effect name_name="ConfusionEffect"        	defaultAbilityName_name="ConfusionEffect" 			iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_confusion" 		targetEffectName_name="axii_confusion"  />
@@ -524,6 +541,20 @@
       <applicator_aura name_name="FireAuraEffect" defaultAbilityName_name="FireAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="4.0">
         <effect name_name="BurningEffect" affectsHostile="1" affectsNeutral="1" affectsFriendly="1" />
       </applicator_aura>
+      <!-- Triangle enemy mutations -->
+      <applicator_aura name_name="TFireAuraEffect" defaultAbilityName_name="FireAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="BurningEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="TFreezingAuraEffect" defaultAbilityName_name="TFreezingAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="SlowdownFrostEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="THypnoAuraEffect" defaultAbilityName_name="THypnoAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="HypnotizedEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="TInspiringAuraEffect" defaultAbilityName_name="TInspiringAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="8.0">
+        <effect name_name="TInspiredEffect" affectsHostile="0" affectsNeutral="1" affectsFriendly="1" affectsWitcher="0" />
+      </applicator_aura>
+      <!-- Triangle end -->
     </effects>
 	
     <effect_icons>

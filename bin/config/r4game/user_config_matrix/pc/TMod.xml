@@ -96,5 +96,55 @@
 			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
     </Group>
+    <Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="MonstersOnly"						value="1"	/>
+				<Entry varId="EnemyMutationChance"				value="10"	/>
+				<Entry varId="NumEnemyMutationRolls"			value="2"	/>
+				<Entry varId="CripplingShotDurationPerLevel"	value="2.5"	/>
+				<Entry varId="HugeScaleFactor"					value="1.2" />
+				<Entry varId="ToughArmorPerLevel"				value="10" 	/>
+				<Entry varId="ToughResistance"					value="34" 	/>
+				<Entry varId="QuickSpeedBonus"					value="34" 	/>
+				<Entry varId="ResilientRegenPerLevel"			value="4" 	/>
+				<Entry varId="ResilientDuration"				value="8" 	/>
+				<Entry varId="ElectricCooldown"					value="8" 	/>
+				<Entry varId="ElectricDamageRatio"				value="0.5"	/>
+				<Entry varId="VampiricHealRatio"				value="1"	/>
+				<Entry varId="VenomousDuration"					value="10"	/>
+				<Entry varId="ExplosiveDamageRatio"				value="4"	/>
+				<Entry varId="ExplosiveRange"					value="3"	/>
+				<Entry varId="FlamingRange"						value="2.5"	/>
+				<Entry varId="FreezingRange"					value="4"	/>
+				<Entry varId="HypnoticRange"					value="4"	/>
+				<Entry varId="HypnoticDelay"					value="4"	/>
+				<Entry varId="InspiredBonus"					value="35"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="MonstersOnly"			 		 displayName="Only entities using essence (not vitality) can mutate."	 				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EnemyMutationChance"	 		 displayName="Percent chance that an enemy will mutate, per roll."	 					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="NumEnemyMutationRolls"	 		 displayName="Number of rolls per enemy to cause a mutation."	 						displayType="SLIDER;0.00;10;10" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CripplingShotDurationPerLevel"	 displayName="Crippling shot duration per level."	 									displayType="SLIDER;0.00;10;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HugeScaleFactor"	 			 displayName="Huge: Scale factor. Health/damage scale squared."							displayType="SLIDER;0.00;3;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ToughArmorPerLevel"	 		 displayName="Tough: Extra armor per level. Only affects steel/silver."					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ToughResistance"		 		 displayName="Tough: Steel/silver % damage resist (multiplicative)."					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuickSpeedBonus"		 		 displayName="Quick: Percent speed increase."											displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResilientRegenPerLevel"	 	 displayName="Resilient: Health regen per level (flat bonus)."							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResilientDuration"			 	 displayName="Resilient: Duration of health regen after hit."							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ElectricCooldown"	 			 displayName="Electric/Flaming/Freezing/Hypnotic: Duration disabled on sign counter."	displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ElectricDamageRatio"			 displayName="Electric: Fraction of returned damage (elemental)."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VampiricHealRatio"				 displayName="Vampiric: Fraction of damage converted to health."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VenomousDuration"				 displayName="Venomous: Duration of poison effect."										displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveDamageRatio"			 displayName="Explosive: Explosive damage ratio. Multiplies enemy damage."				displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveRange"				 displayName="Explosive: Range of explosion (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FlamingRange"					 displayName="Flaming: Range of fire aura (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FreezingRange"					 displayName="Freezing: Range of freezing aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HypnoticRange"					 displayName="Hypnotic: Range of hypnotism aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HypnoticDelay"					 displayName="Hypnotic/Inspiring: Min delay before aura returns after being disabled."	displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="InspiredBonus"					 displayName="Inspiring: % bonus to health and attack power."							displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+    </Group>
 
 </UserConfig>

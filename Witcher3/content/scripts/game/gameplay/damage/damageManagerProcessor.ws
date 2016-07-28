@@ -850,8 +850,17 @@ class W3DamageManagerProcessor extends CObject
 		var sword : SItemUniqueId;
 		var actionFreeze : W3DamageAction;
 		var aerondight	: W3Effect_Aerondight;
-		
-		
+		// Triangle enemy mutations
+		var scaleFactor : float;
+
+		if (actorAttacker && !action.IsDoTDamage() && actorAttacker.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
+			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			for(i=0; i<dmgInfos.Size(); i+=1)
+			{
+				dmgInfos[i].dmgVal = dmgInfos[i].dmgVal * scaleFactor * scaleFactor;
+			}
+		}
+		// Triangle end
 		
 		if(actorAttacker && !actorAttacker.IgnoresDifficultySettings() && !action.IsDoTDamage())
 		{
@@ -1119,8 +1128,11 @@ class W3DamageManagerProcessor extends CObject
 		var g5Chance			: SAbilityAttributeValue;
 		var dist, checkDist		: float;
 		
-		
-		if((W3PlayerWitcher)playerVictim && !playerAttacker && actorAttacker && !action.IsDoTDamage() && action.IsActionMelee() && (attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire) && actorVictim.HasBuff(EET_BlackBlood))
+		// Triangle enemy mutations add check for vamp mutation
+		if((W3PlayerWitcher)playerVictim && !playerAttacker && actorAttacker && !action.IsDoTDamage() && action.IsActionMelee() &&
+			(attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire || actorAttacker.HasAbility(T_EMutationEnumToName(TEM_Vampiric)))
+			&& actorVictim.HasBuff(EET_BlackBlood))
+		 // Triangle end
 		{
 			returned = ProcessActionBlackBloodReturnedDamage();		
 		}
@@ -1156,6 +1168,11 @@ class W3DamageManagerProcessor extends CObject
 			
 		}
 		
+		// Triangle enemy mutations
+		if(action.IsActionMelee() && actorVictim.HasAbility(T_EMutationEnumToName(TEM_Electric))) {
+			ProcessActionElectricReturnedDamage();
+		}
+		// Triangle end
 		
 		if(playerVictim && !playerAttacker && actorAttacker && attackAction && attackAction.IsActionMelee() && thePlayer.HasBuff(EET_Mutagen26))
 		{
@@ -1307,6 +1324,36 @@ class W3DamageManagerProcessor extends CObject
 		return true;
 	}
 	
+	// Triangle enemy mutations
+	private function ProcessActionElectricReturnedDamage() : bool
+	{
+		var returnedAction : W3DamageAction;
+		var npcVictim : CNewNPC;
+		
+		npcVictim = (CNewNPC)actorVictim;
+		if(action.processedDmg.essenceDamage <= 0 || !npcVictim.electricityEnabled)
+			return false;
+		
+		returnedAction = new W3DamageAction in this;
+		returnedAction.Initialize( action.victim, action.attacker, NULL, T_EMutationEnumToName(TEM_Electric), EHRT_None, CPS_AttackPower, true, false, false, false );
+		returnedAction.SetCannotReturnDamage( true );
+		returnedAction.SetHitAnimationPlayType(EAHA_ForceYes);
+		returnedAction.SetHitReactionType(EHRT_Heavy);
+		
+		returnedAction.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, action.processedDmg.essenceDamage * theGame.GetTModOptions().GetElectricDamageRatio());
+		
+		if (npcVictim && (W3PlayerWitcher)actorAttacker && GetWitcherPlayer().IsQuenActive(false)) {
+			npcVictim.SetElectrified(false);
+			npcVictim.AddTimer('DelayElectrify', theGame.GetTModOptions().GetElectricCooldown());
+		}
+
+		theGame.damageMgr.ProcessAction(returnedAction);
+		delete returnedAction;
+		
+		action.attacker.PlayEffect('yrden_shock');
+		
+		return true;
+	}
 	
 	private function ProcessActionReflectDamage() : bool
 	{
@@ -1604,7 +1651,13 @@ class W3DamageManagerProcessor extends CObject
 		if(!action.GetIgnoreArmor())
 			resistPts += CalculateAttributeValue( actorVictim.GetTotalArmor() );
 		
-		
+		// Triangle enemy mutations
+		if (actorVictim && actorVictim.HasAbility(T_EMutationEnumToName(TEM_Tough)) && T_IsPhysicalDamage(dmgType)) {
+			resistPts += theGame.GetTModOptions().GetToughArmorPerLevel() * actorVictim.GetLevel();
+			resistPerc += (1 - resistPerc) * theGame.GetTModOptions().GetToughResistance();
+		}
+		// Triangle end
+
 		resistPts = MaxF(0, resistPts - CalculateAttributeValue(armorReduction) );		
 		resistPerc -= CalculateAttributeValue(armorReductionPerc);		
 		
@@ -1663,6 +1716,7 @@ class W3DamageManagerProcessor extends CObject
 				finalDamage *= TMod.GetWeakDamageMod();
 		}
 		// Triangle end
+		// Triangle TODO switch order of point resist and perc resist so both have a larger impact
 
 		if(finalDamage > 0.f)
 		{
