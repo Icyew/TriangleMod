@@ -230,6 +230,17 @@
         <!-- Regen group -->
         <!-- <staminaRegen type="mult" always_random="false" min="-0.05" max="-0.05" /> -->
       </ability>
+      <!-- Triangle debug commands -->
+      <ability name="TDebugSpellPowerBonus">
+        <spell_power type="mult" min="0.01" />
+      </ability>
+      <ability name="TDebugAttackPowerBonus">
+        <attack_power type="mult" min="0.01" />
+      </ability>
+      <ability name="TDebugHealthBonus">
+        <vitality type="base" min="1" />
+      </ability>
+      <!-- Triangle end -->
     </abilities>
   </definitions>  
 </redxml>
