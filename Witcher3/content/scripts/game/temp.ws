@@ -14403,3 +14403,24 @@ exec function Refill()
 {
 	thePlayer.inv.SingletonItemsRefillAmmoNoAlco(true);
 }
+
+// Triangle debug commands
+exec function T_SetSpellPowerBonus(spellPower : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugSpellPowerBonus');
+	thePlayer.AddAbilityMultiple('TDebugSpellPowerBonus', Max(spellPower, 0));
+}
+
+// Triangle debug commands
+exec function T_SetAttackPowerBonus(attackPower : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugAttackPowerBonus');
+	thePlayer.AddAbilityMultiple('TDebugAttackPowerBonus', Max(attackPower, 0));
+}
+
+// Triangle debug commands
+exec function T_SetHealthBonus(health : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugHealthBonus');
+	thePlayer.AddAbilityMultiple('TDebugHealthBonus', Max(health, 0));
+}
