@@ -282,8 +282,17 @@ enum EHitReactionType
 function ModifyHitSeverityReaction(target : CActor, type : EHitReactionType) : EHitReactionType
 {
 	var severityReduction, severity : int;
+	var witcherPlayer : W3PlayerWitcher; // Triangle frenzy
 
 	severityReduction = RoundMath(CalculateAttributeValue(target.GetAttributeValue('hit_severity')));
+	// Triangle frenzy
+	witcherPlayer = (W3PlayerWitcher)target;
+	if (witcherPlayer && T_CanFrenzy(witcherPlayer) && (witcherPlayer.IsInCombatAction_Attack() || witcherPlayer.GetIsSprinting())) {
+		if (witcherPlayer.GetStat(BCS_Focus) >= (witcherPlayer.GetStatMax(BCS_Focus) - witcherPlayer.GetSkillLevel(S_Alchemy_s16) + 1)) {
+			severityReduction += 2;
+		}
+	}
+	// Triangle end
 	if(severityReduction == 0 || type == EHRT_Igni)
 		return type;
 		
