@@ -63,11 +63,29 @@
     <Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
+				<Entry varId="BasicSignCost"					value="50"	/>
+				<Entry varId="BasicSignDelay"					value="1"	/>
+				<Entry varId="AltSignDelay"						value="3"	/>
+				<Entry varId="AltAardCost"						value="60"	/>
+				<Entry varId="AltIgniCost"						value="50"	/>
+				<Entry varId="AltYrdenCost"						value="35"	/>
+				<Entry varId="AltQuenCost"						value="15"	/>
+				<Entry varId="AltAxiiCost"						value="15"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
 				<Entry varId="QuenDamageRatio"					value="0.667"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
+			<Var id="UseCustomSignStaminaCosts"		 displayName="Use custom stamina cost/delay."								 			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignCost"	 				 displayName="Stamina cost of basic signs"									 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignDelay"	 			 displayName="Stamina delay of basic signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSignDelay"	 			 	 displayName="Stamina delay of alt signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAardCost"	 				 displayName="Stamina cost of alt Aard"										 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltIgniCost"	 				 displayName="Stamina cost/sec of alt Igni"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltYrdenCost"	 				 displayName="Stamina cost/sec of alt Yrden"										 	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltQuenCost"	 				 displayName="Stamina cost/sec of alt Quen"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAxiiCost"	 				 displayName="Stamina cost/sec of alt Axii"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>

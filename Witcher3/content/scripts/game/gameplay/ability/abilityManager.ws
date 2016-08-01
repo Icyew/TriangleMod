@@ -686,9 +686,14 @@ import abstract class W3AbilityManager extends IScriptable
 	{
 		// Triangle enemy mutations
 		var mutation : T_EMutation;
+		var npcOwner : CNewNPC;
+		npcOwner = (CNewNPC)owner;
 		mutation = T_EMutationNameToEnum(abilityName);
 		if (owner)
 			owner.ResumeEffects(T_EMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == T_EMutationEnumToName(TEM_Electric) && npcOwner.IsAlive()) {
+			npcOwner.AddTimer('PlayElectricity', 0);
+		}
 		// Triangle end
 		OnAbilityChanged( abilityName );
 	}
@@ -698,9 +703,14 @@ import abstract class W3AbilityManager extends IScriptable
 	{
 		// Triangle enemy mutations
 		var mutation : T_EMutation;
+		var npcOwner : CNewNPC;
+		npcOwner = (CNewNPC)owner;
 		mutation = T_EMutationNameToEnum(abilityName);
 		if (owner)
 			owner.PauseEffects(T_EMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == T_EMutationEnumToName(TEM_Electric)) {
+			npcOwner.RemoveTimer('PlayElectricity');
+		}
 		// Triangle end
 		if( abilityName == 'Runeword 4 _Stats' )
 		{

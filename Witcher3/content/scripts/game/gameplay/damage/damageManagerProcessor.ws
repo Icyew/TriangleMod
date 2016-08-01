@@ -1331,7 +1331,7 @@ class W3DamageManagerProcessor extends CObject
 		var npcVictim : CNewNPC;
 		
 		npcVictim = (CNewNPC)actorVictim;
-		if(action.processedDmg.essenceDamage <= 0 || !npcVictim.electricityEnabled)
+		if(action.processedDmg.essenceDamage <= 0)
 			return false;
 		
 		returnedAction = new W3DamageAction in this;
@@ -1343,8 +1343,7 @@ class W3DamageManagerProcessor extends CObject
 		returnedAction.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, action.processedDmg.essenceDamage * theGame.GetTModOptions().GetElectricDamageRatio());
 		
 		if (npcVictim && (W3PlayerWitcher)actorAttacker && GetWitcherPlayer().IsQuenActive(false)) {
-			npcVictim.SetElectrified(false);
-			npcVictim.AddTimer('DelayElectrify', theGame.GetTModOptions().GetElectricCooldown());
+			npcVictim.BlockAbility(T_EMutationEnumToName(TEM_Electric), true, theGame.GetTModOptions().GetElectricCooldown());
 		}
 
 		theGame.damageMgr.ProcessAction(returnedAction);
