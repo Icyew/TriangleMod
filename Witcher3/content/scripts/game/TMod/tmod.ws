@@ -171,6 +171,49 @@ class TModOptions
 
 	// ---- Signs Begin ---- //
 
+	public function SetSignStaminaCost(abilityName : name, out cost : SAbilityAttributeValue, out delay : SAbilityAttributeValue, isPerSec : bool)
+	{
+		var skill : ESkill;
+		skill = SkillNameToEnum(abilityName);
+		if (!theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'UseCustomSignStaminaCosts' ))
+			return;
+		switch(skill) {
+			case S_Magic_1:
+			case S_Magic_2:
+			case S_Magic_3:
+			case S_Magic_4:
+			case S_Magic_5:
+				if (!isPerSec) {
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'BasicSignCost' ) );
+					delay.valueBase = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'BasicSignDelay' ) );
+				}
+				return;
+			case S_Magic_s01:
+				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltAardCost' ) );
+				break;
+			case S_Magic_s02:
+				if (isPerSec)
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltIgniCost' ) );
+				break;
+			case S_Magic_s03:
+				if (isPerSec)
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltYrdenCost' ) );
+				break;
+			case S_Magic_s04:
+				if (isPerSec)
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltQuenCost' ) );
+				break;
+			case S_Magic_s05:
+				if (isPerSec)
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltAxiiCost' ) );
+				break;
+			default:
+				return;
+		}
+		delay.valueBase = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltSignDelay' ) );
+		delay.valueMultiplicative = 1; // for firestream... annoying. O hope nothing else tries to change this
+	}
+
 	public function GetQuenStaminaRegenMult() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenStaminaRegenMult' ) );

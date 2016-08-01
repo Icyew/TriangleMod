@@ -1025,7 +1025,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	{
 		var reductionCounter : int;
 		var ability, attributeName : name;
-		var ret, costReduction : SAbilityAttributeValue;
+		var ret, costReduction, delay : SAbilityAttributeValue; // Triangle sign options
 	
 		ability = '';
 		
@@ -1039,6 +1039,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			attributeName = theGame.params.STAMINA_COST_DEFAULT;
 		
 		ret = GetSkillAttributeValue(ability, attributeName, true, true);
+		theGame.GetTModOptions().SetSignStaminaCost(ability, ret, delay, isPerSec); // Triangle sign options Delay not used
 		
 		
 		reductionCounter = GetSkillLevel(skill) - 1;
@@ -1115,6 +1116,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var witcher : W3PlayerWitcher;
 		var TMod : TModOptions;
 		var armorCost : float;
+		// Triangle end
 	
 		super.GetStaminaActionCostInternal(action, isPerSec, cost, delay, abilityName);
 		
@@ -1166,6 +1168,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName);
 
 			cost.valueAdditive += armorCost;
+		}
+		if (action == ESAT_Ability) {
+			TMod.SetSignStaminaCost(abilityName, cost, delay, isPerSec);
 		}
 		// Triangle end
 		
