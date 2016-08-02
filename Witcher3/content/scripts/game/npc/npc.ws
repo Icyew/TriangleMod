@@ -309,7 +309,7 @@ statemachine import class CNewNPC extends CActor
 			if ( IsCountering() )
 			{
 				
-				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && witcher.GetStat(BCS_Toxicity) > 0 && witcher.CanUseSkill(S_Alchemy_s16))
+				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && T_CanFrenzy(witcher)) // Triangle frenzy
 					witcher.StartFrenzy();
 			}
 		}

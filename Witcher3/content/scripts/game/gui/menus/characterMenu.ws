@@ -2271,6 +2271,15 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				break;
+			// Triangle frenzy
+			case S_Alchemy_s16:
+				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);
+				else if (skillLevel >= 3) 	baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel3Key);
+				else 						baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionKey);
+				baseString = StrReplace(baseString, "If Toxicity is above 0", "If a potion effect is active");
+				baseString += " If a potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", normal enemy attacks do not interrupt you while attacking or sprinting.";
+				break;
+			// Triangle end
 			case S_Alchemy_s17:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s17, 'critical_hit_chance', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));

@@ -252,3 +252,15 @@ function T_GetHealthType(actor : CActor) : EBaseCharacterStats
         return BCS_Essence;
     return BCS_Vitality;
 }
+
+// Triangle frenzy
+function T_CanFrenzy(player : CR4Player) : bool
+{
+    var witcherPlayer : W3PlayerWitcher;
+    var mutagenArr : array<W3Mutagen_Effect>;
+    var potionArr : array<CBaseGameplayEffect>;
+    witcherPlayer = (W3PlayerWitcher)player;
+    mutagenArr = witcherPlayer.GetMutagenBuffs();
+    potionArr = witcherPlayer.GetPotionBuffs();
+    return witcherPlayer && witcherPlayer.CanUseSkill(S_Alchemy_s16) && mutagenArr.Size() < potionArr.Size();
+}
