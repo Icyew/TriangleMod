@@ -1145,7 +1145,6 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		witcher = GetWitcherPlayer();
 		if(TMod.GetAltArmorStaminaMod() &&
 			witcher &&
-			!isPerSec &&
 			(action == ESAT_LightAttack ||
 			action == ESAT_HeavyAttack ||
 			(action == ESAT_Ability && abilityName == SkillEnumToName(S_Sword_s02)) ||
@@ -1153,19 +1152,16 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			action == ESAT_Dodge ||
 			action == ESAT_Roll))
 		{
-			cost.valueAdditive += TMod.GetBaseStaminaCost(action, abilityName);
+			TMod.SetActionStaminaCost(action, cost, abilityName, isPerSec);
 			armorCost = 0;
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Armor, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action, abilityName);
-
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Boots, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action, abilityName);
-
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Pants, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action, abilityName);
-
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName);
+				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName, isPerSec);
 
 			cost.valueAdditive += armorCost;
 		}

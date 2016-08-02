@@ -42,29 +42,31 @@ class TModOptions
 		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'AltArmorStaminaMod');
 	}
 
-	public function GetBaseStaminaCost(action : EStaminaActionType, optional abilityName : name) : float
+	public function SetActionStaminaCost(action : EStaminaActionType, out cost : SAbilityAttributeValue, optional abilityName : name, optional isPerSec : bool)
 	{
 		switch (action) {
 			case ESAT_Dodge:
-				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseDodgeCost') );
+				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseDodgeCost') );
 			case ESAT_Roll:
-				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseRollCost') );
+				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseRollCost') );
 			case ESAT_LightAttack:
-				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
+				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
 			case ESAT_HeavyAttack:
-				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') );
+				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') );
 			case ESAT_Ability:
-				if (SkillNameToEnum(abilityName) == S_Sword_s02) {
-					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') ) * 2; // for now, rend has 2x base stamina cost
-				} else if (SkillNameToEnum(abilityName) == S_Sword_s01) { // Triangle TODO draining stamina for whirl might not be necessary, since drain per sec already active
-					return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
+				if (SkillNameToEnum(abilityName) == S_Sword_s02 && !isPerSec) {
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseHeavyAttackCost') ) * 2; // for now, rend has 2x base stamina cost
+				} else if (SkillNameToEnum(abilityName) == S_Sword_s01 && !isPerSec) { // Triangle TODO draining stamina for whirl might not be necessary, since drain per sec already active
+					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'BaseLightAttackCost') );
 				}
 				break;
+			default:
+				return;
 		}
-		return 0;
+		cost.valueBase = 0;
 	}
 
-	public function GetArmorStaminaMod(armorType : EArmorType, armorSlot : EEquipmentSlots, action : EStaminaActionType, optional abilityName : name) : float
+	public function GetArmorStaminaMod(armorType : EArmorType, armorSlot : EEquipmentSlots, action : EStaminaActionType, optional abilityName : name, optional isPerSec : bool) : float
 	{
 		var weight : float;
 		var isBig, isAttack, isEvade : bool;
@@ -84,12 +86,12 @@ class TModOptions
 			(action == ESAT_Ability && SkillNameToEnum(abilityName) == S_Sword_s01) || false);
 		isEvade = (action == ESAT_Dodge || action == ESAT_Roll || action == ESAT_Evade || action == ESAT_Jump || false);
 
-		if (isBig) {
+		if (isBig && !isPerSec) {
 			if (isAttack)
 				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'ChestPantsAttackCost') ) * weight;
 			if (isEvade)
 				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'ChestPantsEvasionCost') ) * weight;
-		} else {
+		} else if (!isPerSec) {
 			if (isAttack)
 				return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'GlovesBootsAttackCost') ) * weight;
 			if (isEvade)

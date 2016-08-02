@@ -144,14 +144,14 @@
       <!-- Rend (ult) -->
       <ability name="sword_s2">
         <tags>sword_s2,attack_heavy</tags>
-    <armor_reduction min="1000" max="1000"/>
+    <armor_reduction min="10000" max="10000"/> <!-- Triangle rend just in case -->
     <critical_hit_chance type="add" min="0.1" />
     <adrenaline_final_damage_bonus type="mult" min="0.334" />
     <stamina_max_dmg_bonus type="mult" min="0.5" /> <!-- Triangle rend overridden by menu item -->
     
     <stamina_cost type="add" min="0" />
-        <stamina_cost_per_sec type="add" min="50" /> <!-- Triangle rend This might cause a divide by 0 error if not fixed (should be fixed tho)! -->
-        <stamina_delay type="add" min="0.5" />
+        <stamina_cost_per_sec type="add" min="0" /> <!-- Triangle rend This might cause a divide by 0 error if not fixed (should be fixed tho)! -->
+        <stamina_delay type="add" min="1.5" /> <!-- Triangle rend -->
       </ability>
   
       <!-- Overwhelm -->
