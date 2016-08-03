@@ -1945,7 +1945,11 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s16:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle resolve
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit, attack power of your next attack is increased by " +
+					NoTrailZeros(FloorF(theGame.GetTModOptions().GetResolveDamagePerLevel() * skillLevel * 100)) + "% for " + NoTrailZeros(theGame.GetTModOptions().GetResolveDuration()) + "s." +
+					"<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle end
 				break;
 			case S_Sword_s17:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;

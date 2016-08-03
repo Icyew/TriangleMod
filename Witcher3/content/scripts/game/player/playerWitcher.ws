@@ -1913,6 +1913,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var i : int;
 		var killSourceName : string;
 		var aerondight	: W3Effect_Aerondight;
+		var params : SCustomEffectParams; // Triangle resolve
 	
 		currVitality = GetStat(BCS_Vitality);
 		
@@ -1920,6 +1921,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 		// Triangle enemy mutations
 		if (action.DealsAnyDamage() && action.attacker.HasAbility(T_EMutationEnumToName(TEM_Draining))) {
 			DrainStamina(ESAT_FixedValue, GetStat(BCS_Stamina), 2);
+		}
+		// Triangle resolve
+		if (CanUseSkill(S_Sword_s16) && action.DealsAnyDamage()) {
+			params.effectType = EET_TResolve;
+			params.creator = this;
+			params.sourceName = "Resolve";
+			params.duration = theGame.GetTModOptions().GetResolveDuration();
+			params.effectValue.valueMultiplicative = theGame.GetTModOptions().GetResolveDamagePerLevel() * GetSkillLevel(S_Sword_s16);
+			AddEffectCustom(params);
 		}
 		// Triangle end
 

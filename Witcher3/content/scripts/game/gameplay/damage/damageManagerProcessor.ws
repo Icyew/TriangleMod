@@ -403,6 +403,8 @@ class W3DamageManagerProcessor extends CObject
 			anyDamageProcessed = ProcessSpellSwordDmg();
 		else
 			ProcessSpellSwordDmg();
+		if (actorAttacker.HasBuff(EET_TResolve))
+			actorAttacker.RemoveAllBuffsOfType(EET_TResolve);
 		// Triangle end
 
 		if(size == 0 && canLog)

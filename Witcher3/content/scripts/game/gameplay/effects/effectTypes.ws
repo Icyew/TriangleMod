@@ -135,6 +135,8 @@ enum EEffectType
 	EET_THypnoAura,
 	EET_TInspiringAura,
 	EET_TInspired,
+	// Triangle resolve
+	EET_TResolve,
 	// Triangle end
 
 	

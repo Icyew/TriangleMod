@@ -33,6 +33,16 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );
 	}
 
+	public function GetResolveDamagePerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDamagePerLevel' ) ) / 100;
+	}
+
+	public function GetResolveDuration() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDuration' ) );
+	}
+
 	// ---- Combat End ---- //
 
 	// ---- Stamina Begin ---- //

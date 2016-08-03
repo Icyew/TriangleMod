@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-16"?>
 <UserConfig>
-    <Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
+	<Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
 				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
-				<Entry varId="HeavyAttackComboBonus"			value="0.1  "/>
+				<Entry varId="HeavyAttackComboBonus"			value="0.1"	/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
+				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
+				<Entry varId="ResolveDuration"					value="2.5" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -18,9 +20,11 @@
 			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendChargeBonus"				 displayName="Fully charged rend damage bonus multiplier"						 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDamagePerLevel"			 displayName="Bonus attack power from Resolve per level"						 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDuration"				 displayName="Time before resolve bonus damage expires"							 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
-    </Group>
-    <Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
+	</Group>
+	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
@@ -59,8 +63,8 @@
 			<Var id="PantsEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for pants armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsEvasionMod"		 	 displayName="Dodge/roll speed % bonus/penalty for gloves/boots."				 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
-    </Group>
-    <Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
+	</Group>
+	<Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
@@ -89,8 +93,8 @@
 			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
-    </Group>
-    <Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
+	</Group>
+	<Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="AreLevelOptionsEnabled"			value="1"	/>
@@ -113,8 +117,8 @@
 			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 				displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
-    </Group>
-    <Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
+	</Group>
+	<Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="MonstersOnly"						value="1"	/>
@@ -163,6 +167,6 @@
 			<Var id="HypnoticDelay"					 displayName="Hypnotic/Inspiring: Min delay before aura returns after being disabled."	displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="InspiredBonus"					 displayName="Inspiring: % bonus to health and attack power."							displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
-    </Group>
+	</Group>
 
 </UserConfig>
