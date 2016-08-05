@@ -98,7 +98,10 @@
         <spell_power type="mult" min="0.1" />
       </ability>
       <ability name="SkillLinkBonus_Green">
-        <vitality type="add" min="200" />
+        <!-- Triangle mutagens -->
+        <!-- <vitality type="add" min="200" /> -->
+        <toxicity type="add" min="10" />
+        <!-- Triangle end -->
       </ability>
       <ability name="SkillLinkBonus_Red">
         <attack_power type="mult" min="0.1" />

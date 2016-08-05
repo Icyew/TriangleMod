@@ -9,46 +9,73 @@
 
 <!-- GREEN -->
 	<ability name="greater_mutagen_color_green" >
-		<vitality type="base" min="150" max="150" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="150" max="150" /> -->
+		<toxicity type="add" min="10" />
+		<!-- Triangle end -->
 		<greater_mutagen_color_green_synergy_bonus is_ability="true" />
 	</ability>
 
 	<ability name="greater_mutagen_color_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<vitality type="base" min="15" max="15" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="15" max="15" /> -->
+		<toxicity type="add" min="1" />
+		<!-- Triangle end -->
 	</ability>
 	
 	<ability name="mutagen_color_green" >
-		<vitality type="base" min="100" max="100" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="100" max="100" /> -->
+		<toxicity type="add" min="7" />
+		<!-- Triangle end -->
 		<mutagen_color_green_synergy_bonus is_ability="true" />
 	</ability>
 
 	<ability name="mutagen_color_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<vitality type="base" min="10" max="10" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="10" max="10" /> -->
+		<toxicity type="add" min="0.7" />
+		<!-- Triangle end -->
 	</ability>
 	
 	<ability name="lesser_mutagen_color_green" >
-		<vitality type="base" min="50" max="50"/>
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="50" max="50"/> -->
+		<toxicity type="add" min="5" />
+		<!-- Triangle end -->
 		<mutagen_color_lesser_green_synergy_bonus is_ability="true" />
 	</ability>
 
 	<ability name="mutagen_color_lesser_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<vitality type="base" min="5" max="5"/>
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="5" max="5"/> -->
+		<toxicity type="add" min="0.5" />
+		<!-- Triangle end -->
 	</ability>
 
 <!-- GREEN X -->
 	<ability name="greater_mutagen_color_green_x" >
-		<vitality type="base" min="150" max="150" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="150" max="150" /> -->
+		<toxicity type="add" min="10" />
+		<!-- Triangle end -->
 	</ability>
 	
 	<ability name="mutagen_color_green_x" >
-		<vitality type="base" min="100" max="100" />
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="100" max="100" /> -->
+		<toxicity type="add" min="7" />
+		<!-- Triangle end -->
 	</ability>
 
 	<ability name="lesser_mutagen_color_green_x" >
-		<vitality type="base" min="50" max="50"/>
+		<!-- Triangle mutagens -->
+		<!-- <vitality type="base" min="50" max="50"/> -->
+		<toxicity type="add" min="5" />
+		<!-- Triangle end -->
 	</ability>
 
 <!-- BLUE -->
