@@ -2469,8 +2469,10 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		else if(skill == S_Alchemy_s20)
 		{
-			if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() )
-				owner.AddEffectDefault(EET_IgnorePain, owner, 'IgnorePain');
+			// Triangle endure pain ignore vanilla implementation
+			// if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() )
+			// 	owner.AddEffectDefault(EET_IgnorePain, owner, 'IgnorePain');
+			// Triangle end
 		}
 		
 		if(skill == S_Alchemy_s18)

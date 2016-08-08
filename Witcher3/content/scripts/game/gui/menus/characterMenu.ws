@@ -2299,7 +2299,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetAttributeRandomizedValue(min, max);
 				arg = ability.valueMultiplicative * skillLevel;				
 				argsInt.PushBack(RoundMath(arg*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle endure pain
+				// baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				baseString = "If a potion effect is active, " + NoTrailZeros(theGame.GetTModOptions().GetEndurePainDamageRatioPerLevel() * skillLevel * 100) +
+					"% of damage taken is drained over " + NoTrailZeros(theGame.GetTModOptions().GetEndurePainDuration()) + "s. This damage cannot kill you.";
+				// Triangle end
 				break;
 			default:
 				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);

@@ -208,10 +208,15 @@
       </ability>
       <!-- Triangle resolve -->
       <ability name="TResolveEffect">
-        <!-- duration and effect strength set via menu item -->
+        <!-- duration and effect strength set via menu item. This xml may not be necessary -->
       </ability>
       <ability name="TResolveDamageBonus">
         <attack_power type="mult" min="0.01" />
+      </ability>
+      <!-- Triangle endure pain -->
+      <ability name="TIgnorePainEffect">
+        <!-- set things via scripts -->
+        <DirectDamage type="mult" min="0" max="0" />
       </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
@@ -441,6 +446,8 @@
     <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="effect_enhanced_weapon"  targetEffectName_name="axii_guardian" />
     <!-- Triangle resolve -->
     <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="effect_enhanced_weapon"/>
+    <!-- Triangle endure pain -->
+    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="Bleeding" showOnHUD="1" effectNameLocalisationKey_name="effect_bleeding"/>
     <!-- Triangle end -->
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
 	  <effect name_name="WraithBlindnessEffect"  	defaultAbilityName_name="WraithBlindnessEffect" 	iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="stunned_ghost" />

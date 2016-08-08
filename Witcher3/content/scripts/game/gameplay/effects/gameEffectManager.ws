@@ -223,6 +223,7 @@ class W3GameEffectManager
 			case EET_TInspiringAura :			effects[effect] = new W3TInspiringAura in this;						break;
 			case EET_TInspired :				effects[effect] = new W3Effect_TInspired in this;					break;
 			case EET_TResolve :					effects[effect] = new W3Effect_TResolve in this;					break;
+			case EET_TIgnorePain :				effects[effect] = new W3Effect_TIgnorePain in this;				break;
 			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
@@ -627,6 +628,7 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "TInspiringAuraEffect" :								type = EET_TInspiringAura;				break;
 		case "TInspiredEffect" :									type = EET_TInspired;					break;
 		case "TResolveEffect" :										type = EET_TResolve;					break;
+		case "TIgnorePainEffect" :									type = EET_TIgnorePain;				break;
 		// Triangle end
 
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
@@ -834,6 +836,7 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_TInspiringAura :						return 'TInspiringAuraEffect';
 		case EET_TInspired :							return 'TInspiredEffect';
 		case EET_TResolve :								return 'TResolveEffect';
+		case EET_TIgnorePain :							return 'TIgnorePainEffect';
 		// Triangle end
 
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';

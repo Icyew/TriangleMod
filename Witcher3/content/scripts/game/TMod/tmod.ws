@@ -45,6 +45,18 @@ class TModOptions
 
 	// ---- Combat End ---- //
 
+	// ---- Alchemy Begin ---- //
+
+	public function GetEndurePainDamageRatioPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'EndurePainDamageRatioPerLevel' ) ) / 100;
+	}
+
+	public function GetEndurePainDuration() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'EndurePainDuration' ) );
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool

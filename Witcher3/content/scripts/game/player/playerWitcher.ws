@@ -1750,6 +1750,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var useQuenForBleeding : bool;
 		var min, max : SAbilityAttributeValue;
 		var skillLevel : int;
+		// Triangle endure pain
+		var params : SCustomEffectParams;
+		var dmgRatio : float;
+		// Triangle end
 		
 		super.ReduceDamage(damageData);
 		
@@ -1893,6 +1897,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 			if(actorAttacker && damageData.DealsAnyDamage() )
 				actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
 		}
+		// Triangle endure pain
+		if (CanUseSkill(S_Alchemy_s20) && damageData.processedDmg.vitalityDamage > 0) {
+			params.effectType = EET_TIgnorePain;
+			params.creator = this;
+			params.sourceName = "Endure Pain";
+			params.duration = theGame.GetTModOptions().GetEndurePainDuration();
+			dmgRatio = theGame.GetTModOptions().GetEndurePainDamageRatioPerLevel() * GetSkillLevel(S_Alchemy_s20);
+			params.effectValue.valueAdditive = damageData.processedDmg.vitalityDamage * dmgRatio / params.duration;
+			damageData.processedDmg.vitalityDamage = damageData.processedDmg.vitalityDamage * (1 - dmgRatio);
+			RemoveBuff(EET_TIgnorePain); // I forget if this is necessary
+			AddEffectCustom(params);
+		}
+		// Triangle end
 	}
 	
 	timer function UndyingSkillCooldown(dt : float, id : int)

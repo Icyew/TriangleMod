@@ -14,14 +14,26 @@
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
-			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboBonus"			 displayName="Extra light attack speed % per light attack combo"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboBonus"			 displayName="Extra total heavy damage multiplier (additive) per heavy attack combo"	displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Seconds for light attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Seconds for heavy attack combo to expire (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="RendChargeBonus"				 displayName="Fully charged rend damage bonus multiplier"						 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ResolveDamagePerLevel"			 displayName="Bonus attack power from Resolve per level"						 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ResolveDuration"				 displayName="Time before resolve bonus damage expires"							 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="EndurePainDamageRatioPerLevel"	value="10" />
+				<Entry varId="EndurePainDuration"				value="8"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="EndurePainDamageRatioPerLevel"	 displayName="Endure Pain: Percentage of damage converted to DoT per level"				displayType="SLIDER;0.00;20;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EndurePainDuration"			 displayName="Endure Pain: Duration of DoT (total dmg stays the same)"					displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">

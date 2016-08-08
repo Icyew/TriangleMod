@@ -137,6 +137,8 @@ enum EEffectType
 	EET_TInspired,
 	// Triangle resolve
 	EET_TResolve,
+	// Triangle endure pain
+	EET_TIgnorePain,
 	// Triangle end
 
 	
