@@ -157,6 +157,13 @@ class CR4HudModuleBuffs extends CR4HudModuleBase
 						extraValue = ( ( W3Effect_BasicQuen ) effectArray[i] ).GetStacks();
 						
 					}
+					// Triangle parry
+					else if( effectType == EET_TParryCooldown )
+					{
+						duration = ( ( W3Effect_TParryCooldown ) effectArray[i] ).GetStacks();
+						initialDuration = ( ( W3Effect_TParryCooldown ) effectArray[i] ).GetMaxStacks();
+					}
+					// Triangle end
 					else if( effectType == EET_Mutation3 )
 					{						
 						duration = ( ( W3Effect_Mutation3 ) effectArray[i] ).GetStacks();

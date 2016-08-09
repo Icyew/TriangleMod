@@ -43,6 +43,16 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDuration' ) );
 	}
 
+	public function GetParryCooldown() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ParryCooldown' ) );
+	}
+
+	public function GetMaxParries() : int
+	{
+		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'MaxParries' ) );
+	}
+
 	// ---- Combat End ---- //
 
 	// ---- Alchemy Begin ---- //

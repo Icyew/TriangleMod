@@ -8447,6 +8447,38 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
+	// Triangle parry
+	function HasEnoughParries(needed : int) : bool
+	{
+		var parryCooldown : W3Effect_TParryCooldown;
+		if (theGame.GetTModOptions().GetMaxParries() == 0) {
+			return true;
+		}
+		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
+			AddEffectDefault(EET_TParryCooldown, this, "Parry");
+		}
+		parryCooldown = (W3Effect_TParryCooldown)GetBuff(EET_TParryCooldown);
+		if (parryCooldown && parryCooldown.GetStacks() >= needed) {
+			return true;
+		}
+		return !parryCooldown;
+	}
+
+	// Triangle parry
+	function DrainParries(value : int)
+	{
+		var parryCooldown : W3Effect_TParryCooldown;
+		if (theGame.GetTModOptions().GetMaxParries() == 0) {
+			return;
+		}
+		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
+			AddEffectDefault(EET_TParryCooldown, this, "Parry");
+		}
+		parryCooldown = (W3Effect_TParryCooldown)GetBuff(EET_TParryCooldown);
+		if (parryCooldown) {
+			parryCooldown.DrainStacks(value);
+		}
+	}
 	
 	function PerformParryCheck( parryInfo : SParryInfo) : bool
 	{
@@ -8475,7 +8507,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			if ( IsInCombatActionFriendly() )
 				RaiseEvent('CombatActionFriendlyEnd');
 			
-			if ( HasStaminaToParry(parryInfo.attackActionName) )
+			if ( HasStaminaToParry(parryInfo.attackActionName) && HasEnoughParries(1)) // Triangle parry
 			{
 				this.SetBehaviorVariable( 'combatActionType', (int)CAT_Parry );
 				
@@ -8493,7 +8525,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				{
 					counter = GetDefendCounter();
 					onHitCounter = parryInfo.attacker.GetAttributeValue( 'break_through_parry_on_hit_counter' );
-					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase )
+					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase && theGame.GetTModOptions().GetMaxParries() == 0 ) // Triangle parry override vanilla parry counter
 					{
 						AddEffectDefault( EET_Stagger, parryInfo.attacker, "Break through parry" );
 					}
@@ -8512,6 +8544,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			else
 			{
 				AddEffectDefault(EET_Stagger, parryInfo.attacker, "Parry");
+				DrainParries(1); // Triangle parry Even if parry breaks, we want to drain partially recharged parries
 				return true;
 			}
 			
@@ -8538,6 +8571,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				else
 					parryInfo.target.PlayEffectOnHeldWeapon('heavy_block');
 			}
+			DrainParries(1); // Triangle parry
 			return true;
 		}			
 		

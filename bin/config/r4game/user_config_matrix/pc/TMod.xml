@@ -11,6 +11,8 @@
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
 				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
+				<Entry varId="ParryCooldown"					value="2" />
+				<Entry varId="MaxParries"						value="3" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -22,6 +24,8 @@
 			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
