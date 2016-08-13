@@ -522,7 +522,6 @@ class W3DamageManagerProcessor extends CObject
 		anyDamageProcessed = false;
 		spellSwordSign = witcher.GetSpellSwordSign();
 		// Triangle TODO let crossbow in on this damage?
-		if(spellSwordSign != ST_None)
 		if(attackAction && attackAction.IsActionMelee() && playerAttacker == witcher && spellSwordSign != ST_None)
 		{
 			associatedSkill = T_PowerSkillForSignType(spellSwordSign);
@@ -1338,7 +1337,7 @@ class W3DamageManagerProcessor extends CObject
 			return false;
 		
 		returnedAction = new W3DamageAction in this;
-		returnedAction.Initialize( action.victim, action.attacker, NULL, T_EMutationEnumToName(TEM_Electric), EHRT_None, CPS_AttackPower, true, false, false, false );
+		returnedAction.Initialize( action.victim, action.attacker, NULL, T_EMutationEnumToName(TEM_Electric), EHRT_None, CPS_Undefined, true, false, false, false );
 		returnedAction.SetCannotReturnDamage( true );
 		returnedAction.SetHitAnimationPlayType(EAHA_ForceYes);
 		returnedAction.SetHitReactionType(EHRT_Heavy);

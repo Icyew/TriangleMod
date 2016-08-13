@@ -386,14 +386,19 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'VenomousDuration' ) );
 	}
 
-	public function GetExplosiveDamageRatio() : float
+	public function GetExplosiveBaseDamage() : float
 	{
-		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveDamageRatio' ) );
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveBaseDamage' ) );
 	}
 
 	public function GetExplosiveRange() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveRange' ) );
+	}
+
+	public function GetExplosiveDelay() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionEnemies', 'ExplosiveDelay' ) );
 	}
 
 	public function GetFlamingRange() : float

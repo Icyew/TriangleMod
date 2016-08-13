@@ -1305,26 +1305,26 @@ statemachine import class CNewNPC extends CActor
 			ent.DestroyAfter(5);
 			FindGameplayEntitiesInSphere(targets, GetWorldPosition() + Vector(0,0,0.1f), theGame.GetTModOptions().GetExplosiveRange(), 1000, '', FLAG_TestLineOfSight);
 			for(i = 0; i < targets.Size(); i += 1) {
-				if (IsRequiredAttitudeBetween(this, targets[i], true, true, true)) {
+				if (this != targets[i] && IsRequiredAttitudeBetween(this, targets[i], true, true, true)) {
 					returnedAction = new W3DamageAction in this;
-					returnedAction.Initialize( this, thePlayer, NULL, 'TEM_Explode', EHRT_None, CPS_AttackPower, true, false, false, false );
+					returnedAction.Initialize( this, targets[i], NULL, 'TEM_Explode', EHRT_None, CPS_AttackPower, true, false, false, false );
 					returnedAction.SetCannotReturnDamage( true );
 					returnedAction.AddEffectInfo(EET_LongStagger);
 					returnedAction.SetProcessBuffsIfNoDamage(true);
 					
-					damage = CalculateAttributeValue(GetAttributeValue('RendingDamage',,true));
-					damage += CalculateAttributeValue(GetAttributeValue('BludgeoningDamage',,true));
-					damage += CalculateAttributeValue(GetAttributeValue('FireDamage',,true));
-					damage += CalculateAttributeValue(GetAttributeValue('ElementalDamage',,true));
+					// NOTE: Damage bonus from levels are in base attack power. It will get added again later (since this uses attack power), but only after
+					// processing difficulty multiplier (fun fact, it's not actually a 'final' damage multiplier), so I double count it here.
+					powerMod = GetPowerStatValue(CPS_AttackPower,,true);
+					damage = theGame.GetTModOptions().GetExplosiveBaseDamage() + powerMod.valueBase;
 
-					powerMod = GetPowerStatValue(CPS_AttackPower, , true);
-					damage = MaxF(0, (damage + powerMod.valueBase) * powerMod.valueMultiplicative + powerMod.valueAdditive);
-
-					returnedAction.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, damage);
+					if (UsesEssence()) {
+						returnedAction.AddDamage(theGame.params.DAMAGE_NAME_RENDING, damage);
+					} else {
+						returnedAction.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, damage);
+					}
 					
 					theGame.damageMgr.ProcessAction(returnedAction);
 					delete returnedAction;
-					break;
 				}
 			}
 			Kill('TEM_Explode', false, thePlayer);
@@ -4818,6 +4818,7 @@ statemachine import class CNewNPC extends CActor
 		// Triangle enemy mutations
 		var stats : CCharacterStats;
 		var healthType : EBaseCharacterStats;
+		var params : SCustomEffectParams;
 		stats = GetCharacterStats();
 
 		healthType = T_GetHealthType(this);
@@ -4828,7 +4829,12 @@ statemachine import class CNewNPC extends CActor
 			action.SetAllProcessedDamageAs(1);
 			explosionMutationTriggered = true;
 			PlayEffect('critical_burning');
-			AddTimer('ExplodeMutation', 3);
+			AddTimer('ExplodeMutation', theGame.GetTModOptions().GetExplosiveDelay());
+			params.effectType = EET_Immobilized;
+			params.creator = this;
+			params.sourceName = T_EMutationEnumToName(TEM_Explosive);
+			params.duration = theGame.GetTModOptions().GetExplosiveDelay() + 1;
+			AddEffectCustom(params);
 		}
 		// Triangle end
 

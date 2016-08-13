@@ -147,8 +147,9 @@
 				<Entry varId="ElectricDamageRatio"				value="0.5"	/>
 				<Entry varId="VampiricHealRatio"				value="1"	/>
 				<Entry varId="VenomousDuration"					value="10"	/>
-				<Entry varId="ExplosiveDamageRatio"				value="4"	/>
+				<Entry varId="ExplosiveBaseDamage"				value="650"	/>
 				<Entry varId="ExplosiveRange"					value="3"	/>
+				<Entry varId="ExplosiveDelay"					value="1.25"/>
 				<Entry varId="FlamingRange"						value="2.5"	/>
 				<Entry varId="FreezingRange"					value="4"	/>
 				<Entry varId="HypnoticRange"					value="4"	/>
@@ -171,8 +172,9 @@
 			<Var id="ElectricDamageRatio"			 displayName="Electric: Fraction of returned damage (elemental)."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="VampiricHealRatio"				 displayName="Vampiric: Fraction of damage converted to health."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="VenomousDuration"				 displayName="Venomous: Duration of poison effect."										displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ExplosiveDamageRatio"			 displayName="Explosive: Explosive damage ratio. Multiplies enemy damage."				displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveBaseDamage"			 displayName="Explosive: Base rending/bludgeoning dmg. Scales with attack power"		displayType="SLIDER;0.00;1000;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ExplosiveRange"				 displayName="Explosive: Range of explosion (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveDelay"				 displayName="Explosive: Seconds before explosion."										displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FlamingRange"					 displayName="Flaming: Range of fire aura (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FreezingRange"					 displayName="Freezing: Range of freezing aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HypnoticRange"					 displayName="Hypnotic: Range of hypnotism aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
