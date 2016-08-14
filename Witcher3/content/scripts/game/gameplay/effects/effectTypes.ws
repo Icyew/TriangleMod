@@ -139,6 +139,8 @@ enum EEffectType
 	EET_TResolve,
 	// Triangle endure pain
 	EET_TIgnorePain,
+	// Triangle parry
+	EET_TParryCooldown,
 	// Triangle end
 
 	

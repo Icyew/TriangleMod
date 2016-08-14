@@ -218,6 +218,11 @@
         <!-- set things via scripts -->
         <DirectDamage type="mult" min="0" max="0" />
       </ability>
+      <!-- Triangle parry -->
+      <ability name="TParryCooldownEffect">
+        <!-- set things via scripts. This xml may not be necessary -->
+        <duration type="add" min="-1" />
+      </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
@@ -443,11 +448,13 @@
     <effects>
       <!-- displayed on hud-->
     <!-- Triangle enemy mutations -->
-    <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="effect_enhanced_weapon"  targetEffectName_name="axii_guardian" />
+    <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EffectAxii" showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_5"  targetEffectName_name="axii_guardian" />
     <!-- Triangle resolve -->
-    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="effect_enhanced_weapon"/>
+    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s5"/>
     <!-- Triangle endure pain -->
-    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="Bleeding" showOnHUD="1" effectNameLocalisationKey_name="effect_bleeding"/>
+    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="Bleeding" showOnHUD="1" effectNameLocalisationKey_name="skill_name_alchemy_s20"/>
+    <!-- Triangle parry -->
+    <effect name_name="TParryCooldownEffect"      defaultAbilityName_name="TParryCooldownEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s10"/>
     <!-- Triangle end -->
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
 	  <effect name_name="WraithBlindnessEffect"  	defaultAbilityName_name="WraithBlindnessEffect" 	iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="stunned_ghost" />
