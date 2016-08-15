@@ -48,6 +48,11 @@
       <ability name="AxiiGuardMeEffect">
         <duration type="add" min="15" max="15" />
       </ability>
+	  
+	  <ability name="BasicQuenEffect">
+        <duration type="add" min="-1" />
+      </ability>
+	  
       <ability name="BattleTranceEffect">
         <duration type="add" min="-1" />        
       </ability>
@@ -226,7 +231,7 @@
       <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
-        <hpPercDamageBonusPerHit type="add" min="0.15" />
+        <hpPercDamageBonusPerHit type="add" min="0.0" />
       </ability>
 	  <ability name="FrozenEffect_WhiteFrost1">
         <duration type="add" min="4"/>
@@ -234,11 +239,11 @@
       </ability>
 	  <ability name="FrozenEffect_WhiteFrost2">
         <duration type="add" min="5"/>
-        <hpPercDamageBonusPerHit type="add" min="0.1" />
+        <hpPercDamageBonusPerHit type="add" min="0.07" />
       </ability>
 	  <ability name="FrozenEffect_WhiteFrost3">
         <duration type="add" min="6"/>
-        <hpPercDamageBonusPerHit type="add" min="0.15" />
+        <hpPercDamageBonusPerHit type="add" min="0.1" />
       </ability>
 	  
       <ability name="HeavyKnockdownEffect">
@@ -271,6 +276,9 @@
         <duration type="add" min="1" max="1" />
         <hp_regen_reduction_strength type="add" min="200" />
         <hp_regen_reduction_duration type="add" min="-1" />
+      </ability>
+	  <ability name="OilEffect">
+        <duration type="add" min="-1" max="-1" />
       </ability>
       <ability name="OverEncumberedEffect">
         <duration type="add" min="-1" />
@@ -456,12 +464,13 @@
     <!-- Triangle parry -->
     <effect name_name="TParryCooldownEffect"      defaultAbilityName_name="TParryCooldownEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s10"/>
     <!-- Triangle end -->
+	  <effect name_name="BasicQuenEffect"        	defaultAbilityName_name="BasicQuenEffect"   		iconType_name="Quen" 	 		showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_4" />
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
 	  <effect name_name="WraithBlindnessEffect"  	defaultAbilityName_name="WraithBlindnessEffect" 	iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="stunned_ghost" />
       <effect name_name="ConfusionEffect"        	defaultAbilityName_name="ConfusionEffect" 			iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_confusion" 		targetEffectName_name="axii_confusion"  />
       <effect name_name="HypnotizedEffect" 		 	defaultAbilityName_name="HypnotizedEffect" 			iconType_name="Hypnotized" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_hypnotized" 		resistStatName_name="will_resistance" targetEffectName_name="axii_hipnotize" />
 	  <effect name_name="WitchHypnotizedEffect"  	defaultAbilityName_name="HypnotizedEffect" 			iconType_name="Hypnotized" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_hypnotized" 		resistStatName_name="will_resistance" targetEffectName_name="axii_hipnotize" />
-      <effect name_name="ImmobilizedEffect" 	 	defaultAbilityName_name="ImmobilizedEffect" 		iconType_name="Immobilized"  	showOnHUD="1" effectNameLocalisationKey_name="effect_immobilized" 		targetEffectName_name="axii_stopping"/>
+      <effect name_name="ImmobilizedEffect" 	 	defaultAbilityName_name="ImmobilizedEffect" 		iconType_name="Immobilized"  	showOnHUD="1" effectNameLocalisationKey_name="effect_immobilized" 		targetEffectName_name=""/>
       <effect name_name="ParalyzedEffect" 		 	defaultAbilityName_name="ParalyzedEffect" 			iconType_name="Immobilized"  	showOnHUD="1" effectNameLocalisationKey_name="effect_paralyzed" 		resistStatName_name="shock_resistance" targetEffectName_name="yrden_paralysis" />
       <effect name_name="BleedingEffect"		 	defaultAbilityName_name="BleedingEffect" 			iconType_name="Bleeding" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_bleeding" 			targetEffectName_name="critical_bleeding" />
       <effect name_name="BleedingTrackingEffect" 	defaultAbilityName_name="BleedingTrackingEffect" 	iconType_name="Bleeding" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_bleeding" 			targetEffectName_name="critical_bleeding" />
@@ -469,6 +478,7 @@
       <effect name_name="PoisonEffect" 			 	defaultAbilityName_name="PoisonEffect" 				iconType_name="PoisonDamage" 	showOnHUD="1" effectNameLocalisationKey_name="attribute_name_poison" 	cameraEffectName_name="critical_poison_player" targetEffectName_name="critical_poison" />
       <effect name_name="PoisonCriticalEffect"   	defaultAbilityName_name="PoisonCriticalEffect" 		iconType_name="PoisonDamage" 	showOnHUD="1" effectNameLocalisationKey_name="attribute_name_poison" 	cameraEffectName_name="critical_poison_player" targetEffectName_name="critical_poison" />
       <effect name_name="EdibleEffect" 			 	defaultAbilityName_name="EdibleEffect_Level1" 		iconType_name="VitalityRegen" 	showOnHUD="1" effectNameLocalisationKey_name="attribute_name_vitalityregen" 	/>
+	  <effect name_name="OilEffect"  	 			defaultAbilityName_name="OilEffect" 												showOnHUD="1" />
       <effect name_name="SlowdownEffect" 		 	defaultAbilityName_name="SlowdownEffect" 			iconType_name="Slowdown" 	 	showOnHUD="1" effectNameLocalisationKey_name="SlowdownEffect" 			targetEffectName_name="yrden_slowdown" />
 	  <effect name_name="SlowdownFrostEffect"  	 	defaultAbilityName_name="SlowdownFrostEffect" 		iconType_name="Slowdown" 	 	showOnHUD="1" effectNameLocalisationKey_name="SlowdownEffect" 			targetEffectName_name="critical_frozen" />
 	  <effect name_name="SlowdownAxiiEffect"  	 	defaultAbilityName_name="SlowdownEffect" 											showOnHUD="0" effectNameLocalisationKey_name="SlowdownEffect" 			targetEffectName_name="axii_slowdown" />
@@ -603,6 +613,7 @@
 	  <effect iconType_name="EffectNekker"    	path="icons/inventory/potions/pheromone-nekker-64x64.png" />
 	  <effect iconType_name="EffectBear"    	path="icons/inventory/potions/pheromone-bear-64x64.png" />
 	  <effect iconType_name="PopsPotion"    	path="icons/inventory/ingredients/alchemy/alcohol_vodka_pepper_64x64.png" />
+	  <effect iconType_name="Quen"    			path="icons/Skills/core/magic_4.png" />
     </effect_icons>
   </custom>
 </redxml>
