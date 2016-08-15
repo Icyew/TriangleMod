@@ -72,6 +72,7 @@ currentChanges=$(git diff --name-status vanilla)
 
 prefix="Witcher3"
 mkdir -p "$tmpPath"
+chmod 774 "$tmpPath"
 IFS=$'\n'
 for fileWithStatus in $currentChanges; do
 	status=$(echo "$fileWithStatus" | grep -oP "^.*?\S" | grep -o "\S")
@@ -80,7 +81,7 @@ for fileWithStatus in $currentChanges; do
 		filePath="$modPath/$file"
 		if [[ $file =~ .*".xml"$ ]] && ! $scriptsOnly; then
 			echo "$filePath";
-			cp -R --parents "$filePath" "$tmpPath";
+			cp -Rp --parents "$filePath" "$tmpPath";
 		fi
 		if [[ $file =~ .*".ws"$ ]] && ! $xmlOnly; then
 			echo "$filePath";
@@ -93,9 +94,9 @@ for fileWithStatus in $currentChanges; do
 				localPath="$studioPath/scripts/$folder/$truncatedPath"
 				pathOnly=${localPath%/*}
 				mkdir -p "$pathOnly";
-				cp -R "$filePath" "$localPath";
+				cp -Rp "$filePath" "$localPath";
 			else
-				cp -R --parents "$filePath" "$tmpPath";
+				cp -Rp --parents "$filePath" "$tmpPath";
 			fi
 		fi
 	fi
@@ -106,7 +107,7 @@ done
 # else
 # 	cp -R "$contentPath" "$tmpPath"
 # fi
-cp -R "$binPath" "$gamePath"
+cp -Rp "$binPath" "$gamePath"
 
 eval "$batPath"
 
