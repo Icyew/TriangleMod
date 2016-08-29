@@ -57,6 +57,11 @@ class TModOptions
 
 	// ---- Alchemy Begin ---- //
 
+	public function GetBonusToxicity() : int
+	{
+		return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'BonusToxicity' ) );
+	}
+
 	public function GetEndurePainDamageRatioPerLevel() : float
 	{
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'EndurePainDamageRatioPerLevel' ) ) / 100;

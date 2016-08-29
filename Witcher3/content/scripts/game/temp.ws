@@ -14424,3 +14424,10 @@ exec function T_SetHealthBonus(health : int)
 	thePlayer.RemoveAbilityAll('TDebugHealthBonus');
 	thePlayer.AddAbilityMultiple('TDebugHealthBonus', Max(health, 0));
 }
+
+// Triangle debug commands
+exec function T_SetToxicityBonus(toxicity : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugToxicityBonus');
+	thePlayer.AddAbilityMultiple('TDebugToxicityBonus', Max(toxicity, 0));
+}

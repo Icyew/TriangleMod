@@ -399,7 +399,7 @@ import class W3GameParams extends CObject
 
 	
 	public const var TOXICITY_DAMAGE_THRESHOLD : float;									
-		default TOXICITY_DAMAGE_THRESHOLD = 0.75;
+		default TOXICITY_DAMAGE_THRESHOLD = 0.8; // Triangle heightened tolerance
 		
 	
 	public const var DEBUG_CHEATS_ENABLED : bool;										

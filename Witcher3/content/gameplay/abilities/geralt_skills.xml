@@ -511,7 +511,7 @@
       <!-- Resistances -->
       <ability name="alchemy_s1">
         <tags>alchemy_s1</tags>
-        <threshold type="add" min="0.05" />
+        <threshold type="add" min="0.04" /> <!-- Triangle heightened tolerance -->
       </ability>
   
       <!-- Refreshment -->

@@ -240,6 +240,13 @@
       <ability name="TDebugHealthBonus">
         <vitality type="base" min="1" />
       </ability>
+      <ability name="TDebugToxicityBonus">
+        <toxicity type="base" always_random="false" min="1" />
+      </ability>
+      <!-- Triangle toxicity -->
+      <ability name="TBonusToxicity">
+        <toxicity type="base" always_random="false" min="1" />
+      </ability>
       <!-- Triangle end -->
     </abilities>
   </definitions>  

@@ -359,6 +359,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 			RemoveBuff( EET_Mutation11Immortal );
 		}
 		
+		// Triangle toxicity
+		RemoveAbilityAll('TBonusToxicity');
+		AddAbilityMultiple('TBonusToxicity', theGame.GetTModOptions().GetBonusToxicity());
+		// Triangle end
+
 		isInitialized = true;
 	}
 
@@ -9195,6 +9200,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		delete effectManager;
 		SetEffectManager();
 
+		// Triangle toxicity
+		RemoveAbilityAll('TBonusToxicity');
+		AddAbilityMultiple('TBonusToxicity', theGame.GetTModOptions().GetBonusToxicity());
+		// Triangle end
+		
 		abilityManager.PostInit();
 	}
 	
