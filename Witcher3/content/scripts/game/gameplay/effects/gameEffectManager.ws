@@ -228,6 +228,8 @@ class W3GameEffectManager
 			case EET_TIgnorePain :				effects[effect] = new W3Effect_TIgnorePain in this;					break;
 			// Triangle parry
 			case EET_TParryCooldown :			effects[effect] = new W3Effect_TParryCooldown in this;				break;
+			// Triangle acquired tolerance
+			case EET_TAcquiredTolerance :		effects[effect] = new W3Effect_TAcquiredTolerance in this;			break;
 			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
@@ -637,6 +639,8 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "TIgnorePainEffect" :									type = EET_TIgnorePain;					break;
 		// Triangle parry
 		case "TParryCooldownEffect" :								type = EET_TParryCooldown;				break;
+		// Triangle acquired tolerance
+		case "TAcquiredToleranceEffect" :							type = EET_TAcquiredTolerance;			break;
 		// Triangle end
 
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
@@ -849,6 +853,8 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_TIgnorePain :							return 'TIgnorePainEffect';
 		// Triangle parry
 		case EET_TParryCooldown :						return 'TParryCooldownEffect';
+		// Triangle acquired tolerance
+		case EET_TAcquiredTolerance :					return 'TAcquiredToleranceEffect';
 		// Triangle end
 
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';

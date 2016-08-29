@@ -9,6 +9,9 @@
 class W3Effect_TParryCooldown extends CBaseGameplayEffect
 {
 	default effectType = EET_TParryCooldown;
+	default isPositive = false;
+	default isNeutral = false;
+	default isNegative = true;
 	private var currentStacks : float;
 
 	event OnUpdate(dt : float)

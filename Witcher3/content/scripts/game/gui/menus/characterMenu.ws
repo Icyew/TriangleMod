@@ -2289,6 +2289,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				break;
+			// Triangle acquired tolerance
+			case S_Alchemy_s18:
+				baseString = "After drinking a potion, toxicity of all potions are decreased by " + NoTrailZeros(theGame.GetTModOptions().GetAcquiredToleranceDiscount()) + " for " +
+					NoTrailZeros(theGame.GetTModOptions().GetAcquiredToleranceDurationPerLevel() * skillLevel) + "s.";
+				break;
+			// Triangle end
 			case S_Alchemy_s19:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s19, 'synergy_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));

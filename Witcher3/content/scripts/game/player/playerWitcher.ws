@@ -4232,7 +4232,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		m_alchemyManager.GetRecipe(nam, recipe);
 			
 		
-		if(CanUseSkill(S_Alchemy_s18))
+		if(CanUseSkill(S_Alchemy_s18) && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
 				AddAbility(SkillEnumToName(S_Alchemy_s18), true);
@@ -6470,6 +6470,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var i : int;
 		var maxTox, toxicityOffset, adrenaline : float;
 		var costReduction : SAbilityAttributeValue;
+		var acquiredToleranceEffect : W3Effect_TAcquiredTolerance; // Triangle acquired tolerance
 		
 		
 		if( effectType == EET_WhiteHoney )
@@ -6491,6 +6492,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			finalPotionToxicity = (finalPotionToxicity - costReduction.valueBase) * (1 - costReduction.valueMultiplicative) - costReduction.valueAdditive;
 			finalPotionToxicity = MaxF(0.f, finalPotionToxicity);
 		}
+
+		// Triangle acquired tolerance
+		acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
+		if (CanUseSkill(S_Alchemy_s18) && acquiredToleranceEffect && acquiredToleranceEffect.IsActive()) {
+			finalPotionToxicity = MaxF(0, finalPotionToxicity - theGame.GetTModOptions().GetAcquiredToleranceDiscount());
+		}
+		// Triangle end
 		
 		
 		if(abilityManager.GetStat(BCS_Toxicity, false) + finalPotionToxicity + toxicityOffset > maxTox )
@@ -6514,6 +6522,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var atts : array<name>;
 		var i : int;
 		var mutagenParams : W3MutagenBuffCustomParams;
+		var acquiredToleranceEffect : W3Effect_TAcquiredTolerance; // Triangle acquired tolerance
 		
 		
 		if(itemId != GetInvalidUniqueId())
@@ -6609,6 +6618,20 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				abilityManager.GainStat(BCS_Toxicity, finalPotionToxicity );
 			}
+
+			// Triangle acquired tolerance
+			if (CanUseSkill(S_Alchemy_s18) && theGame.GetTModOptions().GetAcquiredToleranceDiscount() > 0) {
+				if (!HasBuff(EET_TAcquiredTolerance)) {
+					AddEffectDefault(EET_TAcquiredTolerance, this, "Acquired Tolerance");
+				}
+				acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
+				if (!acquiredToleranceEffect && !acquiredToleranceEffect.IsActive()) {
+					T_LogMessage("Acquired Tolerance effect failed to add for some reason");
+				} else {
+					acquiredToleranceEffect.AddTimeLeft(theGame.GetTModOptions().GetAcquiredToleranceDurationPerLevel() * GetSkillLevel(S_Alchemy_s18));
+				}
+			}
+			// Triangle end
 			
 			
 			if(CanUseSkill(S_Perk_13))

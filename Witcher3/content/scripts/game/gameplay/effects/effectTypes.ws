@@ -141,6 +141,8 @@ enum EEffectType
 	EET_TIgnorePain,
 	// Triangle parry
 	EET_TParryCooldown,
+	// Triangle acquired tolerance
+	EET_TAcquiredTolerance,
 	// Triangle end
 
 	

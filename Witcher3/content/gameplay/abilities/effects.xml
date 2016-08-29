@@ -228,6 +228,10 @@
         <!-- set things via scripts. This xml may not be necessary -->
         <duration type="add" min="-1" />
       </ability>
+      <!-- Triangle acquired tolerance -->
+      <ability name="TAcquiredToleranceEffect">
+        <duration type="add" min="1" /> <!-- Extended via code -->
+      </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
@@ -458,11 +462,13 @@
     <!-- Triangle enemy mutations -->
     <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EffectAxii" showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_5"  targetEffectName_name="axii_guardian" />
     <!-- Triangle resolve -->
-    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s5"/>
+    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="Resolve" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s5"/>
     <!-- Triangle endure pain -->
-    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="Bleeding" showOnHUD="1" effectNameLocalisationKey_name="skill_name_alchemy_s20"/>
+    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="EndurePain" showOnHUD="1" effectNameLocalisationKey_name="skill_name_alchemy_s20"/>
     <!-- Triangle parry -->
     <effect name_name="TParryCooldownEffect"      defaultAbilityName_name="TParryCooldownEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s10"/>
+    <!-- Triangle acquired tolerance -->
+    <effect name_name="TAcquiredToleranceEffect"      defaultAbilityName_name="TAcquiredToleranceEffect"            iconType_name="AcquiredTolerance" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_alchemy_s18"/>
     <!-- Triangle end -->
 	  <effect name_name="BasicQuenEffect"        	defaultAbilityName_name="BasicQuenEffect"   		iconType_name="Quen" 	 		showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_4" />
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
@@ -613,7 +619,14 @@
 	  <effect iconType_name="EffectNekker"    	path="icons/inventory/potions/pheromone-nekker-64x64.png" />
 	  <effect iconType_name="EffectBear"    	path="icons/inventory/potions/pheromone-bear-64x64.png" />
 	  <effect iconType_name="PopsPotion"    	path="icons/inventory/ingredients/alchemy/alcohol_vodka_pepper_64x64.png" />
-	  <effect iconType_name="Quen"    			path="icons/Skills/core/magic_4.png" />
+    <effect iconType_name="Quen"          path="icons/Skills/core/magic_4.png" />
+    <!-- Triangle acquired tolerance -->
+    <effect iconType_name="AcquiredTolerance"         path="icons\Skills\Alchemy\alchemy_s18.png" />
+    <!-- Triangle resolve -->
+    <effect iconType_name="Resolve"         path="icons\Skills\Sword\sword_s5.png" />
+    <!-- Triangle endure pain -->
+	  <effect iconType_name="EndurePain"    			path="icons\Skills\Alchemy\alchemy_s20.png" />
+    <!-- Triangle end-->
     </effect_icons>
   </custom>
 </redxml>

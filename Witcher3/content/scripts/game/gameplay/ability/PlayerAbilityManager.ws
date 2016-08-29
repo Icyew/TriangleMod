@@ -2475,7 +2475,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			// Triangle end
 		}
 		
-		if(skill == S_Alchemy_s18)
+		if(skill == S_Alchemy_s18 && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			m_alchemyManager = new W3AlchemyManager in this;
 			m_alchemyManager.Init();
@@ -2953,7 +2953,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			
 			
 			cnt -= owner.GetAbilityCount(skillAbilityName);
-			if(cnt > 0)
+			if(cnt > 0 && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 				charStats.AddAbilityMultiple(skillAbilityName, cnt);
 			else if(cnt < 0)
 				charStats.RemoveAbilityMultiple(skillAbilityName, -cnt);

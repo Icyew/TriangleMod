@@ -67,6 +67,16 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'EndurePainDuration' ) );
 	}
 
+	public function GetAcquiredToleranceDiscount() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AcquiredToleranceDiscount' ) );
+	}
+
+	public function GetAcquiredToleranceDurationPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AcquiredToleranceDurationPerLevel' ) );
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool
