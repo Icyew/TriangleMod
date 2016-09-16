@@ -36,21 +36,27 @@
 				<Entry varId="EndurePainDuration"					value="8"	/>
 				<Entry varId="AcquiredToleranceDiscount"			value="10"	/>
 				<Entry varId="AcquiredToleranceDurationPerLevel"	value="30"	/>
+				<Entry varId="DelayedRecoverySlowFactorPerLevel"	value="1.66"/>
+				<Entry varId="AltTawnyOwlDuration"					value="0"	/>
+				<Entry varId="AltTawnyOwlBase"						value="4" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
 			<Var id="BonusToxicity"	 						displayName="Bonus toxicity"															displayType="SLIDER;0.00;100;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="EndurePainDamageRatioPerLevel"	 		displayName="Endure Pain: Percentage of damage converted to DoT per level"				displayType="SLIDER;0.00;20;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="EndurePainDuration"			 		displayName="Endure Pain: Duration of DoT (total dmg stays the same)"					displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AcquiredToleranceDiscount"				displayName="Acquired Tolerance: Toxicity cost discount (0 defaults to vanilla)"		displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AcquiredToleranceDurationPerLevel"		displayName="Acquired Tolerance: Duration per potion per level"							displayType="SLIDER;0.00;180;36" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AcquiredToleranceDiscount"				displayName="Acquired Tolerance: Toxicity cost discount (0 for vanilla)"				displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AcquiredToleranceDurationPerLevel"		displayName="Acquired Tolerance: Duration per potion/level"								displayType="SLIDER;0.00;180;36" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DelayedRecoverySlowFactorPerLevel"		displayName="Delayed Recovery: Duration/toxicity drain slow/level (0 for vanilla)"		displayType="SLIDER;0.00;2;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltTawnyOwlDuration"					displayName="Tawny Owl: Constant duration for all levels (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltTawnyOwlBase"						displayName="Tawny Owl: Always-on stamina regen for all levels (0 for vanilla)"			displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
-				<Entry varId="StaminaRegenBonus"				value="15"	/>
+				<Entry varId="StaminaRegenBonus"				value="10"	/>
 				<Entry varId="FocusPerMaxStamina"				value="2"	/>
 				<Entry varId="BaseDodgeCost"					value="4"	/>
 				<Entry varId="BaseRollCost"						value="12"	/>

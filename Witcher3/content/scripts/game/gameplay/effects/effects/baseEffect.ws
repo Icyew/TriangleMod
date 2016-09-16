@@ -621,16 +621,24 @@ class CBaseGameplayEffect extends CObject
 	public function OnTimeUpdated(dt : float)
 	{	
 		var toxicityThreshold : float;
+		var slowFactor : float; // Triangle delayed recovery
 		
 		if( isActive && pauseCounters.Size() == 0)
 		{
 			timeActive += dt;	
 			if( duration != -1 )
 			{
-				timeLeft -= dt;				
+				// Triangle delayed recovery
+				slowFactor = theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
+				if (isPotionEffect && thePlayer.GetStat(BCS_Stamina) >= thePlayer.GetStatMax(BCS_Stamina) && thePlayer.CanUseSkill(S_Alchemy_s03) && slowFactor > 1) {
+					timeLeft = (timeLeft * slowFactor - dt) / slowFactor;
+				} else {
+					timeLeft -= dt;
+				}
+				// Triangle end
 				if( timeLeft <= 0 )
 				{
-					if(isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction )				
+					if(slowFactor == 1 && isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction ) // Triangle delayed recovery
 					{
 						toxicityThreshold = thePlayer.GetStatMax(BCS_Toxicity) * (1 - CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, true) ) * thePlayer.GetSkillLevel(S_Alchemy_s03));
 						if(thePlayer.GetStat(BCS_Toxicity, true) > toxicityThreshold)

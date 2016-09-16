@@ -69,6 +69,14 @@ class W3Effect_AutoStaminaRegen extends W3AutoRegenEffect
 			target.StopStaminaRegen();
 		}
 	}
+
+	// Triangle alt stamina
+	protected function calculateRegenPoints(dt : float) : float
+	{
+		var regenPoints : float;
+		return super.calculateRegenPoints(dt) + theGame.GetTModOptions().GetStaminaRegenBonus() * theGame.GetTModOptions().GetStaminaRegenMult();
+	}
+
 	
 	protected function SetEffectValue()
 	{

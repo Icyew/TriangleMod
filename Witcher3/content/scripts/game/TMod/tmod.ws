@@ -82,6 +82,21 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AcquiredToleranceDurationPerLevel' ) );
 	}
 
+	public function GetDelayedRecoverySlowFactorPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'DelayedRecoverySlowFactorPerLevel' ) );
+	}
+
+	public function GetAltTawnyOwlDuration() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AltTawnyOwlDuration' ) );
+	}
+
+	public function GetAltTawnyOwlBase() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AltTawnyOwlBase' ) );
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool

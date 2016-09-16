@@ -2213,6 +2213,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = 1 - CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, false)) * skillLevel;
 				argsInt.PushBack(Max(0, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle delayed recovery
+				if (theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() > 0) {
+					baseString = "Potion duration and toxicity drain " + NoTrailZeros(RoundTo(theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s04:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s04, 'apply_chance', false, false)) * skillLevel;

@@ -107,6 +107,7 @@ done
 # else
 # 	cp -R "$contentPath" "$tmpPath"
 # fi
+chmod -R 774 "$binPath"
 cp -Rp "$binPath" "$gamePath"
 
 eval "$batPath"

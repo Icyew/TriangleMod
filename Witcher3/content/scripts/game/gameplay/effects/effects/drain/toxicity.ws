@@ -59,6 +59,7 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		var dmgValue, min, max : SAbilityAttributeValue;
 		var currentStateName 	: name;
 		var currentThreshold	: int;
+		var slowFactor : float; // Triangle delayed recovery
 	
 		super.OnUpdate(deltaTime);
 		
@@ -144,7 +145,14 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		}
 			
 		
-		drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) );
+		// Triangle delayed recovery
+		slowFactor = theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
+		if (thePlayer.GetStat(BCS_Stamina) >= thePlayer.GetStatMax(BCS_Stamina) && thePlayer.CanUseSkill(S_Alchemy_s03) && slowFactor > 1) {
+			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) ) / slowFactor;
+		} else {
+			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) );		
+		}
+		// Triangle end
 		
 		
 		if(!target.IsInCombat())

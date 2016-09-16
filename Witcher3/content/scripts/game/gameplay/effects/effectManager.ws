@@ -1721,6 +1721,7 @@ class W3EffectManager
 	{
 		var i : int;
 		var regenEffect : W3RegenEffect;
+		var tawnyOwl : W3Potion_TawnyOwl;
 		
 		for(i=0; i<effects.Size(); i+=1)
 		{
@@ -1729,7 +1730,14 @@ class W3EffectManager
 			{
 				if(regenEffect.GetRegenStat() == CRS_Stamina)
 				{
-					PauseEffects(effects[i].GetEffectType(), sourceName, true, duration, true);
+					// Triangle delayed recovery Triangle tawny owl dont pause tawny owl. just disable
+					tawnyOwl = (W3Potion_TawnyOwl)regenEffect;
+					if (!tawnyOwl) {
+						PauseEffects(effects[i].GetEffectType(), sourceName, true, duration, true);
+					} else {
+						tawnyOwl.DisableRegen(duration);
+					}
+					// Triangle end
 				}
 			}
 		}

@@ -40,31 +40,45 @@ abstract class W3RegenEffect extends CBaseGameplayEffect
 		if(canRegen)
 		{
 			
-			regenPoints = effectValue.valueAdditive + effectValue.valueMultiplicative * target.GetStatMax(stat);
-			
-			if (isOnPlayer && regenStat == CRS_Stamina && attributeName == RegenStatEnumToName(regenStat) && GetWitcherPlayer())
-			{
-				baseStaminaRegenVal = GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
-				
-				regenPoints *= 1 + baseStaminaRegenVal;
-				regenPoints += theGame.GetTModOptions().GetStaminaRegenBonus(); // Triangle alt stamina
-				regenPoints *= theGame.GetTModOptions().GetStaminaRegenMult(); // Triangle alt stamina
-			}
-			
-			else if(regenStat == CRS_Vitality || regenStat == CRS_Essence)
-			{
-				hpRegenPauseBuff = (W3Effect_DoTHPRegenReduce)target.GetBuff(EET_DoTHPRegenReduce);
-				if(hpRegenPauseBuff)
-				{
-					pauseRegenVal = hpRegenPauseBuff.GetEffectValue();
-					regenPoints = MaxF(0, regenPoints * (1 - pauseRegenVal.valueMultiplicative) - pauseRegenVal.valueAdditive);
-				}
-			}
+			regenPoints = calculateRegenPoints(dt); // Triangle delayed recovery Triangle tawny owl
 			
 			if( regenPoints > 0 )
 				effectManager.CacheStatUpdate(stat, regenPoints * dt);
 		}
 	}	
+
+	// Triangle tawny owl
+	// Triangle delayed recovery
+	protected function calculateRegenPoints(dt : float) : float
+	{
+		var regenPoints : float;
+		var canRegen : bool;
+		var hpRegenPauseBuff : W3Effect_DoTHPRegenReduce;
+		var pauseRegenVal : SAbilityAttributeValue;
+		var baseStaminaRegenVal : float;
+
+		regenPoints = effectValue.valueAdditive + effectValue.valueMultiplicative * target.GetStatMax(stat);
+		
+		if (isOnPlayer && regenStat == CRS_Stamina && attributeName == RegenStatEnumToName(regenStat) && GetWitcherPlayer())
+		{
+			baseStaminaRegenVal = GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
+			
+			regenPoints *= 1 + baseStaminaRegenVal;
+			regenPoints *= theGame.GetTModOptions().GetStaminaRegenMult(); // Triangle alt stamina
+		}
+		
+		else if(regenStat == CRS_Vitality || regenStat == CRS_Essence)
+		{
+			hpRegenPauseBuff = (W3Effect_DoTHPRegenReduce)target.GetBuff(EET_DoTHPRegenReduce);
+			if(hpRegenPauseBuff)
+			{
+				pauseRegenVal = hpRegenPauseBuff.GetEffectValue();
+				regenPoints = MaxF(0, regenPoints * (1 - pauseRegenVal.valueMultiplicative) - pauseRegenVal.valueAdditive);
+			}
+		}
+
+		return regenPoints;
+	}
 	
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
