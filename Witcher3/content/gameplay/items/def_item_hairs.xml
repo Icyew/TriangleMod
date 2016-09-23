@@ -90,7 +90,7 @@
 				</variants>
 			</item>
 
-			<item name="Long Loose Hairstyle" category="hair" equip_template="c_03b_mg__witcher_m" ability_mode="OnMount">
+			<item name="Long Loose Hairstyle" category="hair" equip_template="c_03b_mg__witcher" ability_mode="OnMount">
 			<tags>NoShow,NoDrop,Body</tags>
 			<base_abilities>
 			</base_abilities>

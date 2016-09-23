@@ -204,7 +204,6 @@
     <reward name="q502_02_completed" 								level="30"	experience="1000" 	gold="0" 	achievement="0" 	script="" comment="" />
 	<reward name="q503_1_optional_helped_werewolf" 					level="30"	experience="200" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="q503_2_ding_dong_witch_is_dead" 					level="30"	experience="1000" 	gold="0" 	achievement="0" 	script="" comment="" />
-    <reward name="q503_2_ding_dong_witch_is_dead" 					level="30"	experience="1000" 	gold="0" 	achievement="0" 	script="" comment="" />
 	<reward name="q504_1_scare_bear" 								level="30"	experience="200" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="q505_1_meet_emhyr" 								level="30"	experience="150" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="q505_2_killed_monster" 							level="30"	experience="20" 	gold="0" 	achievement="0" 	script="" comment="" />
@@ -474,8 +473,8 @@
     <reward name="mq2003_enc_1_women_in_tomb" 						level="25"	experience="50" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="mq2015_1_half" 									level="25"	experience="50" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="mq2015_2_final" 									level="25"	experience="75" 	gold="0" 	achievement="0" 	script="" comment="" />
-    <reward name="mq2030_1_lifted_curse" 							level="1"	experience="75" 	gold="0" 	achievement="0" 	script="" comment="" />
-    <reward name="mq2030_1_reversed_curse" 							level="1"	experience="25" 	gold="60" 	achievement="0" 	script="" comment="" />
+    <reward name="mq2030_1_lifted_curse" 							level="14"	experience="75" 	gold="0" 	achievement="0" 	script="" comment="" />
+    <reward name="mq2030_1_reversed_curse" 							level="14"	experience="25" 	gold="60" 	achievement="0" 	script="" comment="" />
     <reward name="mq2017_wannabes_saved" 							level="15"	experience="50" 	gold="60" 	achievement="0" 	script="" comment="" />
     <reward name="mq2043_1_succeeded" 								level="0"	experience="50" 	gold="0" 	achievement="0" 	script="" comment="">        <items>            <item name="Heavy Gloves 3 schematic" amount="1" />            <item name="Heavy armor 01" amount="1" />            <item name="Sewant mushrooms" amount="5" />            <item name="Hardened leather" amount="2" />        </items>    </reward>
     <reward name="mq2008_reward_in_chest" 							level="0"	experience="0" 		gold="20" 	achievement="0" 	script="" comment="">        <items>            <item name="Boots 4 schematic" amount="1" />            <item name="Heavy Gloves 3 schematic" amount="1" />            <item name="Ruby" amount="1" />        </items>    </reward>
@@ -608,6 +607,7 @@
 	<reward name="hr101_3_item" 									level="0"	experience="0" 		gold="30" 	achievement="0" 	script="" comment="">        <items>            <item name="Horse Bag 1" amount="1" />        </items>    </reward>
 	<reward name="hr101_4_item" 									level="0"	experience="0" 		gold="40"	achievement="0" 	script="" comment="">        <items>            <item name="Horse Blinder 1" amount="1" />        </items>    </reward>
     <reward name="ff104_1_victory" 									level="0"	experience="75" 	gold="80" 	achievement="0" 	script="" comment="" />
+	<reward name="cg_academic" 										level="0"	experience="0" 		gold="0"	achievement="0" 	script="" comment="">        <items>            <item name="Gwent Almanac" amount="1" /> <item name="gwint_card_zoltan" amount="1" /> </items>    </reward>	
     <reward name="cg_all_cards_gathered" 							level="0"	experience="50" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="cg_card_prodigy" 									level="0"	experience="25" 	gold="0" 	achievement="0" 	script="" comment="" />
     <reward name="cg_baron" 										level="0"	experience="25" 	gold="0" 	achievement="0" 	script="" comment="" />

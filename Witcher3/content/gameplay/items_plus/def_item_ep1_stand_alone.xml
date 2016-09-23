@@ -183,6 +183,15 @@
 											<item_cond name="Body torso 01" collapse="false"/>
 											<item_cond name="Geralt Shirt" collapse="false"/>
 											<item_cond name="Geralt Shirt No Knife" collapse="false"/>
+											<item_cond name="Wolf Armor" collapse="false"/>
+											<item_cond name="Wolf Armor 1" collapse="false"/>
+											<item_cond name="Wolf Armor 2" collapse="false"/>
+											<item_cond name="Wolf Armor 3" collapse="false"/>
+											<item_cond name="NGP Wolf Armor" collapse="false"/>
+											<item_cond name="NGP Wolf Armor 1" collapse="false"/>
+											<item_cond name="NGP Wolf Armor 2" collapse="false"/>
+											<item_cond name="NGP Wolf Armor 3" collapse="false"/>
+											<item_cond name="DLC5 Nilfgaardian Armor" collapse="false"/>
 		</collapse>
 		<variants>				
 										<variant equip_template="l_01a_mg__viper_lvl3" category="boots"></variant>

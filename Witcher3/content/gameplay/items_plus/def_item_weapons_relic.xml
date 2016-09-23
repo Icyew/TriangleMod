@@ -357,7 +357,7 @@
 		<weight							type="base"	min="6.25"				/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<SilverDamage					type="base"	min="1"					/>
-		<vitality						type="base"	min="80"	max="100"	/>
+		<spell_power_quen 				type="mult" min="0.08" 	max="0.10"	/>
 		<spell_power_axii				type="mult"	min="0.1"	max="0.15"	/>
 		<critical_hit_chance			type="add"	min="0.1"	max="0.2"	/>
 		<buff_apply_chance				type="add"	min="0.1"				/>
@@ -390,7 +390,7 @@
 		<quality						type="add"	min="4"		max="4"		/>
 		<SilverDamage					type="base"	min="1"					/>
 		<spell_power_aard				type="mult"	min="0.15"	max="0.2"	/>
-		<vitality 						type="base" min="50" 	max="150"	/>
+		<spell_power_quen 				type="mult" min="0.05" 	max="0.15"	/>
 		<buff_apply_chance				type="add"	min="0.12"	 			/>
 		<desc_burningchance_mult		type="add"	min="0.12"				/>
 		<BurningEffect					is_ability="true"					/>
@@ -699,7 +699,7 @@
 		<weight							type="base"	min="5.5"				/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<vitality 						type="base" min="50" 	max="150"/>
+		<spell_power_quen 				type="mult" min="0.05" 	max="0.15"	/>
 		<spell_power_igni				type="mult"	min="0.2"	max="0.25"	/>
 		<buff_apply_chance				type="add"	min="0.2"				/>
 		<desc_freezingchance_mult		type="add"	min="0.2"				/>
@@ -3269,6 +3269,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_3_01</item>
 		</bound_items></player_override>
@@ -3341,6 +3348,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -3422,6 +3436,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_07</item>
 		</bound_items></player_override>
@@ -3495,6 +3516,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -3575,6 +3603,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_3_05</item>
 		</bound_items></player_override>
@@ -3647,6 +3682,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -3728,6 +3770,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_04</item>
 		</bound_items></player_override>
@@ -3801,6 +3850,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -3882,6 +3938,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_3_01</item>
 		</bound_items></player_override>
@@ -3954,6 +4017,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4036,6 +4106,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_2_03</item>
 		</bound_items></player_override>
@@ -4110,6 +4187,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4193,7 +4277,7 @@
 										</anim_switch>
 										<anim_switch
 											category="steelsword" 
-											equip_slot="steel_sword_back_slot"
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4276,6 +4360,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_08</item>
 		</bound_items></player_override>
@@ -4348,6 +4439,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4430,6 +4528,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_12</item>
 		</bound_items></player_override>
@@ -4504,6 +4609,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4584,6 +4696,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_09</item>
 		</bound_items></player_override>
@@ -4657,6 +4776,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4739,6 +4865,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_2_01</item>
 		</bound_items></player_override>
@@ -4816,6 +4949,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_07</item>
 		</bound_items></player_override>
@@ -4887,6 +5027,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4967,6 +5114,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_09</item>
 		</bound_items></player_override>
@@ -5043,6 +5197,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_03</item>
 		</bound_items></player_override>
@@ -5115,6 +5276,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -5196,6 +5364,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_1_05</item>
 		</bound_items></player_override>
@@ -5268,6 +5443,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -5350,6 +5532,13 @@
 										<anim_switch
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">

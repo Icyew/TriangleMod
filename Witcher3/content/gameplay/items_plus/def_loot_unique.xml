@@ -407,7 +407,7 @@
     <loot name="_uniq_treehart_cont" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="3" chance="100">
         <loot_entry name="Diamond dust" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Glowing ore" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="50" />
-        <loot_entry name="Shattered core" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="50" />
+        <loot_entry name="Glyph quen lesser" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="50" />
     </loot>
     <loot name="_burned_body_in_poor_village3" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="15" chance="100">
         <loot_entry name="Orens" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="15" chance="100" />
@@ -499,8 +499,8 @@
         <loot_entry name="Apple juice" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="50" />
     </loot>
     <loot name="chest_underwater_poi_uniq" player_level_min="0" player_level_max="100" quantity_min="16" quantity_max="16" chance="100">
-        <loot_entry name="Shattered core" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
-        <loot_entry name="Svarog rune" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
+        <loot_entry name="Glyph quen lesser" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
+        <loot_entry name="Rune svarog lesser" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Hardened timber" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Silver plate" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Nilfgaardian special forces insignia" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />

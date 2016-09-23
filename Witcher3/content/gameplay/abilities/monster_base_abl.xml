@@ -55,6 +55,9 @@
       <ability name="CannotBeAttackedFromBehind" on_added="" on_ended="">
         <tags> "CannotBeAttackedFromBehind" </tags>
       </ability>
+	  <ability name="CanSpawnBulbs" on_added="" on_ended="">
+        <tags> "CanSpawnBulbs" </tags>
+      </ability>
       <ability name="Charge" on_added="" on_ended="">
         <tags> "Charge", MonsterSkill </tags>
       </ability>
@@ -127,7 +130,8 @@
       </ability>
       <ability name="Frost" on_added="" on_ended="">
         <tags> "Frost", MonsterSkill </tags>
-      </ability>
+      </ability> 
+
       <!-- E3 Demo Hacks, regen decreased, restore after we're done -->
       <ability name="FullMoon" on_added="" on_ended="">
         <tags> "FullMoon", MonsterSkill </tags>
@@ -145,6 +149,10 @@
       <ability name="GroundSlam" on_added="" on_ended="">
         <tags> "GroundSlam", MonsterSkill </tags>
       </ability>
+	  <ability name="HitWindowOpened">
+		<tags> "HitWindowOpened" </tags>
+		<fire_resistance_perc type="add" min="-0.5" max="-0.5" />
+	  </ability>
       <ability name="HeartPhysicalRes" on_added="" on_ended="">
         <tags> "HeartPhysicalRes" </tags>
         <physical_resistance_perc type="base" min="1.0" max="1.0" />
@@ -248,6 +256,9 @@
       <ability name="Necrophage" on_added="" on_ended="">
         <tags> "Necrophage" </tags>
       </ability>
+	  <ability name="NoJournalEntry" on_added="" on_ended="">
+        <tags> "NoJournalEntry" </tags>
+      </ability>
       <ability name="Ogre" on_added="" on_ended="">
         <tags> "Ogre" </tags>
       </ability>
@@ -273,6 +284,9 @@
         <tags> "RageActive" </tags>
         <essenceRegen type="mult" always_random="false" min="0.02" max="0.02" />
         <attack_power type="mult" always_random="false" min="0.30" max="0.30" />
+      </ability>
+	  <ability name="ReflectMeleeAttacks" on_added="" on_ended="">
+        <tags> "ReflectMeleeAttacks" </tags>
       </ability>
       <ability name="Relic" on_added="" on_ended="">
         <tags> "Relic" </tags>
@@ -378,6 +392,15 @@
       </ability>
       <ability name="WeakToAard" on_added="" on_ended="">
         <tags> "WeakToAard" </tags>
+      </ability>
+	  <ability name="YrdenHide" on_added="" on_ended="">
+        <tags> "YrdenHide" </tags>
+      </ability>
+	  <ability name="YrdenTrap" on_added="" on_ended="">
+        <tags> "YrdenTrap" </tags>
+      </ability>
+	  <ability name="YrdenIgnore" on_added="" on_ended="">
+        <tags> "YrdenTrap" </tags>
       </ability>
 	  <ability name="Zero_XP">
         <tags> "base" </tags>
@@ -606,8 +629,11 @@
 		<attack_power type="mult" always_random="false" min="0.4" max="0.4"/>
 		<vitality type="mult" always_random="false" min="2.7" max="2.7" />
 	  </ability>
-		
-		
+	  
+	  	 <ability name="mon_wolf_ngnerf">
+        <tags> "base" </tags>
+	  </ability>
+			
 	  <ability name="qHagGuardingTreasure">
         <tags> "base" </tags>
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3"/>
@@ -701,6 +727,12 @@
 		<attack_power type="mult" always_random="false" min="0.6" max="0.6" />
       </ability>	
 	  
+	  <ability name="mon_ff204olaf">
+      </ability>
+
+	<ability name="mon_ff205troll">
+      </ability>		  
+	  
 	  <ability name="qmh208_forktail">
 		<tags> "base" </tags>
 		<essence type="mult" always_random="false" min="1.2" max="1.2" />
@@ -748,6 +780,7 @@
 	  	   
 		<ability name="qdjange">
 	  </ability>
+	  
 	 
 	  <ability name="sq315_troll">
 		<tags> "base" </tags>
@@ -1843,8 +1876,8 @@
       <ability name="mon_troll_fistfight">
         <level type="add" always_random="false" min="28" max="28" />
         <threat_level type="add" always_random="false" min="3" max="3" />
-        <essence type="base" always_random="false" min="2700" max="2700" />
-		<attack_power type="mult" always_random="false" min="-0.4" max="-0.4" />
+        <essence type="base" always_random="false" min="4500" max="4500" />
+		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 		<attack_power type="add" always_random="false" min="1000" max="1000" />
 		<armor_reduction min="1000" max="1000"/>
 		<armor_reduction_perc min="1" max="1"/>
@@ -4242,6 +4275,7 @@
         <camera_weight type="add" always_random="false" min="1" max="1" />
         <ticket_request_interval type="add" always_random="false" min="3.5" max="3.5" />
         <humanoid type="add" always_random="false" min="0.0" max="0.0" />
+		<essence type="base" always_random="false" min="650" max="650" />
         <vitality type="base" always_random="false" min="0" max="0" />
         <stamina type="base" always_random="false" min="100" max="100" />
         <morale type="base" always_random="false" min="100" max="100" />
@@ -4451,7 +4485,7 @@
       </ability>
       <!-- Witch3 -->
       <ability name="mon_witch3">
-        <tags> "base" </tags>
+        <tags> "base", "Boss" </tags>
         <level type="add" always_random="false" min="28" max="28" />
         <combat_ticket_weight type="add" always_random="false" min="20" max="20" />
         <combat_ticket_priority type="add" always_random="false" min="25" max="25" />
@@ -4537,7 +4571,7 @@
 	  
 	  <!-- Djinn miniboss -->
       <ability name="mon_djinn">
-        <tags> "base" </tags>
+        <tags> "base", "Boss" </tags>
         <level type="add" always_random="false" min="15" max="15" />
         <combat_ticket_weight type="add" always_random="false" min="20" max="20" />
         <combat_ticket_priority type="add" always_random="false" min="25" max="25" />
@@ -4617,7 +4651,7 @@
 	  
       <!-- Heart_Miniboss -->
       <ability name="mon_heart_miniboss">
-        <tags> "base" </tags>
+        <tags> "base", "Boss" </tags>
         <level type="add" always_random="false" min="25" max="25" />
         <combat_ticket_weight type="add" always_random="false" min="20" max="20" />
         <combat_ticket_priority type="add" always_random="false" min="25" max="25" />
@@ -4728,6 +4762,7 @@
       </ability>
 	  
 	  <ability name="WildHunt_Eredin">
+	  <tags> "Boss" </tags>
         <level type="add" min="29" max="29" />
 		<essence type="add" min="8000" max="8000" />
         <experience type="add" min="100" max="100" />
@@ -4765,6 +4800,7 @@
       </ability>
 	  
 	  <ability name="WildHunt_Imlerith">
+	   <tags> "Boss" </tags>
         <level type="add" min="25" max="25" />
 		<essence type="add" min="12000" max="12000" />
         <experience type="add" min="100" max="100" />
@@ -4795,6 +4831,7 @@
       </ability>
 	  
 	  <ability name="WildHunt_Caranthir">
+	  <tags> "Boss" </tags>
         <level type="add" min="29" max="29" />
 		<essence type="add" min="9000" max="9000" />
         <experience type="add" min="100" max="100" />

@@ -96,7 +96,16 @@
 		<frost_resistance_perc type="base" min="1"/>
 		<frost_resistance type="base" min="1"/>
 		<shock_resistance_perc type="base" min="1"/>
-      </ability>	  	  
+      </ability>
+
+      <ability name="BossNGPLevelBonus">
+        <tags> "base", "InstantKillImmune" </tags>
+	    <level type="add" always_random="false" min="1" max="1" />
+        <essence type="mult" always_random="false" min="0.03" max="0.03" />
+        <vitality type="mult" always_random="false" min="0.03" max="0.03" />
+        <attack_power type="mult" always_random="false" min="0.03" max="0.03" />
+        <spell_power type="mult" always_random="false" min="0.03" max="0.03" />
+      </ability>		  
 	  
       <ability name="_Monster_group_base">
   	<level type="add" always_random="false" min="1" max="1" />

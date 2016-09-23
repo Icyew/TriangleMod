@@ -114,7 +114,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_beauclair_white_64x64.png"
 	>
-		<tags>							mod_food, Edibles, Potion, Drinks, Alcohol
+		<tags>							mod_food, Edibles, Drinks, Alcohol
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_1</a>
@@ -147,7 +147,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_dijkstra_dry_64x64.png"
 	>
-		<tags>							mod_food, Edibles, Potion, Drinks, Alcohol
+		<tags>							mod_food, Edibles, Drinks, Alcohol
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_1</a>
@@ -180,7 +180,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_erveluce_64x64.png"
 	>
-		<tags>							mod_food, Edibles, Potion, Drinks, Alcohol
+		<tags>							mod_food, Edibles, Drinks, Alcohol
 		</tags>
 		<base_abilities>				<a>Magic _Stats</a>
 										<a>base_edible_stats</a>
@@ -199,7 +199,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_est_est_64x64.png"
 	>
-		<tags>							mod_food, Edibles, Potion, Drinks, Alcohol
+		<tags>							mod_food, Edibles, Drinks, Alcohol
 		</tags>
 		<base_abilities>				<a>Magic _Stats</a>
 										<a>base_edible_stats</a>
@@ -264,7 +264,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_mettina_rose_64x64.png"
 	>
-		<tags>							mod_food, Edibles, Potion, Drinks, Alcohol
+		<tags>							mod_food, Edibles, Drinks, Alcohol
 		</tags>
 		<base_abilities>				<a>Magic _Stats</a>
 										<a>base_edible_stats</a>
@@ -297,7 +297,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/ingredients/alchemy/alcohol_vodka_pepper_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food, Alcohol
+		<tags>							Edibles, Drinks, mod_food, Alcohol
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_1</a>
@@ -379,7 +379,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/alcohol_viziman_champion_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food, Alcohol
+		<tags>							Edibles, Drinks, mod_food, Alcohol
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_1</a>
@@ -422,7 +422,7 @@
 		localisation_key_description	="attribute_name_vitalityregen"
 		icon_path						="icons/inventory/potions/tir_na_lia_potion-64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -440,7 +440,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_apple_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -458,7 +458,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_apple_baked_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -475,7 +475,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_banana_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -492,7 +492,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_pepper_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -509,7 +509,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_blueberries_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -526,7 +526,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_bread_64x64.png"
 	>
-		<tags>							Edibles, Potion, Wheat, mod_food
+		<tags>							Edibles, Wheat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -544,7 +544,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_bread_burned_64x64.png"
 	>
-		<tags>							Edibles, Potion, Wheat, mod_food
+		<tags>							Edibles, Wheat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -561,7 +561,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_bun_64x64.png"
 	>
-		<tags>							Edibles, Potion, Wheat, mod_food
+		<tags>							Edibles, Wheat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -578,7 +578,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_bun_burned_64x64.png"
 	>
-		<tags>							Edibles, Potion, Wheat, mod_food
+		<tags>							Edibles, Wheat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -595,7 +595,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/ingredients/alchemy/paste_dog_tallow_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>relic_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -612,7 +612,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_candy_64x64.png"
 	>
-		<tags>							Edibles, Potion, Sweets, mod_food
+		<tags>							Edibles, Sweets, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -630,7 +630,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_cheese_64x64.png"
 	>
-		<tags>							Edibles, Potion, Dairy, mod_food
+		<tags>							Edibles, Dairy, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -648,7 +648,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_plum_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -666,7 +666,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -683,7 +683,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_leg_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -701,7 +701,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_roasted_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -718,7 +718,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_leg_roasted_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -735,7 +735,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_sandwich_64x64.png"
 	>
-		<tags>							Edibles, Potion, mod_food
+		<tags>							Edibles, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -752,7 +752,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_sandwich_grilled_64x64.png"
 	>
-		<tags>							Edibles, Potion, mod_food
+		<tags>							Edibles, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -769,7 +769,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_cucumber_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -786,7 +786,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_dried_fruit_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -803,7 +803,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_dried_fruit_and_nuts_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -820,7 +820,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_egg_64x64.png"
 	>
-		<tags>							Edibles, Potion, Dairy, mod_food
+		<tags>							Edibles, Dairy, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -837,7 +837,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_fish_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -854,7 +854,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_fish_fried_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fish, mod_food
+		<tags>							Edibles, Fish, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -871,7 +871,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_fish_gutted_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fish, mod_food
+		<tags>							Edibles, Fish, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -888,7 +888,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_fondue_64x64.png"
 	>
-		<tags>							Edibles, Potion, mod_food
+		<tags>							Edibles, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -905,7 +905,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_grapes_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -922,7 +922,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_ham_sandwich_64x64.png"
 	>
-		<tags>							Edibles, Potion, mod_food
+		<tags>							Edibles, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -939,7 +939,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_honey_pure_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -956,7 +956,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_honeycomb_64x64.png"
 	>
-		<tags>							Edibles, Potion, Sweets, mod_food, mod_collectible
+		<tags>							Edibles, Sweets, mod_food, mod_collectible
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -973,7 +973,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_meat_fried_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -990,7 +990,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_meat_raw_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1007,7 +1007,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_milk_cow_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food
+		<tags>							Edibles, Drinks, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_2</a>
@@ -1024,7 +1024,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_milk_goat_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food
+		<tags>							Edibles, Drinks, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_2</a>
@@ -1041,7 +1041,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_mushroom_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1058,7 +1058,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_mutton_curry_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -1075,7 +1075,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_mutton_leg.dds"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -1092,7 +1092,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_olive_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1109,7 +1109,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_onion_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1126,7 +1126,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_pear_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1143,7 +1143,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_pepper_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1160,7 +1160,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_plum_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1177,7 +1177,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_pork_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -1194,7 +1194,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_pork_grilled_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -1211,7 +1211,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_potato_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -1228,7 +1228,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_potato_baked_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_3</a>
@@ -1245,7 +1245,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_potato_chip_wedges_64x64.png"
 	>
-		<tags>							Edibles, Potion, Vegetables, mod_food
+		<tags>							Edibles, Vegetables, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -1262,7 +1262,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_raspberries_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1296,7 +1296,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_strawberries_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1313,7 +1313,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_toffee_64x64.png"
 	>
-		<tags>							Edibles, Potion, Sweets, mod_food
+		<tags>							Edibles, Sweets, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
@@ -1330,15 +1330,13 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_vinegar_64x64.png"
 	>
-		<tags>							Edibles, Potion, Fruits, mod_food
+		<tags>							Edibles, Fruits, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>
 		</base_abilities>
 	</item>
 
-		price							="7"
-										<a>FoodEdibleQuality_2</a>
 <!-- DRINKS -->
 
 	<item
@@ -1351,7 +1349,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_apple_juice_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food
+		<tags>							Edibles, Drinks, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_3</a>
@@ -1368,7 +1366,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/ingredients/junk/glass_jug_64x64.png"
 	>
-		<tags>							Edibles, Potion, Drinks, mod_food
+		<tags>							Edibles, Drinks, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>BeverageQuality_2</a>
@@ -1388,7 +1386,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_chicken_leg_roasted_64x64.png"
 	>
-		<tags>							Edibles, Potion, Meat, mod_food
+		<tags>							Edibles, Meat, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_2</a>
@@ -1423,7 +1421,7 @@
 		localisation_key_description	="item_desc_food"
 		icon_path						="icons/inventory/food/food_dumpling_64x64.png"
 	>
-		<tags>							Edibles, Potion, mod_food
+		<tags>							Edibles, mod_food
 		</tags>
 		<base_abilities>				<a>base_edible_stats</a>
 										<a>FoodEdibleQuality_1</a>

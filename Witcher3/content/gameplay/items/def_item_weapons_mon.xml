@@ -388,6 +388,7 @@
 				<RendingDamage min="250" max="250"/>
 			</ability>
 			
+
 			<ability name="mon_simulakrum_weapon _Stats">
 			<tags></tags>
 				<BludgeoningDamage min="250" max="250"/>
@@ -3667,6 +3668,7 @@
 					</action>
 				</anim_actions>
 			</item>
+			
 		<!-- simulakrum weapon -->
 			<item name="mon_simulakrum_weapon_right" 
 				category="monster_weapon"
@@ -4650,7 +4652,7 @@
 				</anim_actions>
 			</item>
 			
-			<item name="mon_wyvern_tail" 
+			<item name="mon_wyvern_tail"
 				category="monster_weapon"
 				ability_slots="0"
 				equip_template="phantom_wyvern_tail"

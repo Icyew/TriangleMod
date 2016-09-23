@@ -1080,10 +1080,11 @@
 				
 				<!-- Base Fish species-->
 				<boidSpeciesDef species_name					= "Fishes" 	type_name			= "FlyingCritterLair"
-								wallsDistance					= "1" 		wallsRepulsion		= "3"
+								wallsDistance					= "1" 		wallsRepulsion		= "1.0"
 								updateTime						= "0.25"
 								boidScaleMin					= "1.0" 	boidScaleMax		= "1.0"
 								livesUnderWater					= "true"
+								waterSurfaceCollisionForce		= "3.0"
 								boidTemplate					= "characters\npc_entities\animals\boids\boid_fish.w2ent">
 
 					<spawnPointType spawnPointType_name = "FishSpawn1"/>

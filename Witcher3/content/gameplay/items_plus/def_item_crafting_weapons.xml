@@ -366,7 +366,7 @@
 		<SlashingDamage 				type="base"	min="444"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.21" 				/>
+		<focus_gain 					type="add" min="0.21" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -376,7 +376,7 @@
 		<SlashingDamage 				type="base"	min="484"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.22" 				/>
+		<focus_gain 					type="add" min="0.22" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -386,7 +386,7 @@
 		<SlashingDamage 				type="base"	min="524"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus		type="add"	min="1.00"				/>
-		<focus_gain 					type="base" min="0.23" 				/>
+		<focus_gain 					type="add" min="0.23" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -396,7 +396,7 @@
 		<SlashingDamage 				type="base"	min="556"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus		type="add"	min="1.00"				/>
-		<focus_gain 					type="base" min="0.25" 				/>
+		<focus_gain 					type="add" min="0.25" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 	
@@ -676,7 +676,7 @@
 		<SilverDamage 					type="base"	min="614" 				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.21" 				/>
+		<focus_gain 					type="add" min="0.21" 				/>
 		<dismember_chance_mult			type="add"	min="0.1"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -688,7 +688,7 @@
 		<SilverDamage 					type="base"	min="664"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.22" 				/>
+		<focus_gain 					type="add" min="0.22" 				/>
 		<dismember_chance_mult			type="add"	min="0.12"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -700,7 +700,7 @@
 		<SilverDamage 					type="base"	min="714"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="1.00"				/>
-		<focus_gain 					type="base" min="0.23" 				/>
+		<focus_gain 					type="add" min="0.23" 				/>
 		<dismember_chance_mult			type="add"	min="0.13"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -712,7 +712,7 @@
 		<SilverDamage 					type="base"	min="754"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="1.00"				/>
-		<focus_gain 					type="base" min="0.25" 				/>
+		<focus_gain 					type="add" min="0.25" 				/>
 		<dismember_chance_mult			type="add"	min="0.14"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 		</ability>
@@ -821,7 +821,7 @@
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="204"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<focus_gain 					type="base" min="0.05" 				/>
+		<focus_gain 					type="add" min="0.05" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -831,7 +831,7 @@
 		<SlashingDamage 				type="base"	min="244"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus 		type="add"	min="0.25"				/>
-		<focus_gain 					type="base" min="0.1" 				/>
+		<focus_gain 					type="add" min="0.1" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -841,7 +841,7 @@
 		<SlashingDamage 				type="base"	min="284"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus 		type="add"	min="0.5"				/>
-		<focus_gain 					type="base" min="0.15" 				/>
+		<focus_gain 					type="add" min="0.15" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
@@ -851,7 +851,7 @@
 		<SlashingDamage 				type="base"	min="316"				/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.2" 				/>
+		<focus_gain 					type="add" min="0.2" 				/>
 		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 	
@@ -967,7 +967,7 @@
 		<SlashingDamage 				type="base"	min="1"					/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<SilverDamage 					type="base"	min="314" 				/>
-		<focus_gain 					type="base" min="0.05" 				/>
+		<focus_gain 					type="add" min="0.05" 				/>
 		<dismember_chance_mult			type="add"	min="0.1"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -979,7 +979,7 @@
 		<SilverDamage 					type="base"	min="364"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
-		<focus_gain 					type="base" min="0.1" 				/>
+		<focus_gain 					type="add" min="0.1" 				/>
 		<dismember_chance_mult			type="add"	min="0.12"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -991,7 +991,7 @@
 		<SilverDamage 					type="base"	min="414"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<focus_gain 					type="base" min="0.15" 				/>
+		<focus_gain 					type="add" min="0.15" 				/>
 		<dismember_chance_mult			type="add"	min="0.13"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
@@ -1003,7 +1003,7 @@
 		<SilverDamage 					type="base"	min="454"				/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="base" min="0.2" 				/>
+		<focus_gain 					type="add" min="0.2" 				/>
 		<dismember_chance_mult			type="add"	min="0.14"				/>
 		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 		</ability>
@@ -3719,7 +3719,7 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_newgame_bear_school_steel_sword" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/witcher_silver_bear_sword_lvl1_64x128.png"
+		icon_path						="icons/inventory/weapons/witcher_steel_bear_sword_lvl1_64x128.png"
 	>
 		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
 		</tags>
@@ -4035,6 +4035,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4099,6 +4106,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4171,6 +4185,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4235,6 +4256,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4307,6 +4335,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4371,6 +4406,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4443,6 +4485,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4507,6 +4556,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4579,6 +4635,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4647,6 +4710,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4711,6 +4781,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4784,6 +4861,13 @@
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>  
 		</bound_items></player_override>
@@ -4848,6 +4932,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4917,6 +5008,13 @@
 										<anim_switch 
 											category="steelsword" 
 											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
 											event="steel_to_silver"
 											switch_act="steel_to_silver_act"
 											switch_deact="steel_to_silver_deact">
@@ -4992,6 +5090,13 @@
 											switch_act="silver_to_steel_act"
 											switch_deact="silver_to_steel_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>				  	<item>Witcher Silver Sword Scabbard</item>
 		</bound_items></player_override>		
@@ -5061,6 +5166,13 @@
 											switch_act="silver_to_steel_act"
 											switch_deact="silver_to_steel_deact">
 										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>
 		</bound_items></player_override>
@@ -5128,6 +5240,13 @@
 											event="silver_to_steel"
 											switch_act="silver_to_steel_act"
 											switch_deact="silver_to_steel_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
 										</anim_switch>
 		</anim_switches>			
 		<player_override><bound_items>					<item>Witcher Silver Sword Scabbard</item>

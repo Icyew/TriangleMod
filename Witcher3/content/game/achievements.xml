@@ -588,5 +588,122 @@
 			<platform name="origin">65</platform>
 		</achievement>
 
+	<!-- The Witcher's Gone South: Travel to the Duchy of Toussaint. -->
+		<achievement name="EA_BeauclairWelcomeTo">
+			<platform name="ps4">66</platform>
+			<platform name="xb">BeauclairWelcomeTo</platform>
+			<platform name="steam">EP2_1</platform>
+			<platform name="gog">EP2_1</platform>
+			<platform name="origin">66</platform>
+		</achievement>
+
+	<!-- Last Action Hero: Be decorated with the Order of Vitis Vinifera -->
+		<achievement name="EA_HeroOfBeauclair">
+			<platform name="ps4">67</platform>
+			<platform name="xb">HeroOfBeauclair</platform>
+			<platform name="steam">EP2_2</platform>
+			<platform name="gog">EP2_2</platform>
+			<platform name="origin">67</platform>
+		</achievement>
+
+	<!-- Kling of the Clink: Serve time in Toussaint. -->
+		<achievement name="EA_BeauclairMostWanted">
+			<platform name="ps4">68</platform>
+			<platform name="xb">BeauclairMostWanted</platform>
+			<platform name="steam">EP2_3</platform>
+			<platform name="gog">EP2_3</platform>
+			<platform name="origin">68</platform>
+		</achievement>
+
+	<!-- A Knight to Remember: Obtain a flawless victory in all the competitions during the knights' tourney. -->
+		<achievement name="EA_ChampionOfBeauclair">
+			<platform name="ps4">69</platform>
+			<platform name="xb">ChampionOfBeauclair</platform>
+			<platform name="steam">EP2_4</platform>
+			<platform name="gog">EP2_4</platform>
+			<platform name="origin">69</platform>
+		</achievement>
+
+	<!-- The Embodiment of the Five Virtues: Be given Aerondight by the Lady of the Lake. -->
+		<achievement name="EA_LikeAVirgin">
+			<platform name="ps4">70</platform>
+			<platform name="xb">LikeAVirgin</platform>
+			<platform name="steam">EP2_5</platform>
+			<platform name="gog">EP2_5</platform>
+			<platform name="origin">70</platform>
+		</achievement>
+
+	<!-- Playing House: Use all available options for developing Corvo Bianco. -->
+		<achievement name="EA_HomeSweetHome">
+			<platform name="ps4">71</platform>
+			<platform name="xb">HomeSweetHome</platform>
+			<platform name="steam">EP2_6</platform>
+			<platform name="gog">EP2_6</platform>
+			<platform name="origin">71</platform>
+		</achievement>
+
+	<!-- Turned Every Stone: Find all grandmaster diagrams for each witcher school. -->
+		<achievement name="EA_TurnedEveryStone">
+			<platform name="ps4">72</platform>
+			<platform name="xb">TurnedEveryStone</platform>
+			<platform name="steam">EP2_7</platform>
+			<platform name="gog">EP2_7</platform>
+			<platform name="origin">72</platform>
+		</achievement>
+
+	<!-- I Have a Gwent Problem: Collect all the cards in the Skellige deck. -->
+		<achievement name="EA_GotToHaveThemAll">
+			<platform name="ps4">73</platform>
+			<platform name="xb">GotToHaveThemAll</platform>
+			<platform name="steam">EP2_8</platform>
+			<platform name="gog">EP2_8</platform>
+			<platform name="origin">73</platform>
+		</achievement>
+
+	<!-- The Grapes of Wrath Stomped: Help unite the warring vineyards and have a wine named in your honor. -->
+		<achievement name="EA_BloodAndWine">
+			<platform name="ps4">74</platform>
+			<platform name="xb">BloodAndWine</platform>
+			<platform name="steam">EP2_9</platform>
+			<platform name="gog">EP2_9</platform>
+			<platform name="origin">74</platform>
+		</achievement>
+
+	<!-- Dressed to Kill: Unlock the bonus for equipping all the witcher gear elements from one School. -->
+		<achievement name="EA_ReadyToRoll">
+			<platform name="ps4">75</platform>
+			<platform name="xb">ReadyToRoll</platform>
+			<platform name="steam">EP2_10</platform>
+			<platform name="gog">EP2_10</platform>
+			<platform name="origin">75</platform>
+		</achievement>
+
+	<!-- Weapon "W": Develop a mutation -->
+		<achievement name="EA_SchoolOfTheMutant">
+			<platform name="ps4">76</platform>
+			<platform name="xb">SchoolOfTheMutant</platform>
+			<platform name="steam">EP2_11</platform>
+			<platform name="gog">EP2_11</platform>
+			<platform name="origin">76</platform>
+		</achievement>
+
+	<!-- Hasta la Vista: Kill a frozen opponent with a crossbow bolt. -->
+		<achievement name="EA_HastaLaVista">
+			<platform name="ps4">77</platform>
+			<platform name="xb">HastaLaVista</platform>
+			<platform name="steam">EP2_12</platform>
+			<platform name="gog">EP2_12</platform>
+			<platform name="origin">77</platform>
+		</achievement>
+
+	<!-- David and Golyat: Kill Golyat with a crossbow bolt to his eye. -->
+		<achievement name="EA_Goliath">
+			<platform name="ps4">78</platform>
+			<platform name="xb">Goliath</platform>
+			<platform name="steam">EP2_13</platform>
+			<platform name="gog">EP2_13</platform>
+			<platform name="origin">78</platform>
+		</achievement>
+
 	</achievements>
 </redxml>

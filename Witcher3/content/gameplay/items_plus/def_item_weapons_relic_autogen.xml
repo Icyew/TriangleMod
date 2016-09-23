@@ -5,38 +5,38 @@
 
 		<!-- AUTO GEN ABILITIES - DO NOT TOUCH THEM ! -->
 			<ability name="autogen_steel_dmg">
-				<SlashingDamage min="7" max="9"/>
+				<SlashingDamage min="7" max="8"/>
 			</ability>		
 			<ability name="autogen_steel_base">
-				<SlashingDamage min="25" max="30"/>
+				<SlashingDamage min="20" max="25"/>
 			</ability>		
 			
 			<ability name="autogen_silver_dmg">
-				<SilverDamage min="8" max="12"/>
+				<SilverDamage min="8" max="10"/>
 			</ability>		
 			<ability name="autogen_silver_base">
-				<SilverDamage min="90" max="100"/>
+				<SilverDamage min="80" max="90"/>
 			</ability>		
 			
 			<ability name="autogen_armor_armor">
-				<armor type="base" min="4" max="6"/>
+				<armor type="base" min="4" max="5"/>
 			</ability>		
 			<ability name="autogen_armor_base">
-				<armor type="base" min="15" max="30"/>
+				<armor type="base" min="15" max="25"/>
 			</ability>		
 			
 			<ability name="autogen_pants_armor">
 				<armor type="base" min="2" max="2"/>
 			</ability>		
 			<ability name="autogen_pants_base">
-				<armor type="base" min="2" max="7"/>
+				<armor type="base" min="2" max="5"/>
 			</ability>		
 			
 			<ability name="autogen_gloves_armor">
 				<armor type="base" min="2" max="2"/>
 			</ability>		
 			<ability name="autogen_gloves_base">
-				<armor type="base" min="0" max="2"/>
+				<armor type="base" min="0" max="1"/>
 			</ability>		
 			
 			

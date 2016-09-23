@@ -1106,7 +1106,7 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_64x128.png"
 	>
-		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary
+		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary, Sleevless
 		</tags>
 		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
 										<parts count="2">Hardened leather</parts>
@@ -1471,7 +1471,7 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_64x128.png"
 	>
-		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary
+		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary, Sleevless
 		</tags>
 		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
 										<parts count="2">Hardened leather</parts>

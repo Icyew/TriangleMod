@@ -90,6 +90,15 @@
         <tags> "ForceCriticalHits" </tags>
 		<critical_hit_chance type="add" min="1.0" />
       </ability>
+	  <ability name="ForceInstantKill">
+        <tags> "ForceInstantKill" </tags>
+      </ability>
+	  <ability name="ForceHeadbuttFinisher">
+        <tags> "ForceHeadbuttFinisher" </tags>
+      </ability>
+	  <ability name="ForceHiltFinisher">
+        <tags> "ForceHiltFinisher" </tags>
+      </ability>
 	  
 	  <!-- npc gets extra damage if hit by basic bolts if player is mounted on boat -->
 	  <ability name="BoatBoltsAffinity" >
@@ -111,6 +120,12 @@
       <ability name="StaticShooter">
         <tags> "StaticShooter" </tags>
       </ability>
+	  <ability name="PreventChangingCombatStyle">
+		<tags> "PreventChangingCombatStyle" </tags>
+	  </ability>
+	  <ability name="DontDropWeaponsOnDismemberment">
+        <tags> "DontDropWeaponsOnDismemberment" </tags>
+      </ability>
       <ability name="DisableCounterAttack">
         <tags> "DisableCounterAttack" </tags>
       </ability>
@@ -127,6 +142,9 @@
 	  <ability name="NewGamePlusFakeLevel">
 		<tags> "NewGamePlusFakeLevel" </tags>
 	  </ability>
+	  <ability name="RoyalArcher">
+        <tags> "RoyalArcher" </tags>
+      </ability>
 	  
 	  <ability name="NPCNoRunning">
         <tags> "NPCNoRunning" </tags>
@@ -166,7 +184,7 @@
         <physical_resistance type="mult" always_random="false" min="0" max="0" />
         <fire_resistance type="add" always_random="false" min="0" max="0" />
         <fire_resistance type="mult" always_random="false" min="0" max="0" />
-		<fire_resistance_perc type="add" always_random="false" min="0.875" max="0.875" />
+		<fire_resistance_perc type="add" always_random="false" min="0.5" max="0.5" />
         <frost_resistance type="add" always_random="false" min="0" max="0" />
         <frost_resistance type="mult" always_random="false" min="0" max="0" />
         <force_resistance type="add" always_random="false" min="0" max="0" />
@@ -222,13 +240,13 @@
 	  
       <ability name="NPCLevelBonusHigh">
         <tags> "base" </tags>
-        <vitality type="mult" always_random="false" min="3.0" max="3.0" />
-        <attack_power type="mult" always_random="false" min="1.2" max="1.2" />
+        <vitality type="mult" always_random="false" min="5.0" max="5.0" />
+        <attack_power type="mult" always_random="false" min="1.4" max="1.4" />
         <staminaRegen type="mult" always_random="false" min="0.1" max="0.1" />
-		<force_resistance_perc type="add" always_random="false" min="0.5" max="0.5" />
-		<burning_resistance_perc type="add" always_random="false" min="0.5" max="0.5" />
-		<will_resistance_perc type="add" always_random="false" min="0.5" max="0.5" />
-		<shock_resistance_perc type="add" always_random="false" min="0.5" max="0.5" />
+		<force_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
+		<burning_resistance_perc type="add" always_random="false" min="0.5" max="0.3" />
+		<will_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
+		<shock_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
       </ability>
 	  
       <ability name="NPCLevelBonusDeadly">
@@ -503,7 +521,7 @@
       <ability name="StatsRangedNormal">
         <tags> "StatsArcherEasy" </tags>
         <aim_duration type="add" always_random="false" min="1.5" max="1.5" />
-      </ability>
+      </ability> 
       <!-- SKILL  :/ these are acutally not skills but stats-->
       <ability name="SkillPeasant">
         <!-- No Dodge ; No Parry -->
@@ -520,9 +538,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
-        <hits_to_raise_guard type="add" always_random="false" min="1" max="1" />
-        <raise_guard_chance type="add" always_random="true" min="1" max="1" />
+        <counter_chance type="add" always_random="false" min="0.2" max="0.2" />
+        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
+        <raise_guard_chance type="add" always_random="true" min="0.2" max="0.2" />
         <lower_guard_chance type="add" always_random="false" min="1" max="1" />
         <taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
         <dodge_melee_light_chance type="add" always_random="false" min="0.0" max="0.0" />
@@ -547,9 +565,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
-        <hits_to_raise_guard type="add" always_random="false" min="1" max="1" />
-        <raise_guard_chance type="add" always_random="true" min="1" max="1" />
+        <counter_chance type="add" always_random="false" min="0.4" max="0.4" />
+        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
+        <raise_guard_chance type="add" always_random="true" min="0.4" max="0.4" />
         <lower_guard_chance type="add" always_random="false" min="1" max="1" />
         <taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
         <dodge_melee_light_chance type="add" always_random="false" min="0.0" max="0.0" />
@@ -574,9 +592,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="60" max="60" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1.0" max="1.0" />
+        <counter_chance type="add" always_random="false" min="0.6" max="0.6" />
         <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-        <raise_guard_chance type="add" always_random="true" min="0.5" max="0.7" />
+        <raise_guard_chance type="add" always_random="true" min="0.6" max="0.6" />
         <lower_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
         <taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
         <dodge_melee_light_chance type="add" always_random="false" min="0.5" max="0.5" />
@@ -600,10 +618,10 @@
 		<delay_between_raise_guard type="base" always_random="false" min="1" max="1"/>
         <dodge_stamina_cost type="base" always_random="false" min="25" max="25" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
-        <hits_to_roll_counter type="add" always_random="true" min="1" max="2" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
-        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-        <raise_guard_chance type="add" always_random="true" min="0.7" max="0.9" />
+        <hits_to_roll_counter type="add" always_random="true" min="2" max="2" />
+        <counter_chance type="add" always_random="false" min="0.7" max="0.7" />
+        <hits_to_raise_guard type="add" always_random="false" min="2" max="2" />
+        <raise_guard_chance type="add" always_random="true" min="0.7" max="0.7" />
         <lower_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
         <taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
         <dodge_melee_light_chance type="add" always_random="false" min="0" max="0" />
@@ -627,9 +645,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="25" max="25" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
-        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-        <raise_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
+        <counter_chance type="add" always_random="false" min="0.6" max="0.6" />
+        <hits_to_raise_guard type="add" always_random="false" min="2" max="2" />
+        <raise_guard_chance type="add" always_random="true" min="0.6" max="0.6" />
         <lower_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
         <taunt_chance type="add" always_random="false" min="0.15" max="0.15" />
         <dodge_melee_light_chance type="add" always_random="false" min="0" max="0" />
@@ -653,9 +671,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="25" max="25" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1.0" max="1.0" />
-        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-        <raise_guard_chance type="add" always_random="false" min="0.9" max="0.9" />
+        <counter_chance type="add" always_random="false" min="0.8" max="0.8" />
+        <hits_to_raise_guard type="add" always_random="false" min="2" max="2" />
+        <raise_guard_chance type="add" always_random="true" min="0.8" max="0.8" />
         <lower_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
         <taunt_chance type="add" always_random="false" min="0.15" max="0.15" />
         <dodge_melee_light_chance type="add" always_random="false" min="0" max="0" />
@@ -679,9 +697,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="25" max="25" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="1" max="1" />
-        <counter_chance type="add" always_random="false" min="1.0" max="1.0" />
-        <hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-        <raise_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
+        <counter_chance type="add" always_random="false" min="0.8" max="0.8" />
+        <hits_to_raise_guard type="add" always_random="false" min="2" max="2" />
+        <raise_guard_chance type="add" always_random="true" min="0.8" max="0.8" />
         <lower_guard_chance type="add" always_random="false" min="0.3" max="0.3" />
         <taunt_chance type="add" always_random="false" min="0.15" max="0.15" />
         <dodge_melee_light_chance type="add" always_random="false" min="0" max="0" />
@@ -705,10 +723,10 @@
 		<delay_between_raise_guard type="base" always_random="false" min="1" max="1"/>
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
-        <hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
+        <hits_to_roll_counter type="add" always_random="false" min="1" max="1" />
+        <counter_chance type="add" always_random="false" min="0.8" max="0.8" />
         <hits_to_raise_guard type="add" always_random="false" min="1" max="1" />
-        <raise_guard_chance type="add" always_random="true" min="1" max="1" />
+        <raise_guard_chance type="add" always_random="true" min="0.8" max="0.8" />
         <lower_guard_chance type="add" always_random="false" min="1" max="1" />
         <taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
         <dodge_melee_light_chance type="add" always_random="false" min="0.06" max="0.06" />
@@ -733,7 +751,7 @@
 		<delay_between_raise_guard type="base" always_random="false" min="1" max="1"/>
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
-        <counter_chance type="add" always_random="false" min="0.4" max="0.4" />
+        <counter_chance type="add" always_random="false" min="0.5" max="0.5" />
         <raise_guard_chance type="add" always_random="false" min="1.0" max="1.0" />
         <lower_guard_chance type="add" always_random="false" min="0.0" max="0.0" />
         <taunt_chance type="add" always_random="false" min="0.15" max="0.15" />
@@ -808,9 +826,9 @@
         <dodge_stamina_cost type="base" always_random="false" min="0" max="0" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="9999" max="9999" />
-        <counter_chance type="add" always_random="false" min="1.0" max="1.0" />
-        <hits_to_raise_guard type="add" always_random="false" min="1" max="1" />
-        <raise_guard_chance type="add" always_random="false" min="1.0" max="1.0" />
+        <counter_chance type="add" always_random="false" min="0.8" max="0.8" />
+        <hits_to_raise_guard type="add" always_random="false" min="2" max="2" />
+        <raise_guard_chance type="add" always_random="false" min="0.8" max="0.8" />
         <lower_guard_chance type="add" always_random="false" min="0.0" max="0.0" />
         <taunt_chance type="add" always_random="false" min="0.5" max="0.5" />
         <dodge_melee_light_chance type="add" always_random="false" min="0" max="0" />
@@ -859,7 +877,7 @@
         <dodge_stamina_cost type="base" always_random="false" min="25" max="25" />
         <stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
         <hits_to_roll_counter type="add" always_random="false" min="1" max="1" />
-        <counter_chance type="add" always_random="false" min="1" max="1" />
+        <counter_chance type="add" always_random="false" min="0.8" max="0.8" />
         <hits_to_raise_guard type="add" always_random="false" min="1" max="1" />
         <raise_guard_chance type="add" always_random="false" min="0.6" max="0.6" />
         <lower_guard_chance type="add" always_random="false" min="0.2" max="0.2" />

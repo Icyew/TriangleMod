@@ -33,6 +33,7 @@
 		<armor_reduction_perc min="1" max="1" />
 		<duration type="add" always_random="false" min="120" max="120" />
 		<BleedingTrackingEffect is_ability="true" />
+		<desc_bleedingchance_mult type="add" min="1" />
 	</ability>
 
 	<ability name="blunt_bolt _Stats">
@@ -53,6 +54,7 @@
 		<SilverDamage type="add" min="8" max="8" />
 		<duration type="add" always_random="false" min="15" max="15" />
 		<BleedingEffect_BroadheadBolt is_ability="true" />
+		<desc_bleedingchance_mult type="add" min="1" />
 	</ability>
 
 	<ability name="broadhead_bolt_legendary _Stats">
@@ -61,6 +63,7 @@
 		<SilverDamage type="add" min="12" max="12" />
 		<duration type="add" always_random="false" min="15" max="15" />
 		<BleedingEffect_BroadheadBolt is_ability="true" />
+		<desc_bleedingchance_mult type="add" min="1" />
 	</ability>
 
 	<ability name="target_point_bolt _Stats">
@@ -155,11 +158,6 @@
 		<base_abilities>				<a>harpoon_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="2">Feather</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Bait / Attract surrounding creatures with a strong scent -->
@@ -180,12 +178,6 @@
 		<base_abilities>				<a>bait_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Silver ore</parts>
-										<parts count="2">Monstrous feather</parts>
-										<parts count="1">Monstrous blood</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Tracking / Makes creature leave blood tracks on the ground -->
@@ -206,12 +198,6 @@
 		<base_abilities>				<a>tracking_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ore</parts>
-										<parts count="2">Monstrous feather</parts>
-										<parts count="1">Monstrous saliva</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Knockdown / Bashing type of damage -->
@@ -232,11 +218,6 @@
 		<base_abilities>				<a>blunt_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
-										<parts count="2">Iron ingot</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="2">Feather</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Knockdown / Bashing type of damage -->
@@ -257,11 +238,6 @@
 		<base_abilities>				<a>blunt_bolt_legendary _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="3">Iron ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="3">Feather</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - High bleeding chance -->
@@ -282,12 +258,6 @@
 		<base_abilities>				<a>broadhead_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="2">Feather</parts>
-										<parts count="1">Monstrous saliva</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - High bleeding chance -->
@@ -308,12 +278,6 @@
 		<base_abilities>				<a>broadhead_bolt_legendary _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="4">Feather</parts>
-										<parts count="1">Monstrous saliva</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Piercing bolt -->
@@ -334,12 +298,6 @@
 		<base_abilities>				<a>target_point_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="1">Monstrous feather</parts>
-										<parts count="1">Dark iron ore</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Piercing bolt -->
@@ -360,12 +318,6 @@
 		<base_abilities>				<a>target_point_bolt_legendary _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="2">Monstrous feather</parts>
-										<parts count="1">Dark iron ingot</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Fires 2 bolts -->
@@ -386,12 +338,6 @@
 		<base_abilities>				<a>split_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="3">Feather</parts>
-										<parts count="1">Meteorite ore</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Fires 2 bolts -->
@@ -412,12 +358,6 @@
 		<base_abilities>				<a>split_bolt_legendary _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Hardened timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="5">Feather</parts>
-										<parts count="1">Meteorite ingot</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Boom! -->
@@ -438,12 +378,6 @@
 		<base_abilities>				<a>explosive_bolt _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="2">Feather</parts>
-										<parts count="1">Blasting powder</parts>
-		</recycling_parts>
 	</item>
 
 <!-- SPECIAL BOLT - Boom! -->
@@ -464,12 +398,6 @@
 		<base_abilities>				<a>explosive_bolt_legendary _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Silver ingot</parts>
-										<parts count="4">Feather</parts>
-										<parts count="2">Blasting powder</parts>
-		</recycling_parts>
 	</item>	  
 
 </items>

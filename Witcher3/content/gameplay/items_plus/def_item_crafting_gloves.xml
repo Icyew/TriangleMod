@@ -9,7 +9,7 @@
 	<ability name="Gloves 01_crafted _Stats">
 		<weight							type="base"	min="1.32"				/>
 		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="180"	max="180"	/>
+		<armor							type="base"	min="64"	max="64"	/>
 		<slashing_resistance_perc		type="base"	min="0.01"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
 		<staminaRegen_armor_mod			type="mult" min="0.02"				/>

@@ -502,7 +502,7 @@
 				<tags>NoShow,NoDrop</tags>
 			</item>
 			
-			<item name="book_to_read" category="work_secondary"  equip_template="tool_book" equip_slot="None" hold_slot="l_weapon">
+			<item name="book_to_read" category="work_secondary"  equip_template="tool_book" equip_slot="l_weapon" hold_slot="l_weapon">
 				<tags>NoShow,NoDrop</tags>
 			</item>
 			

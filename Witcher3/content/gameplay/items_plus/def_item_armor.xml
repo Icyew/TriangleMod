@@ -1097,7 +1097,7 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/geralt_shirt_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_shirt _Stats</a>
 		</base_abilities>
@@ -1127,7 +1127,7 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/geralt_shirt_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_shirt _Stats</a>
 		</base_abilities>

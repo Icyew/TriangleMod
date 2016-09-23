@@ -277,7 +277,7 @@
 	<item
 		name							="q106_magic_communicator"
 		category						="misc"
-		price							="1"
+		price							="100"
 		stackable						="100"
 		localisation_key_name			="item_name_q106_magic_communicator"
 		localisation_key_description	="item_desc_quest_item"
