@@ -72,7 +72,7 @@ currentChanges=$(git diff --name-status vanilla)
 
 prefix="Witcher3"
 mkdir -p "$tmpPath"
-chmod 774 "$tmpPath"
+# chmod 774 "$tmpPath"
 IFS=$'\n'
 for fileWithStatus in $currentChanges; do
 	status=$(echo "$fileWithStatus" | grep -oP "^.*?\S" | grep -o "\S")
@@ -107,7 +107,7 @@ done
 # else
 # 	cp -R "$contentPath" "$tmpPath"
 # fi
-chmod -R 774 "$binPath"
+# chmod -R 774 "$binPath"
 cp -Rp "$binPath" "$gamePath"
 
 eval "$batPath"
