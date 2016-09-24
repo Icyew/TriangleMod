@@ -97,6 +97,16 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AltTawnyOwlBase' ) );
 	}
 
+	public function GetDefaultToxicityDrainTime() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'DefaultToxicityDrainTime' ) );
+	}
+
+	public function GetFastMetabolismDrainFactorPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FastMetabolismDrainFactorPerLevel' ) );
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool

@@ -247,7 +247,7 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 	{
 		var min, max : SAbilityAttributeValue;
 		var dm : CDefinitionsManagerAccessor;
-	
+
 		if(!IsNameValid(abilityName))
 			return;
 	
@@ -255,9 +255,18 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		dm = theGame.GetDefinitionsManager();
 		dm.GetAbilityAttributeValue(abilityName, attributeName, min, max);
 		effectValue = GetAttributeRandomizedValue(min, max);
+		// Triangle toxicity drain
+		if (theGame.GetTModOptions().GetDefaultToxicityDrainTime() > 0) {
+			effectValue.valueAdditive = RoundTo(-1 / theGame.GetTModOptions().GetDefaultToxicityDrainTime(), 4);
+		}
+		// Triangle end
 		
-		
-		if(thePlayer.CanUseSkill(S_Alchemy_s15))
+		// Triangle fast metabolism
+		if (thePlayer.CanUseSkill(S_Alchemy_s15) && theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() > 0) {
+			effectValue.valueAdditive *= 1 + theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s15);
+		}
+		else if(thePlayer.CanUseSkill(S_Alchemy_s15))
+		// Triangle end
 			effectValue += thePlayer.GetSkillAttributeValue(S_Alchemy_s15, attributeName, false, true) * thePlayer.GetSkillLevel(S_Alchemy_s15);
 			
 		if(thePlayer.HasAbility('Runeword 8 Regen'))

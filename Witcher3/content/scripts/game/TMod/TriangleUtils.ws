@@ -264,3 +264,36 @@ function T_CanFrenzy(player : CR4Player) : bool
     potionArr = witcherPlayer.GetPotionBuffs();
     return witcherPlayer && witcherPlayer.CanUseSkill(S_Alchemy_s16) && mutagenArr.Size() < potionArr.Size();
 }
+
+// Triangle everything
+function T_RoundTo(f : float, decimal : int) : float
+{
+    var i, digit : int;
+    var ret : float;
+    var isNeg : bool;
+
+    if(decimal < 0)
+        decimal = 0;
+
+    ret = FloorF(AbsF(f));
+    isNeg = false;
+    if(f<0)
+    {
+        isNeg = true;       
+        f *= -1;
+    }
+    f -= ret;
+    
+    for(i=0; i<decimal; i+=1)
+    {
+        f *= 10;
+        digit = RoundMath(f);
+        ret += digit / PowF(10,i+1);
+        f -= digit;
+    }
+    
+    if(isNeg)
+        ret *= -1;
+        
+    return ret;
+}

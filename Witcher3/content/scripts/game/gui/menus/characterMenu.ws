@@ -2226,7 +2226,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle delayed recovery
 				if (theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() > 0) {
-					baseString = "Potion duration and toxicity drain " + NoTrailZeros(RoundTo(theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
+					baseString = "Potion duration and toxicity drain " + NoTrailZeros(T_RoundTo(theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
 				}
 				// Triangle end
 				break;
@@ -2290,6 +2290,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				if(arg < 0) arg = -arg;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle fast metabolism
+				if (theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() > 0) {
+					baseString = "Toxicity drains " + NoTrailZeros(T_RoundTo(theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() * skillLevel + 1, 1)) + "x faster.";
+				}
+				// Triangle end
 				break;
 			// Triangle frenzy
 			case S_Alchemy_s16:
