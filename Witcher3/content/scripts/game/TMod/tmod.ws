@@ -250,6 +250,7 @@ class TModOptions
 				if (!isPerSec) {
 					cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'BasicSignCost' ) );
 					delay.valueBase = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'BasicSignDelay' ) );
+					delay.valueMultiplicative = 1;
 				}
 				return;
 			case S_Magic_s01:
