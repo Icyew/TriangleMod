@@ -73,7 +73,7 @@
       <!-- Heightened Senses-->
       <ability name="Cat_1">
         <toxicity min="15" max="15" type="add" />
-        <duration min="240" type="add" />
+        <duration min="60" type="add" />
         <ammo type="add" min="3" />
         <CatEffect_Level1 is_ability="true" />
 		<quality type="add" min="2" max="2"/>
@@ -81,7 +81,7 @@
       </ability>
       <ability name="Cat_2">
         <toxicity min="15" max="15" type="add" />
-        <duration min="480" type="add" />
+        <duration min="120" type="add" />
         <ammo type="add" min="4" />
         <CatEffect_Level2 is_ability="true" />
         <Cat_3 is_ability="true" />
@@ -90,7 +90,7 @@
       </ability>
       <ability name="Cat_3">
         <toxicity min="15" max="15" type="add" />
-        <duration min="720" type="add" />
+        <duration min="180" type="add" />
         <ammo type="add" min="5" />
         <CatEffect_Level3 is_ability="true" />
         <Cat_2 is_ability="true" />
@@ -735,15 +735,15 @@
         </base_abilities>
       </item>
 
-      <item name="Clearing Potion" category="edibles" price="1000" grid_size="1" ability_slots="0" stackable="1000" icon_path="icons/inventory/mutagen_potions/ico_mutagen-potion-20.png" localisation_key_name="item_name_potion_clearance" localisation_key_description="item_desc_potion_clearance">
-        <tags>Edibles, Potion, NoEquip</tags>
+      <item name="Clearing Potion" category="potion" price="1000" grid_size="1" ability_slots="0" stackable="1000" icon_path="icons/inventory/mutagen_potions/ico_mutagen-potion-20.png" localisation_key_name="item_name_potion_clearance" localisation_key_description="item_desc_potion_clearance">
+        <tags>Consumable, Potion, NoEquip</tags>
         <base_abilities>
           <a>ClearingPotion_stats</a>
         </base_abilities>
       </item>
 	  
-	  <item name="Wolf Hour" category="edibles" price="100" grid_size="1" ability_slots="0" stackable="1000" icon_path="icons/inventory/quests/stats_elixir_64x64.png" localisation_key_name="item_name_wolf_hour" localisation_key_description="item_desc_wolf_hour">
-        <tags>Edibles, Potion, NoEquip</tags>
+	  <item name="Wolf Hour" category="potion" price="100" grid_size="1" ability_slots="0" stackable="1000" icon_path="icons/inventory/quests/stats_elixir_64x64.png" localisation_key_name="item_name_wolf_hour" localisation_key_description="item_desc_wolf_hour">
+        <tags>Consumable, Potion, NoEquip</tags>
         <base_abilities>
           <a>ClearingPotion_stats</a>
         </base_abilities>

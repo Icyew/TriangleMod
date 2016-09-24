@@ -601,6 +601,10 @@ statemachine import class CNewNPC extends CActor
 					if( !HasAbility('NPCDoNotGainBoost') && !HasAbility('NewGamePlusFakeLevel') )
 					{
 						currentLevel += theGame.params.GetNewGamePlusLevel();
+						if ( currentLevel > ( theGame.params.GetPlayerMaxLevel() + 5 ) ) 
+						{
+							currentLevel = theGame.params.GetPlayerMaxLevel() + 5;
+						}
 					}
 					else if ( !HasAbility('NPCDoNotGainNGPlusLevel') )
 					{
@@ -1443,7 +1447,8 @@ statemachine import class CNewNPC extends CActor
 		
 		
 		
-		if ( !ciriEntity && thePlayer.GetEnemyUpscaling() && npcLevel + levelFakeAddon < playerLevel && !fistFightForcedFromQuest )
+		if ( !ciriEntity && thePlayer.GetEnemyUpscaling() && npcLevel + levelFakeAddon < playerLevel
+			&& !stats.HasAbility( 'fistfight_minigame' ) && !fistFightForcedFromQuest )
 		{
 			
 			npcLevelToUpscaledLevelDifference = playerLevel - npcLevel;
@@ -2236,17 +2241,21 @@ statemachine import class CNewNPC extends CActor
 	function GetExperienceDifferenceLevelName( out strLevel : string ) : string
 	{
 		var lvlDiff : int;
-		var levelWithFake : int; // Triangle level scaling renamed this for clarity
+		var currentLevel : int;
 		var ciriEntity  : W3ReplacerCiri;
 		
-		levelWithFake = GetLevel() + levelFakeAddon;
+		currentLevel = GetLevel() + levelFakeAddon;
 		
 		if ( newGamePlusFakeLevelAddon )
 		{
-			levelWithFake += theGame.params.GetNewGamePlusLevel();
+			currentLevel += theGame.params.GetNewGamePlusLevel();
 		}
 		
-		lvlDiff = levelWithFake - thePlayer.GetLevel();
+		if ( currentLevel > ( theGame.params.GetPlayerMaxLevel() + 5 ) ) 
+		{
+			currentLevel = theGame.params.GetPlayerMaxLevel() + 5;
+		}		
+		lvlDiff = currentLevel - thePlayer.GetLevel();
 			
 		if( GetAttitude( thePlayer ) != AIA_Hostile )
 		{
@@ -2260,7 +2269,7 @@ statemachine import class CNewNPC extends CActor
 		ciriEntity = (W3ReplacerCiri)thePlayer;
 		if ( ciriEntity )
 		{
-			strLevel = "<font color=\"#66FF66\">" + levelWithFake + "</font>";
+			strLevel = "<font color=\"#66FF66\">" + currentLevel + "</font>"; 
 			return "normalLevel";
 		}
 
@@ -2272,17 +2281,17 @@ statemachine import class CNewNPC extends CActor
 		}	
 		else if ( lvlDiff >= theGame.params.LEVEL_DIFF_HIGH )
 		{
-			strLevel = "<font color=\"#FF1919\">" + levelWithFake + "</font>";
+			strLevel = "<font color=\"#FF1919\">" + currentLevel + "</font>"; 
 			return "highLevel";
 		}
 		else if ( lvlDiff > -theGame.params.LEVEL_DIFF_HIGH )
 		{
-			strLevel = "<font color=\"#66FF66\">" + levelWithFake + "</font>";
+			strLevel = "<font color=\"#66FF66\">" + currentLevel + "</font>"; 
 			return "normalLevel";
 		}
 		else
 		{
-			strLevel = "<font color=\"#E6E6E6\">" + levelWithFake + "</font>";
+			strLevel = "<font color=\"#E6E6E6\">" + currentLevel + "</font>"; 
 			return "lowLevel";
 		}
 		return "none";
@@ -2339,6 +2348,9 @@ statemachine import class CNewNPC extends CActor
 	function AddBestiaryKnowledge()
 	{
 		var manager : CWitcherJournalManager;
+		var resource : CJournalResource;
+		var entryBase : CJournalBase;
+		
 		manager = theGame.GetJournalManager();
 		
 		if ( AddBestiaryKnowledgeEP2() ) return;
@@ -2350,8 +2362,36 @@ statemachine import class CNewNPC extends CActor
 		if ( GetSfxTag() == 'sfx_alghoul' )											activateBaseBestiaryEntryWithAlias("BestiaryAlghoul", manager); else
 		if ( HasAbility('mon_greater_miscreant') )									activateBaseBestiaryEntryWithAlias("BestiaryMiscreant", manager); else
 		if ( HasAbility('mon_basilisk') )											activateBaseBestiaryEntryWithAlias("BestiaryBasilisk", manager); else
-		if ( HasAbility('mon_boar_base') )											activateBaseBestiaryEntryWithAlias("BestiaryBoar", manager); else
-		if ( HasAbility('mon_black_spider_base') )									activateBaseBestiaryEntryWithAlias("BestiarySpider", manager); else
+		if ( HasAbility('mon_boar_base') )											
+		{
+			resource = (CJournalResource)LoadResource( "BestiaryBoarEP2" );
+			if ( resource )
+			{
+				entryBase = resource.GetEntry();
+				if ( entryBase )
+				{
+					if ( manager.GetEntryStatus( entryBase ) == JS_Inactive )
+					{
+						activateBaseBestiaryEntryWithAlias("BestiaryBoar", manager);
+					}
+				}
+			}
+		} else
+		if ( HasAbility('mon_black_spider_base') )
+		{
+			resource = (CJournalResource)LoadResource( "BestiarySpiderEP2" );
+			if ( resource )
+			{
+				entryBase = resource.GetEntry();
+				if ( entryBase )
+				{
+					if ( manager.GetEntryStatus( entryBase ) == JS_Inactive )
+					{
+						activateBaseBestiaryEntryWithAlias("BestiarySpider", manager); 
+					}
+				}
+			}
+		} else
 		if ( HasAbility('mon_toad_base') )											activateBaseBestiaryEntryWithAlias("BestiaryToad", manager); else
 		if ( HasAbility('q604_caretaker') )											activateBaseBestiaryEntryWithAlias("Bestiarycaretaker", manager); else
 		if ( HasAbility('mon_nightwraith_iris') )									activateBaseBestiaryEntryWithAlias("BestiaryIris", manager); else
@@ -2402,6 +2442,8 @@ statemachine import class CNewNPC extends CActor
 	function AddBestiaryKnowledgeEP2() : bool
 	{
 		var manager : CWitcherJournalManager;
+		var resource : CJournalResource;
+		var entryBase : CJournalBase;
 		manager = theGame.GetJournalManager();
 		
 		if ( HasAbility('mon_mq7010_dracolizard') )										{ activateBaseBestiaryEntryWithAlias("BestiaryDracolizardMatriarch", manager); return true; } else
@@ -2430,8 +2472,38 @@ statemachine import class CNewNPC extends CActor
 		if ( HasAbility('mon_fairytale_witch') )										{ activateBaseBestiaryEntryWithAlias("BestiaryFairtaleWitch", manager); return true; } else
 		if ( HasAbility('banshee_rapunzel') )											{ activateBaseBestiaryEntryWithAlias("BestiaryRapunzel", manager); return true; } else
 		if ( HasAbility('mon_nightwraith_banshee') )									{ activateBaseBestiaryEntryWithAlias("BestiaryBeanshie", manager); return true; } else
-		if ( HasAbility('mon_black_spider_ep2_base') )									{ activateBaseBestiaryEntryWithAlias("BestiarySpiderEP2", manager); return true; } else
-		if ( HasAbility('mon_boar_ep2_base') )											{ activateBaseBestiaryEntryWithAlias("BestiaryBoarEP2", manager); return true; } else
+		if ( HasAbility('mon_black_spider_ep2_base') )									
+		{ 
+			resource = (CJournalResource)LoadResource( "BestiarySpider" );
+			if ( resource )
+			{
+				entryBase = resource.GetEntry();
+				if ( entryBase )
+				{
+					if ( manager.GetEntryStatus( entryBase ) == JS_Inactive )
+					{
+						activateBaseBestiaryEntryWithAlias("BestiarySpiderEP2", manager); 
+						return true; 
+					}
+				}
+			}
+		} else
+		if ( HasAbility('mon_boar_ep2_base') )											
+		{ 
+			resource = (CJournalResource)LoadResource( "BestiaryBoar" );
+			if ( resource )
+			{
+				entryBase = resource.GetEntry();
+				if ( entryBase )
+				{
+					if ( manager.GetEntryStatus( entryBase ) == JS_Inactive )
+					{
+						activateBaseBestiaryEntryWithAlias("BestiaryBoarEP2", manager); 
+						return true; 
+					}
+				}
+			}
+		} else
 		if ( HasAbility('mon_cloud_giant') )											{ activateBaseBestiaryEntryWithAlias("BestiaryCloudGiant", manager); return true; }
 		
 		return false;
@@ -2514,13 +2586,12 @@ statemachine import class CNewNPC extends CActor
 		if( thePlayer.GetEnemyUpscaling() && npcLevelToUpscaledLevelDifference > 0 ) currentLevel -= npcLevelToUpscaledLevelDifference;
 		if( FactsQuerySum("NewGamePlus") > 0 ) currentLevel -= theGame.params.GetNewGamePlusLevel();
 		
-		
 		if  ( IsHuman() ) 
 		{
 			if ( exp > 1 + ( currentLevel * 2 ) ) { exp = 1 + ( currentLevel * 2 ); }
 		} else
 		{
-			if ( exp > 5 + ( currentLevel * 4 ) ) { exp = 5 + ( currentLevel * 4 ); }
+			if ( exp > 5 + ( currentLevel * 4 ) ) { exp = 5 + ( currentLevel * 4 ); } 
 		}
 				
 		

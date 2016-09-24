@@ -135,7 +135,6 @@
       <ability name="sword_s2">
         <tags>sword_s2,attack_heavy</tags>
 		<armor_reduction min="1000" max="1000"/>
-        <attack_power type="mult" min="0.0" /> <!-- it already gets bonus from heavy attack so that's enough -->
 		<critical_hit_chance type="add" min="0.1" />
 		<adrenaline_final_damage_bonus type="mult" min="0.334" />
 		<stamina_max_dmg_bonus type="mult" min="0.5" />
@@ -299,6 +298,7 @@
 		<SlowdownEffect is_ability="true" />
 		<min_slowdown type="add" min="0.20" />
 		<max_slowdown type="add" min="0.45" />
+		<range type="add" min="2.7" />
       </ability>
 	  	  
       <!-- Quen -->
@@ -896,47 +896,51 @@
 		
 	<!-- PERKS -->
 		<!-- Sun and Stars -->
-        <skill skill_name="perk_1" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_1" localisationDescription="skill_desc_perk_1" cost="1" pathType_name="Perks" subpathType_name="Perks_col1" iconPath="icons\Perks\s_perk_32.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_1" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="1" localisationName="skill_name_perk_1" localisationDescription="skill_desc_perk_1" cost="1" pathType_name="Perks" subpathType_name="Perks_col1" iconPath="icons\Perks\s_perk_32.png" linkVertical="" linkLeft="" linkRight="" />
 		
 		<!-- Steady Shot -->
-        <skill skill_name="perk_2" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_2" localisationDescription="skill_desc_perk_2" cost="1" pathType_name="Perks" subpathType_name="Perks_col1" iconPath="icons\Perks\s_perk_18.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_2" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="6" localisationName="skill_name_perk_2" localisationDescription="skill_desc_perk_2" cost="1" pathType_name="Perks" subpathType_name="Perks_col1" iconPath="icons\Perks\s_perk_18.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Hot Hacker 
         <skill skill_name="perk_3" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_3" localisationDescription="skill_desc_perk_3" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_3.png" linkVertical="" linkLeft="" linkRight="" />
 		-->
 		<!-- To Your Health -->
-        <skill skill_name="perk_4" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_4" localisationDescription="skill_desc_perk_4" cost="1" pathType_name="Perks" subpathType_name="Perks_col2" iconPath="icons\Perks\s_perk_33.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_4" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="2" localisationName="skill_name_perk_4" localisationDescription="skill_desc_perk_4" cost="1" pathType_name="Perks" subpathType_name="Perks_col2" iconPath="icons\Perks\s_perk_33.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Cat's Claw -->
-        <skill skill_name="perk_5" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_5" localisationDescription="skill_desc_perk_5" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_7.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_5" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="3" localisationName="skill_name_perk_5" localisationDescription="skill_desc_perk_5" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_7.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Griffon's Gift -->
-        <skill skill_name="perk_6" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_6" localisationDescription="skill_desc_perk_6" cost="1" pathType_name="Perks" subpathType_name="Perks_col4" iconPath="icons\Perks\s_perk_8.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_6" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="4" localisationName="skill_name_perk_6" localisationDescription="skill_desc_perk_6" cost="1" pathType_name="Perks" subpathType_name="Perks_col4" iconPath="icons\Perks\s_perk_8.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Bear's Brawn -->
-        <skill skill_name="perk_7" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_7" localisationDescription="skill_desc_perk_7" cost="1" pathType_name="Perks" subpathType_name="Perks_col5" iconPath="icons\Perks\s_perk_9.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_7" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="5" localisationName="skill_name_perk_7" localisationDescription="skill_desc_perk_7" cost="1" pathType_name="Perks" subpathType_name="Perks_col5" iconPath="icons\Perks\s_perk_9.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Expertise -->
         <skill skill_name="perk_8" isCoreSkill="1" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_8" localisationDescription="skill_desc_perk_8" cost="" pathType_name="" subpathType_name="" iconPath="icons\Perks\s_perk_8.png" linkVertical="" linkLeft="" linkRight="" />
 		
 		<!-- Written In Blood -->
-        <skill skill_name="perk_9" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_9" localisationDescription="skill_desc_perk_9" cost="1" pathType_name="Perks" subpathType_name="Perks_col2" iconPath="icons\Perks\s_perk_23.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_9" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="7" localisationName="skill_name_perk_9" localisationDescription="skill_desc_perk_9" cost="1" pathType_name="Perks" subpathType_name="Perks_col2" iconPath="icons\Perks\s_perk_23.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Boiling Blood -->
-        <skill skill_name="perk_10" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_10" localisationDescription="skill_desc_perk_10" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_17.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_10" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="8" localisationName="skill_name_perk_10" localisationDescription="skill_desc_perk_10" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_17.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Blood Into Fire -->
-        <skill skill_name="perk_11" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_11" localisationDescription="skill_desc_perk_11" cost="1" pathType_name="Perks" subpathType_name="Perks_col4" iconPath="icons\Perks\s_perk_16.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_11" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="9" localisationName="skill_name_perk_11" localisationDescription="skill_desc_perk_11" cost="1" pathType_name="Perks" subpathType_name="Perks_col4" iconPath="icons\Perks\s_perk_16.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Toxic Block -->
-        <skill skill_name="perk_12" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_12" localisationDescription="skill_desc_perk_12" cost="1" pathType_name="Perks" subpathType_name="Perks_col5" iconPath="icons\Perks\s_perk_30.png" linkVertical="" linkLeft="" linkRight="" />
+        <skill skill_name="perk_12" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="10" localisationName="skill_name_perk_12" localisationDescription="skill_desc_perk_12" cost="1" pathType_name="Perks" subpathType_name="Perks_col5" iconPath="icons\Perks\s_perk_30.png" linkVertical="" linkLeft="" linkRight="" />
       </definitions>
     </skills>
     <skill_slots>
-      <slot id="1" unlockedOnLevel="0" group="1" neighbourUp="2" neighbourDown="" neighbourLeft="" neighbourRight="3" />
-      <slot id="2" unlockedOnLevel="2" group="1" neighbourUp="4" neighbourDown="" neighbourLeft="1" neighbourRight="5" />
-      <slot id="3" unlockedOnLevel="4" group="1" neighbourUp="6" neighbourDown="" neighbourLeft="3" neighbourRight="7" />
-      <slot id="4" unlockedOnLevel="6" group="2" neighbourUp="" neighbourDown="1" neighbourLeft="" neighbourRight="4" />
-      <slot id="5" unlockedOnLevel="8" group="2" neighbourUp="" neighbourDown="3" neighbourLeft="2" neighbourRight="6" />
-      <slot id="6" unlockedOnLevel="10" group="2" neighbourUp="" neighbourDown="5" neighbourLeft="4" neighbourRight="8" />
-      <slot id="7" unlockedOnLevel="12" group="3" neighbourUp="8" neighbourDown="" neighbourLeft="5" neighbourRight="9" />
-      <slot id="8" unlockedOnLevel="15" group="3" neighbourUp="10" neighbourDown="" neighbourLeft="7" neighbourRight="11" />
-      <slot id="9" unlockedOnLevel="18" group="3" neighbourUp="12" neighbourDown="" neighbourLeft="9" neighbourRight="13" />
-      <slot id="10" unlockedOnLevel="22" group="4" neighbourUp="" neighbourDown="7" neighbourLeft="6" neighbourRight="10" />     
-      <slot id="11" unlockedOnLevel="26" group="4" neighbourUp="" neighbourDown="9" neighbourLeft="8" neighbourRight="12" />
-      <slot id="12" unlockedOnLevel="30" group="4" neighbourUp="" neighbourDown="11" neighbourLeft="10" neighbourRight="14" />
+      <slot id="1" unlockedOnLevel="0" group="1" />
+      <slot id="2" unlockedOnLevel="2" group="1" />
+      <slot id="3" unlockedOnLevel="4" group="1" />
+      <slot id="4" unlockedOnLevel="6" group="2" />
+      <slot id="5" unlockedOnLevel="8" group="2" />
+      <slot id="6" unlockedOnLevel="10" group="2" />
+      <slot id="7" unlockedOnLevel="12" group="3" />
+      <slot id="8" unlockedOnLevel="15" group="3" />
+      <slot id="9" unlockedOnLevel="18" group="3" />
+      <slot id="10" unlockedOnLevel="22" group="4" />
+      <slot id="11" unlockedOnLevel="26" group="4" />
+      <slot id="12" unlockedOnLevel="30" group="4" />
+	  <slot id="13" unlockedOnLevel="999999" group="5" />
+	  <slot id="14" unlockedOnLevel="999999" group="5" />
+	  <slot id="15" unlockedOnLevel="999999" group="5" />
+	  <slot id="16" unlockedOnLevel="999999" group="5" />
     </skill_slots>
     <!-- skill mutagen slots -->
     <mutagen_slots>

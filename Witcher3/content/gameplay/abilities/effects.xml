@@ -619,7 +619,6 @@
 	  <effect iconType_name="EffectNekker"    	path="icons/inventory/potions/pheromone-nekker-64x64.png" />
 	  <effect iconType_name="EffectBear"    	path="icons/inventory/potions/pheromone-bear-64x64.png" />
 	  <effect iconType_name="PopsPotion"    	path="icons/inventory/ingredients/alchemy/alcohol_vodka_pepper_64x64.png" />
-    <effect iconType_name="Quen"          path="icons/Skills/core/magic_4.png" />
     <!-- Triangle acquired tolerance -->
     <effect iconType_name="AcquiredTolerance"         path="icons\Skills\Alchemy\alchemy_s18.png" />
     <!-- Triangle resolve -->
@@ -627,6 +626,8 @@
     <!-- Triangle endure pain -->
 	  <effect iconType_name="EndurePain"    			path="icons\Skills\Alchemy\alchemy_s20.png" />
     <!-- Triangle end-->
+	  <effect iconType_name="Quen"    			path="icons/Skills/core/magic_4.png" />
     </effect_icons>
   </custom>
 </redxml>
+

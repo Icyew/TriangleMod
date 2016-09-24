@@ -1,7 +1,7 @@
 cd "C:\W3Mods\Witcher_3_Mod_Tools\bin\x64"
 setlocal
 set modName=mod1111Triangle
-set unpackedPath=C:\W3mods\TriangleMod\temp\Witcher3
+set unpackedPath=C:\W3mods\TMod\temp\Witcher3
 
 rmdir "C:\GOG Games\The Witcher 3 Wild Hunt\Mods\%modName%\content\scripts" /S/Q
 xcopy "%unpackedPath%\content\scripts" "C:\GOG Games\The Witcher 3 Wild Hunt\Mods\%modName%\content\scripts" /S/K/I/Y

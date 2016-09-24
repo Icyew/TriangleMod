@@ -555,7 +555,7 @@
 				<BludgeoningDamage min="100" max="100"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="base" min="12" max="12"/>
-				<quality						type="add"	min="4"					/>
+				<quality type="add"	min="1"					/>
 			</ability>
 
 			<ability name="Pickaxe _Stats">
@@ -2965,7 +2965,7 @@
 				  enhancement_slots="0" 
 				  equip_template="q308_iron_poker"
 				  stackable="1" 
-				  equip_slot="steel_sword_back_slot" 
+				  equip_slot="axe_back_slot" 
 				  hold_slot="r_weapon" 
 				  weapon="true" 
 				  lethal="true"
@@ -3004,7 +3004,7 @@
 					</action>
 					<action 
 						name="holster" 
-						event="HolsterWeapon" 
+						event="HolsterSecondaryWeapon" 
 						act="holster_steel_sword_back_act" 
 						deact="holster_steel_sword_back_deact">
 					</action>

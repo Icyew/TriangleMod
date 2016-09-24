@@ -7,10 +7,16 @@
     </abilities>
 	
 	
+ 	<items>
+	
+		<!-- ######################## MAIN CHARACTER ITEMS ######################## -->	
+			
+		<item name="_armor_stand" category="decorations" equip_template="" attachment_type="skinning">
+				<tags>NoShow,NoDrop</tags>
+				<base_abilities>
+				</base_abilities>
+		</item> 
   
-  
-  
-	<items>
 	
 		<!-- ######################## MAIN CHARACTER ITEMS ######################## -->	
 			
@@ -517,6 +523,7 @@
 			<item name="Sabre Scabbard 04" category="steel_scabbards" equip_template="scabbard_sabre_1_01_03" attachment_type="skinning"><tags>NoShow,NoDrop,EncumbranceOff</tags><base_abilities></base_abilities></item>	
 			<item name="Sabre Scabbard 05" category="steel_scabbards" equip_template="scabbard_sabre_1_04" attachment_type="skinning"><tags>NoShow,NoDrop,EncumbranceOff</tags><base_abilities></base_abilities></item>	
 			<item name="Sabre Scabbard 06" category="steel_scabbards" equip_template="scabbard_sabre_1_05" attachment_type="skinning"><tags>NoShow,NoDrop,EncumbranceOff</tags><base_abilities></base_abilities></item>	
+			<item name="Sabre Scabbard 07" category="steel_scabbards" equip_template="scabbard_sabre_1_06" attachment_type="skinning"><tags>NoShow,NoDrop,EncumbranceOff</tags><base_abilities></base_abilities></item>	
 
 	<!-- ######################## Quest items - not visible in inventory ######################## -->
 			<!-- For sq301_triss sequence -->

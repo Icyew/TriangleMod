@@ -277,7 +277,39 @@
 					<flag name="EFFECT_DOUBLE_SPY"/>
 				</effect_flags>
 			</card>
+
+
+
+
+            <!-- EP 2 cards -->
             
+            <card	index="5001"
+				title="gwint_name_king_bran"
+				description="gwint_desc_king_bran"
+				power="0"
+				picture="ske_ldr_king_bran_bronze"
+				faction_index="F_SKELLIGE" >
+				<type_flags>
+				</type_flags>
+				<effect_flags>
+					<flag name="EFFECT_WEATHER_RESISTANT"/>
+				</effect_flags>
+			</card>
+            
+            <card	index="5002"
+				title="Crach_an_Craite"
+				description="gwint_desc_king_bran_copper"
+				power="0"
+				picture="ske_ldr_king_bran_copper"
+				faction_index="F_SKELLIGE" >
+				<type_flags>
+				</type_flags>
+				<effect_flags>
+					<flag name="EFFECT_GRAVEYARD_SHUFFLE"/>
+				</effect_flags>
+			</card>
+
+   
 		</gwint_battle_king_card_definitions>
 	</custom>
 </redxml>

@@ -277,7 +277,7 @@
 	<item
 		name							="q106_magic_communicator"
 		category						="misc"
-		price							="1"
+		price							="100"
 		stackable						="100"
 		localisation_key_name			="item_name_q106_magic_communicator"
 		localisation_key_description	="item_desc_quest_item"
@@ -2691,7 +2691,22 @@
 		</tags>
 		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
-	</item>				
+	</item>	
+
+	<item
+		name							="mq2037_dowry"
+		category						="misc"
+		price							="600"
+		stackable						="100"
+		localisation_key_name			="item_name_gold_diamond_necklace"
+		localisation_key_description	="item_desc_quest_item"
+		icon_path						="icons/inventory/ingredients/junk/necklace_gold_pearl_64x64.png"
+	>
+		<tags>							Quest, mod_junk
+		</tags>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
+		</recycling_parts>
+	</item>		
 
 	<item
 		name							="mq2038_headsman_sword" 
@@ -5707,7 +5722,7 @@
 		localisation_key_description	="item_desc_book"
 		icon_path						="icons/inventory/scrolls/scroll8.dds"
 	>
-		<tags>							ReadableItem, mod_book
+		<tags>							ReadableItem, Quest, mod_book
 		</tags>
 		<recycling_parts>				<parts count="1">Note</parts>
 		</recycling_parts>
@@ -5954,7 +5969,7 @@
 		hold_slot						=""
 		localisation_key_name			="item_name_mq3017_reds_diary"
 		localisation_key_description	="item_desc_book"
-		icon_path						="icons/inventory/books/book_1.png"
+		icon_path						="icons/inventory/scrolls/scroll1.dds"
 	>
 		<tags>							ReadableItem, mod_book
 		</tags>
@@ -5999,7 +6014,7 @@
 		stackable						="100"
 		localisation_key_name			="item_name_mq3027_my_manifest"
 		localisation_key_description	="item_desc_book"
-		icon_path						="icons/inventory/books/book_5.png"
+		icon_path						="icons/inventory/books/book_1.png"
 	>
 		<tags>							ReadableItem, mod_book, Quest
 		</tags>

@@ -5303,6 +5303,9 @@
 		<player_override><bound_items>
 			<item>Ciri Zireael Sword Scabbard</item>
 		</bound_items></player_override>
+		<bound_items>
+			<item>Ciri Zireael Sword Scabbard</item>
+		</bound_items>
 		<base_abilities>
 			<a>Zireael 01 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5397,9 +5400,9 @@
 		  localisation_key_description = "item_desc_long_steel_sword"
 		  price	= "15" >
 		<tags>PlayerSteelWeapon,Weapon,sword1h,1handedWeapon, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Steel Sword Scabbard</item> 
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Steel_Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5462,9 +5465,9 @@
 		  localisation_key_description = "item_desc_long_steel_sword"
 		  price	= "15" >
 		<tags>PlayerSteelWeapon,Weapon,sword1h,1handedWeapon, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Steel Sword Scabbard</item> 
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Steel_Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5532,9 +5535,9 @@
 			<parts count="2">Iron ingot</parts>
 		</recycling_parts>  
 		<tags>PlayerSilverWeapon,Weapon,Upgradeable,sword1h, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Silver Sword Scabbard</item>
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Silver_Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5602,9 +5605,9 @@
 			<parts count="2">Iron ingot</parts>
 		</recycling_parts>  
 		<tags>PlayerSilverWeapon,Weapon,Upgradeable,sword1h, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Silver Sword Scabbard</item>
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Silver_Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5672,9 +5675,9 @@
 			<parts count="2">Iron ingot</parts>
 		</recycling_parts>  
 		<tags>PlayerSilverWeapon,Weapon,Upgradeable,sword1h, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Silver Sword Scabbard</item>
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Silver_Sword_q403_Upgrade _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -5742,9 +5745,9 @@
 			<parts count="2">Iron ingot</parts>
 		</recycling_parts>  
 		<tags>PlayerSilverWeapon,Weapon,Upgradeable,sword1h, mod_weapon</tags>
-		<player_override><bound_items>
+		<bound_items>
 			<item>NPC Witcher Silver Sword Scabbard</item>
-		</bound_items></player_override>
+		</bound_items>
 		<base_abilities>
 			<a>NPC_Witcher_Silver_Sword_q403_Upgrade _Stats</a>
 			<a>Default weapon _Stats</a>

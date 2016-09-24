@@ -46,7 +46,7 @@
 	<ability name="Iron Poker _Stats">				
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="12" max="12"/>
-				<quality						type="add"	min="4"					/>
+				<quality						type="add"	min="1"					/>
 	</ability>
 			
 	<ability name="Wooden sword _Stats">
@@ -450,6 +450,22 @@
 		<SlashingDamage 				type="base"	min="1"					/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+	</ability>
+	
+<!-- DLC10 -->
+	<ability name="DLC10_Remorse _Stats">
+		<weight							type="base"	min="4.7"				/>
+		<quality						type="add"	min="4"					/>
+		<SlashingDamage 				type="base"	min="1"					/>	
+		<item_level_min					type="add"	min="17"				/>
+		<item_level_max					type="add"	min="100"				/>
+		<critical_hit_chance			type="add"	min="0.05"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
+		<buff_apply_chance				type="add"	min="0.10"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<spell_power					type="mult"	min="0.15"				/>
+		<focus_gain 					type="add"	min="0.15" 				/>
 	</ability>
 
 <!-- QUEST -->
@@ -3573,6 +3589,8 @@
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_silver_2_02</item>  
 		</bound_items></player_override>
+		<bound_items>					<item>scabbard_silver_2_02</item>  
+		</bound_items>
 	</item>
 	
 	<item
@@ -4404,6 +4422,82 @@
 		<player_override><bound_items>					<item>scabbard_silver_2_03</item>  
 		</bound_items></player_override>
 	</item>
+	
+	<item
+		name							="DLC10_Remorse"
+		category						="silversword" 
+		price							="702"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="3"
+		stackable						="1"
+		grid_size						="2"
+		equip_template					="gnomish_silver_sword_lvl2"
+		equip_slot						="silver_sword_back_slot" 
+		hold_slot						="r_weapon"
+		weapon							="true"
+		lethal							="true"
+		ability_mode					="OnHold"
+		hand							="right"
+		sound_identification			="long steel"
+		draw_event						="DrawWeapon"
+		draw_act						="draw_steel_sword_back_act"
+		draw_deact						="draw_steel_sword_back_deact"
+		holster_event					="HolsterWeapon"
+		holster_act						="holster_steel_sword_back_act"
+		holster_deact					="holster_steel_sword_back_deact"
+		localisation_key_name			="item_name_bonus_km_sword_teleport_tower" 
+		localisation_key_description	="item_desc_silver_sword"
+		icon_path						="icons/inventory/weapons/gnomish_silver_sword_lvl2-64x128.png"
+	>
+		<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel,  PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		</tags>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>DLC10_Remorse _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="3">Leather squares</parts>
+										<parts count="2">Dwimeryte ore</parts>
+										<parts count="2">Glowing ingot</parts>
+		</recycling_parts>
+		<anim_actions>
+										<action 
+											name="draw" 
+											event="DrawWeapon" 
+											act="draw_steel_sword_back_act" 
+											deact="draw_steel_sword_back_deact">
+										</action>
+										<action 
+											name="holster" 
+											event="HolsterWeapon" 
+											act="holster_steel_sword_back_act" 
+											deact="holster_steel_sword_back_deact">
+										</action>
+										<action 
+											name="attack" 
+											event="attack_silver_sword_back" 
+											act="attack_silver_sword_back_act" 
+											deact="attack_silver_sword_back_deact">
+										</action>
+		</anim_actions>
+		<anim_switches>
+										<anim_switch 
+											category="steelsword" 
+											equip_slot="steel_sword_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
+										</anim_switch>
+		</anim_switches>
+		<player_override><bound_items>					<item>scabbard_silver_2_03</item>  
+		</bound_items></player_override>
+	</item>
 
 	<item
 		name							="q402 Skellige sword 3"
@@ -4470,6 +4564,13 @@
 											event="silver_to_steel"
 											switch_act="silver_to_steel_act"
 											switch_deact="silver_to_steel_deact">
+										</anim_switch>
+										<anim_switch
+											category="steelsword" 
+											equip_slot="axe_back_slot"
+											event="steel_to_silver"
+											switch_act="steel_to_silver_act"
+											switch_deact="steel_to_silver_deact">
 										</anim_switch>
 		</anim_switches>
 		<player_override><bound_items>					<item>scabbard_steel_skellige_03</item>  
@@ -4833,7 +4934,7 @@
 				  enhancement_slots="0" 
 				  equip_template="iron_poker_01"
 				  stackable="1" 
-				  equip_slot="steel_sword_back_slot" 
+				  equip_slot="axe_back_slot" 
 				  hold_slot="r_weapon" 
 				  weapon="true" 
 				  lethal="true"
@@ -4872,7 +4973,7 @@
 					</action>
 					<action 
 						name="holster" 
-						event="HolsterWeapon" 
+						event="HolsterSecondaryWeapon" 
 						act="holster_steel_sword_back_act" 
 						deact="holster_steel_sword_back_deact">
 					</action>

@@ -1021,5 +1021,308 @@
 			<platform name="gog">1084372</platform>
 			<platform name="xb1">q101_wild_hunt_village</platform>
 		</presence>
+
+		<!-- Blood and Wine -->
+		<presence name="location_name_bar_barrens_forest">
+			<platform name="ps4">1204800</platform>
+			<platform name="origin">1204800</platform>
+			<platform name="steam">1204800</platform>
+			<platform name="gog">1204800</platform>
+			<platform name="xb1">location_name_bar_barrens_forest</platform>
+		</presence>
+		<presence name="location_name_bar_devils_gate">
+			<platform name="ps4">1204995</platform>
+			<platform name="origin">1204995</platform>
+			<platform name="steam">1204995</platform>
+			<platform name="gog">1204995</platform>
+			<platform name="xb1">location_name_bar_devils_gate</platform>
+		</presence>
+		<presence name="location_name_bar_mont_crane">
+			<platform name="ps4">1204978</platform>
+			<platform name="origin">1204978</platform>
+			<platform name="steam">1204978</platform>
+			<platform name="gog">1204978</platform>
+			<platform name="xb1">location_name_bar_mont_crane</platform>
+		</presence>
+		<presence name="location_name_bar_quarry">
+			<platform name="ps4">1204993</platform>
+			<platform name="origin">1204993</platform>
+			<platform name="steam">1204993</platform>
+			<platform name="gog">1204993</platform>
+			<platform name="xb1">location_name_bar_quarry</platform>
+		</presence>
+		<presence name="location_name_barrens-Désolés">
+			<platform name="ps4">1203227</platform>
+			<platform name="origin">1203227</platform>
+			<platform name="steam">1203227</platform>
+			<platform name="gog">1203227</platform>
+			<platform name="xb1">location_name_barrens-Désolés</platform>
+		</presence>
+		<presence name="location_name_beauclair">
+			<platform name="ps4">1205505</platform>
+			<platform name="origin">1205505</platform>
+			<platform name="steam">1205505</platform>
+			<platform name="gog">1205505</platform>
+			<platform name="xb1">location_name_beauclair</platform>
+		</presence>
+		<presence name="location_name_beauclair_adder_and_jewels">
+			<platform name="ps4">1207909</platform>
+			<platform name="origin">1207909</platform>
+			<platform name="steam">1207909</platform>
+			<platform name="gog">1207909</platform>
+			<platform name="xb1">location_name_beauclair_adder_and_jewels</platform>
+		</presence>
+		<presence name="location_name_beauclair_brothel">
+			<platform name="ps4">1205758</platform>
+			<platform name="origin">1205758</platform>
+			<platform name="steam">1205758</platform>
+			<platform name="gog">1205758</platform>
+			<platform name="xb1">location_name_beauclair_brothel</platform>
+		</presence>
+		<presence name="location_name_beauclair_clever_clogs">
+			<platform name="ps4">1205759</platform>
+			<platform name="origin">1205759</platform>
+			<platform name="steam">1205759</platform>
+			<platform name="gog">1205759</platform>
+			<platform name="xb1">location_name_beauclair_clever_clogs</platform>
+		</presence>
+		<presence name="location_name_beauclair_harbour">
+			<platform name="ps4">1205531</platform>
+			<platform name="origin">1205531</platform>
+			<platform name="steam">1205531</platform>
+			<platform name="gog">1205531</platform>
+			<platform name="xb1">location_name_beauclair_harbour</platform>
+		</presence>
+		<presence name="location_name_beauclair_lower_city">
+			<platform name="ps4">1205512</platform>
+			<platform name="origin">1205512</platform>
+			<platform name="steam">1205512</platform>
+			<platform name="gog">1205512</platform>
+			<platform name="xb1">location_name_beauclair_lower_city</platform>
+		</presence>
+		<presence name="location_name_beauclair_pheasantry">
+			<platform name="ps4">1205761</platform>
+			<platform name="origin">1205761</platform>
+			<platform name="steam">1205761</platform>
+			<platform name="gog">1205761</platform>
+			<platform name="xb1">location_name_beauclair_pheasantry</platform>
+		</presence>
+		<presence name="location_name_car_belgard_forest">
+			<platform name="ps4">1206158</platform>
+			<platform name="origin">1206158</platform>
+			<platform name="steam">1206158</platform>
+			<platform name="gog">1206158</platform>
+			<platform name="xb1">location_name_car_belgard_forest</platform>
+		</presence>
+		<presence name="location_name_car_belgard_vinyards">
+			<platform name="ps4">1205193</platform>
+			<platform name="origin">1205193</platform>
+			<platform name="steam">1205193</platform>
+			<platform name="gog">1205193</platform>
+			<platform name="xb1">location_name_car_belgard_vinyards</platform>
+		</presence>
+		<presence name="location_name_car_francollarts_inn">
+			<platform name="ps4">1207209</platform>
+			<platform name="origin">1207209</platform>
+			<platform name="steam">1207209</platform>
+			<platform name="gog">1207209</platform>
+			<platform name="xb1">location_name_car_francollarts_inn</platform>
+		</presence>
+		<presence name="location_name_car_regis_cemetery">
+			<platform name="ps4">1205786</platform>
+			<platform name="origin">1205786</platform>
+			<platform name="steam">1205786</platform>
+			<platform name="gog">1205786</platform>
+			<platform name="xb1">location_name_car_regis_cemetery</platform>
+		</presence>
+		<presence name="location_name_car_tesham_mutna">
+			<platform name="ps4">1205169</platform>
+			<platform name="origin">1205169</platform>
+			<platform name="steam">1205169</platform>
+			<platform name="gog">1205169</platform>
+			<platform name="xb1">location_name_car_tesham_mutna</platform>
+		</presence>
+		<presence name="location_name_car_trappers_village">
+			<platform name="ps4">1205783</platform>
+			<platform name="origin">1205783</platform>
+			<platform name="steam">1205783</platform>
+			<platform name="gog">1205783</platform>
+			<platform name="xb1">location_name_car_trappers_village</platform>
+		</presence>
+		<presence name="location_name_caroberta_woods">
+			<platform name="ps4">1203226</platform>
+			<platform name="origin">1203226</platform>
+			<platform name="steam">1203226</platform>
+			<platform name="gog">1203226</platform>
+			<platform name="xb1">location_name_caroberta_woods</platform>
+		</presence>
+		<presence name="location_name_dun_tynne_hill">
+			<platform name="ps4">1204162</platform>
+			<platform name="origin">1204162</platform>
+			<platform name="steam">1204162</platform>
+			<platform name="gog">1204162</platform>
+			<platform name="xb1">location_name_dun_tynne_hill</platform>
+		</presence>
+		<presence name="location_name_gor_exchange_ruins">
+			<platform name="ps4">1205251</platform>
+			<platform name="origin">1205251</platform>
+			<platform name="steam">1205251</platform>
+			<platform name="gog">1205251</platform>
+			<platform name="xb1">location_name_gor_exchange_ruins</platform>
+		</presence>
+		<presence name="location_name_gor_fox_hollow">
+			<platform name="ps4">1205444</platform>
+			<platform name="origin">1205444</platform>
+			<platform name="steam">1205444</platform>
+			<platform name="gog">1205444</platform>
+			<platform name="xb1">location_name_gor_fox_hollow</platform>
+		</presence>
+		<presence name="location_name_gor_hansa_hideout">
+			<platform name="ps4">1205446</platform>
+			<platform name="origin">1205446</platform>
+			<platform name="steam">1205446</platform>
+			<platform name="gog">1205446</platform>
+			<platform name="xb1">location_name_gor_hansa_hideout</platform>
+		</presence>
+		<presence name="location_name_gor_lac_celavy">
+			<platform name="ps4">1205249</platform>
+			<platform name="origin">1205249</platform>
+			<platform name="steam">1205249</platform>
+			<platform name="gog">1205249</platform>
+			<platform name="xb1">location_name_gor_lac_celavy</platform>
+		</presence>
+		<presence name="location_name_gor_seidhe_llygad">
+			<platform name="ps4">1205787</platform>
+			<platform name="origin">1205787</platform>
+			<platform name="steam">1205787</platform>
+			<platform name="gog">1205787</platform>
+			<platform name="xb1">location_name_gor_seidhe_llygad</platform>
+		</presence>
+		<presence name="location_name_gor_vampire_sanctum">
+			<platform name="ps4">1205212</platform>
+			<platform name="origin">1205212</platform>
+			<platform name="steam">1205212</platform>
+			<platform name="gog">1205212</platform>
+			<platform name="xb1">location_name_gor_vampire_sanctum</platform>
+		</presence>
+		<presence name="location_name_gor_woodcutters_settlement">
+			<platform name="ps4">1205784</platform>
+			<platform name="origin">1205784</platform>
+			<platform name="steam">1205784</platform>
+			<platform name="gog">1205784</platform>
+			<platform name="xb1">location_name_gor_woodcutters_settlement</platform>
+		</presence>
+		<presence name="location_name_gorgona_foothills">
+			<platform name="ps4">1203228</platform>
+			<platform name="origin">1203228</platform>
+			<platform name="steam">1203228</platform>
+			<platform name="gog">1203228</platform>
+			<platform name="xb1">location_name_gorgona_foothills</platform>
+		</presence>
+		<presence name="location_name_san_cockatrice_inn">
+			<platform name="ps4">1204125</platform>
+			<platform name="origin">1204125</platform>
+			<platform name="steam">1204125</platform>
+			<platform name="gog">1204125</platform>
+			<platform name="xb1">location_name_san_cockatrice_inn</platform>
+		</presence>
+		<presence name="location_name_san_flovive">
+			<platform name="ps4">1204126</platform>
+			<platform name="origin">1204126</platform>
+			<platform name="steam">1204126</platform>
+			<platform name="gog">1204126</platform>
+			<platform name="xb1">location_name_san_flovive</platform>
+		</presence>
+		<presence name="location_name_san_forest">
+			<platform name="ps4">1204862</platform>
+			<platform name="origin">1204862</platform>
+			<platform name="steam">1204862</platform>
+			<platform name="gog">1204862</platform>
+			<platform name="xb1">location_name_san_forest</platform>
+		</presence>
+		<presence name="location_name_san_tufo_vineyard">
+			<platform name="ps4">1204129</platform>
+			<platform name="origin">1204129</platform>
+			<platform name="steam">1204129</platform>
+			<platform name="gog">1204129</platform>
+			<platform name="xb1">location_name_san_tufo_vineyard</platform>
+		</presence>
+		<presence name="location_name_sansretour_marsh">
+			<platform name="ps4">1203225</platform>
+			<platform name="origin">1203225</platform>
+			<platform name="steam">1203225</platform>
+			<platform name="gog">1203225</platform>
+			<platform name="xb1">location_name_sansretour_marsh</platform>
+		</presence>
+		<presence name="location_name_sleeping_knights">
+			<platform name="ps4">1211314</platform>
+			<platform name="origin">1211314</platform>
+			<platform name="steam">1211314</platform>
+			<platform name="gog">1211314</platform>
+			<platform name="xb1">location_name_sleeping_knights</platform>
+		</presence>
+		<presence name="location_name_ved_crossing">
+			<platform name="ps4">1203229</platform>
+			<platform name="origin">1203229</platform>
+			<platform name="steam">1203229</platform>
+			<platform name="gog">1203229</platform>
+			<platform name="xb1">location_name_ved_crossing</platform>
+		</presence>
+		<presence name="location_name_ved_hansa_on_swamps">
+			<platform name="ps4">1209935</platform>
+			<platform name="origin">1209935</platform>
+			<platform name="steam">1209935</platform>
+			<platform name="gog">1209935</platform>
+			<platform name="xb1">location_name_ved_hansa_on_swamps</platform>
+		</presence>
+		<presence name="location_name_vedette_valley">
+			<platform name="ps4">1203222</platform>
+			<platform name="origin">1203222</platform>
+			<platform name="steam">1203222</platform>
+			<platform name="gog">1203222</platform>
+			<platform name="xb1">location_name_vedette_valley</platform>
+		</presence>
+		<presence name="location_name_vin_castel_ravello_vinyards">
+			<platform name="ps4">1204791</platform>
+			<platform name="origin">1204791</platform>
+			<platform name="steam">1204791</platform>
+			<platform name="gog">1204791</platform>
+			<platform name="xb1">location_name_vin_castel_ravello_vinyards</platform>
+		</presence>
+		<presence name="location_name_vin_coronata_vineyard">
+			<platform name="ps4">1203460</platform>
+			<platform name="origin">1203460</platform>
+			<platform name="steam">1203460</platform>
+			<platform name="gog">1203460</platform>
+			<platform name="xb1">location_name_vin_coronata_vineyard</platform>
+		</presence>
+		<presence name="location_name_vin_corvo_bianco">
+			<platform name="ps4">1203572</platform>
+			<platform name="origin">1203572</platform>
+			<platform name="steam">1203572</platform>
+			<platform name="gog">1203572</platform>
+			<platform name="xb1">location_name_vin_corvo_bianco</platform>
+		</presence>
+		<presence name="location_name_vin_tournament_meadows">
+			<platform name="ps4">1203577</platform>
+			<platform name="origin">1203577</platform>
+			<platform name="steam">1203577</platform>
+			<platform name="gog">1203577</platform>
+			<platform name="xb1">location_name_vin_tournament_meadows</platform>
+		</presence>
+		<presence name="location_name_vin_vermentino_vineyard">
+			<platform name="ps4">1203522</platform>
+			<platform name="origin">1203522</platform>
+			<platform name="steam">1203522</platform>
+			<platform name="gog">1203522</platform>
+			<platform name="xb1">location_name_vin_vermentino_vineyard</platform>
+		</presence>
+		<presence name="location_name_vinyards">
+			<platform name="ps4">1203223</platform>
+			<platform name="origin">1203223</platform>
+			<platform name="steam">1203223</platform>
+			<platform name="gog">1203223</platform>
+			<platform name="xb1">location_name_vinyards</platform>
+		</presence>
 	</presencegroup>
 </redxml>

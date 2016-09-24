@@ -69,6 +69,7 @@
 		<loot_entry name="Steel plate"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="-1"			/>
 		<loot_entry name="Dark iron ore"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
 		<loot_entry name="Dark iron ingot"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="-1"			/>
+		<loot_entry name="Dark iron plate"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="-1"			/>
 		<loot_entry name="Dark steel ingot"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
 		<loot_entry name="Dark steel plate"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="-1"			/>
 		<loot_entry name="Silver mineral"							player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="-1"			/>
@@ -888,6 +889,24 @@
 		<loot_entry name="Glyph yrden greater schematic"			player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="2.5"		/>
 	</loot>
 
+<!-- DYE TRADER -->
+	<loot name="_store__DyeTrader"									player_level_min="0"	player_level_max="0"	quantity_min="10"	quantity_max="25"	chance="-1"			>
+		<loot_entry name="Dye Default"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="-1"			/>
+		<loot_entry name="Dye Gray"									player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Turquoise"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Brown"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Green"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Blue"									player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Orange"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+		<loot_entry name="Dye Pink"									player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+		<loot_entry name="Dye Yellow"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+<!-- 	<loot_entry name="Dye Black"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+		<loot_entry name="Dye White"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+		<loot_entry name="Dye Red"									player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="1"			/>
+		<loot_entry name="Dye Purple"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="1"			/>
+-->
+	</loot>
+
 <!-- NML -->
 	<loot name="_store__Snots_General"								player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="3"	chance="-1"			>
 <!-- CUSTOM -->
@@ -1131,19 +1150,37 @@
 <!-- GWINT -->
 		<loot_entry name="gwint_card_dummy"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 		<loot_entry name="gwint_card_nausicaa"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-		<loot_entry name="gwint_card_blue_stripes3"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+		<loot_entry name="gwint_card_blue_stripes"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 		<loot_entry name="gwint_card_cynthia"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 	</loot>
 
 <!-- NML -->
-	<loot name="_store__Crossroads_Innkeeper"						player_level_min="0"	player_level_max="0"	quantity_min="205"	quantity_max="210"	chance="-1"			>
+	<loot name="_store__Crossroads_Innkeeper"						player_level_min="0"	player_level_max="0"	quantity_min="17"	quantity_max="23"	chance="-1"			>
+		<loot_entry name="Torch"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="-1"			/>
+<!-- DRINKS -->
+		<loot_entry name="Apple juice"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="3"			/>
+		<loot_entry name="Bottled water"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="3"			/>
+		<loot_entry name="Cows milk"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="3"			/>
+		<loot_entry name="Goats milk"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="3"			/>
+		<loot_entry name="Raspberry juice"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="3"			/>
+<!-- ALCOHOL -->
+		<loot_entry name="Mandrake cordial"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="3"			/>
+		<loot_entry name="Redanian Herbal"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="3"			/>
+		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="3"			/>
+		<loot_entry name="Mahakam Spirit"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="3"			/>
+		<loot_entry name="Nilfgaardian Lemon"						player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="3"			/>
 <!-- FOOD -->
-		<loot_entry name="Bottled water"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="-1"			/>
-		<loot_entry name="Mandrake cordial"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="-1"			/>
-		<loot_entry name="Redanian Herbal"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="-1"			/>
-		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="-1"			/>
-		<loot_entry name="Mahakam Spirit"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="5"	chance="-1"			/>
-		<loot_entry name="Rotten meat"								player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="5"	chance="-1"			/>
+		<loot_entry name="Baked apple"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="3.64"		/>
+		<loot_entry name="Baked potato"								player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="3.64"		/>
+		<loot_entry name="Chicken"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="3.64"		/>
+		<loot_entry name="Chicken leg"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="3.64"		/>
+		<loot_entry name="Dried fruit"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="3.64"		/>
+		<loot_entry name="Dried fruit and nuts"						player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="3.64"		/>
+		<loot_entry name="Gutted fish"								player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="3.64"		/>
+		<loot_entry name="Mutton leg"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="3.64"		/>
+		<loot_entry name="Pepper"									player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="3.64"		/>
+		<loot_entry name="Pork"										player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="3.64"		/>
+		<loot_entry name="Raw meat"									player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="3.64"		/>
 <!-- GWINT -->
 		<loot_entry name="gwint_card_horn"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>	
 		<loot_entry name="gwint_card_combat_engineer"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
@@ -1223,7 +1260,7 @@
 <!-- GWINT -->
 		<loot_entry name="gwint_card_poor_infantry2"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 		<loot_entry name="gwint_card_crinfrid3"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-		<loot_entry name="gwint_card_blue_stripes2"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+		<loot_entry name="gwint_card_blue_stripes"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 		<loot_entry name="gwint_card_morteisen"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 	</loot>
 
@@ -4406,15 +4443,15 @@
 
 <!-- Novigrad -->
 	<loot name="_store__LW_Novigrad_Merchant_Fish"					player_level_min="0"	player_level_max="0"	quantity_min="90"	quantity_max="160"	chance="-1"		 	>
-		<loot_entry name="Fish"										player_level_min="0"	player_level_max="0"	quantity_min="15"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="Gutted fish"								player_level_min="0"	player_level_max="0"	quantity_min="8"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="Fried fish"								player_level_min="0"	player_level_max="0"	quantity_min="7"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="String"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="10"	chance="-1"			/>
-		<loot_entry name="Oil"										player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="10"	chance="-1"			/>
-		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="Mandrake cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="-1"			/>
-		<loot_entry name="Dwarven spirit"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="-1"			/>
+		<loot_entry name="Fish"										player_level_min="0"	player_level_max="0"	quantity_min="15"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="Gutted fish"								player_level_min="0"	player_level_max="0"	quantity_min="8"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="Fried fish"								player_level_min="0"	player_level_max="0"	quantity_min="7"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="String"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="10"	chance="100"		/>
+		<loot_entry name="Oil"										player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="10"	chance="100"		/>
+		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="Mandrake cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="Cherry Cordial"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="100"		/>
+		<loot_entry name="Dwarven spirit"							player_level_min="0"	player_level_max="0"	quantity_min="5"	quantity_max="20"	chance="100"		/>
 	</loot>
 
 	<!-- Novigrad -->
