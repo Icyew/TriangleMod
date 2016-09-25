@@ -1019,6 +1019,25 @@ class W3EffectManager
 		return ret;
 	}
 	
+	// Triangle adaptation
+	public final function GetMutagenBuffsCount() : int
+	{
+		var i, cnt : int;
+		var mutagen : W3Mutagen_Effect;
+		
+		cnt = 0;
+		for(i=0; i<effects.Size(); i+=1)
+		{
+			mutagen = (W3Mutagen_Effect) effects[i];
+			if( mutagen )
+			{
+				cnt += 1;
+			}
+		}
+		
+		return cnt;
+	}
+	
 	public final function GetPotionBuffs() : array<CBaseGameplayEffect>
 	{
 		var i : int;

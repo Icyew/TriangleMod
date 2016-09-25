@@ -107,6 +107,16 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FastMetabolismDrainFactorPerLevel' ) );
 	}
 
+	public function GetAdaptationDiscountPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AdaptationDiscountPerLevel' ) ) / 100;
+	}
+
+	public function GetAdaptationMaxDiscount() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AdaptationMaxDiscount' ) ) / 100;
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool

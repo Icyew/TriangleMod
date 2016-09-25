@@ -2284,6 +2284,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s14, 'duration', false, false) * skillLevel;				
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle adaptation
+				if (theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
+					baseString = "Toxicity cost of mutagen decoctions are reduced " + NoTrailZeros(theGame.GetTModOptions().GetAdaptationDiscountPerLevel() * skillLevel * 100) +
+						"% for each active decoction to a maximum of " + NoTrailZeros(theGame.GetTModOptions().GetAdaptationMaxDiscount() * 100) + "%.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s15:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s15, 'toxicityRegen', false, false)) * skillLevel;

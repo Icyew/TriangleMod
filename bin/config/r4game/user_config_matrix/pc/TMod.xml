@@ -41,6 +41,8 @@
 				<Entry varId="AltTawnyOwlDuration"					value="0"	/>
 				<Entry varId="AltTawnyOwlBase"						value="4" />
 				<Entry varId="FastMetabolismDrainFactorPerLevel"	value="1.8" />
+				<Entry varId="AdaptationDiscountPerLevel"			value="4" />
+				<Entry varId="AdaptationMaxDiscount"				value="40" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -54,6 +56,8 @@
 			<Var id="AltTawnyOwlDuration"					displayName="Tawny Owl: Constant duration for all levels (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltTawnyOwlBase"						displayName="Tawny Owl: Always-on stamina regen for all levels (0 for vanilla)"			displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FastMetabolismDrainFactorPerLevel"		displayName="Fast Metabolism: Toxicity degen multiplier per level (0 for vanilla)"		displayType="SLIDER;0.00;5;50" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AdaptationDiscountPerLevel"			displayName="Adaptation: % discount for decocs after first/level (0 for vanilla)"		displayType="SLIDER;0.00;20;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">

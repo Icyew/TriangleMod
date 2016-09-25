@@ -4326,6 +4326,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 		return null;
 	}
+
+	// Triangle adaptation
+	public final function GetMutagenBuffsCount() : float
+	{
+		var null : array< W3Mutagen_Effect >;
+		
+		if(effectManager)
+		{
+			return effectManager.GetMutagenBuffsCount();
+		}
+	
+		return 0;
+	}
 	
 	public function GetAlchemyRecipes() : array<name>
 	{
@@ -6727,6 +6740,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
 		potionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+		// Triangle adaptation
+		if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+		}
+		// Triangle end
 		
 		if(effectType != EET_WhiteHoney)
 		{
@@ -6756,6 +6774,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
 		finalPotionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+		// Triangle adaptation
+		if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+		}
+		// Triangle end
 		
 		
 		if(CanUseSkill(S_Perk_13))
@@ -6846,6 +6869,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			mutagenParams = new W3MutagenBuffCustomParams in theGame;
 			mutagenParams.toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+			// Triangle adaptation
+			if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
+				mutagenParams.toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+			}
+			// Triangle end
 			mutagenParams.potionItemName = inv.GetItemName(item);
 			
 			potionParams.buffSpecificParams = mutagenParams;

@@ -297,3 +297,9 @@ function T_RoundTo(f : float, decimal : int) : float
         
     return ret;
 }
+
+// Triangle adaptation
+function T_GetAdaptationDiscount(player : W3PlayerWitcher) : float
+{
+    return MinF(theGame.GetTModOptions().GetAdaptationDiscountPerLevel() * player.GetSkillLevel(S_Alchemy_s14) * player.GetMutagenBuffsCount(), theGame.GetTModOptions().GetAdaptationMaxDiscount());
+}
