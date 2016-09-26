@@ -2163,7 +2163,7 @@ import class CInventoryComponent extends CComponent
 					buff.effectAbilityName = abilityName;					
 					
 					buffs.PushBack(buff);
-					
+
 					
 					if(absFast.Size() == 1)
 						return buffs.Size();

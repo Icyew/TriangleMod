@@ -1456,7 +1456,7 @@ class W3EffectManager
 			}
 			else
 			{
-				applyBuff = GetNonSignApplyBuffTest(effectInfos[i].applyChance);
+				applyBuff = GetNonSignApplyBuffTest(effectInfos[i].applyChance, action); // Triangle fixative added action param
 			}
 			
 			if(applyBuff)
@@ -1506,8 +1506,28 @@ class W3EffectManager
 	}
 	
 	
-	private final function GetNonSignApplyBuffTest(applyChance : float) : bool
+	private final function GetNonSignApplyBuffTest(applyChance : float, optional action : W3DamageAction) : bool // Triangle fixative add action param
 	{
+		// Triangle fixative
+		var witcher : W3PlayerWitcher;
+		var victimMonsterCategory : EMonsterCategory;
+		var tmpName : name;
+		var tmpBool	: bool;
+		var attackAction : W3Action_Attack;
+		var actionVictim : CActor;
+		var TMod : TModOptions;
+		var num : float;
+		if (action && action.IsActionMelee()) {
+			actionVictim = (CActor)action.victim;
+			TMod = theGame.GetTModOptions();
+			attackAction = (W3Action_Attack)action;
+			witcher = (W3PlayerWitcher)action.attacker;
+			theGame.GetMonsterParamsForActor(actionVictim, victimMonsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+			if (attackAction && witcher && witcher.CanUseSkill(S_Alchemy_s06) && witcher.inv.ItemHasActiveOilApplied(attackAction.GetWeaponId(), victimMonsterCategory)) {
+				applyChance = MinF(applyChance * TMod.GetFixativeMultBonus(), applyChance + TMod.GetFixativeMaxBonusPerLevel() * witcher.GetSkillLevel(S_Alchemy_s06));
+			}
+		}
+		// Triangle end
 		return RandF() < applyChance;
 	}
 	
