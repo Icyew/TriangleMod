@@ -503,4 +503,16 @@ class TModOptions
 	}
 
 	// ---- Enemies end ---- //
+
+	// ---- Misc start ---- //
+
+	public function GetRuneEffectMultiplier() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'RuneEffectMultiplier' ) );
+	}
+
+	public function GetGlyphEffectMultiplier() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GlyphEffectMultiplier' ) );
+	}
 }
