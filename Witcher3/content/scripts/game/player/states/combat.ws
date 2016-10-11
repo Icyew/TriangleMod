@@ -660,6 +660,11 @@ state Combat in CR4Player extends ExtendedMovable
 		var aerondight		: W3Effect_Aerondight;
 		var weaponId		: SItemUniqueId;
 		
+		// Triangle robx99 animations adapted
+		if (animEventType == AET_DurationEnd) {
+			parent.ResetBaseAnimationMultiplierCauserBySrc(GetAnimNameFromEventAnimInfo(animInfo));
+		}
+		// Triangle end
 		if(parent.HasAbility('Runeword 2 _Stats', true))
 		{
 			if(data.attackName == 'attack_heavy_special')
@@ -1658,10 +1663,32 @@ state Combat in CR4Player extends ExtendedMovable
 		var comp					: CComponent;
 		var compEnabled				: bool;
 		var useNormalAttack 		: bool;
+		// Triangle robx99 animations
+		var heavyAspectSlopeUp		: name;
+		var heavyAspectSlopeDown	: name;
+		var heavyAspectCapsuleShort	: name;
+		// Triangle end
 
 		parent.RemoveTimer( 'ProcessAttackTimer' );
 		parent.RemoveTimer( 'AttackTimerEnd' );
 		npc = (CNewNPC)parent.slideTarget;
+
+		// Triangle robx99 animations
+		witcher = (W3PlayerWitcher)parent;
+
+		if (witcher && witcher.CanPlayHeavyRealistic())
+		{
+			heavyAspectSlopeUp = 'AttackHeavySlopeUp';
+			heavyAspectSlopeDown = 'AttackHeavySlopeDown';
+			heavyAspectCapsuleShort = 'AttackHeavyCapsuleShort';
+		}
+		else
+		{
+			heavyAspectSlopeUp = 'AttackHeavy';
+			heavyAspectSlopeDown = 'AttackHeavy';
+			heavyAspectCapsuleShort = 'AttackHeavy';
+		}
+		// Triangle end
 		
 		if(npc)
 		{
@@ -1843,25 +1870,44 @@ state Combat in CR4Player extends ExtendedMovable
 				{
 					if ( npc && npc.IsUsingHorse() )
 						comboPlayer.PlayAttack('AttackHeavyVsRider');
-					else if ( parent.slideTarget )
+					// Triangle robx99 animations					
+					else if  ( !parent.IsInShallowWater() && npc && ( npc.GetCurrentStance() == NS_Fly || npc.IsInAir() ) ) 
 					{
-						 if(npc && ( npc.GetCurrentStance() == NS_Fly || npc.IsInAir() ) ) 
+						if ( playerToTargetVec.Z >= 0.f )
 							comboPlayer.PlayAttack( 'AttackHeavyFlying' );
-						
 						else
-							comboPlayer.PlayAttack( 'AttackHeavy' );
+							comboPlayer.PlayAttack( heavyAspectSlopeDown );
 					}
 					else
 					{
+						if (attackTarget)
+							targetCapsuleHeight = ((CMovingPhysicalAgentComponent)attackTarget.GetMovingAgentComponent()).GetCapsuleHeight();
+						else
+							targetCapsuleHeight = 0;
+							
+						playerToTargetRot = VecToRotation( playerToTargetVec );
+
+						if (witcher && witcher.CanPlayHalfsword() && attackTarget.HasHeavyArmor())
+							comboPlayer.PlayAttack( 'AttackHeavyHalfsword' );
+						else if ( ( playerToTargetVec.Z > 0.4f && AbsF( playerToTargetRot.Pitch ) > 12.f ) || parent.IsInShallowWater() )
+							comboPlayer.PlayAttack( heavyAspectSlopeUp );						
+						else if ( playerToTargetVec.Z < -0.35f && AbsF( playerToTargetRot.Pitch ) > 12.f  )
+							comboPlayer.PlayAttack( heavyAspectSlopeDown );
 						
+						else if ( !parent.slideTarget )
+							comboPlayer.PlayAttack( 'AttackHeavy' );
+						else if ( targetCapsuleHeight < 1.5 )
+							comboPlayer.PlayAttack( heavyAspectCapsuleShort );
+						else
 							comboPlayer.PlayAttack( 'AttackHeavy' );
 					}
+					// Triangle end
 					
 					witcher = (W3PlayerWitcher)parent;
 					if(witcher)
 					{
 						witcher.ToggleSpecialAttackHeavyAllowed(true);
-						parent.AddTimer( 'SpecialAttackHeavyAllowedTimer', 0.2 );
+						witcher.AddTimer( 'SpecialAttackHeavyAllowedTimer', 0.2 ); // Triangle robx99 animations. just an annoyance
 					}
 				}
 				
@@ -1902,6 +1948,11 @@ state Combat in CR4Player extends ExtendedMovable
 		var attackTarget 				: CGameplayEntity;
 		var playerToTargetVec			: Vector;
 		var attackTargetActor			: CActor; 
+		// Triangle robx99 animations
+		var closeAttackDistances		: array<EAttackDistance>;
+		var witcher					 : W3PlayerWitcher;
+		var aspectString				: string;
+		// Triangle end
 		
 		LogChannel( 'ComboNode', "inGlobalAttackCounter = " + callbackInfo.inGlobalAttackCounter + ", inStringAttackCounter = " + callbackInfo.inStringAttackCounter );	
 		
@@ -1988,8 +2039,8 @@ state Combat in CR4Player extends ExtendedMovable
 			}
 			else
 			{
-				farAttackMinDist =  2.5f;
-				mediumAttackMinDist = 1.f;
+				farAttackMinDist =  theGame.GetTModOptions().GetFarAttackMinDist(); // Triangle robx99 animations adapted
+				mediumAttackMinDist = theGame.GetTModOptions().GetMediumAttackMinDist(); // Triangle robx99 animations adapted
 			}
 			
 			enableCloseCombatRadius = false;
@@ -2009,7 +2060,27 @@ state Combat in CR4Player extends ExtendedMovable
 			else if ( playerToTargetDist > mediumAttackMinDist )
 				callbackInfo.outDistance = ADIST_Medium;
 			else
-				callbackInfo.outDistance = ADIST_Medium;			
+			// Triangle robx99 animations
+			{
+				witcher = (W3PlayerWitcher)parent;
+				aspectString = NameToString(callbackInfo.inAspectName);
+
+				if (witcher && (
+					(StrStartsWith(aspectString, "AttackLight") && witcher.CanPlayLightRealistic()) ||
+					(StrStartsWith(aspectString, "AttackHeavy") && witcher.CanPlayHeavyRealistic()) ||
+					(callbackInfo.inAspectName == 'AttackHeavyHalfsword' && witcher.CanPlayHalfsword())
+				   ))
+				{
+					closeAttackDistances.PushBack(ADIST_Small);
+					closeAttackDistances.PushBack(ADIST_Medium);
+					callbackInfo.outDistance = closeAttackDistances[RandRange(closeAttackDistances.Size())];
+				}
+				else
+				{
+					callbackInfo.outDistance = ADIST_Medium;
+				}
+			}
+			// Triangle end
 				
 			if ( parent.slideTarget && (CActor)parent.slideTarget )
 			{

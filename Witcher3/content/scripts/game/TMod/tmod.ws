@@ -503,4 +503,46 @@ class TModOptions
 	}
 
 	// ---- Enemies end ---- //
+
+	// ---- Animations begin ---- //
+
+	public function AreCustomLightAttackAnimationsEnabled() : bool
+	{
+		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomLightAnimEnabled');
+	}
+
+	public function GetCustomLightAttackAnimationSpeedBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomLightAnimSpeedBonus' ) ) / 100;
+	}
+
+	public function AreCustomHeavyAttackAnimationsEnabled() : bool
+	{
+		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomHeavyAnimEnabled');
+	}
+
+	public function GetCustomHeavyAttackAnimationSpeedBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomHeavyAnimSpeedBonus' ) ) / 100;
+	}
+
+	public function AreHalfswordAttackAnimationsEnabled() : bool
+	{
+		return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomHalfswordAnimEnabled');
+	}
+
+	public function GetHalfswordAttackAnimationSpeedBonus() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'CustomHalfswordAnimSpeedBonus' ) ) / 100;
+	}
+
+	public function GetMediumAttackMinDist() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'MediumAttackMinDist' ) ) / 100;
+	}
+
+	public function GetFarAttackMinDist() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'FarAttackMinDist' ) ) / 100;
+	}
 }

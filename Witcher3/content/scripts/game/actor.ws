@@ -1232,7 +1232,7 @@ import abstract class CActor extends CGameplayEntity
 		return causer.id;
 	}
 
-	// Triangle attack combos
+	// Triangle attack combos everything
 	private saved var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
 	private saved var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 1;
 	public function TopBaseAnimationMultiplierCauserMul() : float
@@ -1247,17 +1247,17 @@ import abstract class CActor extends CGameplayEntity
 		return 1;
 	}
 
-	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int ) : int
+	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int, optional srcName : name ) : int
 	{
-		var causer : SAnimMultiplyCauser;
+		var causer, newCauser : SAnimMultiplyCauser;
 		var finalMul : float;
 		var i, size : int;
 
 		if( overrideExistingId != -1 ) {
 			size = baseAnimationMultiplierCausers.Size();
 			for(i = 0; i < size; i += 1) {
-				if( baseAnimationMultiplierCausers[i].id == overrideExistingId ) {
-					causer = baseAnimationMultiplierCausers[i];
+				causer = baseAnimationMultiplierCausers[i];
+				if( causer.id == overrideExistingId || (srcName != '' && causer.srcName == srcName)) {
 					baseAnimationMultiplierCausers.Remove(causer);
 					baseAnimationMultiplierCausers.PushBack(causer);
 					causer.mul = mul;
@@ -1267,20 +1267,36 @@ import abstract class CActor extends CGameplayEntity
 			}
 		}
 		
-		causer.mul = mul;
-		causer.id = nextFreeBaseAnimMultCauserId;
+		newCauser.mul = mul;
+		newCauser.id = nextFreeBaseAnimMultCauserId;
+		if (srcName) {
+			newCauser.srcName = srcName;
+		}
 		nextFreeBaseAnimMultCauserId += 1;
-		baseAnimationMultiplierCausers.PushBack( causer );
+		baseAnimationMultiplierCausers.PushBack( newCauser );
 		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
 		
-		return causer.id;
+		return newCauser.id;
 	}
 
-	public function ResetBaseAnimationMultiplierCauser( id : int )
+	public function ResetBaseAnimationMultiplierCauserById( id : int )
 	{
 		var i : int;
 		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
 			if (baseAnimationMultiplierCausers[i].id == id) {
+				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
+				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+				break;
+			}
+		}
+	}
+
+	// Triangle robx99 animations adapted
+	public function ResetBaseAnimationMultiplierCauserBySrc( srcName : name )
+	{
+		var i : int;
+		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
+			if (baseAnimationMultiplierCausers[i].srcName == srcName) {
 				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
 				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
 				break;
@@ -6225,6 +6241,47 @@ import abstract class CActor extends CGameplayEntity
 	public function GetTotalArmor() : SAbilityAttributeValue
 	{
 		return GetAttributeValue(theGame.params.ARMOR_VALUE_NAME, , true);
+	}
+
+	// Triangle robx99 animations
+	public function HasHeavyArmor() : bool
+	{
+		var armor : SAbilityAttributeValue;
+		var meshComps : array<CComponent>;
+		var i : int;
+		var mesh : CComponent;
+		var meshName : string;
+
+		if (!this.IsAlive())
+		{
+			return false;
+		}
+
+		armor = this.GetAttributeValue(theGame.params.ARMOR_VALUE_NAME);
+
+		if (armor.valueBase >= 50) // Triangle TODO tweak this value
+		{
+			return true;
+		}
+		else if (!this.IsHuman())
+		{
+			return this.GetMovingAgentComponent().GetName() == "wild_hunt_base";
+		}
+
+		meshComps = this.GetComponentsByClassName('CMeshComponent');
+
+		for (i = 0; i < meshComps.Size(); i += 1)
+		{
+			mesh = meshComps[i];
+			meshName = mesh.GetName();
+
+			if (StrStartsWith(meshName, "t") && GetMeshSoundTypeIdentification(mesh) == 'plate')
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	

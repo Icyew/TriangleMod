@@ -173,6 +173,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		AddAnimEventCallback( 'Mutation11AnimEnd',	'OnAnimEvent_Mutation11AnimEnd' );
 		AddAnimEventCallback( 'Mutation11ShockWave', 'OnAnimEvent_Mutation11ShockWave' );
 		
+		// Triangle robx99 animations
+		AddAnimEventCallback('CustomLightAnimStart', 'OnAnimEvent_CustomLightAnimStart');
+		AddAnimEventCallback('CustomHeavyAnimStart', 'OnAnimEvent_CustomHeavyAnimStart');
+		AddAnimEventCallback('CustomHalfswordAnimStart', 'OnAnimEvent_CustomHalfswordAnimStart');
+		// Triangle end
 
 		
 		amountOfSetPiecesEquipped.Resize( EnumGetMax( 'EItemSetType' ) + 1 );
@@ -381,6 +386,24 @@ statemachine class W3PlayerWitcher extends CR4Player
 		theGame.GameplayFactsAdd( "PlayerIsGeralt" );
 		
 		isInitialized = true;
+	}
+
+	// Triangle robx99 animations
+	public function CanPlayLightRealistic() : bool
+	{
+		return theGame.GetTModOptions().AreCustomLightAttackAnimationsEnabled();
+	}
+
+	// Triangle robx99 animations
+	public function CanPlayHeavyRealistic() : bool
+	{
+		return theGame.GetTModOptions().AreCustomHeavyAttackAnimationsEnabled();
+	}
+
+	// Triangle robx99 animations
+	public function CanPlayHalfsword() : bool
+	{
+		return theGame.GetTModOptions().AreHalfswordAttackAnimationsEnabled();
 	}
 
 	
@@ -7256,6 +7279,81 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		if(abilityManager && abilityManager.IsInitialized())
 			abilityManager.SetStatPointMax(BCS_Vitality, val);
+	}
+
+	// Triangle robx99 animations
+	private function IsCustomAnimValid(actionType : EBufferActionType) : bool
+	{
+		return actionType == GetCombatAction();
+	}
+
+	// Triangle robx99 animations
+	event OnAnimEvent_CustomLightAnimStart(animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo)
+	{
+		var animName : name;
+		var extraSpeed : float;
+
+		if (!IsCustomAnimValid(EBAT_LightAttack))
+		{
+			return false;
+		}
+
+		extraSpeed = 1 + theGame.GetTModOptions().GetCustomLightAttackAnimationSpeedBonus();
+
+		animName = GetAnimNameFromEventAnimInfo(animInfo);
+
+		switch (animName)
+		{
+			case 'man_geralt_custom_sword_attack_fast_1_rp':
+			case 'man_geralt_custom_sword_attack_fast_5_rp':
+				extraSpeed += 0.20f;
+				break;
+		}
+
+		PushBaseAnimationMultiplierCauser(extraSpeed,,animName);
+	}
+
+	// Triangle robx99 animations
+	event OnAnimEvent_CustomHeavyAnimStart(animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo)
+	{
+		var animName : name;
+		var extraSpeed : float;
+
+		if (!IsCustomAnimValid(EBAT_HeavyAttack))
+		{
+			return false;
+		}
+
+		extraSpeed = 1 + theGame.GetTModOptions().GetCustomHeavyAttackAnimationSpeedBonus();
+
+		animName = GetAnimNameFromEventAnimInfo(animInfo);
+
+		switch (animName)
+		{
+			case 'man_geralt_custom_sword_attack_strong_4_rp':
+				extraSpeed -= 0.10f;
+				break;
+		}
+
+		PushBaseAnimationMultiplierCauser(extraSpeed,,animName);
+	}
+
+	// Triangle robx99 animations
+	event OnAnimEvent_CustomHalfswordAnimStart(animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo)
+	{
+		var animName : name;
+		var extraSpeed : float;
+
+		if (!IsCustomAnimValid(EBAT_HeavyAttack))
+		{
+			return false;
+		}
+
+		extraSpeed = 1 + theGame.GetTModOptions().GetHalfswordAttackAnimationSpeedBonus();
+
+		animName = GetAnimNameFromEventAnimInfo(animInfo);
+
+		PushBaseAnimationMultiplierCauser(extraSpeed,,animName);
 	}
 	
 	event OnAnimEvent_ActionBlend( animEventName : name, animEventType : EAnimationEventType, animInfo : SAnimationEventAnimInfo )

@@ -109,17 +109,62 @@ state CombatSword in W3PlayerWitcher extends Combat
 	
 	event OnCreateAttackAspects()
 	{
-		CreateAttackLightAspect();
-		CreateAttackHeavyAspect();
+		// Triangle robx99 animations
+		var witcher : W3PlayerWitcher;
+
+		witcher = (W3PlayerWitcher)parent;
+
+		if (witcher && witcher.CanPlayLightRealistic())
+		{
+			CreateAttackLightAspect_Realistic('AttackLight');
+			CreateAttackLightFlyingAspect_Realistic();
+			CreateAttackLightVsRiderAspect_Realistic();
+			CreateAttackLightAspectSlopeUp_Realistic();
+			CreateAttackLightAspectSlopeDown_Realistic();
+			CreateAttackLightCapsuleShort_Realistic();
+		}
+		else
+		{
+			CreateAttackLightAspect();
+			CreateAttackLightFlyingAspect();
+			CreateAttackLightVsRiderAspect();
+			CreateAttackLightAspectSlopeUp();
+			CreateAttackLightAspectSlopeDown();
+			CreateAttackLightCapsuleShort();
+		}
+
+		if (witcher && witcher.CanPlayHeavyRealistic())
+		{
+			CreateAttackHeavyAspect_Realistic('AttackHeavy');
+			CreateAttackHeavyFlyingAspect_Realistic();
+			CreateAttackHeavyVsRiderAspect_Realistic();
+			CreateAttackHeavyAspectSlopeUp_Realistic();
+			CreateAttackHeavyAspectSlopeDown_Realistic();
+			CreateAttackHeavyCapsuleShort_Realistic();
+		}
+		else
+		{
+			CreateAttackHeavyAspect();
+			CreateAttackHeavyFlyingAspect();
+			CreateAttackHeavyVsRiderAspect();
+		}
+
+		if (witcher && witcher.CanPlayHalfsword())
+		{
+			CreateAttackHeavyHalfswordAspect();
+		}
+		// Triangle end
 		CreateAttackLightFarAspect();
 		CreateAttackHeavyFarAspect();
-		CreateAttackLightFlyingAspect();
-		CreateAttackHeavyFlyingAspect();
-		CreateAttackLightAspectSlopeUp();
-		CreateAttackLightAspectSlopeDown();
-		CreateAttackLightCapsuleShort();
-		CreateAttackLightVsRiderAspect();
-		CreateAttackHeavyVsRiderAspect();
+		// Triangle robx99 animations
+		// CreateAttackLightFlyingAspect();
+		// CreateAttackHeavyFlyingAspect();
+		// CreateAttackLightAspectSlopeUp();
+		// CreateAttackLightAspectSlopeDown();
+		// CreateAttackLightCapsuleShort();
+		// CreateAttackLightVsRiderAspect();
+		// CreateAttackHeavyVsRiderAspect();
+		// Triangle end
 		CreateAttackNeutral();
 		CreateAttackNeutralUnconscious();
 	}
@@ -233,6 +278,140 @@ state CombatSword in W3PlayerWitcher extends Combat
 		}		
 	}
 
+	// Triangle robx99 animations
+	private final function CreateAttackLightAspect_Realistic(aspectName : name)
+	{
+	
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( aspectName );
+		
+		{
+			str = aspect.CreateComboString( false );
+			
+			
+			
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_rp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_rp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_rp', AD_Front, ADIST_Small );
+
+		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_rp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+
+			
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_3_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_rp', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', ADIST_Medium );
+			
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo_l_1', 'man_geralt_sword_attack_close_combo_r_2' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo_l_4', 'man_geralt_sword_attack_close_combo2_r_1' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_r_1', 'man_geralt_sword_attack_close_combo2_l_2' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_l_3', 'man_geralt_sword_attack_close_combo2_r_4' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_r_4', 'man_geralt_sword_attack_close_combo2_r_5' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_r_5', 'man_geralt_sword_attack_close_combo_r_2' );
+			
+			
+			
+			
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			
+			
+
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_lp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_lp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_lp', AD_Front, ADIST_Small );
+
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_lp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_lp_40ms', AD_Left, ADIST_Medium );
+
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Back, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Front, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Left, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Right, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Left, ADIST_Large );
+
+			
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_lp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_lp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_lp', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+
+			
+			aspect.AddLink( 'man_geralt_attack_close_30ms_r_1', 'man_geralt_sword_attack_close_combo_l_1' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo_r_2', 'man_geralt_sword_attack_close_combo_l_3' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo_l_3', 'man_geralt_sword_attack_close_combo_l_4' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_r_1', 'man_geralt_sword_attack_close_combo2_l_2' );
+			aspect.AddLink( 'man_geralt_sword_attack_close_combo2_l_2', 'man_geralt_sword_attack_close_combo2_l_3' );
+		}		
+	}
+
 	private final function CreateAttackHeavyAspect()
 	{
 		var aspect : CComboAspect;
@@ -307,6 +486,101 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_strong_8_lp_70ms', ADIST_Medium );
 			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
 			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );			
+		}	
+	}	
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyAspect_Realistic(aspectName : name)
+	{
+		var aspect : CComboAspect;
+		var str : CComboString;
+		
+		aspect = comboDefinition.CreateComboAspect( aspectName );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_3_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_rp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_rp_70ms', AD_Right, ADIST_Medium );
+
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+			}		
+
+			
+			{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_3_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large );			
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large );	
+
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_3_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
 		}	
 	}	
 
@@ -440,6 +714,73 @@ state CombatSword in W3PlayerWitcher extends Combat
 		}		
 	}
 
+	// Triangle robx99 animations
+	private final function CreateAttackLightFlyingAspect_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackLightFlying' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_rp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_rp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_rp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+			
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_rp', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );		
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );	
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Left, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+		}			
+	}
+
 	private final function CreateAttackHeavyFlyingAspect()
 	{
 		var aspect : CComboAspect;
@@ -486,7 +827,84 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_strong_8_lp_70ms', ADIST_Medium );	
 		}	
 	}
-	
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyFlyingAspect_Realistic()
+	{
+		var aspect : CComboAspect;
+		var str : CComboString;
+		
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavyFlying' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_rp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large );			
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large );	
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
+		}
+	}
+
 	private final function CreateAttackLightVsRiderAspect()
 	{
 		var aspect 		: CComboAspect;
@@ -559,7 +977,74 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );		
 		}	
 	}
-	
+
+	// Triangle robx99 animations
+	private final function CreateAttackLightVsRiderAspect_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackLightVsRider' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_rp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_rp', AD_Front, ADIST_Small );
+		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_rp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_rp', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Left, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+		}	
+	}
+
 	private final function CreateAttackHeavyVsRiderAspect()
 	{
 		var aspect : CComboAspect;
@@ -604,7 +1089,84 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
 		}	
 	}
-	
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyVsRiderAspect_Realistic()
+	{
+		var aspect : CComboAspect;
+		var str : CComboString;
+		
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavyVsRider' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_rp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large );			
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large );	
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
+		}
+	}
+
 	private final function CreateAttackLightAspectSlopeUp()
 	{
 		var aspect 		: CComboAspect;
@@ -668,6 +1230,189 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );		
 		}	
 	}	
+
+	// Triangle robx99 animations
+	private final function CreateAttackLightAspectSlopeUp_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackLightSlopeUp' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_rp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_rp', AD_Front, ADIST_Small );
+		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_rp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_3_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_rp', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_2_lp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_lp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_lp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Back, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Front, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Left, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Right, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Left, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_2_lp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_lp', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+		}	
+	}	
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyAspectSlopeUp_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavySlopeUp' );
+
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_3_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_rp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_rp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_back_1_rp_80ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_3_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large );			
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large );	
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_3_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
+		}
+	}
+		
 
 	private final function CreateAttackLightAspectSlopeDown()
 	{
@@ -769,6 +1514,164 @@ state CombatSword in W3PlayerWitcher extends Combat
 	}	
 
 
+	// Triangle robx99 animations
+	private final function CreateAttackLightAspectSlopeDown_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackLightSlopeDown' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_rp', AD_Front, ADIST_Small );
+		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_3_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_lp', AD_Front, ADIST_Small );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_lp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Back, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Front, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Left, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Right, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_2_lp_50ms', AD_Left, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_lp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+		}	
+	}	
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyAspectSlopeDown_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavySlopeDown' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large );			
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large );	
+			//str.AddDirAttack( 'man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large );	
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
+		}
+	}
+
 	private final function CreateAttackLightCapsuleShort()
 	{
 		var aspect 		: CComboAspect;
@@ -866,6 +1769,233 @@ state CombatSword in W3PlayerWitcher extends Combat
 			str.AddAttack( 'man_geralt_sword_attack_fast_7_lp_40ms', ADIST_Medium );
 			str.AddAttack( 'man_geralt_sword_attack_fast_9_lp_40ms', ADIST_Medium );		
 		}	
+	}
+
+	// Triangle robx99 animations
+	private final function CreateAttackLightCapsuleShort_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackLightCapsuleShort' );
+		
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_4_rp', AD_Front, ADIST_Small );
+		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_5_rp', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_7_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_rp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_3_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_1_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_left_2_rp_50ms', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_right_1_rp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_4_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_rp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_5_rp', ADIST_Medium );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_7_rp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_back_1_rp_40ms', ADIST_Medium );
+		}
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_1_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', AD_Front, ADIST_Medium );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_3_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_fast_6_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_back_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_left_1_lp_40ms', AD_Left, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Back, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Front, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Left, ADIST_Large );		
+			str.AddDirAttack( 'man_geralt_sword_attack_fast_far_back_2_lp_50ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_1_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_fast_1_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_2_lp_40ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_3_lp_40ms', ADIST_Medium );	
+			//str.AddAttack( 'man_geralt_custom_sword_attack_fast_3_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_fast_6_lp', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_fast_right_1_lp_40ms', ADIST_Medium );
+		}	
+	}
+
+	// Triangle robx99 animations
+	private final function CreateAttackHeavyCapsuleShort_Realistic()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+		
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavyCapsuleShort' );
+
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_3_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_rp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_rp_70ms', AD_Right, ADIST_Medium );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_rp', AD_Right, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_far_left_1_rp_80ms', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_rp', ADIST_Small );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_3_rp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_4_rp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_rp', ADIST_Medium );
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_1_lp', AD_Front, ADIST_Small );
+			//str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_4_lp', AD_Front, ADIST_Small );
+
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_2_lp', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_back_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Left, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Front, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Back, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', AD_Right, ADIST_Medium );
+			str.AddDirAttack( 'man_geralt_sword_attack_strong_right_1_lp_70ms', AD_Right, ADIST_Medium );
+
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_1_lp', ADIST_Small );
+			//str.AddAttack( 'man_geralt_custom_sword_attack_strong_4_lp', ADIST_Small );
+
+			str.AddAttack( 'man_geralt_sword_attack_strong_1_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_2_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_3_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_9_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_sword_attack_strong_10_lp_70ms', ADIST_Medium );
+			str.AddAttack( 'man_geralt_custom_sword_attack_strong_2_lp', ADIST_Medium );	
+			str.AddAttack( 'man_geralt_sword_attack_strong_left_1_lp_70ms', ADIST_Medium );		
+		}
+	}
+
+	private final function CreateAttackHeavyHalfswordAspect()
+	{
+		var aspect 		: CComboAspect;
+		var str 		: CComboString;
+
+		aspect = comboDefinition.CreateComboAspect( 'AttackHeavyHalfsword' );
+
+		{
+			str = aspect.CreateComboString( false );
+
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_2_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_4_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_5_rp', AD_Front, ADIST_Small);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_6_rp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_1_rp', AD_Front, ADIST_Medium);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_3_rp', AD_Front, ADIST_Medium);
+
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_7_rp', AD_Front, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_7_rp', AD_Back, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_7_rp', AD_Left, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_7_rp', AD_Right, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_8_rp', AD_Front, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_8_rp', AD_Back, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_8_rp', AD_Left, ADIST_Large);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_8_rp', AD_Right, ADIST_Large);
+
+			str.AddAttack('man_geralt_custom_sword_attack_half_2_rp', ADIST_Small);
+			str.AddAttack('man_geralt_custom_sword_attack_half_4_rp', ADIST_Small);
+			str.AddAttack('man_geralt_custom_sword_attack_half_5_rp', ADIST_Small);
+			str.AddAttack('man_geralt_custom_sword_attack_half_6_rp', ADIST_Small);
+
+			str.AddAttack('man_geralt_custom_sword_attack_half_1_rp', ADIST_Medium);
+			str.AddAttack('man_geralt_custom_sword_attack_half_3_rp', ADIST_Medium);
+		}		
+
+		{
+			str = aspect.CreateComboString( true );
+
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_2_lp', AD_Front, ADIST_Small);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_3_lp', AD_Front, ADIST_Small);
+
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_1_lp', AD_Front, ADIST_Medium);
+			str.AddDirAttack('man_geralt_custom_sword_attack_half_4_lp', AD_Front, ADIST_Medium);
+
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Front, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Back, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Left, ADIST_Large );
+			str.AddDirAttack( 'man_geralt_custom_sword_attack_strong_5_lp', AD_Right, ADIST_Large );
+			str.AddDirAttack('man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Right, ADIST_Large);
+			//str.AddDirAttack('man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Front, ADIST_Large);
+			//str.AddDirAttack('man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Back, ADIST_Large);
+			//str.AddDirAttack('man_geralt_sword_attack_strong_far_right_1_lp_80ms', AD_Left, ADIST_Large);
+
+			str.AddAttack('man_geralt_custom_sword_attack_half_2_lp', ADIST_Small);
+			str.AddAttack('man_geralt_custom_sword_attack_half_3_lp', ADIST_Small);
+
+			str.AddAttack('man_geralt_custom_sword_attack_half_1_lp', ADIST_Medium);
+			str.AddAttack('man_geralt_custom_sword_attack_half_4_lp', ADIST_Medium);
+		}
 	}
 
 	private final function CreateAttackNeutral()
@@ -1202,8 +2332,16 @@ state CombatSword in W3PlayerWitcher extends Combat
 			specialHeavyAnimDuration = GetEventDurationFromEventAnimInfo( animInfo );									
 			specialHeavyAnimDuration += EngineTimeToFloat(theGame.GetEngineTime() - parent.specialHeavyStartEngineTime);			
 			
-			
-			parent.specialHeavyChargeDuration = MinF(parent.specialHeavyChargeDuration, specialHeavyAnimDuration);
+			// Triangle robx99 animations? TODO does this matter
+			if (parent.specialHeavyChargeDuration > 0)
+			{
+				parent.specialHeavyChargeDuration = MinF(parent.specialHeavyChargeDuration, specialHeavyAnimDuration);
+			}
+			else
+			{
+				parent.specialHeavyChargeDuration = specialHeavyAnimDuration;
+			}
+			// Triangle end
 		}
 	}
 	
