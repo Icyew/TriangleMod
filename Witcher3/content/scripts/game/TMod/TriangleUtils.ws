@@ -303,3 +303,13 @@ function T_GetAdaptationDiscount(player : W3PlayerWitcher) : float
 {
     return MinF(theGame.GetTModOptions().GetAdaptationDiscountPerLevel() * player.GetSkillLevel(S_Alchemy_s14) * player.GetMutagenBuffsCount(), theGame.GetTModOptions().GetAdaptationMaxDiscount());
 }
+
+// Triangle transmutation
+function T_SetTransmutationBonus(charStats : CCharacterStats, skillLevel : int, numDecocs : int)
+{
+    if (numDecocs >= 0) {
+        charStats.AddAbilityMultiple('T_alchemy_s13_health_bonus', skillLevel * numDecocs * theGame.GetTModOptions().GetTransmutationHealthPerLevel() / 10);
+    } else {
+        charStats.RemoveAbilityMultiple('T_alchemy_s13_health_bonus', skillLevel * numDecocs * theGame.GetTModOptions().GetTransmutationHealthPerLevel() / 10)
+    }
+}

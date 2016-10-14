@@ -588,6 +588,12 @@
         <tags>alchemy_s13</tags>
         <vitality type="add" min="200" />
       </ability>
+      <!-- Triangle transmutation -->
+      <ability name="T_alchemy_s13_health_bonus">
+        <tags>alchemy_s13</tags>
+        <vitality type="add" min="200" />
+      </ability>
+      <!-- Triangle end -->
 	
       <!-- Mutant -->
       <ability name="alchemy_s14">

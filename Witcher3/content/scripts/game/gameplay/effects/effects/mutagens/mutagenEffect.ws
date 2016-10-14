@@ -36,7 +36,13 @@ abstract class W3Mutagen_Effect extends CBaseGameplayEffect
 		
 		if(witcher.CanUseSkill(S_Alchemy_s13))
 		{
-			witcher.AddAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
+			// Triangle transmutation
+			if (theGame.GetTModOptions().GetTransmutationHealthPerLevel() > 0) {
+				T_SetTransmutationBonus(charStats, witcher.GetSkillLevel(S_Alchemy_s13), 1);
+			} else {
+				witcher.AddAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
+			}
+			// Triangle end
 		}
 		
 		
@@ -58,7 +64,13 @@ abstract class W3Mutagen_Effect extends CBaseGameplayEffect
 		
 		if(witcher.CanUseSkill(S_Alchemy_s13))
 		{
-			witcher.RemoveAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
+			// Triangle transmutation
+			if (theGame.GetTModOptions().GetTransmutationHealthPerLevel() > 0) {
+				T_SetTransmutationBonus(charStats, witcher.GetSkillLevel(S_Alchemy_s13), -1);
+			} else {
+				witcher.RemoveAbilityMultiple(witcher.GetSkillAbilityName(S_Alchemy_s13), witcher.GetSkillLevel(S_Alchemy_s13));
+			}
+			// Triangle end
 		}
 		
 		target.RemoveAbilityAll( abilityName );

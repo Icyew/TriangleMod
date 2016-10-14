@@ -127,6 +127,11 @@ class TModOptions
 		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeMultBonus' ) );
 	}
 
+	public function GetTransmutationHealthPerLevel() : float
+	{
+		return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'TransmutationHealthPerLevel' ) );
+	}
+
 	// ---- Stamina Begin ---- //
 
 	public function GetAltArmorStaminaMod() : bool

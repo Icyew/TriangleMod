@@ -45,6 +45,7 @@
 				<Entry varId="AdaptationMaxDiscount"				value="40" />
 				<Entry varId="FixativeMultBonus"					value="2" />
 				<Entry varId="FixativeMaxBonusPerLevel"				value="4" />
+				<Entry varId="TransmutationHealthPerLevel"			value="200" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -62,6 +63,7 @@
 			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMultBonus"						displayName="Fixative: Crit effect chance multiplier (1 for vanilla)"					displayType="SLIDER;1.00;10;36" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMaxBonusPerLevel"				displayName="Fixative: Max additional crit effect chance per effect/level"				displayType="SLIDER;0.00;40;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="TransmutationHealthPerLevel"			displayName="Tissue Transmutation: health/level"										displayType="SLIDER;0.00;400;80" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">

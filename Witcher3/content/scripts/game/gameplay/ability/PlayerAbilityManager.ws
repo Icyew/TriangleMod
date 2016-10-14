@@ -2516,7 +2516,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			mutagens = GetWitcherPlayer().GetDrunkMutagens();
 			if(mutagens.Size() > 0)	
 			{
-				charStats.AddAbilityMultiple( GetSkillAbilityName( skill ), (GetSkillLevel( skill ) * mutagens.Size() ));
+				// Triangle transmutation
+				if (theGame.GetTModOptions().GetTransmutationHealthPerLevel() > 0) {
+					T_SetTransmutationBonus(charStats, GetSkillLevel(skill), mutagens.Size() );
+				} else {
+					charStats.AddAbilityMultiple( GetSkillAbilityName( skill ), (GetSkillLevel( skill ) * mutagens.Size() ));
+				}
+				// Triangle end
 			}
 		}		
 		else if(skill == S_Alchemy_s06)
@@ -2979,8 +2985,16 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			mutagens = GetWitcherPlayer().GetDrunkMutagens();
 			skillAbilityName = GetSkillAbilityName(S_Alchemy_s13);			
 			
-			if(mutagens.Size() > 0)
-				charStats.AddAbilityMultiple(skillAbilityName, GetSkillLevel(skill));
+			// Triangle transmutation
+			charStats.RemoveAbilityAll(skillAbilityName);
+			if(mutagens.Size() > 0) {
+				if (theGame.GetTModOptions().GetTransmutationHealthPerLevel() > 0) {
+					charStats.RemoveAbilityAll('T_alchemy_s13_health_bonus');
+					T_SetTransmutationBonus(charStats, GetSkillLevel(skill), mutagens.Size() );
+				}
+				charStats.AddAbilityMultiple(skillAbilityName, GetSkillLevel(skill) * mutagens.Size());
+				// Triangle end
+			}
 			else
 				charStats.RemoveAbilityMultiple(skillAbilityName, GetSkillLevel(skill));						
 		}
