@@ -358,6 +358,27 @@ function TOpts_LevelJitter() : int
 {
 	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'LevelJitter' ) );
 }
+
+function TOpts_FlatArmorPerLevel() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'FlatArmorPerLevel' ) );
+}
+
+function TOpts_ArmorPerLevelHuman() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerLevelHuman' ) ) / 100;
+}
+
+function TOpts_ArmorPerLevelMonster() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerLevelMonster' ) ) / 100;
+}
+
+function TOpts_ArmorPerScaledLevelMonster() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerScaledLevelMonster' ) ) / 100;
+}
+
 // ---- Leveling End ---- //
 
 // ---- Enemies Begin ---- //

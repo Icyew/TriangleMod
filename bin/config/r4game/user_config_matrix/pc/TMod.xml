@@ -145,6 +145,10 @@
 				<Entry varId="DownscalingFactor"				value="0.4"	/>
 				<Entry varId="LevelBonus"						value="0.0"	/>
 				<Entry varId="LevelJitter"						value="0.0"	/>
+				<Entry varId="FlatArmorPerLevel"				value="0"	/>
+				<Entry varId="ArmorPerLevelHuman"				value="10"	/>
+				<Entry varId="ArmorPerLevelMonster"				value="8"	/>
+				<Entry varId="ArmorPerScaledLevelMonster"		value="0"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -156,6 +160,10 @@
 			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 				displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FlatArmorPerLevel"		 	 	 displayName="Add armor per enemy level for armored enemies"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelHuman"		 	 displayName="Add % of base armor every enemy level - humans"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelMonster"		 	 displayName="Add % of base armor every enemy level - monsters"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerScaledLevelMonster"	 displayName="Add % of base armor for every level added due to scaling - monsters"		displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
