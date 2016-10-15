@@ -685,13 +685,13 @@ import abstract class W3AbilityManager extends IScriptable
 	public function OnAbilityAdded( abilityName : name )
 	{
 		// Triangle enemy mutations
-		var mutation : T_EMutation;
+		var mutation : TEMutation;
 		var npcOwner : CNewNPC;
 		npcOwner = (CNewNPC)owner;
-		mutation = T_EMutationNameToEnum(abilityName);
+		mutation = TUtil_TEMutationNameToEnum(abilityName);
 		if (owner)
-			owner.ResumeEffects(T_EMutationEnumToEffectType(mutation), abilityName);
-		if (npcOwner && abilityName == T_EMutationEnumToName(TEM_Electric) && npcOwner.IsAlive()) {
+			owner.ResumeEffects(TUtil_TEMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == TUtil_TEMutationEnumToName(TEM_Electric) && npcOwner.IsAlive()) {
 			npcOwner.AddTimer('PlayElectricity', 0);
 		}
 		// Triangle end
@@ -702,13 +702,13 @@ import abstract class W3AbilityManager extends IScriptable
 	public function OnAbilityRemoved( abilityName : name )
 	{
 		// Triangle enemy mutations
-		var mutation : T_EMutation;
+		var mutation : TEMutation;
 		var npcOwner : CNewNPC;
 		npcOwner = (CNewNPC)owner;
-		mutation = T_EMutationNameToEnum(abilityName);
+		mutation = TUtil_TEMutationNameToEnum(abilityName);
 		if (owner)
-			owner.PauseEffects(T_EMutationEnumToEffectType(mutation), abilityName);
-		if (npcOwner && abilityName == T_EMutationEnumToName(TEM_Electric)) {
+			owner.PauseEffects(TUtil_TEMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == TUtil_TEMutationEnumToName(TEM_Electric)) {
 			npcOwner.RemoveTimer('PlayElectricity');
 		}
 		// Triangle end

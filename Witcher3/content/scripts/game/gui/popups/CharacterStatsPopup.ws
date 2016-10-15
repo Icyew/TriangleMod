@@ -333,8 +333,8 @@ function AddCharacterStat(tag : string, varKey:name, locKey:string, iconTag:stri
 	
 		valueAbility *= 1 + GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
 		// Triangle alt stamina
-		valueAbility += theGame.GetTModOptions().GetStaminaRegenBonus();
-		valueAbility *= theGame.GetTModOptions().GetStaminaRegenMult();
+		valueAbility += TOpts_StaminaRegenBonus();
+		valueAbility *= TOpts_StaminaRegenMult();
 		// Triangle end
 		valueStr = NoTrailZeros(RoundMath(valueAbility)) + "/" + GetLocStringByKeyExt("per_second"); 
 	}

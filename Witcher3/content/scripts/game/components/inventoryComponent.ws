@@ -2153,9 +2153,9 @@ import class CInventoryComponent extends CComponent
 			dm.GetContainedAbilities(abs[k], attrs);
 			buff.applyChance = CalculateAttributeValue(GetItemAbilityAttributeValue(id, 'buff_apply_chance', abs[k])) * ArrayOfNamesCount(abs, abs[k]);
 			if (dm.AbilityHasTag(abs[k], 'WeaponUpgrade')) {
-				buff.applyChance *= theGame.GetTModOptions().GetRuneEffectMultiplier();
+				buff.applyChance *= TOpts_RuneEffectMultiplier();
 			} else if (dm.AbilityHasTag(abs[k], 'ArmorUpgrade')) {
-				buff.applyChance *= theGame.GetTModOptions().GetGlyphEffectMultiplier();
+				buff.applyChance *= TOpts_GlyphEffectMultiplier();
 			}
 			
 			for( i = 0; i < attrs.Size(); i += 1 )

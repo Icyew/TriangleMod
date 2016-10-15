@@ -629,7 +629,7 @@ class CBaseGameplayEffect extends CObject
 			if( duration != -1 )
 			{
 				// Triangle delayed recovery
-				slowFactor = theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
+				slowFactor = TOpts_DelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
 				if (isPotionEffect && thePlayer.GetStat(BCS_Stamina) >= thePlayer.GetStatMax(BCS_Stamina) && thePlayer.CanUseSkill(S_Alchemy_s03) && slowFactor > 1) {
 					timeLeft = (timeLeft * slowFactor - dt) / slowFactor;
 				} else {

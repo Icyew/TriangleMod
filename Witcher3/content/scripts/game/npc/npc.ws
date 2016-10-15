@@ -1,4 +1,4 @@
-﻿/***********************************************************************/
+/***********************************************************************/
 /** 	© 2015 CD PROJEKT S.A. All rights reserved.
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
@@ -309,7 +309,7 @@ statemachine import class CNewNPC extends CActor
 			if ( IsCountering() )
 			{
 				
-				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && T_CanFrenzy(witcher)) // Triangle frenzy
+				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && TUtil_CanFrenzy(witcher)) // Triangle frenzy
 					witcher.StartFrenzy();
 			}
 		}
@@ -397,8 +397,8 @@ statemachine import class CNewNPC extends CActor
 		
 
 		// Triangle enemy mutations
-		if (npcGroupType == ENGT_Enemy && (UsesEssence() || theGame.GetTModOptions().CanVitalityMutate()) && !hasRolledForMutations) {
-			theGame.GetTModOptions().GetRandomEnemyMutations(emutations);
+		if (npcGroupType == ENGT_Enemy && (UsesEssence() || TOpts_CanVitalityMutate()) && !hasRolledForMutations) {
+			TOpts_RandomEnemyMutations(emutations);
 			for (i = 0; i < emutations.Size(); i += 1) {
 				AddAbility(emutations[i]);
 			}
@@ -1138,21 +1138,19 @@ statemachine import class CNewNPC extends CActor
 	public function CalculateLevel () : int
 	{
 		var newLevel, playerLevel, opponentLevel, levelJitter : int;
-		var TMod : TModOptions;
 
-		TMod = theGame.GetTModOptions();
 		playerLevel = thePlayer.GetLevel();
 		opponentLevel = currentLevel;
 		newLevel = opponentLevel;
 
 		// Just in case!
-		if (!TMod.AreLevelOptionsEnabled())
+		if (!TOpts_AreLevelOptionsEnabled())
 			return newLevel;
 
 		if (thePlayer.IsCiri())
 			return newLevel;
 
-		if (TMod.DontScaleAnimals() && ( GetSfxTag() == 'sfx_wolf' || HasAbility('mon_boar_base') || IsAnimal() ))
+		if (TOpts_DontScaleAnimals() && ( GetSfxTag() == 'sfx_wolf' || HasAbility('mon_boar_base') || IsAnimal() ))
 			return newLevel;
 
 		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
@@ -1163,18 +1161,18 @@ statemachine import class CNewNPC extends CActor
 		// 	newLevel = opponentLevel;
 		// }
 
-		if (TMod.IsUpscalingOn() && opponentLevel < playerLevel)
+		if (TOpts_IsUpscalingOn() && opponentLevel < playerLevel)
 		{
-			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetUpscalingFactor()));
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TOpts_UpscalingFactor()));
 		}
-		else if (TMod.IsDownscalingOn() && opponentLevel > playerLevel)
+		else if (TOpts_IsDownscalingOn() && opponentLevel > playerLevel)
 		{
-			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TMod.GetDownscalingFactor()));
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TOpts_DownscalingFactor()));
 		}
 
-		newLevel += TMod.GetFlatLevelBonus();
+		newLevel += TOpts_FlatLevelBonus();
 
-		levelJitter = TMod.GetLevelJitter();
+		levelJitter = TOpts_LevelJitter();
 		if (levelJitter != prevJitterOption)
 		{
 			if (levelJitter > 0)
@@ -1201,7 +1199,7 @@ statemachine import class CNewNPC extends CActor
 	// Triangle enemy mutations
 	public function GetMutatedDisplayName() : string
 	{
-		return T_GetMutatedPrefix(this) + GetDisplayName();
+		return TUtil_GetMutatedPrefix(this) + GetDisplayName();
 	}
 
 	// Triangle enemy mutations
@@ -1219,10 +1217,10 @@ statemachine import class CNewNPC extends CActor
 		if (IsAlive()) {
 			params.effectType = EET_TFireAura;
 			params.creator = this;
-			params.sourceName = T_EMutationEnumToName(TEM_Flaming);
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Flaming);
 			params.duration = -1; // Will fail if you don't set this! Pretty dumb
 			specificParams = new W3TFireAuraCustomParams in theGame;
-			specificParams.range = theGame.GetTModOptions().GetFlamingRange();
+			specificParams.range = TOpts_FlamingRange();
 			specificParams.burningDuration = 1;
 			params.buffSpecificParams = specificParams;
 			AddEffectCustom(params);
@@ -1237,10 +1235,10 @@ statemachine import class CNewNPC extends CActor
 		if (IsAlive()) {
 			params.effectType = EET_TFreezingAura;
 			params.creator = this;
-			params.sourceName = T_EMutationEnumToName(TEM_Freezing);
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Freezing);
 			params.duration = -1; // Will fail if you don't set this! Pretty dumb
 			specificParams = new W3TFreezingAuraCustomParams in theGame;
-			specificParams.range = theGame.GetTModOptions().GetFreezingRange();
+			specificParams.range = TOpts_FreezingRange();
 			specificParams.freezingDuration = 1;
 			params.buffSpecificParams = specificParams;
 			AddEffectCustom(params);
@@ -1255,10 +1253,10 @@ statemachine import class CNewNPC extends CActor
 		if (IsAlive()) {
 			params.effectType = EET_THypnoAura;
 			params.creator = this;
-			params.sourceName = T_EMutationEnumToName(TEM_Hypnotic);
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Hypnotic);
 			params.duration = -1; // Will fail if you don't set this! Pretty dumb
 			specificParams = new W3THypnoAuraCustomParams in theGame;
-			specificParams.range = theGame.GetTModOptions().GetHypnoticRange();
+			specificParams.range = TOpts_HypnoticRange();
 			specificParams.hypnoDuration = 0.25;
 			params.buffSpecificParams = specificParams;
 			AddEffectCustom(params);
@@ -1269,7 +1267,7 @@ statemachine import class CNewNPC extends CActor
 	timer function InspireOn(delta : float, id : int)
 	{
 		if (IsAlive()) {
-			AddEffectDefault(EET_TInspiringAura, this, T_EMutationEnumToName(TEM_Inspiring));
+			AddEffectDefault(EET_TInspiringAura, this, TUtil_TEMutationEnumToName(TEM_Inspiring));
 		}
 	}
 
@@ -1278,16 +1276,16 @@ statemachine import class CNewNPC extends CActor
 	{
 		var stats : CCharacterStats;
 		stats = GetCharacterStats();
-		stats.RemoveAbilityAll(T_EMutationEnumToName(TEM_Resilient));
+		stats.RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Resilient));
 		// This might be woefully inefficient but I haven't noticed any problems yet
-		stats.AddAbilityMultiple(T_EMutationEnumToName(TEM_Resilient), theGame.GetTModOptions().GetResilientRegenPerLevel() * GetLevel());
-		AddTimer('EndResilientRegen', theGame.GetTModOptions().GetResilientDuration());
+		stats.AddAbilityMultiple(TUtil_TEMutationEnumToName(TEM_Resilient), TOpts_ResilientRegenPerLevel() * GetLevel());
+		AddTimer('EndResilientRegen', TOpts_ResilientDuration());
 	}
 
 	// Triangle enemy mutations
 	function EndResilientRegen(delta : float, id : int)
 	{
-		GetCharacterStats().RemoveAbilityAll(T_EMutationEnumToName(TEM_Resilient));
+		GetCharacterStats().RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Resilient));
 	}
 	
 	// Triangle enemy mutations
@@ -1307,7 +1305,7 @@ statemachine import class CNewNPC extends CActor
 			SoundEvent('monster_rotfiend_explode');
 			ent = theGame.CreateEntity((CEntityTemplate)LoadResource('rotfiend_explode'), GetWorldPosition(), GetWorldRotation());
 			ent.DestroyAfter(5);
-			FindGameplayEntitiesInSphere(targets, GetWorldPosition() + Vector(0,0,0.1f), theGame.GetTModOptions().GetExplosiveRange(), 1000, '', FLAG_TestLineOfSight);
+			FindGameplayEntitiesInSphere(targets, GetWorldPosition() + Vector(0,0,0.1f), TOpts_ExplosiveRange(), 1000, '', FLAG_TestLineOfSight);
 			for(i = 0; i < targets.Size(); i += 1) {
 				if (this != targets[i] && IsRequiredAttitudeBetween(this, targets[i], true, true, true)) {
 					returnedAction = new W3DamageAction in this;
@@ -1319,7 +1317,7 @@ statemachine import class CNewNPC extends CActor
 					// NOTE: Damage bonus from levels are in base attack power. It will get added again later (since this uses attack power), but only after
 					// processing difficulty multiplier (fun fact, it's not actually a 'final' damage multiplier), so I double count it here.
 					powerMod = GetPowerStatValue(CPS_AttackPower,,true);
-					damage = theGame.GetTModOptions().GetExplosiveBaseDamage() + powerMod.valueBase;
+					damage = TOpts_ExplosiveBaseDamage() + powerMod.valueBase;
 
 					if (UsesEssence()) {
 						returnedAction.AddDamage(theGame.params.DAMAGE_NAME_RENDING, damage);
@@ -1345,7 +1343,7 @@ statemachine import class CNewNPC extends CActor
 			return;
 		animComp = ((CEntity)this).GetComponentByClassName('CAnimatedComponent');
 		if (animComp) {
-			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+			scaleFactor = TOpts_HugeScaleFactor();
 			animComp.SetScale(Vector(scaleFactor, scaleFactor, scaleFactor, 1));
 		}
 	}
@@ -1362,30 +1360,30 @@ statemachine import class CNewNPC extends CActor
 
 		stats = GetCharacterStats();
 
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
 			isHuge = true;
 			ProcessHugeMutationSize();
 			healthPerc = GetHealthPercents();
-			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
-			healthType = T_GetHealthType(this);
+			scaleFactor = TOpts_HugeScaleFactor();
+			healthType = TUtil_GetHealthType(this);
 			abilityManager.UpdateStatMax(healthType);
 			abilityManager.SetStatPointMax(healthType, GetStatMax(healthType)*scaleFactor*scaleFactor);
 			SetHealthPerc(healthPerc);
 			stats.AddAbility('mon_type_huge');
 		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Quick))) {
-			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + theGame.GetTModOptions().GetQuickSpeedBonus(), quickAnimCauserId);
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
+			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + TOpts_QuickSpeedBonus(), quickAnimCauserId);
 		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Flaming))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Flaming))) {
 			AddTimer('FlameOn', 0);
 		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Freezing))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Freezing))) {
 			AddTimer('FreezeOn', 0);
 		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Hypnotic))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic))) {
 			AddTimer('HypnoOn',0);
 		}
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Inspiring))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Inspiring))) {
 			AddTimer('InspireOn',0);
 		}
 	}
@@ -1419,7 +1417,7 @@ statemachine import class CNewNPC extends CActor
 		
 		ciriEntity = (W3ReplacerCiri)thePlayer;
 		// Triangle level scaling
-		if (theGame.GetTModOptions().AreLevelOptionsEnabled()) {
+		if (TOpts_AreLevelOptionsEnabled()) {
 			npcLevel = CalculateLevel();
 		} else {
 			npcLevel = currentLevel;
@@ -2694,10 +2692,10 @@ statemachine import class CNewNPC extends CActor
 		var template										: CEntityTemplate;
 		var stats											: CCharacterStats;
 
-		GetCharacterStats().RemoveAbility(T_EMutationEnumToName(TEM_Electric));
+		GetCharacterStats().RemoveAbility(TUtil_TEMutationEnumToName(TEM_Electric));
 
 		stats = GetCharacterStats();
-		if (stats.HasAbility(T_EMutationEnumToName(TEM_Haunted))) {
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Haunted))) {
 			template = (CEntityTemplate)LoadResource('wraith');
 			ent = theGame.CreateEntity(template, GetWorldPosition(), GetWorldRotation());
 			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
@@ -3320,7 +3318,7 @@ statemachine import class CNewNPC extends CActor
 		aardedFlight = true;
 		
 		// Triangle enemy mutations
-		BlockAbility(T_EMutationEnumToName(TEM_Flaming), true, theGame.GetTModOptions().GetElectricCooldown());
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Flaming), true, TOpts_ElectricCooldown());
 		// Triangle end
 		
 		if( !sign.GetOwner().GetPlayer() || !GetWitcherPlayer().IsMutationActive( EPMT_Mutation6 ) )
@@ -3381,7 +3379,7 @@ statemachine import class CNewNPC extends CActor
 		super.OnAxiiHit(sign);
 
 		// Triangle enemy mutations
-		BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, theGame.GetTModOptions().GetElectricCooldown());
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, TOpts_ElectricCooldown());
 		// Triangle end
 		
 		if ( HasAbility('ablIgnoreSigns') )
@@ -3404,7 +3402,7 @@ statemachine import class CNewNPC extends CActor
 		super.OnIgniHit( sign );
 
 		// Triangle enemy mutations
-		BlockAbility(T_EMutationEnumToName(TEM_Freezing), true, theGame.GetTModOptions().GetElectricCooldown());
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Freezing), true, TOpts_ElectricCooldown());
 		// Triangle end
 
 		
@@ -4892,19 +4890,19 @@ statemachine import class CNewNPC extends CActor
 		var params : SCustomEffectParams;
 		stats = GetCharacterStats();
 
-		healthType = T_GetHealthType(this);
-		if (!explosionMutationTriggered && stats.HasAbility(T_EMutationEnumToName(TEM_Explosive)) && action.DealsAnyDamage()
+		healthType = TUtil_GetHealthType(this);
+		if (!explosionMutationTriggered && stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Explosive)) && action.DealsAnyDamage()
 			&& ((healthType == BCS_Essence && action.processedDmg.essenceDamage >= GetStat(healthType))
 				|| (healthType == BCS_Vitality && action.processedDmg.vitalityDamage >= GetStat(healthType)))) {
 			ForceSetStat(healthType, GetStatMax(healthType));
 			action.SetAllProcessedDamageAs(1);
 			explosionMutationTriggered = true;
 			PlayEffect('critical_burning');
-			AddTimer('ExplodeMutation', theGame.GetTModOptions().GetExplosiveDelay());
+			AddTimer('ExplodeMutation', TOpts_ExplosiveDelay());
 			params.effectType = EET_Immobilized;
 			params.creator = this;
-			params.sourceName = T_EMutationEnumToName(TEM_Explosive);
-			params.duration = theGame.GetTModOptions().GetExplosiveDelay() + 1;
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Explosive);
+			params.duration = TOpts_ExplosiveDelay() + 1;
 			AddEffectCustom(params);
 		}
 		// Triangle end
@@ -4913,7 +4911,7 @@ statemachine import class CNewNPC extends CActor
 		
 		
 		// Triangle enemy mutations
-		if (action.DealsAnyDamage() && !action.IsDoTDamage() && stats.HasAbility(T_EMutationEnumToName(TEM_Resilient))) {
+		if (action.DealsAnyDamage() && !action.IsDoTDamage() && stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Resilient))) {
 			StartResilientRegen();
 		}
 		// Triangle end

@@ -666,8 +666,8 @@ class W3EffectManager
 		if (GetCriticalBuffsCount() == 0) {
 			// terrible hacks ahead
 			// Unblock timeouts
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, 0.1, true);
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, 0.1, true);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, 0.1, true);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, 0.1, true);
 		}
 		// Triangle end
 	}
@@ -687,11 +687,11 @@ class W3EffectManager
 		if (IsCriticalEffectType(effectType)) {
 			// terrible hacks ahead
 			// Block abilities so that the block will not timeout
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, -1);
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, -1);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, -1);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, -1);
 			// Set a timer that ticks down even when timeouts are blocked. These will matter when timeouts are unblocked
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Hypnotic), true, theGame.GetTModOptions().GetMinHypnoticDelay());
-			owner.BlockAbility(T_EMutationEnumToName(TEM_Inspiring), true, theGame.GetTModOptions().GetMinHypnoticDelay());
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, TOpts_MinHypnoticDelay());
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, TOpts_MinHypnoticDelay());
 		}
 		// Triangle end
 
@@ -1515,16 +1515,14 @@ class W3EffectManager
 		var tmpBool	: bool;
 		var attackAction : W3Action_Attack;
 		var actionVictim : CActor;
-		var TMod : TModOptions;
 		var num : float;
 		if (action && action.IsActionMelee()) {
 			actionVictim = (CActor)action.victim;
-			TMod = theGame.GetTModOptions();
 			attackAction = (W3Action_Attack)action;
 			witcher = (W3PlayerWitcher)action.attacker;
 			theGame.GetMonsterParamsForActor(actionVictim, victimMonsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
 			if (attackAction && witcher && witcher.CanUseSkill(S_Alchemy_s06) && witcher.inv.ItemHasActiveOilApplied(attackAction.GetWeaponId(), victimMonsterCategory)) {
-				applyChance = MinF(applyChance * TMod.GetFixativeMultBonus(), applyChance + TMod.GetFixativeMaxBonusPerLevel() * witcher.GetSkillLevel(S_Alchemy_s06));
+				applyChance = MinF(applyChance * TOpts_FixativeMultBonus(), applyChance + TOpts_FixativeMaxBonusPerLevel() * witcher.GetSkillLevel(S_Alchemy_s06));
 			}
 		}
 		// Triangle end

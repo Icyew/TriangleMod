@@ -12,8 +12,8 @@ class W3Effect_TInspired extends CBaseGameplayEffect
 
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		if (!target.HasAbility(T_EMutationEnumToName(TEM_Inspired))) {
-			target.AddAbilityMultiple(T_EMutationEnumToName(TEM_Inspired), theGame.GetTModOptions().GetInspiredBonus());
+		if (!target.HasAbility(TUtil_TEMutationEnumToName(TEM_Inspired))) {
+			target.AddAbilityMultiple(TUtil_TEMutationEnumToName(TEM_Inspired), TOpts_InspiredBonus());
 		}
 
 		super.OnEffectAdded(customParams);
@@ -21,20 +21,20 @@ class W3Effect_TInspired extends CBaseGameplayEffect
 
 	event OnEffectRemoved()
 	{
-		target.RemoveAbilityAll(T_EMutationEnumToName(TEM_Inspired));
+		target.RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Inspired));
 		super.OnEffectRemoved();
 	}
 
 	protected function OnPaused()
 	{
-		target.RemoveAbilityAll(T_EMutationEnumToName(TEM_Inspired));
+		target.RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Inspired));
 		super.OnPaused();
 	}
 
 	protected function OnResumed()
 	{
-		if (!target.HasAbility(T_EMutationEnumToName(TEM_Inspired))) {
-			target.AddAbilityMultiple(T_EMutationEnumToName(TEM_Inspired), theGame.GetTModOptions().GetInspiredBonus());
+		if (!target.HasAbility(TUtil_TEMutationEnumToName(TEM_Inspired))) {
+			target.AddAbilityMultiple(TUtil_TEMutationEnumToName(TEM_Inspired), TOpts_InspiredBonus());
 		}
 		super.OnResumed();
 	}

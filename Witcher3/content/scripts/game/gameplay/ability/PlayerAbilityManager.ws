@@ -1057,7 +1057,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			attributeName = theGame.params.STAMINA_COST_DEFAULT;
 		
 		ret = GetSkillAttributeValue(ability, attributeName, true, true);
-		theGame.GetTModOptions().SetSignStaminaCost(ability, ret, delay, isPerSec); // Triangle sign options Delay not used
+		TOpts_SetSignStaminaCost(ability, ret, delay, isPerSec); // Triangle sign options Delay not used
 		
 		
 		reductionCounter = GetSkillLevel(skill) - 1;
@@ -1132,7 +1132,6 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		// Triangle alt stamina
 		var tempItem : SItemUniqueId;
 		var witcher : W3PlayerWitcher;
-		var TMod : TModOptions;
 		var armorCost : float;
 		// Triangle end
 	
@@ -1159,9 +1158,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		
 		// Triangle alt stamina
-		TMod = theGame.GetTModOptions();
 		witcher = GetWitcherPlayer();
-		if(TMod.GetAltArmorStaminaMod() &&
+		if(TOpts_AltArmorStaminaMod() &&
 			witcher &&
 			(action == ESAT_LightAttack ||
 			action == ESAT_HeavyAttack ||
@@ -1170,21 +1168,21 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			action == ESAT_Dodge ||
 			action == ESAT_Roll))
 		{
-			TMod.SetActionStaminaCost(action, cost, abilityName, isPerSec);
+			TOpts_SetActionStaminaCost(action, cost, abilityName, isPerSec);
 			armorCost = 0;
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Armor, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action, abilityName, isPerSec);
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Boots, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action, abilityName, isPerSec);
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Pants, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action, abilityName, isPerSec);
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action, abilityName, isPerSec);
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, tempItem))
-				armorCost += TMod.GetArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName, isPerSec);
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName, isPerSec);
 
 			cost.valueAdditive += armorCost;
 		}
 		if (action == ESAT_Ability) {
-			TMod.SetSignStaminaCost(abilityName, cost, delay, isPerSec);
+			TOpts_SetSignStaminaCost(abilityName, cost, delay, isPerSec);
 		}
 		// Triangle end
 		
@@ -2493,7 +2491,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			// Triangle end
 		}
 		
-		if(skill == S_Alchemy_s18 && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
+		if(skill == S_Alchemy_s18 && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			m_alchemyManager = new W3AlchemyManager in this;
 			m_alchemyManager.Init();
@@ -2969,7 +2967,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			
 			
 			cnt -= owner.GetAbilityCount(skillAbilityName);
-			if(cnt > 0 && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
+			if(cnt > 0 && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 				charStats.AddAbilityMultiple(skillAbilityName, cnt);
 			else if(cnt < 0)
 				charStats.RemoveAbilityMultiple(skillAbilityName, -cnt);
