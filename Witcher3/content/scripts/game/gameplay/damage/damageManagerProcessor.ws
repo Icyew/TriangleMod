@@ -1661,7 +1661,6 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle armor scaling
 		npcVictim = (CNewNPC)actorVictim;
 		if(npcVictim && !action.GetIgnoreArmor() && actorVictim.GetTotalArmor() > 0 && TUtil_AreAnyArmorOptionsActive()) {
-			TUtil_LogMessage("BEFORE: " + resistPts);
 			if (npcVictim.UsesVitality())
 				resistPts *= 1 + TOpts_ArmorPerLevelHuman() * npcVictim.GetLevel();
 			else if (npcVictim.UsesEssence()) {
@@ -1669,7 +1668,6 @@ class W3DamageManagerProcessor extends CObject
 				resistPts *= 1 + TOpts_ArmorPerScaledLevelMonster() * (npcVictim.GetLevel() - npcVictim.GetLevelFromLocalVar());
 			}
 			resistPts += TOpts_FlatArmorPerLevel() * npcVictim.GetLevel();
-			TUtil_LogMessage("AFTER: " + resistPts);
 		}
 		// Triangle end
 

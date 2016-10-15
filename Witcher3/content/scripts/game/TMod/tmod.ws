@@ -521,3 +521,17 @@ function TOpts_CripplingShotDurationPerLevel() : float
 }
 
 // ---- Enemies end ---- //
+
+// ---- Misc start ---- //
+
+function TOpts_RuneEffectMultiplier() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'RuneEffectMultiplier' ) );
+}
+
+function TOpts_GlyphEffectMultiplier() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GlyphEffectMultiplier' ) );
+}
+
+// ---- Misc end ---- //
