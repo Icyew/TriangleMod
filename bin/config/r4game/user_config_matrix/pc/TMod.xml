@@ -215,11 +215,15 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="RuneEffectMultiplier"					value="1"	/>
 				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
+				<Entry varId="SwitchArmorCalcOrder"					value="1"	/>
+				<Entry varId="ArmorAPScaleRatio"					value="0"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
 			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by attack power * x (x=0 for vanilla)"				displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 

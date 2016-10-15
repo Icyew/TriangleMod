@@ -1568,6 +1568,10 @@ class W3DamageManagerProcessor extends CObject
 		var appliedOilName, vsMonsterResistReduction : name;
 		var oils : array< W3Effect_Oil >;
 		var i : int;
+		// Triangle armor
+		var armor : float;
+		var powerMod : SAbilityAttributeValue;
+		// Triangle end
 		
 		
 		if(attackAction && attackAction.IsActionMelee() && actorAttacker.GetInventory().IsItemFists(weaponId) && !actorVictim.UsesEssence())
@@ -1650,16 +1654,24 @@ class W3DamageManagerProcessor extends CObject
 		
 		
 		if(!action.GetIgnoreArmor())
-			resistPts += CalculateAttributeValue( actorVictim.GetTotalArmor() );
+			armor += CalculateAttributeValue( actorVictim.GetTotalArmor() ); // Triangle armor
 		
 		// Triangle enemy mutations
 		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
-			resistPts += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel();
+			armor += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel(); // Triangle armor
 			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
 		}
 		// Triangle end
 
-		resistPts = MaxF(0, resistPts - CalculateAttributeValue(armorReduction) );		
+		// Triangle armor
+		armor = MaxF(0, armor - CalculateAttributeValue(armorReduction) ); // armor reduction only reduces armor!
+		// scale armor after armor reduction to simulate applying armor before attack power
+		if (playerAttacker && TOpts_ArmorAPScaleRatio() > 0) {
+			powerMod = GetAttackersPowerMod();
+			armor *= 1 + (powerMod.valueMultiplicative - 1) * TOpts_ArmorAPScaleRatio(); // only apply scale factor to positive AP
+		}
+		resistPts += armor;
+		// Triangle end
 		resistPerc -= CalculateAttributeValue(armorReductionPerc);		
 		
 		
@@ -1714,9 +1726,9 @@ class W3DamageManagerProcessor extends CObject
 				finalDamage *= TOpts_WeakDamageMod();
 		}
 		// Triangle end
-		// Triangle TODO switch order of point resist and perc resist so both have a larger impact
-
-		if(finalDamage > 0.f)
+		
+		// Triangle armor switched order of point and perc resist
+		if(!TOpts_SwitchArmorCalcOrder() && finalDamage > 0.f)
 		{
 			
 			if(!action.IsPointResistIgnored() && !(dmgInfo.dmgType == theGame.params.DAMAGE_NAME_ELEMENTAL || dmgInfo.dmgType == theGame.params.DAMAGE_NAME_FIRE || dmgInfo.dmgType == theGame.params.DAMAGE_NAME_FROST ))
@@ -1727,7 +1739,8 @@ class W3DamageManagerProcessor extends CObject
 					action.SetArmorReducedDamageToZero();
 			}
 		}
-		
+		// Triangle end
+
 		if(finalDamage > 0.f)
 		{
 			
@@ -1743,6 +1756,20 @@ class W3DamageManagerProcessor extends CObject
 			}
 			finalDamage *= 1 - resistPercents;
 		}		
+
+		// Triangle armor switched order of point and perc resist
+		if(TOpts_SwitchArmorCalcOrder() && finalDamage > 0.f)
+		{
+			
+			if(!action.IsPointResistIgnored() && !(dmgInfo.dmgType == theGame.params.DAMAGE_NAME_ELEMENTAL || dmgInfo.dmgType == theGame.params.DAMAGE_NAME_FIRE || dmgInfo.dmgType == theGame.params.DAMAGE_NAME_FROST ))
+			{
+				finalDamage = MaxF(0, finalDamage - resistPoints);
+				
+				if(finalDamage == 0.f)
+					action.SetArmorReducedDamageToZero();
+			}
+		}
+		// Triangle end
 		
 		if(dmgInfo.dmgType == theGame.params.DAMAGE_NAME_FIRE && finalDamage > 0)
 			action.SetDealtFireDamage(true);
