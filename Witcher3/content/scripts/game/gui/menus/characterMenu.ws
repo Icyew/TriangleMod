@@ -1894,8 +1894,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				// Triangle attack combos
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, false) * skillLevel;
-				baseString = "Each strong attack hit increases the next strong attack's total damage multiplier by " + NoTrailZeros(theGame.GetTModOptions().GetHeavyAttackComboBonus()*100) + 
-					"%. Combo resets after " + NoTrailZeros(theGame.GetTModOptions().GetHeavyAttackComboDecay()) + "s or on missing a heavy attack. Max combo is "
+				baseString = "Each strong attack hit increases the next strong attack's total damage multiplier by " + NoTrailZeros(TOpts_HeavyAttackComboBonus()*100) + 
+					"%. Combo resets after " + NoTrailZeros(TOpts_HeavyAttackComboDecay()) + "s or on missing a heavy attack. Max combo is "
 					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle end
 				break;
@@ -1958,7 +1958,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				// Triangle resolve
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit, attack power of your next attack is increased by " +
-					NoTrailZeros(FloorF(theGame.GetTModOptions().GetResolveDamagePerLevel() * skillLevel * 100)) + "% for " + NoTrailZeros(theGame.GetTModOptions().GetResolveDuration()) + "s." +
+					NoTrailZeros(FloorF(TOpts_ResolveDamagePerLevel() * skillLevel * 100)) + "% for " + NoTrailZeros(TOpts_ResolveDuration()) + "s." +
 					"<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle end
 				break;
@@ -1994,8 +1994,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				// Triangle attack combos
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, false) * skillLevel;
-				baseString = "Each light attack hit increases the next light attack's speed by " + NoTrailZeros(theGame.GetTModOptions().GetLightAttackComboBonus()) + 
-					"%. Combo resets after " + NoTrailZeros(theGame.GetTModOptions().GetLightAttackComboDecay()) + "s or on missing a light attack. Max combo is "
+				baseString = "Each light attack hit increases the next light attack's speed by " + NoTrailZeros(TOpts_LightAttackComboBonus()) + 
+					"%. Combo resets after " + NoTrailZeros(TOpts_LightAttackComboDecay()) + "s or on missing a light attack. Max combo is "
 					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle end
 				break;
@@ -2225,8 +2225,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(Max(0, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle delayed recovery
-				if (theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() > 0) {
-					baseString = "Potion duration and toxicity drain " + NoTrailZeros(T_RoundTo(theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
+				if (TOpts_DelayedRecoverySlowFactorPerLevel() > 0) {
+					baseString = "Potion duration and toxicity drain " + NoTrailZeros(TUtil_RoundTo(TOpts_DelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
 				}
 				// Triangle end
 				break;
@@ -2285,9 +2285,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle adaptation
-				if (theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
-					baseString = "Toxicity cost of mutagen decoctions are reduced " + NoTrailZeros(theGame.GetTModOptions().GetAdaptationDiscountPerLevel() * skillLevel * 100) +
-						"% for each active decoction to a maximum of " + NoTrailZeros(theGame.GetTModOptions().GetAdaptationMaxDiscount() * 100) + "%.";
+				if (TOpts_AdaptationDiscountPerLevel() > 0) {
+					baseString = "Toxicity cost of mutagen decoctions are reduced " + NoTrailZeros(TOpts_AdaptationDiscountPerLevel() * skillLevel * 100) +
+						"% for each active decoction to a maximum of " + NoTrailZeros(TOpts_AdaptationMaxDiscount() * 100) + "%.";
 				}
 				// Triangle end
 				break;
@@ -2297,8 +2297,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle fast metabolism
-				if (theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() > 0) {
-					baseString = "Toxicity drains " + NoTrailZeros(T_RoundTo(theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() * skillLevel + 1, 1)) + "x faster.";
+				if (TOpts_FastMetabolismDrainFactorPerLevel() > 0) {
+					baseString = "Toxicity drains " + NoTrailZeros(TUtil_RoundTo(TOpts_FastMetabolismDrainFactorPerLevel() * skillLevel + 1, 1)) + "x faster.";
 				}
 				// Triangle end
 				break;
@@ -2318,8 +2318,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				break;
 			// Triangle acquired tolerance
 			case S_Alchemy_s18:
-				baseString = "After drinking a potion, toxicity of all potions are decreased by " + NoTrailZeros(theGame.GetTModOptions().GetAcquiredToleranceDiscount()) + " for " +
-					NoTrailZeros(theGame.GetTModOptions().GetAcquiredToleranceDurationPerLevel() * skillLevel) + "s.";
+				baseString = "After drinking a potion, toxicity of all potions are decreased by " + NoTrailZeros(TOpts_AcquiredToleranceDiscount()) + " for " +
+					NoTrailZeros(TOpts_AcquiredToleranceDurationPerLevel() * skillLevel) + "s.";
 				break;
 			// Triangle end
 			case S_Alchemy_s19:
@@ -2334,8 +2334,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				// Triangle endure pain
 				// baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-				baseString = "If a potion effect is active, " + NoTrailZeros(theGame.GetTModOptions().GetEndurePainDamageRatioPerLevel() * skillLevel * 100) +
-					"% of damage taken is drained over " + NoTrailZeros(theGame.GetTModOptions().GetEndurePainDuration()) + "s. This damage cannot kill you.";
+				baseString = "If a potion effect is active, " + NoTrailZeros(TOpts_EndurePainDamageRatioPerLevel() * skillLevel * 100) +
+					"% of damage taken is drained over " + NoTrailZeros(TOpts_EndurePainDuration()) + "s. This damage cannot kill you.";
 				// Triangle end
 				break;
 			default:

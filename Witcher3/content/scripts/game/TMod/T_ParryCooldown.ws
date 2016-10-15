@@ -16,7 +16,7 @@ class W3Effect_TParryCooldown extends CBaseGameplayEffect
 
 	event OnUpdate(dt : float)
 	{
-		currentStacks += dt / theGame.GetTModOptions().GetParryCooldown();
+		currentStacks += dt / TOpts_ParryCooldown();
 		currentStacks = MinF(currentStacks, GetMaxStacks());
 		SetShowOnHUD(currentStacks != GetMaxStacks());
 		super.OnUpdate(dt);
@@ -43,6 +43,6 @@ class W3Effect_TParryCooldown extends CBaseGameplayEffect
 
 	public final function GetMaxStacks() : int
 	{
-		return theGame.GetTModOptions().GetMaxParries();
+		return TOpts_MaxParries();
 	}
 }

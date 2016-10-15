@@ -8451,7 +8451,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	function HasEnoughParries(needed : int) : bool
 	{
 		var parryCooldown : W3Effect_TParryCooldown;
-		if (theGame.GetTModOptions().GetMaxParries() == 0) {
+		if (TOpts_MaxParries() == 0) {
 			return true;
 		}
 		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
@@ -8468,7 +8468,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	function DrainParries(value : int)
 	{
 		var parryCooldown : W3Effect_TParryCooldown;
-		if (theGame.GetTModOptions().GetMaxParries() == 0) {
+		if (TOpts_MaxParries() == 0) {
 			return;
 		}
 		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
@@ -8525,7 +8525,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				{
 					counter = GetDefendCounter();
 					onHitCounter = parryInfo.attacker.GetAttributeValue( 'break_through_parry_on_hit_counter' );
-					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase && theGame.GetTModOptions().GetMaxParries() == 0 ) // Triangle parry override vanilla parry counter
+					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase && TOpts_MaxParries() == 0 ) // Triangle parry override vanilla parry counter
 					{
 						AddEffectDefault( EET_Stagger, parryInfo.attacker, "Break through parry" );
 					}
@@ -9812,10 +9812,10 @@ statemachine abstract import class CR4Player extends CPlayer
 				switch (action) {
 					case EBAT_Dodge:
 					case EBAT_Roll:
-						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
+						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_ArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
 						break;
 					case EBAT_LightAttack:
-						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetLightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
 						break;
 				}
 			}
@@ -10742,7 +10742,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		if (ShouldDrainFocus(action, abilityName, dt, multiplier)) {
 			if (multiplier == 0)
 				multiplier = 1;
-			DrainFocus(T_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt)));
+			DrainFocus(TUtil_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt)));
 		}
 	}
 
@@ -10766,13 +10766,13 @@ statemachine abstract import class CR4Player extends CPlayer
 			default:
 				return false;
 		}
-		if (theGame.GetTModOptions().GetFocusPerMaxStamina() <= 0)
+		if (TOpts_FocusPerMaxStamina() <= 0)
 			return false;
 
 		if (multiplier == 0)
 			multiplier = 1;
 
-		return GetStat(BCS_Focus) >= T_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt));
+		return GetStat(BCS_Focus) >= TUtil_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt));
 	}
 	
 	public function HasStaminaToUseAction(action : EStaminaActionType, optional abilityName : name, optional dt :float, optional multiplier : float) : bool
@@ -12031,7 +12031,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		{
 			// Triangle attack combos Reset light attack combo timer after whirl because I forget why. But why not
 			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Light) {
-				this.AddTimer('FastAttackCounterDecay', theGame.GetTModOptions().GetLightAttackComboDecay());
+				this.AddTimer('FastAttackCounterDecay', TOpts_LightAttackComboDecay());
 			}
 			// Triangle end
 			theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );

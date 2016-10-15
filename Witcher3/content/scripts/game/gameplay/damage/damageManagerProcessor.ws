@@ -524,12 +524,12 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle TODO let crossbow in on this damage?
 		if(attackAction && attackAction.IsActionMelee() && playerAttacker == witcher && spellSwordSign != ST_None)
 		{
-			associatedSkill = T_PowerSkillForSignType(spellSwordSign);
+			associatedSkill = TUtil_PowerSkillForSignType(spellSwordSign);
 
 			if (witcher.CanUseSkill(associatedSkill))
 			{
 				bonusDmgInfo.dmgVal = CalculateAttributeValue(witcher.GetSkillAttributeValue(associatedSkill, 'sword_damage', false, true)) * witcher.GetSkillLevel(associatedSkill);
-				bonusDmgInfo.dmgType = T_DmgTypeForPowerSkill(associatedSkill);
+				bonusDmgInfo.dmgType = TUtil_DmgTypeForPowerSkill(associatedSkill);
 			}
 
 			if (bonusDmgInfo.dmgVal > 0)
@@ -855,8 +855,8 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle enemy mutations
 		var scaleFactor : float;
 
-		if (actorAttacker && !action.IsDoTDamage() && actorAttacker.HasAbility(T_EMutationEnumToName(TEM_Huge))) {
-			scaleFactor = theGame.GetTModOptions().GetHugeScaleFactor();
+		if (actorAttacker && !action.IsDoTDamage() && actorAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
+			scaleFactor = TOpts_HugeScaleFactor();
 			for(i=0; i<dmgInfos.Size(); i+=1)
 			{
 				dmgInfos[i].dmgVal = dmgInfos[i].dmgVal * scaleFactor * scaleFactor;
@@ -963,7 +963,7 @@ class W3DamageManagerProcessor extends CObject
 			
 			
 			// staminaRendBonus = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'stamina_max_dmg_bonus', false, true); // Triangle rend
-			staminaRendBonus.valueMultiplicative = theGame.GetTModOptions().GetRendChargeBonus(); // Triangle rend
+			staminaRendBonus.valueMultiplicative = TOpts_RendChargeBonus(); // Triangle rend
 			
 			for(i=0; i<dmgInfos.Size(); i+=1)
 			{
@@ -1132,7 +1132,7 @@ class W3DamageManagerProcessor extends CObject
 		
 		// Triangle enemy mutations add check for vamp mutation
 		if((W3PlayerWitcher)playerVictim && !playerAttacker && actorAttacker && !action.IsDoTDamage() && action.IsActionMelee() &&
-			(attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire || actorAttacker.HasAbility(T_EMutationEnumToName(TEM_Vampiric)))
+			(attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire || actorAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Vampiric)))
 			&& actorVictim.HasBuff(EET_BlackBlood))
 		 // Triangle end
 		{
@@ -1171,7 +1171,7 @@ class W3DamageManagerProcessor extends CObject
 		}
 		
 		// Triangle enemy mutations
-		if(action.IsActionMelee() && actorVictim.HasAbility(T_EMutationEnumToName(TEM_Electric))) {
+		if(action.IsActionMelee() && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Electric))) {
 			ProcessActionElectricReturnedDamage();
 		}
 		// Triangle end
@@ -1337,15 +1337,15 @@ class W3DamageManagerProcessor extends CObject
 			return false;
 		
 		returnedAction = new W3DamageAction in this;
-		returnedAction.Initialize( action.victim, action.attacker, NULL, T_EMutationEnumToName(TEM_Electric), EHRT_None, CPS_Undefined, true, false, false, false );
+		returnedAction.Initialize( action.victim, action.attacker, NULL, TUtil_TEMutationEnumToName(TEM_Electric), EHRT_None, CPS_Undefined, true, false, false, false );
 		returnedAction.SetCannotReturnDamage( true );
 		returnedAction.SetHitAnimationPlayType(EAHA_ForceYes);
 		returnedAction.SetHitReactionType(EHRT_Heavy);
 		
-		returnedAction.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, action.processedDmg.essenceDamage * theGame.GetTModOptions().GetElectricDamageRatio());
+		returnedAction.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, action.processedDmg.essenceDamage * TOpts_ElectricDamageRatio());
 		
 		if (npcVictim && (W3PlayerWitcher)actorAttacker && GetWitcherPlayer().IsQuenActive(false)) {
-			npcVictim.BlockAbility(T_EMutationEnumToName(TEM_Electric), true, theGame.GetTModOptions().GetElectricCooldown());
+			npcVictim.BlockAbility(TUtil_TEMutationEnumToName(TEM_Electric), true, TOpts_ElectricCooldown());
 		}
 
 		theGame.damageMgr.ProcessAction(returnedAction);
@@ -1653,9 +1653,9 @@ class W3DamageManagerProcessor extends CObject
 			resistPts += CalculateAttributeValue( actorVictim.GetTotalArmor() );
 		
 		// Triangle enemy mutations
-		if (actorVictim && actorVictim.HasAbility(T_EMutationEnumToName(TEM_Tough)) && T_IsPhysicalDamage(dmgType)) {
-			resistPts += theGame.GetTModOptions().GetToughArmorPerLevel() * actorVictim.GetLevel();
-			resistPerc += (1 - resistPerc) * theGame.GetTModOptions().GetToughResistance();
+		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
+			resistPts += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel();
+			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
 		}
 		// Triangle end
 
@@ -1679,9 +1679,6 @@ class W3DamageManagerProcessor extends CObject
 		var temp : bool;
 		var fistfightDamageMult : float;
 		var burning : W3Effect_Burning;
-		// Triangle heavy attack simplify
-		var TMod : TModOptions;
-		TMod = theGame.GetTModOptions();
 	
 		
 		GetDamageResists(dmgInfo.dmgType, resistPoints, resistPercents);
@@ -1712,9 +1709,9 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle TODO don't apply weak and maybe heavy attack mods to spell sword damage
 		if(playerAttacker && attackAction) {
 			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-				finalDamage *= TMod.GetHeavyAttackDamageMod() + TMod.GetHeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
+				finalDamage *= TOpts_HeavyAttackDamageMod() + TOpts_HeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
 			if (attackAction.isWeak)
-				finalDamage *= TMod.GetWeakDamageMod();
+				finalDamage *= TOpts_WeakDamageMod();
 		}
 		// Triangle end
 		// Triangle TODO switch order of point resist and perc resist so both have a larger impact

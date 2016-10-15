@@ -1,6 +1,6 @@
 // Some utility functions for mod I didn't feel like putting elsewhere
 
-function T_PowerSkillForSignType(sign : ESignType) : ESkill
+function TUtil_PowerSkillForSignType(sign : ESignType) : ESkill
 {
     var associatedSkill : ESkill;
 
@@ -19,7 +19,7 @@ function T_PowerSkillForSignType(sign : ESignType) : ESkill
     return associatedSkill;
 }
 
-function T_DmgTypeForPowerSkill(skill : ESkill) : name
+function TUtil_DmgTypeForPowerSkill(skill : ESkill) : name
 {
     if (skill == S_Magic_s12)
         return theGame.params.DAMAGE_NAME_FORCE;
@@ -34,23 +34,18 @@ function T_DmgTypeForPowerSkill(skill : ESkill) : name
     return '';
 }
 
-function T_AddMessage(message : string)
-{
-    theGame.witcherLog.AddMessage(message);
-}
-
-function T_LogMessage(message : string)
+function TUtil_LogMessage(message : string)
 {
     LogChannel('TMod', message);
 }
 
-function T_StaminaCostToFocusCost(cost : float) : float
+function TUtil_StaminaCostToFocusCost(cost : float) : float
 {
-    return cost / thePlayer.GetStatMax(BCS_Stamina) * theGame.GetTModOptions().GetFocusPerMaxStamina();
+    return cost / thePlayer.GetStatMax(BCS_Stamina) * TOpts_FocusPerMaxStamina();
 }
 
 // Triangle enemy mutations
-enum T_EMutation
+enum TEMutation
 {
     TEM_Undefined,
     TEM_Tough,
@@ -72,7 +67,7 @@ enum T_EMutation
 }
 
 // Triangle enemy mutations
-function T_EMutationNameToEnum(val : name) : T_EMutation
+function TUtil_TEMutationNameToEnum(val : name) : TEMutation
 {
     switch (val) {
         case 'TEM_Tough':
@@ -111,7 +106,7 @@ function T_EMutationNameToEnum(val : name) : T_EMutation
 }
 
 // Triangle enemy mutations
-function T_EMutationEnumToName(val : T_EMutation) : name
+function TUtil_TEMutationEnumToName(val : TEMutation) : name
 {
     switch (val) {
         case TEM_Tough:
@@ -150,7 +145,7 @@ function T_EMutationEnumToName(val : T_EMutation) : name
 }
 
 // Triangle enemy mutations
-function T_EMutationEnumToDesc(val : T_EMutation) : string
+function TUtil_TEMutationEnumToDesc(val : TEMutation) : string
 {
     switch (val) {
         case TEM_Tough:
@@ -189,7 +184,7 @@ function T_EMutationEnumToDesc(val : T_EMutation) : string
 }
 
 // Triangle enemy mutations
-function T_EMutationEnumToEffectType(val : T_EMutation) : EEffectType
+function TUtil_TEMutationEnumToEffectType(val : TEMutation) : EEffectType
 {
     switch (val) {
         case TEM_Flaming:
@@ -208,21 +203,21 @@ function T_EMutationEnumToEffectType(val : T_EMutation) : EEffectType
 }
 
 // Triangle enemy mutations
-function T_GetMutatedPrefix(actor : CActor) : string
+function TUtil_GetMutatedPrefix(actor : CActor) : string
 {
     var prefix : string;
     var stats : CCharacterStats;
-    var mutation : T_EMutation;
+    var mutation : TEMutation;
     var mutationName : name;
     var i, timeRemaining : int;
     stats = actor.GetCharacterStats();
     prefix = "";
 
     for (i = 1; i < TEM_TOTAL_COUNT; i += 1) {
-        mutation = (T_EMutation)i;
-        mutationName = T_EMutationEnumToName(mutation);
+        mutation = (TEMutation)i;
+        mutationName = TUtil_TEMutationEnumToName(mutation);
         if (stats.HasAbility(mutationName)) {
-            prefix += T_EMutationEnumToDesc(mutation) + " ";
+            prefix += TUtil_TEMutationEnumToDesc(mutation) + " ";
         } else if (actor.IsAbilityBlocked(mutationName)) {
             timeRemaining = CeilF(actor.GetBlockedAbilityTimeRemaining(mutationName));
             if (timeRemaining < 0)
@@ -235,7 +230,7 @@ function T_GetMutatedPrefix(actor : CActor) : string
 }
 
 // Triangle enemy mutations
-function T_IsPhysicalDamage(dmgType : name) : bool
+function TUtil_IsPhysicalDamage(dmgType : name) : bool
 {
     return ( dmgType == theGame.params.DAMAGE_NAME_PHYSICAL || 
             dmgType == theGame.params.DAMAGE_NAME_SLASHING || 
@@ -246,7 +241,7 @@ function T_IsPhysicalDamage(dmgType : name) : bool
 }
 
 // Triangle enemy mutations
-function T_GetHealthType(actor : CActor) : EBaseCharacterStats
+function TUtil_GetHealthType(actor : CActor) : EBaseCharacterStats
 {
     if (actor.UsesEssence())
         return BCS_Essence;
@@ -254,7 +249,7 @@ function T_GetHealthType(actor : CActor) : EBaseCharacterStats
 }
 
 // Triangle frenzy
-function T_CanFrenzy(player : CR4Player) : bool
+function TUtil_CanFrenzy(player : CR4Player) : bool
 {
     var witcherPlayer : W3PlayerWitcher;
     var mutagenArr : array<W3Mutagen_Effect>;
@@ -266,7 +261,7 @@ function T_CanFrenzy(player : CR4Player) : bool
 }
 
 // Triangle everything
-function T_RoundTo(f : float, decimal : int) : float
+function TUtil_RoundTo(f : float, decimal : int) : float
 {
     var i, digit : int;
     var ret : float;
@@ -299,7 +294,7 @@ function T_RoundTo(f : float, decimal : int) : float
 }
 
 // Triangle adaptation
-function T_GetAdaptationDiscount(player : W3PlayerWitcher) : float
+function TUtil_GetAdaptationDiscount(player : W3PlayerWitcher) : float
 {
-    return MinF(theGame.GetTModOptions().GetAdaptationDiscountPerLevel() * player.GetSkillLevel(S_Alchemy_s14) * player.GetMutagenBuffsCount(), theGame.GetTModOptions().GetAdaptationMaxDiscount());
+    return MinF(TOpts_AdaptationDiscountPerLevel() * player.GetSkillLevel(S_Alchemy_s14) * player.GetMutagenBuffsCount(), TOpts_AdaptationMaxDiscount());
 }

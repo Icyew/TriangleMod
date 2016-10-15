@@ -1,4 +1,4 @@
-﻿/***********************************************************************/
+/***********************************************************************/
 /** 	© 2015 CD PROJEKT S.A. All rights reserved.
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
@@ -2478,19 +2478,19 @@ import abstract class CActor extends CGameplayEntity
 		
 		// Triangle enemy mutations
 		npcAttacker = (CNewNPC)action.attacker;
-		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(T_EMutationEnumToName(TEM_Venomous))) {
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Venomous))) {
 			customParams.effectType = EET_PoisonCritical;
 			customParams.creator = npcAttacker;
-			customParams.sourceName = T_EMutationEnumToName(TEM_Venomous);
-			customParams.duration = theGame.GetTModOptions().GetVenomousDuration();
+			customParams.sourceName = TUtil_TEMutationEnumToName(TEM_Venomous);
+			customParams.duration = TOpts_VenomousDuration();
 			effectManager.AddEffectCustom(customParams);
 		}
-		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(T_EMutationEnumToName(TEM_Vampiric)) && npcAttacker.UsesEssence()) {
-			healthType = T_GetHealthType(this);
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Vampiric)) && npcAttacker.UsesEssence()) {
+			healthType = TUtil_GetHealthType(this);
 			if (healthType == BCS_Vitality)
-				healAmount = action.processedDmg.vitalityDamage * theGame.GetTModOptions().GetVampiricHealRatio();
+				healAmount = action.processedDmg.vitalityDamage * TOpts_VampiricHealRatio();
 			else
-				healAmount = action.processedDmg.essenceDamage * theGame.GetTModOptions().GetVampiricHealRatio();
+				healAmount = action.processedDmg.essenceDamage * TOpts_VampiricHealRatio();
 			npcAttacker.GainStat(healthType, healAmount);
 			npcAttacker.ShowFloatingValue(EFVT_Heal, FloorF(healAmount), false);
 		}

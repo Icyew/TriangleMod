@@ -1044,7 +1044,7 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.BindMovementAdjustmentToEvent( 'Dodge', 'Dodge' );
 		parent.AddTimer( 'UpdateDodgeInfoTimer', 0, true );	
 
-		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
+		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / TOpts_ArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses TODO this looks wrong
 		parent.RemoveTimer( 'UpdateDodgeInfoTimer' );
 		
 		
@@ -2039,8 +2039,8 @@ state Combat in CR4Player extends ExtendedMovable
 			}
 			else
 			{
-				farAttackMinDist =  theGame.GetTModOptions().GetFarAttackMinDist(); // Triangle robx99 animations adapted
-				mediumAttackMinDist = theGame.GetTModOptions().GetMediumAttackMinDist(); // Triangle robx99 animations adapted
+				farAttackMinDist =  TOpts_FarAttackMinDist(); // Triangle robx99 animations adapted
+				mediumAttackMinDist = TOpts_MediumAttackMinDist(); // Triangle robx99 animations adapted
 			}
 			
 			enableCloseCombatRadius = false;

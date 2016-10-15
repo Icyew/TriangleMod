@@ -10,24 +10,24 @@
 	<ability name="Rune stribog lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02" 		/>
-		<desc_staggerchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
+		<desc_staggerchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<StaggerEffect					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune stribog _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03" 		/>
-		<desc_staggerchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
+		<desc_staggerchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<StaggerEffect					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune stribog greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05" 		/>
-		<desc_staggerchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
+		<desc_staggerchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<StaggerEffect					is_ability="true" 			/>
 	</ability>
 
@@ -36,24 +36,24 @@
 	<ability name="Rune dazhbog lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02" 		/>
-		<desc_burningchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
+		<desc_burningchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<BurningEffect 					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune dazhbog _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03" 		/>
-		<desc_burningchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
+		<desc_burningchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<BurningEffect 					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune dazhbog greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05" 		/>
-		<desc_burningchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
+		<desc_burningchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<BurningEffect 					is_ability="true" 			/>
 	</ability>
 
@@ -62,24 +62,24 @@
 	<ability name="Rune devana lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02"  		/>
-		<desc_bleedingchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04"  		/> <!-- Triangle runes glyphs -->
+		<desc_bleedingchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<BleedingEffect 				is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune devana _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03"  		/>
-		<desc_bleedingchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05"  		/> <!-- Triangle runes glyphs -->
+		<desc_bleedingchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<BleedingEffect 				is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune devana greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05"  		/>
-		<desc_bleedingchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06"  		/> <!-- Triangle runes glyphs -->
+		<desc_bleedingchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<BleedingEffect 				is_ability="true" 			/>
 	</ability>
 
@@ -88,24 +88,24 @@
 	<ability name="Rune zoria lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02" 		/>
-		<desc_freezingchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
+		<desc_freezingchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<SlowdownFrostEffect 			is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune zoria _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03" 		/>
-		<desc_freezingchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
+		<desc_freezingchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<SlowdownFrostEffect 			is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune zoria greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05" 		/>
-		<desc_freezingchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
+		<desc_freezingchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<SlowdownFrostEffect 			is_ability="true" 			/>
 	</ability>
 
@@ -114,24 +114,24 @@
 	<ability name="Rune morana lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02" 		/>
-		<desc_poinsonchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
+		<desc_poinsonchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<PoisonEffect 					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune morana _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03" 		/>
-		<desc_poinsonchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
+		<desc_poinsonchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<PoisonEffect 					is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune morana greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05" 		/>
-		<desc_poinsonchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
+		<desc_poinsonchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<PoisonEffect 					is_ability="true" 			/>
 	</ability>
 
@@ -155,24 +155,24 @@
 	<ability name="Rune triglav lesser _Stats">		
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.02" 		/>
-		<desc_confusionchance_mult 		type="add" min="0.02" 		/>
+		<buff_apply_chance 				type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
+		<desc_confusionchance_mult 		type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 		<ConfusionEffect 				is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune triglav _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.03" 		/>
-		<desc_confusionchance_mult 		type="add" min="0.03" 		/>
+		<buff_apply_chance 				type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
+		<desc_confusionchance_mult 		type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 		<ConfusionEffect 				is_ability="true" 			/>
 	</ability>
 
 	<ability name="Rune triglav greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<buff_apply_chance 				type="add" min="0.05" 		/>
-		<desc_confusionchance_mult 		type="add" min="0.05" 		/>
+		<buff_apply_chance 				type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
+		<desc_confusionchance_mult 		type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 		<ConfusionEffect 				is_ability="true" 			/>
 	</ability>
 
@@ -201,19 +201,19 @@
 	<ability name="Rune veles lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power					type="mult"  min="0.02"		/>
+		<spell_power					type="mult"  min="0.04"		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune veles _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power					type="mult"  min="0.03"		/>
+		<spell_power					type="mult"  min="0.05"		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune veles greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power 					type="mult"  min="0.05"		/>
+		<spell_power 					type="mult"  min="0.06"		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 <!-- WEAPON UPGRADE - RUNE - PERUN -->
@@ -221,19 +221,19 @@
 	<ability name="Rune perun lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<focus_gain 					type="add" min="0.02" 		/>
+		<focus_gain 					type="add" min="0.04" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune perun _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<focus_gain 					type="add" min="0.03" 		/>
+		<focus_gain 					type="add" min="0.05" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune perun greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<focus_gain 					type="add" min="0.05" 		/>
+		<focus_gain 					type="add" min="0.06" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 <!-- WEAPON UPGRADE - RUNE - ELEMENTAL -->
@@ -241,19 +241,19 @@
 	<ability name="Rune elemental lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.02" 		/>
+		<attack_power					type="mult" min="0.04" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune elemental _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.03" 		/>
+		<attack_power					type="mult" min="0.05" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Rune elemental greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.05" 		/>
+		<attack_power					type="mult" min="0.06" 		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 <!-- ARMOR UPGRADE - GLYPH - AARD -->
@@ -261,13 +261,13 @@
 	<ability name="Glyph aard lesser _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<spell_power_aard				type="mult"	min="0.02"		/>
+		<spell_power_aard				type="mult"	min="0.06"		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Glyph aard _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<spell_power_aard				type="mult"	min="0.05"		/>
+		<spell_power_aard				type="mult"	min="0.08"		/> <!-- Triangle runes glyphs -->
 	</ability>
 
 	<ability name="Glyph aard greater _Stats">
@@ -279,13 +279,13 @@
 <!-- ARMOR UPGRADE - GLYPH - AXII -->
 
 	<ability name="Glyph axii lesser _Stats">
-		<spell_power_axii				type="mult"	min="0.02"		/>
+		<spell_power_axii				type="mult"	min="0.06"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph axii _Stats">
-		<spell_power_axii				type="mult"	min="0.05"		/>
+		<spell_power_axii				type="mult"	min="0.08"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -299,13 +299,13 @@
 <!-- ARMOR UPGRADE - GLYPH - IGNI -->
 
 	<ability name="Glyph igni lesser _Stats">
-		<spell_power_igni				type="mult"	min="0.02"		/>
+		<spell_power_igni				type="mult"	min="0.06"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph igni _Stats">
-		<spell_power_igni				type="mult"	min="0.05"		/>
+		<spell_power_igni				type="mult"	min="0.08"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -319,13 +319,13 @@
 <!-- ARMOR UPGRADE - GLYPH - QUEN -->
 
 	<ability name="Glyph quen lesser _Stats">
-		<spell_power_quen				type="mult"	min="0.02"		/>
+		<spell_power_quen				type="mult"	min="0.06"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph quen _Stats">
-		<spell_power_quen				type="mult"	min="0.05"		/>
+		<spell_power_quen				type="mult"	min="0.08"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -339,13 +339,13 @@
 <!-- ARMOR UPGRADE - GLYPH - YRDEN -->
 
 	<ability name="Glyph yrden lesser _Stats">
-		<spell_power_yrden				type="mult"	min="0.02"		/>
+		<spell_power_yrden				type="mult"	min="0.06"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph yrden _Stats">
-		<spell_power_yrden				type="mult"	min="0.05"		/>
+		<spell_power_yrden				type="mult"	min="0.08"		/> <!-- Triangle runes glyphs -->
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>

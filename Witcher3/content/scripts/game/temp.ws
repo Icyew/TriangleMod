@@ -6638,7 +6638,7 @@ exec function spawn(nam : name, optional quantity : int, optional distance : flo
 		}
 			
 		// Triangle enemy mutation For testing purposes
-		if (T_EMutationNameToEnum(mutation) != TEM_Undefined) {
+		if (TUtil_TEMutationNameToEnum(mutation) != TEM_Undefined) {
 			((CNewNPC)ent).AddAbility(mutation);
 		}
 		// Triangle end
