@@ -74,7 +74,7 @@ class W3Effect_AutoStaminaRegen extends W3AutoRegenEffect
 	protected function calculateRegenPoints(dt : float) : float
 	{
 		var regenPoints : float;
-		return super.calculateRegenPoints(dt) + theGame.GetTModOptions().GetStaminaRegenBonus() * theGame.GetTModOptions().GetStaminaRegenMult();
+		return super.calculateRegenPoints(dt) + TOpts_StaminaRegenBonus() * TOpts_StaminaRegenMult();
 	}
 
 	

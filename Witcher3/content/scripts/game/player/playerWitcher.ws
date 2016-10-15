@@ -374,7 +374,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		// Triangle toxicity
 		RemoveAbilityAll('TBonusToxicity');
-		AddAbilityMultiple('TBonusToxicity', theGame.GetTModOptions().GetBonusToxicity());
+		AddAbilityMultiple('TBonusToxicity', TOpts_BonusToxicity());
 		// Triangle end
 
 		
@@ -1731,7 +1731,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		weaponEnt.StopEffect('runeword_yrden');
 	
 		spellSwordSign = sign;
-		associatedSkill = T_PowerSkillForSignType(sign);
+		associatedSkill = TUtil_PowerSkillForSignType(sign);
 
 		if(weaponEnt && associatedSkill != S_SUndefined && CanUseSkill(associatedSkill))
 		{
@@ -2025,8 +2025,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 			params.effectType = EET_TIgnorePain;
 			params.creator = this;
 			params.sourceName = "Endure Pain";
-			params.duration = theGame.GetTModOptions().GetEndurePainDuration();
-			dmgRatio = theGame.GetTModOptions().GetEndurePainDamageRatioPerLevel() * GetSkillLevel(S_Alchemy_s20);
+			params.duration = TOpts_EndurePainDuration();
+			dmgRatio = TOpts_EndurePainDamageRatioPerLevel() * GetSkillLevel(S_Alchemy_s20);
 			params.effectValue.valueAdditive = damageData.processedDmg.vitalityDamage * dmgRatio / params.duration;
 			damageData.processedDmg.vitalityDamage = damageData.processedDmg.vitalityDamage * (1 - dmgRatio);
 			RemoveBuff(EET_TIgnorePain); // I forget if this is necessary
@@ -2059,7 +2059,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 
 		// Triangle enemy mutations
-		if (action.DealsAnyDamage() && action.attacker.HasAbility(T_EMutationEnumToName(TEM_Draining))) {
+		if (action.DealsAnyDamage() && action.attacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Draining))) {
 			DrainStamina(ESAT_FixedValue, GetStat(BCS_Stamina), 2);
 		}
 		// Triangle resolve
@@ -2067,8 +2067,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 			params.effectType = EET_TResolve;
 			params.creator = this;
 			params.sourceName = "Resolve";
-			params.duration = theGame.GetTModOptions().GetResolveDuration();
-			params.effectValue.valueMultiplicative = theGame.GetTModOptions().GetResolveDamagePerLevel() * GetSkillLevel(S_Sword_s16);
+			params.duration = TOpts_ResolveDuration();
+			params.effectValue.valueMultiplicative = TOpts_ResolveDamagePerLevel() * GetSkillLevel(S_Sword_s16);
 			AddEffectCustom(params);
 		}
 		// Triangle end
@@ -2474,7 +2474,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				}
 				
 				// Triangle spell sword effect from sign power skills
-				if(!action.WasDodged() && spellSwordSign != ST_None && CanUseSkill(T_PowerSkillForSignType(spellSwordSign)))
+				if(!action.WasDodged() && spellSwordSign != ST_None && CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign)))
 				{
 					// Triangle TODO is it a problem if these effects are played twice, once for the runeword?
 					// Triangle TODO play visual effects on hit
@@ -2537,7 +2537,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					if(abs.Size() > 0)
 					{
 						value = GetSkillAttributeValue(S_Sword_s12, 'duration', true, true) * GetSkillLevel(S_Sword_s12);
-						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, theGame.GetTModOptions().GetCripplingShotDurationPerLevel() * GetSkillLevel(S_Sword_s12)); // Triangle enemy mutations
+						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, TOpts_CripplingShotDurationPerLevel() * GetSkillLevel(S_Sword_s12)); // Triangle enemy mutations
 					}
 				}
 			}
@@ -3389,7 +3389,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			// Triangle attack combos
 			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
 				RemoveTimer('FastAttackCounterDecay');
-				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(theGame.GetTModOptions().GetLightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
 			}
 			// Triangle end
 			SetCombatAction( action ) ;
@@ -3446,7 +3446,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var skill : ESkill;
 		// Triangle attack combos
 		var attackTypeName : name;
-		var TMod : TModOptions;
 		var maxLightCombo, maxHeavyCombo : float;
 		var null : ETickGroup;
 	
@@ -3464,14 +3463,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				maxLightCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s21));
 				maxHeavyCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s04));
-				TMod = theGame.GetTModOptions();
 				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;
 					if (fastAttackCounter < maxLightCombo && CanUseSkill(S_Sword_s21))
 						fastAttackCounter += 1;
-					AddTimer('FastAttackCounterDecay', TMod.GetLightAttackComboDecay(), false, false, null, false, true);
+					AddTimer('FastAttackCounterDecay', TOpts_LightAttackComboDecay(), false, false, null, false, true);
 				}
 				
 				if(IsHeavyAttack(attackTypeName))
@@ -3482,7 +3480,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 						prevHeavyAttackCounter = heavyAttackCounter;
 						heavyAttackCounter += 1;
 					}
-					AddTimer('HeavyAttackCounterDecay', TMod.GetHeavyAttackComboDecay(), false, false, null, false, true);
+					AddTimer('HeavyAttackCounterDecay', TOpts_HeavyAttackComboDecay(), false, false, null, false, true);
 				}
 
 				// Triangle TODO move somewhere else
@@ -4412,7 +4410,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		m_alchemyManager.GetRecipe(nam, recipe);
 			
 		
-		if(CanUseSkill(S_Alchemy_s18) && theGame.GetTModOptions().GetAcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
+		if(CanUseSkill(S_Alchemy_s18) && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
 				AddAbility(SkillEnumToName(S_Alchemy_s18), true);
@@ -6741,8 +6739,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		potionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
 		// Triangle adaptation
-		if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
-			toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+		if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
 		}
 		// Triangle end
 		
@@ -6775,8 +6773,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		finalPotionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
 		// Triangle adaptation
-		if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
-			toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+		if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
 		}
 		// Triangle end
 		
@@ -6793,7 +6791,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		// Triangle acquired tolerance
 		acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
 		if (CanUseSkill(S_Alchemy_s18) && acquiredToleranceEffect && acquiredToleranceEffect.IsActive()) {
-			finalPotionToxicity = MaxF(0, finalPotionToxicity - theGame.GetTModOptions().GetAcquiredToleranceDiscount());
+			finalPotionToxicity = MaxF(0, finalPotionToxicity - TOpts_AcquiredToleranceDiscount());
 		}
 		// Triangle end
 		
@@ -6870,8 +6868,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 			mutagenParams = new W3MutagenBuffCustomParams in theGame;
 			mutagenParams.toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
 			// Triangle adaptation
-			if (CanUseSkill(S_Alchemy_s14) && theGame.GetTModOptions().GetAdaptationDiscountPerLevel() > 0) {
-				mutagenParams.toxicityOffset *= 1 - T_GetAdaptationDiscount(this);
+			if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+				mutagenParams.toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
 			}
 			// Triangle end
 			mutagenParams.potionItemName = inv.GetItemName(item);
@@ -6922,15 +6920,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 
 			// Triangle acquired tolerance
-			if (CanUseSkill(S_Alchemy_s18) && theGame.GetTModOptions().GetAcquiredToleranceDiscount() > 0) {
+			if (CanUseSkill(S_Alchemy_s18) && TOpts_AcquiredToleranceDiscount() > 0) {
 				if (!HasBuff(EET_TAcquiredTolerance)) {
 					AddEffectDefault(EET_TAcquiredTolerance, this, "Acquired Tolerance");
 				}
 				acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
 				if (!acquiredToleranceEffect && !acquiredToleranceEffect.IsActive()) {
-					T_LogMessage("Acquired Tolerance effect failed to add for some reason");
+					TUtil_LogMessage("Acquired Tolerance effect failed to add for some reason");
 				} else {
-					acquiredToleranceEffect.AddTimeLeft(theGame.GetTModOptions().GetAcquiredToleranceDurationPerLevel() * GetSkillLevel(S_Alchemy_s18));
+					acquiredToleranceEffect.AddTimeLeft(TOpts_AcquiredToleranceDurationPerLevel() * GetSkillLevel(S_Alchemy_s18));
 				}
 			}
 			// Triangle end
@@ -7922,7 +7920,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				staminaRegenVal -= 0.03;
 		}
 		// Triangle alt stamina
-		else if (!theGame.GetTModOptions().GetAltArmorStaminaMod())
+		else if (!TOpts_AltArmorStaminaMod())
 		{
 			armorRegenVal = GetAttributeValue('staminaRegen_armor_mod');
 			staminaRegenVal = armorRegenVal.valueMultiplicative;
@@ -7950,9 +7948,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var value : SAbilityAttributeValue;
 		var mutagen : CBaseGameplayEffect;
 		var thunder : W3Potion_Thunderbolt;
-		// Triangle heavy attack simplify
-		var TMod : TModOptions;
-		TMod = theGame.GetTModOptions();
 		
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
@@ -8085,9 +8080,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if ( steelDmg != 0 )
 		{
 			playerOffenseStats.steelStrongDmg = (steelDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
+			playerOffenseStats.steelStrongDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.steelStrongCritDmg = (steelDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.steelStrongCritDmg) + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongCritDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;		
+			playerOffenseStats.steelStrongCritDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;		
 		}
 		else
 		{
@@ -8120,9 +8115,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if ( silverDmg != 0 )
 		{
 			playerOffenseStats.silverStrongDmg = (silverDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
+			playerOffenseStats.silverStrongDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.silverStrongCritDmg = (silverDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.silverStrongCritDmg) + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongCritDmg *= TMod.GetHeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
+			playerOffenseStats.silverStrongCritDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 		}
 		else
 		{
@@ -9499,7 +9494,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 
 		// Triangle toxicity
 		RemoveAbilityAll('TBonusToxicity');
-		AddAbilityMultiple('TBonusToxicity', theGame.GetTModOptions().GetBonusToxicity());
+		AddAbilityMultiple('TBonusToxicity', TOpts_BonusToxicity());
 		// Triangle end
 		
 		abilityManager.PostInit();

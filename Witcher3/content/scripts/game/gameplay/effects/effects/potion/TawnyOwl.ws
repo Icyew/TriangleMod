@@ -19,7 +19,7 @@ class W3Potion_TawnyOwl extends W3RegenEffect
 		// Triangle delayed recovery
 		// Triangle tawny owl
 		// Triangle TODO this change disabled. Need to slow down tox degen a lot first, so it's actually important and white honey is useful. Keep this around just in case
-		// if (theGame.GetTModOptions().GetAltTawnyOwlDuration() > 0) {
+		// if (TOpts_AltTawnyOwlDuration() > 0) {
 		// 	if (shouldEnableSuperiorEffect()) {
 		// 		if (!superiorEffectActive) {
 		// 			duration *= 2;
@@ -81,8 +81,8 @@ class W3Potion_TawnyOwl extends W3RegenEffect
 	{
 		var skillPassiveMod : float;
 		var witcher : W3PlayerWitcher;
-		if (theGame.GetTModOptions().GetAltTawnyOwlDuration() > 0) {
-			duration = theGame.GetTModOptions().GetAltTawnyOwlDuration();
+		if (TOpts_AltTawnyOwlDuration() > 0) {
+			duration = TOpts_AltTawnyOwlDuration();
 			witcher = GetWitcherPlayer();
 			skillPassiveMod = CalculateAttributeValue(witcher.GetAttributeValue('potion_duration'));
 		
@@ -106,11 +106,8 @@ class W3Potion_TawnyOwl extends W3RegenEffect
 	// Triangle delayed recovery
 	protected function calculateRegenPoints(dt : float) : float
 	{
-		var TMod : TModOptions;
-
-		TMod = theGame.GetTModOptions();
 		if (timeLeftDisabled > 0) {
-			effectValue.valueMultiplicative = MinF(TMod.GetAltTawnyOwlBase() / 100, initialEffectValue.valueMultiplicative);
+			effectValue.valueMultiplicative = MinF(TOpts_AltTawnyOwlBase() / 100, initialEffectValue.valueMultiplicative);
 			timeLeftDisabled -= dt;
 			if (timeLeftDisabled <= 0) {
 				EnableRegen();

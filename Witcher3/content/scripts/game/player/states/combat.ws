@@ -1039,7 +1039,7 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.BindMovementAdjustmentToEvent( 'Dodge', 'Dodge' );
 		parent.AddTimer( 'UpdateDodgeInfoTimer', 0, true );	
 
-		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / theGame.GetTModOptions().GetArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses
+		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / TOpts_ArmorSpeedBonus(parent.GetInventory(), EBAT_Dodge )); // Triangle armor bonuses TODO this looks wrong
 		parent.RemoveTimer( 'UpdateDodgeInfoTimer' );
 		
 		

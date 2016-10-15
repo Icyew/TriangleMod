@@ -5,16 +5,6 @@
 /***********************************************************************/
 import class CCommonGame extends CGame
 {
-	// Triangle options
-	var tmodOptions : TModOptions;
-
-	function GetTModOptions() : TModOptions
-	{
-		if (!tmodOptions)
-			tmodOptions = new TModOptions in this;
-		return tmodOptions;
-	}
-
 	import final function EnableSubtitles( enable : bool );
 	import final function AreSubtitlesEnabled() : bool;
 

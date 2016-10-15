@@ -146,7 +146,7 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 			
 		
 		// Triangle delayed recovery
-		slowFactor = theGame.GetTModOptions().GetDelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
+		slowFactor = TOpts_DelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
 		if (thePlayer.GetStat(BCS_Stamina) >= thePlayer.GetStatMax(BCS_Stamina) && thePlayer.CanUseSkill(S_Alchemy_s03) && slowFactor > 1) {
 			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) ) / slowFactor;
 		} else {
@@ -256,14 +256,14 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		dm.GetAbilityAttributeValue(abilityName, attributeName, min, max);
 		effectValue = GetAttributeRandomizedValue(min, max);
 		// Triangle toxicity drain
-		if (theGame.GetTModOptions().GetDefaultToxicityDrainTime() > 0) {
-			effectValue.valueAdditive = RoundTo(-1 / theGame.GetTModOptions().GetDefaultToxicityDrainTime(), 4);
+		if (TOpts_DefaultToxicityDrainTime() > 0) {
+			effectValue.valueAdditive = RoundTo(-1 / TOpts_DefaultToxicityDrainTime(), 4);
 		}
 		// Triangle end
 		
 		// Triangle fast metabolism
-		if (thePlayer.CanUseSkill(S_Alchemy_s15) && theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() > 0) {
-			effectValue.valueAdditive *= 1 + theGame.GetTModOptions().GetFastMetabolismDrainFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s15);
+		if (thePlayer.CanUseSkill(S_Alchemy_s15) && TOpts_FastMetabolismDrainFactorPerLevel() > 0) {
+			effectValue.valueAdditive *= 1 + TOpts_FastMetabolismDrainFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s15);
 		}
 		else if(thePlayer.CanUseSkill(S_Alchemy_s15))
 		// Triangle end
