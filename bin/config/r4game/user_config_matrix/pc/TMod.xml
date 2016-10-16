@@ -5,6 +5,7 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
 				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
+				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
 				<Entry varId="HeavyAttackComboBonus"			value="0.1"	/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
@@ -18,9 +19,10 @@
 		<VisibleVars>
 			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />

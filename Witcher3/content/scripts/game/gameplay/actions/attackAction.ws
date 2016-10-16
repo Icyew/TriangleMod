@@ -297,11 +297,11 @@ class W3Action_Attack extends W3DamageAction
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
 			
 			
-			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04))
+			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() == 0 ) // Triangle attack combos
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s04);
 			
 			
-			if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21))
+			if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() == 0 ) // Triangle attack combos
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s21);
 						
 			

@@ -5,6 +5,11 @@ function TOpts_HeavyAttackDamageMod() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackDmgMod' ) );
 }
 
+function TOpts_LightAttackComboCritBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboCritBonus' ) ) / 100;
+}
+
 function TOpts_LightAttackComboBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboBonus' ) );
