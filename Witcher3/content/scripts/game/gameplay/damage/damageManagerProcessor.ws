@@ -1596,7 +1596,7 @@ class W3DamageManagerProcessor extends CObject
 			{
 				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
 				
-				resistPerc += bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05);
+				resistPerc += (1 - resistPerc) * bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05); // Triangle protective coating
 			}
 			
 			
