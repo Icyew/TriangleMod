@@ -1186,7 +1186,34 @@ statemachine import class CNewNPC extends CActor
 
 		return newLevel;
 	}
-	
+
+	// Triangle enemy mutations armor scaling
+	public function GetTotalArmor() : SAbilityAttributeValue
+	{
+		var totalArmor : SAbilityAttributeValue;
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		totalArmor = super.GetTotalArmor();
+		// NOTE I use valueBase so that melt armor and other multiplier based armor reducers work as expected
+		// Triangle armor scaling
+		if (UsesVitality())
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerLevelHuman() * GetLevel();
+		else if (UsesEssence()) {
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerLevelMonster() * GetLevel();
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerScaledLevelMonster() * (GetLevel() - GetLevelFromLocalVar());
+		}
+		if (totalArmor.valueBase > 0) {
+			totalArmor.valueBase += TOpts_FlatArmorPerLevel() * GetLevel();
+		}
+		// Triangle enemy mutations
+		// Note that this will make non-armored type enemies look like armored types in some parts of the code. use super class' method for those bits
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough))) {
+			totalArmor.valueBase += TOpts_ToughArmorPerLevel() * GetLevel();
+		}
+		// Triangle end
+		return totalArmor;
+	}
+
 	// Triangle level scaling Not currently using this anymore. I know I should delete dead code, but eeehh
 	private function AddRemoveAbilityMultiple(abilityName : name, count : int)
 	{
@@ -1553,7 +1580,7 @@ statemachine import class CNewNPC extends CActor
 					!stats.HasAbility(theGame.params.MONSTER_BONUS_PER_LEVEL)
 				)
 				{				
-					if ( CalculateAttributeValue(GetTotalArmor()) > 0.f )
+					if ( CalculateAttributeValue(super.GetTotalArmor()) > 0.f ) // Triangle enemy mutations
 					{
 						if ( GetIsMonsterTypeGroup() )
 						{
@@ -2526,7 +2553,7 @@ statemachine import class CNewNPC extends CActor
 		modDamage += CalculateAttributeValue(GetPowerStatValue(CPS_AttackPower, , true));
 		modDamage *= 5;
 		
-		modArmor = CalculateAttributeValue(GetTotalArmor()) * 100;
+		modArmor = CalculateAttributeValue(super.GetTotalArmor()) * 100; // Triangle enemy mutations
 		
 		modVitality = GetStatMax(BCS_Essence) + 3 * GetStatMax(BCS_Vitality);
 		

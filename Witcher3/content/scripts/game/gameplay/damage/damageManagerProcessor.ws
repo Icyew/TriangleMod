@@ -1661,31 +1661,18 @@ class W3DamageManagerProcessor extends CObject
 		}
 		
 		
-		if(!action.GetIgnoreArmor())
-			armor += CalculateAttributeValue( actorVictim.GetTotalArmor() ); // Triangle armor
-		
+		// Triangle armor
+		if(!action.GetIgnoreArmor() && TUtil_IsPhysicalDamage(dmgType) && !action.IsDoTDamage()) //point resist only applies to physical damage
+			armor = CalculateAttributeValue( actorVictim.GetTotalArmor() );
+
 		// Triangle enemy mutations
 		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
-			if (!action.GetIgnoreArmor())
-				armor += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel(); // Triangle armor
 			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
 		}
-		// Triangle armor scaling
-		npcVictim = (CNewNPC)actorVictim;
-		if(npcVictim && !action.GetIgnoreArmor() && armor > 0 && TUtil_AreAnyArmorOptionsActive()) {
-			if (npcVictim.UsesVitality())
-				armor *= 1 + TOpts_ArmorPerLevelHuman() * npcVictim.GetLevel();
-			else if (npcVictim.UsesEssence()) {
-				armor *= 1 + TOpts_ArmorPerLevelMonster() * npcVictim.GetLevel();
-				armor *= 1 + TOpts_ArmorPerScaledLevelMonster() * (npcVictim.GetLevel() - npcVictim.GetLevelFromLocalVar());
-			}
-			armor += TOpts_FlatArmorPerLevel() * npcVictim.GetLevel();
-		}
-		// Triangle end
 
 		// Triangle armor
 		armor = MaxF(0, armor - CalculateAttributeValue(armorReduction) ); // armor reduction only reduces armor!
-		// scale armor after armor reduction to simulate applying armor before attack power
+		// scale armor after armor reduction and separately from normal armor calculation to simulate applying armor before attack power
 		if (playerAttacker && TOpts_ArmorAPScaleRatio() > 0) {
 			powerMod = GetAttackersPowerMod();
 			armor *= 1 + (powerMod.valueMultiplicative - 1) * TOpts_ArmorAPScaleRatio(); // only apply scale factor to positive AP
