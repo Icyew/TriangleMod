@@ -722,7 +722,13 @@ class W3DamageManagerProcessor extends CObject
 					isLightAttack = playerAttacker.IsLightAttack( attackAction.GetAttackName() );
 					isHeavyAttack = playerAttacker.IsHeavyAttack( attackAction.GetAttackName() );
 					critChance += playerAttacker.GetCriticalHitChance(isLightAttack, isHeavyAttack, actorVictim, victimMonsterCategory, (W3BoltProjectile)action.causer );
-					
+					// Triangle attack combos light attack combo
+					if(isLightAttack && playerAttacker.CanUseSkill(S_Sword_s21))
+					{
+						critChance += TOpts_LightAttackComboCritBonus() * GetWitcherPlayer().GetLightAttackComboLength(); // Don't add bonus if combo < 2
+					}
+					// Triangle end
+
 					
 					if(action.GetIsHeadShot())
 					{
@@ -1529,7 +1535,7 @@ class W3DamageManagerProcessor extends CObject
 				witcherPlayer = (W3PlayerWitcher)playerAttacker;
 				if(witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s04))
 				{
-					// criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackCounter();
+					// criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackComboLength();
 				}
 				// Triangle end
 
@@ -1735,7 +1741,7 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle TODO don't apply weak and maybe heavy attack mods to spell sword damage
 		if(playerAttacker && attackAction) {
 			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()))
-				finalDamage *= TOpts_HeavyAttackDamageMod() + TOpts_HeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetPrevHeavyAttackCounter();
+				finalDamage *= TOpts_HeavyAttackDamageMod() + TOpts_HeavyAttackComboBonus() * ((W3PlayerWitcher)playerAttacker).GetHeavyAttackComboLength();
 			if (attackAction.isWeak)
 				finalDamage *= TOpts_WeakDamageMod();
 		}

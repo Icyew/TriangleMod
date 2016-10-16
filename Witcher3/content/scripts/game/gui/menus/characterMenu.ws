@@ -1892,11 +1892,14 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s04:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle attack combos
-				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, false) * skillLevel;
-				baseString = "Each strong attack hit increases the next strong attack's total damage multiplier by " + NoTrailZeros(TOpts_HeavyAttackComboBonus()*100) + 
-					"%. Combo resets after " + NoTrailZeros(TOpts_HeavyAttackComboDecay()) + "s or on missing a heavy attack. Max combo is "
-					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				if (TOpts_HeavyAttackComboDecay() > 0 ) {
+					ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, false) * skillLevel;
+					baseString = "Each strong attack hit increases the next strong attack's total damage multiplier by " + NoTrailZeros(TOpts_HeavyAttackComboBonus()*100) + 
+						"%. Combo resets after " + NoTrailZeros(TOpts_HeavyAttackComboDecay()) + "s or on missing a heavy attack. Max combo is "
+						+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
 				// Triangle end
 				break;
 			case S_Sword_s05:
@@ -1992,11 +1995,14 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Sword_s21:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle attack combos
-				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, false) * skillLevel;
-				baseString = "Each light attack hit increases the next light attack's speed by " + NoTrailZeros(TOpts_LightAttackComboBonus()) + 
-					"%. Combo resets after " + NoTrailZeros(TOpts_LightAttackComboDecay()) + "s or on missing a light attack. Max combo is "
-					+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				if (TOpts_LightAttackComboDecay() > 0 ) {
+					ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, false) * skillLevel;
+					baseString = "Each light attack hit increases the light attack speed by " + NoTrailZeros(TOpts_LightAttackComboBonus()) + 
+						"% and crit chance by " + NoTrailZeros(TOpts_LightAttackComboCritBonus() * 100) + "%. Combo resets after " + NoTrailZeros(TOpts_LightAttackComboDecay()) + "s or on missing a light attack. Max combo is "
+						+ NoTrailZeros(ability.valueAdditive) + " hits.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
 				// Triangle end
 				break;
 			default:
