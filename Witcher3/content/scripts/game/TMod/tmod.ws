@@ -534,4 +534,14 @@ function TOpts_GlyphEffectMultiplier() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GlyphEffectMultiplier' ) );
 }
 
+function TOpts_SwitchArmorCalcOrder() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'SwitchArmorCalcOrder' );
+}
+
+function TOpts_ArmorAPScaleRatio() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'ArmorAPScaleRatio' ) );
+}
+
 // ---- Misc end ---- //
