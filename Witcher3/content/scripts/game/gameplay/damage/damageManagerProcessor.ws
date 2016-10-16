@@ -1568,6 +1568,8 @@ class W3DamageManagerProcessor extends CObject
 		var appliedOilName, vsMonsterResistReduction : name;
 		var oils : array< W3Effect_Oil >;
 		var i : int;
+		// Triangle armor scaling
+		var npcVictim : CNewNPC;
 		// Triangle armor
 		var armor : float;
 		var powerMod : SAbilityAttributeValue;
@@ -1658,8 +1660,20 @@ class W3DamageManagerProcessor extends CObject
 		
 		// Triangle enemy mutations
 		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
-			armor += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel(); // Triangle armor
+			if (!action.GetIgnoreArmor())
+				armor += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel(); // Triangle armor
 			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
+		}
+		// Triangle armor scaling
+		npcVictim = (CNewNPC)actorVictim;
+		if(npcVictim && !action.GetIgnoreArmor() && armor > 0 && TUtil_AreAnyArmorOptionsActive()) {
+			if (npcVictim.UsesVitality())
+				armor *= 1 + TOpts_ArmorPerLevelHuman() * npcVictim.GetLevel();
+			else if (npcVictim.UsesEssence()) {
+				armor *= 1 + TOpts_ArmorPerLevelMonster() * npcVictim.GetLevel();
+				armor *= 1 + TOpts_ArmorPerScaledLevelMonster() * (npcVictim.GetLevel() - npcVictim.GetLevelFromLocalVar());
+			}
+			armor += TOpts_FlatArmorPerLevel() * npcVictim.GetLevel();
 		}
 		// Triangle end
 
