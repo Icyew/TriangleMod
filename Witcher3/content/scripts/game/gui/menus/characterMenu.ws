@@ -1925,6 +1925,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle crushing blows
+				if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Critical hits have a chance for knockdown that scales with adrenaline."
+						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s09:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, false)) * skillLevel;

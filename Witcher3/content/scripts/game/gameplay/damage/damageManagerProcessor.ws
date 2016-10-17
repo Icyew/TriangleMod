@@ -1823,6 +1823,10 @@ class W3DamageManagerProcessor extends CObject
 		var logStr : string;
 		var hpPerc : float;
 		var npcVictim : CNewNPC;
+		// Triangle crushing blows
+		var witcherPlayer : W3PlayerWitcher;
+		var focusPoints : float;
+		// Triangle end
 	
 		
 		if ( theGame.CanLog() )
@@ -1855,6 +1859,24 @@ class W3DamageManagerProcessor extends CObject
 				{
 					actorVictim.OnTakeDamage(action);
 				}
+				// Triangle crushing blows
+				witcherPlayer = (W3PlayerWitcher)playerAttacker;
+				if(attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
+					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
+					// TODO maybe revisit this effect when resistances are redone
+					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
+						focusPoints = witcherPlayer.GetSpecialAttackTimeRatio() * witcherPlayer.GetStatMax(BCS_Focus);
+					} else {
+						focusPoints = witcherPlayer.GetStat(BCS_Focus);
+					}
+					if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0
+						&& RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
+						&& !actorVictim.IsHuge()
+						&& !(npcVictim && npcVictim.HasShieldedAbility() && npcVictim.IsShielded(witcherPlayer))) {
+						action.AddEffectInfo(EET_Knockdown);
+					}
+				}
+				// Triangle end
 			}
 			
 			if(!actorVictim.IsAlive() && hpPerc == 1)
@@ -2496,7 +2518,7 @@ class W3DamageManagerProcessor extends CObject
 			action.SetBuffSourceName( 'Mutation2ExplosionValid' );
 		}
 	
-		
+
 		if(actorVictim && action.GetEffectsCount() > 0)
 			ret = actorVictim.ApplyActionEffects(action);
 		else

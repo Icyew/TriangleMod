@@ -55,6 +55,11 @@ function TOpts_MaxParries() : int
 	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'MaxParries' ) );
 }
 
+function TOpts_CrushingBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //
