@@ -14,6 +14,7 @@
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
+				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -28,6 +29,7 @@
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
