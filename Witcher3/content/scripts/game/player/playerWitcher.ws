@@ -3007,12 +3007,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(skillLevel > 1)
 				{
 					reduction = GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, true) * (skillLevel - 1);
-					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive);
+					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive) * TOpts_WhirlStaminaDiscount(); // Triangle whirl
 				}
 				
 				DrainStamina(ESAT_FixedValue, cost, delay, GetSkillAbilityName(S_Sword_s01));
 			}
-			else				
+			if (GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) // Triangle whirl
 			{				
 				GetSkillAttributeValue(S_Sword_s01, 'focus_cost_per_sec', false, true);
 				focusPerSec = GetWhirlFocusCostPerSec();
@@ -3020,7 +3020,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
-		if(GetStat(BCS_Stamina) <= 0 && GetStat(BCS_Focus) <= 0)
+		if((GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) && GetStat(BCS_Focus) <= 0) // Triangle whirl
 		{
 			OnPerformSpecialAttack(true, false);
 		}
@@ -3038,7 +3038,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(skillLevel > 1)
 			ability -= GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, false) * (skillLevel-1);
 			
-		val = CalculateAttributeValue(ability);
+		val = CalculateAttributeValue(ability) * TOpts_WhirlFocusDiscount(); // Triangle whirl
 		
 		return val;
 	}

@@ -26,6 +26,8 @@ statemachine import class CNewNPC extends CActor
 	// Triangle level scaling used to check if you need to re-apply or remove jitter to a creature
 	saved var prevJitterOption	  : int;			  default prevJitterOption = 0;
 	saved var cachedJitter		  : int;			  default cachedJitter = 0;
+	// Triangle whirl
+	var stunLocked				  : bool;
 	// Triangle end
 	
 	
@@ -1128,6 +1130,25 @@ statemachine import class CNewNPC extends CActor
 	
 	var fistFightForcedFromQuest : bool; 
 	
+	// Triangle whirl
+	public function StunLocked() : bool
+	{
+		return stunLocked;
+	}
+
+	// Triangle whirl
+	public function StunLock(seconds : float)
+	{
+		stunLocked = true;
+		AddTimer('StunUnlock', seconds,,,,,true);
+	}
+
+	// Triangle whirl
+	timer function StunUnlock(delta : float, id : int)
+	{
+		stunLocked = false;
+	}
+
 	// Triangle level scaling
 	public function LinearInterpolate ( playerLevel : int, opponentLevel : int, t : float) : float
 	{

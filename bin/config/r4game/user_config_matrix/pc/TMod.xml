@@ -15,6 +15,12 @@
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
+				<Entry varId="LightAttackOnRelease"				value="0" />
+				<Entry varId="WhirlDrainBoth"					value="1" />
+				<Entry varId="WhirlFocusDiscount"				value="0.8" />
+				<Entry varId="WhirlStaminaDiscount"				value="0.5" />
+				<Entry varId="WhirlAltSeverance"				value="0" />
+				<Entry varId="WhirlStunLock"					value="1" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -29,7 +35,13 @@
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackOnRelease"	 	 	 displayName="Whirl: Light attack on button release. Lets you whirl immediately"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlFocusDiscount"	 	 	 displayName="Whirl: Focus drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStaminaDiscount"	 	 	 displayName="Whirl: Stamina drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

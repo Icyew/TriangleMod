@@ -77,7 +77,7 @@ class CBTTaskReaction extends IBehTreeTask
 	{
 		var npc : CNewNPC = GetNPC();
 		
-		if ( (dodgeType == EDT_Attack_Light || dodgeType == EDT_Attack_Heavy ) && counterChance > 0)
+		if ( (dodgeType == EDT_Attack_Light || dodgeType == EDT_Attack_Heavy ) && counterChance > 0 && !npc.StunLocked()) // Triangle whirl not sure when this class is used but still
 		{
 			if (RandRange(100) < counterChance)
 			{
@@ -91,7 +91,7 @@ class CBTTaskReaction extends IBehTreeTask
 		}
 		else
 		{
-			if( !ChooseAndCheckDodge() )
+			if( ChooseAndCheckDodge() ) // Triangle whirl this looks like a bug... TODO figure out when this is actually used
 			{
 				if( npc.RaiseForceEvent( 'Dodge' ) )
 				{
@@ -124,6 +124,11 @@ class CBTTaskReaction extends IBehTreeTask
 			case EDT_Projectile		: dodgeChance = dodgeChanceProjectile; break;
 			default : return false;
 		}
+		// Triangle whirl
+		if (npc.StunLocked()) {
+			dodgeChance = 0;
+		}
+		// Triangle end
 		
 		if (RandRange(100) < dodgeChance)
 		{

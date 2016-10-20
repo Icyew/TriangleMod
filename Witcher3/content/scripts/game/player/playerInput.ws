@@ -1609,7 +1609,7 @@ class CPlayerInput
 	{
 		var allowed, checkedFists 			: bool;
 		
-		if( IsPressed(action) )
+		if( IsPressed(action) || TOpts_LightAttackOnRelease()) // Triangle whirl
 		{
 			if( IsActionAllowed(EIAB_LightAttacks)  )
 			{
@@ -1617,13 +1617,13 @@ class CPlayerInput
 				{
 					allowed = false;					
 					
-					if( thePlayer.GetCurrentMeleeWeaponType() == PW_Fists || thePlayer.GetCurrentMeleeWeaponType() == PW_None )
+					if( (thePlayer.GetCurrentMeleeWeaponType() == PW_Fists || thePlayer.GetCurrentMeleeWeaponType() == PW_None ) && (IsPressed(action) || !TOpts_LightAttackOnRelease())) // Triangle whirl
 					{
 						checkedFists = true;
 						if(IsActionAllowed(EIAB_Fists))
 							allowed = true;
 					}
-					else if(IsActionAllowed(EIAB_SwordAttack))
+					else if(IsActionAllowed(EIAB_SwordAttack) && (IsReleased(action) || !TOpts_LightAttackOnRelease())) // Triangle whirl
 					{
 						checkedFists = false;
 						allowed = true;
@@ -1631,7 +1631,12 @@ class CPlayerInput
 					
 					if(allowed)
 					{
-						thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Pressed );
+						// Triangle whirl
+						if (TOpts_LightAttackOnRelease())
+							thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Released );
+						else
+							thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Pressed );
+						// Triangle end
 					}
 					else
 					{

@@ -2519,6 +2519,7 @@ class W3DamageManagerProcessor extends CObject
 	{
 		var inv : CInventoryComponent;
 		var ret : bool;
+		var npcVictim : CNewNPC; // Triangle whirl
 	
 		
 		if(!action.victim.IsAlive() || action.WasDodged() || (attackAction && attackAction.IsActionMelee() && !attackAction.ApplyBuffsIfParried() && attackAction.CanBeParried() && attackAction.IsParried()) )
@@ -2533,6 +2534,15 @@ class W3DamageManagerProcessor extends CObject
 			action.SetBuffSourceName( 'Mutation2ExplosionValid' );
 		}
 	
+
+		// Triangle whirl
+		if (TOpts_WhirlStunLock() > 0 && thePlayer.GetCombatAction() == EBAT_SpecialAttack_Light) {
+			npcVictim = (CNewNPC)actorVictim;
+			if (npcVictim) {
+				npcVictim.StunLock(TOpts_WhirlStunLock());
+			}
+		}
+		// Triangle end
 
 		if(actorVictim && action.GetEffectsCount() > 0)
 			ret = actorVictim.ApplyActionEffects(action);

@@ -60,6 +60,36 @@ function TOpts_CrushingBlowsBonusPerFocusPnt() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
 }
 
+function TOpts_LightAttackOnRelease() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackOnRelease' );
+}
+
+function TOpts_DoesWhirlDrainBoth() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlDrainBoth' );
+}
+
+function TOpts_WhirlFocusDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlFocusDiscount' ) );
+}
+
+function TOpts_WhirlStaminaDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStaminaDiscount' ) );
+}
+
+function TOpts_WhirlAltSeverance() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlAltSeverance' );
+}
+
+function TOpts_WhirlStunLock() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //
