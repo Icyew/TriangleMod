@@ -1670,6 +1670,12 @@ class W3DamageManagerProcessor extends CObject
 			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
 		}
 
+		// Triangle precise blows
+		if (action.IsCriticalHit() && playerAttacker && playerAttacker.CanUseSkill(S_Sword_s17) && !playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && TOpts_PreciseBlowsBonusPerFocusPnt() > 0) {
+			armor = MaxF(0, armor * (1 - playerAttacker.GetStat(BCS_Focus) * TOpts_PreciseBlowsBonusPerFocusPnt()));
+		}
+		// Triangle end
+
 		// Triangle armor
 		armor = MaxF(0, armor - CalculateAttributeValue(armorReduction) ); // armor reduction only reduces armor!
 		// scale armor after armor reduction and separately from normal armor calculation to simulate applying armor before attack power

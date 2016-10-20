@@ -60,6 +60,11 @@ function TOpts_CrushingBlowsBonusPerFocusPnt() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
 }
 
+function TOpts_PreciseBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowBonusPerFocus' ) ) / 100;
+}
+
 function TOpts_LightAttackOnRelease() : bool
 {
 	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackOnRelease' );

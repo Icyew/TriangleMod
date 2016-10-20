@@ -1977,6 +1977,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle precise blows
+				if (TOpts_PreciseBlowsBonusPerFocusPnt() > 0) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Critical hits ignore " + NoTrailZeros(TOpts_PreciseBlowsBonusPerFocusPnt() * 100) + "% of armor per adrenaline point."
+						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s18:
 				if (skillLevel > 1)

@@ -15,6 +15,7 @@
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
+				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
 				<Entry varId="LightAttackOnRelease"				value="0" />
 				<Entry varId="WhirlDrainBoth"					value="1" />
 				<Entry varId="WhirlFocusDiscount"				value="0.8" />
@@ -36,6 +37,7 @@
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackOnRelease"	 	 	 displayName="Whirl: Light attack on button release. Lets you whirl immediately"		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlFocusDiscount"	 	 	 displayName="Whirl: Focus drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
