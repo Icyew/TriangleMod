@@ -1661,31 +1661,24 @@ class W3DamageManagerProcessor extends CObject
 		}
 		
 		
-		if(!action.GetIgnoreArmor())
-			armor += CalculateAttributeValue( actorVictim.GetTotalArmor() ); // Triangle armor
-		
+		// Triangle armor
+		if(!action.GetIgnoreArmor() && TUtil_IsPhysicalDamage(dmgType) && !action.IsDoTDamage()) //point resist only applies to physical damage
+			armor = CalculateAttributeValue( actorVictim.GetTotalArmor() );
+
 		// Triangle enemy mutations
 		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
-			if (!action.GetIgnoreArmor())
-				armor += TOpts_ToughArmorPerLevel() * actorVictim.GetLevel(); // Triangle armor
 			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
 		}
-		// Triangle armor scaling
-		npcVictim = (CNewNPC)actorVictim;
-		if(npcVictim && !action.GetIgnoreArmor() && armor > 0 && TUtil_AreAnyArmorOptionsActive()) {
-			if (npcVictim.UsesVitality())
-				armor *= 1 + TOpts_ArmorPerLevelHuman() * npcVictim.GetLevel();
-			else if (npcVictim.UsesEssence()) {
-				armor *= 1 + TOpts_ArmorPerLevelMonster() * npcVictim.GetLevel();
-				armor *= 1 + TOpts_ArmorPerScaledLevelMonster() * (npcVictim.GetLevel() - npcVictim.GetLevelFromLocalVar());
-			}
-			armor += TOpts_FlatArmorPerLevel() * npcVictim.GetLevel();
+
+		// Triangle precise blows
+		if (action.IsCriticalHit() && playerAttacker && playerAttacker.CanUseSkill(S_Sword_s17) && !playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && TOpts_PreciseBlowsBonusPerFocusPnt() > 0) {
+			armor = MaxF(0, armor * (1 - playerAttacker.GetStat(BCS_Focus) * TOpts_PreciseBlowsBonusPerFocusPnt()));
 		}
 		// Triangle end
 
 		// Triangle armor
 		armor = MaxF(0, armor - CalculateAttributeValue(armorReduction) ); // armor reduction only reduces armor!
-		// scale armor after armor reduction to simulate applying armor before attack power
+		// scale armor after armor reduction and separately from normal armor calculation to simulate applying armor before attack power
 		if (playerAttacker && TOpts_ArmorAPScaleRatio() > 0) {
 			powerMod = GetAttackersPowerMod();
 			armor *= 1 + (powerMod.valueMultiplicative - 1) * TOpts_ArmorAPScaleRatio(); // only apply scale factor to positive AP
@@ -1836,6 +1829,10 @@ class W3DamageManagerProcessor extends CObject
 		var logStr : string;
 		var hpPerc : float;
 		var npcVictim : CNewNPC;
+		// Triangle crushing blows
+		var witcherPlayer : W3PlayerWitcher;
+		var focusPoints : float;
+		// Triangle end
 	
 		
 		if ( theGame.CanLog() )
@@ -1868,10 +1865,43 @@ class W3DamageManagerProcessor extends CObject
 				{
 					actorVictim.OnTakeDamage(action);
 				}
+				// Triangle crushing blows
+				witcherPlayer = (W3PlayerWitcher)playerAttacker;
+				if(attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
+					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
+					// TODO maybe revisit this effect when resistances are redone
+					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
+						focusPoints = witcherPlayer.GetSpecialAttackTimeRatio() * witcherPlayer.GetStatMax(BCS_Focus);
+					} else {
+						focusPoints = witcherPlayer.GetStat(BCS_Focus);
+					}
+					if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0
+						&& RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
+						&& !actorVictim.IsHuge()
+						&& !(npcVictim && npcVictim.HasShieldedAbility() && npcVictim.IsShielded(witcherPlayer))) {
+						action.AddEffectInfo(EET_Knockdown);
+					}
+				}
+				// Triangle end
 			}
 			
 			if(!actorVictim.IsAlive() && hpPerc == 1)
 				action.SetWasKilledBySingleHit();
+			// Triangle crushing blows
+			witcherPlayer = (W3PlayerWitcher)playerAttacker;
+			if(attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
+				// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
+				// TODO maybe revisit this effect when resistances are redone
+				if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
+					focusPoints = witcherPlayer.GetSpecialAttackTimeRatio() * witcherPlayer.GetStatMax(BCS_Focus);
+				} else {
+					focusPoints = witcherPlayer.GetStat(BCS_Focus);
+				}
+				if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0 && RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)) {
+					action.AddEffectInfo(EET_Knockdown);
+				}
+			}
+			// Triangle end
 		}
 			
 		if ( theGame.CanLog() )
@@ -2495,6 +2525,7 @@ class W3DamageManagerProcessor extends CObject
 	{
 		var inv : CInventoryComponent;
 		var ret : bool;
+		var npcVictim : CNewNPC; // Triangle whirl
 	
 		
 		if(!action.victim.IsAlive() || action.WasDodged() || (attackAction && attackAction.IsActionMelee() && !attackAction.ApplyBuffsIfParried() && attackAction.CanBeParried() && attackAction.IsParried()) )
@@ -2509,7 +2540,16 @@ class W3DamageManagerProcessor extends CObject
 			action.SetBuffSourceName( 'Mutation2ExplosionValid' );
 		}
 	
-		
+
+		// Triangle whirl
+		if (TOpts_WhirlStunLock() > 0 && thePlayer.GetCombatAction() == EBAT_SpecialAttack_Light) {
+			npcVictim = (CNewNPC)actorVictim;
+			if (npcVictim) {
+				npcVictim.StunLock(TOpts_WhirlStunLock());
+			}
+		}
+		// Triangle end
+
 		if(actorVictim && action.GetEffectsCount() > 0)
 			ret = actorVictim.ApplyActionEffects(action);
 		else

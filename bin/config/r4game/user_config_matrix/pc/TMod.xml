@@ -9,11 +9,19 @@
 				<Entry varId="HeavyAttackComboBonus"			value="0.1"	/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
-				<Entry varId="RendChargeBonus"					value="0.5"	/>
 				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
+				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
+				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
+				<Entry varId="RendChargeBonus"					value="0.5"	/>
+				<Entry varId="AltSpecialAttackInput"			value="0" />
+				<Entry varId="WhirlDrainBoth"					value="0" />
+				<Entry varId="WhirlFocusDiscount"				value="0.8" />
+				<Entry varId="WhirlStaminaDiscount"				value="0.5" />
+				<Entry varId="WhirlAltSeverance"				value="0" />
+				<Entry varId="WhirlStunLock"					value="0" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -23,11 +31,19 @@
 			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSpecialAttackInput"	 	 	 displayName="Whirl Rend: rend/whirl while holding guard/witcher sense + attack."		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlFocusDiscount"	 	 	 displayName="Whirl: Focus drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStaminaDiscount"	 	 	 displayName="Whirl: Stamina drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
@@ -233,7 +249,7 @@
 			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by attack power * x (x=0 for vanilla)"				displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 

@@ -1609,6 +1609,12 @@ class CPlayerInput
 	{
 		var allowed, checkedFists 			: bool;
 		
+		// Triangle whirl
+		if (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed()) {
+			OnCbtSpecialAttackLight(action);
+			return true;
+		}
+		// Triangle end
 		if( IsPressed(action) )
 		{
 			if( IsActionAllowed(EIAB_LightAttacks)  )
@@ -1654,6 +1660,12 @@ class CPlayerInput
 		var allowed, checkedSword : bool;
 		var outKeys : array<EInputKey>;
 		
+		// Triangle rend
+		if (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed()) {
+			OnCbtSpecialAttackHeavy(action);
+			return true;
+		}
+		// Triangle end
 		if ( thePlayer.GetBIsInputAllowed() )
 		{
 			if( IsActionAllowed(EIAB_HeavyAttacks) )
@@ -1680,7 +1692,7 @@ class CPlayerInput
 					}
 					else
 					{
-						if( IsReleased(action) && theInput.GetLastActivationTime( action.aName ) < 0.2 )
+						if( ((IsReleased(action) && !TUtil_IsAltSpecialAttackButtonPressed()) || (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed())) && theInput.GetLastActivationTime( action.aName ) < 0.2 ) // Triangle rend
 						{
 							thePlayer.SetupCombatAction( EBAT_HeavyAttack, BS_Released );
 						}
@@ -1767,6 +1779,7 @@ class CPlayerInput
 		{
 			return;
 		}
+
 		
 		if ( IsPressed(action) )
 		{
@@ -1802,6 +1815,7 @@ class CPlayerInput
 		}
 	}
 	
+
 	event OnCbtSpecialAttackLight( action : SInputAction )
 	{
 		if ( IsReleased( action )  )
@@ -1824,7 +1838,7 @@ class CPlayerInput
 			return false;
 		}
 		
-		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s01) )	
+		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s01) && TUtil_IsAltSpecialAttackButtonPressed()) // Triangle whirl
 		{	
 			thePlayer.PrepareToAttack();
 			thePlayer.SetPlayedSpecialAttackMissingResourceSound(false);
@@ -1854,7 +1868,7 @@ class CPlayerInput
 			return false;
 		}
 		
-		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s02) )	
+		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s02) && TUtil_IsAltSpecialAttackButtonPressed())	// Triangle rend
 		{	
 			thePlayer.PrepareToAttack();
 			thePlayer.SetPlayedSpecialAttackMissingResourceSound(false);

@@ -660,9 +660,9 @@ state Combat in CR4Player extends ExtendedMovable
 		var aerondight		: W3Effect_Aerondight;
 		var weaponId		: SItemUniqueId;
 		
-		if(parent.HasAbility('Runeword 2 _Stats', true))
+		if(parent.HasAbility('Runeword 2 _Stats', true) || TOpts_WhirlAltSeverance()) // Triangle whirl
 		{
-			if(data.attackName == 'attack_heavy_special')
+			if(data.attackName == 'attack_heavy_special' && parent.HasAbility('Runeword 2 _Stats', true)) // Triangle whirl
 			{
 				data.rangeName = 'runeword2_heavy';		
 				weaponEntity = thePlayer.inv.GetItemEntityUnsafe(thePlayer.inv.GetItemFromSlot(data.weaponSlot));
@@ -693,7 +693,7 @@ state Combat in CR4Player extends ExtendedMovable
 				}
 			}
 		}
-		
+
 		res = virtual_parent.OnPreAttackEvent( animEventName, animEventType, data, animInfo );
 		
 		if ( animEventType == AET_DurationEnd && parent.HasHitTarget() )

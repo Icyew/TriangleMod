@@ -55,6 +55,46 @@ function TOpts_MaxParries() : int
 	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'MaxParries' ) );
 }
 
+function TOpts_CrushingBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
+}
+
+function TOpts_PreciseBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowBonusPerFocus' ) ) / 100;
+}
+
+function TOpts_AltSpecialAttackInput() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AltSpecialAttackInput' );
+}
+
+function TOpts_DoesWhirlDrainBoth() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlDrainBoth' );
+}
+
+function TOpts_WhirlFocusDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlFocusDiscount' ) );
+}
+
+function TOpts_WhirlStaminaDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStaminaDiscount' ) );
+}
+
+function TOpts_WhirlAltSeverance() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlAltSeverance' );
+}
+
+function TOpts_WhirlStunLock() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //
