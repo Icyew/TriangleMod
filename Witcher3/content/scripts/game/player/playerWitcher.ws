@@ -3104,9 +3104,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		// Triangle rend
-		// Moved this line to be after setting the ratio
-		if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
-			OnPerformSpecialAttack(false, false);
+		// Moved this line to be after setting the ratio - edit: let player keep going, but it'll be a 'weak' hit
+		// if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
+		// 	OnPerformSpecialAttack(false, false);
 
 		// focusHighlight = ratio * GetStatMax(BCS_Focus);
 		// focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));

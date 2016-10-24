@@ -9491,9 +9491,8 @@ statemachine abstract import class CR4Player extends CPlayer
 				
 				switch ( stage )
 				{
-					case BS_Released : // Triangle whirl
 					case BS_Pressed :
-					if ((stage == BS_Released && TOpts_LightAttackOnRelease()) || (stage == BS_Pressed && !TOpts_LightAttackOnRelease())) { // Triangle whirl
+					{
 						
 						
 						
@@ -9510,8 +9509,7 @@ statemachine abstract import class CR4Player extends CPlayer
 							actionResult = OnPerformAttack(theGame.params.ATTACK_NAME_LIGHT);
 							// end Triangle
 							//target.SignalGameplayEventParamInt('Time2Dodge', (int)EDT_Attack );
-					} else actionResult = false; // Triangle whirl
-					break;
+					} break;
 					
 					default :
 					{

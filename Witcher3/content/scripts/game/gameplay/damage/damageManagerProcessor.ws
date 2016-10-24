@@ -707,7 +707,7 @@ class W3DamageManagerProcessor extends CObject
 					if( SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName() )
 					{				
 						// Triangle rend Crit scales with adrenaline points used now
-						rendLoad = ((W3PlayerWitcher)playerAttacker).GetSpecialAttackTimeRatio() * playerAttacker.GetStatMax(BCS_Focus);
+						rendLoad = FloorF(MinF(((W3PlayerWitcher)playerAttacker).GetSpecialAttackTimeRatio() * playerAttacker.GetStatMax(BCS_Focus), playerAttacker.GetStat(BCS_Focus)));
 						critChance += FloorF(rendLoad) * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
 						// Triangle end
 					}
@@ -953,7 +953,7 @@ class W3DamageManagerProcessor extends CObject
 			rendRatio = witcherAttacker.GetSpecialAttackTimeRatio();
 
 			
-			rendLoad = rendRatio * playerAttacker.GetStatMax(BCS_Focus); // Triangle rend ends now when you don't have enough focus to drain, so rendLoad can't exceed max focus
+			rendLoad = FloorF(MinF(rendRatio * playerAttacker.GetStatMax(BCS_Focus), playerAttacker.GetStat(BCS_Focus))); // Triangle rend
 			
 			
 			if(rendLoad >= 1)

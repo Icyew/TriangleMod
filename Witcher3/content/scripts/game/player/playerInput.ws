@@ -1609,7 +1609,13 @@ class CPlayerInput
 	{
 		var allowed, checkedFists 			: bool;
 		
-		if( IsPressed(action) || TOpts_LightAttackOnRelease()) // Triangle whirl
+		// Triangle whirl
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
+			OnCbtSpecialAttackLight(action);
+			return true;
+		}
+		// Triangle end
+		if( IsPressed(action) )
 		{
 			if( IsActionAllowed(EIAB_LightAttacks)  )
 			{
@@ -1617,13 +1623,13 @@ class CPlayerInput
 				{
 					allowed = false;					
 					
-					if( (thePlayer.GetCurrentMeleeWeaponType() == PW_Fists || thePlayer.GetCurrentMeleeWeaponType() == PW_None ) && (IsPressed(action) || !TOpts_LightAttackOnRelease())) // Triangle whirl
+					if( thePlayer.GetCurrentMeleeWeaponType() == PW_Fists || thePlayer.GetCurrentMeleeWeaponType() == PW_None )
 					{
 						checkedFists = true;
 						if(IsActionAllowed(EIAB_Fists))
 							allowed = true;
 					}
-					else if(IsActionAllowed(EIAB_SwordAttack) && (IsReleased(action) || !TOpts_LightAttackOnRelease())) // Triangle whirl
+					else if(IsActionAllowed(EIAB_SwordAttack))
 					{
 						checkedFists = false;
 						allowed = true;
@@ -1631,12 +1637,7 @@ class CPlayerInput
 					
 					if(allowed)
 					{
-						// Triangle whirl
-						if (TOpts_LightAttackOnRelease())
-							thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Released );
-						else
-							thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Pressed );
-						// Triangle end
+						thePlayer.SetupCombatAction( EBAT_LightAttack, BS_Pressed );
 					}
 					else
 					{
@@ -1659,6 +1660,12 @@ class CPlayerInput
 		var allowed, checkedSword : bool;
 		var outKeys : array<EInputKey>;
 		
+		// Triangle rend
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
+			OnCbtSpecialAttackHeavy(action);
+			return true;
+		}
+		// Triangle end
 		if ( thePlayer.GetBIsInputAllowed() )
 		{
 			if( IsActionAllowed(EIAB_HeavyAttacks) )
@@ -1772,6 +1779,7 @@ class CPlayerInput
 		{
 			return;
 		}
+
 		
 		if ( IsPressed(action) )
 		{
@@ -1807,6 +1815,7 @@ class CPlayerInput
 		}
 	}
 	
+
 	event OnCbtSpecialAttackLight( action : SInputAction )
 	{
 		if ( IsReleased( action )  )
