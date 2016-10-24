@@ -65,9 +65,9 @@ function TOpts_PreciseBlowsBonusPerFocusPnt() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowBonusPerFocus' ) ) / 100;
 }
 
-function TOpts_LightAttackOnRelease() : bool
+function TOpts_AltSpecialAttackInput() : bool
 {
-	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackOnRelease' );
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AltSpecialAttackInput' );
 }
 
 function TOpts_DoesWhirlDrainBoth() : bool
