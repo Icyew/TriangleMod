@@ -5,6 +5,11 @@ function TOpts_HeavyAttackDamageMod() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackDmgMod' ) );
 }
 
+function TOpts_LightAttackComboCritBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboCritBonus' ) ) / 100;
+}
+
 function TOpts_LightAttackComboBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboBonus' ) );
@@ -48,6 +53,46 @@ function TOpts_ParryCooldown() : float
 function TOpts_MaxParries() : int
 {
 	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'MaxParries' ) );
+}
+
+function TOpts_CrushingBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
+}
+
+function TOpts_PreciseBlowsBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowBonusPerFocus' ) ) / 100;
+}
+
+function TOpts_AltSpecialAttackInput() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AltSpecialAttackInput' );
+}
+
+function TOpts_DoesWhirlDrainBoth() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlDrainBoth' );
+}
+
+function TOpts_WhirlFocusDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlFocusDiscount' ) );
+}
+
+function TOpts_WhirlStaminaDiscount() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStaminaDiscount' ) );
+}
+
+function TOpts_WhirlAltSeverance() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlAltSeverance' );
+}
+
+function TOpts_WhirlStunLock() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
 }
 
 // ---- Combat End ---- //
@@ -358,6 +403,27 @@ function TOpts_LevelJitter() : int
 {
 	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'LevelJitter' ) );
 }
+
+function TOpts_FlatArmorPerLevel() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'FlatArmorPerLevel' ) );
+}
+
+function TOpts_ArmorPerLevelHuman() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerLevelHuman' ) ) / 100;
+}
+
+function TOpts_ArmorPerLevelMonster() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerLevelMonster' ) ) / 100;
+}
+
+function TOpts_ArmorPerScaledLevelMonster() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionScaling', 'ArmorPerScaledLevelMonster' ) ) / 100;
+}
+
 // ---- Leveling End ---- //
 
 // ---- Enemies Begin ---- //
@@ -555,6 +621,16 @@ function TOpts_RuneEffectMultiplier() : float
 function TOpts_GlyphEffectMultiplier() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GlyphEffectMultiplier' ) );
+}
+
+function TOpts_SwitchArmorCalcOrder() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'SwitchArmorCalcOrder' );
+}
+
+function TOpts_ArmorAPScaleRatio() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'ArmorAPScaleRatio' ) );
 }
 
 // ---- Misc end ---- //

@@ -5,27 +5,45 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
 				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
+				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
 				<Entry varId="HeavyAttackComboBonus"			value="0.1"	/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
-				<Entry varId="RendChargeBonus"					value="0.5"	/>
 				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
+				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
+				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
+				<Entry varId="RendChargeBonus"					value="0.5"	/>
+				<Entry varId="AltSpecialAttackInput"			value="0" />
+				<Entry varId="WhirlDrainBoth"					value="0" />
+				<Entry varId="WhirlFocusDiscount"				value="0.8" />
+				<Entry varId="WhirlStaminaDiscount"				value="0.5" />
+				<Entry varId="WhirlAltSeverance"				value="0" />
+				<Entry varId="WhirlStunLock"					value="0" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
 			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 disables)"			 		displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSpecialAttackInput"	 	 	 displayName="Whirl Rend: rend/whirl while holding guard/witcher sense + attack."		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlFocusDiscount"	 	 	 displayName="Whirl: Focus drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStaminaDiscount"	 	 	 displayName="Whirl: Stamina drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
@@ -145,6 +163,10 @@
 				<Entry varId="DownscalingFactor"				value="0.4"	/>
 				<Entry varId="LevelBonus"						value="0.0"	/>
 				<Entry varId="LevelJitter"						value="0.0"	/>
+				<Entry varId="FlatArmorPerLevel"				value="0"	/>
+				<Entry varId="ArmorPerLevelHuman"				value="10"	/>
+				<Entry varId="ArmorPerLevelMonster"				value="10"	/>
+				<Entry varId="ArmorPerScaledLevelMonster"		value="0"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -156,6 +178,10 @@
 			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 				displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FlatArmorPerLevel"		 	 	 displayName="Add armor per enemy level for armored enemies"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelHuman"		 	 displayName="Add % of base armor every enemy level - humans"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelMonster"		 	 displayName="Add % of base armor every enemy level - monsters"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerScaledLevelMonster"	 displayName="Add % of base armor for every level added due to scaling - monsters"		displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
@@ -213,25 +239,25 @@
 	<Group id="TModOptionAnimations" displayName="Mods.TMod. Animations ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="MediumAttackMinDist"				value="1.8" />
+				<Entry varId="FarAttackMinDist"					value="2.5" />
 				<Entry varId="CustomLightAnimEnabled"			value="1" />
 				<Entry varId="CustomLightAnimSpeedBonus"		value="50" />
 				<Entry varId="CustomHeavyAnimEnabled"			value="1" />
 				<Entry varId="CustomHeavyAnimSpeedBonus"		value="30" />
-				<Entry varId="CustomHalfswordAnimEnabled"		value="1" />
+				<Entry varId="CustomHalfswordAnimEnabled"		value="0" />
 				<Entry varId="CustomHalfswordAnimSpeedBonus"	value="60" />
-				<Entry varId="MediumAttackMinDist"				value="1.8" />
-				<Entry varId="FarAttackMinDist"					value="2.5" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
+			<Var id="MediumAttackMinDist"			 		 displayName="Minimum distance to execute a medium ranged attack"							 	displayType="SLIDER;0.00;4;80" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FarAttackMinDist"			 		 	 displayName="Minimum distance to execute a far ranged attack"							 		displayType="SLIDER;0.00;5;100" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomLightAnimEnabled"				 displayName="light attack animations: enable extra animations"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomLightAnimSpeedBonus"				 displayName="light attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomHeavyAnimEnabled"				 displayName="heavy attack animations: enable extra animations"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomHeavyAnimSpeedBonus"				 displayName="heavy attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomHalfswordAnimEnabled"			 displayName="halfsword attack animations: enable halfswording vs heavy armor"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomHalfswordAnimSpeedBonus"			 displayName="halfsword attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="MediumAttackMinDist"			 		 displayName="Minimum distance to execute a medium ranged attack"							 	displayType="SLIDER;0.00;4;80" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="FarAttackMinDist"			 		 	 displayName="Minimum distance to execute a far ranged attack"							 		displayType="SLIDER;0.00;5;100" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionMisc" displayName="Mods.TMod. Misc ">
@@ -239,11 +265,15 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="RuneEffectMultiplier"					value="1"	/>
 				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
+				<Entry varId="SwitchArmorCalcOrder"					value="1"	/>
+				<Entry varId="ArmorAPScaleRatio"					value="0"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
 			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 

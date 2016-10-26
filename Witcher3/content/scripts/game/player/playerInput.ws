@@ -1609,6 +1609,12 @@ class CPlayerInput
 	{
 		var allowed, checkedFists 			: bool;
 		
+		// Triangle whirl
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
+			OnCbtSpecialAttackLight(action);
+			return true;
+		}
+		// Triangle end
 		if( IsPressed(action) )
 		{
 			if( IsActionAllowed(EIAB_LightAttacks)  )
@@ -1654,6 +1660,12 @@ class CPlayerInput
 		var allowed, checkedSword : bool;
 		var outKeys : array<EInputKey>;
 		
+		// Triangle rend
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
+			OnCbtSpecialAttackHeavy(action);
+			return true;
+		}
+		// Triangle end
 		if ( thePlayer.GetBIsInputAllowed() )
 		{
 			if( IsActionAllowed(EIAB_HeavyAttacks) )
@@ -1767,6 +1779,7 @@ class CPlayerInput
 		{
 			return;
 		}
+
 		
 		if ( IsPressed(action) )
 		{
@@ -1802,6 +1815,7 @@ class CPlayerInput
 		}
 	}
 	
+
 	event OnCbtSpecialAttackLight( action : SInputAction )
 	{
 		if ( IsReleased( action )  )

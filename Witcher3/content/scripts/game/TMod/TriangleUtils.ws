@@ -298,3 +298,15 @@ function TUtil_GetAdaptationDiscount(player : W3PlayerWitcher) : float
 {
     return MinF(TOpts_AdaptationDiscountPerLevel() * player.GetSkillLevel(S_Alchemy_s14) * player.GetMutagenBuffsCount(), TOpts_AdaptationMaxDiscount());
 }
+
+// Triangle armor scaling
+function TUtil_AreAnyArmorOptionsActive() : bool
+{
+    return (TOpts_FlatArmorPerLevel() > 0 || TOpts_ArmorPerLevelHuman() > 0 || TOpts_ArmorPerLevelMonster() > 0 || TOpts_ArmorPerScaledLevelMonster() > 0);
+}
+
+// Triangle whirl rend
+function TUtil_IsAltSpecialAttackPressedAndEnabled() : bool
+{
+    return TOpts_AltSpecialAttackInput() && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
+}

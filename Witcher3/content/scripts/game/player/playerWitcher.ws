@@ -28,7 +28,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 	// Triangle attack combos
 	// Heavy attack dmg is calculated after counter inc, so we need to keep track of prev counter
 	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;
-	private				var prevHeavyAttackCounter										: int;
 	// Triangle rend
 	protected			var cachedFocusDifference										: float; default cachedFocusDifference = 0;
 	private				var undrainedFocusDifference									: float; default undrainedFocusDifference = 0;
@@ -3031,12 +3030,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(skillLevel > 1)
 				{
 					reduction = GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, true) * (skillLevel - 1);
-					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive);
+					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive) * TOpts_WhirlStaminaDiscount(); // Triangle whirl
 				}
 				
 				DrainStamina(ESAT_FixedValue, cost, delay, GetSkillAbilityName(S_Sword_s01));
 			}
-			else				
+			if (GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) // Triangle whirl
 			{				
 				GetSkillAttributeValue(S_Sword_s01, 'focus_cost_per_sec', false, true);
 				focusPerSec = GetWhirlFocusCostPerSec();
@@ -3044,7 +3043,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
-		if(GetStat(BCS_Stamina) <= 0 && GetStat(BCS_Focus) <= 0)
+		if((GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) && GetStat(BCS_Focus) <= 0) // Triangle whirl
 		{
 			OnPerformSpecialAttack(true, false);
 		}
@@ -3062,7 +3061,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(skillLevel > 1)
 			ability -= GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, false) * (skillLevel-1);
 			
-		val = CalculateAttributeValue(ability);
+		val = CalculateAttributeValue(ability) * TOpts_WhirlFocusDiscount(); // Triangle whirl
 		
 		return val;
 	}
@@ -3128,9 +3127,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		// Triangle rend
-		// Moved this line to be after setting the ratio
-		if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
-			OnPerformSpecialAttack(false, false);
+		// Moved this line to be after setting the ratio - edit: let player keep going, but it'll be a 'weak' hit
+		// if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
+		// 	OnPerformSpecialAttack(false, false);
 
 		// focusHighlight = ratio * GetStatMax(BCS_Focus);
 		// focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
@@ -3412,7 +3411,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			// Triangle attack combos
 			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
 				RemoveTimer('FastAttackCounterDecay');
-				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1)); // triggers before combo inc, so use raw counter
 			}
 			// Triangle end
 			SetCombatAction( action ) ;
@@ -3490,7 +3489,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;
-					if (fastAttackCounter < maxLightCombo && CanUseSkill(S_Sword_s21))
+					if (GetLightAttackComboLength() < maxLightCombo && CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() > 0)
 						fastAttackCounter += 1;
 					AddTimer('FastAttackCounterDecay', TOpts_LightAttackComboDecay(), false, false, null, false, true);
 				}
@@ -3499,10 +3498,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;
-					if (heavyAttackCounter < maxHeavyCombo && CanUseSkill(S_Sword_s04)) {
-						prevHeavyAttackCounter = heavyAttackCounter;
+					if (GetHeavyAttackComboLength() < maxHeavyCombo && CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() > 0)
 						heavyAttackCounter += 1;
-					}
 					AddTimer('HeavyAttackCounterDecay', TOpts_HeavyAttackComboDecay(), false, false, null, false, true);
 				}
 
@@ -3551,15 +3548,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 
 	// Triangle attack combos
-	public function GetHeavyAttackCounter() : int
+	public function GetLightAttackComboLength() : int
 	{
-		return heavyAttackCounter;
+		return Max(0, fastAttackCounter - 1);
 	}
 
 	// Triangle attack combos
-	public function GetPrevHeavyAttackCounter() : int
+	public function GetHeavyAttackComboLength() : int
 	{
-		return prevHeavyAttackCounter;
+		return Max(0, heavyAttackCounter - 1);
 	}
 	
 	public function GetCraftingSchematicsNames() : array<name>		{return craftingSchematics;}
@@ -8050,7 +8047,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
 		
-		if (CanUseSkill(S_Sword_s21))
+		if (CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() == 0)
 			fastAP += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		if (CanUseSkill(S_Perk_05))
 		{
@@ -8058,7 +8055,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			fastCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 			strongCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 		}
-		if (CanUseSkill(S_Sword_s04))
+		if (CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() == 0)
 			strongAP += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
 		if (CanUseSkill(S_Perk_07))
 			strongAP +=	GetAttributeValue('attack_power_heavy_style');

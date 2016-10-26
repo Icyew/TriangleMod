@@ -2564,11 +2564,11 @@ import abstract class CActor extends CGameplayEntity
 			{
 				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))
 				{
-					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetLightAttackCounter(), false);
+					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetLightAttackComboLength(), false);
 				}
 				else if(attackAction && witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s04))
 				{
-					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetHeavyAttackCounter(), false);
+					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetHeavyAttackComboLength(), false);
 				}
 				// Triangle TODO move somwhere else
 				/*else if(action.GetSignSkill() != S_SUndefined && action.GetSignSkill() != S_Magic_3)

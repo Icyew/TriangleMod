@@ -8273,14 +8273,6 @@ statemachine abstract import class CR4Player extends CPlayer
 			critChance += ( ( W3ConfuseEffect )target.GetBuff( EET_Confusion ) ).GetCriticalHitChanceBonus();
 		}
 		
-		// Triangle attack combos light attack combo
-		// Triangle TODO dead light combos give attack speed now
-		witcherPlayer = (W3PlayerWitcher)this;
-		if(witcherPlayer && !isHeavyAttack && CanUseSkill(S_Sword_s21))
-		{
-			// critChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * witcherPlayer.GetLightAttackCounter();	
-		}
-		// Triangle end
 		
 		oilChanceAttribute = MonsterCategoryToCriticalChanceBonus( victimMonsterCategory );
 		if( IsNameValid( oilChanceAttribute ) )
@@ -9815,7 +9807,7 @@ statemachine abstract import class CR4Player extends CPlayer
 						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_ArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
 						break;
 					case EBAT_LightAttack:
-						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1));
+						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1)); // triggers before combo inc, so use raw counter
 						break;
 				}
 			}

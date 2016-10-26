@@ -190,6 +190,19 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 		{
 			hitsToCounter = 65536;
 		}
+		
+		// Triangle whirl
+		if (npc.StunLocked()) {
+			dodgeChanceAttackLight	= 0;
+			dodgeChanceAttackHeavy	= 0;
+			dodgeChanceAard			= 0;
+			dodgeChanceIgni			= 0;
+			dodgeChanceBomb			= 0;
+			dodgeChanceProjectile	= 0;
+			dodgeChanceFear			= 0;
+			counterChance 			= 0;
+		}
+		// Triangle end
 	}
 	
 	private function CheckCounter() : bool
