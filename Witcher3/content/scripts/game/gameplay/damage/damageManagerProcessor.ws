@@ -1592,14 +1592,6 @@ class W3DamageManagerProcessor extends CObject
 			actorVictim.GetResistValue( GetResistForDamage(dmgType, action.IsDoTDamage()), resistPts, resistPerc );
 			
 			
-			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05))
-			{
-				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
-				
-				resistPerc += (1 - resistPerc) * bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05); // Triangle protective coating
-			}
-			
-			
 			if(playerVictim && actorAttacker && playerVictim.HasBuff(EET_Mutagen28))
 			{
 				mutagenBuff = (W3Mutagen28_Effect)playerVictim.GetBuff(EET_Mutagen28);
@@ -1607,6 +1599,16 @@ class W3DamageManagerProcessor extends CObject
 				resistPts += bonusReduct;
 				resistPerc += bonusResist;
 			}
+			
+			
+			// Triangle protective coating moved this block so it takes effect after the mutagen above
+			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05))
+			{
+				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
+				
+				resistPerc += (1 - resistPerc) * bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05); // Triangle protective coating
+			}
+			// Triangle end
 			
 			
 			if(actorAttacker)
