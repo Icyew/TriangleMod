@@ -306,7 +306,7 @@ function TUtil_AreAnyArmorOptionsActive() : bool
 }
 
 // Triangle whirl rend
-function TUtil_IsAltSpecialAttackButtonPressed() : bool
+function TUtil_IsAltSpecialAttackPressedAndEnabled() : bool
 {
-    return !TOpts_AltSpecialAttackInput() || (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
+    return TOpts_AltSpecialAttackInput() && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
 }

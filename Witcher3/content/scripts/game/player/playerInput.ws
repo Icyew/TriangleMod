@@ -1610,7 +1610,7 @@ class CPlayerInput
 		var allowed, checkedFists 			: bool;
 		
 		// Triangle whirl
-		if (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed()) {
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
 			OnCbtSpecialAttackLight(action);
 			return true;
 		}
@@ -1661,7 +1661,7 @@ class CPlayerInput
 		var outKeys : array<EInputKey>;
 		
 		// Triangle rend
-		if (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed()) {
+		if ((IsPressed(action) || IsReleased(action)) && TUtil_IsAltSpecialAttackPressedAndEnabled()) {
 			OnCbtSpecialAttackHeavy(action);
 			return true;
 		}
@@ -1692,7 +1692,7 @@ class CPlayerInput
 					}
 					else
 					{
-						if( ((IsReleased(action) && !TUtil_IsAltSpecialAttackButtonPressed()) || (IsPressed(action) && TUtil_IsAltSpecialAttackButtonPressed())) && theInput.GetLastActivationTime( action.aName ) < 0.2 ) // Triangle rend
+						if( IsReleased(action) && theInput.GetLastActivationTime( action.aName ) < 0.2 )
 						{
 							thePlayer.SetupCombatAction( EBAT_HeavyAttack, BS_Released );
 						}
@@ -1838,7 +1838,7 @@ class CPlayerInput
 			return false;
 		}
 		
-		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s01) && TUtil_IsAltSpecialAttackButtonPressed()) // Triangle whirl
+		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s01) )	
 		{	
 			thePlayer.PrepareToAttack();
 			thePlayer.SetPlayedSpecialAttackMissingResourceSound(false);
@@ -1868,7 +1868,7 @@ class CPlayerInput
 			return false;
 		}
 		
-		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s02) && TUtil_IsAltSpecialAttackButtonPressed())	// Triangle rend
+		if( IsPressed(action) && thePlayer.CanUseSkill(S_Sword_s02) )	
 		{	
 			thePlayer.PrepareToAttack();
 			thePlayer.SetPlayedSpecialAttackMissingResourceSound(false);
