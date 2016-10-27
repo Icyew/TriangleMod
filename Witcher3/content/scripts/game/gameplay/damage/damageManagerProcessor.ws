@@ -727,6 +727,20 @@ class W3DamageManagerProcessor extends CObject
 					{
 						critChance += TOpts_LightAttackComboCritBonus() * GetWitcherPlayer().GetLightAttackComboLength(); // Don't add bonus if combo < 2
 					}
+					// Triangle crits
+					// Triangle TODO is EET_CounterStrikeHit like stagger?
+					if (actorVictim && (actorVictim.HasBuff(EET_Knockdown)
+						|| actorVictim.GetIsRecoveringFromKnockdown()
+						|| actorVictim.HasBuff(EET_HeavyKnockdown)
+						|| actorVictim.HasBuff(EET_Confusion)
+						|| actorVictim.HasBuff(EET_Paralyzed)
+						|| actorVictim.HasBuff(EET_Blindness)
+						|| actorVictim.HasBuff(EET_Immobilized))) {
+						critChance += TOpts_KnockdownCritChance();
+					} else if (actorVictim && (actorVictim.HasBuff(EET_Stagger) || actorVictim.HasBuff(EET_LongStagger))) {
+						critChance += TOpts_StaggerCritChance();
+					}
+					critChance += TOpts_CritChanceBonus();
 					// Triangle end
 
 					
@@ -1537,6 +1551,8 @@ class W3DamageManagerProcessor extends CObject
 				{
 					// criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackComboLength();
 				}
+				// Triangle crits
+				criticalDamageBonus.valueAdditive += TOpts_CritDamageBonus();
 				// Triangle end
 
 				criticalDamageBonus += actorAttacker.GetAttributeValue('critical_hit_damage_bonus_per_focus_pnt') * thePlayer.GetStat(BCS_Focus); // Triangle armor styles

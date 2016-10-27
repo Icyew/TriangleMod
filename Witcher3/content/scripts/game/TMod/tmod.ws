@@ -95,6 +95,26 @@ function TOpts_WhirlStunLock() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
 }
 
+function TOpts_CritDamageBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CritDamageBonus' ) ) / 100;
+}
+
+function TOpts_CritChanceBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CritChanceBonus' ) ) / 100;
+}
+
+function TOpts_StaggerCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'StaggerCritChance' ) ) / 100;
+}
+
+function TOpts_KnockdownCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'KnockdownCritChance' ) ) / 100;
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //

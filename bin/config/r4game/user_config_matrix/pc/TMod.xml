@@ -3,6 +3,10 @@
 	<Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="CritDamageBonus"					value="75" />
+				<Entry varId="CritChanceBonus"					value="0" />
+				<Entry varId="StaggerCritChance"				value="50" />
+				<Entry varId="KnockdownCritChance"				value="100" />
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
 				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
 				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
@@ -25,6 +29,10 @@
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
+			<Var id="CritDamageBonus"				 displayName="Crit damage: flat crit attack power bonus."								displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CritChanceBonus"				 displayName="Crit chance: flat crit chance % bonus."									displayType="SLIDER;-100;100;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaggerCritChance"				 displayName="Crit chance: bonus crit % vs staggered enemies."							displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="KnockdownCritChance"			 displayName="Crit chance: bonus crit % vs prone, confused, paralyzed, etc."			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
