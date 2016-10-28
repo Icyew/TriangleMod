@@ -19,6 +19,7 @@
 				<Entry varId="MaxParries"						value="3" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
 				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
+				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
 				<Entry varId="AltSpecialAttackInput"			value="0" />
 				<Entry varId="WhirlDrainBoth"					value="0" />
@@ -45,6 +46,7 @@
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendBonusPerFocusPnt"			 displayName="Rend: Total damage multiplier per focus point"							displayType="SLIDER;0.00;1;50" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltSpecialAttackInput"	 	 	 displayName="Whirl Rend: rend/whirl while holding guard/witcher sense + attack."		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />

@@ -707,7 +707,7 @@ class W3DamageManagerProcessor extends CObject
 					if( SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName() )
 					{				
 						// Triangle rend Crit scales with adrenaline points used now
-						rendLoad = FloorF(MinF(((W3PlayerWitcher)playerAttacker).GetSpecialAttackTimeRatio() * playerAttacker.GetStatMax(BCS_Focus), playerAttacker.GetStat(BCS_Focus)));
+						rendLoad = GetWitcherPlayer().GetCachedFocusDifference(); // Will always be a natural number
 						critChance += FloorF(rendLoad) * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
 						// Triangle end
 					}
@@ -967,12 +967,13 @@ class W3DamageManagerProcessor extends CObject
 			rendRatio = witcherAttacker.GetSpecialAttackTimeRatio();
 
 			
-			rendLoad = FloorF(MinF(rendRatio * playerAttacker.GetStatMax(BCS_Focus), playerAttacker.GetStat(BCS_Focus))); // Triangle rend
+			rendLoad = GetWitcherPlayer().GetCachedFocusDifference(); // Triangle rend
 			
 			
 			if(rendLoad >= 1)
 			{
-				rendBonusPerPoint = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'adrenaline_final_damage_bonus', false, true);
+				// rendBonusPerPoint = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'adrenaline_final_damage_bonus', false, true); // Triangle rend
+				rendBonusPerPoint.valueMultiplicative = TOpts_RendBonusPerFocusPnt(); // Triangle rend
 				rendBonus = FloorF(rendLoad) * rendBonusPerPoint.valueMultiplicative;
 				
 				for(i=0; i<dmgInfos.Size(); i+=1)
@@ -1889,10 +1890,9 @@ class W3DamageManagerProcessor extends CObject
 					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
 					// TODO maybe revisit this effect when resistances are redone
 					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
-						focusPoints = witcherPlayer.GetSpecialAttackTimeRatio() * witcherPlayer.GetStatMax(BCS_Focus);
-					} else {
-						focusPoints = witcherPlayer.GetStat(BCS_Focus);
+						focusPoints = witcherPlayer.GetCachedFocusDifference(); // Triangle TODO this can now be > your total focus. OP?
 					}
+					focusPoints = FloorF(focusPoints + witcherPlayer.GetStat(BCS_Focus));
 					if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0
 						&& RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
 						&& !actorVictim.IsHuge()

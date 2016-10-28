@@ -30,6 +30,11 @@ function TOpts_HeavyAttackComboDecay() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboDecay' ) );
 }
 
+function TOpts_RendBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendBonusPerFocusPnt' ) );
+}
+
 function TOpts_RendChargeBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );

@@ -149,7 +149,7 @@
         <tags>sword_s2,attack_heavy</tags>
     <armor_reduction min="10000" max="10000"/> <!-- Triangle rend just in case -->
     <critical_hit_chance type="add" min="0.1" />
-    <adrenaline_final_damage_bonus type="mult" min="0.334" />
+    <adrenaline_final_damage_bonus type="mult" min="0.334" /> <!-- Triangle rend overridden by menu item -->
     <stamina_max_dmg_bonus type="mult" min="0.5" /> <!-- Triangle rend overridden by menu item -->
     
     <stamina_cost type="add" min="0" />

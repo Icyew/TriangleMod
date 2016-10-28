@@ -1873,8 +1873,8 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				
 				// Triangle rend
-				baseString = "Unleash an attack that ignores enemy Defense and increases total damage by 50% when fully charged." +
-					" Adrenaline points increase critical chance by " + NoTrailZeros(RoundMath(arg*100)) + "% and total damage by " + NoTrailZeros(RoundMath(ability.valueMultiplicative*100)) + "%.";
+				baseString = "Unleash an attack that ignores enemy Defense and increases total damage by " + NoTrailZeros(TOpts_RendChargeBonus()*100) + "% when fully charged." +
+					" Adrenaline points increase critical chance by " + NoTrailZeros(RoundMath(arg*100)) + "% and total damage by " + NoTrailZeros(TOpts_RendBonusPerFocusPnt()*100) + "%.";
 				if (skillLevel >= 5){
 					baseString += "<br>Adrenaline points are refunded on a miss or a killing blow.";
 				} else {
