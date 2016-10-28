@@ -30,6 +30,11 @@ function TOpts_HeavyAttackComboDecay() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboDecay' ) );
 }
 
+function TOpts_RendBonusPerFocusPnt() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendBonusPerFocusPnt' ) );
+}
+
 function TOpts_RendChargeBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );
@@ -93,6 +98,26 @@ function TOpts_WhirlAltSeverance() : bool
 function TOpts_WhirlStunLock() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
+}
+
+function TOpts_CritDamageBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CritDamageBonus' ) ) / 100;
+}
+
+function TOpts_CritChanceBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CritChanceBonus' ) ) / 100;
+}
+
+function TOpts_StaggerCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'StaggerCritChance' ) ) / 100;
+}
+
+function TOpts_KnockdownCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'KnockdownCritChance' ) ) / 100;
 }
 
 // ---- Combat End ---- //
