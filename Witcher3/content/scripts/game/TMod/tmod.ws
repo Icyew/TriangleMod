@@ -100,6 +100,11 @@ function TOpts_WhirlStunLock() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLock' ) );
 }
 
+function TOpts_WhirlStunLockSlow() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'WhirlStunLockSlow' ) ) / 100;
+}
+
 function TOpts_CritDamageBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CritDamageBonus' ) ) / 100;

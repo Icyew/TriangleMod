@@ -4,13 +4,13 @@
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="CritDamageBonus"					value="75" />
-				<Entry varId="CritChanceBonus"					value="0" />
+				<Entry varId="CritChanceBonus"					value="-5" />
 				<Entry varId="StaggerCritChance"				value="50" />
 				<Entry varId="KnockdownCritChance"				value="100" />
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
-				<Entry varId="LightAttackComboBonus"			value="2.5"	/>
-				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
-				<Entry varId="HeavyAttackComboBonus"			value="0.1"	/>
+				<Entry varId="LightAttackComboBonus"			value="0"	/>
+				<Entry varId="LightAttackComboCritBonus"		value="4"	/>
+				<Entry varId="HeavyAttackComboBonus"			value="0.12"/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
 				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
@@ -21,12 +21,13 @@
 				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
 				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
-				<Entry varId="AltSpecialAttackInput"			value="0" />
-				<Entry varId="WhirlDrainBoth"					value="0" />
-				<Entry varId="WhirlFocusDiscount"				value="0.8" />
+				<Entry varId="AltSpecialAttackInput"			value="1" />
+				<Entry varId="WhirlDrainBoth"					value="1" />
+				<Entry varId="WhirlFocusDiscount"				value="1.25" />
 				<Entry varId="WhirlStaminaDiscount"				value="0.5" />
 				<Entry varId="WhirlAltSeverance"				value="0" />
-				<Entry varId="WhirlStunLock"					value="0" />
+				<Entry varId="WhirlStunLock"					value="0.35" />
+				<Entry varId="WhirlStunLockSlow"				value="66" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -54,6 +55,7 @@
 			<Var id="WhirlStaminaDiscount"	 	 	 displayName="Whirl: Stamina drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLockSlow"	 	 		 displayName="Whirl: While dodging disabled, slow by X %."								displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
