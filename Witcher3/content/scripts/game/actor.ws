@@ -1247,17 +1247,17 @@ import abstract class CActor extends CGameplayEntity
 		return 1;
 	}
 
-	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int ) : int
+	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int, optional srcName : name ) : int
 	{
-		var causer : SAnimMultiplyCauser;
+		var causer, newCauser : SAnimMultiplyCauser;
 		var finalMul : float;
 		var i, size : int;
 
 		if( overrideExistingId != -1 ) {
 			size = baseAnimationMultiplierCausers.Size();
 			for(i = 0; i < size; i += 1) {
-				if( baseAnimationMultiplierCausers[i].id == overrideExistingId ) {
-					causer = baseAnimationMultiplierCausers[i];
+				causer = baseAnimationMultiplierCausers[i];
+				if( causer.id == overrideExistingId || (srcName != '' && causer.srcName == srcName)) {
 					baseAnimationMultiplierCausers.Remove(causer);
 					baseAnimationMultiplierCausers.PushBack(causer);
 					causer.mul = mul;
@@ -1267,20 +1267,36 @@ import abstract class CActor extends CGameplayEntity
 			}
 		}
 		
-		causer.mul = mul;
-		causer.id = nextFreeBaseAnimMultCauserId;
+		newCauser.mul = mul;
+		newCauser.id = nextFreeBaseAnimMultCauserId;
+		if (srcName) {
+			newCauser.srcName = srcName;
+		}
 		nextFreeBaseAnimMultCauserId += 1;
-		baseAnimationMultiplierCausers.PushBack( causer );
+		baseAnimationMultiplierCausers.PushBack( newCauser );
 		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
 		
-		return causer.id;
+		return newCauser.id;
 	}
 
-	public function ResetBaseAnimationMultiplierCauser( id : int )
+	public function ResetBaseAnimationMultiplierCauserById( id : int )
 	{
 		var i : int;
 		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
 			if (baseAnimationMultiplierCausers[i].id == id) {
+				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
+				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+				break;
+			}
+		}
+	}
+
+	// Triangle robx99 animations adapted
+	public function ResetBaseAnimationMultiplierCauserBySrc( srcName : name )
+	{
+		var i : int;
+		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
+			if (baseAnimationMultiplierCausers[i].srcName == srcName) {
 				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
 				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
 				break;

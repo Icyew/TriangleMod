@@ -11974,7 +11974,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		// Triangle attack combos armor bonuses
 		if ((W3PlayerWitcher)this) {
 			if (expectingCombatActionEnd.Size() > 0) {
-				ResetBaseAnimationMultiplierCauser(expectingCombatActionEnd[0]);
+				ResetBaseAnimationMultiplierCauserById(expectingCombatActionEnd[0]);
 				expectingCombatActionEnd.Remove(expectingCombatActionEnd[0]);
 			}
 		}

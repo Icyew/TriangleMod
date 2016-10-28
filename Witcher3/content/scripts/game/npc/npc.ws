@@ -1140,12 +1140,14 @@ statemachine import class CNewNPC extends CActor
 	public function StunLock(seconds : float)
 	{
 		stunLocked = true;
+		PushBaseAnimationMultiplierCauser(1 - TOpts_WhirlStunLockSlow(),, 'stunlock');
 		AddTimer('StunUnlock', seconds,,,,,true);
 	}
 
 	// Triangle whirl
 	timer function StunUnlock(delta : float, id : int)
 	{
+		ResetBaseAnimationMultiplierCauserBySrc('stunlock');
 		stunLocked = false;
 	}
 

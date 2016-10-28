@@ -725,7 +725,7 @@ class W3DamageManagerProcessor extends CObject
 					// Triangle attack combos light attack combo
 					if(isLightAttack && playerAttacker.CanUseSkill(S_Sword_s21))
 					{
-						critChance += TOpts_LightAttackComboCritBonus() * GetWitcherPlayer().GetLightAttackComboLength(); // Don't add bonus if combo < 2
+						critChance += TOpts_LightAttackComboCritBonus() * GetWitcherPlayer().GetLightAttackComboLength(); // Combo starts at 2 hits!
 					}
 					// Triangle crits
 					// Triangle TODO is EET_CounterStrikeHit like stagger?
