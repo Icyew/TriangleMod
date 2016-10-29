@@ -2077,7 +2077,7 @@ state Combat in CR4Player extends ExtendedMovable
 				}
 				else
 				{
-					callbackInfo.outDistance = ADIST_Medium;
+					callbackInfo.outDistance = ADIST_Small; // Triangle TODO make sure this doesnt cause issue. vanilla and robx99 use ADIST_Medium here.
 				}
 			}
 			// Triangle end

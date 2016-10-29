@@ -631,12 +631,12 @@ function TOpts_HalfswordAttackAnimationSpeedBonus() : float
 
 function TOpts_MediumAttackMinDist() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'MediumAttackMinDist' ) ) / 100;
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'MediumAttackMinDist' ) );
 }
 
 function TOpts_FarAttackMinDist() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'FarAttackMinDist' ) ) / 100;
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAnimations', 'FarAttackMinDist' ) );
 }
 
 // ---- Animations end ---- //

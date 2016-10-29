@@ -251,25 +251,25 @@
 	<Group id="TModOptionAnimations" displayName="Mods.TMod. Animations ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
-				<Entry varId="MediumAttackMinDist"				value="1.8" />
+				<Entry varId="MediumAttackMinDist"				value="1" />
 				<Entry varId="FarAttackMinDist"					value="2.5" />
-				<Entry varId="CustomLightAnimEnabled"			value="1" />
+				<Entry varId="CustomLightAnimEnabled"			value="0" />
 				<Entry varId="CustomLightAnimSpeedBonus"		value="50" />
-				<Entry varId="CustomHeavyAnimEnabled"			value="1" />
+				<Entry varId="CustomHeavyAnimEnabled"			value="0" />
 				<Entry varId="CustomHeavyAnimSpeedBonus"		value="30" />
 				<Entry varId="CustomHalfswordAnimEnabled"		value="0" />
 				<Entry varId="CustomHalfswordAnimSpeedBonus"	value="60" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
-			<Var id="MediumAttackMinDist"			 		 displayName="Minimum distance to execute a medium ranged attack"							 	displayType="SLIDER;0.00;4;80" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="FarAttackMinDist"			 		 	 displayName="Minimum distance to execute a far ranged attack"							 		displayType="SLIDER;0.00;5;100" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MediumAttackMinDist"			 		 displayName="Minimum distance to execute a medium ranged attack"							 		displayType="SLIDER;0.00;4;80" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FarAttackMinDist"			 		 	 displayName="Minimum distance to execute a far ranged attack"							 			displayType="SLIDER;0.00;5;100" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomLightAnimEnabled"				 displayName="light attack animations: enable extra animations"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="CustomLightAnimSpeedBonus"				 displayName="light attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomLightAnimSpeedBonus"				 displayName="light attack animations: % speed bonus (0 is too slow)"							 	displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CustomHeavyAnimEnabled"				 displayName="heavy attack animations: enable extra animations"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="CustomHeavyAnimSpeedBonus"				 displayName="heavy attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="CustomHalfswordAnimEnabled"			 displayName="halfsword attack animations: enable halfswording vs heavy armor"							 			displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="CustomHalfswordAnimSpeedBonus"			 displayName="halfsword attack animations: % speed bonus"							 			displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomHeavyAnimSpeedBonus"				 displayName="heavy attack animations: % speed bonus (0 is too slow)"							 	displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomHalfswordAnimEnabled"			 displayName="halfsword attack animations: enable halfswording vs heavy armor"						displayType="TOGGLE" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomHalfswordAnimSpeedBonus"			 displayName="halfsword attack animations: % speed bonus (0 is too slow)"							displayType="SLIDER;0.00;100;20" 			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionMisc" displayName="Mods.TMod. Misc ">
