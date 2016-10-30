@@ -1886,11 +1886,11 @@ class W3DamageManagerProcessor extends CObject
 				}
 				// Triangle crushing blows
 				witcherPlayer = (W3PlayerWitcher)playerAttacker;
-				if(attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
+				if(actorVictim.IsAlive() && attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
 					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
 					// TODO maybe revisit this effect when resistances are redone
 					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
-						focusPoints = witcherPlayer.GetCachedFocusDifference(); // Triangle TODO this can now be > your total focus. OP?
+						focusPoints = witcherPlayer.GetCachedFocusDifference();
 					}
 					focusPoints = FloorF(focusPoints + witcherPlayer.GetStat(BCS_Focus));
 					if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0
@@ -1905,21 +1905,6 @@ class W3DamageManagerProcessor extends CObject
 			
 			if(!actorVictim.IsAlive() && hpPerc == 1)
 				action.SetWasKilledBySingleHit();
-			// Triangle crushing blows
-			witcherPlayer = (W3PlayerWitcher)playerAttacker;
-			if(attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
-				// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
-				// TODO maybe revisit this effect when resistances are redone
-				if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
-					focusPoints = witcherPlayer.GetSpecialAttackTimeRatio() * witcherPlayer.GetStatMax(BCS_Focus);
-				} else {
-					focusPoints = witcherPlayer.GetStat(BCS_Focus);
-				}
-				if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0 && RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)) {
-					action.AddEffectInfo(EET_Knockdown);
-				}
-			}
-			// Triangle end
 		}
 			
 		if ( theGame.CanLog() )
