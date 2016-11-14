@@ -310,3 +310,68 @@ function TUtil_IsAltSpecialAttackPressedAndEnabled() : bool
 {
     return TOpts_AltSpecialAttackInput() && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
 }
+
+// Triangle synergy mutagens
+function TUtil_AddMutagenBonuses(color : ESkillColor, level : int, count : float) : float
+{
+    var bonus : float;
+    var bonusName : name;
+    var bonusMod : float;
+    var finalBonus : int;
+
+    switch (color) {
+        case SC_Red:
+            bonusName = 'T_mutagen_attackpower';
+            bonus = TOpts_MinRedBonus();
+            break;
+        case SC_Green:
+            if (TOpts_GreenGivesToxicity())
+                bonusName = 'T_mutagen_toxicity';
+            else
+                bonusName = 'T_mutagen_vitality';
+            bonus = TOpts_MinGreenBonus();
+            break;
+        case SC_Blue:
+            bonusName = 'T_mutagen_spellpower';
+            bonus = TOpts_MinBlueBonus();
+            break;
+        default:
+            return 0;
+    }
+
+    bonusMod = 1 + 0.5 * (level - 1);
+
+    finalBonus = FloorF(count * FloorF(bonus * bonusMod));
+    if (finalBonus > 0) {
+        thePlayer.AddAbilityMultiple(bonusName, finalBonus);
+    }
+    return finalBonus;
+}
+
+// Triangle synergy mutagens
+function TUtil_NullifyMutagen(mutagen : name, color : ESkillColor)
+{
+    var attrVal, max : SAbilityAttributeValue;
+    var count : int;
+    var dm : CDefinitionsManagerAccessor;
+    count = thePlayer.GetAbilityCount(mutagen);
+    dm = theGame.GetDefinitionsManager();
+    if (count == 0)
+        return;
+    if (color == SC_Green) {
+        dm.GetAbilityAttributeValue(mutagen, 'vitality', attrVal, max);
+        thePlayer.RemoveAbilityAll('T_mutagen_vitality_negative');
+        count = RoundMath(attrVal.valueBase * count);
+        thePlayer.AddAbilityMultiple('T_mutagen_vitality_negative', count);
+    } else if (color == SC_Blue) {
+        dm.GetAbilityAttributeValue(mutagen, 'spell_power', attrVal, max);
+        thePlayer.RemoveAbilityAll('T_mutagen_spellpower_negative');
+        count = RoundMath(attrVal.valueMultiplicative * 100 * count);
+        thePlayer.AddAbilityMultiple('T_mutagen_spellpower_negative', count);
+    } else {
+        dm.GetAbilityAttributeValue(mutagen, 'attack_power', attrVal, max);
+        thePlayer.RemoveAbilityAll('T_mutagen_attackpower_negative');
+        count = RoundMath(attrVal.valueMultiplicative * 100 * count);
+        thePlayer.AddAbilityMultiple('T_mutagen_attackpower_negative', RoundMath(attrVal.valueMultiplicative * 100 * count));
+    }
+}

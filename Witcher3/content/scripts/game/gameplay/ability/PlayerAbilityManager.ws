@@ -762,10 +762,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if( skillLevel > 0 )
 			{
 				color = owner.GetInventory().GetSkillMutagenColor( mutagenItemID );
-				current.count = skillLevel * GetSkillGroupColorCount(color, skillGroupID);
+				current.count = skillLevel * FloorF(GetSkillGroupColorCount(color, skillGroupID)); // Triangle synergy returns a float now
 			}
 		}
-		
 		
 		if( current.abilityName != mutagenBonuses[skillGroupID].abilityName )
 		{
@@ -941,9 +940,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function GetSkillGroupColorCount(commonColor : ESkillColor, groupID : int) : ESkillColor
+	public final function GetSkillGroupColorCount(commonColor : ESkillColor, groupID : int) : float // Triangle synergy changed return type
 	{
-		var count, i : int;
+		// Triangle synergy
+		var count : float;
+		var i : int;
+		// Triangle end
 		var mutagenSlot : EEquipmentSlots;
 		var skillColors : array<ESkillColor>;
 		var item : SItemUniqueId;
@@ -961,10 +963,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		count = 0;
 		for(i=0; i<skillColors.Size(); i+=1)
 		{
-			if(skillColors[i] == commonColor )	
+			
+			if(skillColors[i] == commonColor || (TOpts_YellowSkillWildcard() && skillColors[i] == SC_Yellow)) // Triangle mutagens
 			{
 				count = count + 1;
+			// Triangle synergy
+			} else if (CanUseSkill(S_Alchemy_s19) && TOpts_AltSynergyBonusPerLevel() > 0 && skillColors[i] != SC_None) {
+				count = count + TOpts_AltSynergyBonusPerLevel() * GetSkillLevel(S_Alchemy_s19);
 			}
+			// Triangle end
 		}
 		
 		return count;

@@ -7,76 +7,73 @@
 
 <!-- *** MUTAGENS *** -->
 
+	<!-- Triangle mutagens synergy -->
+	<ability name="T_mutagen_vitality" >
+		<vitality type="base" min="1" max="1" />
+	</ability>
+	<ability name="T_mutagen_toxicity" >
+		<toxicity type="add" min="1" />
+	</ability>
+	<ability name="T_mutagen_spellpower" >
+		<spell_power type="mult" min="0.01" max="0.01" />
+	</ability>
+	<ability name="T_mutagen_attackpower" >
+		<attack_power type="mult" min="0.01" max="0.01"/>
+	</ability>
+	<ability name="T_mutagen_vitality_negative" >
+		<vitality type="base" min="-1" max="-1" />
+	</ability>
+	<ability name="T_mutagen_spellpower_negative" >
+		<spell_power type="mult" min="-0.01" max="-0.01" />
+	</ability>
+	<ability name="T_mutagen_attackpower_negative" >
+		<attack_power type="mult" min="-0.01" max="-0.01"/>
+	</ability>
+	<!-- Triangle end -->
+
 <!-- GREEN -->
 	<ability name="greater_mutagen_color_green" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="150" max="150" /> -->
-		<toxicity type="add" min="10" />
-		<!-- Triangle end -->
+		<vitality type="base" min="150" max="150" />
 		<greater_mutagen_color_green_synergy_bonus is_ability="true" />
 		<mutation_research_points_green type="add" min="1" />
 	</ability>
 
 	<ability name="greater_mutagen_color_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="15" max="15" /> -->
-		<toxicity type="add" min="1" />
-		<!-- Triangle end -->
+		<vitality type="base" min="15" max="15" />
 	</ability>
 	
 	<ability name="mutagen_color_green" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="100" max="100" /> -->
-		<toxicity type="add" min="7" />
-		<!-- Triangle end -->
+		<vitality type="base" min="100" max="100" />
 		<mutagen_color_green_synergy_bonus is_ability="true" />
 	</ability>
 
 	<ability name="mutagen_color_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="10" max="10" /> -->
-		<toxicity type="add" min="0.7" />
-		<!-- Triangle end -->
+		<vitality type="base" min="10" max="10" />
 	</ability>
 	
 	<ability name="lesser_mutagen_color_green" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="50" max="50"/> -->
-		<toxicity type="add" min="5" />
-		<!-- Triangle end -->
+		<vitality type="base" min="50" max="50"/>
 		<mutagen_color_lesser_green_synergy_bonus is_ability="true" />
 	</ability>
 
 	<ability name="mutagen_color_lesser_green_synergy_bonus">
 		<tags>alchemy_s19</tags>
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="5" max="5"/> -->
-		<toxicity type="add" min="0.5" />
-		<!-- Triangle end -->
+		<vitality type="base" min="5" max="5"/>
 	</ability>
 
 <!-- GREEN X -->
 	<ability name="greater_mutagen_color_green_x" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="150" max="150" /> -->
-		<toxicity type="add" min="10" />
-		<!-- Triangle end -->
+		<vitality type="base" min="150" max="150" />
 	</ability>
 	
 	<ability name="mutagen_color_green_x" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="100" max="100" /> -->
-		<toxicity type="add" min="7" />
-		<!-- Triangle end -->
+		<vitality type="base" min="100" max="100" />
 	</ability>
 
 	<ability name="lesser_mutagen_color_green_x" >
-		<!-- Triangle mutagens -->
-		<!-- <vitality type="base" min="50" max="50"/> -->
-		<toxicity type="add" min="5" />
-		<!-- Triangle end -->
+		<vitality type="base" min="50" max="50"/>
 	</ability>
 
 <!-- BLUE -->

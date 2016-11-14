@@ -10904,7 +10904,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		return '';
 	}
 	
-	public function GetGroupBonusCount(commonColor : ESkillColor,groupID : int) : int
+	public function GetGroupBonusCount(commonColor : ESkillColor,groupID : int) : float // Triangle synergy change return type
 	{
 		if(abilityManager && abilityManager.IsInitialized())
 			return ((W3PlayerAbilityManager)abilityManager).GetSkillGroupColorCount(commonColor, groupID);

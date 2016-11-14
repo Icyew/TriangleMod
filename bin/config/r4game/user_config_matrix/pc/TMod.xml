@@ -75,6 +75,12 @@
 				<Entry varId="AdaptationMaxDiscount"				value="40" />
 				<Entry varId="FixativeMultBonus"					value="2" />
 				<Entry varId="FixativeMaxBonusPerLevel"				value="4" />
+				<Entry varId="AltSynergyPercPerLevel"				value="20" />
+				<Entry varId="YellowSkillWildcard"					value="1" />
+				<Entry varId="MinBlueBonus"							value="5" />
+				<Entry varId="MinGreenBonus"						value="5"/>
+				<Entry varId="GreenGivesToxicity"					value="1" />
+				<Entry varId="MinRedBonus"							value="5" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -92,6 +98,12 @@
 			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMultBonus"						displayName="Fixative: Crit effect chance multiplier (1 for vanilla)"					displayType="SLIDER;1.00;10;36" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMaxBonusPerLevel"				displayName="Fixative: Max additional crit effect chance per effect/level"				displayType="SLIDER;0.00;40;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSynergyPercPerLevel"				displayName="Synergy: % mod/level for alternate Synergy (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="YellowSkillWildcard"					displayName="Mutagens: General skills can link to any mutagen"							displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinBlueBonus"							displayName="Blue mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinGreenBonus"							displayName="Green mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GreenGivesToxicity"					displayName="Green mutagen: Grant toxicity instead of vitality"							displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinRedBonus"							displayName="Red mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">

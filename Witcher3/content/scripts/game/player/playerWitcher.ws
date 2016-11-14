@@ -6264,6 +6264,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
+	// Triangle synergy
+	public final function GetMutagenItemIDFromGroupID( skillGroupID : int ) : SItemUniqueId
+	{
+		var pam : W3PlayerAbilityManager;
+		
+		pam = (W3PlayerAbilityManager)abilityManager;
+		if(pam && pam.IsInitialized())
+			return pam.GetMutagenItemIDFromGroupID(skillGroupID);
+			
+		return GetInvalidUniqueId();
+	}
+	
+	// Triangle synergy
+	public final function GetSkillGroupIDFromSkill(skillType : ESkill) : int
+	{
+		var pam : W3PlayerAbilityManager;
+		
+		pam = (W3PlayerAbilityManager)abilityManager;
+		if(pam && pam.IsInitialized())
+			return pam.GetSkillGroupIdFromSkill(skillType);
+			
+		return -1;
+	}
+	
 	public final function GetSkillGroupIDFromIndex(idx : int) : int
 	{
 		var pam : W3PlayerAbilityManager;

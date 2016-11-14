@@ -199,6 +199,38 @@ function TOpts_FixativeMultBonus() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeMultBonus' ) );
 }
 
+function TOpts_YellowSkillWildcard() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'YellowSkillWildcard' );
+}
+
+function TOpts_AltSynergyBonusPerLevel() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AltSynergyPercPerLevel' ) ) / 100;
+}
+
+function TOpts_MinBlueBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'MinBlueBonus' ) );
+}
+
+function TOpts_MinRedBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'MinRedBonus' ) );
+}
+
+function TOpts_MinGreenBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'MinGreenBonus' ) );
+}
+
+function TOpts_GreenGivesToxicity() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'GreenGivesToxicity' );
+}
+
+// ---- Alchemy End ---- //
+
 // ---- Stamina Begin ---- //
 
 function TOpts_AltArmorStaminaMod() : bool

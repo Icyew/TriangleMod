@@ -1250,6 +1250,31 @@ class CR4CharacterMenu extends CR4MenuBase
 				thePlayer.RemoveAbility( 'mutagen_color_red_x' );
 				thePlayer.RemoveAbility( 'mutagen_color_blue_x' );
 			}	
+		// Triangle mutagens synergy
+		thePlayer.RemoveAbilityAll('T_mutagen_vitality_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_spellpower_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_attackpower_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_attackpower');
+		thePlayer.RemoveAbilityAll('T_mutagen_vitality');
+		thePlayer.RemoveAbilityAll('T_mutagen_toxicity');
+		thePlayer.RemoveAbilityAll('T_mutagen_spellpower');
+		// Cancel out default mutagen effects so we can replace them with custom options
+		if (TOpts_MinRedBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_red', SC_Red);
+			TUtil_NullifyMutagen('lesser_mutagen_color_red', SC_Red);
+			TUtil_NullifyMutagen('greater_mutagen_color_red', SC_Red);
+		}
+		if (TOpts_MinGreenBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_green', SC_Green);
+			TUtil_NullifyMutagen('lesser_mutagen_color_green', SC_Green);
+			TUtil_NullifyMutagen('greater_mutagen_color_green', SC_Green);
+		}
+		if (TOpts_MinBlueBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_blue', SC_Blue);
+			TUtil_NullifyMutagen('lesser_mutagen_color_blue', SC_Blue);
+			TUtil_NullifyMutagen('greater_mutagen_color_blue', SC_Blue);
+		}
+		// Triangle end
 	}
 	
 	private function GetGroupBonusDescription( groupId:int, out color : ESkillColor ):string
@@ -1268,12 +1293,16 @@ class CR4CharacterMenu extends CR4MenuBase
 		var attributeValue			: float;
 		var synergyBonus			: float;
 		var pam : W3PlayerAbilityManager;
+		var mutagenBonus, curColorCountPartial : float; // Triangle mutagens synergy
 		
 		hasMutagen = GetWitcherPlayer().GetItemEquippedOnSlot(thePlayer.GetMutagenSlotIDFromGroupID(groupId), mutagen);
 		
 		pam = (W3PlayerAbilityManager)thePlayer.abilityManager;
 		curAbilityName = thePlayer.GetSkillGroupBonus(groupId);
-		curColorCount =  1 + thePlayer.GetGroupBonusCount( thePlayer.GetInventory().GetSkillMutagenColor( mutagen ), groupId );
+		// Triangle synergy
+		curColorCountPartial =  1 + thePlayer.GetGroupBonusCount( thePlayer.GetInventory().GetSkillMutagenColor( mutagen ), groupId );
+		curColorCount = FloorF(curColorCountPartial);
+		// Triangle end
 		
 		hasAbility = thePlayer.HasAbility(curAbilityName);
 		
@@ -1289,48 +1318,84 @@ class CR4CharacterMenu extends CR4MenuBase
 			_inv.GetItemStats(mutagen, mutagenStats);
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
@@ -1338,12 +1403,21 @@ class CR4CharacterMenu extends CR4MenuBase
 			for (i = 0; i < mutagenStats.Size(); i += 1)
 			{
 				curDescription = mutagenStats[i].attributeName + " ";
+				// Triangle mutagens
+				if (color == SC_Green && mutagenBonus > 0 && TOpts_GreenGivesToxicity())
+					curDescription = "Toxicity ";
+				// Triangle end
 				if (i > 0)
 				{
 					curDescription += ", ";
 				}
-				
-				if (hasAbility)
+			
+				// Triangle mutagens synergy
+				if (mutagenBonus > 0) {
+					attributeValue = mutagenBonus;
+				}
+				else if (hasAbility)
+				// Triangle end
 				{
 					attributeValue = mutagenStats[i].value * curColorCount;
 				}
@@ -1352,7 +1426,7 @@ class CR4CharacterMenu extends CR4MenuBase
 					attributeValue = mutagenStats[i].value * curColorCount;
 				}
 				
-				if ( GetWitcherPlayer().CanUseSkill ( S_Alchemy_s19 ) )
+				if ( GetWitcherPlayer().CanUseSkill ( S_Alchemy_s19 ) && TOpts_AltSynergyBonusPerLevel() == 0) // Triangle synergy
 				{
 					synergyBonus = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s19, 'synergy_bonus', false, false));
 					synergyBonus *= GetWitcherPlayer().GetSkillLevel(S_Alchemy_s19);
@@ -1361,6 +1435,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				
 				if( mutagenStats[i].percentageValue )
 				{
+					// Triangle synergy mutagens synergy
+					if (mutagenBonus > 0)
+						curDescription += "+" + RoundMath(attributeValue ) +"%";
+					else
+					// Triangle end
 					curDescription += "+" + RoundMath(attributeValue * 100 ) +"%";
 				}
 				else
@@ -1669,8 +1748,23 @@ class CR4CharacterMenu extends CR4MenuBase
 		
 		var originSkillLevel : int;
 		var boostedSkillLevel : int;
-		
+		// Triangle synergy
+		var groupID : int;
+		var mutagenColor : ESkillColor;
+		var witcher : W3PlayerWitcher;
+		var mutagenItemId : SItemUniqueId;
+		witcher = GetWitcherPlayer();
+		groupID = witcher.GetSkillGroupIDFromSkill(curSkill.skillType);
+		mutagenItemId = witcher.GetMutagenItemIDFromGroupID(groupID);
+
 		skillColor = thePlayer.GetSkillColor(curSkill.skillType);
+		if ((TOpts_YellowSkillWildcard() && skillColor == SC_Yellow) ||
+			(skillColor != SC_None && thePlayer.CanUseSkill(S_Alchemy_s19) && witcher.GetInventory().IsIdValid(mutagenItemId) && TOpts_AltSynergyBonusPerLevel() > 0)) {
+			mutagenColor = witcher.GetInventory().GetSkillMutagenColor(mutagenItemId);
+			if (mutagenColor != SC_None)
+				skillColor = mutagenColor;
+		}
+		// Triangle end
 		
 		dataObject.SetMemberFlashInt('id', curSkill.skillType); 
 		dataObject.SetMemberFlashInt('skillTypeId', curSkill.skillType);
@@ -2344,6 +2438,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s19, 'synergy_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle synergy
+				baseString = "Skills will take on the color of whatever mutagen is equipped to its group. Links like this grant " + NoTrailZeros(TOpts_AltSynergyBonusPerLevel() * skillLevel * 100) +
+					"% of their normal bonus.";
+				// Triangle end
 				break;
 			case S_Alchemy_s20:
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue(EffectTypeToName(EET_IgnorePain), StatEnumToName(BCS_Vitality), min, max);
