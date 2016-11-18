@@ -1901,9 +1901,9 @@ class W3DamageManagerProcessor extends CObject
 					}
 				}
 				// Triangle headshot
-				if (actorVictim.IsAlive() && attackAction && attackAction.GetIsHeadShot()) {
-					action.AddEffectInfo(EET_Stagger); // Triangle TODO maybe prevent chain-stagger. eh
-				}
+				// if (actorVictim.IsAlive() && attackAction && attackAction.GetIsHeadShot()) {
+				// 	action.AddEffectInfo(EET_Stagger); // Triangle TODO maybe prevent chain-stagger. eh
+				// }
 				// Triangle end
 			}
 			
