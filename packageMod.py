@@ -79,6 +79,7 @@ def main():
             if ext == '.xml' and not scriptsOnly:
                 os.makedirs(path.join(tempPath, dirname), exist_ok=True)
                 shutil.copyfile(filePath, tempFilePath)
+                print(status, relPath)
             elif ext == '.ws' and not xmlOnly:
                 destPath = None
                 if not debug:
@@ -91,7 +92,7 @@ def main():
                 destDir, destBaseName = path.split(destPath)
                 os.makedirs(destDir, exist_ok=True)
                 shutil.copyfile(filePath, destPath)
-            print(status, relPath)
+                print(status, relPath)
 
     tempBinPath = path.join(tempPath, 'bin')
     shutil.copytree(binPath, tempBinPath)
