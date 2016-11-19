@@ -9804,7 +9804,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				switch (action) {
 					case EBAT_Dodge:
 					case EBAT_Roll:
-						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_ArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
+						// expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_ArmorSpeedBonus(this.GetInventory(), action))); // Triangle TODO dead code for now
 						break;
 					case EBAT_LightAttack:
 						expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1)); // triggers before combo inc, so use raw counter

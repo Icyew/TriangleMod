@@ -1186,7 +1186,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, tempItem))
 				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName, isPerSec);
 
-			cost.valueAdditive += armorCost;
+			cost.valueAdditive += RoundMath(armorCost);
 		}
 		if (action == ESAT_Ability) {
 			TOpts_SetSignStaminaCost(abilityName, cost, delay, isPerSec);

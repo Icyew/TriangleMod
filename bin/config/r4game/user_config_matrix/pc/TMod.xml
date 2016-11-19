@@ -13,7 +13,8 @@
 				<Entry varId="HeavyAttackComboBonus"			value="0.12"/>
 				<Entry varId="LightAttackComboDecay"			value="3"	/>
 				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
-				<Entry varId="ResolveDamagePerLevel"			value="33.5"/>
+				<Entry varId="ResolveFocusGainPerLevel"			value="0.07"/>
+				<Entry varId="ResolveDamagePerLevel"			value="20"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
@@ -41,6 +42,7 @@
 			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveFocusGainPerLevel"		 displayName="Resolve: Adrenaline gain on hit per level (0 for vanilla)"				displayType="SLIDER;0.00;1;100"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
@@ -112,16 +114,16 @@
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
 				<Entry varId="StaminaRegenBonus"				value="15"	/>
 				<Entry varId="FocusPerMaxStamina"				value="2"	/>
-				<Entry varId="BaseDodgeCost"					value="4"	/>
+				<Entry varId="BaseDodgeCost"					value="2"	/>
 				<Entry varId="BaseRollCost"						value="12"	/>
-				<Entry varId="BaseLightAttackCost"				value="4"	/>
-				<Entry varId="BaseHeavyAttackCost"				value="8"	/>
+				<Entry varId="BaseLightAttackCost"				value="2"	/>
+				<Entry varId="BaseHeavyAttackCost"				value="6"	/>
 				<Entry varId="WeakDamageMod"					value="0.3" />
 				<Entry varId="AltArmorStaminaMod"				value="1"	/>
-				<Entry varId="ChestPantsAttackCost"				value="0.8"	/>
-				<Entry varId="ChestPantsEvasionCost"			value="0.8"	/>
-				<Entry varId="GlovesBootsAttackCost"			value="0.4"	/>
-				<Entry varId="GlovesBootsEvasionCost"			value="0.4"	/>
+				<Entry varId="ChestPantsAttackCost"				value="1"	/>
+				<Entry varId="ChestPantsEvasionCost"			value="1.21"	/>
+				<Entry varId="GlovesBootsAttackCost"			value="0.21"	/>
+				<Entry varId="GlovesBootsEvasionCost"			value="0.31"	/>
 				<Entry varId="ChestEvasionMod"					value="0" />
 				<Entry varId="PantsEvasionMod"					value="0" />
 				<Entry varId="GlovesBootsEvasionMod"			value="0" />
@@ -228,8 +230,8 @@
 				<Entry varId="ExplosiveBaseDamage"				value="650"	/>
 				<Entry varId="ExplosiveRange"					value="3"	/>
 				<Entry varId="ExplosiveDelay"					value="1.25"/>
-				<Entry varId="FlamingRange"						value="2.5"	/>
-				<Entry varId="FreezingRange"					value="4"	/>
+				<Entry varId="FlamingRange"						value="2"	/>
+				<Entry varId="FreezingRange"					value="3"	/>
 				<Entry varId="HypnoticRange"					value="4"	/>
 				<Entry varId="HypnoticDelay"					value="4"	/>
 				<Entry varId="InspiredBonus"					value="35"	/>

@@ -146,8 +146,16 @@ class W3DamageManagerProcessor extends CObject
 			}
 			
 			
-			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) )
-				focusDrain *= 1 - (CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, true) ) * thePlayer.GetSkillLevel(S_Sword_s16));
+			// Triangle resolve
+			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) ) {
+				if (TOpts_ResolveFocusGainPerLevel() > 0) {
+					focusDrain = 0;
+					thePlayer.GainStat(BCS_Focus, TOpts_ResolveFocusGainPerLevel() * thePlayer.GetSkillLevel(S_Sword_s16));
+				} else {
+					focusDrain *= 1 - (CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, true) ) * thePlayer.GetSkillLevel(S_Sword_s16));
+				}
+			}
+			// Triangle end
 				
 			thePlayer.DrainFocus(focusDrain);
 		}

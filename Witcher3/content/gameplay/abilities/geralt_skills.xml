@@ -238,7 +238,7 @@
 	  <!-- Resolve -->
       <ability name="sword_s16">
         <tags>sword_s16</tags>
-        <focus_drain_reduction type="add" min="0.334" /> <!-- Triangle resolve Switched to 3 pnts -->
+        <focus_drain_reduction type="add" min="0.20" />
       </ability>
 	
       <!-- Critical hits - Fast Style -->
@@ -756,7 +756,7 @@
 		<!-- Whirl -->
         <skill skill_name="sword_s1"  requiredPointsSpent="20" maxLevel="5" priority="5"  guiPositionID="31" localisationName="skill_name_sword_s1" localisationDescription="skill_desc_sword_s1"  localisationDescriptionLevel2="skill_desc_sword_s1_2"  localisationDescriptionLevel3="skill_desc_sword_s1_2"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s1.png"  linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Crippling Strikes -->
-    	<!-- Triangle resolve Since resolve is 3 pnt, lower top tier reqs a bit -->
+    <!-- Triangle skill tree -->
         <skill skill_name="sword_s5"  requiredPointsSpent="28" maxLevel="5" priority="14" guiPositionID="21" localisationName="skill_name_sword_s5" localisationDescription="skill_desc_sword_s5"  localisationDescriptionLevel2="skill_desc_sword_s5"  localisationDescriptionLevel3="skill_desc_sword_s5"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s5.png"  linkVertical="red" linkLeft="red" linkRight="red" />
     
 		<!-- STRONG STYLE -->
@@ -767,7 +767,7 @@
 		<!-- Rend -->
 				<skill skill_name="sword_s2"  requiredPointsSpent="20" maxLevel="5" priority="4"  guiPositionID="12" localisationName="skill_name_sword_s2" localisationDescription="skill_desc_sword_s2" localisationDescriptionLevel2="skill_desc_sword_s2" localisationDescriptionLevel3="skill_desc_sword_s2" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s2.png" linkVertical="red" linkLeft="red" linkRight="red" />
 			<!-- Sunder Armor -->
-		<!-- Triangle resolve Since resolve is 3 pnt, lower top tier reqs a bit -->
+		<!-- Triangle skill tree -->
         <skill skill_name="sword_s6"  requiredPointsSpent="28" maxLevel="5" priority="15" guiPositionID="17" localisationName="skill_name_sword_s6" localisationDescription="skill_desc_sword_s6" localisationDescriptionLevel2="skill_desc_sword_s6" localisationDescriptionLevel3="skill_desc_sword_s6" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s6.png" linkVertical="red" linkLeft="red" linkRight="red" />
 
 		<!-- UTILITY -->
@@ -778,7 +778,7 @@
 		<!-- Counterattack -->
         <skill skill_name="sword_s11" requiredPointsSpent="20" maxLevel="3" priority="13" guiPositionID="25" localisationName="skill_name_sword_s11" localisationDescriptionNotAcquired="skill_desc_prev_sword_s11" localisationDescription="skill_desc_sword_s11" localisationDescriptionLevel2="skill_desc_sword_s11_2" localisationDescriptionLevel3="skill_desc_sword_s11_3" cost="1" pathType_name="Sword" subpathType_name="Sword_Utility" iconPath="icons\Skills\Sword\sword_s3.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Overwhelm -->
-		<!-- Triangle resolve Since resolve is 3 pnt, lower top tier reqs a bit -->
+		<!-- Triangle skill tree -->
         <skill skill_name="sword_s3"  requiredPointsSpent="28" maxLevel="2" priority="8"  guiPositionID="8"  localisationName="skill_name_sword_s3" localisationDescription="skill_desc_sword_s3"  localisationDescriptionLevel2="skill_desc_sword_s3"  localisationDescriptionLevel3="skill_desc_sword_s3"  cost="1" pathType_name="Sword" subpathType_name="Sword_Utility" iconPath="icons\Skills\Sword\sword_s11.png"  linkVertical="red" linkLeft="red" linkRight="red" />
   
 		<!-- CROSSBOW -->
@@ -789,7 +789,7 @@
 		<!-- Precision -->
         <skill skill_name="sword_s7"  requiredPointsSpent="20" maxLevel="5" priority="6"  guiPositionID="33" localisationName="skill_name_sword_s7" localisationDescription="skill_desc_sword_s7"  localisationDescriptionLevel2="skill_desc_sword_s7"  localisationDescriptionLevel3="skill_desc_sword_s7"  cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s12.png"  linkVertical="yellow" linkLeft="red" linkRight="red" />
 		<!-- Crippling Shot -->
-		<!-- Triangle resolve Since resolve is 3 pnt, lower top tier reqs a bit -->
+		<!-- Triangle skill tree -->
         <skill skill_name="sword_s12" requiredPointsSpent="28" maxLevel="5" priority="19" guiPositionID="7"  localisationName="skill_name_sword_s12" localisationDescription="skill_desc_sword_s12" localisationDescriptionLevel2="skill_desc_sword_s12" localisationDescriptionLevel3="skill_desc_sword_s12" cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s7.png" linkVertical="yellow" linkLeft="red" linkRight="red" />
 
         <!-- BATTLE TRANS -->
@@ -800,7 +800,7 @@
 		<!-- Still Mind -->
         <skill skill_name="sword_s20" requiredPointsSpent="20" maxLevel="5" priority="20" guiPositionID="28" localisationName="skill_name_sword_s20" localisationDescription="skill_desc_sword_s20" localisationDescriptionLevel2="skill_desc_sword_s20" localisationDescriptionLevel3="skill_desc_sword_s20" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s20.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- All Out -->
-		<!-- Triangle resolve Since resolve is 3 pnt, lower top tier reqs a bit -->
+		<!-- Triangle skill tree -->
         <skill skill_name="sword_s19" requiredPointsSpent="28" maxLevel="5" priority="1"  guiPositionID="37" localisationName="skill_name_sword_s19" localisationDescription="skill_desc_sword_s19" localisationDescriptionLevel2="skill_desc_sword_s19" localisationDescriptionLevel3="skill_desc_sword_s19" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s19.png" linkVertical="red" linkLeft="red" linkRight="red" />
 
     <!-- SIGNS -->

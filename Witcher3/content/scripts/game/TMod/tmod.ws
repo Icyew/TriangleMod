@@ -40,6 +40,11 @@ function TOpts_RendChargeBonus() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );
 }
 
+function TOpts_ResolveFocusGainPerLevel() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveFocusGainPerLevel' ));
+}
+
 function TOpts_ResolveDamagePerLevel() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDamagePerLevel' ) ) / 100;
@@ -341,8 +346,7 @@ function TOpts_ArmorSpeedBonus(inventory : CInventoryComponent, action : EBuffer
 			speedBonus += tempMod;
 	}
 
-	speedPenalty = 1 / speedPenalty;
-	return speedBonus * speedPenalty;
+	return speedBonus / speedPenalty;
 }
 
 function TOpts_StaminaRegenMult() : float
