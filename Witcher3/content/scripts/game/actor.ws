@@ -2212,7 +2212,12 @@ import abstract class CActor extends CGameplayEntity
 	public function UpdateStatMax(stat : EBaseCharacterStats)
 	{
 		if(abilityManager && abilityManager.IsInitialized() && IsAlive())
-			abilityManager.UpdateStatMax(stat);
+			abilityManager.UpdateStatMaxWrapper(stat); // Triangle enemy hp
+	}
+
+	public function HPModifier() : float
+	{
+		return 1;
 	}
 	
 	public function ForceSetStat(stat : EBaseCharacterStats, val : float)

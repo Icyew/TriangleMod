@@ -218,8 +218,8 @@
 				<Entry varId="NumEnemyMutationRolls"			value="2"	/>
 				<Entry varId="CripplingShotDurationPerLevel"	value="2.5"	/>
 				<Entry varId="HugeScaleFactor"					value="1.2" />
-				<Entry varId="ToughArmorPerLevel"				value="10" 	/>
-				<Entry varId="ToughResistance"					value="34" 	/>
+				<Entry varId="ToughArmorPerLevel"				value="5" 	/>
+				<Entry varId="ToughResistance"					value="15" 	/>
 				<Entry varId="QuickSpeedBonus"					value="34" 	/>
 				<Entry varId="ResilientRegenPerLevel"			value="4" 	/>
 				<Entry varId="ResilientDuration"				value="8" 	/>
@@ -269,6 +269,10 @@
 				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
 				<Entry varId="SwitchArmorCalcOrder"					value="1"	/>
 				<Entry varId="ArmorAPScaleRatio"					value="0"	/>
+				<Entry varId="VitalityHealthMod"					value="0.5"	/>
+				<Entry varId="EssenceHealthMod"						value="0.5"	/>
+				<Entry varId="QuestBossHealthMod"					value="1"	/>
+				<Entry varId="GeraltHealthMod"						value="0.5"	/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -276,6 +280,10 @@
 			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VitalityHealthMod"			 		 displayName="Health mod for non-boss enemies w/ vitality"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EssenceHealthMod"			 		 displayName="Health mod for non-boss enemies w/ essence"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuestBossHealthMod"			 	 displayName="Health mod for quest and boss enemies (0 defaults to other mods)"		displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GeraltHealthMod"			 	 	 displayName="Health mod for Geralt"												displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 

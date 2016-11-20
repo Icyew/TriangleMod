@@ -37,7 +37,7 @@ import abstract class W3AbilityManager extends IScriptable
 	import final function GetStats( stat : EBaseCharacterStats, out current : float, out max : float ) : bool;
 	import final function SetStatPointCurrent( stat : EBaseCharacterStats, val : float );
 	import final function SetStatPointMax( stat : EBaseCharacterStats, val : float );
-	import final function UpdateStatMax( stat : EBaseCharacterStats );
+	import private final function UpdateStatMax( stat : EBaseCharacterStats ); // Triangle hp mods made private
 	
 	import final function HasResistStat( stat : ECharacterDefenseStats ) : bool;
 	import final function GetResistStat( stat : ECharacterDefenseStats, out resistStat: SResistanceValue ) : bool;
@@ -721,6 +721,16 @@ import abstract class W3AbilityManager extends IScriptable
 	}
 	
 	
+	// Triangle hp mods
+	function UpdateStatMaxWrapper(stat : EBaseCharacterStats)
+	{
+		UpdateStatMax(stat);
+		if (stat == BCS_Essence)
+			SetStatPointMax(BCS_Essence, GetStatMax(BCS_Essence) * owner.HPModifier());
+		else if (stat == BCS_Vitality)
+			SetStatPointMax(BCS_Vitality, GetStatMax(BCS_Vitality) * owner.HPModifier());
+	}
+
 	protected function OnAbilityChanged( abilityName : name )
 	{
 		var atts, tags : array<name>;
@@ -774,14 +784,14 @@ import abstract class W3AbilityManager extends IScriptable
 					if(abilityName == theGame.params.GLOBAL_ENEMY_ABILITY || abilityName == theGame.params.GLOBAL_PLAYER_ABILITY || abilityName == theGame.params.ENEMY_BONUS_PER_LEVEL)
 					{
 						
-						UpdateStatMax(stat);
+						UpdateStatMaxWrapper(stat); // Triangle hp mods
 						RestoreStat(stat);
 					}
 					else
 					{
 						
 						oldMax = GetStatMax(stat);
-						UpdateStatMax(stat);
+						UpdateStatMaxWrapper(stat); // Triangle hp mods
 						MutliplyStatBy(stat, GetStatMax(stat) / oldMax);
 					}
 				}
@@ -840,14 +850,14 @@ import abstract class W3AbilityManager extends IScriptable
 				if(maxVit > 0)
 				{
 					oldMax = maxVit;
-					UpdateStatMax(BCS_Vitality);					
+					UpdateStatMaxWrapper(BCS_Vitality);	// Triangle hp mods
 					MutliplyStatBy(BCS_Vitality, GetStatMax(BCS_Vitality) / oldMax);
 				}
 				
 				if(maxEss > 0)
 				{
 					oldMax = maxEss;
-					UpdateStatMax(BCS_Essence);					
+					UpdateStatMaxWrapper(BCS_Essence); // Triangle hp mods
 					MutliplyStatBy(BCS_Essence, GetStatMax(BCS_Essence) / oldMax);
 				}
 				

@@ -384,6 +384,9 @@ statemachine import class CNewNPC extends CActor
 		// Triangle enemy mutations
 		var emutations : array < name >;
 		var i : int;
+		var tmpName : name;
+		var tmpBool : bool;
+		var monsterCategory : EMonsterCategory;
 		// Triangle end
 		
 		currentLevel = level;
@@ -399,7 +402,8 @@ statemachine import class CNewNPC extends CActor
 		
 
 		// Triangle enemy mutations
-		if (npcGroupType == ENGT_Enemy && (UsesEssence() || TOpts_CanVitalityMutate()) && !hasRolledForMutations) {
+		theGame.GetMonsterParamsForActor(this, monsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+		if (npcGroupType == ENGT_Enemy && monsterCategory != MC_Animal && (UsesEssence() || TOpts_CanVitalityMutate()) && !hasRolledForMutations) {
 			TOpts_RandomEnemyMutations(emutations);
 			for (i = 0; i < emutations.Size(); i += 1) {
 				AddAbility(emutations[i]);
@@ -1399,14 +1403,12 @@ statemachine import class CNewNPC extends CActor
 	}
 
 	// Triangle enemy mutations
-	saved var quickAnimCauserId : int; default quickAnimCauserId = -1;
 	public function ProcessMutations()
 	{
 		var animComp : CComponent;
 		var scaleFactor, healthPerc : float;
 		var stats : CCharacterStats;
 		var effectParams : SCustomEffectParams;
-		var healthType : EBaseCharacterStats;
 
 		stats = GetCharacterStats();
 
@@ -1415,14 +1417,12 @@ statemachine import class CNewNPC extends CActor
 			ProcessHugeMutationSize();
 			healthPerc = GetHealthPercents();
 			scaleFactor = TOpts_HugeScaleFactor();
-			healthType = TUtil_GetHealthType(this);
-			abilityManager.UpdateStatMax(healthType);
-			abilityManager.SetStatPointMax(healthType, GetStatMax(healthType)*scaleFactor*scaleFactor);
+			abilityManager.UpdateStatMaxWrapper(TUtil_GetHealthType(this));
 			SetHealthPerc(healthPerc);
 			stats.AddAbility('mon_type_huge');
 		}
 		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
-			quickAnimCauserId = PushBaseAnimationMultiplierCauser(1 + TOpts_QuickSpeedBonus(), quickAnimCauserId);
+			PushBaseAnimationMultiplierCauser(1 + TOpts_QuickSpeedBonus(),, TUtil_TEMutationEnumToName(TEM_Quick));
 		}
 		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Flaming))) {
 			AddTimer('FlameOn', 0);
@@ -1436,6 +1436,38 @@ statemachine import class CNewNPC extends CActor
 		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Inspiring))) {
 			AddTimer('InspireOn',0);
 		}
+	}
+
+	// Triangle hp mods
+	function HPModifier() : float
+	{
+		var modifier : float;
+		var healthType : EBaseCharacterStats;
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		healthType = TUtil_GetHealthType(this);
+		if ((stats.HasAbilityWithTag('T_questmonster') || stats.HasAbilityWithTag('Boss') || HasAbility('Boss') || HasAbility('SkillBoss')) && TOpts_QuestBossHealthMod() > 0) {
+			modifier = TOpts_QuestBossHealthMod();
+		} else if (healthType == BCS_Essence) {
+			modifier = TOpts_EssenceHealthMod();
+		} else {
+			modifier = TOpts_VitalityHealthMod();
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
+			modifier *= TOpts_HugeScaleFactor() * TOpts_HugeScaleFactor();
+		}
+		if (modifier <= 0)
+			modifier = 1;
+		return modifier;
+	}
+
+	// Triangle hp mods
+	function ProcessHPOptions()
+	{
+		var healthPerc : float;
+		healthPerc = GetHealthPercents();
+		abilityManager.UpdateStatMaxWrapper(TUtil_GetHealthType(this));
+		SetHealthPerc(healthPerc);
 	}
 
 	// Triangle level scaling add level bonuses with TMod options
@@ -1641,6 +1673,7 @@ statemachine import class CNewNPC extends CActor
 			
 		}
 		ProcessMutations(); // Triangle enemy mutations
+		ProcessHPOptions(); // Triangle hp mods
 	}
 	
 	public function SetParentEncounter( encounter : CEncounter )

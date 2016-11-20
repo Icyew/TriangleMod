@@ -11380,6 +11380,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		theGame.GetJournalManager().ForceUntrackingQuestForEP1Savegame();
 	}
+
+	// Triangle hp mods
+	function HPModifier() : float
+	{
+		return TOpts_GeraltHealthMod();
+	}
 }
 
 exec function fuqfep1()
