@@ -1902,7 +1902,7 @@ class W3DamageManagerProcessor extends CObject
 					}
 					focusPoints = FloorF(focusPoints + witcherPlayer.GetStat(BCS_Focus));
 					if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0
-						&& RandF() < (1 + focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
+						&& RandF() < (focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
 						&& !actorVictim.IsHuge()
 						&& !(npcVictim && npcVictim.HasShieldedAbility() && npcVictim.IsShielded(witcherPlayer))) {
 						action.AddEffectInfo(EET_Knockdown);

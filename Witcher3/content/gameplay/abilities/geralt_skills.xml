@@ -657,7 +657,7 @@
     </ability>
     <ability name="perk_5">
       <tags>perk_5</tags>
-      <critical_hit_damage_bonus_per_focus_pnt type="add" min="0.07" /> <!-- Triangle armor styles -->
+      <critical_hit_damage_bonus_per_focus_pnt type="add" min="0.08" /> <!-- Triangle armor styles -->
       <attack_power_fast_style type="mult" min="0.05" />
     </ability>
     <ability name="perk_6">

@@ -18,7 +18,7 @@
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
-				<Entry varId="CrushBlowBonusPerFocus"			value="1" />
+				<Entry varId="CrushBlowBonusPerFocus"			value="0.75" />
 				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
 				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
