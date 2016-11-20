@@ -655,4 +655,24 @@ function TOpts_ArmorAPScaleRatio() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'ArmorAPScaleRatio' ) );
 }
 
+function TOpts_VitalityHealthMod() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'VitalityHealthMod' ) );
+}
+
+function TOpts_EssenceHealthMod() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'EssenceHealthMod' ) );
+}
+
+function TOpts_QuestBossHealthMod() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'QuestBossHealthMod' ) );
+}
+
+function TOpts_GeraltHealthMod() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GeraltHealthMod' ) );
+}
+
 // ---- Misc end ---- //

@@ -471,28 +471,28 @@
 	  
 	  <!-- Quest monsters modifiers -->
 	  <ability name="q100_Ratzz">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
       </ability>
 	   
 	  <ability name="mh302_Leshy">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="add" always_random="false" min="12000" max="12000" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
       </ability>
 	  
 	  <ability name="qMq3005_NobleEscort">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="2000" max="2000" />
       </ability>
 	 
 	  <ability name="q100_PrologGriffon">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="add" always_random="false" min="2200" max="2200" />
       </ability>
 	  
 	  <ability name="q101_wilddog">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <attack_power type="mult" always_random="false" min="1.4" max="1.4" />
         <vitality type="mult" always_random="false" min="1.2" max="1.2" />
@@ -500,18 +500,19 @@
 	  
 	 
       <ability name="mq0003_noonwraith">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <attack_power type="base" always_random="false" min="60" max="60" />
 		<essence type="base" always_random="false" min="1" max="1" />
       </ability>
 	   
       <ability name="q503_banditsFakeLevels">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <level type="add" always_random="false" min="32" max="32" />
       </ability>
       
 	  <ability name="q403wildhunt_minion_nerf">
+      <tags> T_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability>
 	  
@@ -520,60 +521,60 @@
 	  </ability>
 	  
 	  <ability name="q103_werewolf">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="add" always_random="false" min="100" max="150" />
 		<essence type="add" always_random="false" min="3000" max="3000" />
 		<essenceRegen type="add" always_random="false" min="-90" max="-90" /> 
       </ability>
  
 	<ability name="q104_evilKeira">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 
 	   <ability name="q503_replacer">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="qs302_ifryt">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	   <ability name="qSUMMONwolfs">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <attack_power type="mult" always_random="false" min="-0.5" max="-0.5" />
         <essence type="mult" always_random="false" min="-0.7" max="-0.7" />
       </ability>
 	    
 	  <ability name="q103_botchling">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="4.3" max="4.3" />
 		<armor type="add" always_random="false" min="120" max="120" />
 		<essenceRegen type="add" always_random="false" min="-100" max="-100" />
       </ability>
 	  
 	  <ability name="qPhilippa_NG">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	   
 	  <ability name="qmq2038_gundar">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="2" max="2" />
 		<attack_power type="mult" always_random="false" min="0.2" max="0.2" />
 		<armor type="add" always_random="false" min="50" max="50" />
       </ability>
 	    
 	  <ability name="sq209_eredin">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<level type="add" always_random="false" min="30" max="30" />
       </ability>
 	  
 	  <ability name="mq1019_priestFakeLevel">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<level type="add" always_random="false" min="4" max="4" />
       </ability>
 	  
 	  <ability name="qRosaVarAttre">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="1000" max="1000" />
 	  </ability>
 	    
@@ -592,38 +593,38 @@
 	  </ability>
 	 
 	  <ability name="q302_whorenson">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="1400" max="1400" />
       </ability>
 	  
 	   <ability name="q302_bear">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	   <ability name="q302_mh104">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="q305_Kidnaper">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="400" max="400" />
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3" /> 
 	  </ability>
 	  
 	  
 	  <ability name="qSergeantFistFIght">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="1500" max="1500" />
       </ability>
 	 
 	  <ability name="q103_wolf">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="2000" max="2000" />
 		<essenceRegen type="add" always_random="false" min="-2" max="-2" />
       </ability>
 	  
 	  <ability name="qmh303_suc">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.5" max="-0.5" /> 
 		<attack_damage type="mult" always_random="false" min="-0.5" max="-0.5" /> 
 		<vitality type="mult" always_random="false" min="1.5" max="1.5" />	
@@ -631,341 +632,356 @@
 	  
 	    
 	  <ability name="qBanditos">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="q302_DwarfsDMG">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-1.1" max="-1.1" /> 
       </ability>
 	  
 	  <ability name="q201_StuffedAnimalsTrp">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="mult" always_random="true" min="-0.7" max="-0.7" />
         <attack_power type="mult" always_random="true" min="-0.9" max="-0.9" /> 
 	  </ability>
 	 
 	  <ability name="q201_StuffedAnimalsTrpWOLFS">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="true" min="-0.9" max="-0.9" />
         <attack_power type="mult" always_random="true" min="-0.1" max="-0.1" /> 
 		<level type="add" always_random="false" min="50" max="50" />
 	  </ability>
 	 
 	  <ability name="qVES_HP">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="true" min="2475" max="2475" />
 	  </ability>
 	  
 	  <ability name="q206_berserkerhaj">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="1500" max="1500" />
       </ability>
 	  
 	  <ability name="prologue_wolf">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="-70" max="-70" />
       </ability>
 	  
 	  <ability name="q302_ReplacerThugs">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="600" max="600" />
       </ability>
 	 
 	  <ability name="q103_wraith">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="add" always_random="false" min="0.3" max="0.3" />
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3"/>
 	  </ability>
 		
 	  <ability name="qsq102_Letho">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.8" max="-0.8"/>
 	  </ability>
 		
 	  <ability name="qmq3031">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="0.4" max="0.4"/>
 		<vitality type="mult" always_random="false" min="2.7" max="2.7" />
 	  </ability>
 	  
 	  	 <ability name="mon_wolf_ngnerf">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 	  </ability>
 			
 	  <ability name="qHagGuardingTreasure">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3"/>
 		<essence type="mult" always_random="false" min="1.5" max="1.5" />
 	  </ability>
 		
 	  <ability name="qGargoyleGuardingTreasure">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.7" max="0.7" />
 	  </ability>
 		
 	  <ability name="qWyverneGuardingTreasure">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.2" max="1.2" />
 	  </ability>
 		
 
 	  <ability name="q103_basilisk">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="1200" max="1200" />
       </ability>
 	 
 	  <ability name="q104_dao">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<armor type="base" always_random="false" min="-20" max="-20" />
 		<essence type="add" always_random="false" min="600" max="600" />
 	  </ability>
 	 
 	  <ability name="q106_MorowaD">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 	  </ability>
 	 
 	  <ability name="mh306_dao">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability>
 	  
 	  <ability name="q210_dao">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 		<armor type="base" always_random="false" min="-50" max="-50" />
 		<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
 	  </ability>
 	 
 	  <ability name="q210_Arachas">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.2" max="-0.2" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	 
 	  <ability name="q210_WH_Ghost">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 		<essence type="add" always_random="false" min="1200" max="1200" />
 	  </ability>
 	 
 	  <ability name="mq3035">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<level type="add" always_random="false" min="9" max="9" />
 	  </ability>
 	 
 	  <ability name="q210_Wraith">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="0.4" max="0.4" />
 		<essence type="add" always_random="false" min="3000" max="3000" />
 	  </ability>
 	 
 	  <ability name="q210_PhilipaDMGBoost">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	  
 	  <ability name="q309_rats">
+    <tags> TMod_questmonster </tags>
 		<level type="add" always_random="false" min="1" max="1" />
 	  </ability> 
 	  
 	  <ability name="q104_gargoyle">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<armor type="base" always_random="false" min="-34" max="-34" />
 		<essence type="base" always_random="false" min="-800" max="-800" />
 	  </ability>	
 	  
 	  <ability name="qmh210_lamia">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 	  </ability>
 	
 	  <ability name="q111_biesBUFFS">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="3500" max="3500" />
 		<attack_power type="mult" always_random="false" min="0.6" max="0.6" />
       </ability>	
 	  
 	  <ability name="mon_ff204olaf">
+      <tags> TMod_questmonster </tags>
       </ability>
 
 	<ability name="mon_ff205troll">
+    <tags> TMod_questmonster </tags>
       </ability>		  
 	  
 	  <ability name="qmh208_forktail">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.2" max="1.2" />
       </ability>	
 	
 	  <ability name="q111_fugas">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="2800" max="2800" />
 		<fire_resistance type="add" always_random="false" min="60" max="60" />
 		<attack_power type="mult" always_random="false" min="-0.4" max="-0.4" />
 	  </ability>	
 	
 	  <ability name="q107_drowndead">
+      <tags> TMod_questmonster </tags>
 	    <essence type="base" always_random="false" min="-1600" max="-1600" />
 	    <attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	
 	  <ability name="q107_FIEND">
+      <tags> TMod_questmonster </tags>
 	    <essence type="mult" always_random="false" min="1.5" max="1.5" />
 	    <attack_power type="mult" always_random="false" min="1.5" max="1.5" />
 	  </ability>
 	
 	  <ability name="qMH208_Noonwraith">
+      <tags> TMod_questmonster </tags>
 	    <essence type="add" always_random="false" min="2000" max="2000" />
 	  </ability>
 	  
 	  <ability name="qmh108_fogling">
+      <tags> TMod_questmonster </tags>
 	  </ability>
 	 
 	  <ability name="q104_whminion">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.4" max="-0.4"/>
 	  </ability>
 	 
 	  <ability name="sq104_WW">
+      <tags> TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.2" max="-0.2"/>
 	  </ability>
 	  
 	    <ability name="qmq2017">
+        <tags> TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="5.5" max="5.5"/>
 	  </ability>
 	  
 	   <ability name="qsTEINGRIM">
+      <tags> TMod_questmonster </tags>
 	  </ability>
 	  	   
 		<ability name="qdjange">
+      <tags> TMod_questmonster </tags>
 	  </ability>
 	  
 	 
 	  <ability name="sq315_troll">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<armor type="base" always_random="false" min="-50" max="-50" />
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability> 
 	 
 	  <ability name="q503_WWnerf">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.9" max="-0.9" />
 	  </ability> 
 	 
 	  <ability name="q202_troll">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<armor type="base" always_random="false" min="-50" max="-50" />
 		<essence type="add" always_random="false" min="-1000" max="-1000"/>
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
       </ability> 
 	   
 	  <ability name="q104_wh">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="base" always_random="false" min="180" max="180"/>
 	  </ability>
 	  
 	  <ability name="q310_bartTroll">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.4" max="-0.4"/>
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability>
 	 
 	  <ability name="q105_WH_replacer">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="12000" max="12000"/>
 		<attack_power type="mult" always_random="false" min="0.7" max="0.7" />
 	  </ability>
 	  
 	 <ability name="q105_Werewolf">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 	  </ability>
 	 
 	  <ability name="q104_whboss">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="1400" max="1400"/>
 		<attack_power type="mult" always_random="false" min="1.1" max="1.1" />
 		<armor type="add" always_random="false" min="30" max="30" />
 	  </ability>
 
 	  <ability name="q105_bandits">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="500" max="500" />
 	  </ability>
 	  
 	  <ability name="qmh304_ekima">
-	  <tags> "base" </tags>
+	  <tags> "base", TMod_questmonster </tags>
 	  </ability>
 	  
 	  <ability name="q109_keira">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="650" max="650" />
 	  </ability>
 	  
 	  <ability name="qRose">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="0.6" max="0.6" />
 	  </ability>
 	  
 	  <ability name="q309_katakan">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="base" always_random="false" min="1000" max="1000"/>
 		<attack_power type="add" always_random="false" min="70" max="70" />
 		<essenceRegen type="add" always_random="false" min="70" max="70" />
 	  </ability>
 	  
 	  <ability name="sq204_wolfs">
+      <tags> TMod_questmonster </tags>
         <vitality type="base" always_random="false" min="1000" max="1000" />
         <attack_power type="base" always_random="false" min="630" max="630" /> 
       </ability>
 	  
 	   <ability name="sq204_wolfs23">
+      <tags> TMod_questmonster </tags>
       </ability>
 	  
 	    <ability name="sq204_Leshywolf">
+        <tags> TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="sq204_alpha">
+      <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="8" max="8" />
         <vitality type="base" always_random="false" min="1200" max="1200" />
         <attack_power type="base" always_random="false" min="630" max="630" /> 
       </ability>
 	  
 	  <ability name="mq1001_dog">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="1300" max="1300" />
       </ability>
 	 
 	  <ability name="mh305_doppler">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="add" always_random="false" min="100" max="100" />
       </ability>
 	  
 	    <ability name="qmh206_bies">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="1.6" max="1.6" /> 
 		<essence type="mult" always_random="false" min="1.4" max="1.4" />
       </ability>
 	  
 	  <ability name="mh301_Gryphon">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
 		<attack_power type="mult" always_random="false" min="-1.2" max="-1.2" /> 
       </ability>
 	  
 	  <ability name="mh305_doppler_geralt">
         <!-- lvl 14 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="add" always_random="false" min="1000" max="1000" />
       </ability>
 	  
 	  <ability name="mh307_Minion">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="add" always_random="false" min="6900" max="6900" />
 		<armor type="base" always_random="false" min="250" max="250" />
@@ -974,7 +990,7 @@
 	  
 	  <ability name="mh207_wraith">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="-0.7" max="-0.7" />
 		<attack_power type="mult" always_random="false" min="-0.4" max="-0.4"/>
@@ -982,14 +998,14 @@
 	  
 	  <ability name="mq2003_wraith">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2"/>
       </ability>
 	  
 	  <ability name="q202_IceGiantDOOM">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="1.6" max="1.6" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2"/>
@@ -997,87 +1013,88 @@
 	  
 	  <ability name="q108_wraith">
 		<!-- lvl 8 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="-0.7" max="-0.7" />
 		<attack_power type="mult" always_random="false" min="-0.5" max="-0.5"/>
       </ability>
 	  
 	  <ability name="sq205_cyclop">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.2" max="1.2" />
 	  </ability>
 	  
 	  <ability name="mq2012_cyclop">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="base" always_random="false" min="700" max="700" />
 		<attack_power type="mult" always_random="false" min="-0.5" max="-0.5"/>
 	  </ability>
 	  
 	  <ability name="q308_wampire">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.8" max="1.8" />
 	  </ability>
 	  
 	  <ability name="q203_cyclop">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="base" always_random="false" min="1250" max="1250" />
 		<attack_power type="mult" always_random="false" min="-0.6" max="-0.6"/>
 	  </ability>
 	 
 	  <ability name="q401_cyclop">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.4" max="0.4" />
 		<attack_power type="mult" always_random="false" min="-0.1" max="-0.1"/>
 	  </ability>
 	  
 	  <ability name="q401_wyvern">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="2500" max="2500" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2"/>
 	  </ability>	
 	  
 	  <ability name="q403_CiriWHn">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.8" max="-0.8"/>
 	  </ability>	
 	  
 	  <ability name="q108_drowners">
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.4" max="-0.4"/>
 	  </ability>
 	  
 	  <ability name="q202_fogling">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="add" always_random="false" min="200" max="200" />
 	  </ability>
 	
 	  <ability name="sq205_fogling">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="add" always_random="false" min="300" max="300" />
 	  </ability>
 	
 	  <ability name="q202_him">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="-0.4" max="-0.4" />
 	  </ability>
 	
 	  <ability name="mh207_wraith_boss">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="-0.3" max="-0.3" />
       </ability>
 	  
 	  <ability name="qth1003_kiyan">
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="2500" max="2500" />
       </ability>
 	  
       <ability name="mon_wolfq201">
+        <tags> TMod_questmonster </tags>
 	   <!-- lvl 11 -->
         <level type="add" always_random="false" min="7" max="7" />
         <threat_level type="add" always_random="false" min="1" max="1" />
@@ -1086,10 +1103,12 @@
 	  </ability>
 	  
 	  <ability name="q402_bies">
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="2300" max="2300" />
 	  </ability>
 	  
 	  <ability name="mon_wolfq205">
+      <tags> TMod_questmonster </tags>
 	   <!-- lvl 13 -->
         <level type="add" always_random="false" min="9" max="9" />
         <threat_level type="add" always_random="false" min="1" max="1" />
@@ -1098,16 +1117,19 @@
 	  </ability>
 	 
 	  <ability name="q205CiriWHminion">
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="800" max="800" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	  
 	   <ability name="q205CiriWH">
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="1800" max="2800" />
 		<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
 	  </ability>
 	  
 	  <ability name="qMH101_cockatrice">
+      <tags> TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="2.2" max="2.2" />
 		<attack_power type="mult" always_random="false" min="0.2" max="0.2" />
 		<poison_resistance type="base" always_random="false" min="40" max="40" />
@@ -1115,7 +1137,7 @@
 	  
 	  <ability name="sq201_werewolf">
         <!-- lvl 23 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
 		<essence type="base" always_random="false" min="600" max="600" />
 		<essence type="mult" always_random="false" min="-0.3" max="-0.3" />
@@ -2801,6 +2823,7 @@
 		<WeatherBonusEffect_wraith is_ability="false" />
       </ability>
       <ability name="mon_wraith_mh">
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="10350" max="10350" />
@@ -2893,6 +2916,7 @@
         <WeatherBonusEffect_nocturnal is_ability="true" />
       </ability>
       <ability name="mon_nightwraith_mh">
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="4350" max="4350" />
@@ -2911,6 +2935,7 @@
       </ability>
       <!-- Noonwraith monster hunt-->
       <ability name="mon_noonwraith_mh">
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="350" max="350" />
@@ -3397,6 +3422,7 @@
 	  
 	  <!-- Wild hunt minionMH-->
       <ability name="mon_wild_hunt_minionMH">
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="350" max="350" />
@@ -3955,6 +3981,7 @@
       </ability>
 	  
       <ability name="mon_forktail_mh">
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="4" max="4" />
         <essence type="base" always_random="false" min="2500" max="2500" />
@@ -4173,6 +4200,7 @@
       </ability>
 	  
 	  <ability name="mon_fogling_mh">
+      <tags> TMod_questmonster </tags>
 		<level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="3500" max="3500" />
