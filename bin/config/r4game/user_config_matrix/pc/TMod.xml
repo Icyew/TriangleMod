@@ -29,6 +29,8 @@
 				<Entry varId="WhirlAltSeverance"				value="0" />
 				<Entry varId="WhirlStunLock"					value="0.35" />
 				<Entry varId="WhirlStunLockSlow"				value="66" />
+				<Entry varId="ColdBloodedCritMult"				value="1.5" />
+				<Entry varId="AnatomicalKnowledgeDuration"		value="8" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -58,6 +60,8 @@
 			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="WhirlStunLockSlow"	 	 		 displayName="Whirl: While dodging disabled, slow by X %."								displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ColdBloodedCritMult"	 		 displayName="Cold blooded: Focus gain crit multiplier."								displayType="SLIDER;1.00;3;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AnatomicalKnowledgeDuration"	 displayName="Anatomical knowledge: Blindness duration."								displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

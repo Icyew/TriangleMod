@@ -2515,6 +2515,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(CanUseSkill(S_Sword_s15))
 				{				
 					value = GetSkillAttributeValue(S_Sword_s15, 'focus_gain', false, true) * GetSkillLevel(S_Sword_s15) ;
+					// Triangle cold blooded
+					if (attackAction.IsCriticalHit())
+						value = value * TOpts_ColdBloodedCritMultiplier();
+					// Triangle end
 					GainStat(BCS_Focus, CalculateAttributeValue(value) );
 				}
 				

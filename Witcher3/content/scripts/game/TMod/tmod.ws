@@ -130,6 +130,16 @@ function TOpts_KnockdownCritChance() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'KnockdownCritChance' ) ) / 100;
 }
 
+function TOpts_ColdBloodedCritMultiplier() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ColdBloodedCritMult' ) );
+}
+
+function TOpts_AnatomicalKnowledgeDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AnatomicalKnowledgeDuration' ) );
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //

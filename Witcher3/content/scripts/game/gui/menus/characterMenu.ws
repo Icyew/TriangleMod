@@ -2012,6 +2012,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s07, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle anatomical knowledge
+				if (TOpts_AnatomicalKnowledgeDuration() > 0) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Headshots drain 1 adrenaline point and blind your enemies for " +
+						NoTrailZeros(TUtil_RoundTo(TOpts_AnatomicalKnowledgeDuration() * skillLevel / 5, 1)) + "s.";
+					baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s08:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
@@ -2055,6 +2062,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s15, 'focus_gain', false, false)) * skillLevel;
 				argsFloat.PushBack(arg);
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt, argsFloat) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle cold blooded
+				if (TOpts_ColdBloodedCritMultiplier() > 1) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt, argsFloat) + " Critical hits yield " + NoTrailZeros(TOpts_ColdBloodedCritMultiplier()) + "x as much adrenaline." +
+						"<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s16:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, false)) * skillLevel;

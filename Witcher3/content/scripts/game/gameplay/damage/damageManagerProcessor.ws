@@ -1561,7 +1561,9 @@ class W3DamageManagerProcessor extends CObject
 					// criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s04, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * witcherPlayer.GetHeavyAttackComboLength();
 				}
 				// Triangle crits
-				criticalDamageBonus.valueAdditive += TOpts_CritDamageBonus();
+				if (playerAttacker) {
+					criticalDamageBonus.valueAdditive += TOpts_CritDamageBonus();
+				}
 				// Triangle end
 
 				criticalDamageBonus += actorAttacker.GetAttributeValue('critical_hit_damage_bonus_per_focus_pnt') * thePlayer.GetStat(BCS_Focus); // Triangle armor styles
@@ -1908,10 +1910,12 @@ class W3DamageManagerProcessor extends CObject
 						action.AddEffectInfo(EET_Knockdown);
 					}
 				}
-				// Triangle headshot
-				// if (actorVictim.IsAlive() && attackAction && attackAction.GetIsHeadShot()) {
-				// 	action.AddEffectInfo(EET_Stagger); // Triangle TODO maybe prevent chain-stagger. eh
-				// }
+				// Triangle anatomical knowledge
+				if (attackAction && attackAction.GetIsHeadShot() && witcherPlayer && witcherPlayer.CanUseSkill(S_Sword_s07) && actorVictim.IsAlive() &&
+						witcherPlayer.GetStat(BCS_Focus) >= 1 && TOpts_AnatomicalKnowledgeDuration() > 0) {
+					action.AddEffectInfo(EET_Blindness, TOpts_AnatomicalKnowledgeDuration() * witcherPlayer.GetSkillLevel(S_Sword_s07) / 5);
+					witcherPlayer.DrainFocus(1);
+				}
 				// Triangle end
 			}
 			
