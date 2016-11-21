@@ -2407,7 +2407,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 						AddEffectDefault( EET_Mutation3, this, "", false );
 					}
 					
-					GainStat(BCS_Focus, 0.1f * (1 + CalculateAttributeValue(value)) );
+					// Triangle focus gain
+					if (IsHeavyAttack(attackAction.GetAttackName())){
+						GainStat(BCS_Focus, TOpts_HeavyAttackFocusGain() * (1 + CalculateAttributeValue(value)) );
+					} else {
+						GainStat(BCS_Focus, TOpts_LightAttackFocusGain() * (1 + CalculateAttributeValue(value)) );
+					}
+					// Triangle end
 				}
 				
 				

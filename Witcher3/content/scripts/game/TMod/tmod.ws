@@ -140,6 +140,16 @@ function TOpts_AnatomicalKnowledgeDuration() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AnatomicalKnowledgeDuration' ) );
 }
 
+function TOpts_LightAttackFocusGain() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackFocusGain' ) );
+}
+
+function TOpts_HeavyAttackFocusGain() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackFocusGain' ) );
+}
+
 // ---- Combat End ---- //
 
 // ---- Alchemy Begin ---- //
@@ -643,46 +653,46 @@ function TOpts_CripplingShotDurationPerLevel() : float
 
 // ---- Enemies end ---- //
 
-// ---- Misc start ---- //
+// ---- General start ---- //
 
 function TOpts_RuneEffectMultiplier() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'RuneEffectMultiplier' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'RuneEffectMultiplier' ) );
 }
 
 function TOpts_GlyphEffectMultiplier() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GlyphEffectMultiplier' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'GlyphEffectMultiplier' ) );
 }
 
 function TOpts_SwitchArmorCalcOrder() : bool
 {
-	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'SwitchArmorCalcOrder' );
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'SwitchArmorCalcOrder' );
 }
 
 function TOpts_ArmorAPScaleRatio() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'ArmorAPScaleRatio' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'ArmorAPScaleRatio' ) );
 }
 
 function TOpts_VitalityHealthMod() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'VitalityHealthMod' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'VitalityHealthMod' ) );
 }
 
 function TOpts_EssenceHealthMod() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'EssenceHealthMod' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'EssenceHealthMod' ) );
 }
 
 function TOpts_QuestBossHealthMod() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'QuestBossHealthMod' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'QuestBossHealthMod' ) );
 }
 
 function TOpts_GeraltHealthMod() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionMisc', 'GeraltHealthMod' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionGeneral', 'GeraltHealthMod' ) );
 }
 
-// ---- Misc end ---- //
+// ---- General end ---- //

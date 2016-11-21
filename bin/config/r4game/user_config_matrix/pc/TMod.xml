@@ -8,6 +8,10 @@
 				<Entry varId="StaggerCritChance"				value="50" />
 				<Entry varId="KnockdownCritChance"				value="100" />
 				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
+				<Entry varId="ParryCooldown"					value="2" />
+				<Entry varId="MaxParries"						value="3" />
+				<Entry varId="LightAttackFocusGain"				value="0.1" />
+				<Entry varId="HeavyAttackFocusGain"				value="0.15" />
 				<Entry varId="LightAttackComboBonus"			value="0"	/>
 				<Entry varId="LightAttackComboCritBonus"		value="4"	/>
 				<Entry varId="HeavyAttackComboBonus"			value="0.12"/>
@@ -16,8 +20,6 @@
 				<Entry varId="ResolveFocusGainPerLevel"			value="0.07"/>
 				<Entry varId="ResolveDamagePerLevel"			value="20"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
-				<Entry varId="ParryCooldown"					value="2" />
-				<Entry varId="MaxParries"						value="3" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="0.75" />
 				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
 				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
@@ -39,6 +41,10 @@
 			<Var id="StaggerCritChance"				 displayName="Crit chance: bonus crit % vs staggered enemies."							displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="KnockdownCritChance"			 displayName="Crit chance: bonus crit % vs prone, confused, paralyzed, etc."			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackFocusGain"			 displayName="Light attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackFocusGain"		 	 displayName="Heavy attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
@@ -47,8 +53,6 @@
 			<Var id="ResolveFocusGainPerLevel"		 displayName="Resolve: Adrenaline gain on hit per level (0 for vanilla)"				displayType="SLIDER;0.00;1;100"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendBonusPerFocusPnt"			 displayName="Rend: Total damage multiplier per focus point"							displayType="SLIDER;0.00;1;50" 			tags="customNames;nonLocalized;customDisplayName" />
@@ -62,6 +66,36 @@
 			<Var id="WhirlStunLockSlow"	 	 		 displayName="Whirl: While dodging disabled, slow by X %."								displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ColdBloodedCritMult"	 		 displayName="Cold blooded: Focus gain crit multiplier."								displayType="SLIDER;1.00;3;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AnatomicalKnowledgeDuration"	 displayName="Anatomical knowledge: Blindness duration."								displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
+				<Entry varId="BasicSignCost"					value="50"	/>
+				<Entry varId="BasicSignDelay"					value="1"	/>
+				<Entry varId="AltSignDelay"						value="3"	/>
+				<Entry varId="AltAardCost"						value="60"	/>
+				<Entry varId="AltIgniCost"						value="50"	/>
+				<Entry varId="AltYrdenCost"						value="35"	/>
+				<Entry varId="AltQuenCost"						value="15"	/>
+				<Entry varId="AltAxiiCost"						value="15"	/>
+				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
+				<Entry varId="QuenDamageRatio"					value="0.667"/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="UseCustomSignStaminaCosts"		 displayName="Use custom stamina cost/delay."								 			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignCost"	 				 displayName="Stamina cost of basic signs"									 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignDelay"	 			 displayName="Stamina delay of basic signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSignDelay"	 			 	 displayName="Stamina delay of alt signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAardCost"	 				 displayName="Stamina cost of alt Aard"										 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltIgniCost"	 				 displayName="Stamina cost/sec of alt Igni"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltYrdenCost"	 				 displayName="Stamina cost/sec of alt Yrden"										 	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltQuenCost"	 				 displayName="Stamina cost/sec of alt Quen"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAxiiCost"	 				 displayName="Stamina cost/sec of alt Axii"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
@@ -112,6 +146,30 @@
 			<Var id="MinRedBonus"							displayName="Red mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
+	<Group id="TModOptionGeneral" displayName="Mods.TMod. General ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="RuneEffectMultiplier"					value="1"	/>
+				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
+				<Entry varId="SwitchArmorCalcOrder"					value="1"	/>
+				<Entry varId="ArmorAPScaleRatio"					value="0"	/>
+				<Entry varId="VitalityHealthMod"					value="0.5"	/>
+				<Entry varId="EssenceHealthMod"						value="0.5"	/>
+				<Entry varId="QuestBossHealthMod"					value="1"	/>
+				<Entry varId="GeraltHealthMod"						value="0.5"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VitalityHealthMod"			 		 displayName="Health mod for non-boss enemies w/ vitality"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EssenceHealthMod"			 		 displayName="Health mod for non-boss enemies w/ essence"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuestBossHealthMod"			 	 displayName="Health mod for quest and boss enemies (0 defaults to other mods)"		displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GeraltHealthMod"			 	 	 displayName="Health mod for Geralt"												displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
 	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
@@ -150,36 +208,6 @@
 			<Var id="ChestEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for chest armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PantsEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for pants armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsEvasionMod"		 	 displayName="Dodge/roll speed % bonus/penalty for gloves/boots."				 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-		</VisibleVars>
-	</Group>
-	<Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
-		<PresetsArray>
-			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
-				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
-				<Entry varId="BasicSignCost"					value="50"	/>
-				<Entry varId="BasicSignDelay"					value="1"	/>
-				<Entry varId="AltSignDelay"						value="3"	/>
-				<Entry varId="AltAardCost"						value="60"	/>
-				<Entry varId="AltIgniCost"						value="50"	/>
-				<Entry varId="AltYrdenCost"						value="35"	/>
-				<Entry varId="AltQuenCost"						value="15"	/>
-				<Entry varId="AltAxiiCost"						value="15"	/>
-				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
-				<Entry varId="QuenDamageRatio"					value="0.667"/>
-			</Preset>
-		</PresetsArray>
-		<VisibleVars>
-			<Var id="UseCustomSignStaminaCosts"		 displayName="Use custom stamina cost/delay."								 			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="BasicSignCost"	 				 displayName="Stamina cost of basic signs"									 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="BasicSignDelay"	 			 displayName="Stamina delay of basic signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltSignDelay"	 			 	 displayName="Stamina delay of alt signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltAardCost"	 				 displayName="Stamina cost of alt Aard"										 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltIgniCost"	 				 displayName="Stamina cost/sec of alt Igni"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltYrdenCost"	 				 displayName="Stamina cost/sec of alt Yrden"										 	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltQuenCost"	 				 displayName="Stamina cost/sec of alt Quen"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AltAxiiCost"	 				 displayName="Stamina cost/sec of alt Axii"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
@@ -264,30 +292,6 @@
 			<Var id="HypnoticRange"					 displayName="Hypnotic: Range of hypnotism aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HypnoticDelay"					 displayName="Hypnotic/Inspiring: Min delay before aura returns after being disabled."	displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="InspiredBonus"					 displayName="Inspiring: % bonus to health and attack power."							displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
-		</VisibleVars>
-	</Group>
-	<Group id="TModOptionMisc" displayName="Mods.TMod. Misc ">
-		<PresetsArray>
-			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
-				<Entry varId="RuneEffectMultiplier"					value="1"	/>
-				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
-				<Entry varId="SwitchArmorCalcOrder"					value="1"	/>
-				<Entry varId="ArmorAPScaleRatio"					value="0"	/>
-				<Entry varId="VitalityHealthMod"					value="0.5"	/>
-				<Entry varId="EssenceHealthMod"						value="0.5"	/>
-				<Entry varId="QuestBossHealthMod"					value="1"	/>
-				<Entry varId="GeraltHealthMod"						value="0.5"	/>
-			</Preset>
-		</PresetsArray>
-		<VisibleVars>
-			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="VitalityHealthMod"			 		 displayName="Health mod for non-boss enemies w/ vitality"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="EssenceHealthMod"			 		 displayName="Health mod for non-boss enemies w/ essence"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="QuestBossHealthMod"			 	 displayName="Health mod for quest and boss enemies (0 defaults to other mods)"		displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="GeraltHealthMod"			 	 	 displayName="Health mod for Geralt"												displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 
