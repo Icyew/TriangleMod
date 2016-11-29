@@ -1566,7 +1566,7 @@ class W3DamageManagerProcessor extends CObject
 				}
 				// Triangle end
 
-				criticalDamageBonus += actorAttacker.GetAttributeValue('critical_hit_damage_bonus_per_focus_pnt') * thePlayer.GetStat(BCS_Focus); // Triangle armor styles
+				criticalDamageBonus += actorAttacker.GetAttributeValue(theGame.params.CRITICAL_HIT_DAMAGE_BONUS); // Triangle armor styles
 			}
 			
 			

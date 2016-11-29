@@ -2518,19 +2518,22 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				// Triangle armor styles
 				baseString = "Each piece of light armor increases light attack damage by " + RoundMath(ability.valueMultiplicative*100) + "% ";
-				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'critical_hit_damage_bonus_per_focus_pnt', false, true);
-				baseString += "and critical hit damage by " + RoundMath(ability.valueAdditive*100) + "% per adrenaline point.";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
+				baseString += "and critical hit damage by " + RoundMath(ability.valueAdditive*100) + "%.";
 				// Triangle end
 				break;
 			case S_Perk_06:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'spell_power', false, true);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = "Each piece of medium armor increases spell power by " + RoundMath(ability.valueMultiplicative*100) + "% "; // Triangle armor styles
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'staminaRegen', false, true);
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				// Triangle armor styles
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'spell_power', false, true);
+				baseString = "Each piece of medium armor increases spell power by " + RoundMath(ability.valueMultiplicative*100) + "% ";
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'attack_power', false, true);
-				baseString += "and attack power by " + RoundMath(ability.valueMultiplicative*100) + "%.";
+				baseString += ", attack power by " + RoundMath(ability.valueMultiplicative*100) + "%.";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'vitality', false, true);
+				baseString += ", and vitality by " + NoTrailZeros(TUtil_RoundTo(ability.valueMultiplicative*100, 1)) + "%.";
 				// Triangle end
 				break;
 			case S_Perk_07:

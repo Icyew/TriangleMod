@@ -322,20 +322,21 @@ function TOpts_ArmorStaminaMod(armorType : EArmorType, armorSlot : EEquipmentSlo
 }
 
 // triangle TODO dead code for now
-function TOpts_ArmorSpeedBonus(inventory : CInventoryComponent, action : EBufferActionType) : float
+function TOpts_ArmorSpeedMod(inventory : CInventoryComponent, action : EBufferActionType) : float
 {
 	var speedBonus, speedPenalty, tempMod : float;
 	var tempItem : SItemUniqueId;
 	var armorEq, glovesEq, pantsEq, bootsEq : bool;
 
-	if (action != EBAT_Dodge && action != EBAT_Roll) {
+	// does not affect heavy attacks or whirl
+	if (action != EBAT_Dodge && action != EBAT_Roll && action != EBAT_LightAttack) {
 		return 1.0;
 	}
 
 	speedBonus = 1.0;
 	speedPenalty = 1.0;
 	if (inventory.GetItemEquippedOnSlot(EES_Armor, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
-		tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'ChestEvasionMod') ) / 100;
+		tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'ChestPantsEvasionMod') ) / 100;
 		if (inventory.GetArmorType(tempItem) == EAT_Heavy)
 			speedPenalty += tempMod;
 		else
@@ -343,7 +344,7 @@ function TOpts_ArmorSpeedBonus(inventory : CInventoryComponent, action : EBuffer
 	}
 
 	if (inventory.GetItemEquippedOnSlot(EES_Pants, tempItem) && inventory.GetArmorType(tempItem) != EAT_Medium) {
-		tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'PantsEvasionMod') ) / 100;
+		tempMod = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionStamina', 'ChestPantsEvasionMod') ) / 100;
 		if (inventory.GetArmorType(tempItem) == EAT_Heavy)
 			speedPenalty += tempMod;
 		else

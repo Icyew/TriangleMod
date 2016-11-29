@@ -657,19 +657,20 @@
     </ability>
     <ability name="perk_5">
       <tags>perk_5</tags>
-      <critical_hit_damage_bonus_per_focus_pnt type="add" min="0.08" /> <!-- Triangle armor styles -->
-      <attack_power_fast_style type="mult" min="0.05" />
+      <critical_hit_damage_bonus type="add" min="0.25" /> <!-- Triangle armor styles -->
+      <attack_power_fast_style type="mult" min="0.05" /> <!-- Triangle armor styles -->
     </ability>
     <ability name="perk_6">
       <tags>perk_6</tags>
       <spell_power type="mult" min="0.05" />
       <attack_power type="mult" min="0.05" /> <!-- Triangle armor styles -->
+      <vitality type="mult" min="0.025" />
       <!-- <staminaRegen type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
     </ability>
     <ability name="perk_7">
       <tags>perk_7</tags>
       <vitality type="mult" min="0.05" />
-      <attack_power_heavy_style type="mult" min="0.05" />
+      <attack_power_heavy_style type="mult" min="0.06" /> <!-- Triangle armor styles -->
     </ability>
     <ability name="perk_10">
       <tags>perk_10, GlobalPassiveBonus</tags>

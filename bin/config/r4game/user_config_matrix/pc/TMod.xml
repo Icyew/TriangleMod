@@ -72,16 +72,16 @@
 		<PresetsArray>
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
-				<Entry varId="BasicSignCost"					value="50"	/>
+				<Entry varId="BasicSignCost"					value="100"	/>
 				<Entry varId="BasicSignDelay"					value="1"	/>
 				<Entry varId="AltSignDelay"						value="3"	/>
-				<Entry varId="AltAardCost"						value="60"	/>
+				<Entry varId="AltAardCost"						value="100"	/>
 				<Entry varId="AltIgniCost"						value="50"	/>
-				<Entry varId="AltYrdenCost"						value="35"	/>
+				<Entry varId="AltYrdenCost"						value="100"	/>
 				<Entry varId="AltQuenCost"						value="15"	/>
 				<Entry varId="AltAxiiCost"						value="15"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
-				<Entry varId="QuenDamageRatio"					value="0.667"/>
+				<Entry varId="QuenDamageRatio"					value="0.5"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -175,20 +175,19 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="StaminaRegenMult"					value="1.0"	/>
 				<Entry varId="StaminaRegenBonus"				value="15"	/>
-				<Entry varId="FocusPerMaxStamina"				value="2"	/>
-				<Entry varId="BaseDodgeCost"					value="2"	/>
-				<Entry varId="BaseRollCost"						value="12"	/>
-				<Entry varId="BaseLightAttackCost"				value="2"	/>
-				<Entry varId="BaseHeavyAttackCost"				value="6"	/>
+				<Entry varId="FocusPerMaxStamina"				value="0"	/>
+				<Entry varId="BaseDodgeCost"					value="0"	/>
+				<Entry varId="BaseRollCost"						value="10"	/>
+				<Entry varId="BaseLightAttackCost"				value="0"	/>
+				<Entry varId="BaseHeavyAttackCost"				value="0"	/>
 				<Entry varId="WeakDamageMod"					value="0.3" />
 				<Entry varId="AltArmorStaminaMod"				value="1"	/>
-				<Entry varId="ChestPantsAttackCost"				value="1"	/>
-				<Entry varId="ChestPantsEvasionCost"			value="1.21"	/>
-				<Entry varId="GlovesBootsAttackCost"			value="0.21"	/>
-				<Entry varId="GlovesBootsEvasionCost"			value="0.31"	/>
-				<Entry varId="ChestEvasionMod"					value="0" />
-				<Entry varId="PantsEvasionMod"					value="0" />
-				<Entry varId="GlovesBootsEvasionMod"			value="0" />
+				<Entry varId="ChestPantsAttackCost"				value="0"	/>
+				<Entry varId="ChestPantsEvasionCost"			value="0"	/>
+				<Entry varId="GlovesBootsAttackCost"			value="0"	/>
+				<Entry varId="GlovesBootsEvasionCost"			value="0"	/>
+				<Entry varId="ChestPantsEvasionMod"				value="7" />
+				<Entry varId="GlovesBootsEvasionMod"			value="3" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -205,9 +204,8 @@
 			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsAttackCost" 		 displayName="Extra armor stamina cost per weight level for Attacks - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GlovesBootsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ChestEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for chest armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="PantsEvasionMod"				 displayName="Dodge/roll speed % bonus/penalty for pants armor" 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="GlovesBootsEvasionMod"		 	 displayName="Dodge/roll speed % bonus/penalty for gloves/boots."				 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsEvasionMod"			 displayName="Light attack/dodge speed % bonus/penalty for chest/pants"					displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionMod"		 	 displayName="Light attack/dodge speed % bonus/penalty for gloves/boots"			 	displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
