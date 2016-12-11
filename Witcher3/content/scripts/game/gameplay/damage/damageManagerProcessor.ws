@@ -2564,7 +2564,7 @@ class W3DamageManagerProcessor extends CObject
 		if (TOpts_WhirlStunLock() > 0 && thePlayer.GetCombatAction() == EBAT_SpecialAttack_Light) {
 			npcVictim = (CNewNPC)actorVictim;
 			if (npcVictim) {
-				npcVictim.StunLock(TOpts_WhirlStunLock());
+				npcVictim.StunLock(TOpts_WhirlStunLock(), 1 - TOpts_WhirlStunLockSlow());
 			}
 		}
 		// Triangle end
