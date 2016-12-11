@@ -85,6 +85,7 @@
 				<Entry varId="IgniDuration"						value="1"/>
 				<Entry varId="IgniDurationSpread"				value="0.4"/>
 				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
+				<Entry varId="AardStaminaDelay"					value="1"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -102,6 +103,7 @@
 			<Var id="IgniDuration"		 		 	 displayName="Igni: base burning duration (0 for vanilla burning)"				 		displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardStaminaDelay"		 	 	 displayName="Aard: aard drains stamina and delays regen for Xs (0 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

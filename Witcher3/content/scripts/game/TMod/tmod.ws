@@ -463,6 +463,11 @@ function TOpts_IgniSPDurationFactor() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniSPDurationFactor' ) );
 }
 
+function TOpts_AardStaminaDelay() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardStaminaDelay' ) );
+}
+
 // ---- Signs End ---- //
 
 // ---- Leveling Begin ---- //

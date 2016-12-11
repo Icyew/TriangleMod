@@ -2307,6 +2307,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s20, 'range', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle far reaching aard
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit with Aard, stamina drains and regen is delayed for " + NoTrailZeros(TOpts_AardStaminaDelay() * skillLevel / 3) + "s." +
+					"<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;					
 		}
 		

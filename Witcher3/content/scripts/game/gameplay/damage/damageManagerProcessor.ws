@@ -748,6 +748,12 @@ class W3DamageManagerProcessor extends CObject
 					} else if (actorVictim && (actorVictim.HasBuff(EET_Stagger) || actorVictim.HasBuff(EET_LongStagger))) {
 						critChance += TOpts_StaggerCritChance();
 					}
+					// if (TUtil_IsEffectFromAard(EET_HeavyKnockdown, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_Knockdown, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_LongStagger, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_Stagger, actorVictim)) {
+					// 	critChance += 1;
+					// }
 					critChance += TOpts_CritChanceBonus();
 					// Triangle end
 

@@ -375,3 +375,16 @@ function TUtil_NullifyMutagen(mutagen : name, color : ESkillColor)
         thePlayer.AddAbilityMultiple('T_mutagen_attackpower_negative', RoundMath(attrVal.valueMultiplicative * 100 * count));
     }
 }
+
+// Triangle aard (NOT USED, kept for posterity)
+function TUtil_IsEffectFromAard(effectType : EEffectType, actorVictim : CActor) : bool
+{
+    var buff : CBaseGameplayEffect;
+    if (actorVictim && actorVictim.HasBuff(effectType)) {
+        buff = actorVictim.GetBuff(effectType);
+        if (buff.GetSourceName() == NameToString('_sign')) {
+            return true;
+        }
+    }
+    return false;
+}

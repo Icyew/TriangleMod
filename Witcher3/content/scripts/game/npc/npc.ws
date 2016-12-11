@@ -3404,6 +3404,9 @@ statemachine import class CNewNPC extends CActor
 		
 		// Triangle enemy mutations
 		BlockAbility(TUtil_TEMutationEnumToName(TEM_Flaming), true, TOpts_ElectricCooldown());
+		// Triangle far reaching aard
+		if (TOpts_AardStaminaDelay() > 0 && sign.GetOwner().GetPlayer() && sign.GetOwner().GetPlayer().CanUseSkill(S_Magic_s20))
+			DrainStamina(ESAT_FixedValue, GetStatMax(BCS_Stamina), TOpts_AardStaminaDelay() * (sign.GetOwner().GetPlayer().GetSkillLevel(S_Magic_s20) / 3));
 		// Triangle end
 		
 		if( !sign.GetOwner().GetPlayer() || !GetWitcherPlayer().IsMutationActive( EPMT_Mutation6 ) )
