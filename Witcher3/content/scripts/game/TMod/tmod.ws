@@ -448,6 +448,21 @@ function TOpts_QuenDamageRatio() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenDamageRatio' ) );
 }
 
+function TOpts_IgniDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniDuration' ) );
+}
+
+function TOpts_IgniDurationSpread() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniDurationSpread' ) );
+}
+
+function TOpts_IgniSPDurationFactor() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniSPDurationFactor' ) );
+}
+
 // ---- Signs End ---- //
 
 // ---- Leveling Begin ---- //

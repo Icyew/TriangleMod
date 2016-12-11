@@ -82,6 +82,9 @@
 				<Entry varId="AltAxiiCost"						value="15"	/>
 				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
 				<Entry varId="QuenDamageRatio"					value="0.5"/>
+				<Entry varId="IgniDuration"						value="1"/>
+				<Entry varId="IgniDurationSpread"				value="0.4"/>
+				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -96,6 +99,9 @@
 			<Var id="AltAxiiCost"	 				 displayName="Stamina cost/sec of alt Axii"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniDuration"		 		 	 displayName="Igni: base burning duration (0 for vanilla burning)"				 		displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

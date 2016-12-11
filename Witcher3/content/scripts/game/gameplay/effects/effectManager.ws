@@ -1430,6 +1430,10 @@ class W3EffectManager
 		var retB, applyBuff : bool;
 		var signEntity : W3SignEntity;
 		var canLog : bool;
+		// Triangle igni
+		var igniDuration : float;
+		// Triangle end
+
 		
 		canLog = theGame.CanLog();
 		size = action.GetEffects( effectInfos );
@@ -1461,7 +1465,12 @@ class W3EffectManager
 			
 			if(applyBuff)
 			{
-				
+				// Triangle igni
+				if (signEntity && signEntity.GetSignType() == ST_Igni && TOpts_IgniDuration() > 0) {
+					igniDuration = RandRangeF(TOpts_IgniDuration() + TOpts_IgniDurationSpread() / 2, TOpts_IgniDuration() - TOpts_IgniDurationSpread() / 2); // spell power applied in baseEffect.ws CalculateDuration
+					ret = InternalAddEffect(effectInfos[i].effectType, action.attacker, action.GetBuffSourceName(), igniDuration, effectInfos[i].effectCustomValue, effectInfos[i].effectAbilityName, effectInfos[i].customFXName, signEntity, attackerPowerStatValue, effectInfos[i].effectCustomParam );
+				} else
+				// Triangle end
 				ret = InternalAddEffect(effectInfos[i].effectType, action.attacker, action.GetBuffSourceName(), effectInfos[i].effectDuration, effectInfos[i].effectCustomValue, effectInfos[i].effectAbilityName, effectInfos[i].customFXName, signEntity, attackerPowerStatValue, effectInfos[i].effectCustomParam );
 			}
 			else

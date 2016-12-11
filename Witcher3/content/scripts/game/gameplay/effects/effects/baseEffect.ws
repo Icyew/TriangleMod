@@ -305,6 +305,9 @@ class CBaseGameplayEffect extends CObject
 	{
 		var durationResistance : float;
 		var min, max : SAbilityAttributeValue;
+		// Triangle igni
+		var signEntity : W3SignEntity;
+		// Triangle end
 		
 		if(duration == 0)
 		{
@@ -327,6 +330,12 @@ class CBaseGameplayEffect extends CObject
 			else
 				durationResistance = resistance;
 				
+			// Triangle igni
+			signEntity = (W3SignEntity)GetCreator();
+			if (signEntity && signEntity.GetSignType() == ST_Igni && IsAddedByPlayer()) {
+				duration = MaxF(0, initialDuration * MaxF(0, 1 + (creatorPowerStat.valueMultiplicative - 1) * TOpts_IgniSPDurationFactor()) * (1 - durationResistance) );
+			} else
+			// Triangle end
 			duration = MaxF(0, initialDuration * MaxF(0, creatorPowerStat.valueMultiplicative) * (1 - durationResistance) );
 			LogEffects("BaseEffect.CalculateDuration: " + effectType + " duration with target resistance (" + NoTrailZeros(resistance) + ") and attacker power mul of (" + NoTrailZeros(creatorPowerStat.valueMultiplicative) + ") is " + NoTrailZeros(duration) + ", base was " + NoTrailZeros(initialDuration));
 		}		
