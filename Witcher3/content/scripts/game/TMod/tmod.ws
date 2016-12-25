@@ -10,14 +10,39 @@ function TOpts_LightAttackComboCritBonus() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboCritBonus' ) ) / 100;
 }
 
-function TOpts_LightAttackComboBonus() : float
+function TOpts_LightAttackComboSpeedBonus() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboBonus' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboSpeedBonus' ) );
 }
 
-function TOpts_HeavyAttackComboBonus() : float
+function TOpts_LightAttackComboCritDmgBonus() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboBonus' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboCritDmgBonus' ) ) / 100;
+}
+
+function TOpts_LightAttackComboDmgBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackComboDmgBonus' ) ) / 100;
+}
+
+function TOpts_HeavyAttackComboMultBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboMultBonus' ) ) / 100;
+}
+
+function TOpts_HeavyAttackComboCritDmgBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboCritDmgBonus' ) ) / 100;
+}
+
+function TOpts_HeavyAttackComboDmgBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboDmgBonus' ) ) / 100;
+}
+
+function TOpts_HeavyAttackComboCritBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboCritBonus' ) ) / 100;
 }
 
 function TOpts_LightAttackComboDecay() : float
@@ -28,6 +53,26 @@ function TOpts_LightAttackComboDecay() : float
 function TOpts_HeavyAttackComboDecay() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackComboDecay' ) );
+}
+
+function TOpts_AttackComboCrossDecayFactor() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'AttackComboCrossDecay' ) );
+}
+
+function TOpts_LightAttackMaxCombo() : int
+{
+	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'LightAttackMaxCombo' ) );
+}
+
+function TOpts_HeavyAttackMaxCombo() : int
+{
+	return StringToInt( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'HeavyAttackMaxCombo' ) );
+}
+
+function TOpts_MaxComboDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'MaxComboDuration' ) );
 }
 
 function TOpts_RendBonusPerFocusPnt() : float

@@ -388,3 +388,41 @@ function TUtil_IsEffectFromAard(effectType : EEffectType, actorVictim : CActor) 
     }
     return false;
 }
+
+// Triangle attack combos
+function TUtil_AreAttackCombosEnabled(isHeavy : bool) : bool
+{
+    if (isHeavy) {
+        return TOpts_LightAttackComboDecay() > 0;
+    } else {
+        return TOpts_HeavyAttackComboDecay() > 0;
+    }
+}
+
+// Triangle attack combos
+function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
+{
+    var witcher : W3PlayerWitcher;
+    witcher = (W3PlayerWitcher)player;
+    if (!witcher)
+        return false;
+    if (isHeavy && TUtil_AreAttackCombosEnabled(isHeavy)) {
+        return witcher.CanUseSkill(S_Sword_s04) || witcher.CanUseSkill(S_Sword_s08);
+    } else if (TUtil_AreAttackCombosEnabled(isHeavy)) {
+        return witcher.CanUseSkill(S_Sword_s21) || witcher.CanUseSkill(S_Sword_s17);
+    } else {
+        return false;
+    }
+}
+
+// Triangle everything
+function TUtil_ValueForLevel(player : CR4Player, skill : ESkill, maxValue : float, maxLevel : int) : float
+{
+    var witcher : W3PlayerWitcher;
+    witcher = (W3PlayerWitcher)player;
+    if (!witcher) {
+        TUtil_LogMessage("Error: attempted to get a skill value for non-geralt");
+        return 0;
+    }
+    return (witcher.GetSkillLevel(skill) / maxLevel) * maxValue;
+}

@@ -7,16 +7,25 @@
 				<Entry varId="CritChanceBonus"					value="-5" />
 				<Entry varId="StaggerCritChance"				value="50" />
 				<Entry varId="KnockdownCritChance"				value="100" />
-				<Entry varId="HeavyAttackDmgMod"				value="1.8" />
+				<Entry varId="HeavyAttackDmgMod"				value="1.65" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
 				<Entry varId="LightAttackFocusGain"				value="0.1" />
 				<Entry varId="HeavyAttackFocusGain"				value="0.15" />
-				<Entry varId="LightAttackComboBonus"			value="0"	/>
-				<Entry varId="LightAttackComboCritBonus"		value="4"	/>
-				<Entry varId="HeavyAttackComboBonus"			value="0.12"/>
-				<Entry varId="LightAttackComboDecay"			value="3"	/>
-				<Entry varId="HeavyAttackComboDecay"			value="6"	/>
+				<Entry varId="MaxComboDuration"					value="6"	/>
+				<Entry varId="LightAttackMaxCombo"				value="10"	/>
+				<Entry varId="HeavyAttackMaxCombo"				value="5"	/>
+				<Entry varId="LightAttackComboDecay"			value="1.75"/>
+				<Entry varId="HeavyAttackComboDecay"			value="3.5"	/>
+				<Entry varId="AttackComboCrossDecay"			value="0.5"/>
+				<Entry varId="LightAttackComboSpeedBonus"		value="0"	/>
+				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
+				<Entry varId="LightAttackComboCritDmgBonus"		value="0"	/>
+				<Entry varId="LightAttackComboDmgBonus"			value="4"	/>
+				<Entry varId="HeavyAttackComboMultBonus"		value="0"/>
+				<Entry varId="HeavyAttackComboCritBonus"		value="0"	/>
+				<Entry varId="HeavyAttackComboCritDmgBonus"		value="0"	/>
+				<Entry varId="HeavyAttackComboDmgBonus"			value="8"	/>
 				<Entry varId="ResolveFocusGainPerLevel"			value="0.07"/>
 				<Entry varId="ResolveDamagePerLevel"			value="20"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
@@ -45,11 +54,20 @@
 			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackFocusGain"			 displayName="Light attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackFocusGain"		 	 displayName="Heavy attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboBonus"			 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MaxComboDuration"			 	 displayName="Attack combo: Maximum time before combos expire"			 				displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackMaxCombo"			 displayName="Light combo: Maximum light attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Light combo: Time until combo to expires (0 for vanilla)"			 		displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackMaxCombo"			 displayName="Heavy combo: Maximum heavy attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Heavy combo: Time until combo expires (0 for vanilla)"			 		displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AttackComboCrossDecay"			 displayName="Attack combo: Fraction of time that applies to other attack type"			displayType="SLIDER;0.00;1;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboSpeedBonus"	 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Muscle Memory: Time until combo to expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboBonus"			 displayName="Strength Training: +Total damage multiplier (additive) per hit"			displayType="SLIDER;0.00;0.3;30" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Strength Training: Time until combo expires (0 for vanilla)"			 	displayType="SLIDER;0.00;30;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboCritDmgBonus"	 displayName="Muscle Memory: Bonus crit attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDmgBonus"	 	 displayName="Muscle Memory: Bonus attack power per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboMultBonus"		 displayName="Strength Training: Total % damage multiplier per hit"						displayType="SLIDER;0.00;50;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboCritBonus"		 displayName="Strength Training: Bonus crit % per hit"									displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboCritDmgBonus"	 displayName="Strength Training: Bonus crit attack power per hit"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDmgBonus"		 displayName="Strength Training: Bonus attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveFocusGainPerLevel"		 displayName="Resolve: Adrenaline gain on hit per level (0 for vanilla)"				displayType="SLIDER;0.00;1;100"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />

@@ -2569,11 +2569,11 @@ import abstract class CActor extends CGameplayEntity
 			{
 				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))
 				{
-					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetLightAttackComboLength(), false);
+					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetAttackComboLength(false), false);
 				}
 				else if(attackAction && witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s04))
 				{
-					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetHeavyAttackComboLength(), false);
+					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetAttackComboLength(true), false);
 				}
 				// Triangle TODO move somwhere else
 				/*else if(action.GetSignSkill() != S_SUndefined && action.GetSignSkill() != S_Magic_3)
@@ -5431,10 +5431,10 @@ import abstract class CActor extends CGameplayEntity
 		// Triangle attack combos
 		if (this == thePlayer && hitTargets.Size() == 0) {
 			if (IsLightAttack(attackActionName) && !GetWitcherPlayer().IsDoingSpecialAttack(false)) {
-				GetWitcherPlayer().AddTimer('FastAttackCounterDecay', 0);
+				GetWitcherPlayer().DecAttackCombo(false); // misses decrease your combo
 			} else if (IsHeavyAttack(attackActionName)) {
 				GetWitcherPlayer().RefundRend(); // Triangle rend Refund if a miss
-				GetWitcherPlayer().AddTimer('HeavyAttackCounterDecay', 0);
+				GetWitcherPlayer().DecAttackCombo(true); // misses decrease your combo
 			}
 		}
 		// Triangle end
