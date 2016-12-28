@@ -7,10 +7,15 @@
 
 
 // Triangle acquired tolerance
-class W3Effect_TAcquiredTolerance extends W3Effect_TMutableDuration
+class W3Effect_TMutableDuration extends CBaseGameplayEffect
 {
-	default effectType = EET_TAcquiredTolerance;
-	default isPositive = true;
-	default isNeutral = false;
-	default isNegative = false;
+	public function AddTimeLeft(time : float, optional capDuration : bool)
+	{
+		timeLeft += time;
+		if (capDuration && timeLeft > duration) {
+			timeLeft = duration;
+		} else {
+			duration = MaxF(duration, timeLeft);
+		}
+	}
 }

@@ -2083,9 +2083,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var value : SAbilityAttributeValue;
 		
 		
-		if (CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() == 0 ) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s04), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
-		if (CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() == 0 ) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s21), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		attackPower = attackPower * 0.5;
 		

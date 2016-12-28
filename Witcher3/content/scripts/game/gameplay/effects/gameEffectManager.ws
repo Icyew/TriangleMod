@@ -224,6 +224,10 @@ class W3GameEffectManager
 			case EET_TInspired :				effects[effect] = new W3Effect_TInspired in this;					break;
 			// Triangle resolve
 			case EET_TResolve :					effects[effect] = new W3Effect_TResolve in this;					break;
+			// Triangle light attack combo
+			case EET_TLightCombo :				effects[effect] = new W3Effect_TLightCombo in this;					break;
+			// Triangle heavy attack combo
+			case EET_THeavyCombo :				effects[effect] = new W3Effect_THeavyCombo in this;					break;
 			// Triangle endure pain
 			case EET_TIgnorePain :				effects[effect] = new W3Effect_TIgnorePain in this;					break;
 			// Triangle parry
@@ -635,6 +639,10 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "TInspiredEffect" :									type = EET_TInspired;					break;
 		// Triangle resolve
 		case "TResolveEffect" :										type = EET_TResolve;					break;
+		// Triangle light attack combo
+		case "TLightComboEffect" :									type = EET_TLightCombo;					break;
+		// Triangle heavy attack combo
+		case "THeavyComboEffect" :									type = EET_THeavyCombo;					break;
 		// Triangle endure pain
 		case "TIgnorePainEffect" :									type = EET_TIgnorePain;					break;
 		// Triangle parry
@@ -849,6 +857,10 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_TInspired :							return 'TInspiredEffect';
 		// Triangle resolve
 		case EET_TResolve :								return 'TResolveEffect';
+		// Triangle light attack combo
+		case EET_TLightCombo :							return 'TLightComboEffect';
+		// Triangle heavy attack combo
+		case EET_THeavyCombo :							return 'THeavyComboEffect';
 		// Triangle endure pain
 		case EET_TIgnorePain :							return 'TIgnorePainEffect';
 		// Triangle parry

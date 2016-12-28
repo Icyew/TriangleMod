@@ -297,12 +297,22 @@ class W3Action_Attack extends W3DamageAction
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
 			
 			
-			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() == 0 ) // Triangle attack combos
+			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true)) // Triangle attack combos
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s04);
+			// Triangle attack combos
+			if(witcherAttacker.CanUseSkill(S_Sword_s04) && TUtil_AreAttackCombosEnabled(true)) {
+				result.valueMultiplicative += TUtil_ValueForLevel(witcherAttacker, S_Sword_s04, TOpts_HeavyAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(true);
+			}
+			// Triangle end
 			
 			
-			if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() == 0 ) // Triangle attack combos
+			if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false)) // Triangle attack combos
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s21);
+			// Triangle attack combos
+			if(witcherAttacker.CanUseSkill(S_Sword_s21) && TUtil_AreAttackCombosEnabled(true)) {
+				result.valueMultiplicative += TUtil_ValueForLevel(witcherAttacker, S_Sword_s21, TOpts_LightAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(false);
+			}
+			// Triangle end
 						
 			
 			if(witcherAttacker.inv.IsIdValid(crossbowId) && witcherAttacker.CanUseSkill(S_Perk_02))

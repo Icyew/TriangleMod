@@ -137,6 +137,10 @@ enum EEffectType
 	EET_TInspired,
 	// Triangle resolve
 	EET_TResolve,
+	// Triangle light attack combo
+	EET_TLightCombo,
+	// Triangle heavy attack combo
+	EET_THeavyCombo,
 	// Triangle endure pain
 	EET_TIgnorePain,
 	// Triangle parry

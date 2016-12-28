@@ -26,8 +26,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private saved var booksRead 						: array<name>; 					
 	
 	// Triangle attack combos
-	// Heavy attack dmg is calculated after counter inc, so we need to keep track of prev counter
-	private				var fastAttackCounter, heavyAttackCounter, signAttackCounter	: int;
+	// ONCE AGAIN NOT USED. But they're in the vanilla code still so have to keep them
+	private				var fastAttackCounter, heavyAttackCounter	: int;
 	// Triangle rend
 	protected			var cachedFocusDifference										: float; default cachedFocusDifference = 0;
 	private				var undrainedFocusDifference									: float; default undrainedFocusDifference = 0;
@@ -3397,8 +3397,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			// Triangle attack combos
 			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
-				RemoveTimer('FastAttackCounterDecay');
-				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboBonus() * GetWitcherPlayer().GetLightAttackCounter() / 100 + 1)); // triggers before combo inc, so use raw counter
+				PauseComboTime('Whirl');
+				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboSpeedBonus() * GetWitcherPlayer().GetAttackComboCounter(false) / 100 + 1)); // triggers before combo inc, so use raw counter
+			}
+			// Triangle attack combos
+			if (action == EBAT_SpecialAttack_Heavy && stage == BS_Pressed) {
+				PauseComboTime('Rend');
 			}
 			// Triangle end
 			SetCombatAction( action ) ;
@@ -3470,36 +3474,160 @@ statemachine class W3PlayerWitcher extends CR4Player
 			attackTypeName = attackAction.GetAttackTypeName();
 			if(attackTypeName)
 			{
-				maxLightCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s21));
-				maxHeavyCombo = RoundMath(CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s04, 'max_combo', false, true)) * GetSkillLevel(S_Sword_s04));
 				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;
-					if (GetLightAttackComboLength() < maxLightCombo && CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() > 0)
-						fastAttackCounter += 1;
-					AddTimer('FastAttackCounterDecay', TOpts_LightAttackComboDecay(), false, false, null, false, true);
+					if (TUtil_ShouldAttackCombo(this, false))
+						IncAttackCombo(false);
+					if (TUtil_ShouldAttackCombo(this, true))
+						IncComboTime(true, TOpts_AttackComboCrossDecayFactor() * TOpts_LightAttackComboDecay());
 				}
 				
 				if(IsHeavyAttack(attackTypeName))
 				{
 					attackAction.isWeak = isWeak;
 					isWeak = false;
-					if (GetHeavyAttackComboLength() < maxHeavyCombo && CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() > 0)
-						heavyAttackCounter += 1;
-					AddTimer('HeavyAttackCounterDecay', TOpts_HeavyAttackComboDecay(), false, false, null, false, true);
+					if (TUtil_ShouldAttackCombo(this, true))
+						IncAttackCombo(true);
+					if (TUtil_ShouldAttackCombo(this, false))
+						IncComboTime(false, TOpts_AttackComboCrossDecayFactor() * TOpts_HeavyAttackComboDecay());
 				}
-
-				// Triangle TODO move somewhere else
-				/*if(attackAction.GetSignSkill() != S_SUndefined && attackAction.GetSignSkill() != S_Magic_3)
-					signAttackCounter += 1;*/
 			}
 			// Triangle end
 		}
 
-		// AddTimer('SignAttackCounterDecay',5.0); // Triangle TODO // Triangle attack combos
 		
 		return true;
+	}
+
+	// Triangle attack combos
+	public function IncAttackCombo(isHeavyAttack : bool)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (!HasBuff(effectType)) {
+			AddEffectDefault(effectType, this, 'AttackCombo');
+		}
+
+		comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+		comboEffect.IncCombo();
+		comboEffect.IncTime();
+	}
+
+	// Triangle attack combos
+	public function DecAttackCombo(isHeavyAttack : bool)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.DecCombo();
+		}
+
+	}
+
+	// Triangle attack combos
+	public function IncComboTime(isHeavyAttack : bool, optional fixedTime : float)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.IncTime(fixedTime);
+		}
+	}
+
+	// Triangle attack combos
+	public function PauseComboTime(srcName : name)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		effectType = EET_THeavyCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Pause(srcName);
+		}
+		effectType = EET_TLightCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Pause(srcName);
+		}
+	}
+
+	// Triangle attack combos
+	public function ResumeComboTime(srcName : name)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		effectType = EET_THeavyCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Resume(srcName);
+		}
+		effectType = EET_TLightCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Resume(srcName);
+		}
+	}
+
+	// Triangle attack combos
+	public function GetAttackComboCounter(isHeavyAttack : bool) : int
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			return comboEffect.ComboCount();
+		} else {
+			return 0;
+		}
+	}
+
+	// Triangle attack combos
+	public function GetAttackComboLength(isHeavyAttack : bool) : int
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			return comboEffect.ComboLength();
+		} else {
+			return 0;
+		}
 	}
 	
 	protected function TestParryAndCounter(data : CPreAttackEventData, weaponId : SItemUniqueId, out parried : bool, out countered : bool) : array<CActor>
@@ -3509,41 +3637,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 			data.Can_Parry_Attack = false;
 			
 		return super.TestParryAndCounter(data, weaponId, parried, countered);
-	}
-		
-	private timer function FastAttackCounterDecay(delta : float, id : int)
-	{
-		fastAttackCounter = 0;
-	}
-	
-	private timer function HeavyAttackCounterDecay(delta : float, id : int)
-	{
-		heavyAttackCounter = 0;
-	}
-		
-	
-	// Triangle attack combos
-	private timer function SignAttackCounterDecay(delta : float, id : int)
-	{
-		signAttackCounter = 0;
-	}
-
-	// Triangle attack combos
-	public function GetLightAttackCounter() : int
-	{
-		return fastAttackCounter;
-	}
-
-	// Triangle attack combos
-	public function GetLightAttackComboLength() : int
-	{
-		return Max(0, fastAttackCounter - 1);
-	}
-
-	// Triangle attack combos
-	public function GetHeavyAttackComboLength() : int
-	{
-		return Max(0, heavyAttackCounter - 1);
 	}
 	
 	public function GetCraftingSchematicsNames() : array<name>		{return craftingSchematics;}
@@ -7983,7 +8076,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
 		
-		if (CanUseSkill(S_Sword_s21) && TOpts_LightAttackComboDecay() == 0)
+		if (CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false)) // Triangle attack combos
 			fastAP += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		if (CanUseSkill(S_Perk_05))
 		{
@@ -7991,7 +8084,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			fastCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 			strongCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 		}
-		if (CanUseSkill(S_Sword_s04) && TOpts_HeavyAttackComboDecay() == 0)
+		if (CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true)) // Triangle attack combos
 			strongAP += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
 		if (CanUseSkill(S_Perk_07))
 			strongAP +=	GetAttributeValue('attack_power_heavy_style');

@@ -223,6 +223,14 @@
         <!-- set things via scripts -->
         <DirectDamage type="mult" min="0" max="0" />
       </ability>
+      <!-- Triangle light attack combos -->
+      <ability name="TLightComboEffect">
+        <duration type="add" min="-1" />
+      </ability>
+      <!-- Triangle heavy attack combos -->
+      <ability name="THeavyComboEffect">
+        <duration type="add" min="-1" />
+      </ability>
       <!-- Triangle parry -->
       <ability name="TParryCooldownEffect">
         <!-- set things via scripts. This xml may not be necessary -->
@@ -463,6 +471,10 @@
     <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EffectAxii" showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_5"  targetEffectName_name="axii_guardian" />
     <!-- Triangle resolve -->
     <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="Resolve" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s5"/>
+    <!-- Triangle light attack combo -->
+    <effect name_name="TLightComboEffect"      defaultAbilityName_name="TLightComboEffect"            iconType_name="FastAttack" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
+    <!-- Triangle heavy attack combo -->
+    <effect name_name="THeavyComboEffect"      defaultAbilityName_name="THeavyComboEffect"            iconType_name="HeavyAttack" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_2"/>
     <!-- Triangle endure pain -->
     <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="EndurePain" showOnHUD="1" effectNameLocalisationKey_name="skill_name_alchemy_s20"/>
     <!-- Triangle parry -->
@@ -623,6 +635,10 @@
     <effect iconType_name="AcquiredTolerance"         path="icons\Skills\Alchemy\alchemy_s18.png" />
     <!-- Triangle resolve -->
     <effect iconType_name="Resolve"         path="icons\Skills\Sword\sword_s5.png" />
+    <!-- Triangle light attack combo -->
+    <effect iconType_name="FastAttack"         path="icons\Skills\core\sword_1.png" />
+    <!-- Triangle heavy attack combo -->
+    <effect iconType_name="HeavyAttack"         path="icons\Skills\core\sword_2.png" />
     <!-- Triangle endure pain -->
 	  <effect iconType_name="EndurePain"    			path="icons\Skills\Alchemy\alchemy_s20.png" />
     <!-- Triangle end-->

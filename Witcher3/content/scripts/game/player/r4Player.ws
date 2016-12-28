@@ -12013,9 +12013,13 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if(GetBehaviorVariable('combatActionType') == (int)CAT_SpecialAttack)
 		{
-			// Triangle attack combos Reset light attack combo timer after whirl because I forget why. But why not
+			// Triangle attack combos Resume combo timer when done with special attacks
 			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Light) {
-				this.AddTimer('FastAttackCounterDecay', TOpts_LightAttackComboDecay());
+				GetWitcherPlayer().ResumeComboTime('Whirl');
+			}
+			// Triangle attack combos
+			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Heavy) {
+				GetWitcherPlayer().ResumeComboTime('Rend');
 			}
 			// Triangle end
 			theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );
