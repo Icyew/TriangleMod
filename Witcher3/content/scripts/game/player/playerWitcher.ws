@@ -2020,7 +2020,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
 		}
 		// Triangle endure pain
-		if (CanUseSkill(S_Alchemy_s20) && !damageData.IsDoTDamage() && damageData.processedDmg.vitalityDamage > 0) {
+		if (CanUseSkill(S_Alchemy_s20) && !damageData.IsDoTDamage() && damageData.processedDmg.vitalityDamage > 0 && TOpts_EndurePainDamageRatioPerLevel() > 0) {
 			params.effectType = EET_TIgnorePain;
 			params.creator = this;
 			params.sourceName = "Endure Pain";

@@ -2470,10 +2470,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetAttributeRandomizedValue(min, max);
 				arg = ability.valueMultiplicative * skillLevel;				
 				argsInt.PushBack(RoundMath(arg*100));
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle endure pain
-				// baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-				baseString = "If a potion effect is active, " + NoTrailZeros(TOpts_EndurePainDamageRatioPerLevel() * skillLevel * 100) +
-					"% of damage taken is drained over " + NoTrailZeros(TOpts_EndurePainDuration()) + "s. This damage cannot kill you.";
+				if (TOpts_EndurePainDamageRatioPerLevel() > 0) {
+					baseString = "If a potion effect is active, " + NoTrailZeros(TOpts_EndurePainDamageRatioPerLevel() * skillLevel * 100) +
+						"% of damage taken is drained over " + NoTrailZeros(TOpts_EndurePainDuration()) + "s. This damage cannot kill you.";
+				}
 				// Triangle end
 				break;
 			default:

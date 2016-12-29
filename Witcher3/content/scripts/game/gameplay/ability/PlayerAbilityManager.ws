@@ -2364,6 +2364,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			i = GetSkillSlotID(skill);
 			if (i > orgTotalSkillSlotsCount)
 				UnequipSkill(i);
+
 		}
 		// Elys end
 		
@@ -2493,8 +2494,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		else if(skill == S_Alchemy_s20)
 		{
 			// Triangle endure pain ignore vanilla implementation
-			// if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() )
-			// 	owner.AddEffectDefault(EET_IgnorePain, owner, 'IgnorePain');
+			if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() && TOpts_EndurePainDamageRatioPerLevel() == 0)
+				owner.AddEffectDefault(EET_IgnorePain, owner, 'IgnorePain');
 			// Triangle end
 		}
 		

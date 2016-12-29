@@ -152,7 +152,7 @@
 		<VisibleVars>
 			<Var id="BonusToxicity"	 						displayName="Bonus toxicity"															displayType="SLIDER;0.00;100;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="DefaultToxicityDrainTime"				displayName="Default time to degen 1 toxicity point (0 for vanilla)"					displayType="SLIDER;0.00;60;120" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="EndurePainDamageRatioPerLevel"	 		displayName="Endure Pain: Percentage of damage converted to DoT per level"				displayType="SLIDER;0.00;20;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EndurePainDamageRatioPerLevel"	 		displayName="Endure Pain: Percentage of damage converted to DoT/level (0 for vanilla)"	displayType="SLIDER;0.00;20;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="EndurePainDuration"			 		displayName="Endure Pain: Duration of DoT (total dmg stays the same)"					displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AcquiredToleranceDiscount"				displayName="Acquired Tolerance: Toxicity cost discount (0 for vanilla)"				displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AcquiredToleranceDurationPerLevel"		displayName="Acquired Tolerance: Duration per potion/level"								displayType="SLIDER;0.00;180;36" 		tags="customNames;nonLocalized;customDisplayName" />

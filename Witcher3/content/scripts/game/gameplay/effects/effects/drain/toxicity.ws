@@ -134,8 +134,8 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 			
 			
 			// Triangle endure pain ignore vanilla effect
-			// if(thePlayer.CanUseSkill(S_Alchemy_s20) && !target.HasBuff(EET_IgnorePain))
-			// 	target.AddEffectDefault(EET_IgnorePain, target, 'IgnorePain');
+			if(thePlayer.CanUseSkill(S_Alchemy_s20) && !target.HasBuff(EET_IgnorePain) && TOpts_EndurePainDamageRatioPerLevel() == 0)
+				target.AddEffectDefault(EET_IgnorePain, target, 'IgnorePain');
 			// Triangle end
 		}
 		else
