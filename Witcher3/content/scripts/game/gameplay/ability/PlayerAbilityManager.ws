@@ -133,7 +133,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		// Elys start //
 		// Triangle passive skills Set original skill slots count and equip default passive skills
 
-		orgTotalSkillSlotsCount = 12;
+		orgTotalSkillSlotsCount = totalSkillSlotsCount;
 
 		for(i=0; i<skills.Size(); i+=1)
 		{
@@ -2346,7 +2346,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	public final function EquipSkill(skill : ESkill, slotID : int) : bool
 	{
 		var idx : int;
-		var i : int; // Elys // Triangle passive skills
+		var id : int; // Elys // Triangle passive skills
 		var prevColor : ESkillColor;
 		
 		if(!HasLearnedSkill(skill) || IsCoreSkill(skill))
@@ -2358,12 +2358,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			return false;
 		// Elys start
 		// Triangle passive skills unequip skills from passive slot when they are added to active slot
-
+		// NOTE I don't think this block should actually be hit, since we try to unequip before equipping in charactermenu.ws
 		if(IsSkillEquipped(skill))
 		{
-			i = GetSkillSlotID(skill);
-			if (i > orgTotalSkillSlotsCount)
-				UnequipSkill(i);
+			id = GetSkillSlotID(skill);
+			if (id > orgTotalSkillSlotsCount)
+				UnequipSkill(id, true); // keep passive slot open
+			TUtil_LogMessage("WARNING: this probably shouldn't happen. slotID: " + id + " orgTotalSkillSlotsCount: " + orgTotalSkillSlotsCount + " isPassiveFree: " + IsFreePassiveSlotOpen(GetSkillPathType(skill)));
 
 		}
 		// Elys end
@@ -2381,7 +2382,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function UnequipSkill(slotID : int) : bool
+	public final function UnequipSkill(slotID : int, optional keepPassiveOpen : bool) : bool // Triangle passive skills
 	{
 		var idx : int;
 		var prevColor : ESkillColor;
@@ -2403,22 +2404,22 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		prevColor = GetSkillGroupColor(skillSlots[idx].groupID);
 		LinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);
 		OnSkillUnequip(skill);
-		
-		// Elys start
-		// Triangle passive skills if unequipped skill is passive, re-equip in passive slot. Set unequipped skill to free passive slot if eligible
-		if ( slotID <= orgTotalSkillSlotsCount ) // Triangle used to use idx instead of slotID. Was probably a bug?
+
+		// Elys Triangle passive skills
+		// if unequipped skill is passive, re-equip in passive slot. Set unequipped skill to free passive slot if eligible
+		if ( slotID <= orgTotalSkillSlotsCount && !keepPassiveOpen) // Triangle used to use idx instead of slotID. Was probably a bug?
 		{
 			if (IsEligibleForFreePassiveSlot(skill))
 			{
 				UnequipFreePassiveSlot(GetSkillPathType(skill));
 			}
 
-			if( MustEquipSkill(skill) )
-			{
+			// Might also be a perma passive skill
+			if (MustEquipSkill(skill)) {
 				ForceEquipSkill(skill);
 			}
 		}
-		// Elys end
+		// Elys Triangle end
 
 		return true;
 	}
@@ -4369,14 +4370,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	private final function IsDefaultSkill(skill : ESkill) : bool
 	{
 		// Triangle passive skills These should match xml. these skills always have a point in them, but are not necessarily passive
-		if(	 skill == S_Perk_05 ||
-				skill == S_Perk_06 ||
-				skill == S_Perk_07 ) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		// if(	 skill == S_Perk_05 ||
+		// 		skill == S_Perk_06 ||
+		// 		skill == S_Perk_07 ) {
+		// 	return true;
+		// }
+		// else {
+		// 	return false;
+		// }
+		return false; // no more default skills for now
 	}
 	// Dazedy end
 
@@ -4405,13 +4407,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 
 	// Triangle passive skills
-	private final function IsSkillInFreePassiveSlot(skill : ESkill, path : ESkillPath) : bool
+	private final function IsDefinedNonPassiveOnPath(skill : ESkill, path : ESkillPath) : bool
 	{
 		return skill != S_SUndefined && !IsAlwaysPassiveSkill(skill) && GetSkillPathType(skill) == path;
 	}
 
 	// Triangle passive skills check if a passive slot is available for this skill
-	private final function IsFreePassiveSlotOpen(skill : ESkill) : bool
+	private final function IsFreePassiveSlotOpen(path : ESkillPath) : bool
 	{
 		var socketedSkill : ESkill;
 		var i : int;
@@ -4419,7 +4421,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		for (i = orgTotalSkillSlotsCount; i < totalSkillSlotsCount; i+=1)
 		{
 			socketedSkill = skillSlots[i].socketedSkill;
-			if (IsSkillInFreePassiveSlot(socketedSkill, GetSkillPathType(skill)))
+			if (IsDefinedNonPassiveOnPath(socketedSkill, path))
 			{
 				return false;
 			}
@@ -4436,9 +4438,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		for (i = orgTotalSkillSlotsCount; i < totalSkillSlotsCount; i+=1)
 		{
 			socketedSkill = skillSlots[i].socketedSkill;
-			if (IsSkillInFreePassiveSlot(socketedSkill, path))
+			if (IsDefinedNonPassiveOnPath(socketedSkill, path))
 			{
-				UnequipSkill(skillSlots[i].id);
+				UnequipSkill(skillSlots[i].id, true); // Make sure this keeps passive slot empty!
 				break;
 			}
 		}
@@ -4453,14 +4455,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	// Triangle passive skills
 	private final function IsEligibleForFreePassiveSlot(skill : ESkill) : bool
 	{
-		return !IsAlwaysPassiveSkill(skill) && IsTierOneColorSkill(skill) && !IsSkillEquipped(skill);
+		return !IsAlwaysPassiveSkill(skill) && (IsTierOneColorSkill(skill) || GetSkillPathType(skill) == ESP_Perks) && !IsSkillEquipped(skill);
 	}
 
 	//Chicken Start
 	// Triangle passive skills
 	private final function ShouldBePassiveSkill(skill : ESkill) : bool
 	{
-		return IsAlwaysPassiveSkill(skill) || (IsEligibleForFreePassiveSlot(skill) && IsFreePassiveSlotOpen(skill));
+		return IsAlwaysPassiveSkill(skill) || (IsEligibleForFreePassiveSlot(skill) && IsFreePassiveSlotOpen(GetSkillPathType(skill)));
 	}
 	//Chicken End
 	//Triangle passive skills Pretty sure Elys wrote this

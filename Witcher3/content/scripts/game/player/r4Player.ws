@@ -11181,7 +11181,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	
-	public function UnequipSkill(slotID : int) : bool
+	public function UnequipSkill(slotID : int, optional keepPassiveOpen : bool) : bool // Triangle passive skills
 	{
 		var ret : bool;
 		var groupID : int;
@@ -11192,7 +11192,12 @@ statemachine abstract import class CR4Player extends CPlayer
 		{
 			pam = (W3PlayerAbilityManager)abilityManager;
 			GetSkillOnSlot(slotID, skill);
-			ret = pam.UnequipSkill(slotID);
+			// Triangle passive skills
+			if (keepPassiveOpen)
+				ret = pam.UnequipSkill(slotID, true);
+			else
+				ret = pam.UnequipSkill(slotID);
+			// Triangle end
 			if(ret)
 			{
 				groupID = pam.GetSkillGroupIdFromSkillSlotId(slotID);

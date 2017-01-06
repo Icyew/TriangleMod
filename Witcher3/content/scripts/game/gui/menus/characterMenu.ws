@@ -1169,7 +1169,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			LogChannel('CHR', "tryUnequipSkill, currentSkillSlotIdx " + currentSkillSlotIdx);
 			if (currentSkillSlotIdx > -1)
 			{
-				res = thePlayer.UnequipSkill(currentSkillSlotIdx + 1);
+				res = thePlayer.UnequipSkill(currentSkillSlotIdx + 1, true); // Triangle passive skills keep passive slot open
 			}
 			
 			m_fxClearSkillSlot.InvokeSelfOneArg(FlashArgInt(currentSkillSlotIdx + 1));
