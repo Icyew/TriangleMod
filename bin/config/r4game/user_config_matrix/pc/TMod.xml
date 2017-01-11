@@ -30,7 +30,9 @@
 				<Entry varId="ResolveDamagePerLevel"			value="20"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="0.75" />
+				<Entry varId="CrushBlowCritDmgBonus"			value="30" />
 				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
+				<Entry varId="PrecBlowCritChanceBonus"			value="2.5"	/>
 				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
 				<Entry varId="RendChargeBonus"					value="0.5"	/>
 				<Entry varId="AltSpecialAttackInput"			value="1" />
@@ -56,9 +58,9 @@
 			<Var id="HeavyAttackFocusGain"		 	 displayName="Heavy attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MaxComboDuration"			 	 displayName="Attack combo: Maximum time before combos expire"			 				displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackMaxCombo"			 displayName="Light combo: Maximum light attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="LightAttackComboDecay"			 displayName="Light combo: Time until combo to expires (0 for vanilla)"			 		displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Light combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackMaxCombo"			 displayName="Heavy combo: Maximum heavy attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="HeavyAttackComboDecay"			 displayName="Heavy combo: Time until combo expires (0 for vanilla)"			 		displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Heavy combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AttackComboCrossDecay"			 displayName="Attack combo: Fraction of time that applies to other attack type"			displayType="SLIDER;0.00;1;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboSpeedBonus"	 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
@@ -72,7 +74,9 @@
 			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowCritDmgBonus"			 displayName="Crushing Blows: Bonus crit attack bonus per hit"							displayType="SLIDER;0.00;40;80"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowCritChanceBonus" 	 	 displayName="Precise Blows: Bonus crit % per hit"										displayType="SLIDER;0.00;10;100"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendBonusPerFocusPnt"			 displayName="Rend: Total damage multiplier per focus point"							displayType="SLIDER;0.00;1;50" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltSpecialAttackInput"	 	 	 displayName="Whirl Rend: rend/whirl while holding guard/witcher sense + attack."		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />

@@ -8259,11 +8259,11 @@ statemachine abstract import class CR4Player extends CPlayer
 		}
 		
 		
-		if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) )
+		if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 		{
 			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s08 );
 		}
-		else if( isLightAttack && CanUseSkill( S_Sword_s17 ) )
+		else if( isLightAttack && CanUseSkill( S_Sword_s17 ) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 		{
 			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s17 );
 		}

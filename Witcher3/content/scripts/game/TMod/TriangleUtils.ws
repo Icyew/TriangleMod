@@ -399,6 +399,47 @@ function TUtil_AreAttackCombosEnabled(isHeavy : bool) : bool
     }
 }
 
+// Triangle everything
+function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
+{
+    switch (skill) {
+        case S_Sword_s04:
+            if (!TUtil_AreAttackCombosEnabled(true))
+                return false;
+            else
+            return TOpts_HeavyAttackComboMultBonus() > 0 ||
+                    TOpts_HeavyAttackComboCritDmgBonus() > 0 ||
+                    TOpts_HeavyAttackComboCritBonus() > 0 ||
+                    TOpts_HeavyAttackComboDmgBonus() > 0;
+            break;
+        case S_Sword_s21:
+            if (!TUtil_AreAttackCombosEnabled(false))
+                return false;
+            else
+            return TOpts_LightAttackComboCritBonus() > 0 ||
+                    TOpts_LightAttackComboSpeedBonus() > 0 ||
+                    TOpts_LightAttackComboCritDmgBonus() > 0 ||
+                    TOpts_LightAttackComboDmgBonus() > 0;
+            break;
+        case S_Sword_s08:
+            if (!TUtil_AreAttackCombosEnabled(true))
+                return false;
+            else
+            return TOpts_CrushingBlowsBonusPerFocusPnt() > 0 ||
+                    TOpts_CrushingBlowsCritDmgBonus() > 0;
+            break;
+        case S_Sword_s17:
+            if (!TUtil_AreAttackCombosEnabled(false))
+                return false;
+            else
+            return TOpts_PreciseBlowsBonusPerFocusPnt() > 0 ||
+                    TOpts_PreciseBlowsCritChanceBonus() > 0;
+            break;
+        default:
+            return false;
+    }
+}
+
 // Triangle attack combos
 function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
 {
@@ -407,9 +448,11 @@ function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
     if (!witcher)
         return false;
     if (isHeavy && TUtil_AreAttackCombosEnabled(isHeavy)) {
-        return witcher.CanUseSkill(S_Sword_s04) || witcher.CanUseSkill(S_Sword_s08);
+        return (witcher.CanUseSkill(S_Sword_s04) && TUtil_IsCustomSkillEnabled(S_Sword_s04)) ||
+                (witcher.CanUseSkill(S_Sword_s08) && TUtil_IsCustomSkillEnabled(S_Sword_s08));
     } else if (TUtil_AreAttackCombosEnabled(isHeavy)) {
-        return witcher.CanUseSkill(S_Sword_s21) || witcher.CanUseSkill(S_Sword_s17);
+        return (witcher.CanUseSkill(S_Sword_s21) && TUtil_IsCustomSkillEnabled(S_Sword_s21)) ||
+                (witcher.CanUseSkill(S_Sword_s17) && TUtil_IsCustomSkillEnabled(S_Sword_s17));
     } else {
         return false;
     }
@@ -419,10 +462,12 @@ function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
 function TUtil_ValueForLevel(player : CR4Player, skill : ESkill, maxValue : float, maxLevel : int) : float
 {
     var witcher : W3PlayerWitcher;
+    var currLevel : float;
     witcher = (W3PlayerWitcher)player;
     if (!witcher) {
         TUtil_LogMessage("Error: attempted to get a skill value for non-geralt");
         return 0;
     }
-    return (witcher.GetSkillLevel(skill) / maxLevel) * maxValue;
+    currLevel = witcher.GetSkillLevel(skill);
+    return (currLevel / maxLevel) * maxValue;
 }

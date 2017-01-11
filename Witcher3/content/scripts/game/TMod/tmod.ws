@@ -115,9 +115,20 @@ function TOpts_CrushingBlowsBonusPerFocusPnt() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowBonusPerFocus' ) );
 }
 
+
+function TOpts_CrushingBlowsCritDmgBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'CrushBlowCritDmgBonus' ) ) / 100;
+}
+
 function TOpts_PreciseBlowsBonusPerFocusPnt() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowBonusPerFocus' ) ) / 100;
+}
+
+function TOpts_PreciseBlowsCritChanceBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'PrecBlowCritChanceBonus' ) ) / 100;
 }
 
 function TOpts_AltSpecialAttackInput() : bool

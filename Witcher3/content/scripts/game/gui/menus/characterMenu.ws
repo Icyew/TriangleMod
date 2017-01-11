@@ -2027,8 +2027,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle crushing blows
-				if (TOpts_CrushingBlowsBonusPerFocusPnt() > 0) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Critical hits have a chance for knockdown that scales with adrenaline."
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s08)) {
+					baseString = "Each heavy combo hit increases crit damage by " + NoTrailZeros(100 * TOpts_CrushingBlowsCritDmgBonus() * (skillLevel / 5))
+						+ "%. Critical hits have a chance for knockdown that scales with adrenaline."
 						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				}
 				// Triangle end
@@ -2090,8 +2091,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle precise blows
-				if (TOpts_PreciseBlowsBonusPerFocusPnt() > 0) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Critical hits ignore " + NoTrailZeros(TOpts_PreciseBlowsBonusPerFocusPnt() * 100) + "% of armor per adrenaline point."
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s17)) {
+					baseString = "Each light combo hit increases crit chance by " + NoTrailZeros(TOpts_PreciseBlowsCritChanceBonus() * 100 * skillLevel / 5)
+						+ "%. Critical hits ignore " + NoTrailZeros(TOpts_PreciseBlowsBonusPerFocusPnt() * 100) + "% of armor per adrenaline point."
 						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				}
 				// Triangle end
@@ -2121,7 +2123,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle attack combos
-				if (TUtil_AreAttackCombosEnabled(false)) {
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s21)) {
 					ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, 'max_combo', false, false) * skillLevel;
 					baseString = "Each light attack hit increases the light attack speed by " + NoTrailZeros(TOpts_LightAttackComboSpeedBonus()) + 
 						"% and crit chance by " + NoTrailZeros(TOpts_LightAttackComboCritBonus() * 100) + "%. Combo resets after " + NoTrailZeros(TOpts_LightAttackComboDecay()) + "s or on missing a light attack. Max combo is "

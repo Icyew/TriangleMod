@@ -8076,7 +8076,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
 		
-		if (CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false)) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s21) && !TUtil_IsCustomSkillEnabled(S_Sword_s21)) // Triangle attack combos
 			fastAP += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		if (CanUseSkill(S_Perk_05))
 		{
@@ -8084,7 +8084,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			fastCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 			strongCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
 		}
-		if (CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true)) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s04) && !TUtil_IsCustomSkillEnabled(S_Sword_s04)) // Triangle attack combos
 			strongAP += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
 		if (CanUseSkill(S_Perk_07))
 			strongAP +=	GetAttributeValue('attack_power_heavy_style');
@@ -8093,13 +8093,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			strongAP += GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
 		// Triangle end
 			
-		if (CanUseSkill(S_Sword_s17)) 
+		if (CanUseSkill(S_Sword_s17) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 		{
 			fastCritChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
 			fastCritDmg += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
 		}
 		
-		if (CanUseSkill(S_Sword_s08)) 
+		if (CanUseSkill(S_Sword_s08) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 		{
 			strongCritChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
 			strongCritDmg += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);

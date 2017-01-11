@@ -2083,19 +2083,19 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var value : SAbilityAttributeValue;
 		
 		
-		if (CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true) ) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s04) && !TUtil_IsCustomSkillEnabled(S_Sword_s04) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s04), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
-		if (CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false) ) // Triangle attack combos
+		if (CanUseSkill(S_Sword_s21) && !TUtil_IsCustomSkillEnabled(S_Sword_s21) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s21), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		attackPower = attackPower * 0.5;
 		
 		
-		if (CanUseSkill(S_Sword_s08)) 
+		if (CanUseSkill(S_Sword_s08) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 		{
 			steelCritChance += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s08), theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
 			steelCritDmg += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s08), theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);
 		}
-		if (CanUseSkill(S_Sword_s17)) 
+		if (CanUseSkill(S_Sword_s17) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 		{
 			steelCritChance += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s17), theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
 			steelCritDmg += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s17), theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
