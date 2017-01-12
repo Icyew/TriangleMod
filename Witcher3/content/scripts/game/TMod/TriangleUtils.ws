@@ -411,7 +411,6 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
                     TOpts_HeavyAttackComboCritDmgBonus() > 0 ||
                     TOpts_HeavyAttackComboCritBonus() > 0 ||
                     TOpts_HeavyAttackComboDmgBonus() > 0;
-            break;
         case S_Sword_s21:
             if (!TUtil_AreAttackCombosEnabled(false))
                 return false;
@@ -420,21 +419,22 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
                     TOpts_LightAttackComboSpeedBonus() > 0 ||
                     TOpts_LightAttackComboCritDmgBonus() > 0 ||
                     TOpts_LightAttackComboDmgBonus() > 0;
-            break;
         case S_Sword_s08:
             if (!TUtil_AreAttackCombosEnabled(true))
                 return false;
             else
             return TOpts_CrushingBlowsBonusPerFocusPnt() > 0 ||
                     TOpts_CrushingBlowsCritDmgBonus() > 0;
-            break;
         case S_Sword_s17:
             if (!TUtil_AreAttackCombosEnabled(false))
                 return false;
             else
             return TOpts_PreciseBlowsBonusPerFocusPnt() > 0 ||
                     TOpts_PreciseBlowsCritChanceBonus() > 0;
-            break;
+        case S_Sword_s07:
+            return TOpts_AnatomicalKnowledgeDuration() > 0;
+        case S_Sword_s16:
+            return TOpts_ResolveFocusGainPerLevel() > 0;
         default:
             return false;
     }

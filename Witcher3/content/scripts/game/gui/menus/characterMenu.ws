@@ -2074,7 +2074,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				// Triangle resolve
-				if (TOpts_ResolveFocusGainPerLevel() > 0) {
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
 					baseString = "On being hit, gain " + NoTrailZeros(TUtil_RoundTo(TOpts_ResolveFocusGainPerLevel() * skillLevel, 2)) + " adrenaline points. The ";
 				} else {
 					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit, the ";

@@ -148,7 +148,7 @@ class W3DamageManagerProcessor extends CObject
 			
 			// Triangle resolve
 			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) ) {
-				if (TOpts_ResolveFocusGainPerLevel() > 0) {
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
 					focusDrain = 0;
 					thePlayer.GainStat(BCS_Focus, TOpts_ResolveFocusGainPerLevel() * thePlayer.GetSkillLevel(S_Sword_s16));
 				} else {
@@ -1944,7 +1944,7 @@ class W3DamageManagerProcessor extends CObject
 				}
 				// Triangle anatomical knowledge
 				if (attackAction && attackAction.GetIsHeadShot() && witcherPlayer && witcherPlayer.CanUseSkill(S_Sword_s07) && actorVictim.IsAlive() &&
-						witcherPlayer.GetStat(BCS_Focus) >= 1 && TOpts_AnatomicalKnowledgeDuration() > 0) {
+						witcherPlayer.GetStat(BCS_Focus) >= 1 && TUtil_IsCustomSkillEnabled(S_Sword_s07)) {
 					action.AddEffectInfo(EET_Blindness, TOpts_AnatomicalKnowledgeDuration() * witcherPlayer.GetSkillLevel(S_Sword_s07) / 5);
 					witcherPlayer.DrainFocus(1);
 				}
