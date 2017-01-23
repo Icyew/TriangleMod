@@ -408,9 +408,9 @@ class W3DamageManagerProcessor extends CObject
 		
 		// Triangle spell sword Add bonus damage from sign power skills. Maybe causes problems if direct damage happens here... don't know
 		if (!anyDamageProcessed)
-			anyDamageProcessed = ProcessSpellSwordDmg();
+			anyDamageProcessed = ProcessSpellSwordStuff();
 		else
-			ProcessSpellSwordDmg();
+			ProcessSpellSwordStuff();
 		// Triangle resolve
 		if (actorAttacker.HasBuff(EET_TResolve))
 			actorAttacker.RemoveAllBuffsOfType(EET_TResolve);
@@ -517,7 +517,26 @@ class W3DamageManagerProcessor extends CObject
 	}
 	
 	// Triangle spell sword
-	private function ProcessSpellSwordDmg() : bool
+	private function DealYrdenSpellSwordDamage(target : CGameplayEntity, dmg : float)
+	{
+		var newAction : W3DamageAction;
+		
+		newAction = new W3DamageAction in this;
+		newAction.Initialize(playerAttacker, target, NULL, TUtil_PowerSkillForSignType(ST_Yrden), EHRT_None, CPS_Undefined, true, false, false, false );
+		newAction.SetCannotReturnDamage( true );
+		newAction.SetHitAnimationPlayType(EAHA_ForceYes);
+		newAction.SetHitReactionType(EHRT_Heavy);
+		
+		newAction.AddDamage(theGame.params.DAMAGE_NAME_SHOCK, dmg);
+
+		theGame.damageMgr.ProcessAction(newAction);
+		delete newAction;
+		
+		target.PlayEffect('yrden_shock');
+	}
+
+	// Triangle spell sword
+	private function ProcessSpellSwordStuff() : bool
 	{
 		var spellSwordSign : ESignType;
 		var associatedSkill : ESkill;
@@ -525,25 +544,57 @@ class W3DamageManagerProcessor extends CObject
 		var anyDamageProcessed : bool;
 		var witcher : W3PlayerWitcher;
 		var dmgValue : float;
+		var params : SCustomEffectParams;
+		var ents : array<CGameplayEntity>;
+		var i : int;
+		var resistPoints, resistPercents : float;
+		var spellPower : SAbilityAttributeValue;
 
-		witcher = GetWitcherPlayer();
+
+		witcher = (W3PlayerWitcher)actorAttacker;
 		anyDamageProcessed = false;
 		spellSwordSign = witcher.GetSpellSwordSign();
-		// Triangle TODO let crossbow in on this damage?
-		if(attackAction && attackAction.IsActionMelee() && playerAttacker == witcher && spellSwordSign != ST_None)
+		if(attackAction && attackAction.IsActionMelee() && witcher && spellSwordSign != ST_None)
 		{
 			associatedSkill = TUtil_PowerSkillForSignType(spellSwordSign);
+			spellPower = witcher.GetTotalSignSpellPower(SignEnumToSkillEnum(spellSwordSign));
 
 			if (witcher.CanUseSkill(associatedSkill))
 			{
-				bonusDmgInfo.dmgVal = CalculateAttributeValue(witcher.GetSkillAttributeValue(associatedSkill, 'sword_damage', false, true)) * witcher.GetSkillLevel(associatedSkill);
-				bonusDmgInfo.dmgType = TUtil_DmgTypeForPowerSkill(associatedSkill);
+				if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && witcher.IsSpellSwordCharged()) {
+					witcher.DrainSpellSwordStacks();
+					bonusDmgInfo.dmgVal = TOpts_SpellSwordBaseDmg();
+					bonusDmgInfo.dmgType = TUtil_DmgTypeForPowerSkill(associatedSkill);
+					if (spellSwordSign == ST_Aard) {
+						// For some reason, adding resistStat to effect doesnt work
+						// TODO verify resists are working ok
+						attackAction.AddEffectInfo(EET_SlowdownFrost, TOpts_AardPowerFrostDuration() * spellPower.valueMultiplicative);
+					} else if (spellSwordSign == ST_Igni) {
+						bonusDmgInfo.dmgVal += TOpts_IgniPowerScorchFraction() * actorVictim.GetHealth();
+						attackAction.AddEffectInfo(EET_Burning, 0.5);
+					} else if (spellSwordSign == ST_Yrden) {
+						FindGameplayEntitiesInCylinder(ents, attackAction.victim.GetWorldPosition(), TOpts_YrdenPowerRadius(), 5, 100, , FLAG_OnlyAliveActors);
+						for (i = 0; i < ents.Size(); i += 1) {
+							if (ents[i] != thePlayer)
+								DealYrdenSpellSwordDamage(ents[i], bonusDmgInfo.dmgVal);
+						}
+					} else if (spellSwordSign == ST_Axii) {
+						GetDamageResists(theGame.params.DAMAGE_NAME_WILL, resistPoints, resistPercents);
+						attackAction.AddEffectInfo(EET_TWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative);
+					}
+				}
+				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(witcher, TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit(), 5));
 			}
 
 			if (bonusDmgInfo.dmgVal > 0)
 			{
-				anyDamageProcessed = true;
-				dmgValue = MaxF(0, CalculateDamage(bonusDmgInfo, witcher.GetTotalSignSpellPower(SignEnumToSkillEnum(spellSwordSign))));
+				// Skips heavy dmg final modifier. rend bonus should happen before this function is called, so should be ok
+				dmgValue = MaxF(0, CalculateDamage(bonusDmgInfo, spellPower, true));
+
+				if (spellSwordSign == ST_Quen) {
+					witcher.GainStat(BCS_Vitality, dmgValue * TOpts_QuenPowerHealRatio());
+					dmgValue *= 1 - TOpts_QuenPowerHealRatio();
+				}
 
 				//add to total damage to be dealt
 				if( DamageHitsEssence(  bonusDmgInfo.dmgType ) )		action.processedDmg.essenceDamage  += dmgValue;
@@ -552,7 +603,10 @@ class W3DamageManagerProcessor extends CObject
 				if( DamageHitsStamina(  bonusDmgInfo.dmgType ) )		action.processedDmg.staminaDamage  += dmgValue;
 
 				// Add damage to action in case stuff processes it later
-				action.AddDamage(bonusDmgInfo.dmgType, dmgValue);
+				if (dmgValue > 0) {
+					anyDamageProcessed = true;
+					action.AddDamage(bonusDmgInfo.dmgType, dmgValue);
+				}
 			}
 		}
 		return anyDamageProcessed;
@@ -1748,7 +1802,7 @@ class W3DamageManagerProcessor extends CObject
 	}
 		
 	
-	private function CalculateDamage(dmgInfo : SRawDamage, powerMod : SAbilityAttributeValue) : float
+	private function CalculateDamage(dmgInfo : SRawDamage, powerMod : SAbilityAttributeValue, optional skipHeavyMod : bool) : float // Triangle spell sword
 	{
 		var finalDamage, finalIncomingDamage : float;
 		var resistPoints, resistPercents : float;
@@ -1788,7 +1842,7 @@ class W3DamageManagerProcessor extends CObject
 			
 		// Triangle heavy attack simplify alt stamina attack combos
 		// Triangle TODO don't apply weak and maybe heavy attack mods to spell sword damage
-		if(playerAttacker && attackAction) {
+		if(playerAttacker && attackAction && !skipHeavyMod) {
 			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName())) {
 				finalDamage *= TOpts_HeavyAttackDamageMod();
 				witcher = (W3PlayerWitcher)playerAttacker;
@@ -1796,8 +1850,11 @@ class W3DamageManagerProcessor extends CObject
 					finalDamage *= 1 + TUtil_ValueForLevel(witcher, S_Sword_s04, TOpts_HeavyAttackComboMultBonus(), 5) * witcher.GetAttackComboLength(true);
 				}
 			}
-			if (attackAction.isWeak)
-				finalDamage *= TOpts_WeakDamageMod();
+		}
+		if (attackAction && attackAction.isWeak) {
+			finalDamage *= TOpts_WeakDamageMod();
+			if (actorAttacker.HasBuff(EET_TWeakness))
+				actorAttacker.RemoveBuff(EET_TWeakness);
 		}
 		// Triangle end
 		
@@ -1931,6 +1988,7 @@ class W3DamageManagerProcessor extends CObject
 				if(actorVictim.IsAlive() && attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
 					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
 					// TODO maybe revisit this effect when resistances are redone
+					// TODO this is OP, esp with max adrenaline
 					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
 						focusPoints = witcherPlayer.GetCachedFocusDifference();
 					}
@@ -1943,6 +2001,7 @@ class W3DamageManagerProcessor extends CObject
 					}
 				}
 				// Triangle anatomical knowledge
+				// TODO make this a % chance
 				if (attackAction && attackAction.GetIsHeadShot() && witcherPlayer && witcherPlayer.CanUseSkill(S_Sword_s07) && actorVictim.IsAlive() &&
 						witcherPlayer.GetStat(BCS_Focus) >= 1 && TUtil_IsCustomSkillEnabled(S_Sword_s07)) {
 					action.AddEffectInfo(EET_Blindness, TOpts_AnatomicalKnowledgeDuration() * witcherPlayer.GetSkillLevel(S_Sword_s07) / 5);

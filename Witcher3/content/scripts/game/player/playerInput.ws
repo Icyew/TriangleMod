@@ -2121,7 +2121,15 @@ class CPlayerInput
 					return false;
 				}
 			
-				if( thePlayer.HasStaminaToUseSkill( signSkill, false ) )
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(thePlayer.GetEquippedSign())) && TUtil_IsAltSignPowerPressedAndUsable(thePlayer.GetEquippedSign())) {
+					if (GetWitcherPlayer().GetSpellSwordSign() == thePlayer.GetEquippedSign()) {
+						GetWitcherPlayer().SetSpellSwordSign(ST_None);
+					} else {
+						GetWitcherPlayer().SetSpellSwordSign(thePlayer.GetEquippedSign());
+					}
+				} else if( thePlayer.HasStaminaToUseSkill( signSkill, false ) )
+				// Triangle end
 				{
 					if( GetInvalidUniqueId() != thePlayer.inv.GetItemFromSlot( 'l_weapon' ) && !thePlayer.IsUsableItemLBlocked())
 					{

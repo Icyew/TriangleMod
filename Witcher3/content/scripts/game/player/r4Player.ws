@@ -222,7 +222,6 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	// Triangle attack combos armor bonuses
 	protected var expectingCombatActionEnd	: array < int >;
-	public var isWeak						: bool; default isWeak = false; // If true, deal less damage on sword hit
 	// Triangle end
 	
 
@@ -9500,7 +9499,7 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_LightAttack);
+							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_LightAttack) || HasBuff(EET_TWeakness);
 							DrainStamina(ESAT_LightAttack);
 						
 						
@@ -9533,7 +9532,7 @@ statemachine abstract import class CR4Player extends CPlayer
 							
 							
 							// Triangle alt stamina
-							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack);
+							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack) || HasBuff(EET_TWeakness);
 							DrainStamina(ESAT_HeavyAttack);
 						
 						
@@ -10969,7 +10968,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		ret = ( CanUseSkill(skill) && (abilityManager.GetStat(BCS_Stamina, signHack) >= cost) );
 		
 		
-		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1) // Triangle TODO rage management
+		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1) // Triangle TODO rage management, spell sword
 		{
 			ret = true;
 		}

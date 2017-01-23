@@ -234,6 +234,9 @@ class W3GameEffectManager
 			case EET_TParryCooldown :			effects[effect] = new W3Effect_TParryCooldown in this;				break;
 			// Triangle acquired tolerance
 			case EET_TAcquiredTolerance :		effects[effect] = new W3Effect_TAcquiredTolerance in this;			break;
+			// Triangle spell sword
+			case EET_TSpellSword :				effects[effect] = new W3Effect_TSpellSword in this;			break;
+			case EET_TWeakness :				effects[effect] = new W3Effect_TWeakness in this;			break;
 			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
@@ -649,6 +652,9 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "TParryCooldownEffect" :								type = EET_TParryCooldown;				break;
 		// Triangle acquired tolerance
 		case "TAcquiredToleranceEffect" :							type = EET_TAcquiredTolerance;			break;
+		// Triangle spell sword
+		case "TSpellSwordEffect" :									type = EET_TSpellSword;					break;
+		case "TWeaknessEffect" :									type = EET_TWeakness;					break;
 		// Triangle end
 
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
@@ -867,6 +873,9 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_TParryCooldown :						return 'TParryCooldownEffect';
 		// Triangle acquired tolerance
 		case EET_TAcquiredTolerance :					return 'TAcquiredToleranceEffect';
+		// Triangle spell sword
+		case EET_TSpellSword :							return 'TSpellSwordEffect';
+		case EET_TWeakness :							return 'TWeaknessEffect';
 		// Triangle end
 
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';

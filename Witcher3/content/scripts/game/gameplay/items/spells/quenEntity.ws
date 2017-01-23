@@ -618,7 +618,7 @@ state ShieldActive in W3QuenEntity extends Active
 			}
 			// Triangle Spell sword stuff
 			if (casterActor == thePlayer)
-				GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+				// GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
 			// Triangle end
 			
 			damageData.SetEndsQuen(true);
@@ -993,7 +993,7 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			}
 			// Triangle spell sword stuff
 			if (casterActor == thePlayer)
-				GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+				// GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
 			// Triangle end
 			
 			damageData.SetEndsQuen(true);			

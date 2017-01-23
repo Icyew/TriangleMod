@@ -487,6 +487,16 @@ function TOpts_SetSignStaminaCost(abilityName : name, out cost : SAbilityAttribu
 			if (isPerSec)
 				cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AltAxiiCost' ) );
 			break;
+		case S_Magic_s12:
+		case S_Magic_s07:
+		case S_Magic_s16:
+		case S_Magic_s15:
+		case S_Magic_s18:
+			cost.valueAdditive = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordCost' ) );
+			delay.valueBase = StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordDelay' ) );
+			delay.valueMultiplicative = 1;
+			return;
+			break;
 		default:
 			return;
 	}
@@ -522,6 +532,56 @@ function TOpts_IgniSPDurationFactor() : float
 function TOpts_AardStaminaDelay() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardStaminaDelay' ) );
+}
+
+function TOpts_SpellSwordBaseDmg() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordBaseDmg' ) );
+}
+
+function TOpts_SpellSwordBaseCost() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordCost' ) );
+}
+
+function TOpts_SpellSwordBaseDelay() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordDelay' ) );
+}
+
+function TOpts_SpellSwordStacksPerHit() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordStacksPerHit' ) );
+}
+
+function TOpts_SpellSwordStacksPerSign() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'SpellSwordStacksPerSign' ) );
+}
+
+function TOpts_AardPowerFrostDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardPowerFrostDuration' ) );
+}
+
+function TOpts_IgniPowerScorchFraction() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniPowerScorch' ) ) / 100;
+}
+
+function TOpts_YrdenPowerRadius() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'YrdenPowerRadius' ) );
+}
+
+function TOpts_QuenPowerHealRatio() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenPowerHealRatio' ) );
+}
+
+function TOpts_AxiiPowerWeaknessDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AxiiPowerWeaknessDuration' ) );
 }
 
 // ---- Signs End ---- //

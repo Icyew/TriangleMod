@@ -202,6 +202,7 @@
         <staminaRegen type="mult" always_random="false" min="0.2" max="0.2" />
 		<root_ground_damage_area type="base" always_random="false" min="0" max="0" />
         <root_ground_damage_area type="mult" always_random="false" min="0" />
+        <frost_resistance_perc type="add" always_random="false" min="0.1" max="0.1" /> <!-- Triangle spell sword -->
 		<force_resistance_perc type="add" always_random="false" min="0.1" max="0.1" />
 		<burning_resistance_perc type="add" always_random="false" min="0.1" max="0.1" />
 		<will_resistance_perc type="add" always_random="false" min="0.1" max="0.1" />

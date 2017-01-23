@@ -240,6 +240,15 @@
       <ability name="TAcquiredToleranceEffect">
         <duration type="add" min="1" /> <!-- Extended via code -->
       </ability>
+      <!-- Triangle spell sword -->
+      <ability name="TSpellSwordEffect">
+        <!-- set things via scripts. This xml may not be necessary -->
+        <duration type="add" min="-1" />
+      </ability>
+      <ability name="TWeaknessEffect">
+        <!-- set things via scripts. This xml may not be necessary -->
+        <duration type="add" min="-1" />
+      </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
@@ -481,6 +490,9 @@
     <effect name_name="TParryCooldownEffect"      defaultAbilityName_name="TParryCooldownEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s10"/>
     <!-- Triangle acquired tolerance -->
     <effect name_name="TAcquiredToleranceEffect"      defaultAbilityName_name="TAcquiredToleranceEffect"            iconType_name="AcquiredTolerance" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_alchemy_s18"/>
+    <!-- Triangle spell sword -->
+    <effect name_name="TSpellSwordEffect"      defaultAbilityName_name="TSpellSwordEffect"            iconType_name="AardPower" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_magic_s12"/>
+    <effect name_name="TWeaknessEffect"      defaultAbilityName_name="TWeaknessEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
     <!-- Triangle end -->
 	  <effect name_name="BasicQuenEffect"        	defaultAbilityName_name="BasicQuenEffect"   		iconType_name="Quen" 	 		showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_4" />
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
@@ -640,7 +652,13 @@
     <!-- Triangle heavy attack combo -->
     <effect iconType_name="HeavyAttack"         path="icons\Skills\core\sword_2.png" />
     <!-- Triangle endure pain -->
-	  <effect iconType_name="EndurePain"    			path="icons\Skills\Alchemy\alchemy_s20.png" />
+    <effect iconType_name="EndurePain"          path="icons\Skills\Alchemy\alchemy_s20.png" />"icons\Skills\Signs\magic_s6.png"
+    <!-- Triangle spell sword -->
+    <effect iconType_name="AardPower"         path="icons\Skills\Signs\magic_s6.png" />
+    <effect iconType_name="IgniPower"         path="icons\Skills\Signs\magic_s7.png" />
+    <effect iconType_name="YrdenPower"        path="icons\Skills\Signs\magic_s11.png" />
+    <effect iconType_name="QuenPower"         path="icons\Skills\Signs\magic_s13.png" />
+	  <effect iconType_name="AxiiPower"     		path="icons\Skills\Signs\magic_s18.png" />
     <!-- Triangle end-->
 	  <effect iconType_name="Quen"    			path="icons/Skills/core/magic_4.png" />
     </effect_icons>

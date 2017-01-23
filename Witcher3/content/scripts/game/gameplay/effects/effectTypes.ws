@@ -147,6 +147,9 @@ enum EEffectType
 	EET_TParryCooldown,
 	// Triangle acquired tolerance
 	EET_TAcquiredTolerance,
+	// Triangle spell sword
+	EET_TSpellSword,
+	EET_TWeakness,
 	// Triangle end
 
 	

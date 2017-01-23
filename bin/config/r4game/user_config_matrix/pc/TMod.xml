@@ -61,7 +61,7 @@
 			<Var id="LightAttackComboDecay"			 displayName="Light combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackMaxCombo"			 displayName="Heavy combo: Maximum heavy attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDecay"			 displayName="Heavy combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AttackComboCrossDecay"			 displayName="Attack combo: Fraction of time that applies to other attack type"			displayType="SLIDER;0.00;1;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AttackComboCrossDecay"			 displayName="Attack combo: Fraction of time that applies to other attack type"			displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboSpeedBonus"	 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="LightAttackComboCritDmgBonus"	 displayName="Muscle Memory: Bonus crit attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
@@ -108,6 +108,16 @@
 				<Entry varId="IgniDurationSpread"				value="0.4"/>
 				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
 				<Entry varId="AardStaminaDelay"					value="1"/>
+				<Entry varId="SpellSwordBaseDmg"				value="300"/>
+<!-- 			<Entry varId="SpellSwordCost"					value="0"/>
+				<Entry varId="SpellSwordDelay"					value="0"/> -->
+				<Entry varId="SpellSwordStacksPerHit"			value="10"/>
+				<Entry varId="SpellSwordStacksPerSign"			value="30"/>
+				<Entry varId="AardPowerFrostDuration"			value="3"/>
+				<Entry varId="IgniPowerScorch"					value="3"/>
+				<Entry varId="YrdenPowerRadius"					value="5"/>
+				<Entry varId="QuenPowerHealRatio"				value="0.5"/>
+				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -126,6 +136,16 @@
 			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AardStaminaDelay"		 	 	 displayName="Aard: aard drains stamina and delays regen for Xs (0 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+<!-- 		<Var id="SpellSwordCost"		 	 	 displayName="Sign Power: stamina cost per hit" 										displayType="SLIDER;0.00;100;100"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordDelay"		 	 	 displayName="Sign Power: stamina delay per hit" 										displayType="SLIDER;0.00;10;40"		 	tags="customNames;nonLocalized;customDisplayName" /> -->
+ 			<Var id="SpellSwordStacksPerHit"	 	 displayName="Sign Power: charge generated per hit" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordStacksPerSign"	 	 displayName="Sign Power: charge generated per sign" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordBaseDmg"		 	 	 displayName="Sign Power: base bonus damage per hit" 									displayType="SLIDER;0.00;500;20"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardPowerFrostDuration"	 	 displayName="Aard power: duration to freeze enemies (0 vanilla)" 						displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniPowerScorch"	 	 		 displayName="Igni power: % of remaining hp as dmg (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="YrdenPowerRadius"	 	 		 displayName="Yrden power: radius of splash damage (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenPowerHealRatio"	 	 	 displayName="Quen power: fraction of dmg converted to hp instead (0 vanilla)" 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
@@ -139,7 +159,7 @@
 				<Entry varId="AcquiredToleranceDurationPerLevel"	value="30"	/>
 				<Entry varId="DelayedRecoverySlowFactorPerLevel"	value="1.66"/>
 				<Entry varId="AltTawnyOwlDuration"					value="0"	/>
-				<Entry varId="AltTawnyOwlBase"						value="4" />
+				<Entry varId="AltTawnyOwlBase"						value="0" />
 				<Entry varId="FastMetabolismDrainFactorPerLevel"	value="1.8" />
 				<Entry varId="AdaptationDiscountPerLevel"			value="4" />
 				<Entry varId="AdaptationMaxDiscount"				value="40" />
@@ -210,7 +230,7 @@
 				<Entry varId="BaseRollCost"						value="10"	/>
 				<Entry varId="BaseLightAttackCost"				value="0"	/>
 				<Entry varId="BaseHeavyAttackCost"				value="0"	/>
-				<Entry varId="WeakDamageMod"					value="0.3" />
+				<Entry varId="WeakDamageMod"					value="0.25" />
 				<Entry varId="AltArmorStaminaMod"				value="1"	/>
 				<Entry varId="ChestPantsAttackCost"				value="0"	/>
 				<Entry varId="ChestPantsEvasionCost"			value="0"	/>
@@ -228,7 +248,7 @@
 			<Var id="BaseRollCost"					 displayName="Roll stamina cost"								 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="BaseLightAttackCost"			 displayName="Light attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="BaseHeavyAttackCost"			 displayName="Heavy attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="WeakDamageMod"					 displayName="Damage multiplier when you have insufficient stamina"						displayType="SLIDER;0.00;1;20"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WeakDamageMod"					 displayName="Damage multiplier for weak attacks (insufficient stamina)"				displayType="SLIDER;0.00;1;20"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltArmorStaminaMod"			 displayName="Use alternate armor stamina penalty"										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ChestPantsAttackCost" 		 	 displayName="Extra armor stamina cost per weight level for Attacks - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />

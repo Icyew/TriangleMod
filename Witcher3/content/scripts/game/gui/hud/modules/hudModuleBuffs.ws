@@ -163,6 +163,11 @@ class CR4HudModuleBuffs extends CR4HudModuleBase
 						duration = ( ( W3Effect_TParryCooldown ) effectArray[i] ).GetStacks();
 						initialDuration = ( ( W3Effect_TParryCooldown ) effectArray[i] ).GetMaxStacks();
 					}
+					else if( effectType == EET_TSpellSword )
+					{
+						duration = ( ( W3Effect_TSpellSword ) effectArray[i] ).GetStacks();
+						initialDuration = ( ( W3Effect_TSpellSword ) effectArray[i] ).GetMaxStacks();
+					}
 					// Triangle end
 					else if( effectType == EET_Mutation3 )
 					{						

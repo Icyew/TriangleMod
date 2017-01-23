@@ -96,6 +96,11 @@ import abstract class CActor extends CGameplayEntity
 	
 	private var effectsUpdateTicking : bool;		default effectsUpdateTicking = false;
 	
+	// Triangle alt stamina spell sword
+	// Moved here so npcs can get weakness. I know it's weird to have both the effect and non-effect versions but im tired ok
+	public var isWeak						: bool; default isWeak = false; // If true, deal less damage on next hit
+	// Triangle end
+	
 	public function GetIgnoreImmortalDodge() : bool
 	{
 		

@@ -1255,7 +1255,16 @@ statemachine import class CNewNPC extends CActor
 	// Triangle enemy mutations
 	public function GetMutatedDisplayName() : string
 	{
-		return TUtil_GetMutatedPrefix(this) + GetDisplayName();
+		return GetWeakPrefix() + TUtil_GetMutatedPrefix(this) + GetDisplayName();
+	}
+
+	// Triangle spell sword
+	public function GetWeakPrefix() : string
+	{
+		if (isWeak)
+			return "Weak ";
+		else
+			return "";
 	}
 
 	// Triangle enemy mutations

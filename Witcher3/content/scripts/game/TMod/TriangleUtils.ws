@@ -311,6 +311,12 @@ function TUtil_IsAltSpecialAttackPressedAndEnabled() : bool
     return TOpts_AltSpecialAttackInput() && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
 }
 
+// Triangle spell sword
+function TUtil_IsAltSignPowerPressedAndUsable(signType : ESignType) : bool
+{
+    return thePlayer.CanUseSkill(TUtil_PowerSkillForSignType(signType)) && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
+}
+
 // Triangle synergy mutagens
 function TUtil_AddMutagenBonuses(color : ESkillColor, level : int, count : float) : float
 {
@@ -435,6 +441,16 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
             return TOpts_AnatomicalKnowledgeDuration() > 0;
         case S_Sword_s16:
             return TOpts_ResolveFocusGainPerLevel() > 0;
+        case S_Magic_s12:
+            return TOpts_AardPowerFrostDuration() > 0;
+        case S_Magic_s07:
+            return TOpts_IgniPowerScorchFraction() > 0;
+        case S_Magic_s16:
+            return TOpts_YrdenPowerRadius() > 0;
+        case S_Magic_s15:
+            return TOpts_QuenPowerHealRatio() > 0;
+        case S_Magic_s18:
+            return TOpts_AxiiPowerWeaknessDuration() > 0;
         default:
             return false;
     }
@@ -469,5 +485,11 @@ function TUtil_ValueForLevel(player : CR4Player, skill : ESkill, maxValue : floa
         return 0;
     }
     currLevel = witcher.GetSkillLevel(skill);
-    return (currLevel / maxLevel) * maxValue;
+    return TUtil_InterpolateLevelValue(maxValue, maxLevel, currLevel);
+}
+
+// Triangle everything
+function TUtil_InterpolateLevelValue(maxValue : float, maxLevel : int, level : float) : float
+{
+    return (level / maxLevel) * maxValue;
 }

@@ -1,4 +1,4 @@
-﻿/***********************************************************************/
+/***********************************************************************/
 /** 	© 2015 CD PROJEKT S.A. All rights reserved.
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
@@ -178,7 +178,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		runewordInfusionType = ST_None;
 		
-		spellSwordSign = ST_None; // Triangle spell sword
+		// spellSwordSign = ST_None; // Triangle spell sword
 				
 		
 		inv = GetInventory();			
@@ -1701,63 +1701,79 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		_HoldBeforeOpenRadialMenuTime = time;
 	}
+
+	// Triangle spell sword
+	public function AddSpellSwordStacks(value : float)
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			spellSwordEffect.AddStacks(value);
+		}
+	}
+
+	// Triangle spell sword
+	public function DrainSpellSwordStacks()
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			spellSwordEffect.DrainStacks();
+		}
+	}
+
+	// Triangle spell sword
+	public function IsSpellSwordCharged() : bool
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			if (spellSwordEffect.GetStacks() == spellSwordEffect.GetMaxStacks()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	// Triangle spell sword
 	public function GetSpellSwordSign() : ESignType
 	{
-		return spellSwordSign;
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			return spellSwordEffect.GetSign();
+		} else {
+			return ST_None;
+		}
 	}
 	
 	// Triangle spell sword
 	public function SetSpellSwordSign(sign : ESignType)
 	{
-		var duration : SAbilityAttributeValue;
-		var value : float;
-		var items : array<SItemUniqueId>;
-		var weaponEnt : CEntity;
-		var fxName : name;
-		var associatedSkill : ESkill;
-	
-		items = inv.GetHeldWeapons();
-		if (items.Size() > 0)
-			weaponEnt = inv.GetItemEntityUnsafe(items[0]);
-	
-		//clear previous infusion or spellsword fx
-		weaponEnt.StopEffect('runeword_aard');
-		weaponEnt.StopEffect('runeword_axii');
-		weaponEnt.StopEffect('runeword_igni');
-		weaponEnt.StopEffect('runeword_quen');
-		weaponEnt.StopEffect('runeword_yrden');
-	
-		spellSwordSign = sign;
-		associatedSkill = TUtil_PowerSkillForSignType(sign);
+		var spellSwordEffect : W3Effect_TSpellSword;
+		var params : SCustomEffectParams;
+		var extraParams : W3TSpellSwordCustomParams;
 
-		if(weaponEnt && associatedSkill != S_SUndefined && CanUseSkill(associatedSkill))
-		{
-			//show current fx
-			if(sign == ST_Aard)
-				fxName = 'runeword_aard';
-			else if(sign == ST_Axii)
-				fxName = 'runeword_axii';
-			else if(sign == ST_Igni)
-				fxName = 'runeword_igni';
-			else if(sign == ST_Quen)
-				fxName = 'runeword_quen';
-			else if(sign == ST_Yrden)
-				fxName = 'runeword_yrden';
-			else fxName = '';
-				
-			if (StrLen(fxName) > 0)
-				weaponEnt.PlayEffect(fxName);
+		if (sign == ST_None) {
+			RemoveBuff(EET_TSpellSword);
+		} else if (TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(sign)) && CanUseSkill(TUtil_PowerSkillForSignType(sign)) && sign != GetSpellSwordSign()) {
+			extraParams = new W3TSpellSwordCustomParams in theGame;
+			extraParams.signType = sign;
+			if (HasBuff(EET_TSpellSword)) {
+				spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+				extraParams.initialStacks = spellSwordEffect.GetStacks();
+				RemoveBuff(EET_TSpellSword);
+			}
+
+			params.effectType = EET_TSpellSword;
+			params.creator = this;
+			params.sourceName = TUtil_PowerSkillForSignType(sign);
+			params.duration = -1;
+			params.buffSpecificParams = extraParams;
+			theGame.VibrateControllerHard(0.5f);
+			AddEffectCustom(params);
 		}
 	}
-
-	// Triangle spell sword Currently never used. maybe come back later
-	private timer function SpellSwordSignDecay(delta : float, id : int)
-	{
-		SetSpellSwordSign(ST_None);
-	}
-	
 	
 	public function RepairItem (  rapairKitId : SItemUniqueId, usedOnItem : SItemUniqueId )
 	{
@@ -2479,27 +2495,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 				}
 				
 				// Triangle spell sword effect from sign power skills
-				if(!action.WasDodged() && spellSwordSign != ST_None && CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign)))
+				if(!action.WasDodged() && spellSwordSign != ST_None
+					&& CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign))
+					&& TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(spellSwordSign)))
 				{
 					// Triangle TODO is it a problem if these effects are played twice, once for the runeword?
 					// Triangle TODO play visual effects on hit
-					if(spellSwordSign == ST_Axii)
-					{
-						actorVictim.SoundEvent('sign_axii_release');
-					}
-					else if(spellSwordSign == ST_Igni)
-					{
-						actorVictim.SoundEvent('sign_igni_charge_begin');
-					}
-					else if(spellSwordSign == ST_Quen)
-					{
-						PlayEffectSingle('drain_energy_caretaker_shovel');
-					}
-					else if(spellSwordSign == ST_Yrden)
-					{
-						actorVictim.SoundEvent('sign_yrden_shock_activate');
-					}
-					SetSpellSwordSign(ST_None);
+					// if(spellSwordSign == ST_Axii)
+					// {
+					// 	actorVictim.SoundEvent('sign_axii_release');
+					// }
+					// else if(spellSwordSign == ST_Igni)
+					// {
+					// 	actorVictim.SoundEvent('sign_igni_charge_begin');
+					// }
+					// else if(spellSwordSign == ST_Quen)
+					// {
+					// 	PlayEffectSingle('drain_energy_caretaker_shovel');
+					// }
+					// else if(spellSwordSign == ST_Yrden)
+					// {
+					// 	actorVictim.SoundEvent('sign_yrden_shock_activate');
+					// }
+					// SetSpellSwordSign(ST_None);
 				}
 				// Triangle end
 				
@@ -3348,7 +3366,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						isWeak = false; // Triangle alt stamina
+						isWeak = HasBuff(EET_TWeakness); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( true, true );
 					} break;
 					
@@ -3370,7 +3388,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						isWeak = !thePlayer.HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)); // Triangle alt stamina
+						isWeak = !thePlayer.HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)) || HasBuff(EET_TWeakness); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( false, true );
 					} break;
 					
@@ -3477,7 +3495,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
 				{
 					attackAction.isWeak = isWeak;
-					isWeak = false;
+					isWeak = HasBuff(EET_TWeakness); // only remove weakness if it wasn't added via effect
 					if (TUtil_ShouldAttackCombo(this, false))
 						IncAttackCombo(false);
 					if (TUtil_ShouldAttackCombo(this, true))
@@ -3487,7 +3505,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(IsHeavyAttack(attackTypeName))
 				{
 					attackAction.isWeak = isWeak;
-					isWeak = false;
+					isWeak = HasBuff(EET_TWeakness); // only remove weakness if it wasn't added via effect
 					if (TUtil_ShouldAttackCombo(this, true))
 						IncAttackCombo(true);
 					if (TUtil_ShouldAttackCombo(this, false))
@@ -8688,8 +8706,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		// Triangle spell sword
 		if (signType != ST_Quen)
 		{
-			SetSpellSwordSign(signType);
+			// SetSpellSwordSign(signType);
 		}
+		AddSpellSwordStacks(TUtil_ValueForLevel(this, TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign(), 5));
 		// Triangle end
 	}
 	

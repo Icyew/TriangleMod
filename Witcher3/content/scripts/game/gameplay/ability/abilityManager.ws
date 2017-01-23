@@ -383,7 +383,7 @@ import abstract class W3AbilityManager extends IScriptable
 			charPts = resistStat.points;
 			charPerc = resistStat.percents;		
 		}
-		
+
 		
 		if(stat == CDS_DoTBurningDamageRes || stat == CDS_DoTPoisonDamageRes || stat == CDS_DoTBleedingDamageRes)
 		{
