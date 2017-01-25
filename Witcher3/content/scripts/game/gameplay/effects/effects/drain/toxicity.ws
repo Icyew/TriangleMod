@@ -146,8 +146,8 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 			
 		
 		// Triangle delayed recovery
-		slowFactor = TOpts_DelayedRecoverySlowFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s03) + 1;
-		if (thePlayer.GetStat(BCS_Stamina) >= thePlayer.GetStatMax(BCS_Stamina) && thePlayer.CanUseSkill(S_Alchemy_s03) && slowFactor > 1) {
+		if (TUtil_IsCustomSkillEnabled(S_Alchemy_s03) && thePlayer.CanUseSkill(S_Alchemy_s03) && !thePlayer.IsInCombat()) {
+			slowFactor = TUtil_ValueForLevel(S_Alchemy_s03, TOpts_DelayedRecoverySlowFactor(), 3) + 1;
 			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) ) / slowFactor;
 		} else {
 			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) );		

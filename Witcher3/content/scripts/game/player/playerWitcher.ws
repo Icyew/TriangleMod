@@ -8717,7 +8717,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 
 		// Triangle spell sword
-		AddSpellSwordStacks(TUtil_ValueForLevel(this, TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign(), 5));
+		AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign(), 5));
 		// Triangle end
 	}
 	

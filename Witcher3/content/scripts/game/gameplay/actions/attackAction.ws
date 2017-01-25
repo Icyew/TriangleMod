@@ -301,7 +301,7 @@ class W3Action_Attack extends W3DamageAction
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s04);
 			// Triangle attack combos
 			if(witcherAttacker.CanUseSkill(S_Sword_s04) && TUtil_AreAttackCombosEnabled(true)) {
-				result.valueMultiplicative += TUtil_ValueForLevel(witcherAttacker, S_Sword_s04, TOpts_HeavyAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(true);
+				result.valueMultiplicative += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(true);
 			}
 			// Triangle end
 			
@@ -310,7 +310,7 @@ class W3Action_Attack extends W3DamageAction
 				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s21);
 			// Triangle attack combos
 			if(witcherAttacker.CanUseSkill(S_Sword_s21) && TUtil_AreAttackCombosEnabled(true)) {
-				result.valueMultiplicative += TUtil_ValueForLevel(witcherAttacker, S_Sword_s21, TOpts_LightAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(false);
+				result.valueMultiplicative += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboDmgBonus(), 5) * witcherAttacker.GetAttackComboLength(false);
 			}
 			// Triangle end
 						

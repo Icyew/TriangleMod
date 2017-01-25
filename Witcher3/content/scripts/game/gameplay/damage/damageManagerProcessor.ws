@@ -583,7 +583,7 @@ class W3DamageManagerProcessor extends CObject
 						attackAction.AddEffectInfo(EET_TWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative);
 					}
 				}
-				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(witcher, TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit(), 5));
+				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit(), 5));
 			}
 
 			if (bonusDmgInfo.dmgVal > 0)
@@ -787,16 +787,16 @@ class W3DamageManagerProcessor extends CObject
 					// Triangle attack combos
 					if(playerAttacker.CanUseSkill(S_Sword_s21) && TUtil_IsCustomSkillEnabled(S_Sword_s21))
 					{
-						critChance += TUtil_ValueForLevel(playerAttacker, S_Sword_s21, TOpts_LightAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
 					}
 					if(playerAttacker.CanUseSkill(S_Sword_s04) && TUtil_IsCustomSkillEnabled(S_Sword_s04))
 					{
-						critChance += TUtil_ValueForLevel(playerAttacker, S_Sword_s04, TOpts_HeavyAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(true); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(true); // Combo starts at 2 hits!
 					}
 					// Triangle precise blows
 					if(playerAttacker.CanUseSkill(S_Sword_s17) && TUtil_IsCustomSkillEnabled(S_Sword_s17))
 					{
-						critChance += TUtil_ValueForLevel(playerAttacker, S_Sword_s17, TOpts_PreciseBlowsCritChanceBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s17, TOpts_PreciseBlowsCritChanceBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
 					}
 					// Triangle crits
 					// Triangle TODO is EET_CounterStrikeHit like stagger?
@@ -1621,7 +1621,7 @@ class W3DamageManagerProcessor extends CObject
 					{
 						witcherPlayer = (W3PlayerWitcher)playerAttacker;
 						if (witcherPlayer && TUtil_IsCustomSkillEnabled(S_Sword_s08)) {
-							criticalDamageBonus.valueAdditive += TUtil_ValueForLevel(playerAttacker, S_Sword_s08, TOpts_CrushingBlowsCritDmgBonus(), 5) * witcherPlayer.GetAttackComboLength(true);
+							criticalDamageBonus.valueAdditive += TUtil_ValueForLevel(S_Sword_s08, TOpts_CrushingBlowsCritDmgBonus(), 5) * witcherPlayer.GetAttackComboLength(true);
 						} else
 						criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * playerAttacker.GetSkillLevel(S_Sword_s08);
 					}
@@ -1634,11 +1634,11 @@ class W3DamageManagerProcessor extends CObject
 				witcherPlayer = (W3PlayerWitcher)playerAttacker;
 				if(witcherPlayer && playerAttacker.CanUseSkill(S_Sword_s04))
 				{
-					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(true) * TUtil_ValueForLevel(playerAttacker, S_Sword_s04, TOpts_HeavyAttackComboCritDmgBonus(), 5);
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(true) * TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritDmgBonus(), 5);
 				}
 				if(witcherPlayer && playerAttacker.CanUseSkill(S_Sword_s21))
 				{
-					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(false) * TUtil_ValueForLevel(playerAttacker, S_Sword_s21, TOpts_LightAttackComboCritDmgBonus(), 5);
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(false) * TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritDmgBonus(), 5);
 				}
 				// Triangle crits
 				if (playerAttacker) {
@@ -1847,7 +1847,7 @@ class W3DamageManagerProcessor extends CObject
 				finalDamage *= TOpts_HeavyAttackDamageMod();
 				witcher = (W3PlayerWitcher)playerAttacker;
 				if (witcher) {
-					finalDamage *= 1 + TUtil_ValueForLevel(witcher, S_Sword_s04, TOpts_HeavyAttackComboMultBonus(), 5) * witcher.GetAttackComboLength(true);
+					finalDamage *= 1 + TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboMultBonus(), 5) * witcher.GetAttackComboLength(true);
 				}
 			}
 		}

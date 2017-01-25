@@ -451,6 +451,8 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
             return TOpts_QuenPowerHealRatio() > 0;
         case S_Magic_s18:
             return TOpts_AxiiPowerWeaknessDuration() > 0;
+        case S_Alchemy_s03:
+            return TOpts_DelayedRecoverySlowFactor() > 0;
         default:
             return false;
     }
@@ -475,17 +477,9 @@ function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
 }
 
 // Triangle everything
-function TUtil_ValueForLevel(player : CR4Player, skill : ESkill, maxValue : float, maxLevel : int) : float
+function TUtil_ValueForLevel(skill : ESkill, maxValue : float, maxLevel : int) : float
 {
-    var witcher : W3PlayerWitcher;
-    var currLevel : float;
-    witcher = (W3PlayerWitcher)player;
-    if (!witcher) {
-        TUtil_LogMessage("Error: attempted to get a skill value for non-geralt");
-        return 0;
-    }
-    currLevel = witcher.GetSkillLevel(skill);
-    return TUtil_InterpolateLevelValue(maxValue, maxLevel, currLevel);
+    return TUtil_InterpolateLevelValue(maxValue, maxLevel, thePlayer.GetSkillLevel(skill));
 }
 
 // Triangle everything

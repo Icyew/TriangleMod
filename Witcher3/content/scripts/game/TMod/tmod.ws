@@ -235,9 +235,9 @@ function TOpts_AcquiredToleranceDurationPerLevel() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AcquiredToleranceDurationPerLevel' ) );
 }
 
-function TOpts_DelayedRecoverySlowFactorPerLevel() : float
+function TOpts_DelayedRecoverySlowFactor() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'DelayedRecoverySlowFactorPerLevel' ) );
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'DelayedRecoverySlowFactor' ) );
 }
 
 function TOpts_AltTawnyOwlDuration() : float

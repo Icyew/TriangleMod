@@ -2376,8 +2376,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(Max(0, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle delayed recovery
-				if (TOpts_DelayedRecoverySlowFactorPerLevel() > 0) {
-					baseString = "Potion duration and toxicity drain " + NoTrailZeros(TUtil_RoundTo(TOpts_DelayedRecoverySlowFactorPerLevel() * skillLevel + 1, 1)) + "x slower at maximum stamina.";
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s03)) {
+					baseString = "Potion duration and toxicity drain " + NoTrailZeros(TUtil_RoundTo(TUtil_InterpolateLevelValue(TOpts_DelayedRecoverySlowFactor(), 3, skillLevel) + 1, 2)) +
+						"x slower out of combat.";
 				}
 				// Triangle end
 				break;
