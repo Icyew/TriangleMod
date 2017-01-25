@@ -12,7 +12,7 @@ class W3Effect_THeavyCombo extends W3Effect_TAttackCombo
 
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		maxDuration = TOpts_MaxComboDuration();
+		duration = TOpts_MaxComboDuration();
 		decayTime = TOpts_HeavyAttackComboDecay();
 		maxCombo = TOpts_HeavyAttackMaxCombo();
 		super.OnEffectAdded(customParams);

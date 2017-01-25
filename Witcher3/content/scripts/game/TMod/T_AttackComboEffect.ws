@@ -12,14 +12,13 @@ class W3Effect_TAttackCombo extends W3Effect_TMutableDuration
 	default isNeutral = false;
 	default isNegative = false;
 	protected var comboCount : int; default comboCount = 0;
-	protected var maxDuration : float;
 	protected var decayTime : float;
 	protected var maxCombo : int;
 
-	event OnUpdate(dt : float)
+	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		SetShowOnHUD(comboCount > 0);
-		super.OnUpdate(dt);
+		timeLeft = 0;
+		super.OnEffectAdded(customParams);
 	}
 
 	public function IncCombo()
@@ -36,11 +35,7 @@ class W3Effect_TAttackCombo extends W3Effect_TMutableDuration
 
 	public function IncTime(optional fixedTime : float)
 	{
-		if (duration  < 0) {
-			SetTimeLeft(0);
-			duration = maxDuration;
-		}
-		if (fixedTime > 0)
+		if (fixedTime)
 			AddTimeLeft(fixedTime, true);
 		else
 			AddTimeLeft(decayTime, true);

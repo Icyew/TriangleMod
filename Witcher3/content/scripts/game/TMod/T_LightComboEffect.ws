@@ -12,7 +12,7 @@ class W3Effect_TLightCombo extends W3Effect_TAttackCombo
 
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		maxDuration = TOpts_MaxComboDuration();
+		duration = TOpts_MaxComboDuration();
 		decayTime = TOpts_LightAttackComboDecay();
 		maxCombo = TOpts_LightAttackMaxCombo();
 		super.OnEffectAdded(customParams);

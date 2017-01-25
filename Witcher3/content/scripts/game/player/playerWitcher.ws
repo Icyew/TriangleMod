@@ -3520,6 +3520,23 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 
 	// Triangle attack combos
+	public function GetOrCreateAttackComboEffect(effectType : EEffectType) : W3Effect_TAttackCombo
+	{
+		var params : SCustomEffectParams;
+
+		if (HasBuff(effectType)) {
+			return (W3Effect_TAttackCombo)GetBuff(effectType);
+		} else {
+			params.effectType = effectType;
+			params.creator = this;
+			params.sourceName = 'attackcombo';
+			params.duration = TOpts_MaxComboDuration();
+			AddEffectCustom(params);
+			return (W3Effect_TAttackCombo)GetBuff(effectType);
+		}
+	}
+
+	// Triangle attack combos
 	public function IncAttackCombo(isHeavyAttack : bool)
 	{
 		var comboEffect : W3Effect_TAttackCombo;
@@ -3530,11 +3547,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		else
 			effectType = EET_TLightCombo;
 
-		if (!HasBuff(effectType)) {
-			AddEffectDefault(effectType, this, 'AttackCombo');
-		}
-
-		comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+		comboEffect = GetOrCreateAttackComboEffect(effectType);
 		comboEffect.IncCombo();
 		comboEffect.IncTime();
 	}
@@ -8704,10 +8717,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 
 		// Triangle spell sword
-		if (signType != ST_Quen)
-		{
-			// SetSpellSwordSign(signType);
-		}
 		AddSpellSwordStacks(TUtil_ValueForLevel(this, TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign(), 5));
 		// Triangle end
 	}

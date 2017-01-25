@@ -213,7 +213,6 @@
       </ability>
       <!-- Triangle resolve -->
       <ability name="TResolveEffect">
-        <!-- duration and effect strength set via menu item. This xml may not be necessary -->
       </ability>
       <ability name="TResolveDamageBonus">
         <attack_power type="mult" min="0.01" />
@@ -225,11 +224,9 @@
       </ability>
       <!-- Triangle light attack combos -->
       <ability name="TLightComboEffect">
-        <duration type="add" min="-1" />
       </ability>
       <!-- Triangle heavy attack combos -->
       <ability name="THeavyComboEffect">
-        <duration type="add" min="-1" />
       </ability>
       <!-- Triangle parry -->
       <ability name="TParryCooldownEffect">
@@ -242,12 +239,8 @@
       </ability>
       <!-- Triangle spell sword -->
       <ability name="TSpellSwordEffect">
-        <!-- set things via scripts. This xml may not be necessary -->
-        <duration type="add" min="-1" />
       </ability>
       <ability name="TWeaknessEffect">
-        <!-- set things via scripts. This xml may not be necessary -->
-        <duration type="add" min="-1" />
       </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
