@@ -2303,6 +2303,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			case S_Magic_s18:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s18, PowerStatEnumToName(CPS_SpellPower), false, false);
 				ability.valueMultiplicative *= skillLevel;
+				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
 				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {

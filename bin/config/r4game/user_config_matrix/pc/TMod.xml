@@ -118,6 +118,7 @@
 				<Entry varId="YrdenPowerRadius"					value="5"/>
 				<Entry varId="QuenPowerHealRatio"				value="0.5"/>
 				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
+				<Entry varId="QuenRemoveDoT"					value="0"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -146,6 +147,7 @@
 			<Var id="YrdenPowerRadius"	 	 		 displayName="Yrden power: radius of splash damage (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenPowerHealRatio"	 	 	 displayName="Quen power: fraction of dmg converted to hp instead (0 vanilla)" 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenRemoveDoT"	 	 		 	 displayName="Quen: Remove DoT effects on cast (true vanilla)" 							displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

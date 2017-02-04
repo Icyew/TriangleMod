@@ -479,7 +479,7 @@
 	
 	   <!-- Axii Powe -->
       <ability name="magic_s18">
-        <tags>magic_s16,Axii</tags>
+        <tags>magic_s18,Axii</tags>
         <spell_power type="mult" min="0.05" />
       </ability>
 	

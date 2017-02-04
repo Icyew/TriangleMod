@@ -584,6 +584,11 @@ function TOpts_AxiiPowerWeaknessDuration() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AxiiPowerWeaknessDuration' ) );
 }
 
+function TOpts_QuenRemoveDoT() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenRemoveDoT' );
+}
+
 // ---- Signs End ---- //
 
 // ---- Leveling Begin ---- //

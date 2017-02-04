@@ -134,7 +134,11 @@ statemachine class W3QuenEntity extends W3SignEntity
 				continue;
 			}
 			
-			actor.RemoveEffect( crits[i], true );			
+			// Triangle quen dot
+			if (TOpts_QuenRemoveDoT()) {
+				actor.RemoveEffect( crits[i], true );			
+			}
+			// Triangle end
 		}		
 	}
 	
