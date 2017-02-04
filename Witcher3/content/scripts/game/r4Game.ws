@@ -287,6 +287,7 @@ import class CR4Game extends CCommonGame
 	
 	
 	import final function DisplaySystemHelp();
+	import final function DisplayStore();
 	import final function DisplayUserProfileSystemDialog();
 	import final function SetRichPresence( presence : name );
 
@@ -1214,19 +1215,23 @@ import class CR4Game extends CCommonGame
 	
 	 public function PopulateMenuQueueStartupAlways( out menus : array< name > )
 	{
+		var menuType : int;
+		
+		menuType = ChooseRandomMainMenuIfNotChosenYet();
 		if (GetPlatform() != Platform_PC)
 		{
-			if ( theGame.GetDLCManager().IsEP2Available() )
+			switch ( menuType )
 			{
-				menus.PushBack( 'StartScreenMenuEP2' );
-			}
-			else if ( theGame.GetDLCManager().IsEP1Available() )
-			{
-				menus.PushBack( 'StartScreenMenuEP1' );
-			}
-			else
-			{
-				menus.PushBack( 'StartScreenMenu' );
+				case 1:
+					menus.PushBack( 'StartScreenMenuEP1' );
+					break;
+				case 2:
+					menus.PushBack( 'StartScreenMenuEP2' );
+					break;
+				case 0:
+				default:
+					menus.PushBack( 'StartScreenMenu' );
+					break;
 			}
 		}
 	}
@@ -1254,18 +1259,60 @@ import class CR4Game extends CCommonGame
 	
 	 public function PopulateMenuQueueMainAlways( out menus : array< name > )
 	{
+		var menuType : int;
+		
+		menuType = ChooseRandomMainMenuIfNotChosenYet();
+		switch ( menuType )
+		{
+			case 1:
+				menus.PushBack( 'CommonMainMenuEP1' );
+				break;
+			case 2:
+				menus.PushBack( 'CommonMainMenuEP2' );
+				break;
+			case 0:
+			default:
+				menus.PushBack( 'CommonMainMenu' );
+				break;
+		}
+	}
+
+	private var _mainMenuType : int; default _mainMenuType = -1;
+
+	public function GetChosenMainMenuType() : int
+	{
+		return _mainMenuType;
+	}
+	
+	private function ChooseRandomMainMenuIfNotChosenYet() : int
+	{
+		var availableMainMenuTypes : array< int >;
+		var seed : int;
+		var index : int;
+		
+		if ( _mainMenuType > -1 )
+		{
+			return _mainMenuType;
+		}
+		
+		availableMainMenuTypes.PushBack( 0 );
+		
+		if (theGame.GetDLCManager().IsEP1Available())
+		{
+			availableMainMenuTypes.PushBack( 1 );
+		}
 		if (theGame.GetDLCManager().IsEP2Available())
 		{
-			menus.PushBack( 'CommonMainMenuEP2' );
+			availableMainMenuTypes.PushBack( 2 );
 		}
-		else if (theGame.GetDLCManager().IsEP1Available())
-		{
-			menus.PushBack( 'CommonMainMenuEP1' );
-		}
-		else
-		{
-			menus.PushBack( 'CommonMainMenu' );
-		}
+
+		seed = CalcSeed( theGame );
+		index = (int)RandNoiseF( seed, availableMainMenuTypes.Size() );
+
+		_mainMenuType = availableMainMenuTypes[ index ];
+		LogChannel('asd', "RAND " + seed + "   " + index + "   " + _mainMenuType );
+
+		return _mainMenuType;
 	}
 
 	public function GetNewGameDefinitionFilename() : string

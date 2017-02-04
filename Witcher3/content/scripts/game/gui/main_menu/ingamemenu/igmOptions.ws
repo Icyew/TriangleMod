@@ -25,6 +25,10 @@ function IngameMenu_GetOptionTypeFromString(optionType:string): InGameMenuAction
 	{
 		return IGMActionType_Gamma;
 	}
+	else if (optionType == "BUTTON")
+	{
+		return IGMActionType_Button;
+	}
 	
 	return IGMActionType_Toggle; 
 }
@@ -138,7 +142,7 @@ function IngameMenu_FillOptionsSubMenuData(flashStorageUtility : CScriptedFlashV
 		}
 		else
 		{
-			IngameMenu_FillArrayFromConfigGroup(flashStorageUtility, i, l_optionChildList);
+			IngameMenu_FillArrayFromConfigGroup(flashStorageUtility, i, l_optionChildList, isMainMenu);
 		}
 	}
 	
@@ -245,13 +249,19 @@ function IngameMenu_FillCreditsSubGroup(flashStorageUtility : CScriptedFlashValu
 	}
 }
 
-function IngameMenu_FillArrayFromConfigGroup(flashStorageUtility : CScriptedFlashValueStorage, groupID:int, rootFlashArray:CScriptedFlashArray):void
+function IngameMenu_FillArrayFromConfigGroup(flashStorageUtility : CScriptedFlashValueStorage, groupID:int, rootFlashArray:CScriptedFlashArray, isMainMenu : bool ):void
 {
 	var groupRootObject			: CScriptedFlashObject;
 	var groupName				: name;
 	var hasChildOptions			: bool;
 	var groupParentArray		: CScriptedFlashArray;
 	var inGameConfigWrapper	: CInGameConfigWrapper;
+	
+	var i						: int;
+	var hasChildOptionsDLC		: bool;
+	var dlcOptionIndex			: int;
+	
+	dlcOptionIndex = -1;
 	
 	inGameConfigWrapper = (CInGameConfigWrapper)theGame.GetInGameConfigWrapper();
 	
@@ -266,7 +276,36 @@ function IngameMenu_FillArrayFromConfigGroup(flashStorageUtility : CScriptedFlas
 			hasChildOptions = IngameMenu_FillSubMenuOptionsList(flashStorageUtility, groupID, groupName, groupRootObject);
 			
 			
-			if (!hasChildOptions && groupParentArray)
+			
+			
+			
+			if ( isMainMenu )
+			{
+				if ( groupName == 'Gameplay' )
+				{
+					
+					for (i = 0; i < inGameConfigWrapper.GetGroupsNum(); i += 1)
+					{
+						groupName = inGameConfigWrapper.GetGroupName(i);
+						if (groupName == 'DLC')
+						{
+							dlcOptionIndex = i;
+							break;
+						}
+					}
+					if (dlcOptionIndex != -1)
+					{
+						hasChildOptionsDLC = IngameMenu_FillSubMenuOptionsList(flashStorageUtility, dlcOptionIndex, 'DLC', groupRootObject);
+					}
+				}
+			}
+			
+			
+			
+			
+			
+			
+			if (! ( hasChildOptions || hasChildOptionsDLC ) && groupParentArray)
 			{
 				groupParentArray.PopBack();
 			}

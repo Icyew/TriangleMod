@@ -218,6 +218,7 @@ class IngameMenuStructureCreator
 			l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP1_Save);
 			l_DataFlashObject.SetMemberFlashArray( "subElements", l_ChildMenuFlashArray );
 			l_DataFlashObject.SetMemberFlashString( "description", GetLocStringByKeyExt("panel_mainmenu_start_ep1_description") );
+			l_DataFlashObject.SetMemberFlashBool( "unavailable", !( theGame.CanStartStandaloneDLC('ep1') && theGame.GetDLCManager().IsEP1Available() && theGame.IsContentAvailable('content12') ) );
 			
 			l_optionChildList.PushBackFlashObject(l_DataFlashObject);
 		}
@@ -228,6 +229,7 @@ class IngameMenuStructureCreator
 			l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP2_Save);
 			l_DataFlashObject.SetMemberFlashArray( "subElements", l_ChildMenuFlashArray );
 			l_DataFlashObject.SetMemberFlashString( "description", GetLocStringByKeyExt("panel_mainmenu_start_ep2_description") );
+			l_DataFlashObject.SetMemberFlashBool( "unavailable", !( theGame.CanStartStandaloneDLC('bob_000_000') && theGame.GetDLCManager().IsEP2Available() && theGame.IsContentAvailable('content12') ) );
 			
 			l_optionChildList.PushBackFlashObject(l_DataFlashObject);
 		}
@@ -239,6 +241,8 @@ class IngameMenuStructureCreator
 			l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_New_game_plus);
 			l_DataFlashObject.SetMemberFlashArray( "subElements", l_ChildMenuFlashArray );
 			l_DataFlashObject.SetMemberFlashString( "description", GetLocStringByKeyExt("panel_mainmenu_start_ngplus_description") );
+			l_DataFlashObject.SetMemberFlashBool( "unavailable", !( theGame.GetDLCManager().IsNewGamePlusAvailable() ) );
+			
 			l_optionChildList.PushBackFlashObject(l_DataFlashObject);
 		}
 		

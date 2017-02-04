@@ -298,7 +298,7 @@ import class CDefinitionsManagerAccessor extends CObject
 				break;
 		}
 		
-		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName);
+		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName, baseLevel);
 		
 		if ( FactsQuerySum("NewGamePlus") > 0 )
 		{
@@ -312,7 +312,13 @@ import class CDefinitionsManagerAccessor extends CObject
 		if ( isRelicGear ) level = level - 1;
 		if ( level < 1 ) level = 1;
 		if ( ItemHasTag(itemName, 'OlgierdSabre') ) level = level - 3;
-		if ( (isRelicGear || isWitcherGear) && ItemHasTag(itemName, 'EP1') ) level = level - 1;
+		if ( ItemHasTag(itemName, 'EP1') )
+		{
+			if ( (isRelicGear || isWitcherGear) ) 
+			{
+				level = level - 1;
+			}
+		}
 		
 		if ( FactsQuerySum("NewGamePlus") > 0 )
 		{

@@ -382,6 +382,7 @@ class CR4MainCreditsMenu extends CR4MenuBase
 	event OnCloseMenu()
 	{
 		var ingameMenu : CR4IngameMenu;
+		var menuType : int;
 		
 		guiManager.CancelFlashbackVideo();
 
@@ -393,19 +394,21 @@ class CR4MainCreditsMenu extends CR4MenuBase
 			
 			if (ingameMenu)
 			{
-				if ( theGame.GetDLCManager().IsEP2Available() )
+				menuType = theGame.GetChosenMainMenuType();
+				switch ( menuType )
 				{
-					theSound.SoundEvent('stop_music' );
-					theSound.SoundEvent('play_music_toussaint' );
-					theSound.SoundEvent('mus_main_menu_ep2');
-				}
-				else if ( theGame.GetDLCManager().IsEP1Available() )
-				{
-					theSound.SoundEvent('mus_main_menu_theme_ep1');
-				}
-				else
-				{
-					theSound.SoundEvent('mus_main_menu_theme');
+					case 1:
+						theSound.SoundEvent('mus_main_menu_theme_ep1');
+						break;
+					case 2:
+						theSound.SoundEvent('stop_music' );
+						theSound.SoundEvent('play_music_toussaint' );
+						theSound.SoundEvent('mus_main_menu_ep2');
+						break;
+					case 0:
+					default:
+						theSound.SoundEvent('mus_main_menu_theme');
+						break;
 				}
 			}
 			else

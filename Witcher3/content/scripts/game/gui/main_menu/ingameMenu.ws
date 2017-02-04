@@ -37,6 +37,7 @@ enum InGameMenuActionType
 	IGMActionType_Back				= 25,
 	IGMActionType_NewGamePlus		= 26,
 	IGMActionType_InstalledDLC		= 27,
+	IGMActionType_Button			= 28,
 	
 	IGMActionType_Options 			= 100
 };
@@ -84,6 +85,7 @@ class CR4IngameMenu extends CR4MenuBase
 	private var m_fxForceBackgroundVis	: CScriptedFlashFunction;
 	private var m_fxSetHardwareCursorOn : CScriptedFlashFunction;
 	private var m_fxSetExpansionText	: CScriptedFlashFunction;
+	private	var m_fxUpdateAnchorsAspectRatio : CScriptedFlashFunction;
 	
 	protected var loadConfPopup			: W3ApplyLoadConfirmation;
 	protected var saveConfPopup			: W3SaveGameConfirmation;
@@ -143,6 +145,8 @@ class CR4IngameMenu extends CR4MenuBase
 		var lootPopup			: CR4LootPopup;
 		var ep1StatusText		: string;
 		var ep2StatusText		: string;
+		var width				: int;
+		var height				: int;
 		
 		super.OnConfigUI();
 		
@@ -163,6 +167,7 @@ class CR4IngameMenu extends CR4MenuBase
 		m_fxForceBackgroundVis = m_flashModule.GetMemberFlashFunction( "setForceBackgroundVisible" );
 		m_fxSetHardwareCursorOn = m_flashModule.GetMemberFlashFunction( "setHardwareCursorOn" );
 		m_fxSetExpansionText = m_flashModule.GetMemberFlashFunction( "setExpansionText" );
+		m_fxUpdateAnchorsAspectRatio = m_flashModule.GetMemberFlashFunction( "UpdateAnchorsAspectRatio" );
 		
 		m_structureCreator = new IngameMenuStructureCreator in this;
 		m_structureCreator.parentMenu = this;
@@ -210,26 +215,29 @@ class CR4IngameMenu extends CR4MenuBase
 			
 			StartShowingCustomDialogs();
 			
-			if (theGame.GetDLCManager().IsEP1Available())
+			if (!theGame.IsContentAvailable('content12'))
 			{
-				ep1StatusText = GetLocStringByKeyExt("expansion_status_installed");
-			}
-			else
-			{
-				ep1StatusText = GetLocStringByKeyExt("expansion_status_available");
-			}
-			
-			if (theGame.GetDLCManager().IsEP2Available())
-			{
-				ep2StatusText = GetLocStringByKeyExt("expansion_status_installed");
-			}
-			else
-			{
+				if (theGame.GetDLCManager().IsEP1Available())
+				{
+					ep1StatusText = GetLocStringByKeyExt("expansion_status_installed");
+				}
+				else
+				{
+					ep1StatusText = GetLocStringByKeyExt("expansion_status_available");
+				}
 				
-				ep2StatusText = GetLocStringByKeyExt("expansion_status_available");
-			}
+				if (theGame.GetDLCManager().IsEP2Available())
+				{
+					ep2StatusText = GetLocStringByKeyExt("expansion_status_installed");
+				}
+				else
+				{
+					
+					ep2StatusText = GetLocStringByKeyExt("expansion_status_available");
+				}
 			
-			m_fxSetExpansionText.InvokeSelfTwoArgs(FlashArgString(ep1StatusText), FlashArgString(ep2StatusText));
+				m_fxSetExpansionText.InvokeSelfTwoArgs(FlashArgString(ep1StatusText), FlashArgString(ep2StatusText));
+			}
 			
 			if (theGame.AreConfigResetInThisSession() && !theGame.HasShownConfigChangedMessage())
 			{
@@ -284,13 +292,20 @@ class CR4IngameMenu extends CR4MenuBase
 		if (!panelMode)
 		{
 			m_fxSetIsMainMenu.InvokeSelfOneArg(FlashArgBool(isMainMenu)); 
+			
 			if (isMainMenu)
 			{
 				username = FixStringForFont(theGame.GetActiveUserDisplayName());
 				m_fxSetCurrentUsername.InvokeSelfOneArg(FlashArgString(username));
 				
 				m_fxSetVersion.InvokeSelfOneArg(FlashArgString(theGame.GetApplicationVersion()));
+				
+				if( !theGame.IsContentAvailable( 'content12' ) )
+				{
+					theGame.GetGuiManager().RefreshMainMenuAfterContentLoaded();
+				}
 			}
+			
 			theGame.GetSecondScreenManager().SendGameMenuOpen();
 			
 			lastSetDifficulty = theGame.GetDifficultyLevel();
@@ -310,6 +325,9 @@ class CR4IngameMenu extends CR4MenuBase
 			
 			PopulateMenuData();
 		}
+		
+		theGame.GetCurrentViewportResolution( width, height );
+		m_fxUpdateAnchorsAspectRatio.InvokeSelfTwoArgs( FlashArgInt( width ), FlashArgInt( height ) );
 	}
 	
 	event OnRefresh()
@@ -370,7 +388,7 @@ class CR4IngameMenu extends CR4MenuBase
 			}
 		}
 		
-		
+		if (!theGame.IsContentAvailable('content12'))
 		{
 			if (theGame.GetDLCManager().IsEP1Available())
 			{
@@ -737,16 +755,11 @@ class CR4IngameMenu extends CR4MenuBase
 	
 	private function StartShowingCustomDialogs()
 	{
-		if (theGame.GetDLCManager().IsEP1Available() && theGame.GetInGameConfigWrapper().GetVarValue('Hidden', 'HasSeenEP1WelcomeMessage') == "false")
-		{
-			theGame.GetInGameConfigWrapper().SetVarValue('Hidden', 'HasSeenEP1WelcomeMessage', "true");
-			prepareBigMessage( 1 );
-		}
-		if (theGame.GetDLCManager().IsEP2Available() && theGame.GetInGameConfigWrapper().GetVarValue('Hidden', 'HasSeenEP2WelcomeMessage') == "false")
-		{
-			theGame.GetInGameConfigWrapper().SetVarValue('Hidden', 'HasSeenEP2WelcomeMessage', "true");
-			prepareBigMessage( 2 );
-		}
+		//this function should be empty
+		//if you have merging conflict here, choose lines from A
+		//and make sure that this part of merged file
+		//matches the code in A - i.e. has only these comments
+		//between opening and closing bracket
 	}
 	
 	protected function prepareBigMessage( epIndex : int ):void
@@ -773,6 +786,27 @@ class CR4IngameMenu extends CR4MenuBase
 		m_flashValueStorage.SetFlashObject( "ingamemenu.bigMessage" + epIndex, l_DataFlashObject );
 	}
 	
+	private function prepareBigMessageGOTY( text : string )
+	{
+		var l_DataFlashObject 		: CScriptedFlashObject;
+		var title1 : string;
+		var content : string;
+		var titleEnd : string;
+
+		l_DataFlashObject = m_flashValueStorage.CreateTempFlashObject();
+
+		title1   = GetLocStringByKey( text );
+		content  = GetLocStringByKey( "menu_goty_starting_message_content" );
+		titleEnd = GetLocStringByKey( "ep1_installed_information_good_luck" );
+
+		l_DataFlashObject.SetMemberFlashInt( "index", 3 );
+		l_DataFlashObject.SetMemberFlashString( "tfTitle1",   title1 );
+		l_DataFlashObject.SetMemberFlashString( "tfContent",  content );
+		l_DataFlashObject.SetMemberFlashString( "tfTitleEnd", titleEnd );
+		
+		m_flashValueStorage.SetFlashObject( "ingamemenu.bigMessage3", l_DataFlashObject );
+
+	}
 	
 	protected function LoadLastSave():void
 	{
@@ -959,6 +993,14 @@ class CR4IngameMenu extends CR4MenuBase
 		if (groupName == 'Rendering' && optionName == 'PreserveSystemGamma')
 		{
 			theGame.GetGuiManager().DisplayRestartGameToApplyAllChanges();
+		}
+	}
+	
+	event  OnButtonClicked( optionName : name )
+	{
+		if ( optionName == 'MoreSpeechLanguages' )
+		{
+			theGame.DisplayStore();
 		}
 	}
 	
@@ -2091,4 +2133,10 @@ class CR4IngameMenu extends CR4MenuBase
 	function PlayOpenSoundEvent()
 	{
 	}
+}
+
+exec function ddd()
+{
+	LogChannel('asd', "[" + GetLocStringByKey( "menu_goty_starting_message_content" ) + "]" );
+	LogChannel('asd', "[" + GetLocStringById( 1217650 ) + "]" );
 }

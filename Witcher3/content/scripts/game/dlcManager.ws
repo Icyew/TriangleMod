@@ -59,4 +59,17 @@ import class CDLCManager extends CObject
 		
 		return false;
 	}
+	
+	public function IsAllDLCsAvailable():bool
+	{
+		var dlcList : array<name>;
+		var i:int;
+		
+		GetDLCs(dlcList);
+		if(dlcList.Size() >= 20)
+		{
+			return true;
+		}
+		return false;
+	}
 }
