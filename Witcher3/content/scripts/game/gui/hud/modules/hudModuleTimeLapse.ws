@@ -70,4 +70,58 @@ class CR4HudModuleTimeLapse extends CR4HudModuleBase
 	{
 		ShowElement(bShow);
 	}
+	
+	public function SetTimeLapseMessageTest( localisationKey : string, optional doNotTranslate : bool )
+	{
+		var str : string;
+		
+		if ( doNotTranslate )
+		{
+			str = localisationKey;
+		}
+		else
+		{
+			str = GetLocStringByKeyExt(localisationKey);
+		}
+		if(str == "#" || StrUpper(str) == "#NONE")
+		{
+			m_fxSetTimeLapseMessage.InvokeSelfOneArg(FlashArgString(""));
+		}
+		else
+		{
+			m_fxSetTimeLapseMessage.InvokeSelfOneArg(FlashArgString(str));
+		}
+	}	
+}
+
+exec function testTurkish1()
+{
+	var hud : CR4ScriptedHud;
+	var timeLapseModule : CR4HudModuleTimeLapse;
+	
+	hud = (CR4ScriptedHud)theGame.GetHud();
+	if( hud )
+	{
+		timeLapseModule = (CR4HudModuleTimeLapse)hud.GetHudModule("TimeLapseModule");
+		if ( timeLapseModule )
+		{
+			timeLapseModule.SetTimeLapseMessageTest( GetLocStringById( 339458 ), true );
+		}
+	}
+}
+
+exec function testTurkish2()
+{
+	var hud : CR4ScriptedHud;
+	var timeLapseModule : CR4HudModuleTimeLapse;
+	
+	hud = (CR4ScriptedHud)theGame.GetHud();
+	if( hud )
+	{
+		timeLapseModule = (CR4HudModuleTimeLapse)hud.GetHudModule("TimeLapseModule");
+		if ( timeLapseModule )
+		{
+			timeLapseModule.SetTimeLapseMessageTest( "iiiııı", true );
+		}
+	}
 }

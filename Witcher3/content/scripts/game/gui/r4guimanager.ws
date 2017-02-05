@@ -132,6 +132,9 @@ import class CR4GuiManager extends CGuiManager
 	private var controllerDisconnected : bool;
 	default controllerDisconnected = false;
 	
+	private var waitingForGameLoaded : bool;
+	default waitingForGameLoaded = false;
+	
 	public var potalConfirmationPending : bool;
 	default potalConfirmationPending = false;
 	private var pendingPortalConfirmationPauseParam : bool;
@@ -243,10 +246,33 @@ import class CR4GuiManager extends CGuiManager
 	
 	private function  Update( deltaTime : float )
 	{
+		var rootMenu : CR4Menu;
+		var ingameMenu : CR4IngameMenu;
+		
 		if( guiSceneController )
 		{
 			guiSceneController.Update( deltaTime );
 		}
+		
+		if( waitingForGameLoaded && theGame.IsContentAvailable('content12') )
+		{
+			rootMenu = theGame.GetGuiManager().GetRootMenu();
+			if ( rootMenu )
+			{
+				ingameMenu = (CR4IngameMenu)rootMenu.GetSubMenu();
+				if ( ingameMenu )
+				{
+					ingameMenu.OnRefresh();
+				}
+			}
+			
+			waitingForGameLoaded = false;
+		}
+	}
+	
+	public function RefreshMainMenuAfterContentLoaded() : void
+	{
+		waitingForGameLoaded = true;
 	}
 	
 	public function GetLastRequestedCreditsIndex() : int

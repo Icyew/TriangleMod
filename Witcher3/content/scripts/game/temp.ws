@@ -14398,7 +14398,10 @@ exec function StopEffect( fx : name, optional entityTag : name )
 		ents[i].StopEffect( fx );
 	}
 }
-
+exec function DLCS()
+{
+	theGame.GetDLCManager().IsAllDLCsAvailable();
+}
 exec function Refill()
 {
 	thePlayer.inv.SingletonItemsRefillAmmoNoAlco(true);

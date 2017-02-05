@@ -48,6 +48,7 @@ class CR4MenuBase extends CR4Menu
 	protected var m_fxSetIsInCombat				: CScriptedFlashFunction;
 	protected var m_fxShowSecondaryModulesSFF 	: CScriptedFlashFunction;
 	protected var m_fxSetArabicAligmentMode  	: CScriptedFlashFunction;
+	protected var m_fxSetGameLanguage			: CScriptedFlashFunction;
 	protected var m_fxSetRestrictDirectClosing	: CScriptedFlashFunction;
 	protected var m_fxSwapAcceptCancel			: CScriptedFlashFunction;
 	
@@ -107,6 +108,7 @@ class CR4MenuBase extends CR4Menu
 		m_fxShowSecondaryModulesSFF		= m_flashModule.GetMemberFlashFunction( "ShowSecondaryModules" );
 		m_fxSetCurrentModule 			= m_flashModule.GetMemberFlashFunction( "setCurrentModule" );
 		m_fxSetArabicAligmentMode 		= m_flashModule.GetMemberFlashFunction( "setArabicAligmentMode" );
+		m_fxSetGameLanguage				= m_flashModule.GetMemberFlashFunction( "setGameLanguage" );
 		m_fxSetRestrictDirectClosing 	= m_flashModule.GetMemberFlashFunction( "setRestrictDirectClosing" );
 		m_fxSwapAcceptCancel	 		= m_flashModule.GetMemberFlashFunction( "swapAcceptCancel" );
 		m_fxSetGamepadType				= m_flashModule.GetMemberFlashFunction( "setGamepadType" );
@@ -520,6 +522,10 @@ class CR4MenuBase extends CR4Menu
 		if (m_fxSetArabicAligmentMode)
 		{
 			m_fxSetArabicAligmentMode.InvokeSelfOneArg( FlashArgBool( (language == "AR") ) );
+		}
+		if ( m_fxSetGameLanguage )
+		{
+			m_fxSetGameLanguage.InvokeSelfOneArg( FlashArgString( language ) );
 		}
 	}
 	

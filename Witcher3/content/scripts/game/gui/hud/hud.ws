@@ -396,7 +396,9 @@ class CR4ScriptedHud extends CR4Hud
 		
 		UpdateInputDeviceType();
 		
-		CheckDLCMessagePending();
+		
+		
+		
 		setGameLanguage();
 		ToogleMinimalBuffView(true);
 	}
