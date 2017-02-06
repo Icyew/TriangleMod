@@ -310,6 +310,11 @@ function TOpts_GreenGivesToxicity() : bool
 	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'GreenGivesToxicity' );
 }
 
+function TOpts_PoisonedBladesCritBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'PoisonedBladesCritBonus' ) ) / 100;
+}
+
 // ---- Alchemy End ---- //
 
 // ---- Stamina Begin ---- //

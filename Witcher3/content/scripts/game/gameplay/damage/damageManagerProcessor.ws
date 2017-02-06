@@ -712,6 +712,11 @@ class W3DamageManagerProcessor extends CObject
 				baseChance = CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Alchemy_s12, 'skill_chance', false, true));
 				perOilLevelChance = CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Alchemy_s12, 'oil_level_chance', false, true));						
 				chance = baseChance * skillLevel + perOilLevelChance * oilLevel;
+				// Triangle poisoned blades
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s12) && attackAction.IsCriticalHit()) {
+					chance += TOpts_PoisonedBladesCritBonus();
+				}
+				// Triangle end
 				
 				
 				if(RandF() < chance)

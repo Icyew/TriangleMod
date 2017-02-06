@@ -2427,6 +2427,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s12, 'skill_chance', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg * 100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle poisoned blades
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s12)) {
+					baseString += " Critical hits have a " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_PoisonedBladesCritBonus() * 100, 5, skillLevel)) + "% bonus chance to poison.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s13:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s13, 'vitality', false, false)) * skillLevel;
