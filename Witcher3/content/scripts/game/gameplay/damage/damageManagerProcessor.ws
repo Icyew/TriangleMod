@@ -297,6 +297,7 @@ class W3DamageManagerProcessor extends CObject
 		var witcher : W3PlayerWitcher;
 		var canLog : bool;
 		var immortalityChannels : array<EActorImmortalityChanel>;
+		var weakBuff : W3Effect_TWeakness; // Triangle protective coating, spell sword, alt stamina
 		
 		canLog = theGame.CanLog();
 		
@@ -414,6 +415,11 @@ class W3DamageManagerProcessor extends CObject
 		// Triangle resolve
 		if (actorAttacker.HasBuff(EET_TResolve))
 			actorAttacker.RemoveAllBuffsOfType(EET_TResolve);
+		// Triangle protective coating, spell sword, alt stamina
+		// This should happen after all damage is calculated
+		if (actorAttacker && actorAttacker.HasBuff(EET_TOneTimeWeakness)) {
+			actorAttacker.RemoveBuff(EET_TOneTimeWeakness);
+		}
 		// Triangle end
 
 		if(size == 0 && canLog)
@@ -549,6 +555,7 @@ class W3DamageManagerProcessor extends CObject
 		var i : int;
 		var resistPoints, resistPercents : float;
 		var spellPower : SAbilityAttributeValue;
+		var attrVal : SAbilityAttributeValue;
 
 
 		witcher = (W3PlayerWitcher)actorAttacker;
@@ -580,7 +587,8 @@ class W3DamageManagerProcessor extends CObject
 						}
 					} else if (spellSwordSign == ST_Axii) {
 						GetDamageResists(theGame.params.DAMAGE_NAME_WILL, resistPoints, resistPercents);
-						attackAction.AddEffectInfo(EET_TWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative);
+						attrVal.valueMultiplicative = TOpts_AxiiPowerWeaknessPenalty();
+						attackAction.AddEffectInfo(EET_TOneTimeWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative, attrVal);
 					}
 				}
 				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit(), 5));
@@ -696,6 +704,7 @@ class W3DamageManagerProcessor extends CObject
 		var oilLevel, skillLevel, i : int;
 		var baseChance, perOilLevelChance, chance : float;
 		var buffs : array<name>;
+		var attrVal : SAbilityAttributeValue; // Triangle protective coating
 	
 		
 		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s12) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
@@ -731,6 +740,13 @@ class W3DamageManagerProcessor extends CObject
 				}
 			}
 		}
+		// Triangle protective coating
+		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s05) &&
+				TUtil_IsCustomSkillEnabled(S_Alchemy_s05) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) ) {
+			attrVal.valueMultiplicative = TOpts_ProtectiveCoatingWeaknessPenalty();
+			action.AddEffectInfo(EET_TWeakness, TOpts_ProtectiveCoatingDuration(), attrVal);
+		}
+		// Triangle end
 	}
 	
 	
@@ -1714,7 +1730,7 @@ class W3DamageManagerProcessor extends CObject
 			
 			
 			// Triangle protective coating moved this block so it takes effect after the mutagen above
-			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05))
+			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05) && !TUtil_IsCustomSkillEnabled(S_Alchemy_s05))
 			{
 				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
 				
@@ -1819,6 +1835,7 @@ class W3DamageManagerProcessor extends CObject
 		var fistfightDamageMult : float;
 		var burning : W3Effect_Burning;
 		var witcher : W3PlayerWitcher; // Triangle attack combos
+		var weakBuff : W3Effect_TWeakness; // Triangle protective coating, spell sword, alt stamina
 	
 		
 		GetDamageResists(dmgInfo.dmgType, resistPoints, resistPercents);
@@ -1845,7 +1862,7 @@ class W3DamageManagerProcessor extends CObject
 			
 		finalIncomingDamage = finalDamage;
 			
-		// Triangle heavy attack simplify alt stamina attack combos
+		// Triangle heavy attack simplify, alt stamina, attack combos
 		// Triangle TODO don't apply weak and maybe heavy attack mods to spell sword damage
 		if(playerAttacker && attackAction && !skipHeavyMod) {
 			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName())) {
@@ -1856,10 +1873,16 @@ class W3DamageManagerProcessor extends CObject
 				}
 			}
 		}
-		if (attackAction && attackAction.isWeak) {
-			finalDamage *= TOpts_WeakDamageMod();
-			if (actorAttacker.HasBuff(EET_TWeakness))
-				actorAttacker.RemoveBuff(EET_TWeakness);
+		// Triangle alt stamina, spell sword, protective coating
+		if (actorAttacker && (actorAttacker.HasBuff(EET_TWeakness) || actorAttacker.HasBuff(EET_TOneTimeWeakness))) {
+			weakBuff = (W3Effect_TWeakness)actorAttacker.GetBuff(EET_TWeakness);
+			if (weakBuff) {
+				finalDamage *= weakBuff.WeakMod();
+			}
+			weakBuff = (W3Effect_TOneTimeWeakness)actorAttacker.GetBuff(EET_TOneTimeWeakness);
+			if (weakBuff) {
+				finalDamage *= weakBuff.WeakMod();
+			}
 		}
 		// Triangle end
 		

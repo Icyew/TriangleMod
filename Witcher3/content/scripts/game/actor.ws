@@ -96,10 +96,6 @@ import abstract class CActor extends CGameplayEntity
 	
 	private var effectsUpdateTicking : bool;		default effectsUpdateTicking = false;
 	
-	// Triangle alt stamina spell sword
-	// Moved here so npcs can get weakness. I know it's weird to have both the effect and non-effect versions but im tired ok
-	public var isWeak						: bool; default isWeak = false; // If true, deal less damage on next hit
-	// Triangle end
 	
 	public function GetIgnoreImmortalDodge() : bool
 	{
@@ -2560,9 +2556,8 @@ import abstract class CActor extends CGameplayEntity
 				hudModuleDamageType = EFVT_None;
 			}			
 		
-			// Triangle alt stamina
-			attackAction = (W3Action_Attack)action;
-			if (attackAction.isWeak) {
+			// Triangle alt stamina, enemy mutations
+			if (playerAttacker && playerAttacker.HasBuff(EET_TWeakness)) {
 				ShowFloatingValue(EFVT_Triangle, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) , "Weak!");
 			} else {
 				ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT));

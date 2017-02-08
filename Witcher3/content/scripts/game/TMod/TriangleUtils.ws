@@ -455,6 +455,8 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
             return TOpts_DelayedRecoverySlowFactor() > 0;
         case S_Alchemy_s12:
             return TOpts_PoisonedBladesCritBonus() > 0;
+        case S_Alchemy_s05:
+            return TOpts_ProtectiveCoatingDuration() > 0;
         default:
             return false;
     }

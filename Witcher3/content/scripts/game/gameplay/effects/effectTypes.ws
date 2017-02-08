@@ -149,7 +149,9 @@ enum EEffectType
 	EET_TAcquiredTolerance,
 	// Triangle spell sword
 	EET_TSpellSword,
+	// Triangle protective coating, spell sword
 	EET_TWeakness,
+	EET_TOneTimeWeakness,
 	// Triangle end
 
 	

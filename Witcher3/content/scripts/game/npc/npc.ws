@@ -19,6 +19,13 @@ enum EConverserType
 	CT_Child
 };
 
+// Triangle spell sword, protective coating
+struct ExtPrefixEntry
+{
+	var prefix : string;
+	var sourceName : string;
+}
+// Triangle end
 
 statemachine import class CNewNPC extends CActor
 {
@@ -26,6 +33,8 @@ statemachine import class CNewNPC extends CActor
 	// Triangle level scaling used to check if you need to re-apply or remove jitter to a creature
 	saved var prevJitterOption	  : int;			  default prevJitterOption = 0;
 	saved var cachedJitter		  : int;			  default cachedJitter = 0;
+	// Triangle spell sword, protective coating
+	var extPrefixes				  : array<ExtPrefixEntry>;
 	// Triangle whirl
 	var stunLocked				  : bool;
 	// Triangle end
@@ -1255,16 +1264,38 @@ statemachine import class CNewNPC extends CActor
 	// Triangle enemy mutations
 	public function GetMutatedDisplayName() : string
 	{
-		return GetWeakPrefix() + TUtil_GetMutatedPrefix(this) + GetDisplayName();
+		return GetExtPrefixString() + TUtil_GetMutatedPrefix(this) + GetDisplayName();
+	}
+
+	// Triangle spell sword, protective coating
+	public function AddPrefix(prefix : string, sourceName : string) {
+		var prefEntry : ExtPrefixEntry;
+		prefEntry.prefix = prefix;
+		prefEntry.sourceName = sourceName;
+		extPrefixes.PushBack(prefEntry);
+	}
+
+	// Triangle spell sword, protective coating
+	public function RemovePrefix(sourceName : string, optional prefix : string) {
+		var i : int;
+		for (i = extPrefixes.Size() - 1; i >= 0; i -= 1) {
+			if (extPrefixes[i].sourceName == sourceName && (!prefix || extPrefixes[i].prefix == prefix)) {
+				extPrefixes.Erase(i);
+				break;
+			}
+		}
 	}
 
 	// Triangle spell sword
-	public function GetWeakPrefix() : string
+	public function GetExtPrefixString() : string
 	{
-		if (isWeak)
-			return "Weak ";
-		else
-			return "";
+		var i : int;
+		var prefix : string;
+		prefix = "";
+		for (i = 0; i < extPrefixes.Size(); i += 1) {
+			prefix += extPrefixes[i].prefix + " ";
+		}
+		return prefix;
 	}
 
 	// Triangle enemy mutations

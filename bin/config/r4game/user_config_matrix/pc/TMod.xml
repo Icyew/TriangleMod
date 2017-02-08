@@ -118,6 +118,7 @@
 				<Entry varId="YrdenPowerRadius"					value="5"/>
 				<Entry varId="QuenPowerHealRatio"				value="0.5"/>
 				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
+				<Entry varId="AxiiPowerWeaknessPenalty"			value="50"/>
 				<Entry varId="QuenRemoveDoT"					value="0"/>
 			</Preset>
 		</PresetsArray>
@@ -147,6 +148,7 @@
 			<Var id="YrdenPowerRadius"	 	 		 displayName="Yrden power: radius of splash damage (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenPowerHealRatio"	 	 	 displayName="Quen power: fraction of dmg converted to hp instead (0 vanilla)" 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiPowerWeaknessPenalty"	 	 displayName="Axii power: % damage penalty" 											displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenRemoveDoT"	 	 		 	 displayName="Quen: Remove DoT effects on cast (true vanilla)" 							displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
@@ -166,6 +168,8 @@
 				<Entry varId="AdaptationDiscountPerLevel"			value="4" />
 				<Entry varId="AdaptationMaxDiscount"				value="40" />
 				<Entry varId="PoisonedBladesCritBonus"				value="50" />
+				<Entry varId="ProtectiveCoatingDuration"			value="10" />
+				<Entry varId="ProtectiveCoatingWeaknessPenalty"		value="25" />
 				<Entry varId="FixativeMultBonus"					value="2" />
 				<Entry varId="FixativeMaxBonusPerLevel"				value="4" />
 				<Entry varId="AltSynergyPercPerLevel"				value="20" />
@@ -190,6 +194,8 @@
 			<Var id="AdaptationDiscountPerLevel"			displayName="Adaptation: % discount for decocs after first/level (0 for vanilla)"		displayType="SLIDER;0.00;20;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PoisonedBladesCritBonus"				displayName="Poisoned blades: bonus % to poison on crits (0 vanilla)"					displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ProtectiveCoatingDuration"				displayName="Protective coating: duration (0 vanilla)"									displayType="SLIDER;0.00;60;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ProtectiveCoatingWeaknessPenalty"		displayName="Protective coating: % damage penalty"										displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMultBonus"						displayName="Fixative: Crit effect chance multiplier (1 for vanilla)"					displayType="SLIDER;1.00;10;36" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMaxBonusPerLevel"				displayName="Fixative: Max additional crit effect chance per effect/level"				displayType="SLIDER;0.00;40;120" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltSynergyPercPerLevel"				displayName="Synergy: % mod/level for alternate Synergy (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />

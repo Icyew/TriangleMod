@@ -315,6 +315,16 @@ function TOpts_PoisonedBladesCritBonus() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'PoisonedBladesCritBonus' ) ) / 100;
 }
 
+function TOpts_ProtectiveCoatingDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'ProtectiveCoatingDuration' ) );
+}
+
+function TOpts_ProtectiveCoatingWeaknessPenalty() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'ProtectiveCoatingWeaknessPenalty' ) ) / 100;
+}
+
 // ---- Alchemy End ---- //
 
 // ---- Stamina Begin ---- //
@@ -587,6 +597,11 @@ function TOpts_QuenPowerHealRatio() : float
 function TOpts_AxiiPowerWeaknessDuration() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AxiiPowerWeaknessDuration' ) );
+}
+
+function TOpts_AxiiPowerWeaknessPenalty() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AxiiPowerWeaknessPenalty' ) ) / 100;
 }
 
 function TOpts_QuenRemoveDoT() : bool

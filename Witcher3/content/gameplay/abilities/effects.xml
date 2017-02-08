@@ -240,7 +240,10 @@
       <!-- Triangle spell sword -->
       <ability name="TSpellSwordEffect">
       </ability>
+      <!-- Triangle protective coating, spell sword -->
       <ability name="TWeaknessEffect">
+      <ability name="TOneTimeWeaknessEffect">
+      </ability>
       </ability>
       <!-- Triangle end -->
       <ability name="FrozenEffect">
@@ -485,7 +488,9 @@
     <effect name_name="TAcquiredToleranceEffect"      defaultAbilityName_name="TAcquiredToleranceEffect"            iconType_name="AcquiredTolerance" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_alchemy_s18"/>
     <!-- Triangle spell sword -->
     <effect name_name="TSpellSwordEffect"      defaultAbilityName_name="TSpellSwordEffect"            iconType_name="AardPower" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_magic_s12"/>
+    <!-- Triangle spell sword, protective coating -->
     <effect name_name="TWeaknessEffect"      defaultAbilityName_name="TWeaknessEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
+    <effect name_name="TOneTimeWeaknessEffect"      defaultAbilityName_name="TOneTimeWeaknessEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
     <!-- Triangle end -->
 	  <effect name_name="BasicQuenEffect"        	defaultAbilityName_name="BasicQuenEffect"   		iconType_name="Quen" 	 		showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_4" />
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />

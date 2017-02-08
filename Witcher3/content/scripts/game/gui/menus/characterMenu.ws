@@ -2309,7 +2309,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
 					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 					baseString += "<br>Cast Axii while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, weakens the target's next attack by " + NoTrailZeros((1 - TOpts_WeakDamageMod()) * 100) + "% for " + NoTrailZeros(TOpts_AxiiPowerWeaknessDuration()) +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, weakens the target's next attack by " + NoTrailZeros(TOpts_AxiiPowerWeaknessPenalty() * 100) + "% for " + NoTrailZeros(TOpts_AxiiPowerWeaknessDuration()) +
 						"s, and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), 5, skillLevel)) + "% per hit, and signs charge " +
 						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), 5, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
 					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
@@ -2392,6 +2392,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = 5 * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle protective coating
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s05)) {
+					baseString = "Oil applied to blades will weaken the target enemy type on hit, reducing their damage by " +
+						NoTrailZeros(100*TUtil_InterpolateLevelValue(TOpts_ProtectiveCoatingWeaknessPenalty(), 5, skillLevel)) + "% for " +
+						NoTrailZeros(TOpts_ProtectiveCoatingDuration()) + "s.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s06:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s06, 'ammo_bonus', false, false)) * skillLevel;

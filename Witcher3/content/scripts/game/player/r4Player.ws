@@ -9498,8 +9498,6 @@ statemachine abstract import class CR4Player extends CPlayer
 						
 							
 							
-							// Triangle alt stamina
-							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_LightAttack) || HasBuff(EET_TWeakness);
 							DrainStamina(ESAT_LightAttack);
 						
 						
@@ -9531,8 +9529,6 @@ statemachine abstract import class CR4Player extends CPlayer
 						
 							
 							
-							// Triangle alt stamina
-							isWeak = !thePlayer.HasStaminaToUseAction(ESAT_HeavyAttack) || HasBuff(EET_TWeakness);
 							DrainStamina(ESAT_HeavyAttack);
 						
 						

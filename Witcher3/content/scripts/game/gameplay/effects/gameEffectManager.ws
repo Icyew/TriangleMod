@@ -235,8 +235,10 @@ class W3GameEffectManager
 			// Triangle acquired tolerance
 			case EET_TAcquiredTolerance :		effects[effect] = new W3Effect_TAcquiredTolerance in this;			break;
 			// Triangle spell sword
-			case EET_TSpellSword :				effects[effect] = new W3Effect_TSpellSword in this;			break;
-			case EET_TWeakness :				effects[effect] = new W3Effect_TWeakness in this;			break;
+			case EET_TSpellSword :				effects[effect] = new W3Effect_TSpellSword in this;					break;
+			// Triangle protective coating, spell sword
+			case EET_TWeakness :				effects[effect] = new W3Effect_TWeakness in this;					break;
+			case EET_TOneTimeWeakness :			effects[effect] = new W3Effect_TOneTimeWeakness in this;			break;
 			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
@@ -654,7 +656,9 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "TAcquiredToleranceEffect" :							type = EET_TAcquiredTolerance;			break;
 		// Triangle spell sword
 		case "TSpellSwordEffect" :									type = EET_TSpellSword;					break;
+		// Triangle protective coating, spell sword
 		case "TWeaknessEffect" :									type = EET_TWeakness;					break;
+		case "TOneTimeWeaknessEffect" :								type = EET_TOneTimeWeakness;			break;
 		// Triangle end
 
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
@@ -875,7 +879,9 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_TAcquiredTolerance :					return 'TAcquiredToleranceEffect';
 		// Triangle spell sword
 		case EET_TSpellSword :							return 'TSpellSwordEffect';
+		// Triangle protective coating, spell sword
 		case EET_TWeakness :							return 'TWeaknessEffect';
+		case EET_TOneTimeWeakness :						return 'TOneTimeWeaknessEffect';
 		// Triangle end
 
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';

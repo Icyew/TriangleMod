@@ -6,33 +6,55 @@
 
 
 
-// Triangle spell sword
+// Triangle protective coating, spell sword, alt stamina, enemy mutations
 class W3Effect_TWeakness extends CBaseGameplayEffect
 {
 	default effectType = EET_TWeakness;
 	default isNegative = true;
+	protected var weaknessModifier : float;
+	protected var npcTarget : CNewNPC;
+	protected var prefix : string; default prefix = "Weakened";
+
+
 
 	event OnEffectAdded(optional customParams : W3BuffCustomParams)
 	{
-		target.isWeak = true;
+		npcTarget = (CNewNPC)target;
+		if (effectValue.valueMultiplicative < 0 || effectValue.valueMultiplicative > 1) {
+			TUtil_LogMessage("WARNING: weakness effectValue.valueMultiplicative is not between 0 and 1");
+		}
+		if (npcTarget) {
+			npcTarget.AddPrefix(prefix, sourceName);
+		}
 		super.OnEffectAdded(customParams);
+	}
+
+	public function WeakMod() : float
+	{
+		return 1 - effectValue.valueMultiplicative;
 	}
 
 	event OnEffectRemoved()
 	{
-		target.isWeak = false;
+		if (npcTarget) {
+			npcTarget.RemovePrefix(sourceName, prefix);
+		}
 		super.OnEffectRemoved();
 	}
 
 	protected function OnPaused()
 	{
-		target.isWeak = false;
+		if (npcTarget) {
+			npcTarget.RemovePrefix(sourceName, prefix);
+		}
 		super.OnPaused();
 	}
 
 	protected function OnResumed()
 	{
-		target.isWeak = true;
+		if (npcTarget) {
+			npcTarget.AddPrefix(prefix, sourceName);
+		}
 		super.OnResumed();
 	}
 }

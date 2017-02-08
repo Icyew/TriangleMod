@@ -3366,7 +3366,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						isWeak = HasBuff(EET_TWeakness); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( true, true );
 					} break;
 					
@@ -3388,7 +3387,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 				{
 					case BS_Pressed :
 					{
-						isWeak = !thePlayer.HasStaminaToUseAction(ESAT_Ability, SkillEnumToName(S_Sword_s02)) || HasBuff(EET_TWeakness); // Triangle alt stamina
 						actionResult = this.OnPerformSpecialAttack( false, true );
 					} break;
 					
@@ -3494,8 +3492,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
 				{
-					attackAction.isWeak = isWeak;
-					isWeak = HasBuff(EET_TWeakness); // only remove weakness if it wasn't added via effect
 					if (TUtil_ShouldAttackCombo(this, false))
 						IncAttackCombo(false);
 					if (TUtil_ShouldAttackCombo(this, true))
@@ -3504,8 +3500,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 				if(IsHeavyAttack(attackTypeName))
 				{
-					attackAction.isWeak = isWeak;
-					isWeak = HasBuff(EET_TWeakness); // only remove weakness if it wasn't added via effect
 					if (TUtil_ShouldAttackCombo(this, true))
 						IncAttackCombo(true);
 					if (TUtil_ShouldAttackCombo(this, false))
