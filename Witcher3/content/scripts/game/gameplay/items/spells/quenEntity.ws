@@ -78,11 +78,26 @@ statemachine class W3QuenEntity extends W3SignEntity
 	protected function GetSignStats()
 	{
 		var min, max : SAbilityAttributeValue;
+		var spellPower : SAbilityAttributeValue; // Triangle quen duration spellpower
 		
 		super.GetSignStats();
 		
 		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_duration', true, true));
 		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_health', false, true));
+		// Triangle quen base health
+		if (TOpts_QuenBaseHealth() > 0) {
+			shieldHealth = TOpts_QuenBaseHealth();
+		}
+		// Triangle quen base duration
+		if (TOpts_QuenBaseDuration() > 0) {
+			shieldDuration = TOpts_QuenBaseDuration();
+		}
+		// Triangle quen duration spellpower
+		if (TOpts_QuenSPAffectsDuration()) {
+			spellPower = owner.GetActor().GetTotalSignSpellPower(GetSkill());
+			shieldDuration *= spellPower.valueMultiplicative;
+		}
+		// Triangle end
 		initialShieldHealth = shieldHealth;
 		
 		if ( owner.CanUseSkill(S_Magic_s14))
@@ -497,6 +512,7 @@ state ShieldActive in W3QuenEntity extends Active
 		var damageTypes : array<SRawDamage>;
 		var i : int;
 		var isBleeding : bool;
+		var modifiedIncomingDamage : float; // Triangle quen ratio
 		
 		if( damageData.WasDodged() ||
 			damageData.GetHitReactionType() == EHRT_Reflect )
@@ -543,10 +559,15 @@ state ShieldActive in W3QuenEntity extends Active
 			incomingDamage = MaxF(0, damageData.processedDmg.vitalityDamage - directDamage);
 		}
 		
-		if(incomingDamage < parent.shieldHealth)
-			reducedDamage = incomingDamage;
+		// Triangle quen ratio
+		modifiedIncomingDamage = incomingDamage * TOpts_QuenAbsorptionRatio();
+		if(modifiedIncomingDamage < parent.shieldHealth)
+			reducedDamage = modifiedIncomingDamage;
+		else if (TOpts_QuenAbsorbLastHit())
+			reducedDamage = MaxF(modifiedIncomingDamage, parent.shieldHealth);
 		else
-			reducedDamage = MaxF(incomingDamage, parent.shieldHealth);
+			reducedDamage = parent.shieldHealth;
+		// Triangle end
 		
 		
 		if(!damageData.IsDoTDamage())

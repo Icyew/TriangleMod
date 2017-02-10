@@ -120,6 +120,11 @@
 				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
 				<Entry varId="AxiiPowerWeaknessPenalty"			value="50"/>
 				<Entry varId="QuenRemoveDoT"					value="0"/>
+				<Entry varId="QuenAbsorbLastHit"				value="1"/>
+				<Entry varId="QuenAbsorptionRatio"				value="50"/>
+				<Entry varId="QuenBaseHealth"					value="400"/>
+				<Entry varId="QuenBaseDuration"					value="10"/>
+				<Entry varId="QuenSPAffectsDuration"			value="1"/>
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -150,6 +155,11 @@
 			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AxiiPowerWeaknessPenalty"	 	 displayName="Axii power: % damage penalty" 											displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenRemoveDoT"	 	 		 	 displayName="Quen: Remove DoT effects on cast (true vanilla)" 							displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenAbsorbLastHit"	 	 		 displayName="Quen: fully absorb hit that breaks Quen (true vanilla)" 					displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenAbsorptionRatio"	 	 	 displayName="Quen: maximum % of damage absorbed (1 vanilla)"							displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenBaseHealth"	 	 	 	 displayName="Quen: base shield health (0 vanilla)" 									displayType="SLIDER;0.00;1000;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenBaseDuration"	 	 	 	 displayName="Quen: base shield duration (0 vanilla)" 									displayType="SLIDER;0.00;60;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenSPAffectsDuration"	 	 	 displayName="Quen: spellpower affects duration (false vanilla)" 						displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">

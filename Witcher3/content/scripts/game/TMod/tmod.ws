@@ -609,6 +609,31 @@ function TOpts_QuenRemoveDoT() : bool
 	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenRemoveDoT' );
 }
 
+function TOpts_QuenAbsorbLastHit() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenAbsorbLastHit' );
+}
+
+function TOpts_QuenAbsorptionRatio() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenAbsorptionRatio' ) ) / 100;
+}
+
+function TOpts_QuenBaseHealth() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenBaseHealth' ) );
+}
+
+function TOpts_QuenBaseDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenBaseDuration' ) );
+}
+
+function TOpts_QuenSPAffectsDuration() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'QuenSPAffectsDuration' );
+}
+
 // ---- Signs End ---- //
 
 // ---- Leveling Begin ---- //
