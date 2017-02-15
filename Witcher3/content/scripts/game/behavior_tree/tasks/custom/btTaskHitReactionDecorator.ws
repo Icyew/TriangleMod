@@ -92,6 +92,10 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 		if (npc.StunLocked()) {
 			raiseGuardChance = 0;
 			counterChance = 0;
+		// Triangle enemy mutations
+		} else if (npc.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
+			raiseGuardChance = TUtil_SquareInvProbInt(raiseGuardChance);
+			counterChance = TUtil_SquareInvProbInt(counterChance);
 		}
 		// Triangle end
 	}

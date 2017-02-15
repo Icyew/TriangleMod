@@ -491,3 +491,15 @@ function TUtil_InterpolateLevelValue(maxValue : float, maxLevel : int, level : f
 {
     return (level / maxLevel) * maxValue;
 }
+
+// Triangle enemy mutations
+function TUtil_SquareInvProbInt(val : int) : int
+{
+    return 100 - (100 - val) * (100 - val);
+}
+
+// Triangle enemy mutations
+function TUtil_SquareInvProbFloat(val : float) : float
+{
+    return 100 - (100 - val) * (100 - val);
+}

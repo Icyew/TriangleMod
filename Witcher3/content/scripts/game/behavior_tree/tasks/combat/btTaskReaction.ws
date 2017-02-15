@@ -127,6 +127,9 @@ class CBTTaskReaction extends IBehTreeTask
 		// Triangle whirl
 		if (npc.StunLocked()) {
 			dodgeChance = 0;
+		// Triangle enemy mutations
+		} else if (npc.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
+			dodgeChance = TUtil_SquareInvProbInt(dodgeChance);
 		}
 		// Triangle end
 		

@@ -201,6 +201,16 @@ class CBTTaskDodge extends CBTTaskPlayAnimationEventDecorator
 			dodgeChanceProjectile	= 0;
 			dodgeChanceFear			= 0;
 			counterChance 			= 0;
+		// Triangle enemy mutations
+		} else if (npc.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
+			dodgeChanceAttackLight	= TUtil_SquareInvProbInt(dodgeChanceAttackLight);
+			dodgeChanceAttackHeavy	= TUtil_SquareInvProbInt(dodgeChanceAttackHeavy);
+			dodgeChanceAard			= TUtil_SquareInvProbInt(dodgeChanceAard);
+			dodgeChanceIgni			= TUtil_SquareInvProbInt(dodgeChanceIgni);
+			dodgeChanceBomb			= TUtil_SquareInvProbInt(dodgeChanceBomb);
+			dodgeChanceProjectile	= TUtil_SquareInvProbInt(dodgeChanceProjectile);
+			dodgeChanceFear			= TUtil_SquareInvProbInt(dodgeChanceFear);
+			counterChance 			= TUtil_SquareInvProbFloat(counterChance);
 		}
 		// Triangle end
 	}
