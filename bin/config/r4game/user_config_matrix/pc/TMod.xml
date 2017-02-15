@@ -26,8 +26,9 @@
 				<Entry varId="HeavyAttackComboCritBonus"		value="0"	/>
 				<Entry varId="HeavyAttackComboCritDmgBonus"		value="0"	/>
 				<Entry varId="HeavyAttackComboDmgBonus"			value="8"	/>
-				<Entry varId="ResolveFocusGainPerLevel"			value="0.07"/>
-				<Entry varId="ResolveDamagePerLevel"			value="20"/>
+				<Entry varId="ResolvePenaltyReduction"			value="400"/>
+				<Entry varId="ResolveDamage"					value="100"/>
+				<Entry varId="ResolveCritChance"				value="100"/>
 				<Entry varId="ResolveDuration"					value="2.5" />
 				<Entry varId="CrushBlowBonusPerFocus"			value="0.75" />
 				<Entry varId="CrushBlowCritDmgBonus"			value="30" />
@@ -70,8 +71,9 @@
 			<Var id="HeavyAttackComboCritBonus"		 displayName="Strength Training: Bonus crit % per hit"									displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboCritDmgBonus"	 displayName="Strength Training: Bonus crit attack power per hit"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="HeavyAttackComboDmgBonus"		 displayName="Strength Training: Bonus attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ResolveFocusGainPerLevel"		 displayName="Resolve: Adrenaline gain on hit per level (0 for vanilla)"				displayType="SLIDER;0.00;1;100"			tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="ResolveDamagePerLevel"			 displayName="Resolve: Bonus attack power per level"							 		displayType="SLIDER;0.00;50;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolvePenaltyReduction"		 displayName="Resolve: % reduction in focus lost. can be > 100 (0 vanilla)"				displayType="SLIDER;0.00;1000;40"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDamage"			 		 displayName="Resolve: Bonus attack power"							 					displayType="SLIDER;0.00;500;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveCritChance"		 		 displayName="Resolve: Bonus crit chance"							 					displayType="SLIDER;0.00;100;20"		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="CrushBlowCritDmgBonus"			 displayName="Crushing Blows: Bonus crit attack bonus per hit"							displayType="SLIDER;0.00;40;80"			tags="customNames;nonLocalized;customDisplayName" />

@@ -475,7 +475,7 @@
     <!-- Triangle enemy mutations -->
     <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EffectAxii" showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_5"  targetEffectName_name="axii_guardian" />
     <!-- Triangle resolve -->
-    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="Resolve" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s5"/>
+    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="Resolve" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s16"/>
     <!-- Triangle light attack combo -->
     <effect name_name="TLightComboEffect"      defaultAbilityName_name="TLightComboEffect"            iconType_name="FastAttack" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
     <!-- Triangle heavy attack combo -->
@@ -644,7 +644,7 @@
     <!-- Triangle acquired tolerance -->
     <effect iconType_name="AcquiredTolerance"         path="icons\Skills\Alchemy\alchemy_s18.png" />
     <!-- Triangle resolve -->
-    <effect iconType_name="Resolve"         path="icons\Skills\Sword\sword_s5.png" />
+    <effect iconType_name="Resolve"         path="icons\Skills\Sword\sword_s16.png" />
     <!-- Triangle light attack combo -->
     <effect iconType_name="FastAttack"         path="icons\Skills\core\sword_1.png" />
     <!-- Triangle heavy attack combo -->

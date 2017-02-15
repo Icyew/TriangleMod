@@ -431,6 +431,8 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
             else
             return TOpts_CrushingBlowsBonusPerFocusPnt() > 0 ||
                     TOpts_CrushingBlowsCritDmgBonus() > 0;
+        case S_Sword_s16:
+            return TOpts_ResolvePenaltyReduction() > 0;
         case S_Sword_s17:
             if (!TUtil_AreAttackCombosEnabled(false))
                 return false;
@@ -439,8 +441,6 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
                     TOpts_PreciseBlowsCritChanceBonus() > 0;
         case S_Sword_s07:
             return TOpts_AnatomicalKnowledgeDuration() > 0;
-        case S_Sword_s16:
-            return TOpts_ResolveFocusGainPerLevel() > 0;
         case S_Magic_s12:
             return TOpts_AardPowerFrostDuration() > 0;
         case S_Magic_s07:
@@ -481,9 +481,9 @@ function TUtil_ShouldAttackCombo(player : CR4Player, isHeavy : bool) : bool
 }
 
 // Triangle everything
-function TUtil_ValueForLevel(skill : ESkill, maxValue : float, maxLevel : int) : float
+function TUtil_ValueForLevel(skill : ESkill, maxValue : float) : float
 {
-    return TUtil_InterpolateLevelValue(maxValue, maxLevel, thePlayer.GetSkillLevel(skill));
+    return TUtil_InterpolateLevelValue(maxValue, GetWitcherPlayer().GetSkillMaxLevel(skill), thePlayer.GetSkillLevel(skill));
 }
 
 // Triangle everything

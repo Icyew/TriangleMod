@@ -85,14 +85,19 @@ function TOpts_RendChargeBonus() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'RendChargeBonus' ) );
 }
 
-function TOpts_ResolveFocusGainPerLevel() : float
+function TOpts_ResolvePenaltyReduction() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveFocusGainPerLevel' ));
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolvePenaltyReduction' ) ) / 100;
 }
 
-function TOpts_ResolveDamagePerLevel() : float
+function TOpts_ResolveDamage() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDamagePerLevel' ) ) / 100;
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveDamage' ) ) / 100;
+}
+
+function TOpts_ResolveCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionCombat', 'ResolveCritChance' ) ) / 100;
 }
 
 function TOpts_ResolveDuration() : float

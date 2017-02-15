@@ -149,8 +149,11 @@ class W3DamageManagerProcessor extends CObject
 			// Triangle resolve
 			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) ) {
 				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
-					focusDrain = 0;
-					thePlayer.GainStat(BCS_Focus, TOpts_ResolveFocusGainPerLevel() * thePlayer.GetSkillLevel(S_Sword_s16));
+					focusDrain *= 1 - TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolvePenaltyReduction());
+					if (focusDrain < 0) {
+						thePlayer.GainStat(BCS_Focus, -1 * focusDrain);
+						focusDrain = 0;
+					}
 				} else {
 					focusDrain *= 1 - (CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, true) ) * thePlayer.GetSkillLevel(S_Sword_s16));
 				}
@@ -413,8 +416,9 @@ class W3DamageManagerProcessor extends CObject
 		else
 			ProcessSpellSwordStuff();
 		// Triangle resolve
-		if (actorAttacker.HasBuff(EET_TResolve))
+		if (actorAttacker.HasBuff(EET_TResolve)) {
 			actorAttacker.RemoveAllBuffsOfType(EET_TResolve);
+		}
 		// Triangle protective coating, spell sword, alt stamina
 		// This should happen after all damage is calculated
 		if (actorAttacker && actorAttacker.HasBuff(EET_TOneTimeWeakness)) {
@@ -591,7 +595,7 @@ class W3DamageManagerProcessor extends CObject
 						attackAction.AddEffectInfo(EET_TOneTimeWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative, attrVal);
 					}
 				}
-				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit(), 5));
+				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit()));
 			}
 
 			if (bonusDmgInfo.dmgVal > 0)
@@ -808,16 +812,16 @@ class W3DamageManagerProcessor extends CObject
 					// Triangle attack combos
 					if(playerAttacker.CanUseSkill(S_Sword_s21) && TUtil_IsCustomSkillEnabled(S_Sword_s21))
 					{
-						critChance += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritBonus()) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
 					}
 					if(playerAttacker.CanUseSkill(S_Sword_s04) && TUtil_IsCustomSkillEnabled(S_Sword_s04))
 					{
-						critChance += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(true); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritBonus()) * GetWitcherPlayer().GetAttackComboLength(true); // Combo starts at 2 hits!
 					}
 					// Triangle precise blows
 					if(playerAttacker.CanUseSkill(S_Sword_s17) && TUtil_IsCustomSkillEnabled(S_Sword_s17))
 					{
-						critChance += TUtil_ValueForLevel(S_Sword_s17, TOpts_PreciseBlowsCritChanceBonus(), 5) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+						critChance += TUtil_ValueForLevel(S_Sword_s17, TOpts_PreciseBlowsCritChanceBonus()) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
 					}
 					// Triangle crits
 					// Triangle TODO is EET_CounterStrikeHit like stagger?
@@ -839,6 +843,10 @@ class W3DamageManagerProcessor extends CObject
 					// 	critChance += 1;
 					// }
 					critChance += TOpts_CritChanceBonus();
+					// Triangle resolve
+					if (playerAttacker.HasBuff(EET_TResolve)) {
+						critChance += TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveCritChance());
+					}
 					// Triangle end
 
 					
@@ -1642,7 +1650,7 @@ class W3DamageManagerProcessor extends CObject
 					{
 						witcherPlayer = (W3PlayerWitcher)playerAttacker;
 						if (witcherPlayer && TUtil_IsCustomSkillEnabled(S_Sword_s08)) {
-							criticalDamageBonus.valueAdditive += TUtil_ValueForLevel(S_Sword_s08, TOpts_CrushingBlowsCritDmgBonus(), 5) * witcherPlayer.GetAttackComboLength(true);
+							criticalDamageBonus.valueAdditive += TUtil_ValueForLevel(S_Sword_s08, TOpts_CrushingBlowsCritDmgBonus()) * witcherPlayer.GetAttackComboLength(true);
 						} else
 						criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * playerAttacker.GetSkillLevel(S_Sword_s08);
 					}
@@ -1655,11 +1663,11 @@ class W3DamageManagerProcessor extends CObject
 				witcherPlayer = (W3PlayerWitcher)playerAttacker;
 				if(witcherPlayer && playerAttacker.CanUseSkill(S_Sword_s04))
 				{
-					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(true) * TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritDmgBonus(), 5);
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(true) * TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritDmgBonus());
 				}
 				if(witcherPlayer && playerAttacker.CanUseSkill(S_Sword_s21))
 				{
-					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(false) * TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritDmgBonus(), 5);
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(false) * TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritDmgBonus());
 				}
 				// Triangle crits
 				if (playerAttacker) {
@@ -1869,7 +1877,7 @@ class W3DamageManagerProcessor extends CObject
 				finalDamage *= TOpts_HeavyAttackDamageMod();
 				witcher = (W3PlayerWitcher)playerAttacker;
 				if (witcher) {
-					finalDamage *= 1 + TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboMultBonus(), 5) * witcher.GetAttackComboLength(true);
+					finalDamage *= 1 + TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboMultBonus()) * witcher.GetAttackComboLength(true);
 				}
 			}
 		}

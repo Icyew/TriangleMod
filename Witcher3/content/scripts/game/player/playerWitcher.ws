@@ -2038,7 +2038,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		// Triangle endure pain
 		if (CanUseSkill(S_Alchemy_s20) && !damageData.IsDoTDamage() && damageData.processedDmg.vitalityDamage > 0 && TOpts_EndurePainDamageRatioPerLevel() > 0) {
 			params.effectType = EET_TIgnorePain;
-			params.creator = this;
+			params.creator = actorAttacker; // This is important. otherwise, tresolve effect will be immediately removed when added
 			params.sourceName = "Endure Pain";
 			params.duration = TOpts_EndurePainDuration();
 			dmgRatio = TOpts_EndurePainDamageRatioPerLevel() * GetSkillLevel(S_Alchemy_s20);
@@ -2078,13 +2078,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 			DrainStamina(ESAT_FixedValue, GetStat(BCS_Stamina), 2);
 		}
 		// Triangle resolve
-		if (CanUseSkill(S_Sword_s16) && action.DealsAnyDamage()) {
+		if (CanUseSkill(S_Sword_s16) && TUtil_IsCustomSkillEnabled(S_Sword_s16) && !action.IsDoTDamage() && action.DealsAnyDamage()) {
 			params.effectType = EET_TResolve;
 			params.creator = this;
 			params.sourceName = "Resolve";
 			params.duration = TOpts_ResolveDuration();
-			params.effectValue.valueMultiplicative = TOpts_ResolveDamagePerLevel() * GetSkillLevel(S_Sword_s16);
+			params.effectValue.valueMultiplicative = TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveDamage());
+			RemoveAllBuffsOfType(EET_TResolve);
 			AddEffectCustom(params);
+			TUtil_LogMessage("resolve");
 		}
 		// Triangle end
 
@@ -8711,7 +8713,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 
 		// Triangle spell sword
-		AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign(), 5));
+		AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign()));
 		// Triangle end
 	}
 	
