@@ -2313,7 +2313,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
 		
-		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && GetStat( BCS_Focus ) >= 3 && CanUseSkill( S_Alchemy_s07 ) )
+		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && (GetStat( BCS_Focus ) >= 3 || TOpts_NoHunterInstinctFocusReq()) && CanUseSkill( S_Alchemy_s07 ) ) // Triangle hunter instinct
 		{
 			monsterBonusType = MonsterCategoryToAttackPowerBonus( victimMonsterCategory );
 			oilBonus = inv.GetItemAttributeValue( weaponId, monsterBonusType );

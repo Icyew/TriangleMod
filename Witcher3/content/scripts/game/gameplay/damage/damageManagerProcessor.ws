@@ -847,6 +847,12 @@ class W3DamageManagerProcessor extends CObject
 					if (playerAttacker.HasBuff(EET_TResolve)) {
 						critChance += TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveCritChance());
 					}
+					// Triangle hunter instinct
+					if(TUtil_IsCustomSkillEnabled(S_Alchemy_s07) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) &&
+						(playerAttacker.GetStat( BCS_Focus ) >= 3 || TOpts_NoHunterInstinctFocusReq()) && playerAttacker.CanUseSkill( S_Alchemy_s07 ) ) // Triangle hunter instinct
+					{
+						critChance += TOpts_HunterInstinctCritChance();
+					}
 					// Triangle end
 
 					

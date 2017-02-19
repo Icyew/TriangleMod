@@ -2431,6 +2431,15 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;				
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle hunter instinct
+				if (TOpts_NoHunterInstinctFocusReq()) {
+					baseString = StrReplace(baseString, "When Adrenaline Points are at their maximum, c", "C");
+				}
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s07)) {
+					baseString += " In Addition, critical hit chance against the target is increased by " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_HunterInstinctCritChance() * 100, maxLevel, skillLevel)) + "%.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s08:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s08, 'item_count', false, false)) * skillLevel;

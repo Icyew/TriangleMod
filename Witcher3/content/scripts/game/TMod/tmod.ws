@@ -340,6 +340,16 @@ function TOpts_ActivePotsInsteadOfTox() : bool
 	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'ActivePotsInsteadOfTox' );
 }
 
+function TOpts_NoHunterInstinctFocusReq() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'NoHunterInstinctFocusReq' );
+}
+
+function TOpts_HunterInstinctCritChance() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'HunterInstinctCritChance' ) ) / 100;
+}
+
 // ---- Alchemy End ---- //
 
 // ---- Stamina Begin ---- //
