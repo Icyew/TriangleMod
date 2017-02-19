@@ -44,7 +44,7 @@
 				<Entry varId="WhirlStunLock"					value="0.35" />
 				<Entry varId="WhirlStunLockSlow"				value="66" />
 				<Entry varId="ColdBloodedCritMult"				value="1.5" />
-				<Entry varId="AnatomicalKnowledgeDuration"		value="8" />
+				<Entry varId="AnatomicalKnowledgeDuration"		value="0" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
