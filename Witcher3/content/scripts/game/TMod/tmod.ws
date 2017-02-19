@@ -280,14 +280,19 @@ function TOpts_AdaptationMaxDiscount() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AdaptationMaxDiscount' ) ) / 100;
 }
 
-function TOpts_FixativeMaxBonusPerLevel() : float
+function TOpts_FixativeMaxBonus() : float
 {
-	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeMaxBonusPerLevel' ) ) / 100;
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeMaxBonus' ) ) / 100;
 }
 
 function TOpts_FixativeMultBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeMultBonus' ) );
+}
+
+function TOpts_FixativeDurationBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'FixativeDurationBonus' ) ) / 100;
 }
 
 function TOpts_YellowSkillWildcard() : bool
@@ -323,6 +328,11 @@ function TOpts_GreenGivesToxicity() : bool
 function TOpts_PoisonedBladesCritBonus() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'PoisonedBladesCritBonus' ) ) / 100;
+}
+
+function TOpts_PoisonedBladesDuration() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'PoisonedBladesDuration' ) );
 }
 
 function TOpts_ProtectiveCoatingDuration() : float

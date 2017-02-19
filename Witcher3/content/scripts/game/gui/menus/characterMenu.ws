@@ -2426,6 +2426,17 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s06, 'ammo_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(Min(100, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle fixative
+				if (TOpts_FixativeDurationBonus() > 0) {
+					baseString += " Durations of Poisoned Blades and Protective Coating effects are increased by " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_FixativeDurationBonus() * 100, maxLevel, skillLevel)) + "%.";
+				}
+				if (TOpts_FixativeMultBonus() != 1) {
+					baseString += " Critical effects from sword attacks are " +
+						NoTrailZeros(TOpts_FixativeMultBonus()) + "x as likely to activate, with a maximum bonus of " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_FixativeMaxBonus() * 100, maxLevel, skillLevel)) + "% per effect.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s07:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;				
@@ -2466,6 +2477,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg * 100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle poisoned blades
+				if (TOpts_PoisonedBladesDuration() > 0) {
+					baseString += " Poison lasts for " + NoTrailZeros(TOpts_PoisonedBladesDuration()) + "s.";
+				}
 				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s12)) {
 					baseString += " Critical hits have a " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_PoisonedBladesCritBonus() * 100, maxLevel, skillLevel)) + "% bonus chance to poison.";
 				}

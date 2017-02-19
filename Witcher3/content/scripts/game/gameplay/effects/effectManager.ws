@@ -1548,7 +1548,7 @@ class W3EffectManager
 			witcher = (W3PlayerWitcher)action.attacker;
 			theGame.GetMonsterParamsForActor(actionVictim, victimMonsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
 			if (attackAction && witcher && witcher.CanUseSkill(S_Alchemy_s06) && witcher.inv.ItemHasActiveOilApplied(attackAction.GetWeaponId(), victimMonsterCategory)) {
-				applyChance = MinF(applyChance * TOpts_FixativeMultBonus(), applyChance + TOpts_FixativeMaxBonusPerLevel() * witcher.GetSkillLevel(S_Alchemy_s06));
+				applyChance = MinF(applyChance * TOpts_FixativeMultBonus(), applyChance + TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeMaxBonus()));
 			}
 		}
 		// Triangle end

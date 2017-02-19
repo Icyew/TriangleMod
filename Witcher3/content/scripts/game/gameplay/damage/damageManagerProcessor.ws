@@ -709,6 +709,7 @@ class W3DamageManagerProcessor extends CObject
 		var baseChance, perOilLevelChance, chance : float;
 		var buffs : array<name>;
 		var attrVal : SAbilityAttributeValue; // Triangle protective coating
+		var durationBonus : float; // Triangle fixative
 	
 		
 		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s12) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
@@ -739,6 +740,14 @@ class W3DamageManagerProcessor extends CObject
 					for(i=0; i<buffs.Size(); i+=1)
 					{
 						EffectNameToType(buffs[i], effectType, effectAbilityName);
+						// Triangle poisoned blades, fixative
+						if (TOpts_PoisonedBladesDuration() > 0) {
+							durationBonus = 1;
+							if (playerAttacker.CanUseSkill(S_Alchemy_s06) && TOpts_FixativeDurationBonus() > 0)
+								durationBonus += TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeDurationBonus());
+							action.AddEffectInfo(effectType, TOpts_PoisonedBladesDuration() * durationBonus, , effectAbilityName);
+						} else
+						// Triangle end
 						action.AddEffectInfo(effectType, , , effectAbilityName);
 					}
 				}
@@ -748,7 +757,10 @@ class W3DamageManagerProcessor extends CObject
 		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s05) &&
 				TUtil_IsCustomSkillEnabled(S_Alchemy_s05) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) ) {
 			attrVal.valueMultiplicative = TOpts_ProtectiveCoatingWeaknessPenalty();
-			action.AddEffectInfo(EET_TWeakness, TOpts_ProtectiveCoatingDuration(), attrVal);
+			durationBonus = 1;
+			if (playerAttacker.CanUseSkill(S_Alchemy_s06) && TOpts_FixativeDurationBonus() > 0)
+				durationBonus += TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeDurationBonus());
+			action.AddEffectInfo(EET_TWeakness, TOpts_ProtectiveCoatingDuration() * durationBonus, attrVal);
 		}
 		// Triangle end
 	}

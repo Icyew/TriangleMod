@@ -181,10 +181,12 @@
 				<Entry varId="AdaptationDiscountPerLevel"			value="4" />
 				<Entry varId="AdaptationMaxDiscount"				value="40" />
 				<Entry varId="PoisonedBladesCritBonus"				value="50" />
+				<Entry varId="PoisonedBladesDuration"				value="5" />
 				<Entry varId="ProtectiveCoatingDuration"			value="10" />
 				<Entry varId="ProtectiveCoatingWeaknessPenalty"		value="25" />
-				<Entry varId="FixativeMultBonus"					value="2" />
-				<Entry varId="FixativeMaxBonusPerLevel"				value="4" />
+				<Entry varId="FixativeMultBonus"					value="1" />
+				<Entry varId="FixativeMaxBonus"						value="0" />
+				<Entry varId="FixativeDurationBonus"				value="45" />
 				<Entry varId="AltSynergyPercPerLevel"				value="20" />
 				<Entry varId="YellowSkillWildcard"					value="1" />
 				<Entry varId="MinBlueBonus"							value="5" />
@@ -211,10 +213,12 @@
 			<Var id="AdaptationDiscountPerLevel"			displayName="Adaptation: % discount for decocs after first/level (0 for vanilla)"		displayType="SLIDER;0.00;20;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="PoisonedBladesCritBonus"				displayName="Poisoned blades: bonus % to poison on crits (0 vanilla)"					displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PoisonedBladesDuration"				displayName="Poisoned blades: duration of poison (0 vanilla)"							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ProtectiveCoatingDuration"				displayName="Protective coating: duration (0 vanilla)"									displayType="SLIDER;0.00;60;60" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="ProtectiveCoatingWeaknessPenalty"		displayName="Protective coating: % damage penalty"										displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="FixativeMultBonus"						displayName="Fixative: Crit effect chance multiplier (1 for vanilla)"					displayType="SLIDER;1.00;10;36" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="FixativeMaxBonusPerLevel"				displayName="Fixative: Max additional crit effect chance per effect/level"				displayType="SLIDER;0.00;40;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FixativeMaxBonus"						displayName="Fixative: Max additional crit effect chance per effect"					displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FixativeDurationBonus"					displayName="Fixative: % duration bonus for poisoned blades/protective coating"			displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltSynergyPercPerLevel"				displayName="Synergy: % mod/level for alternate Synergy (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="YellowSkillWildcard"					displayName="Mutagens: General skills can link to any mutagen"							displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MinBlueBonus"							displayName="Blue mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
