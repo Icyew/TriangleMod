@@ -2565,6 +2565,7 @@ import abstract class CActor extends CGameplayEntity
 			// Triangle end
 			// Triangle attack combos
 			witcherPlayer = (W3PlayerWitcher)action.attacker;
+			attackAction = (W3Action_Attack)action;
 			if(witcherPlayer)
 			{
 				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))

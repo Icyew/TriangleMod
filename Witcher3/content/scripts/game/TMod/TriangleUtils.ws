@@ -248,16 +248,19 @@ function TUtil_GetHealthType(actor : CActor) : EBaseCharacterStats
     return BCS_Vitality;
 }
 
+// Triangle frenzy, killing spree
+function TUtil_NonZeroToxOrActivePotion() : bool
+{
+    return (TOpts_ActivePotsInsteadOfTox() && GetWitcherPlayer().GetNonMutagenPotionBuffsCount() > 0) ||
+        (!TOpts_ActivePotsInsteadOfTox() && thePlayer.GetStat(BCS_Toxicity) > 0);
+}
+
 // Triangle frenzy
 function TUtil_CanFrenzy(player : CR4Player) : bool
 {
     var witcherPlayer : W3PlayerWitcher;
-    var mutagenArr : array<W3Mutagen_Effect>;
-    var potionArr : array<CBaseGameplayEffect>;
     witcherPlayer = (W3PlayerWitcher)player;
-    mutagenArr = witcherPlayer.GetMutagenBuffs();
-    potionArr = witcherPlayer.GetPotionBuffs();
-    return witcherPlayer && witcherPlayer.CanUseSkill(S_Alchemy_s16) && mutagenArr.Size() < potionArr.Size();
+    return witcherPlayer && witcherPlayer.CanUseSkill(S_Alchemy_s16) && TUtil_NonZeroToxOrActivePotion();
 }
 
 // Triangle everything
@@ -457,6 +460,8 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
             return TOpts_PoisonedBladesCritBonus() > 0;
         case S_Alchemy_s05:
             return TOpts_ProtectiveCoatingDuration() > 0;
+        case S_Alchemy_s16:
+            return TOpts_CustomFrenzy();
         default:
             return false;
     }

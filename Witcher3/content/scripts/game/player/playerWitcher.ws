@@ -2086,7 +2086,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 			params.effectValue.valueMultiplicative = TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveDamage());
 			RemoveAllBuffsOfType(EET_TResolve);
 			AddEffectCustom(params);
-			TUtil_LogMessage("resolve");
 		}
 		// Triangle end
 
@@ -3416,7 +3415,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			// Triangle attack combos
 			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
 				PauseComboTime('Whirl');
-				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboSpeedBonus() * GetWitcherPlayer().GetAttackComboCounter(false) / 100 + 1)); // triggers before combo inc, so use raw counter
+				if (TOpts_LightAttackComboSpeedBonus() > 0) {
+					expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboSpeedBonus() * GetWitcherPlayer().GetAttackComboCounter(false) / 100 + 1)); // triggers before combo inc, so use raw counter
+				}
 			}
 			// Triangle attack combos
 			if (action == EBAT_SpecialAttack_Heavy && stage == BS_Pressed) {
@@ -4440,6 +4441,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	// Triangle frenzy, killing spree
+	public final function GetNonMutagenPotionBuffsCount() : float
+	{
+		if(effectManager)
+		{
+			return effectManager.GetNonMutagenPotionBuffsCount();
+		}
+		return 0;
+	}
+
 	public final function GetMutagenBuffs() : array< W3Mutagen_Effect >
 	{
 		var null : array< W3Mutagen_Effect >;
@@ -4455,13 +4466,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	// Triangle adaptation
 	public final function GetMutagenBuffsCount() : float
 	{
-		var null : array< W3Mutagen_Effect >;
-		
 		if(effectManager)
 		{
 			return effectManager.GetMutagenBuffsCount();
 		}
-	
 		return 0;
 	}
 	

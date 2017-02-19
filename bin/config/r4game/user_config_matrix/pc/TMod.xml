@@ -173,6 +173,7 @@
 				<Entry varId="EndurePainDuration"					value="8"	/>
 				<Entry varId="AcquiredToleranceDiscount"			value="10"	/>
 				<Entry varId="AcquiredToleranceDurationPerLevel"	value="30"	/>
+				<Entry varId="CustomFrenzy"							value="1"/>
 				<Entry varId="DelayedRecoverySlowFactor"			value="5"/>
 				<Entry varId="AltTawnyOwlDuration"					value="0"	/>
 				<Entry varId="AltTawnyOwlBase"						value="0" />
@@ -190,6 +191,7 @@
 				<Entry varId="MinGreenBonus"						value="5"/>
 				<Entry varId="GreenGivesToxicity"					value="1" />
 				<Entry varId="MinRedBonus"							value="5" />
+				<Entry varId="ActivePotsInsteadOfTox"				value="1" />
 			</Preset>
 		</PresetsArray>
 		<VisibleVars>
@@ -199,6 +201,7 @@
 			<Var id="EndurePainDuration"			 		displayName="Endure Pain: Duration of DoT (total dmg stays the same)"					displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AcquiredToleranceDiscount"				displayName="Acquired Tolerance: Toxicity cost discount (0 for vanilla)"				displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AcquiredToleranceDurationPerLevel"		displayName="Acquired Tolerance: Duration per potion/level"								displayType="SLIDER;0.00;180;36" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomFrenzy"							displayName="Frenzy: Frenzy also grants super armor while attacking"					displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="DelayedRecoverySlowFactor"				displayName="Delayed Recovery: Duration/toxicity drain slowdown factor (0 vanilla)"		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltTawnyOwlDuration"					displayName="Tawny Owl: Constant duration for all levels (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AltTawnyOwlBase"						displayName="Tawny Owl: Always-on stamina regen for all levels (0 for vanilla)"			displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
@@ -216,6 +219,7 @@
 			<Var id="MinGreenBonus"							displayName="Green mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="GreenGivesToxicity"					displayName="Green mutagen: Grant toxicity instead of vitality"							displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="MinRedBonus"							displayName="Red mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ActivePotsInsteadOfTox"				displayName="All: Skills that need tox > 0 instead need active potion effects"			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
 		</VisibleVars>
 	</Group>
 	<Group id="TModOptionGeneral" displayName="Mods.TMod. General ">

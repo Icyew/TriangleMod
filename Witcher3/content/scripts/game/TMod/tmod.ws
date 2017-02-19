@@ -240,6 +240,11 @@ function TOpts_AcquiredToleranceDurationPerLevel() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'AcquiredToleranceDurationPerLevel' ) );
 }
 
+function TOpts_CustomFrenzy() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'CustomFrenzy' );
+}
+
 function TOpts_DelayedRecoverySlowFactor() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'DelayedRecoverySlowFactor' ) );
@@ -328,6 +333,11 @@ function TOpts_ProtectiveCoatingDuration() : float
 function TOpts_ProtectiveCoatingWeaknessPenalty() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'ProtectiveCoatingWeaknessPenalty' ) ) / 100;
+}
+
+function TOpts_ActivePotsInsteadOfTox() : bool
+{
+	return theGame.GetInGameConfigWrapper().GetVarValue('TModOptionAlchemy', 'ActivePotsInsteadOfTox' );
 }
 
 // ---- Alchemy End ---- //

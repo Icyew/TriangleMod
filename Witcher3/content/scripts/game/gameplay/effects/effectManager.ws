@@ -1066,6 +1066,23 @@ class W3EffectManager
 		return cnt;
 	}	
 	
+	// Triangle frenzy, killing spree
+	public final function GetNonMutagenPotionBuffsCount() : int
+	{
+		var i, cnt : int;
+		var mutagen : W3Mutagen_Effect;
+		
+		cnt = 0;
+		for(i=0; i<effects.Size(); i+=1)
+		{
+			mutagen = (W3Mutagen_Effect) effects[i];
+			if(effects[i].IsPotionEffect() && !mutagen)
+				cnt += 1;
+		}
+		
+		return cnt;
+	}	
+	
 	
 	public final function GetEffect(effectType : EEffectType, optional sourceName : string) : CBaseGameplayEffect
 	{

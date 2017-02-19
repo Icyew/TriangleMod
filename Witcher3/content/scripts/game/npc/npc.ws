@@ -2947,7 +2947,7 @@ statemachine import class CNewNPC extends CActor
 			SoundEvent( "grunt_vo_death" );
 		}
 						
-		if(damageAction.attacker == thePlayer && ((W3PlayerWitcher)thePlayer) && thePlayer.GetStat(BCS_Toxicity) > 0 && thePlayer.CanUseSkill(S_Alchemy_s17))
+		if(damageAction.attacker == thePlayer && ((W3PlayerWitcher)thePlayer) && TUtil_NonZeroToxOrActivePotion() && thePlayer.CanUseSkill(S_Alchemy_s17)) // Triangle killing spree
 		{
 			thePlayer.AddAbilityMultiple( SkillEnumToName(S_Alchemy_s17), thePlayer.GetSkillLevel(S_Alchemy_s17) );
 		}

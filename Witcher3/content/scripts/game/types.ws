@@ -287,7 +287,7 @@ function ModifyHitSeverityReaction(target : CActor, type : EHitReactionType) : E
 	severityReduction = RoundMath(CalculateAttributeValue(target.GetAttributeValue('hit_severity')));
 	// Triangle frenzy
 	witcherPlayer = (W3PlayerWitcher)target;
-	if (witcherPlayer && TUtil_CanFrenzy(witcherPlayer) && (witcherPlayer.IsInCombatAction_Attack() || witcherPlayer.GetIsSprinting())) {
+	if (witcherPlayer && TUtil_IsCustomSkillEnabled(S_Alchemy_s16) && TUtil_CanFrenzy(witcherPlayer) && (witcherPlayer.IsInCombatAction_Attack() || witcherPlayer.GetIsSprinting())) {
 		if (witcherPlayer.GetStat(BCS_Focus) >= (witcherPlayer.GetStatMax(BCS_Focus) - witcherPlayer.GetSkillLevel(S_Alchemy_s16) + 1)) {
 			severityReduction += 2;
 		}

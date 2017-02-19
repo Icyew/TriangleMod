@@ -2494,14 +2494,23 @@ class CR4CharacterMenu extends CR4MenuBase
 				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);
 				else if (skillLevel >= 3) 	baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel3Key);
 				else 						baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionKey);
-				baseString = StrReplace(baseString, "If Toxicity is above 0", "If a potion effect is active");
-				baseString += " If a potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", normal enemy attacks do not interrupt you while attacking or sprinting.";
+				if (TOpts_ActivePotsInsteadOfTox()) {
+					baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
+				}
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s16)) {
+					baseString += " If a non-mutagen potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", normal enemy attacks do not interrupt you while attacking or sprinting.";
+				}
 				break;
 			// Triangle end
 			case S_Alchemy_s17:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s17, 'critical_hit_chance', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle killing spree
+				if (TOpts_ActivePotsInsteadOfTox()) {
+					baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
+				}
+				// Triangle end
 				break;
 			// Triangle acquired tolerance
 			case S_Alchemy_s18:
