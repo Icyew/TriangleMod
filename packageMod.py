@@ -20,6 +20,7 @@ def main():
 
     modPath = None
     gamePath = None
+    modName = 'mod01TMod'
     scriptsOnly = False
     xmlOnly = False
     debug = False
@@ -29,6 +30,8 @@ def main():
             modPath = path.abspath(arg)
         elif opt == '-g':
             gamePath = arg
+        elif opt == '-n':
+            modName = arg
         elif opt == '-s':
             scriptsOnly = True
         elif opt == '-x':
@@ -51,7 +54,7 @@ def main():
     scriptPath = path.join(contentPath, 'scripts')
     batPath = path.join(modPath, 'pack.bat')
     binPath = path.join(modPath, 'bin')
-    studioPath = path.abspath(path.join(modPath, '..', 'ScriptStudio'))
+    studioPath = path.abspath(path.join(modPath, '..', 'TModScriptStudio'))
     studioLocal = path.join(studioPath, 'scripts', 'local')
     studioSource = path.join(studioPath, 'scripts', 'source')
 
@@ -99,8 +102,6 @@ def main():
 
     print('Necessary files have been copied to temp folder!')
 
-    modName = 'mod1111Triangle'
-
     dir_util.copy_tree(tempBinPath, path.join(gamePath, 'bin'))
     shutil.rmtree(tempBinPath)
 
@@ -115,7 +116,7 @@ def main():
     print('Script and bin files copied to game folder!')
 
     if not scriptsOnly:
-        p = Popen(path.join(modPath, 'pack.bat'))
+        p = Popen([path.join(modPath, 'pack.bat'), modName])
         p.wait()
 
     print('Finished!')

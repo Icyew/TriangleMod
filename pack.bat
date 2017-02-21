@@ -1,6 +1,8 @@
 cd "C:\W3Mods\Witcher_3_Mod_Tools\bin\x64"
-wcc_lite pack -dir="C:\W3mods\TMod\temp\Witcher3\content" -outdir="C:\GOG Games\The Witcher 3 Wild Hunt\Mods\mod1111Triangle\content"
-wcc_lite metadatastore -path="C:\GOG Games\The Witcher 3 Wild Hunt\Mods\mod1111Triangle\content"
+@echo off
+REM %1 is the mod's directory name
+wcc_lite pack -dir="C:\W3mods\TMod\temp\Witcher3\content" -outdir="C:\GOG Games\The Witcher 3 Wild Hunt\Mods\%1\content"
+wcc_lite metadatastore -path="C:\GOG Games\The Witcher 3 Wild Hunt\Mods\%1\content"
 
 
 

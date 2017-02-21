@@ -18,5 +18,5 @@ if [ -z "$path" ]; then
 	echo "Path -p must be defined";
 	exit 1;
 fi
-tail -f -n +1 "$path" | grep "TMod"
+tail -f -n +1 "$path" | grep -n "TMod"
 
