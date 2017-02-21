@@ -25,6 +25,12 @@ statemachine class CThrowable extends CProjectileTrajectory
 		return (CActor)EntityHandleGet(ownerHandle);
 	}
 	
+	//modSigns
+	public final function IsFromAimThrow() : bool
+	{
+		return isFromAimThrow;
+	}
+	
 	event OnProcessThrowEvent( animEventName : name )
 	{
 		var ownerPlayer : CR4Player;

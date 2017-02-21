@@ -5,346 +5,451 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
-<!-- ARMOR WITCHER -->
-	<ability name="Starting Armor 1 _Stats">
-		<weight							type="base"	min="5.08"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base" min="30"	max="30"	/>
-		<slashing_resistance_perc		type="base" min="0.18"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.09"				/>
-		<piercing_resistance_perc		type="base"	min="0.09"				/>
-		<rending_resistance_perc		type="base" min="0.12"				/>
-		<elemental_resistance_perc		type="base" min="0.15"				/>
+<!-- ARMOR WITCHER: STARTING UPGRADE, MEDIUM -->
+	<ability name="Starting Armor 1 _Stats"> <!-- q1, lvl 2 -->
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="1"					/>
+		<armor							type="base" min="35"				/>
+		<slashing_resistance_perc		type="base" min="0.10"				/>
+		<bludgeoning_resistance_perc	type="base" min="0.02"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base" min="0.10"				/>
+		<elemental_resistance_perc		type="base" min="0.10"				/>
 	</ability>
 	
 <!-- ARMOR LIGHT -->
-	<ability name="Light armor 01_crafted _Stats">
-		<weight							type="base"	min="1.62"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="32"	max="32"	/>
-		<slashing_resistance_perc		type="base"	min="0.15"				/>
-		<piercing_resistance_perc		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.1"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+	<ability name="Light armor 01_crafted _Stats"> <!-- Cidarian Gambeson - q1, lvl 1 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="1"					/>
+		<armor							type="base"	min="30"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
-	<ability name="Light armor 02_crafted _Stats">
-		<weight							type="base"	min="1.99"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="38"	max="38"	/>
-		<slashing_resistance_perc		type="base"	min="0.15"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.15"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+	<ability name="Light armor 02_crafted _Stats"> <!-- Skellige Gambeson - q1, lvl 2 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="1"					/>
+		<armor							type="base"	min="35"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
-	<ability name="Light armor 03_crafted _Stats">
-		<weight							type="base"	min="3.46"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="42"	max="42"	/>
-		<slashing_resistance_perc		type="base"	min="0.25"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.15"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 03_crafted _Stats"> <!-- Kaedveni Gambeson - q1, lvl 4, 1 slot -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="1"					/>
+		<armor							type="base"	min="45"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
-	<ability name="Light armor 04_crafted _Stats">
-		<weight							type="base"	min="3.62" 				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="54"	max="54"	/>
-		<slashing_resistance_perc		type="base" min="0.30"				/>
-		<piercing_resistance_perc		type="base" min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.15"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 04_crafted _Stats"> <!-- Spikeroog Aketon - q2, lvl 6, 1 slot -->
+		<weight							type="base"	min="6.5" 				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="55"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+		<focus_gain 					type="add"	min="0.05"				/>
 	</ability>
 
-<!-- Shiadhal -->
-	<ability name="Light armor 05_crafted _Stats"> 
-		<weight							type="base"	min="15.22"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base"	min="150" 	max="150"	/>
-		<slashing_resistance_perc		type="base"	min="0.25"				/>
-		<piercing_resistance_perc		type="base"	min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.1"				/>
-		<burning_resistance_perc		type="base"	min="1"					/>
-		<spell_power_igni				type="mult"	min="0.2"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
-	</ability>
-	
 <!-- Light armor 02 variant -->
-	<ability name="Light armor 06_crafted _Stats">
-		<weight							type="base"	min="3.89"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="62"	max="62"	/>
-		<slashing_resistance_perc		type="base" min="0.20"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.20"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 06_crafted _Stats"> <!-- Verden Archer's Gambeson - q2, lvl 8, 2 slots -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="65"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+		<poison_resistance_perc			type="base"	min="0.15"				/>
 	</ability>
 	
 <!-- Light armor 03 variant -->
-	<ability name="Light armor 07_crafted _Stats">
-		<weight							type="base"	min="4.51"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="67"	max="67"	/>
-		<slashing_resistance_perc		type="base" min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.25"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 07_crafted _Stats"> <!-- Bounty Hunter's Gambeson - q3, lvl 10, 2 slots -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="3"					/>
+		<armor							type="base"	min="75"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+		<spell_power_axii 				type="mult" min="0.1"				/>
 	</ability>
 
 <!-- Light armor 04 variant -->
-	<ability name="Light armor 08_crafted _Stats">
-		<weight							type="base"	min="5.28" 				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="92"	max="92"	/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+	<ability name="Light armor 08_crafted _Stats"> <!-- Ard Skellig Aketon - q3, lvl 15, 3 slots -->
+		<weight							type="base"	min="6.5" 				/>
+		<quality						type="add"	min="3"					/>
+		<armor							type="base"	min="100"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+		<spell_power_yrden 				type="mult" min="0.15"				/>
 	</ability>
 			
+	<ability name="q108 Light armor 09_crafted _Stats"> <!-- Freya's Warriors' Armor - q4, lvl 24, 3 slots -->
+		<weight							type="base" min="6.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base"	min="145"				/>
+		<slashing_resistance_perc		type="base"	min="0.08"				/>
+		<piercing_resistance_perc		type="base"	min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base"	min="0.08"				/>
+		<elemental_resistance_perc		type="base"	min="0.08"				/>
+		<vitality 						type="base" min="200"				/>
+		<quen_chance_on_projectile		type="add"	min="1.0"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+	</ability>
+
+<!-- RELIC LIGHT -->
+	<ability name="Light armor 05_crafted _Stats"> <!-- Shiadhal's Armor - q4, lvl 20, 3 slots -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base"	min="125" 				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
+		<burning_resistance_perc		type="base"	min="1"					/>
+		<spell_power_igni				type="mult"	min="0.1"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
+	</ability>
+	
 <!-- ARMOR MEDIUM -->
-	<ability name="Medium armor 01_crafted _Stats">
-		<weight							type="base"	min="12.65"				/>
-		<quality 						type="add"	min="2"		max="3"		/>
-		<armor							type="base"	min="92"	max="92"	/>
-		<slashing_resistance_perc		type="base"	min="0.2"				/>
-		<piercing_resistance_perc		type="base" min="0.15"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.2"				/>
+	<ability name="Medium armor 01_crafted _Stats"> <!-- Salmian Brigandine - q1, lvl 4, 1 slot -->
+		<weight							type="base"	min="13.5"				/>
+		<quality 						type="add"	min="1"					/>
+		<armor							type="base"	min="45"				/>
+		<slashing_resistance_perc		type="base"	min="0.12"				/>
+		<piercing_resistance_perc		type="base"	min="0.05"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
+		<rending_resistance_perc		type="base" min="0.12"				/>
+		<elemental_resistance_perc		type="base" min="0.12"				/>
 	</ability>
 	
-	<ability name="Medium armor 02_crafted _Stats">
-		<weight							type="base"	min="16.49"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="97"	max="97"	/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.15" 				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.2"				/>
+	<ability name="Medium armor 02_crafted _Stats"> <!-- Cidarian Cavalry Armor - q2, lvl 6, 1 slot -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="55"				/>
+		<slashing_resistance_perc		type="base"	min="0.12"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.12"				/>
+		<elemental_resistance_perc		type="base" min="0.12"				/>
+		<bleeding_resistance_perc		type="base"	min="0.15"				/>
 	</ability>
 	
-	<ability name="Medium armor 03_crafted _Stats">
-		<weight							type="base"	min="17.01"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="102"	max="102"	/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.20"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.20"				/>
+	<ability name="Medium armor 03_crafted _Stats"> <!-- Redanian Halberdier's Armor - q2, lvl 8, 2 slots -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="65"				/>
+		<slashing_resistance_perc		type="base"	min="0.14"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.14"				/>
+		<elemental_resistance_perc		type="base" min="0.14"				/>
+		<burning_resistance_perc		type="base"	min="0.15"				/>
 	</ability>
 	
-	<ability name="Medium armor 04_crafted _Stats">
-		<weight							type="base"	min="12.04"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base" min="107"	max="107"	/>
-		<slashing_resistance_perc		type="base"	min="0.35"				/>
-		<piercing_resistance_perc		type="base"	min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.25"				/>
+	<ability name="q108 Medium armor 03_crafted _Stats"> <!-- Redanian Halberdier's Armor - q4, lvl 24, 3 slots -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base"	min="145"				/>
+		<slashing_resistance_perc		type="base"	min="0.17"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base"	min="0.17" 				/>
+		<poison_resistance_perc 		type="base" min="1.0"				/>
+		<bleeding_resistance_perc 		type="base" min="1.0"				/>
+		<burning_resistance_perc 		type="base" min="1.0"				/>
+		<vitality 						type="base" min="300"				/>
+	</ability>
+	
+	<ability name="Medium armor 04_crafted _Stats"> <!-- Angrenian Cuirass - q3, lvl 10, 2 slots -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="3"					/>
+		<armor							type="base" min="75"				/>
+		<slashing_resistance_perc		type="base"	min="0.14"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.14"				/>
+		<elemental_resistance_perc		type="base" min="0.14"				/>
+		<quen_chance_on_projectile		type="add"	min="0.2"				/>
+	</ability>
+	
+<!-- RELIC MEDIUM -->
+	<ability name="Thyssen armor crafted _Stats"> <!-- Thyssen Armor - q4, lvl 15, 3 slots -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base"	min="100"				/>
+		<slashing_resistance_perc		type="base"	min="0.14"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.14"				/>
+		<elemental_resistance_perc		type="base" min="0.14"				/>
+		<poison_resistance_perc			type="base"	min="1"					/>
+		<quen_chance_on_projectile		type="add"	min="0.25"				/>
 	</ability>
 	
 <!-- ARMOR HEAVY -->
-	<ability name="Heavy armor 01_crafted _Stats">
-		<weight							type="base"	min="24.95"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="157"	max="157"	/>
-		<slashing_resistance_perc		type="base"	min="0.3"				/>
-		<piercing_resistance_perc 		type="base" min="0.3"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.25"				/>
-		<staminaRegen_armor_mod 		type="mult" min="-0.10"				/>
+	<ability name="Heavy armor 01_crafted _Stats"> <!-- Mag Deira Cuirass - q1, lvl 3 -->
+		<weight							type="base"	min="16.0"				/>
+		<quality						type="add"	min="1"					/>
+		<armor							type="base"	min="40"				/>
+		<slashing_resistance_perc		type="base"	min="0.18"				/>
+		<piercing_resistance_perc		type="base"	min="0.18"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.18"				/>
+		<rending_resistance_perc		type="base" min="0.18"				/>
+		<elemental_resistance_perc		type="base" min="0.18"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
 	</ability>
 
-	<ability name="Heavy armor 02_crafted _Stats">
-		<weight							type="base"	min="21.8"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="162"	max="162"	/>
-		<slashing_resistance_perc 		type="base" min="0.35"				/>
-		<piercing_resistance_perc 		type="base" min="0.3"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.2"				/>
-		<staminaRegen_armor_mod 		type="mult" min="-0.10"				/>
+	<ability name="Heavy armor 02_crafted _Stats"> <!-- Ban Ard Breastplate - q2, lvl 6, 1 slot -->
+		<weight							type="base"	min="17.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="55"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
+		<vitality 						type="base" min="250"				/>
 	</ability>
 
-	<ability name="Heavy armor 03_crafted _Stats">
-		<weight							type="base"	min="24.32" 			/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="167"	max="167"	/>
-		<slashing_resistance_perc		type="base"	min="0.4" 				/>
-		<piercing_resistance_perc		type="base" min="0.35"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.30"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+	<ability name="Heavy armor 03_crafted _Stats"> <!-- Nilfgaardian Guardsman Armor - q2, lvl 9, 2 slots -->
+		<weight							type="base"	min="17.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="70"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
+		<focus_gain 					type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Heavy armor 04_crafted _Stats">
-		<weight							type="base"	min="34.2"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="177"	max="177"	/>
-		<slashing_resistance_perc 		type="base" min="0.45"				/>
-		<piercing_resistance_perc		type="base" min="0.40"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+	<ability name="Heavy armor 04_crafted _Stats"> <!-- Hindarfjall Heavy Armor - q3, lvl 12, 2 slots -->
+		<weight							type="base"	min="17.5"				/>
+		<quality						type="add"	min="3"					/>
+		<armor							type="base"	min="85"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
+		<spell_power_quen				type="mult" min="0.1"				/>
 	</ability>
 
-<!-- Relic -->
-	<ability name="Thyssen armor crafted _Stats">
-		<weight							type="base"	min="24.05" 			/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base"	min="180"	max="180"	/>
-		<slashing_resistance_perc		type="base"	min="0.35"				/>
-		<piercing_resistance_perc		type="base"	min="0.20"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.20"				/>
-		<poison_resistance_perc			type="base"	min="1"					/>
-		<quen_chance_on_projectile		type="add"	min="0.05"				/>
+	<ability name="q108 Heavy armor 04_crafted _Stats"> <!-- Hindarfjall Heavy Armor - q4, lvl 24, 3 slots -->
+		<weight							type="base" min="17.5"				/>
+		<quality 						type="add"	min="4"					/>
+		<armor							type="base"	min="145"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc 		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc 	type="base" min="0.22"				/>
+		<rending_resistance_perc 		type="base" min="0.22"				/>
+		<elemental_resistance_perc 		type="base" min="0.22"				/>
+		<frost_resistance_perc			type="add"	min="1.0"				/>
+		<vitality 						type="base" min="400"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.20"				/>
 	</ability>
+
+<!-- RELIC HEAVY -->
+	<ability name="Relic Heavy 3 armor crafted _Stats"> <!-- Impera Brigade Armor - q4, lvl 15, 3 slots -->
+		<weight							type="base"	min="17.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base"	min="100"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<spell_power_aard				type="mult"	min="0.10"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.20"				/>
+	</ability>
+
+<!-- WITCHER ARMOR -->
 	
-<!-- Relic -->
-	<ability name="Relic Heavy 3 armor crafted _Stats">
-		<weight							type="base"	min="11.28"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base"	min="180"	max="180"	/>
-		<slashing_resistance_perc		type="base"	min="0.4"				/>
-		<piercing_resistance_perc		type="base"	min="0.4"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.35"				/>
-		<elemental_resistance_perc		type="base"	min="0.25"				/>
-		<spell_power_aard				type="mult"	min="0.2"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
-	</ability>
-	
-<!-- Lynx armor -->
-	<ability name="Lynx Armor _Stats">
-		<weight							type="base"	min="6.52"				/>
+<!-- Lynx armor: 10% to attack power + 5% per level, up to 25% attack power bonus -->
+	<ability name="Lynx Armor _Stats"> <!-- lvl 19 -> 17 -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base" min="120"	max="120"	/>
-		<slashing_resistance_perc		type="base" min="0.05"				/>
-		<piercing_resistance_perc		type="base" min="0.05"				/>
-		<rending_resistance_perc		type="base" min="0.05"				/>
-		<elemental_resistance_perc		type="base" min="0.20"				/>
-		<attack_power					type="mult" min="0.05"				/>
+		<armor							type="base" min="110"	max="110"	/>
+		<slashing_resistance_perc		type="base" min="0.08"				/>
+		<piercing_resistance_perc		type="base" min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
+		<attack_power					type="mult" min="0.10"				/>
 		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
 	</ability>
 	
-	<ability name="Lynx Armor 1 _Stats">
-		<weight							type="base"	min="7.8"				/>
+	<ability name="Lynx Armor 1 _Stats"> <!-- lvl 25 -> 23 -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="150"	max="150"	/>
+		<armor							type="base"	min="140"	max="140"	/>
 		<slashing_resistance_perc		type="base" min="0.08"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<rending_resistance_perc		type="base"	min="0.08"				/>
-		<elemental_resistance_perc		type="base"	min="0.30"				/>
-		<attack_power					type="mult"	min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
-	</ability>
-
-	<ability name="Lynx Armor 2 _Stats">
-		<weight							type="base"	min="13.7"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="180"	max="180"	/>
-		<slashing_resistance_perc		type="base"	min="0.11"				/>
-		<piercing_resistance_perc		type="base"	min="0.08"				/>
-		<rending_resistance_perc		type="base"	min="0.11"				/>
-		<elemental_resistance_perc		type="base"	min="0.35"				/>
+		<piercing_resistance_perc		type="base" min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
 		<attack_power					type="mult"	min="0.15"				/>
 		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
 	</ability>
-	
-	<ability name="Lynx Armor 3 _Stats">
-		<weight							type="base"	min="17.0" 				/>
+
+	<ability name="Lynx Armor 2 _Stats"> <!-- lvl 31 -> 29 -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="205" 	max="205"	/>
-		<slashing_resistance_perc		type="base"	min="0.15"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<rending_resistance_perc		type="base"	min="0.15"				/>
-		<elemental_resistance_perc		type="base"	min="0.45"				/>
+		<armor							type="base"	min="170"	max="170"	/>
+		<slashing_resistance_perc		type="base" min="0.08"				/>
+		<piercing_resistance_perc		type="base" min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
 		<attack_power					type="mult"	min="0.20"				/>
 		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
 	</ability>
+	
+	<ability name="Lynx Armor 3 _Stats"> <!-- lvl 36 -> 34 -->
+		<weight							type="base"	min="5" 				/>
+		<quality						type="add"	min="5"		max="5"		/>
+		<armor							type="base"	min="195" 	max="195"	/>
+		<slashing_resistance_perc		type="base" min="0.08"				/>
+		<piercing_resistance_perc		type="base" min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
+		<attack_power					type="mult"	min="0.25"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+	</ability>
 
-<!-- Gryphon armor -->		
-	<ability name="Gryphon Armor _Stats">
-		<weight							type="base"	min="6.67"				/>
+<!-- Gryphon armor: 10% to spell power + 5% per level, up to 25% spell power bonus -->
+	<ability name="Gryphon Armor _Stats"> <!-- lvl 13 -> 11 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="90"	max="90"	/>
-		<slashing_resistance_perc		type="base"	min="0.10"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.15"				/>
-		<spell_power					type="mult"	min="0.05"				/>
+		<armor							type="base"	min="80"	max="80"	/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<spell_power					type="mult"	min="0.10"				/>
 	</ability>
 	
-	<ability name="Gryphon Armor 1 _Stats">
-		<weight							type="base" min="8.39"				/>
+	<ability name="Gryphon Armor 1 _Stats"> <!-- lvl 20 -> 18 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="125"	max="125"	/>
-		<slashing_resistance_perc		type="base"	min="0.14"				/>
-		<piercing_resistance_perc		type="base" min="0.08"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.08"				/>
-		<rending_resistance_perc		type="base" min="0.20"				/>
-		<spell_power					type="mult" min="0.10"				/>
-	</ability>
-	
-	<ability name="Gryphon Armor 2 _Stats">
-		<weight							type="base"	min="18.3"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor 							type="base"	min="165"	max="165"	/>
-		<slashing_resistance_perc		type="base"	min="0.18"				/>
-		<piercing_resistance_perc		type="base" min="0.12"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.12"				/>
-		<rending_resistance_perc		type="base" min="0.25"				/>
+		<armor							type="base"	min="115"	max="115"	/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
 		<spell_power					type="mult" min="0.15"				/>
 	</ability>
 	
-	<ability name="Gryphon Armor 3 _Stats">
-		<weight							type="base"	min="20.1" 				/>
+	<ability name="Gryphon Armor 2 _Stats"> <!-- lvl 28 -> 26 -->
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"		max="5"		/>
+		<armor 							type="base"	min="155"	max="155"	/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<spell_power					type="mult" min="0.20"				/>
+	</ability>
+	
+	<ability name="Gryphon Armor 3 _Stats"> <!-- lvl 36 -> 34 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5" 	max="5"		/>
-		<armor							type="base"	min="205"	max="205"	/>
-		<slashing_resistance_perc		type="base"	min="0.22"				/>
-		<piercing_resistance_perc		type="base"	min="0.17"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.16"				/>
-		<rending_resistance_perc		type="base"	min="0.30"				/>
-		<spell_power 					type="mult"	min="0.20"				/>
+		<armor							type="base"	min="195"	max="195"	/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<spell_power 					type="mult"	min="0.25"				/>
 	</ability>
 
-<!-- Bear armor -->	
-	<ability name="Bear Armor _Stats">
-		<weight							type="base"	min="8.36"				/>
+<!-- Bear armor: 10% to focus gain + 5% per level, up to 25% focus gain bonus -->
+	<ability name="Bear Armor _Stats"> <!-- lvl 22 -> 20 -->
+		<weight							type="base"	min="15"				/>
 		<quality						type="add" 	min="5" 	max="5"		/>
-		<armor							type="base"	min="135"	max="135"	/>
-		<slashing_resistance_perc		type="base" min="0.15"				/>
-		<piercing_resistance_perc		type="base" min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.05"				/>
-		<rending_resistance_perc		type="base" min="0.20"				/>
-		<focus_gain 					type="base" min="0.05" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>			
-	</ability>
-	
-	<ability name="Bear Armor 1 _Stats">
-		<weight							type="base"	min="10.9"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="160"	max="160"	/>
-		<slashing_resistance_perc		type="base"	min="0.20"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.10"				/>
-		<rending_resistance_perc		type="base"	min="0.30"				/>
+		<armor							type="base"	min="125"	max="125"	/>
+		<slashing_resistance_perc		type="base" min="0.22"				/>
+		<piercing_resistance_perc		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
 		<focus_gain 					type="base" min="0.10" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>		
+		<staminaRegen_armor_mod			type="mult" min="-0.20"				/>			
 	</ability>
 	
-	<ability name="Bear Armor 2 _Stats">
-		<weight							type="base"	min="19.45"				/>
+	<ability name="Bear Armor 1 _Stats"> <!-- lvl 27 -> 25 -->
+		<weight							type="base"	min="15"				/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base" min="185"	max="185"	/>
-		<slashing_resistance_perc		type="base"	min="0.25"				/>
-		<piercing_resistance_perc		type="base"	min="0.15"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.15"				/>
-		<rending_resistance_perc		type="base"	min="0.35"				/>
+		<armor							type="base"	min="150"	max="150"	/>
+		<slashing_resistance_perc		type="base" min="0.22"				/>
+		<piercing_resistance_perc		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
 		<focus_gain 					type="base" min="0.15" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>		
+		<staminaRegen_armor_mod			type="mult" min="-0.20"				/>			
 	</ability>
 	
-	<ability name="Bear Armor 3 _Stats">
-		<weight							type="base"	min="22.7" 				/>
-		<quality						type="add"	min="5" 	max="5"		/>
-		<armor							type="base"	min="205"	max="205"	/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.25"				/>
-		<rending_resistance_perc		type="base"	min="0.45"				/>
+	<ability name="Bear Armor 2 _Stats"> <!-- lvl 32 -> 30 -->
+		<weight							type="base"	min="15"				/>
+		<quality						type="add"	min="5"		max="5"		/>
+		<armor							type="base" min="175"	max="175"	/>
+		<slashing_resistance_perc		type="base" min="0.22"				/>
+		<piercing_resistance_perc		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
 		<focus_gain 					type="base" min="0.20" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>	
+		<staminaRegen_armor_mod			type="mult" min="-0.20"				/>			
+	</ability>
+	
+	<ability name="Bear Armor 3 _Stats"> <!-- lvl 36 -> 34 -->
+		<weight							type="base"	min="15"				/>
+		<quality						type="add"	min="5" 	max="5"		/>
+		<armor							type="base"	min="195"	max="195"	/>
+		<slashing_resistance_perc		type="base" min="0.22"				/>
+		<piercing_resistance_perc		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<focus_gain 					type="base" min="0.25" 				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.20"				/>			
 	</ability>
 	
 </abilities>
@@ -357,7 +462,7 @@
 	<item
 		name							="Starting Armor 1"
 		category						="armor"
-		price							="108"
+		price							="132"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -369,16 +474,14 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/armor-01.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Starting Armor 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__viper_lvl3" category="gloves"></variant>
 		</variants>
@@ -388,7 +491,7 @@
 	<item
 		name							="Light armor 01_crafted"
 		category						="armor"
-		price							="108"
+		price							="82"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -400,16 +503,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl1_01_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Linen</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 										<parts count="1">Leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="4">Thread</parts>
-										<parts count="4">Cotton</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl1" category="gloves"></variant>
 		</variants>
@@ -419,7 +520,7 @@
 	<item
 		name							="Light armor 02_crafted"
 		category						="armor"
-		price							="142"
+		price							="84"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -431,16 +532,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl2_01_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Linen</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 										<parts count="1">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="1">Silk</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl2" category="gloves"></variant>
 		</variants>
@@ -450,7 +549,7 @@
 	<item
 		name							="Light armor 03_crafted"
 		category						="armor"
-		price							="184"
+		price							="138"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -462,16 +561,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl3_01_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Light armor 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 										<parts count="2">Leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="3">Thread</parts>
-										<parts count="5">Leather squares</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl3" category="gloves"></variant>
 		</variants>
@@ -481,7 +578,7 @@
 	<item
 		name							="Light armor 04_crafted"
 		category						="armor"
-		price							="212"
+		price							="192"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -493,29 +590,55 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl4_01_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 04_crafted _Stats</a>
 		</base_abilities>
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl4" category="gloves"></variant>
 		</variants>
-		<recycling_parts>				<parts count="3">Linen</parts>
-										<parts count="3">Leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="5">String</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 	</item>
 	
-<!-- Light armor 5 -->
+	<item
+		name							="q108 Light armor 09_crafted"
+		category						="armor"
+		price							="550"
+		initial_durability				="100"
+		max_durability					="100" 
+		enhancement_slots				="3"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="t_03_mg__common_light_lvl2"
+		localisation_key_name			="item_name_light_armor_09"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/common_light_lvl2_03_64x128.png"
+	>
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>q108 Light armor 09_crafted _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="2">Silk</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="1">Glowing ore</parts>
+		</recycling_parts> 				
+		<variants>						<variant equip_template="t_03a_mg__common_light_lvl2" category="gloves"></variant>
+		</variants>
+	</item>
+
+	<!-- Light armor 5 -->
 	<item
 		name							="Light armor 05_crafted"
 		category						="armor"
-		price							="1282"
+		price							="568"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -524,16 +647,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl1_02_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 05_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="3">Meteorite silver plate</parts>
-										<parts count="1">Silk</parts>
-										<parts count="2">Amber dust</parts>
+		<recycling_parts>				<parts count="2">Silk</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl1" category="gloves"></variant>
 		</variants>
@@ -543,28 +664,26 @@
 	<item
 		name							="Light armor 06_crafted"
 		category						="armor"
-		price							="230"
+		price							="246"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="t_02_mg__common_light_lvl2"
 		localisation_key_name			="item_name_light_armor_06"
 		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/common_light_lvl1_02_64x128.png"
+		icon_path						="icons/inventory/armors/common_light_lvl2_02_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 06_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="3">Leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl2" category="gloves"></variant>
 		</variants>
@@ -574,10 +693,10 @@
 	<item
 		name							="Light armor 07_crafted"
 		category						="armor"
-		price							="238"
+		price							="373"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -586,16 +705,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl3_02_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 07_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="4">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl3" category="gloves"></variant>
 		</variants>
@@ -605,10 +722,10 @@
 	<item
 		name							="Light armor 08_crafted"
 		category						="armor"
-		price							="236"
+		price							="433"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -617,17 +734,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl4_02_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Light armor 08_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
+		<recycling_parts>				<parts count="2">Silk</parts>
 										<parts count="2">Hardened leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Rope</parts>
 										<parts count="1">String</parts>
-										
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl4" category="gloves"></variant>
 		</variants>
@@ -637,10 +751,10 @@
 	<item
 		name							="Medium armor 01_crafted"
 		category						="armor"
-		price							="198"
+		price							="201"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -649,17 +763,14 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_medium_lvl1_01_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Medium armor 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="5">Nails</parts>
-										<parts count="2">Steel plate</parts>
-										
+		<recycling_parts>				<parts count="1">Steel plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl1" category="gloves"></variant>
 		</variants>
@@ -669,7 +780,7 @@
 	<item
 		name							="Medium armor 02_crafted"
 		category						="armor"
-		price							="266"
+		price							="344"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -681,17 +792,14 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/t_01_mg__common_medium_lvl2-64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Medium armor 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Steel plate</parts>
-										
+		<recycling_parts>				<parts count="1">Dark steel plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl2" category="gloves"></variant>
 		</variants>
@@ -701,10 +809,10 @@
 	<item
 		name							="Medium armor 03_crafted"
 		category						="armor"
-		price							="306"
+		price							="398"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -713,17 +821,44 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/t_01_mg__common_medium_lvl3-64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Medium armor 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="4">Steel plate</parts>
+		<recycling_parts>				<parts count="1">Dark steel plate</parts>
+										<parts count="2">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
+		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl3" category="gloves"></variant>
+		</variants>
+	</item>
+
+	<item
+		name							="q108 Medium armor 03_crafted"
+		category						="armor"
+		price							="700"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="3"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="t_01_mg__common_medium_lvl3"
+		localisation_key_name			="item_name_medium_armor_03"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/t_01_mg__common_medium_lvl3-64x128.png"
+	>
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>	
+										<a>q108 Medium armor 03_crafted _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Hardened leather</parts>
+		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
@@ -732,10 +867,10 @@
 	<item
 		name							="Medium armor 04_crafted"
 		category						="armor"
-		price							="428"
+		price							="524"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -744,16 +879,15 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_medium_lvl4_01_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="2">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl4" category="gloves"></variant>
 		</variants>
@@ -763,10 +897,10 @@
 	<item
 		name							="Heavy armor 01_crafted"
 		category						="armor"
-		price							="736"
+		price							="288"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -775,16 +909,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl1_01_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, mod_armor
+		<tags>							Armor,HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Heavy armor 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="5">Wire</parts>
-										<parts count="2">Dark steel plate</parts>
+		<recycling_parts>				<parts count="2">Steel plate</parts>
+										<parts count="2">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl1" category="gloves"></variant>
 		</variants>
@@ -794,7 +926,7 @@
 	<item
 		name							="Heavy armor 02_crafted"
 		category						="armor"
-		price							="852"
+		price							="422"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -806,16 +938,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl2_01_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, mod_armor
+		<tags>							Armor,HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Heavy armor 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Silk</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="4">Leather straps</parts>
-										<parts count="1">Steel plate</parts>
-										<parts count="3">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="2">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl2" category="gloves"></variant>
 		</variants>
@@ -825,7 +955,7 @@
 	<item
 		name							="Heavy armor 03_crafted"
 		category						="armor"
-		price							="928"
+		price							="478"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -837,16 +967,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl3_01_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, mod_armor
+		<tags>							Armor,HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Heavy armor 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather squares</parts>
-										<parts count="1">Silk</parts>
-										<parts count="4">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl3" category="gloves"></variant>
 		</variants>
@@ -856,7 +985,35 @@
 	<item
 		name							="Heavy armor 04_crafted"
 		category						="armor"
-		price							="932"
+		price							="878"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="2"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="t_01_mg__common_heavy_lvl4"
+		localisation_key_name			="item_name_heavy_armor_04"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/common_heavy_lvl4_01_64x128.png"
+	>
+		<tags>							Armor,HeavyArmor, mod_armor, DoNotEnhance
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>	
+										<a>Heavy armor 04_crafted _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
+		</recycling_parts>
+		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl4" category="gloves"></variant>
+		</variants>
+	</item>
+
+	<item
+		name							="q108 Heavy armor 04_crafted"
+		category						="armor"
+		price							="1600"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -868,16 +1025,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl4_01_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
-										<a>Heavy armor 04_crafted _Stats</a>
+										<a>q108 Heavy armor 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather squares</parts>
-										<parts count="6">Wire</parts>
-										<parts count="4">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl4" category="gloves"></variant>
 		</variants>
@@ -887,10 +1042,10 @@
 	<item
 		name							="Thyssen armor crafted"
 		category						="armor"
-		price							="1076"
+		price							="823"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -899,16 +1054,16 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_medium_lvl2_02_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Thyssen armor crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="4">Meteorite ore</parts>
-										<parts count="1">Ruby dust</parts>
-										<parts count="4">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_medium_lvl2" category="gloves"></variant>
 		</variants>
@@ -918,7 +1073,7 @@
 	<item
 		name							="Relic Heavy 3 crafted"
 		category						="armor"
-		price							="1360"
+		price							="1523"
 		initial_durability				="300"
 		max_durability					="300"
 		enhancement_slots				="3"
@@ -930,16 +1085,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl3_02_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>	
 										<a>Relic Heavy 3 armor crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Silk</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="2">Sapphire dust</parts>
-										<parts count="4">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_03a_mg__common_heavy_lvl3" category="gloves"></variant>
 		</variants>
@@ -951,7 +1104,7 @@
 	<item
 		name							="Lynx Armor"
 		category						="armor"
-		price							="399"
+		price							="375"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -963,13 +1116,10 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_64x128.png"
 	>
-		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary, Sleevless
+		<tags>							Armor,LightArmor,LynxSet, mod_armor, DoNotEnhance, mod_legendary, Sleevless
 		</tags>
 		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="4">Dark iron ingot</parts>
-										<parts count="4">Steel ingot</parts>
-										<parts count="2">Hardened timber</parts>
+										<parts count="1">Hardened leather</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Armor _Stats</a>
@@ -982,7 +1132,7 @@
 	<item
 		name							="Lynx Armor 1"
 		category						="armor"
-		price							="478"
+		price							="852"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -994,15 +1144,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_1_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Armor 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Hardened leather</parts>
-										<parts count="4">Dark iron ingot</parts>
-										<parts count="4">Steel ingot</parts>
-										<parts count="2">Lunar shards</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__lynx_lvl2" category="gloves"></variant>	
 		</variants>
@@ -1012,7 +1161,7 @@
 	<item
 		name							="Lynx Armor 2"
 		category						="armor"
-		price							="1866"
+		price							="1798"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1024,15 +1173,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_2_64x128.png"
 	>
-		<tags>							Armor, LightArmor,LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor,LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Armor 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Draconide leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="4">Glowing ingot</parts>
-										<parts count="3">Quicksilver solution</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__lynx_lvl3" category="gloves"></variant>
 		</variants>
@@ -1042,7 +1190,7 @@
 	<item
 		name							="Lynx Armor 3"
 		category						="armor"
-		price							="1961"
+		price							="2937"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1054,15 +1202,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_3_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Armor 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Draconide leather</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="4">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__lynx_lvl4" category="gloves"></variant>
 		</variants>
@@ -1072,7 +1219,7 @@
 	<item
 		name							="Gryphon Armor"
 		category						="armor"
-		price							="412"
+		price							="565"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -1084,16 +1231,15 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_armor_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Armor _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Meteorite ingot</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="5">Leather straps</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__gryphon_lvl1" category="gloves"></variant>
 		</variants>
@@ -1103,7 +1249,7 @@
 	<item
 		name							="Gryphon Armor 1"
 		category						="armor"
-		price							="479"
+		price							="865"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -1115,15 +1261,16 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_armor_1_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Armor 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Hardened leather</parts>
-										<parts count="2">Meteorite ingot</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="4">Linen</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__gryphon_lvl2" category="gloves"></variant>
 		</variants>
@@ -1133,7 +1280,7 @@
 	<item
 		name							="Gryphon Armor 2"
 		category						="armor"
-		price							="1961"
+		price							="1875"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1145,15 +1292,16 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_armor_2_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Armor 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Draconide leather</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="4">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__gryphon_lvl3" category="gloves"></variant>
 		</variants>
@@ -1163,7 +1311,7 @@
 	<item
 		name							="Gryphon Armor 3"
 		category						="armor"
-		price							="2379"
+		price							="3193"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1175,16 +1323,17 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_armor_3_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>
 										<a>Default armor _Stats</a>
 										<a>Gryphon Armor 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Draconide leather</parts>
-										<parts count="3">Dwimeryte ingot</parts>
-										<parts count="6">Glowing ingot</parts>
-										<parts count="1">Fifth essence</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__gryphon_lvl4" category="gloves"></variant>
 		</variants>
@@ -1194,7 +1343,7 @@
 	<item
 		name							="Bear Armor"
 		category						="armor"
-		price							="335"
+		price							="1195"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -1206,16 +1355,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_armor_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Armor _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Dark iron ingot</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="4">Linen</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Silver plate</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__bear_lvl1" category="gloves"></variant>
 		</variants>
@@ -1225,7 +1373,7 @@
 	<item
 		name							="Bear Armor 1"
 		category						="armor"
-		price							="455"
+		price							="1851"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -1237,15 +1385,16 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_armor_1_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Armor 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Hardened leather</parts>
-										<parts count="2">Meteorite ingot</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="5">String</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Silver plate</parts>
+										<parts count="1">Meteorite plate</parts>
+										<parts count="1">Draconide leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__bear_lvl2" category="gloves"></variant>
 		</variants>
@@ -1255,7 +1404,7 @@
 	<item
 		name							="Bear Armor 2"
 		category						="armor"
-		price							="1946"
+		price							="3081"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1267,15 +1416,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_armor_2_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>		
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Armor 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Draconide leather</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="4">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Monstrous plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__bear_lvl3" category="gloves"></variant>
 		</variants>
@@ -1285,7 +1434,7 @@
 	<item
 		name							="Bear Armor 3"
 		category						="armor"
-		price							="2594"
+		price							="4908"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -1297,16 +1446,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_armor_3_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Armor 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Draconide leather</parts>
-										<parts count="4">Dwimeryte ingot</parts>
-										<parts count="4">Glowing ingot</parts>
-										<parts count="6">Chitin scale</parts>
-										<parts count="1">Optima mater</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Monstrous plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__bear_lvl4" category="gloves"></variant>
 		</variants>

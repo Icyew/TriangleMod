@@ -59,7 +59,7 @@ class CPayFactBasedStorySceneChoiceAction extends CStorySceneChoiceLineActionScr
 	function PerformAction()
 	{
 		thePlayer.RemoveMoney( FactsQuerySum( valueFact ) );
-		GetWitcherPlayer().AddPoints( EExperiencePoint, CeilF(FactsQuerySum( valueFact ) / 10), true );
+		GetWitcherPlayer().AddPoints( EExperiencePoint, /*CeilF(FactsQuerySum( valueFact ) / 10)*/ 5, true ); //modSigns: fixed exp for bribe
 		theSound.SoundEvent("gui_bribe");
 	}
 	
@@ -100,7 +100,7 @@ class CPayStorySceneChoiceAction extends CStorySceneChoiceLineActionScripted
 		
 		if( !dontGrantExp )
 		{
-			GetWitcherPlayer().AddPoints( EExperiencePoint, CeilF(money / 10), true );
+			GetWitcherPlayer().AddPoints( EExperiencePoint, /*CeilF(money / 10)*/ 5, true ); //modSigns: fixed exp for bribe
 		}
 		
 		theSound.SoundEvent("gui_bribe");
@@ -142,7 +142,7 @@ class CAxiiStorySceneChoiceAction extends CStorySceneChoiceLineActionScripted
 	
 	function PerformAction()
 	{
-		GetWitcherPlayer().AddPoints( EExperiencePoint, 20 + GetWitcherPlayer().GetAxiiLevel() * 5, true );
+		GetWitcherPlayer().AddPoints( EExperiencePoint, /*20 +*/ GetWitcherPlayer().GetAxiiLevel() * 5, true ); //modSigns: less exp for Axii
 	}
 	
 	function GetActionText() : string 				

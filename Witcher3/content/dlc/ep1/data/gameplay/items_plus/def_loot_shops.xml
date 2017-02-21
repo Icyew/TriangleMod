@@ -2,60 +2,57 @@
 <redxml>
 	<definitions>
 		<loot_definitions>
+
 			<!-- EP1 Ofir Merchant -->
-			<loot name="_store__Ofir_merchant" 								player_level_min="0"	player_level_max="0"	quantity_min="215"	quantity_max="220"	chance="100" 		>
-				<loot_entry name="Ofir Armor"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Ofir Sabre 2"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Ofir Crossbow"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Ofir Horse Bag"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Ofir Horse Blinders"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Crafted Ofir Steel Sword schematic"		player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="gwint_card_francesca_platinium"			player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="gwint_card_eredin_platinium"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="gwint_card_mrmirror_foglet"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Chitin scale"								player_level_min="20"	player_level_max="0"	quantity_min="3"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Draconide leather"						player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Powdered pearl"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Pearl"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Black pearl dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Black pearl"								player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Amber dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Amber"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Amber fossil"								player_level_min="10"	player_level_max="0"	quantity_min="0"	quantity_max="1"	chance="100"  		/>
-				<loot_entry name="Amber flawless"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Amethyst dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Amethyst"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Amethyst flawless"						player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Diamond dust"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Diamond"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Diamond flawless"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Emerald dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Emerald"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Emerald flawless"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Ruby dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Ruby"										player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Ruby flawless"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Sapphire dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Sapphire"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Sapphire flawless"						player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Infused dust"								player_level_min="20"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Infused shard"							player_level_min="25"	player_level_max="0"	quantity_min="0"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Infused crystal"							player_level_min="30"	player_level_max="0"	quantity_min="0"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Lead ore"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Gold mineral"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Gold ore"									player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
-				<loot_entry name="Dark iron ingot"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Dark steel ingot"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Dark steel plate"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Silver mineral"							player_level_min="0"	player_level_max="0"	quantity_min="3"	quantity_max="5"	chance="100"  		/>
-				<loot_entry name="Silver ore"								player_level_min="10"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Silver plate"								player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Meteorite ore"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Meteorite ingot"							player_level_min="15"	player_level_max="0"	quantity_min="2"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Meteorite silver ingot"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="100"  		/>
-				<loot_entry name="Meteorite silver plate"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Glowing ore"								player_level_min="30"	player_level_max="0"	quantity_min="1"	quantity_max="3"	chance="100"  		/>
-				<loot_entry name="Dwimeryte ore"							player_level_min="40"	player_level_max="0"	quantity_min="1"	quantity_max="2"	chance="100"  		/>
+			<loot name="_store__Ofir_merchant" 								player_level_min="0"	player_level_max="0"	quantity_min="250"	quantity_max="250"	chance="100" 		>
+<!-- crafting -->
+				<loot_entry name="Dark iron ore"							player_level_min="0"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Dark iron ingot"							player_level_min="5"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Dark steel ingot"							player_level_min="5"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Silver mineral"							player_level_min="0"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Silver ore"								player_level_min="0"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Silver ingot"								player_level_min="4"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Meteorite ore"							player_level_min="0"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Meteorite ingot"							player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Meteorite silver ingot"					player_level_min="10"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Glowing ore"								player_level_min="7"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Glowing ingot"							player_level_min="12"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Dwimeryte ore"							player_level_min="11"	player_level_max="0"	quantity_min="4"	quantity_max="8"	chance="-1"			/>
+				<loot_entry name="Dwimeryte ingot"							player_level_min="14"	player_level_max="0"	quantity_min="1"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Powdered pearl"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Black pearl dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Infused dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Amethyst dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Amber dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Ruby dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Sapphire dust"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Emerald dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+				<loot_entry name="Diamond dust"								player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="4"	chance="-1"			/>
+<!-- valuables -->
+				<loot_entry name="Pearl"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Black pearl"								player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Amber"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Amber flawless"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Amethyst"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Amethyst flawless"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Diamond"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Diamond flawless"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Emerald"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Emerald flawless"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Ruby"										player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Ruby flawless"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Sapphire"									player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Sapphire flawless"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+<!-- CUSTOM -->
+				<loot_entry name="Ofir Armor"								player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="Ofir Sabre 2"								player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="Ofir Crossbow"							player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="Ofir Horse Bag"							player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="Ofir Horse Blinders"						player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="Crafted Ofir Steel Sword schematic"		player_level_min="25"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="gwint_card_francesca_platinium"			player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="gwint_card_eredin_platinium"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
+				<loot_entry name="gwint_card_mrmirror_foglet"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"  		/>
 			</loot>
 			
 			<!-- EP1 Circus Camp Merchant -->
@@ -80,23 +77,23 @@
 			
 			<!-- EP1 Countess Mignole shop -->
 			<loot name="_store__Countess_mignole" 							player_level_min="0"	player_level_max="0"	quantity_min="250"	quantity_max="250"	chance="-1"			>
-				<loot_entry name="Recipe for Blizzard 3"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Dancing Star 3"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Cat 3"							player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Full Moon 3"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Golden Oriole 3"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Maribor Forest 3"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Petris Philtre 3"				player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Swallow 3"						player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Tawny Owl 3"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
-				<loot_entry name="Recipe for Thunderbolt 3"					player_level_min="0"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Blizzard 3"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Dancing Star 3"				player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Cat 3"							player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Full Moon 3"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Golden Oriole 3"				player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Maribor Forest 3"				player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Petris Philtre 3"				player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Swallow 3"						player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Tawny Owl 3"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
+				<loot_entry name="Recipe for Thunderbolt 3"					player_level_min="20"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 				<loot_entry name="EP1 Witcher Armor schematic"				player_level_min="3"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 				<loot_entry name="EP1 Witcher Boots schematic"				player_level_min="3"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 				<loot_entry name="EP1 Witcher Gloves schematic"				player_level_min="3"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 				<loot_entry name="EP1 Witcher Pants schematic"				player_level_min="3"	player_level_max="0"	quantity_min="1"	quantity_max="1"	chance="-1"			/>
 			</loot>		
 
-<!-- Enchanter -->
+			<!-- Enchanter -->
 			<loot name="_store__LW_DLC_EnchanterAmateur"					player_level_min="0"	player_level_max="0"	quantity_min="250"	quantity_max="250"	chance="-1"			>
 				<!-- RUNES -->
 				<loot_entry name="Runestone lesser"							player_level_min="0"	player_level_max="0"	quantity_min="2"	quantity_max="5"	chance="-1"			/>

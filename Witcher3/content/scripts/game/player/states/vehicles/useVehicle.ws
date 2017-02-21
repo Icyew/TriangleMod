@@ -1419,16 +1419,17 @@ state SwordAttack in W3VehicleCombatManager
 			
 			if( actor )
 			{
-				actor.DrainStamina(ESAT_FixedValue, 100, 1);
+				//actor.DrainStamina(ESAT_FixedValue, 100, 1); //modSigns: removed
+				//theGame.witcherLog.AddMessage("Attacking from horse: " + actor.GetDisplayName()); //modSigns: debug
 
 				damage.Init( rider, actor ,NULL, rider.GetInventory().GetItemFromSlot( 'r_weapon' ),'attack_heavy',rider.GetName(),EHRT_Heavy, false, false, 'attack_heavy', AST_Jab, ASD_NotSet, true, false, false, false );
-				if ( speed < 2 )
+				/*if ( speed < 2 )
 				{
 					damage.AddDamage( theGame.params.DAMAGE_NAME_DIRECT, baseDamage );
 				} else
 				{
 					damage.AddDamage( theGame.params.DAMAGE_NAME_DIRECT, baseDamage * MaxF( 1.1 + speed, 1 ) );
-				}
+				}*/ //modSigns: removed
 				if( speed >= 4.0 )
 					damage.AddEffectInfo( EET_KnockdownTypeApplicator );
 				damage.SetSoundAttackType('wpn_slice')	;

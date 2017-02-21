@@ -2,698 +2,775 @@
 <redxml>
 <definitions>
 
+<!-- crafted weapons have max possible damage for their level -->
+
 <!-- ######################## ABILITY DEFINITONS ######################## -->
 <abilities>
 
 <!-- STEEL -->
 
-	<ability name="Short sword 1_crafted _Stats">
+	<ability name="Short sword 1_crafted _Stats"> <!-- q1, lvl 1 -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="33"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction				type="base"	min="20"				/>
+	</ability>
+	
+	<ability name="Short sword 2_crafted _Stats"> <!-- q1 lvl 2 -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="41"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+	
+	<ability name="No Mans Land sword 1_crafted _Stats"> <!-- q1, lvl 3 -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="49"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<attack_power					type="mult"	min="0.05"				/>
+	</ability>
+	
+	<ability name="No Mans Land sword 2_crafted _Stats"> <!-- q1, lvl 4, 1 slot -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="57"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="No Mans Land sword 3_crafted _Stats"> <!-- q2, lvl 5, 1 slot -->
 		<quality						type="add"	min="2"					/>
-		<weight							type="base"	min="3.2"				/>
-		<SlashingDamage					type="base"	min="30"				/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="65"				/>
 		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction				type="base"	min="20"				/>
+		<StaggerEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_staggerchance_mult		type="add"	min="0.05"				/>
 	</ability>
-	
-	<ability name="Short sword 2_crafted _Stats">
+
+	<ability name="No Mans Land sword 4_crafted _Stats"> <!-- q2, lvl 6, 1 slot -->
 		<quality						type="add"	min="2"					/>
-		<weight							type="base"	min="3.05"				/>
-		<SlashingDamage					type="base"	min="35"				/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="73"				/>
 		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-	
-	<ability name="No Mans Land sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.05"				/>
-		<SlashingDamage					type="base"	min="38"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-	
-	<ability name="No Mans Land sword 2_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.1"				/>
-		<SlashingDamage					type="base"	min="45"				/>
-		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction				type="base"	min="20"				/>
+		<ConfusionEffect				is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_confusionchance_mult		type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="No Mans Land sword 3_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.1"				/>
-		<SlashingDamage					type="base"	min="150"				/>
+	<ability name="Nilfgaardian sword 1_crafted _Stats"> <!-- q1, lvl 7, 1 slot -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="81"				/>
 		<SilverDamage					type="base"	min="1"					/>
+		<attack_power					type="mult"	min="0.05"				/>
 	</ability>
 
-	<ability name="No Mans Land sword 4_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.1"				/>
-		<SlashingDamage					type="base"	min="195"				/>
+	<ability name="Nilfgaardian sword 4_crafted _Stats"> <!-- q2, lvl 8, 2 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="89"				/>
 		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Nilfgaardian sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="6.2"				/>
-		<SlashingDamage					type="base"	min="85"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Nilfgaardian sword 4_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.1"				/>
-		<SlashingDamage					type="base"	min="270"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Novigraadan sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.7"				/>
-		<SlashingDamage					type="base"	min="67"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Novigraadan sword 2_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.2" 				/>
-		<SlashingDamage					type="base"	min="110"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Novigraadan sword 3_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="3.4"				/>
-		<SlashingDamage					type="base"	min="155"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Novigraadan sword 4_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.4"				/>
-		<SlashingDamage					type="base"	min="230"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Inquisitor sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.1"				/>
-		<SlashingDamage					type="base"	min="276"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Inquisitor sword 2_crafted _Stats">
-		<quality						type="add"	min="3"		max="3"		/>
-		<weight							type="base"	min="4.1"				/>
-		<SlashingDamage					type="base"	min="310"				/>
-		<SilverDamage					type="base"	min="1"					/>
-	</ability>
-
-	<ability name="Skellige sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="5.6"				/>
-		<SlashingDamage					type="base"	min="75"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Skellige sword 2_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.1"				/>
-		<SlashingDamage					type="base"	min="115"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Skellige sword 3_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.1"				/>
-		<SlashingDamage					type="base"	min="170"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Skellige sword 4_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="5.1"				/>
-		<SlashingDamage					type="base"	min="235"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Scoiatael sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.62"				/>
-		<SlashingDamage					type="base"	min="205"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Scoiatael sword 2_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.42"				/>
-		<SlashingDamage					type="base"	min="245"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Scoiatael sword 3_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.42"				/>
-		<SlashingDamage					type="base"	min="285"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Scoiatael sword 4_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="4.42"				/>
-		<SlashingDamage					type="base"	min="320"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Dwarven sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="5.1"				/>
-		<SlashingDamage					type="base"	min="350"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Dwarven sword 2_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="6.1" 				/>
-		<SlashingDamage					type="base"	min="390"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Gnomish sword 1_crafted _Stats">
-		<quality						type="add"	min="3"					/>
-		<weight							type="base"	min="6.0"				/>
-		<SlashingDamage					type="base"	min="366"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-	</ability>
-
-	<ability name="Gnomish sword 2_crafted _Stats">
-		<quality						type="add"	min="4"					/>
-		<weight							type="base"	min="6.3"				/>
-		<SlashingDamage					type="base"	min="405"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<dismember_chance				type="add"	min="0.01"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.15" 				/>
+		<attack_power					type="mult"	min="0.05"				/>
 		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Novigraadan sword 1_crafted _Stats"> <!-- q1, lvl 9, 2 slots -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="97"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.2"				/>
+	</ability>
+
+	<ability name="Novigraadan sword 2_crafted _Stats"> <!-- q1, lvl 10, 2 slots -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="105"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<attack_power					type="mult"	min="0.1"				/>
+	</ability>
+
+	<ability name="Novigraadan sword 3_crafted _Stats"> <!-- q2, lvl 11, 2 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="113"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<attack_power					type="mult"	min="0.1"				/>
+		<StaggerEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add" min="0.1"				/>
+		<desc_staggerchance_mult		type="add" min="0.1"				/>
+	</ability>
+
+	<ability name="Novigraadan sword 4_crafted _Stats"> <!-- q2, lvl 12, 3 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="121"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<attack_power					type="mult"	min="0.1"				/>
+		<ConfusionEffect				is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_confusionchance_mult		type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="Inquisitor sword 1_crafted _Stats"> <!-- q2, lvl 5, 1 slot -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="65"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction				type="base" min="20"				/>
+		<SlowdownFrostEffect			is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_freezingchance_mult		type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Inquisitor sword 2_crafted _Stats"> <!-- q3, lvl 12, 2 slots -->
+		<quality						type="add"	min="3"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="121"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction				type="base" min="40"				/>
+		<BurningEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_burningchance_mult		type="add"	min="0.1"				/>
+		<spell_power_igni				type="mult"	min="0.1"				/>
+	</ability>
+
+	<ability name="Skellige sword 1_crafted _Stats"> <!-- q1, lvl 3 -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="49"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.2"				/>
+	</ability>
+
+	<ability name="Skellige sword 2_crafted _Stats"> <!-- q2, lvl 7, 1 slot -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="81"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.2"				/>
+		<StaggerEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add" min="0.05"				/>
+		<desc_staggerchance_mult		type="add" min="0.05"				/>
+	</ability>
+
+	<ability name="Skellige sword 3_crafted _Stats"> <!-- q2, lvl 11, 2 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="113"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.35"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="Skellige sword 4_crafted _Stats"> <!-- q2, lvl 15, 3 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="8"					/>
+		<SlashingDamage					type="base"	min="145"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.35"				/>
+		<BurningEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_burningchance_mult		type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="Scoiatael sword 1_crafted _Stats"> <!-- q1, lvl 2 -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="41"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="Scoiatael sword 2_crafted _Stats"> <!-- q2, lvl 6, 1 slot -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="73"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.1"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Scoiatael sword 3_crafted _Stats"> <!-- q3, lvl 10, 2 slots -->
+		<quality						type="add"	min="3"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="105"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.1"				/>
+		<spell_power_aard				type="mult"	min="0.1"				/>
+	</ability>
+
+	<ability name="Scoiatael sword 4_crafted _Stats"> <!-- q3, lvl 14, 3 slots -->
+		<quality						type="add"	min="3"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="137"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
+		<ConfusionEffect				is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_confusionchance_mult		type="add"	min="0.1"				/>
+		<spell_power_axii				type="mult"	min="0.1"				/>
+	</ability>
+
+	<ability name="Dwarven sword 1_crafted _Stats"> <!-- q1, lvl 4, 1 slot -->
+		<quality						type="add"	min="1"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="57"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+	<ability name="Dwarven sword 2_crafted _Stats"> <!-- q3, lvl 8, 2 slots -->
+		<quality						type="add"	min="3"					/>
+		<weight							type="base"	min="6" 				/>
+		<SlashingDamage					type="base"	min="89"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+		<SlowdownFrostEffect			is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_freezingchance_mult		type="add"	min="0.05"				/>
+		<spell_power_yrden				type="mult"	min="0.05"				/>
+	</ability>
+
+	<ability name="Gnomish sword 1_crafted _Stats"> <!-- q2, lvl 9, 2 slots -->
+		<quality						type="add"	min="2"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="97"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.07"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.07"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.07"				/>
+	</ability>
+
+	<ability name="Gnomish sword 2_crafted _Stats"> <!-- q3, lvl 13, 3 slots -->
+		<quality						type="add"	min="3"					/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="129"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.1"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.1"				/>
+		<spell_power_quen				type="mult"	min="0.1"				/>
 	</ability>
 
 <!-- STEEL RELIC -->
 
-	<ability name="Arbitrator_crafted_Stats">
+	<ability name="Arbitrator_crafted_Stats"> <!-- relic, lvl 10, 3 slots, 8% armor reduction, 15% crit chance, 35% crit damage, 8% stager chance -->
 		<quality						type="add"	min="4"					/>
-		<weight							type="base"	min="3.7"				/>
-		<SlashingDamage					type="base"	min="170"				/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="105"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 		<dismember_chance_mult			type="add"	min="0.1"				/>
+		<armor_reduction_perc			type="add"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.35"				/>
 		<desc_staggerchance_mult		type="add"	min="0.1"				/>
 		<buff_apply_chance				type="add"	min="0.1"				/>
 		<StaggerEffect					is_ability="true"					/>
 	</ability>	
 	
-	<ability name="Longclaw_crafted_Stats">
+	<ability name="Longclaw_crafted_Stats"> <!-- relic, lvl 18, 3 slots, 45 armor reduction, 12% poison chance, 10% yrden power, 50 poison damage -->
 		<quality						type="add"	min="4"					/>
-		<weight							type="base"	min="3.45"				/>
-		<SlashingDamage					type="base"	min="330"				/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="169"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<armor_reduction				type="base"	min="50"				/>
-		<spell_power_yrden				type="mult"	min="0.3"				/>
 		<dismember_chance_mult			type="add"	min="0.1"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<armor_reduction				type="base"	min="45"				/>
+		<spell_power_yrden				type="mult"	min="0.1"				/>
+		<PoisonDamage 					type="add"  min="50" 				/>
+		<desc_poinsonchance_mult		type="add"	min="0.12"				/>
+		<buff_apply_chance				type="add"	min="0.12"				/>
+		<PoisonEffect					is_ability="true"					/>
 	</ability>
 	
-	<ability name="Beannshie_crafted_Stats">
+	<ability name="Beannshie_crafted_Stats"> <!-- relic, lvl 14, 3 slots, 35 armor reduction, 10% freezing chance, 45 frost damage, 10% aard power -->
 		<quality						type="add"	min="4"					/>
-		<weight							type="base"	min="7.25"				/>
-		<SlashingDamage					type="base"	min="390"				/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="137"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<armor_reduction				type="base"	min="50"				/>
-		<FrostDamage 					type="add"  min="10" 				/>
-		<spell_power_aard				type="mult"	min="0.2"				/>
+		<armor_reduction				type="base"	min="35"				/>
+		<FrostDamage 					type="add"  min="45" 				/>
+		<spell_power_aard				type="mult"	min="0.1"				/>
+		<buff_apply_chance 				type="add" 	min="0.1"				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.1"				/>
+		<SlowdownFrostEffect 			is_ability="true" 					/>
 	</ability>		
 
-	<ability name="Blackunicorn_crafted_Stats">
+	<ability name="Blackunicorn_crafted_Stats"> <!-- relic, lvl 23, 3 slots, 10% armor reduction, 50% crit damage, 15% aard power, 15% bleeding chance -->
 		<quality						type="add"	min="4"					/>
-		<weight							type="base"	min="5.6"				/>
-		<SlashingDamage					type="base"	min="400"				/>
+		<weight							type="base"	min="6"					/>
+		<SlashingDamage					type="base"	min="209"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<spell_power_aard				type="mult"	min="0.1"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.1"				/>
-		<buff_apply_chance				type="add"	min="0.1"				/>
+		<armor_reduction_perc			type="add"	min="0.1"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<spell_power_aard				type="mult"	min="0.15"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.15"				/>
+		<buff_apply_chance				type="add"	min="0.15"				/>
 		<BleedingEffect					is_ability="true"					/>
 	</ability>	
 	
 <!-- STEEL WITCHER -->
 
-	<ability name="Viper School steel sword _Stats">
-		<weight							type="base"	min="3.4"				/>
+	<ability name="Viper School steel sword _Stats"> <!-- lvl 3, 1 slot, 5% poison chance -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage					type="base"	min="55"				/>
+		<SlashingDamage					type="base"	min="49"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<desc_poinsonchance_mult		type="add"	min="0.15"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
-		<PoisonEffect					is_ability="true"					/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-	</ability>
-
-	<ability name="Lynx School steel sword _Stats">
-		<weight							type="base"	min="6.3"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="180"				/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<desc_bleedingchance_mult		type="add"	min="0.05"				/>
+		<PoisonDamage 					type="add"  min="10" 				/>
+		<desc_poinsonchance_mult		type="add"	min="0.05"				/>
 		<buff_apply_chance				type="add"	min="0.05"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<PoisonEffect					is_ability="true"					/>
 	</ability>
 
-	<ability name="Lynx School steel sword 1 _Stats">
-		<weight							type="base"	min="4.35"				/>
+	<ability name="Lynx School steel sword _Stats"> <!-- lvl 17, 1 slot, 15% bleeding -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="228"				/>
+		<SlashingDamage 				type="base"	min="161"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-	</ability>
-	
-	<ability name="Lynx School steel sword 2 _Stats">
-		<weight							type="base"	min="4.5"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="276"				/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-	</ability>
-	
-	<ability name="Lynx School steel sword 3 _Stats">
-		<weight							type="base"	min="5.8"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="316"				/>
-		<SilverDamage 					type="base"	min="1"					/>	
-		<critical_hit_chance			type="add"	min="0.1"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
 		<desc_bleedingchance_mult		type="add"	min="0.15"				/>
+		<buff_apply_chance				type="add"	min="0.15"				/>
 		<BleedingEffect					is_ability="true"					/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Gryphon School steel sword _Stats">
-		<weight							type="base"	min="3.4"				/>
+	<ability name="Lynx School steel sword 1 _Stats"> <!-- lvl 23, 2 slots, 20% bleeding -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="132"				/>
+		<SlashingDamage 				type="base"	min="209"				/>
+		<SilverDamage 					type="base"	min="1"					/>
+		<desc_bleedingchance_mult		type="add"	min="0.2"				/>
+		<buff_apply_chance				type="add"	min="0.2"				/>
+		<BleedingEffect					is_ability="true"					/>
+	</ability>
+	
+	<ability name="Lynx School steel sword 2 _Stats"> <!-- lvl 29, 3 slots, 25% crit chance, 20% bleeding -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="257"				/>
+		<SilverDamage 					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.2"				/>
+		<buff_apply_chance				type="add"	min="0.2"				/>
+		<BleedingEffect					is_ability="true"					/>
+	</ability>
+	
+	<ability name="Lynx School steel sword 3 _Stats"> <!-- lvl 34, 3 slots, 30% crit chance, 25% bleeding -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="297"				/>
 		<SilverDamage 					type="base"	min="1"					/>	
-		<spell_power					type="mult"	min="0.05"				/>		
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<critical_hit_chance			type="add"	min="0.30"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.25"				/>
+		<BleedingEffect					is_ability="true"					/>
 	</ability>
 
-	<ability name="Gryphon School steel sword 1 _Stats">
-		<weight							type="base"	min="4.5"				/>
+	<ability name="Gryphon School steel sword _Stats"> <!-- lvl 11, 1 slot, 10% spell power -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="188"				/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<spell_power					type="mult"	min="0.1"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<SlashingDamage 				type="base"	min="113"				/>
+		<SilverDamage 					type="base"	min="1"					/>	
+		<spell_power					type="mult"	min="0.1"				/>		
 	</ability>
 
-	<ability name="Gryphon School steel sword 2 _Stats">
-		<weight							type="base"	min="4.4"				/>
+	<ability name="Gryphon School steel sword 1 _Stats"> <!-- lvl 18, 2 slots, 15% spell power -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="252"				/>
+		<SlashingDamage 				type="base"	min="169"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
 		<spell_power					type="mult"	min="0.15"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Gryphon School steel sword 3 _Stats">
-		<weight							type="base"	min="5.6"				/>
+	<ability name="Gryphon School steel sword 2 _Stats"> <!-- lvl 26, 3 slots, 25% crit chance, 20% spell power -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="316"				/>
+		<SlashingDamage 				type="base"	min="233"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
-		<spell_power					type="mult"	min="0.20"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
+		<spell_power					type="mult"	min="0.2"				/>
 	</ability>
 
-	<ability name="Bear School steel sword _Stats">
-		<weight							type="base"	min="4.6"				/>
+	<ability name="Gryphon School steel sword 3 _Stats"> <!-- lvl 34, 3 slots, 30% crit chance, 25% spell power -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="204"				/>
+		<SlashingDamage 				type="base"	min="297"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<focus_gain 					type="add"	min="0.05" 				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<critical_hit_chance			type="add"	min="0.3"				/>
+		<spell_power					type="mult"	min="0.25"				/>
 	</ability>
 
-	<ability name="Bear School steel sword 1 _Stats">
-		<weight							type="base"	min="4.8"				/>
+	<ability name="Bear School steel sword _Stats"> <!-- lvl 20, 1 slot, 15% focus gain, 60% crit damage -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="244"				/>
+		<SlashingDamage 				type="base"	min="186"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus 		type="add"	min="0.25"				/>
-		<focus_gain 					type="add"	min="0.1" 				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-	</ability>
-
-	<ability name="Bear School steel sword 2 _Stats">
-		<weight							type="base"	min="5.8"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="284"				/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus 		type="add"	min="0.5"				/>
 		<focus_gain 					type="add"	min="0.15" 				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<critical_hit_damage_bonus 		type="add"	min="0.6"				/>
 	</ability>
 
-	<ability name="Bear School steel sword 3 _Stats">
-		<weight							type="base"	min="6.4"				/>
+	<ability name="Bear School steel sword 1 _Stats"> <!-- lvl 25, 2 slots, 15% focus gain, 75% crit damage -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="316"				/>
+		<SlashingDamage 				type="base"	min="226"				/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<focus_gain 					type="add"	min="0.15" 				/>
+		<critical_hit_damage_bonus 		type="add"	min="0.75"				/>
+	</ability>
+
+	<ability name="Bear School steel sword 2 _Stats"> <!-- lvl 30, 3 slots, 20% focus gain, 80% crit damage -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="266"				/>
+		<SilverDamage 					type="base"	min="1"					/>
 		<focus_gain 					type="add"	min="0.2" 				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
+		<critical_hit_damage_bonus 		type="add"	min="0.8"				/>
+	</ability>
+
+	<ability name="Bear School steel sword 3 _Stats"> <!-- lvl 34, 3 slots, 25% focus gain, 85% crit bonus -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="298"				/>
+		<SilverDamage 					type="base"	min="1"					/>
+		<focus_gain 					type="add"	min="0.25" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.85"				/>
 	</ability>
 
 <!-- SILVER -->
 
-	<ability name="Silver sword 1_crafted _Stats">
-		<weight							type="base"	min="3.05"				/>
-		<quality						type="add"	min="3"					/>
+	<ability name="Silver sword 1_crafted _Stats"> <!-- q1, lvl 1 -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="1"					/>
 		<SlashingDamage					type="base"	min="1" 				/>
-		<SilverDamage					type="base"	min="215"				/>
+		<SilverDamage					type="base"	min="100"				/>
+		<armor_reduction				type="base"	min="20"				/>
 	</ability>
 
-	<ability name="Silver sword 2_crafted _Stats">
-		<weight							type="base"	min="3.05"				/>
+	<ability name="Silver sword 2_crafted _Stats"> <!-- q1, lvl 2 -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="1"					/>
+		<SlashingDamage					type="base"	min="1"					/>
+		<SilverDamage					type="base"	min="110"				/>
+		<critical_hit_chance			type="add"	min="0.1"				/>
+	</ability>
+
+	<ability name="Silver sword 3_crafted _Stats"> <!-- q1, lvl 4, 1 slot -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="1"					/>
+		<SlashingDamage					type="base"	min="1"					/>
+		<SilverDamage					type="base"	min="130"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+	<ability name="Silver sword 4_crafted _Stats"> <!-- q2, lvl 6, 1 slot -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="2"					/>
+		<SlashingDamage					type="base"	min="1"					/>
+		<SilverDamage					type="base"	min="150"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.2"				/>
+		<BurningEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_burningchance_mult		type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Silver sword 5_crafted _Stats"> <!-- q2, lvl 8, 2 slots -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="2"					/>
+		<SlashingDamage					type="base"	min="1"					/>
+		<SilverDamage					type="base"	min="170"				/>
+		<armor_reduction				type="base"	min="20"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Silver sword 6_crafted _Stats"> <!-- q3, lvl 10, 2 slots -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="3"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="225"				/>
+		<SilverDamage					type="base"	min="190"				/>
+		<attack_power					type="mult"	min="0.1"				/>
+		<StaggerEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_staggerchance_mult		type="add"	min="0.1"				/>
+		<spell_power_axii				type="mult"	min="0.1"				/>
 	</ability>
-
-	<ability name="Silver sword 3_crafted _Stats">
-		<weight							type="base"	min="3.1"				/>
-		<quality						type="add"	min="3"					/>
-		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="250"				/>
-	</ability>
-
-	<ability name="Silver sword 4_crafted _Stats">
-		<weight							type="base"	min="3.05"				/>
-		<quality						type="add"	min="3"					/>
-		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="275"				/>
-	</ability>
-
-	<ability name="Silver sword 5_crafted _Stats">
-		<weight							type="base"	min="3.25"				/>
-		<quality						type="add"	min="3"					/>
+	
+	<ability name="mq4005 Silver sword 6_crafted _Stats"> <!-- quest (Berengar sword, KM, lvl 27->22), relic, lvl 22, 3 slots, 50% crit damage, 25% crit chance, 50 armor reduction, 10% bleeding -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="4"					/>
 		<SlashingDamage					type="base"	min="1"					/>
 		<SilverDamage					type="base"	min="310"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-	</ability>
-
-	<ability name="Silver sword 6_crafted _Stats">
-		<weight							type="base"	min="3.4"				/>
-		<quality						type="add"	min="3"					/>
-		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="325"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-	</ability>
-	
-	<ability name="mq4005 Silver sword 6_crafted _Stats">
-		<weight							type="base"	min="4.35"				/>
-		<quality						type="add"	min="4"					/>
-		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="375"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
 		<armor_reduction 				type="base" min="50" 				/>
 		<BleedingEffect 				is_ability="true" 					/>
-		<buff_apply_chance 				type="add" 	min="0.10"				/>
-		<desc_bleedingchance_mult 		type="add" 	min="0.10" 				/>
-		<dismember_chance_mult 			type="add" 	min="0.03" 				/>
+		<buff_apply_chance 				type="add" 	min="0.1"				/>
+		<desc_bleedingchance_mult 		type="add" 	min="0.1" 				/>
+		<dismember_chance_mult 			type="add" 	min="0.1" 				/>
 	</ability>
 
-	<ability name="Silver sword 7_crafted _Stats">
-		<weight							type="base"	min="3.6"				/>
+	<ability name="Silver sword 7_crafted _Stats"> <!-- q3, lvl 12, 3 slots -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="3"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="355"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<SilverDamage					type="base"	min="210"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.40"				/>
+		<SlowdownFrostEffect			is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_freezingchance_mult		type="add"	min="0.1"				/>
+		<spell_power_yrden				type="mult"	min="0.1"				/>
 	</ability>
 
-	<ability name="Elven silver sword 1_crafted _Stats">
-		<weight							type="base"	min="3.5"				/>
-		<quality						type="add"	min="3"					/>
+	<ability name="Elven silver sword 1_crafted _Stats"> <!-- q2, lvl 5, 1 slot -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="325"				/>
+		<SilverDamage					type="base"	min="140"				/>
 		<critical_hit_chance			type="add"	min="0.1"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Elven silver sword 2_crafted _Stats">
-		<weight							type="base"	min="3.5"				/>
+	<ability name="Elven silver sword 2_crafted _Stats"> <!-- q3, lvl 11, 2 slots -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="3"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="355"				/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<SilverDamage					type="base"	min="200"				/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.1"				/>
+		<spell_power_aard				type="mult"	min="0.1"				/>
 	</ability>
 
-	<ability name="Dwarven silver sword 1_crafted _Stats">
-		<weight							type="base"	min="4.1"				/>
-		<quality						type="add"	min="3"					/>
+	<ability name="Dwarven silver sword 1_crafted _Stats"> <!-- q2, lvl 7, 1 slot -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="335"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<SilverDamage					type="base"	min="160"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+		<ConfusionEffect				is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_confusionchance_mult		type="add"	min="0.05"				/>
 	</ability>
 	
-	<ability name="Dwarven silver sword 2_crafted _Stats">
-		<weight							type="base"	min="6.1"				/>
+	<ability name="Dwarven silver sword 2_crafted _Stats"> <!-- q3, lvl 13, 2 slots -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="3"					/>
 		<SlashingDamage					type="base"	min="1" 				/>
-		<SilverDamage					type="base"	min="465"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<SilverDamage					type="base"	min="220"				/>
+		<armor_reduction_perc			type="base"	min="0.1"				/>
+		<BurningEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_burningchance_mult		type="add"	min="0.1"				/>
+		<spell_power_igni				type="mult"	min="0.1"				/>
 	</ability>
 
-	<ability name="Gnomish silver sword 1_crafted _Stats">
-		<weight							type="base"	min="3.3"				/>
-		<quality						type="add"	min="3"					/>
+	<ability name="Gnomish silver sword 1_crafted _Stats"> <!-- q2, lvl 9, 2 slots -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="355"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
+		<SilverDamage					type="base"	min="180"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+		<SlowdownFrostEffect			is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.05"				/>
+		<desc_freezingchance_mult		type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Gnomish silver sword 2_crafted _Stats">
-		<weight							type="base"	min="5.25"				/>
+	<ability name="Gnomish silver sword 2_crafted _Stats"> <!-- q3, lvl 15, 3 slots -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="3"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="465"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<SilverDamage					type="base"	min="240"				/>
+		<armor_reduction_perc			type="base"	min="0.1"				/>
+		<BleedingEffect					is_ability="true"					/>
+		<buff_apply_chance				type="add"	min="0.1"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.1"				/>
+		<spell_power_quen				type="mult"	min="0.1"				/>
 	</ability>
 
 <!-- SILVER RELIC -->
 
-	<ability name="Harpy_crafted_Stats">
-		<weight							type="base"	min="5.7"				/>
+	<ability name="Harpy_crafted_Stats"> <!-- relic, lvl 25, 3 slots, 15% attack power, 25% crit chance, 50% crit damage, 15% bleeding chance -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="475"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.1"				/>
-		<buff_apply_chance				type="add"	min="0.1"				/>
+		<SilverDamage					type="base"	min="340"				/>
+		<dismember_chance				type="add"	min="0.1"				/>
+		<attack_power					type="mult"	min="0.15"				/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.15"				/>
+		<buff_apply_chance				type="add"	min="0.15"				/>
 		<BleedingEffect					is_ability="true"					/>
 	</ability>	
 	
-	<ability name="Negotiator_crafted_Stats">
-		<weight							type="base"	min="7.3"				/>
+	<ability name="Negotiator_crafted_Stats"> <!-- relic, lvl 22, 3 slots, 50 armor reduction, 50% crit damage, 15% confusion chance, 15% yrden power -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="450"				/>
+		<SilverDamage					type="base"	min="310"				/>
+		<dismember_chance				type="add"	min="0.1"				/>
 		<armor_reduction				type="base"	min="50"				/>
-		<critical_hit_chance			type="add"	min="0.15"				/>
-		<desc_confusionchance_mult		type="add"	min="0.1"				/>
-		<buff_apply_chance				type="add"	min="0.1"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<spell_power_yrden				type="mult"	min="0.15"				/>
+		<desc_confusionchance_mult		type="add"	min="0.15"				/>
+		<buff_apply_chance				type="add"	min="0.15"				/>
 		<ConfusionEffect				is_ability="true"					/>
 	</ability>	
 
-	<ability name="Weeper_crafted_Stats">
-		<weight							type="base"	min="7.3"				/>
+	<ability name="Weeper_crafted_Stats"> <!-- relic, lvl 18, 3 slots, 10% attack power, 20% crit chance, 60% crit damage, 10% focus gain -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"					/>
 		<SlashingDamage					type="base"	min="1"					/>
-		<SilverDamage					type="base"	min="410"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<dismember_chance_mult			type="add"	min="0.05"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
+		<SilverDamage					type="base"	min="270"				/>
+		<dismember_chance				type="add"	min="0.1"				/>
+		<attack_power					type="mult"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.2"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.60"				/>
+		<focus_gain 					type="add" 	min="0.1"				/>
 	</ability>		
 
 <!-- SILVER WITCHER -->
-	<ability name="Viper School silver sword _Stats">
-		<weight							type="base"	min="2.4"				/>
+	<ability name="Viper School silver sword _Stats"> <!-- lvl 3, 1 slot, 5% poison chance -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="125"				/>
-		<desc_poinsonchance_mult		type="add"	min="0.1"				/>
-		<buff_apply_chance				type="add"	min="0.1"				/>
-		<PoisonEffect					is_ability="true"					/>
-		<spell_power_aard				type="mult"	min="0.1"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
-	</ability>
-
-	<ability name="Lynx School silver sword _Stats">
-		<weight							type="base"	min="2.35"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="284"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.05"				/>
+		<SilverDamage 					type="base"	min="120"				/>
+		<PoisonDamage 					type="add"  min="20" 				/>
+		<desc_poinsonchance_mult		type="add"	min="0.05"				/>
 		<buff_apply_chance				type="add"	min="0.05"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<spell_power_aard				type="mult"	min="0.12"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
+		<PoisonEffect					is_ability="true"					/>
 	</ability>
 
-	<ability name="Lynx School silver sword 1 _Stats">
-		<weight							type="base"	min="3.45"				/>
+	<ability name="Lynx School silver sword _Stats"> <!-- lvl 17, 1 slot, 15% bleeding -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="344"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<spell_power_aard				type="mult"	min="0.14"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
-	</ability>
-
-	<ability name="Lynx School silver sword 2 _Stats">
-		<weight							type="base"	min="5.45"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="404"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
-		<spell_power_aard				type="mult"	min="0.14"				/>
-		<dismember_chance_mult			type="add"	min="0.05"				/>
-		<BleedingEffect					is_ability="true"					/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
-	</ability>
-
-	<ability name="Lynx School silver sword 3 _Stats">
-		<weight							type="base"	min="6.9"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="454"				/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<SilverDamage 					type="base"	min="260"				/>
 		<desc_bleedingchance_mult		type="add"	min="0.15"				/>
 		<buff_apply_chance				type="add"	min="0.15"				/>
-		<spell_power_aard				type="mult"	min="0.15"				/>
-		<dismember_chance_mult			type="add"	min="0.1"				/>
 		<BleedingEffect					is_ability="true"					/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
 
-	<ability name="Gryphon School silver sword _Stats">
-		<weight							type="base"	min="3.4"				/>
+	<ability name="Lynx School silver sword 1 _Stats"> <!-- lvl 23, 2 slots, 20% bleeding -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="224"				/>
-		<spell_power					type="mult"	min="0.05"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
+		<SilverDamage 					type="base"	min="320"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.2"				/>
+		<buff_apply_chance				type="add"	min="0.2"				/>
+		<BleedingEffect					is_ability="true"					/>
 	</ability>
 
-	<ability name="Gryphon School silver sword 1 _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Lynx School silver sword 2 _Stats"> <!-- lvl 29, 3 slots, 25% crit chance, 20% bleeding -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="294"				/>
+		<SilverDamage 					type="base"	min="380"				/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.2"				/>
+		<buff_apply_chance				type="add"	min="0.2"				/>
+		<BleedingEffect					is_ability="true"					/>
+	</ability>
+
+	<ability name="Lynx School silver sword 3 _Stats"> <!-- lvl 34, 3 slots, 30% crit chance, 25% bleeding -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="430"				/>
+		<critical_hit_chance			type="add"	min="0.3"				/>
+		<desc_bleedingchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
+		<BleedingEffect					is_ability="true"					/>
+	</ability>
+
+	<ability name="Gryphon School silver sword _Stats"> <!-- lvl 11, 1 slot, 10% spell power -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="200"				/>
 		<spell_power					type="mult"	min="0.1"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
 
-	<ability name="Gryphon School silver sword 2 _Stats">
-		<weight							type="base"	min="5.6"				/>
+	<ability name="Gryphon School silver sword 1 _Stats"> <!-- lvl 18, 2 slots, 15% spell power -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="374"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
+		<SilverDamage 					type="base"	min="270"				/>
 		<spell_power					type="mult"	min="0.15"				/>
-		<dismember_chance_mult			type="add"	min="0.1"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
 
-	<ability name="Gryphon School silver sword 3 _Stats">
-		<weight							type="base"	min="5.6"				/>
+	<ability name="Gryphon School silver sword 2 _Stats"> <!-- lvl 26, 3 slots, 25% crit chance, 20% spell power -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="454"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
+		<SilverDamage 					type="base"	min="350"				/>
+		<critical_hit_chance			type="add"	min="0.25"				/>
 		<spell_power					type="mult"	min="0.2"				/>
-		<dismember_chance_mult			type="add"	min="0.1"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
 	</ability>
 
-	<ability name="Bear School silver sword _Stats">
-		<weight							type="base"	min="4.55"				/>
+	<ability name="Gryphon School silver sword 3 _Stats"> <!-- lvl 34, 3 slots, 30% crit chance, 25% spell power -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="314" 				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<focus_gain 					type="add" 	min="0.05" 				/>
-		<dismember_chance_mult			type="add"	min="0.1"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
+		<SilverDamage 					type="base"	min="430"				/>
+		<critical_hit_chance			type="add"	min="0.3"				/>
+		<spell_power					type="mult"	min="0.25"				/>
 	</ability>
 
-	<ability name="Bear School silver sword 1 _Stats">
-		<weight							type="base"	min="6.0"				/>
+	<ability name="Bear School silver sword _Stats"> <!-- lvl 20, 1 slot, 15% focus gain, 60% crit damage -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="364"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
-		<focus_gain 					type="add"	min="0.1" 				/>
-		<dismember_chance_mult			type="add"	min="0.12"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
+		<SilverDamage 					type="base"	min="290" 				/>
+		<focus_gain 					type="add" 	min="0.15" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.60"				/>
 	</ability>
 
-	<ability name="Bear School silver sword 2 _Stats">
-		<weight							type="base"	min="6.0"				/>
+	<ability name="Bear School silver sword 1 _Stats"> <!-- lvl 25, 2 slots, 15% focus gain, 75% crit damage -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="414"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<focus_gain 					type="add"	min="0.15" 				/>
-		<dismember_chance_mult			type="add"	min="0.13"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
-	</ability>
-
-	<ability name="Bear School silver sword 3 _Stats">
-		<weight							type="base"	min="6.0"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="454"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
+		<SilverDamage 					type="base"	min="340"				/>
+		<focus_gain 					type="add" 	min="0.15" 				/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<focus_gain 					type="add"	min="0.2" 				/>
-		<dismember_chance_mult			type="add"	min="0.14"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.2"				/>
-		</ability>
+	</ability>
+
+	<ability name="Bear School silver sword 2 _Stats"> <!-- lvl 30, 3  slots, 20% focus gain, 80% crit damage -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="390"				/>
+		<focus_gain 					type="add" 	min="0.2" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.8"				/>
+	</ability>
+
+	<ability name="Bear School silver sword 3 _Stats"> <!-- lvl 34, 3 slots, 25% focus gain, 85% crit damage -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="430"				/>
+		<focus_gain 					type="add" 	min="0.25" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.85"				/>
+	</ability>
 		
 </abilities>
 
@@ -704,7 +781,7 @@
 	<item
 		name							="Short sword 1_crafted" 
 		category						="steelsword" 
-		price							="16"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -728,13 +805,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/short_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Short sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -772,7 +850,7 @@
 	<item
 		name							="Short sword 2_crafted" 
 		category						="steelsword"
-		price							="10"
+		price							="30"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -794,15 +872,16 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_short_sword_2" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/sword-01-b.png"
+		icon_path						="icons/inventory/weapons/short_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Short sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -840,7 +919,7 @@
 	<item
 		name							="No Mans Land sword 1_crafted" 
 		category						="steelsword"
-		price							="10"
+		price							="32"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -864,13 +943,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nomansland_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nml
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -908,10 +988,10 @@
 	<item
 		name							="No Mans Land sword 2_crafted" 
 		category						="steelsword"
-		price							="12"
+		price							="84"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		equip_template					="nomansland_sword_lvl2"
 		stackable						="1" 
 		grid_size						="2"
@@ -932,13 +1012,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nomansland_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nml
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -976,7 +1058,7 @@
 	<item
 		name							="No Mans Land sword 3_crafted" 
 		category						="steelsword"
-		price							="16"
+		price							="118"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1000,13 +1082,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nomansland_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nml
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 3_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1044,7 +1128,7 @@
 	<item
 		name							="No Mans Land sword 4_crafted" 
 		category						="steelsword"
-		price							="16"
+		price							="120"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1068,13 +1152,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nomansland_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nml
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1112,10 +1198,10 @@
 	<item
 		name							="Nilfgaardian sword 1_crafted" 
 		category						="steelsword"
-		price							="24"
+		price							="90"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		equip_template					="nilfgaardian_sword_lvl1"
 		stackable						="1" 
 		grid_size						="2"
@@ -1136,13 +1222,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nilfgaardian_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nilfgaard
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nilfgaard
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="4">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1180,10 +1268,10 @@
 	<item
 		name							="Nilfgaardian sword 4_crafted" 
 		category						="steelsword"
-		price							="108"
+		price							="224"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		equip_template					="nilfgaardian_sword_lvl4"
 		stackable						="1" 
 		grid_size						="2"
@@ -1204,13 +1292,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nilfgaardian_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nilfgaard
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nilfgaard
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1248,10 +1338,10 @@
 	<item
 		name							="Novigraadan sword 1_crafted"
 		category						="steelsword"
-		price							="20"
+		price							="144"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="2"
 		equip_template					="novigraadan_sword_lvl1"
 		stackable						="1" 
 		grid_size						="2"
@@ -1272,13 +1362,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/novigraadan_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_novigraad
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="3">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1316,10 +1408,10 @@
 	<item
 		name							="Novigraadan sword 2_crafted" 
 		category						="steelsword"
-		price							="20"
+		price							="146"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		equip_template					="novigraadan_sword_lvl2"
 		stackable						="1" 
 		grid_size						="2"
@@ -1340,13 +1432,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/novigraadan_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_novigraad
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1384,10 +1478,10 @@
 	<item
 		name							="Novigraadan sword 3_crafted" 
 		category						="steelsword"
-		price							="28"
+		price							="180"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		equip_template					="novigraadan_sword_lvl3"
 		stackable						="1" 
 		grid_size						="2"
@@ -1408,13 +1502,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/novigraadan_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_novigraad
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 3_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1452,10 +1548,10 @@
 	<item
 		name							="Novigraadan sword 4_crafted" 
 		category						="steelsword"
-		price							="120"
+		price							="232"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="3"
 		equip_template					="novigraadan_sword_lvl4"
 		stackable						="1" 
 		grid_size						="2"
@@ -1476,13 +1572,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/novigraadan_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_novigraad
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1520,10 +1618,10 @@
 	<item
 		name							="Inquisitor sword 1_crafted" 
 		category						="steelsword"
-		price							="108"
+		price							="143"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		equip_template					="inquisitor_sword_lvl1"
 		stackable						="1" 
 		grid_size						="2"
@@ -1542,15 +1640,17 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_inquisitor_sword_1" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/sword-01-b.png"
+		icon_path						="icons/inventory/weapons/inquisitor_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Inquisitor sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1588,10 +1688,10 @@
 	<item
 		name							="Inquisitor sword 2_crafted" 
 		category						="steelsword"
-		price							="108"
+		price							="342"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		equip_template					="inquisitor_sword_lvl2"
 		stackable						="1" 
 		grid_size						="2"
@@ -1610,15 +1710,17 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_inquisitor_sword_2" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/sword-01-b.png"
+		icon_path						="icons/inventory/weapons/inquisitor_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Inquisitor sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1656,7 +1758,7 @@
 	<item
 		name							="Skellige sword 1_crafted" 
 		category						="steelsword"
-		price							="89"
+		price							="57"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1680,13 +1782,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/skellige_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_skellige
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1724,7 +1827,7 @@
 	<item
 		name							="Skellige sword 2_crafted" 
 		category						="steelsword"
-		price							="89"
+		price							="147"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1748,13 +1851,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/skellige_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_skellige
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1792,10 +1897,10 @@
 	<item
 		name							="Skellige sword 3_crafted" 
 		category						="steelsword"
-		price							="89"
+		price							="205"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		equip_template					="skellige_sword_lvl3"
 		stackable						="1" 
 		grid_size						="2"
@@ -1816,13 +1921,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/skellige_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_skellige
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 3_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1860,10 +1967,10 @@
 	<item
 		name							="Skellige sword 4_crafted" 
 		category						="steelsword"
-		price							="181"
+		price							="265"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="3"
 		equip_template					="skellige_sword_lvl4"
 		stackable						="1" 
 		grid_size						="2"
@@ -1884,13 +1991,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/skellige_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_skellige
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1928,7 +2037,7 @@
 	<item
 		name							="Scoiatael sword 1_crafted" 
 		category						="steelsword"
-		price							="140"
+		price							="55"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1952,14 +2061,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/scoiataels_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Hardened timber</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1997,10 +2107,10 @@
 	<item
 		name							="Scoiatael sword 2_crafted" 
 		category						="steelsword"
-		price							="140"
+		price							="145"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		equip_template					="scoiataels_sword_lvl2"
 		stackable						="1" 
 		grid_size						="2"
@@ -2021,14 +2131,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/scoiataels_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2066,7 +2177,7 @@
 	<item
 		name							="Scoiatael sword 3_crafted" 
 		category						="steelsword"
-		price							="140"
+		price							="338"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2090,14 +2201,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/scoiataels_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 3_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2135,10 +2247,10 @@
 	<item
 		name							="Scoiatael sword 4_crafted" 
 		category						="steelsword"
-		price							="140"
+		price							="396"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		equip_template					="scoiataels_sword_lvl4"
 		stackable						="1" 
 		grid_size						="2"
@@ -2159,14 +2271,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/scoiataels_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="4">Meteorite ore</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2204,10 +2317,10 @@
 	<item
 		name							="Dwarven sword 1_crafted" 
 		category						="steelsword"
-		price							="181"
+		price							="80"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		equip_template					="dwarven_sword_lvl1"
 		stackable						="1" 
 		grid_size						="2"
@@ -2228,14 +2341,16 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/dwarven_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dark steel ingot</parts>
-		</recycling_parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
+										<parts count="1">Wire</parts>
+		</recycling_parts> 
 		<anim_actions>
 										<action 
 											name="draw" 
@@ -2272,7 +2387,7 @@
 	<item
 		name							="Dwarven sword 2_crafted" 
 		category						="steelsword"
-		price							="725"
+		price							="334"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2296,14 +2411,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/dwarven_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2341,7 +2457,7 @@
 	<item
 		name							="Gnomish sword 1_crafted" 
 		category						="steelsword"
-		price							="710"
+		price							="203"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2365,14 +2481,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/gnomish_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2410,10 +2527,10 @@
 	<item
 		name							="Gnomish sword 2_crafted" 
 		category						="steelsword"
-		price							="925"
+		price							="394"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		equip_template					="gnomish_sword_lvl2"
 		stackable						="1" 
 		grid_size						="2"
@@ -2434,16 +2551,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/gnomish_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="2">Ruby dust</parts>
-										<parts count="2">Sapphire dust</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2483,7 +2599,7 @@
 	<item
 		name							="Arbitrator_crafted"
 		category						="steelsword"
-		price							="185"
+		price							="867"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -2507,13 +2623,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/unique_arbitrator_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Arbitrator_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Arbitrator_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Amethyst</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2551,7 +2669,7 @@
 	<item
 		name							="Longclaw_crafted" 
 		category						="steelsword" 
-		price							="217"
+		price							="1012"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -2573,15 +2691,18 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_longclaw" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/sword-01-b.png"
+		icon_path						="icons/inventory/weapons/steel_unique_longclaw_64x128.png"
 	>
-		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
-										<parts count="1">Amethyst</parts>
-		</recycling_parts>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Longclaw_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Longclaw_crafted_Stats</a>
 		</base_abilities>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
+		</recycling_parts>
 		<anim_actions>
 										<action 
 											name="draw" 
@@ -2618,7 +2739,7 @@
 	<item
 		name							="Beannshie_crafted" 
 		category						="steelsword" 
-		price							="913"
+		price							="942"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -2642,13 +2763,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/steel_unique_beanshie_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Beannshie_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Beannshie_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
-										<parts count="1">Sapphire</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2686,7 +2809,7 @@
 	<item
 		name							="Blackunicorn_crafted" 
 		category						="steelsword" 
-		price							="1091"
+		price							="1037"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -2710,15 +2833,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/unique_black_unicorn_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Blackunicorn_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Blackunicorn_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
-										<parts count="2">Ruby dust</parts>
-										<parts count="2">Sapphire dust</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2758,13 +2881,13 @@
 	<item
 		name							="Viper School steel sword"
 		category						="steelsword" 
-		price							="150"
+		price							="190"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
-		equip_template					="witcher_steel_lynx_sword_lvl1"
+		equip_template					="nomansland_sword_lvl2"
 		equip_slot						="steel_sword_back_slot" 
 		hold_slot						="r_weapon" 
 		weapon							="true" 
@@ -2780,16 +2903,16 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_viper_school_steel_sword" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/witcher_steel_lynx_sword_lvl1_64x128.png"
+		icon_path						="icons/inventory/weapons/nomansland_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Viper School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
-										<parts count="1">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2827,7 +2950,7 @@
 	<item
 		name							="Lynx School steel sword"
 		category						="steelsword" 
-		price							="133"
+		price							="238"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -2851,14 +2974,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_lynx_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="4">Iron ingot</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2897,7 +3020,7 @@
 	<item
 		name							="Lynx School steel sword 1"
 		category						="steelsword" 
-		price							="223"
+		price							="502"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2921,14 +3044,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_lynx_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Lynx School steel sword 1 _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2967,7 +3091,7 @@
 	<item
 		name							="Lynx School steel sword 2"
 		category						="steelsword" 
-		price							="327"
+		price							="775"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -2991,14 +3115,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_lynx_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School steel sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Ruby</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -3037,7 +3162,7 @@
 	<item
 		name							="Lynx School steel sword 3"
 		category						="steelsword" 
-		price							="1079"
+		price							="1351"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3061,15 +3186,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_lynx_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School steel sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="1">Ruby flawless</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -3107,7 +3232,7 @@
 	<item
 		name							="Gryphon School steel sword"
 		category						="steelsword" 
-		price							="95"
+		price							="204"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3131,14 +3256,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_gryphon_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Fifth essence</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3177,7 +3302,7 @@
 	<item
 		name							="Gryphon School steel sword 1"
 		category						="steelsword" 
-		price							="135"
+		price							="471"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3201,13 +3326,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_gryphon_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School steel sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3246,7 +3373,7 @@
 	<item
 		name							="Gryphon School steel sword 2"
 		category						="steelsword" 
-		price							="142"
+		price							="747"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3270,13 +3397,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_gryphon_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School steel sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3315,7 +3444,7 @@
 	<item
 		name							="Gryphon School steel sword 3"
 		category						="steelsword" 
-		price							="694"
+		price							="1353"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3339,14 +3468,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_gryphon_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School steel sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3384,7 +3514,7 @@
 	<item
 		name							="Bear School steel sword"
 		category						="steelsword" 
-		price							="46"
+		price							="292"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3408,13 +3538,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_bear_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3453,7 +3584,7 @@
 	<item
 		name							="Bear School steel sword 1"
 		category						="steelsword" 
-		price							="142"
+		price							="619"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3477,13 +3608,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_bear_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School steel sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3522,7 +3655,7 @@
 	<item
 		name							="Bear School steel sword 2"
 		category						="steelsword"
-		price							="686"
+		price							="955"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3546,14 +3679,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_bear_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School steel sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3592,7 +3726,7 @@
 	<item
 		name							="Bear School steel sword 3"
 		category						="steelsword" 
-		price							="710"
+		price							="1600"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3616,14 +3750,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/witcher_steel_bear_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School steel sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3662,7 +3797,7 @@
 	<item
 		name							="Silver sword 1_crafted" 
 		category						="silversword" 
-		price							="152"
+		price							="68"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -3686,13 +3821,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3738,10 +3874,10 @@
 	<item
 		name							="Silver sword 2_crafted" 
 		category						="silversword" 
-		price							="152"
+		price							="70"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="0" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="silver_sword_lvl2"
@@ -3762,13 +3898,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3814,7 +3951,7 @@
 	<item
 		name							="Silver sword 3_crafted" 
 		category						="silversword" 
-		price							="154"
+		price							="124"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -3838,13 +3975,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 3_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>   
 		<anim_actions>
 										<action 
@@ -3890,7 +4029,7 @@
 	<item
 		name							="Silver sword 4_crafted" 
 		category						="silversword" 
-		price							="152"
+		price							="233"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -3914,13 +4053,16 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 4_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -3966,10 +4108,10 @@
 	<item
 		name							="Silver sword 5_crafted" 
 		category						="silversword" 
-		price							="252"
+		price							="287"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="2" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="silver_sword_lvl5"
@@ -3990,13 +4132,16 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl5_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 5_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4042,7 +4187,7 @@
 	<item
 		name							="Silver sword 6_crafted" 
 		category						="silversword" 
-		price							="258"
+		price							="551"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2" 
@@ -4066,13 +4211,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl6_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 6_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4118,10 +4265,10 @@
 	<item
 		name							="mq4005 Silver sword 6_crafted" 
 		category						="silversword" 
-		price							="312"
+		price							="1050"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2" 
+		enhancement_slots				="3" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="silver_sword_lvl6"
@@ -4142,13 +4289,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl6_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>mq4005 Silver sword 6_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4194,10 +4343,10 @@
 	<item
 		name							="Silver sword 7_crafted" 
 		category						="silversword" 
-		price							="266"
+		price							="605"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2" 
+		enhancement_slots				="3" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="silver_sword_lvl7"
@@ -4218,13 +4367,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_sword_lvl7_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 7_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4270,10 +4421,10 @@
 	<item
 		name							="Elven silver sword 1_crafted" 
 		category						="silversword" 
-		price							="251"
+		price							="256"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0" 
+		enhancement_slots				="1" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="elven_silver_sword_lvl1"
@@ -4294,13 +4445,16 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/elven_silver_sword_lvl1-64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Elven silver sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4346,10 +4500,10 @@
 	<item
 		name							="Elven silver sword 2_crafted" 
 		category						="silversword" 
-		price							="251"
+		price							="578"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="2" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="elven_silver_sword_lvl2"
@@ -4370,13 +4524,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/elven_silver_sword_lvl2-264x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Elven silver sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4422,10 +4578,10 @@
 	<item
 		name							="Dwarven silver sword 1_crafted" 
 		category						="silversword" 
-		price							="297"
+		price							="260"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0" 
+		enhancement_slots				="1" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="dwarven_sword_lvl1"
@@ -4446,13 +4602,16 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/dwarven_silver_sword_lvl1-64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven silver sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4498,10 +4657,10 @@
 	<item
 		name							="Dwarven silver sword 2_crafted" 
 		category						="silversword" 
-		price							="725"
+		price							="582"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="2" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="dwarven_sword_lvl2"
@@ -4522,14 +4681,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/dwarven_silver_sword_lvl2-64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven silver sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4575,10 +4735,10 @@
 	<item
 		name							="Gnomish silver sword 1_crafted" 
 		category						="silversword" 
-		price							="243"
+		price							="316"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="2" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="gnomish_sword_lvl1"
@@ -4599,13 +4759,16 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/gnomish_silver_sword_lvl1-64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish silver sword 1_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4651,10 +4814,10 @@
 	<item
 		name							="Gnomish silver sword 2_crafted" 
 		category						="silversword" 
-		price							="680"
+		price							="636"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="3" 
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="gnomish_sword_lvl2"
@@ -4675,14 +4838,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/gnomish_silver_sword_lvl2-64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, mod_weapon, DoNotEnhance, mod_origin_nonhuman
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish silver sword 2_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -4730,7 +4894,7 @@
 	<item
 		name							="Harpy_crafted" 
 		category						="silversword" 
-		price							="886"
+		price							="1295"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -4754,14 +4918,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_unique_harpy_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Harpy_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Harpy_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="1">Ruby</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4807,7 +4972,7 @@
 	<item
 		name							="Negotiator_crafted" 
 		category						="silversword" 
-		price							="1010"
+		price							="1300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -4831,14 +4996,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_unique_negotiator_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Negotiator_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Negotiator_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="2">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4884,7 +5050,7 @@
 	<item
 		name							="Weeper_crafted" 
 		category						="silversword" 
-		price							="755"
+		price							="1235"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3" 
@@ -4908,13 +5074,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/silver_unique_weeper_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
-		<base_abilities>				<a>Weeper_crafted_Stats</a>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Weeper_crafted_Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4961,13 +5129,13 @@
 	<item
 		name							="Viper School silver sword"
 		category						="silversword" 
-		price							="242"
+		price							="226"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
-		equip_template					="silver_sword_lvl1"
+		equip_template					="silver_sword_lvl2"
 		equip_slot						="silver_sword_back_slot"
 		hold_slot						="r_weapon"
 		weapon							="true"
@@ -4983,16 +5151,16 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_viper_school_silver_sword" 
 		localisation_key_description	="item_desc_silver_sword"
-		icon_path						="icons/inventory/weapons/sword-02-b.png"
+		icon_path						="icons/inventory/weapons/silver_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Viper School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="1">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5037,7 +5205,7 @@
 	<item
 		name							="Lynx School silver sword"
 		category						="silversword" 
-		price							="219"
+		price							="274"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -5061,14 +5229,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_lynx_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Silver ingot</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>  
 		<anim_actions>
 										<action 
@@ -5114,7 +5282,7 @@
 	<item
 		name							="Lynx School silver sword 1"
 		category						="silversword" 
-		price							="343"
+		price							="574"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -5138,14 +5306,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_lynx_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5191,7 +5360,7 @@
 	<item
 		name							="Lynx School silver sword 2"
 		category						="silversword" 
-		price							="771"
+		price							="1011"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5215,15 +5384,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_lynx_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5269,7 +5438,7 @@
 	<item
 		name							="Lynx School silver sword 3"
 		category						="silversword" 
-		price							="927"
+		price							="1614"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5293,15 +5462,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_lynx_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, LynxSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Lynx School silver sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="1">Ruby</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5346,7 +5515,7 @@
 	<item
 		name							="Gryphon School silver sword"
 		category						="silversword" 
-		price							="233"
+		price							="237"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -5370,14 +5539,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_gryphon_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="3">Silver ingot</parts>
-										<parts count="1">Fifth essence</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5423,7 +5592,7 @@
 	<item
 		name							="Gryphon School silver sword 1"
 		category						="silversword" 
-		price							="239"
+		price							="522"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -5447,13 +5616,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_gryphon_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5499,7 +5670,7 @@
 	<item
 		name							="Gryphon School silver sword 2"
 		category						="silversword" 
-		price							="694"
+		price							="940"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5523,14 +5694,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_gryphon_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5576,7 +5748,7 @@
 	<item
 		name							="Gryphon School silver sword 3"
 		category						="silversword" 
-		price							="694"
+		price							="1528"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5600,14 +5772,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_gryphon_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, GryphonSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gryphon School silver sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Hardened timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5652,7 +5825,7 @@
 	<item
 		name							="Bear School silver sword"
 		category						="silversword" 
-		price							="182"
+		price							="316"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -5676,13 +5849,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_bear_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -5728,7 +5902,7 @@
 	<item
 		name							="Bear School silver sword 1"
 		category						="silversword" 
-		price							="694"
+		price							="679"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -5752,14 +5926,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_bear_sword_lvl2_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -5805,7 +5980,7 @@
 	<item
 		name							="Bear School silver sword 2"
 		category						="silversword" 
-		price							="694"
+		price							="1158"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5829,14 +6004,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_bear_sword_lvl3_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -5882,7 +6058,7 @@
 	<item
 		name							="Bear School silver sword 3"
 		category						="silversword" 
-		price							="694"
+		price							="1812"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -5906,14 +6082,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/witcher_silver_bear_sword_lvl4_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, mod_legendary
+		<tags>							PlayerSilverWeapon, Weapon, sword1h, BearSet, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Bear School silver sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 

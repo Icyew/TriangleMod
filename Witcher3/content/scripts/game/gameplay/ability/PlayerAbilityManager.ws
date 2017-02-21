@@ -333,7 +333,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	
 		for(i=0; i<skills.Size(); i+=1)
 		{
-			if(skills[i].skillPath == ESP_Signs && skills[i].level < skills[i].maxLevel)
+			//modSigns: also need to check if skill is equipped - won't activate maxed out but unequipped skills!
+			if(skills[i].skillPath == ESP_Signs && (skills[i].level < skills[i].maxLevel || !IsSkillEquipped(skills[i].skillType)))
 			{
 				temp.skillType = skills[i].skillType;
 				temp.level = skills[i].level;
@@ -409,7 +410,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				owner.AddEffectDefault(EET_BattleTrance, owner, "BattleTranceSkill");
 		}
 		
-		if ( points >= owner.GetStatMax(BCS_Focus) && owner.HasAbility('Runeword 8 _Stats', true) && !owner.HasBuff(EET_Runeword8) )
+		if ( (W3PlayerWitcher)owner && points >= owner.GetStatMax(BCS_Focus) && ((W3PlayerWitcher)owner).HasRunewordActive('Runeword 8 _Stats') && !owner.HasBuff(EET_Runeword8) ) //modSigns
 		{
 			owner.AddEffectDefault(EET_Runeword8, owner, "max focus");
 		}
@@ -483,13 +484,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		else if( (W3PlayerWitcher)owner && GetWitcherPlayer().IsMutationActive( EPMT_Mutation10 ) && !owner.HasBuff( EET_Mutation10 ) && owner.IsInCombat() )
 		{
-			enemies = GetWitcherPlayer().GetEnemies();
+			//modSigns
+			//enemies = GetWitcherPlayer().GetEnemies();
 			
 			
-			if( enemies.Size() > 0 )
-			{
+			//if( enemies.Size() > 0 )
+			//{
 				owner.AddEffectDefault( EET_Mutation10, NULL, "Mutation 10" );
-			}
+			//}
 		}
 			
 		theTelemetry.SetCommonStatFlt(CS_TOXICITY, GetStat(BCS_Toxicity));
@@ -706,7 +708,6 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			MutagensSyngergyBonusUpdate( -1, GetSkillLevel( S_Alchemy_s19 ) );
 		}
 	}
-	
 	
 	
 	private final function MutagensSyngergyBonusUpdate( skillGroupID : int, skillLevel : int )
@@ -1114,7 +1115,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	{
 		var attributeName : name;
 		var skill : ESkill;
-		var blizzard : W3Potion_Blizzard;
+		//var blizzard : W3Potion_Blizzard;
 	
 		super.GetStaminaActionCostInternal(action, isPerSec, cost, delay, abilityName);
 		
@@ -1131,15 +1132,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			cost += GetSkillAttributeValue(SkillEnumToName(S_Sword_1), attributeName, false, true);
 		else if(action == ESAT_HeavyAttack && CanUseSkill(S_Sword_2) )
 			cost += GetSkillAttributeValue(SkillEnumToName(S_Sword_2), attributeName, false, true);
-		else if ((action == ESAT_Sprint || action == ESAT_Jump) && thePlayer.HasBuff(EET_Mutagen24) && !thePlayer.IsInCombat())
+		/*else if ((action == ESAT_Sprint || action == ESAT_Jump) && thePlayer.HasBuff(EET_Mutagen24) && !thePlayer.IsInCombat())
 		{
 			cost.valueAdditive = 0;
 			cost.valueBase = 0;
 			cost.valueMultiplicative = 0;
-		}
+		}*/ //modSigns: moved to another place
 		
 		
-		if( thePlayer.HasBuff( EET_Blizzard ) && owner == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel( EET_Blizzard ) == 3 && thePlayer.HasBuff( EET_BattleTrance ) )
+		/*if( thePlayer.HasBuff( EET_Blizzard ) && owner == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel( EET_Blizzard ) == 3 && thePlayer.HasBuff( EET_BattleTrance ) )
 		{
 			blizzard = ( W3Potion_Blizzard )thePlayer.GetBuff( EET_Blizzard );
 			if( blizzard.IsSlowMoActive() )
@@ -1148,8 +1149,100 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				cost.valueBase = 0;
 				cost.valueMultiplicative = 0;
 			}
+		}*/ //modSigns: moved to another place
+	}
+	
+	//modSigns
+	public function GetStaminaActionCost(action : EStaminaActionType, out cost : float, out delay : float, optional fixedCost : float, optional fixedDelay : float, optional abilityName : name, optional dt : float, optional costMult : float)
+	{
+		var blizzard : W3Potion_Blizzard;
+		var penalty : float;
+		
+		if ((action == ESAT_Sprint || action == ESAT_Jump) && thePlayer.HasBuff(EET_Mutagen24) && !thePlayer.IsInCombat())
+		{
+			cost = 0;
+			return;
+		}
+		
+		if( thePlayer.HasBuff( EET_Blizzard ) && owner == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel( EET_Blizzard ) == 3 && thePlayer.HasBuff( EET_BattleTrance ) )
+		{
+			blizzard = ( W3Potion_Blizzard )thePlayer.GetBuff( EET_Blizzard );
+			if( blizzard.IsSlowMoActive() )
+			{
+				cost = 0;
+				return;
+			}
+		}
+		
+		super.GetStaminaActionCost(action, cost, delay, fixedCost, fixedDelay, abilityName, dt, costMult);
+		
+		//modSigns
+		penalty = CalcStaminaArmorPenalty(action) + CalcStaminaOverEncumbrancePenalty(action);
+		
+		if(dt > 0)
+			penalty *= dt;
+		
+		cost += penalty;
+		
+		//modSigns: gryphon set bonus - reduce sign skills cost
+		if((W3PlayerWitcher)owner && action == ESAT_Ability && IsSkillSign(SkillNameToEnum(abilityName)) && GetWitcherPlayer().IsSetBonusActive( EISB_Gryphon_1 ))
+		{
+			cost *= 1 - GetWitcherPlayer().GetGryphonSetStaminaCostReduction();
 		}
 	}
+	
+	//modSigns
+	private function ActionHasPenalty(action : EStaminaActionType) : bool
+	{
+		return (action == ESAT_Roll || action == ESAT_Sprint || action == ESAT_Jump || action == ESAT_Dodge);
+	}
+	
+	//modSigns
+	private final function CalcStaminaArmorPenalty(action : EStaminaActionType) : float
+	{
+		var armorPieces : array<int>;
+		var witcher : W3PlayerWitcher;
+		
+		witcher = GetWitcherPlayer();
+		
+		if(!ActionHasPenalty(action) || owner != witcher)
+			return 0;
+			
+		witcher.inv.CountArmorPieces(armorPieces);
+		
+		switch(action)
+		{
+			case ESAT_Roll:
+				return armorPieces[1] * 2.50 + armorPieces[2] * 5.00; //light - 0, medium - 10, heavy - 20 (4 pieces)
+			case ESAT_Sprint:
+				return armorPieces[1] * 1.25 + armorPieces[2] * 3.75; //light - 0, medium -  5, heavy - 15 (4 pieces)
+			case ESAT_Jump:
+				return armorPieces[1] * 1.25 + armorPieces[2] * 3.75; //light - 0, medium -  5, heavy - 15 (4 pieces)
+			case ESAT_Dodge:
+				return                         armorPieces[2] * 2.50; //light - 0, medium -  0, heavy - 10 (4 pieces)
+		}
+		return 0;
+	}
+	
+	//modSigns
+	private final function CalcStaminaOverEncumbrancePenalty(action : EStaminaActionType) : float
+	{
+		var tmpBool : bool;
+		var witcher : W3PlayerWitcher;
+		
+		witcher = GetWitcherPlayer();
+		
+		if(!ActionHasPenalty(action) || owner != witcher)
+			return 0;
+			
+		if(witcher.HasBuff(EET_OverEncumbered))
+		{
+			return ClampF(witcher.GetEncumbrance()/witcher.GetMaxRunEncumbrance(tmpBool) - 1, 0, 1) * 100;
+		}
+		
+		return 0;
+	}
+	
 		
 	
 	
@@ -1335,6 +1428,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		return skills[skill].isCoreSkill;
 	}
 	
+	
+    //modSigns
+	public final function ResetAlchemy05SkillMaxLevel()
+	{
+		skills[S_Alchemy_s05].maxLevel = 3;
+	}
 	
 	protected final function CacheSkills(skillDefinitionName : name, out cache : array<SSkill>)
 	{
@@ -1931,11 +2030,17 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			owner.AddTimer('AbilityManager_FloorStaminaSegment', 0.1, , , , true);
 		}
 		
-		
-		if (cost > 0 && dt <= 0 && owner == thePlayer && thePlayer.HasBuff(EET_Mutagen21) && abilityName != 'sword_s1' && abilityName != 'sword_s2')
+		// Mutagen 21 - action costing stamina heal geralt, Whirl and Rend handled separately due to their hacks
+		// modSigns: remove hacks, make healing proportional to stamina spent
+		/*if (cost > 0 && dt <= 0 && owner == thePlayer && thePlayer.HasBuff(EET_Mutagen21) && abilityName != 'sword_s1' && abilityName != 'sword_s2')
 		{	
 			mutagen = (W3Mutagen21_Effect)thePlayer.GetBuff(EET_Mutagen21);
 			mutagen.Heal();
+		}*/
+		if(cost > 0 && owner == thePlayer && thePlayer.HasBuff(EET_Mutagen21))
+		{
+			mutagen = (W3Mutagen21_Effect)thePlayer.GetBuff(EET_Mutagen21);
+			mutagen.Heal(cost);
 		}
 		
 		
@@ -1958,6 +2063,14 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	{
 		
 		if(stat == BCS_Focus && owner.HasBuff(EET_Runeword8))
+			return;
+			
+		//modSigns: no focus gain when spending focus to sustain whirl
+		if(stat == BCS_Focus && owner.GetBehaviorVariable( 'isPerformingSpecialAttack' ) > 0 && owner.GetBehaviorVariable( 'playerAttackType' ) == (int)PAT_Light && owner.GetStat(BCS_Stamina) <= 0)
+			return;
+			
+		//modSigns: no focus gain during Undying skill buff
+		if(stat == BCS_Focus && owner.HasBuff(EET_UndyingSkillImmortal))
 			return;
 			
 		super.GainStat(stat, amount);
@@ -2310,7 +2423,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var prevColor : ESkillColor;
 		var skill : ESkill;
 	
-		idx = GetSkillSlotIndex(slotID, true);
+		//idx = GetSkillSlotIndex(slotID, true); //modSigns:
+		idx = GetSkillSlotIndex(slotID, false);  //fix a bug with skills permanently stuck in locked slots after 1.22 patch
 		if(idx < 0)
 			return false;
 		
@@ -2413,7 +2527,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			for(i=0; i<names.Size(); i+=1)
 			{
 				m_alchemyManager.GetRecipe(names[i], recipe);
-				if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+				//modSigns
+				//if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+				if (IsAlchemy18Recipe(recipe.cookedItemType) && recipe.level <= GetSkillLevel(S_Alchemy_s18))
 					charStats.AddAbility(skillName, true);
 			}
 		}
@@ -2438,15 +2554,19 @@ class W3PlayerAbilityManager extends W3AbilityManager
 				hud.OnRelevantSkillChanged( skill, true );
 			}
 		}
+		else if(skill == S_Alchemy_s10) //modSigns: check ammo
+		{
+			thePlayer.SkillReduceBombAmmoBonus();
+		}
 		else if(skill == S_Magic_s11)		
 		{
 			((W3YrdenEntity) (witcher.GetSignEntity(ST_Yrden))).SkillEquipped(skill);
 		}
-		else if(skill == S_Magic_s07)		
+		/*else if(skill == S_Magic_s07)		
 		{
 			if(owner.HasBuff(EET_BattleTrance))
 				owner.AddAbility( GetSkillAbilityName(S_Magic_s07) );
-		}
+		}*/ //modSigns: early Igni design leftover code - Concentration ability - removing
 		else if(skill == S_Perk_08)
 		{
 			
@@ -2555,6 +2675,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var witcher : W3PlayerWitcher;
 		var weapon, armor : W3RepairObjectEnhancement;
 		var foodBuff : W3Effect_WellFed;
+		var waterBuff : W3Effect_WellHydrated; //modSigns
 		var commonMenu : CR4CommonMenu;
 		var guiMan : CR4GuiManager;
 		var hud : CR4ScriptedHud;
@@ -2599,10 +2720,10 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		{
 			((W3YrdenEntity) (GetWitcherPlayer().GetSignEntity(ST_Yrden))).SkillUnequipped(skill);
 		}
-		else if(skill == S_Magic_s07)	
+		/*else if(skill == S_Magic_s07)	
 		{
 			owner.RemoveAbility( GetSkillAbilityName(S_Magic_s07) );
-		}
+		}*/  //modSigns: early Igni design leftover code - Concentration ability - removing
 		else if(skill == S_Alchemy_s04)	
 		{
 			owner.RemoveEffect(GetWitcherPlayer().GetSkillBonusPotionEffect());
@@ -2686,6 +2807,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if( foodBuff )
 			{
 				foodBuff.OnPerk15Unequipped();
+			}
+			//modSigns: add well hydrated effect
+			waterBuff = (W3Effect_WellHydrated)owner.GetBuff( EET_WellHydrated );
+			if( waterBuff )
+			{
+				waterBuff.OnPerk15Unequipped();
 			}
 		}
 		else if(skill == S_Perk_19 && owner.HasBuff(EET_BattleTrance))
@@ -2874,7 +3001,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			for(i=0; i<names.Size(); i+=1)
 			{
 				m_alchemyManager.GetRecipe(names[i], recipe);
-				if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+				//modSigns
+				//if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+				if(IsAlchemy18Recipe(recipe.cookedItemType) && recipe.level <= GetSkillLevel(S_Alchemy_s18))
 					cnt += 1;
 			}
 			
@@ -3053,6 +3182,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		owner.RemoveAbilityAll('sword_adrenalinegain');
 		owner.RemoveAbilityAll('magic_staminaregen');
 		owner.RemoveAbilityAll('alchemy_potionduration');
+		
+		//modSigns
+		if( FactsQuerySum( "modSigns_S_Alchemy_s05_Fix" ) < 1 )
+		{
+			ResetAlchemy05SkillMaxLevel();
+			FactsAdd( "modSigns_S_Alchemy_s05_Fix" );
+		}
 	}
 	
 	

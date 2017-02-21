@@ -79,11 +79,11 @@ class CBTTaskGroundTrapAttack extends CBTTaskAttack
 			return BTNS_Failed;
 		}
 		
-		attributeName = GetBasicAttackDamageAttributeName(theGame.params.ATTACK_NAME_LIGHT, theGame.params.DAMAGE_NAME_PHYSICAL);
-		damage = CalculateAttributeValue(npc.GetAttributeValue(attributeName));
+		//attributeName = GetBasicAttackDamageAttributeName(theGame.params.ATTACK_NAME_LIGHT, theGame.params.DAMAGE_NAME_PHYSICAL); //modSigns
+		//damage = CalculateAttributeValue(npc.GetAttributeValue(attributeName));
 		
 		action = new W3DamageAction in this;
-		action.SetHitAnimationPlayType(EAHA_ForceNo);
+		//action.SetHitAnimationPlayType(EAHA_ForceNo); //modSigns
 		
 		if ( IsNameValid( activateOnAnimEvent ) )
 		{
@@ -167,8 +167,11 @@ class CBTTaskGroundTrapAttack extends CBTTaskAttack
 							}
 							
 							action.attacker = m_trap;
-							action.Initialize( m_trap, victims[i], NULL, m_trap.GetName(), EHRT_None, CPS_Undefined, false, false, false, true);
-							action.AddDamage(damageTypeName, damage );
+							action.Initialize( m_trap, victims[i], NULL, m_trap.GetName(), EHRT_Light, CPS_Undefined, false, false, false, true); //modSigns
+							damage = MaxF(500, 0.2 * ((CActor)victims[i]).GetMaxHealth()); //modSigns
+							//theGame.witcherLog.AddMessage("Ground Trap: " + 0.2 * ((CActor)victims[i]).GetMaxHealth());
+							//theGame.witcherLog.AddMessage("Ground Trap: " + damage);
+							action.AddDamage(theGame.params.DAMAGE_NAME_DIRECT, damage ); //modSigns
 							theGame.damageMgr.ProcessAction( action );
 							if ( IsNameValid( playFxOnDamageVictim ) )
 							{
@@ -367,7 +370,7 @@ class CBTTaskGroundTrapAttackDef extends CBTTaskAttackDef
 	editable var onActivateFromTaskAttack 	: bool;
 	
 	default onActivateFromTaskAttack = true;
-	default damageTypeName = 'RendingDamage';
+	default damageTypeName = 'DirectDamage'; //'RendingDamage'; - modSigns
 	default navigationSafeSpotRadius = 0.5;
 }
 

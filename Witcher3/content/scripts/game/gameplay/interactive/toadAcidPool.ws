@@ -153,11 +153,13 @@ class CToadAcidPool extends CInteractiveEntity
 				if(targetEntity)
 				{
 					damage = new W3DamageAction in this;
-					damage.Initialize( this, entitiesInRange[i], NULL, this, EHRT_None, CPS_Undefined, false, false, false, true );
-					if ( targetEntity == GetWitcherPlayer() )
+					damage.Initialize( this, entitiesInRange[i], NULL, this, EHRT_Heavy, CPS_Undefined, false, false, false, true );
+					/*if ( targetEntity == GetWitcherPlayer() )
 						damage.AddDamage( theGame.params.DAMAGE_NAME_FIRE, damageVal * (int)GetWitcherPlayer().GetLevel() );
 					else
 						damage.AddDamage( theGame.params.DAMAGE_NAME_FIRE, damageVal * (int)CalculateAttributeValue(targetEntity.GetAttributeValue('level',,true)) );
+					*/ //modSigns
+					damage.AddDamage( theGame.params.DAMAGE_NAME_FIRE, MaxF(damageVal, 0.2 * ((CActor)targetEntity).GetMaxHealth())  ); //modSigns
 					damage.AddEffectInfo(EET_KnockdownTypeApplicator);
 					damage.SetProcessBuffsIfNoDamage(true);
 					theGame.damageMgr.ProcessAction( damage );

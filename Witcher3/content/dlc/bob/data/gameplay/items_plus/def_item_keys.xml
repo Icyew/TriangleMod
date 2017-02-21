@@ -7,7 +7,7 @@
 		name							="q704_ft_fairy_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q704_ft_fairy_key"
 		localisation_key_description	="item_desc_q704_ft_fairy_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -16,15 +16,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 
 	<item
 		name							="q704_ft_goose_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q704_ft_goose_key"
 		localisation_key_description	="item_desc_q704_ft_goose_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -33,15 +31,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 
 	<item
 		name							="q706_wagon_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q706_wagon_key"
 		localisation_key_description	="item_desc_q706_wagon_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -50,8 +46,6 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 
 
@@ -60,7 +54,7 @@
 		name							="q707_old_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q707_old_key"
 		localisation_key_description	="item_desc_q707_old_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -69,15 +63,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 
 	<item
 		name							="mh701_wine_cellar_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_mh701_wine_cellar_key"
 		localisation_key_description	="item_desc_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -86,15 +78,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 	<item
 		name							="mq7001_house_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_mq7001_house_key"
 		localisation_key_description	="item_desc_mq7001_house_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -103,15 +93,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 	<item
 		name							="mq7024_vineyard_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_mq7024_vineyard_key"
 		localisation_key_description	="item_desc_key"
 		icon_path						="icons\inventory\quests\mq7024_vineyard_key.png"
@@ -120,15 +108,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 	<item
 		name							="mq7011_vault_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_mq7011_vault_key"
 		localisation_key_description	="item_desc_mq7011_vault_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -137,15 +123,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 	<item
 		name							="sq703_cellar_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_sq703_cellar_key"
 		localisation_key_description	="item_desc_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -154,15 +138,13 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 		<item
 		name							="th701_wg_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_th701_wg_key"
 		localisation_key_description	="item_desc_key"
 		icon_path						="icons/inventory/keys/key1.dds"
@@ -171,8 +153,6 @@
 		</tags>
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	
 </items>

@@ -412,8 +412,8 @@
     <loot name="_burned_body_in_poor_village3" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="15" chance="100">
         <loot_entry name="Orens" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="15" chance="100" />
     </loot>
-    <loot name="_chest_furs" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="15" chance="100">
-        <loot_entry name="Old bear skin" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="10" chance="100" />
+    <loot name="_chest_furs" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="2" chance="100">
+        <loot_entry name="Old bear skin" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="5" chance="100" />
         <loot_entry name="Wolf pelt" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="5" chance="100" />
     </loot>
     <loot name="_dead_women_random_valuables" player_level_min="0" player_level_max="100" quantity_min="4" quantity_max="4" chance="100">
@@ -459,9 +459,9 @@
     <loot name="_burned_body_in_poor_village4" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100">
         <loot_entry name="Ruby" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
     </loot>
-    <loot name="_chest_hunterman_bear_saddle" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="3" chance="100">
+    <loot name="_chest_hunterman_bear_saddle" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="2" chance="100">
         <loot_entry name="Bear fat" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="2" chance="100" />
-        <loot_entry name="Dog tallow" player_level_min="0" player_level_max="100" quantity_min="0" quantity_max="1" chance="100" />
+        <loot_entry name="Dog tallow" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
     </loot>
     <loot name="_chest_witches" player_level_min="0" player_level_max="100" quantity_min="3" quantity_max="3" chance="100">
         <loot_entry name="Recipe for Alcohest 1" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
@@ -512,7 +512,7 @@
         <loot_entry name="Gloves 01 q2" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Silver mineral" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
         <loot_entry name="Saltpetre" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="2" chance="100" />
-        <loot_entry name="Wolf pelt" player_level_min="0" player_level_max="100" quantity_min="11" quantity_max="11" chance="100" />
+        <loot_entry name="Wolf pelt" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
     </loot>
     <loot name="_chest_uniq_freyachest" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="9" chance="100">
         <loot_entry name="Longclaw schematic" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
@@ -541,7 +541,7 @@
         <loot_entry name="Medium armor 11" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
     </loot>
     <loot name="_burned_body_in_poor_village" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="10" chance="100">
-        <loot_entry name="Coal" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="10" chance="100" />
+        <loot_entry name="Coal" player_level_min="0" player_level_max="100" quantity_min="3" quantity_max="6" chance="100" />
     </loot>
     <loot name="_chest_woodtimber" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="6" chance="100">
         <loot_entry name="Timber" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="3" chance="100" />
@@ -551,9 +551,9 @@
     </loot>
     <loot name="_box_herbs_q403" player_level_min="0" player_level_max="100" quantity_min="7" quantity_max="18" chance="100">
         <loot_entry name="Berbercane fruit" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="3" chance="100" />
-        <loot_entry name="Balisse fruit" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="6" chance="100" />
+        <loot_entry name="Balisse fruit" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="4" chance="100" />
         <loot_entry name="Crows eye" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="3" chance="100" />
-        <loot_entry name="White myrtle" player_level_min="0" player_level_max="100" quantity_min="3" quantity_max="5" chance="100" />
+        <loot_entry name="White myrtle" player_level_min="0" player_level_max="100" quantity_min="3" quantity_max="4" chance="100" />
         <loot_entry name="Vitriol" player_level_min="0" player_level_max="100" quantity_min="0" quantity_max="1" chance="100" />
     </loot>
     <loot name="_rich_people_home_chest" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="2" chance="100">
@@ -618,19 +618,19 @@
         <loot_entry name="lore_witchers" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
     </loot>
     <loot name="_chest_food_container" player_level_min="0" player_level_max="100" quantity_min="25" quantity_max="29" chance="100">
-        <loot_entry name="Mushroom" player_level_min="0" player_level_max="100" quantity_min="25" quantity_max="29" chance="100" />
+        <loot_entry name="Mushroom" player_level_min="0" player_level_max="100" quantity_min="10" quantity_max="10" chance="100" />
     </loot>
     <loot name="_tree_cont_spiral" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="11" chance="100">
-        <loot_entry name="Ashes" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="10" chance="100" />
+        <loot_entry name="Ashes" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="5" chance="100" />
         <loot_entry name="Elemental essence" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
     </loot>
     <loot name="gargorye_cave_uniq_chest" player_level_min="0" player_level_max="100" quantity_min="80" quantity_max="80" chance="100">
         <loot_entry name="Split Bolt Legendary" player_level_min="0" player_level_max="100" quantity_min="10" quantity_max="10" chance="100" />
         <loot_entry name="Broadhead Bolt Legendary" player_level_min="0" player_level_max="100" quantity_min="20" quantity_max="20" chance="100" />
         <loot_entry name="Viziman Champion" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
-        <loot_entry name="Leather straps" player_level_min="0" player_level_max="100" quantity_min="30" quantity_max="30" chance="100" />
+        <loot_entry name="Leather straps" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
         <loot_entry name="Silver ore" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
-        <loot_entry name="Saltpetre" player_level_min="0" player_level_max="100" quantity_min="10" quantity_max="10" chance="100" />
+        <loot_entry name="Saltpetre" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
     </loot>
     <loot name="_burned_body_in_poor_village2" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100">
         <loot_entry name="No Mans Land sword 1 q2" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
@@ -641,7 +641,7 @@
     <loot name="_unioq_niellens_chest" player_level_min="0" player_level_max="100" quantity_min="52" quantity_max="52" chance="100">
         <loot_entry name="Crossbow 2" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Explosive Bolt schematic" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
-        <loot_entry name="Leather straps" player_level_min="0" player_level_max="100" quantity_min="50" quantity_max="50" chance="100" />
+        <loot_entry name="Leather straps" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
     </loot>
     <loot name="_novigrad_trisshouse_roseofmemories" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100">
         <loot_entry name="Rose of memories" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
@@ -664,8 +664,8 @@
     <loot name="_uniq_prolog_nilfgaardcastle" player_level_min="0" player_level_max="100" quantity_min="11" quantity_max="12" chance="100">
         <loot_entry name="Nilfgaardian sword 1" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
         <loot_entry name="Boots 01 q2" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
-        <loot_entry name="Leather" player_level_min="0" player_level_max="100" quantity_min="5" quantity_max="5" chance="100" />
-        <loot_entry name="Saltpetre" player_level_min="0" player_level_max="100" quantity_min="4" quantity_max="5" chance="100" />
+        <loot_entry name="Leather" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="3" chance="100" />
+        <loot_entry name="Saltpetre" player_level_min="0" player_level_max="100" quantity_min="3" quantity_max="4" chance="100" />
     </loot>
     <loot name="_nov_cyclop_home_adventurer" player_level_min="0" player_level_max="100" quantity_min="8" quantity_max="13" chance="100">
         <loot_entry name="Novigraadan sword 3" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="1" chance="100" />
@@ -770,7 +770,7 @@
     <loot name="q401_loot" player_level_min="0" player_level_max="100" quantity_min="9" quantity_max="18" chance="100">
         <loot_entry name="Dwarven spirit" player_level_min="0" player_level_max="100" quantity_min="1" quantity_max="2" chance="100" />
         <loot_entry name="Berbercane fruit" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="4" chance="100" />
-        <loot_entry name="Balisse fruit" player_level_min="0" player_level_max="100" quantity_min="4" quantity_max="8" chance="100" />
+        <loot_entry name="Balisse fruit" player_level_min="0" player_level_max="100" quantity_min="4" quantity_max="6" chance="100" />
         <loot_entry name="Crows eye" player_level_min="0" player_level_max="100" quantity_min="2" quantity_max="4" chance="100" />
     </loot>
     <loot name="bandit_camp_vs_crafting_chest" player_level_min="0" player_level_max="100" quantity_min="8" quantity_max="8" chance="100">

@@ -44,6 +44,7 @@ import abstract class CActor extends CGameplayEntity
 	private				var	lastWasAttackedTime			: float;
 	private				var lastWasHitTime				: float;
 	private				var lowerGuardTime				: float;
+	private				var lastAttackTime				: float; //modSigns
 	private 			var knockedUncounscious			: bool;
 	private 			var isGameplayVisible			: bool;
 	private				var lastBreathTime				: float;
@@ -1686,6 +1687,27 @@ import abstract class CActor extends CGameplayEntity
 		return cachedIsAnimal;
 	}
 	
+	//modSigns
+	private var cachedIsBeast : int;	default cachedIsBeast = -1;
+	public function IsBeast() : bool
+	{
+		var monsterCategory : EMonsterCategory;
+		var tmpName : name;
+		var tmpBool : bool;
+		
+		if ( cachedIsBeast != -1 )
+			return cachedIsBeast > 0;
+		
+		theGame.GetMonsterParamsForActor(this, monsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+		
+		if ( monsterCategory == MC_Beast )
+			cachedIsBeast = 1;
+		else
+			cachedIsBeast = 0;
+		
+		return cachedIsBeast;
+	}
+	
 	private var cachedIsVampire : int;	default cachedIsVampire = -1;
 	public function IsVampire() : bool
 	{
@@ -2390,6 +2412,8 @@ import abstract class CActor extends CGameplayEntity
 			buff = (W3Effect_Frozen)buffs[i];
 			if(buff.KillOnHit())
 			{
+				//modSigns: combat log
+				//theGame.witcherLog.AddCombatMessage("Frozen effect: KillOnHit!", thePlayer, NULL);
 				action.processedDmg.vitalityDamage = GetStatMax(BCS_Vitality);
 				action.processedDmg.essenceDamage = GetStatMax(BCS_Essence);
 				if ( action.attacker == thePlayer )
@@ -2472,7 +2496,7 @@ import abstract class CActor extends CGameplayEntity
 		{
 			attackName = ((W3Action_Attack)action).GetAttackName();
 		
-			
+			// modSigns: make percentage proportional to stamina spent
 			if ( thePlayer.HasBuff(EET_Mutagen04) && action.DealsAnyDamage() && thePlayer.IsHeavyAttack(attackName) && thePlayer.GetStat(BCS_Stamina) > 0)
 			{
 				mutagen = thePlayer.GetBuff(EET_Mutagen04);
@@ -2483,16 +2507,21 @@ import abstract class CActor extends CGameplayEntity
 				health = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 				if (UsesVitality())
 				{
-					health *= GetStat(BCS_Vitality);
+					// modSigns: multiply by stamina percentage
+					health *= GetStat(BCS_Vitality) * stamina / thePlayer.GetStatMax(BCS_Stamina);
 					DrainVitality(health);					
 					thePlayer.DrainStamina(ESAT_FixedValue, stamina, 0.5f);
 				}
 				else if (UsesEssence())
 				{
-					health *= GetStat(BCS_Essence);
+					// modSigns: multiply by stamina percentage
+					health *= GetStat(BCS_Essence) * stamina / thePlayer.GetStatMax(BCS_Stamina);
 					DrainEssence(health);					
 					thePlayer.DrainStamina(ESAT_FixedValue, stamina, 0.5f);
 				}
+				//combat log
+				//theGame.witcherLog.AddCombatMessage("Stamina perc: " + FloatToString(stamina / thePlayer.GetStatMax(BCS_Stamina)), thePlayer, NULL);
+				//theGame.witcherLog.AddCombatMessage("ArchGriffin damage: " + FloatToString(health), thePlayer, NULL);
 				
 				if(health > 0)
 					action.SetDealtDamage();
@@ -2585,10 +2614,14 @@ import abstract class CActor extends CGameplayEntity
 		var hp, dmg : float;
 		var action : W3DamageAction;
 		
+		//theGame.witcherLog.AddMessage("ReactToReflectedAttack"); //modSigns: debug
+		
 		action = new W3DamageAction in this;
 		action.Initialize(target,this,NULL,'',EHRT_Reflect,CPS_AttackPower,true,false,false,false);
 		action.SetHitAnimationPlayType(EAHA_ForceYes);
 		action.SetCannotReturnDamage( true );
+		action.AddEffectInfo( EET_Stagger ); //modSigns: add stagger
+		action.SetProcessBuffsIfNoDamage( true ); //modSigns: signal to process stagger
 		
 		
 		
@@ -4802,6 +4835,10 @@ import abstract class CActor extends CGameplayEntity
 		
 		
 		
+		//theGame.witcherLog.AddMessage("!!!!!!!!!OnPreAttackEvent!!!!!!!!!"); //modSigns: debug
+		//theGame.witcherLog.AddMessage("animEventName = " + animEventName); //modSigns: debug
+		//theGame.witcherLog.AddMessage("animName = " + GetAnimNameFromEventAnimInfo(animInfo)); //modSigns: debug
+			
 		if(animEventType == AET_DurationStart)
 		{
 			ignoreAttack = false;
@@ -5291,12 +5328,13 @@ import abstract class CActor extends CGameplayEntity
 		
 		if( GetInventory().ItemHasTag( weaponId, 'PhantomWeapon' ) )
 		{	
-			if( this == thePlayer && IsLightAttack( attackActionName ) && hitTargets.Size() )
+			//modSigns: moved to player witcher, OnProcessActionPost
+			/*if( this == thePlayer && IsLightAttack( attackActionName ) && hitTargets.Size() )
 			{	
 				thePlayer.GetPhantomWeaponMgr().IncrementHitCounter();
 				attackActionName = '';
 			}
-			else if( IsHeavyAttack( attackActionName ) )
+			else*/ if( IsHeavyAttack( attackActionName ) )
 			{
 				AddTimer('PhantomWeapon', 0.0);
 				phantomWeaponHitTime = hitTime + 0.0;
@@ -5351,21 +5389,23 @@ import abstract class CActor extends CGameplayEntity
 			phantomStrike = true;
 		}
 		
+		if( phantomStrike == true ) //modSigns
+		{
+			for(i=0; i<phantomWeaponHitTargets.Size(); i+=1)
+			{	
+				
+				phantomWeaponHitTargets[i].AddAbility( 'DisableFinishers', true );
+				phantomWeaponHitTargets[i].AddAbility( 'DisableDismemberment', true );
+				
+				Attack(phantomWeaponHitTargets[i], phantomWeaponAnimData, phantomWeaponWeaponId, phantomWeaponParried, phantomWeaponCountered, phantomWeaponParriedBy, phantomWeaponAttackAnimationName, phantomWeaponHitTime, weaponEntity);
+				
+				phantomWeaponHitTargets[i].RemoveAbility( 'DisableFinishers' );
+				phantomWeaponHitTargets[i].RemoveAbility( 'DisableDismemberment' );
+			}
 		
-		for(i=0; i<phantomWeaponHitTargets.Size(); i+=1)
-		{	
-			
-			phantomWeaponHitTargets[i].AddAbility( 'DisableFinishers', true );
-			phantomWeaponHitTargets[i].AddAbility( 'DisableDismemberment', true );
-			
-			Attack(phantomWeaponHitTargets[i], phantomWeaponAnimData, phantomWeaponWeaponId, phantomWeaponParried, phantomWeaponCountered, phantomWeaponParriedBy, phantomWeaponAttackAnimationName, phantomWeaponHitTime, weaponEntity);
-			
-			phantomWeaponHitTargets[i].RemoveAbility( 'DisableFinishers' );
-			phantomWeaponHitTargets[i].RemoveAbility( 'DisableDismemberment' );
+			if( !phantomWeaponCountered && phantomWeaponHitTargets.Size() && phantomWeaponParried )
+				PlayEffectOnHeldWeapon( 'special_attack_block' );
 		}
-		
-		if( !phantomWeaponCountered && phantomWeaponHitTargets.Size() && phantomWeaponParried )
-			PlayEffectOnHeldWeapon( 'special_attack_block' );
 		
 		AddTimer('PostAttackDebugRangeClear', 1);
 		attackActionName = '';
@@ -5395,6 +5435,8 @@ import abstract class CActor extends CGameplayEntity
 	protected function PrepareAttackAction( hitTarget : CGameplayEntity, animData : CPreAttackEventData, weaponId : SItemUniqueId, parried : bool, countered : bool, parriedBy : array<CActor>, attackAnimationName : name, hitTime : float, weaponEntity : CItemEntity, out attackAction : W3Action_Attack) : bool
 	{
 		var actor : CActor;
+		var phantomDmgInfo : SRawDamage; //modSigns
+		var npc : CNewNPC; //modSigns
 	
 		if(!hitTarget)
 			return false;
@@ -5443,11 +5485,23 @@ import abstract class CActor extends CGameplayEntity
 			
 			if( attackAction.attacker == thePlayer )
 			{
+				//modSigns: break the shield if it's there
+				npc = (CNewNPC)attackAction.victim;
+				if( npc && npc.IsShielded( thePlayer ) )
+				{
+					npc.ProcessShieldDestruction();
+				}
+				else
+				{
+					//modSigns: if there's no shield - add knockdown and damage
+					attackAction.AddEffectInfo( EET_Knockdown );
+					phantomDmgInfo.dmgVal = 0.1 * actor.GetMaxHealth(); // 10% of victim's health
+					phantomDmgInfo.dmgType = theGame.params.DAMAGE_NAME_DIRECT;
+					attackAction.AddDamage(phantomDmgInfo.dmgType, phantomDmgInfo.dmgVal);
+					//debug
+					//theGame.witcherLog.AddMessage( "phantom weapon damage = " + phantomDmgInfo.dmgVal );
+				}
 				thePlayer.GetPhantomWeaponMgr().DischargeWeapon( true );
-				attackAction.AddEffectInfo( EET_HeavyKnockdown );
-				
-				if( ((CNewNPC)attackAction.victim).IsShielded( NULL ) )
-					((CNewNPC)attackAction.victim).ProcessShieldDestruction();
 			}
 			else
 			{
@@ -5599,6 +5653,8 @@ import abstract class CActor extends CGameplayEntity
 		}
 		
 		
+		ModifyHitSeverityReactionFromDamage( damageData ); //modSigns
+		
 		thisNPC = (CNewNPC)this;
 		if( thisNPC && damageData.attacker == thePlayer && !HasBuff(EET_AxiiGuardMe) &&
 			( GetAttitudeBetween( this, thePlayer ) == AIA_Friendly ||
@@ -5625,7 +5681,6 @@ import abstract class CActor extends CGameplayEntity
 			damageData.ClearEffects();
 			return;
 		}
-		
 		
 		if(!damageData.DealsAnyDamage() && damageData.GetBuffSourceName() != "Mutation4")
 			return;
@@ -5664,13 +5719,13 @@ import abstract class CActor extends CGameplayEntity
 				LogDMHits("CActor.ReduceDamage: victim attacked from front and vulnerable to this type of strike - attack will ignor armor", damageData );
 			}
 			damageData.SetIgnoreArmor( true );
-			damageData.SetPointResistIgnored( true );
+			//damageData.SetPointResistIgnored( true ); //modSigns
 			return;
 		}
 		
 		
 		
-		if( this.HasAbility( 'EredinInvulnerable' ) && damageData.IsActionWitcherSign() )
+		/*if( this.HasAbility( 'EredinInvulnerable' ) && damageData.IsActionWitcherSign() )
 		{
 			if ( canLog )
 			{
@@ -5678,7 +5733,7 @@ import abstract class CActor extends CGameplayEntity
 			}
 			damageData.SetAllProcessedDamageAs(0);
 			return;
-		}
+		}*/ //modSigns
 		
 		
 		if(this != thePlayer && IsCurrentlyDodging() && damageData.CanBeDodged() && ( VecDistanceSquared(this.GetWorldPosition(),damageData.attacker.GetWorldPosition()) > 1.7 
@@ -5811,7 +5866,7 @@ import abstract class CActor extends CGameplayEntity
 
 		
 		
-		if( actorAttacker && HasAbility( 'IceArmor' ) && !actorAttacker.HasAbility( 'Ciri_Rage' ) )
+		/*if( actorAttacker && HasAbility( 'IceArmor' ) && !actorAttacker.HasAbility( 'Ciri_Rage' ) )
 		{
 			if ( theGame.GetDifficultyMode() == EDM_Easy )
 			{
@@ -5833,7 +5888,7 @@ import abstract class CActor extends CGameplayEntity
 				damageData.processedDmg.essenceDamage *= 0.5f;
 				theGame.witcherLog.CombatMessageAddGlobalDamageMult(0.5f);
 			}
-		}
+		}*/ //modSigns: moved to damage manager
 
 		
 		
@@ -5932,6 +5987,11 @@ import abstract class CActor extends CGameplayEntity
 	public function GetDelaySinceLastHit() : float
 	{
 		return theGame.GetEngineTimeAsSeconds() - lastWasHitTime;
+	}
+	
+	public function GetDelaySinceLastAttack() : float //modSigns
+	{
+		return theGame.GetEngineTimeAsSeconds() - lastAttackTime;
 	}
 	
 	public function IsAttacked( optional byPlayer : bool ) : void
@@ -6648,6 +6708,8 @@ import abstract class CActor extends CGameplayEntity
 				GetInventory().PlayItemEffect( attackAction.GetWeaponId(), bloodTrailParam.GetEffectName() );
 			}
 		}		
+		//modSigns
+		lastAttackTime = theGame.GetEngineTimeAsSeconds();
 	}
 	
 	event OnHitActionReaction( attacker : CActor, weaponName : name )

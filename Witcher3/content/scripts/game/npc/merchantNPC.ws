@@ -32,7 +32,21 @@ class W3MerchantNPC extends CNewNPC
 	var invComp : CInventoryComponent;
 
 	default questBonus = false;
-
+	
+	//modSigns: balisse fruit temp fix
+	function BalisseFruitTempFix()
+	{
+		var l_merchantComponent : W3MerchantComponent;
+		
+		l_merchantComponent = (W3MerchantComponent)GetComponentByClassName('W3MerchantComponent');
+		invComp = GetInventory();
+		if(invComp && l_merchantComponent && l_merchantComponent.GetMapPinType() == 'Herbalist')
+		{
+			if(!invComp.HasItem('Balisse fruit'))
+				invComp.AddAnItem('Balisse fruit', 10);
+		}
+	}
+	
 	event OnSpawned( spawnData : SEntitySpawnData )
 	{
 		var tags : array< name >;
@@ -40,6 +54,24 @@ class W3MerchantNPC extends CNewNPC
 		var i : int;
 		
 		super.OnSpawned( spawnData );
+		
+		// WMK
+		// The generic merchants are not always spawned with the required tags. Because of this the dialog scene may use a
+		// wrong model and ShowMeGoods function (from scene_functions.ws) doesn't find the merchant and is not possible to view its
+		// inventory. Also the NPC is not seen as a merchant when opening the map (there's no pin). The following code fixes all
+		// these issues. Note that the required tag(s) must be the first one(s). Patch 1.12 notes contain "Fixes rare issue whereby Shop
+		// screen would not open correctly for traveling merchants", but is not a rare issue and the bug was not
+		// fixed. Or maybe it was fixed only for generic wandering merchants...
+		if (embeddedScenes.Size() > 0) {
+			if (StrBeginsWith(embeddedScenes[0].storyScene.GetPath(), "living_world\dialogue\generic_merchants\shop_generic_merchant")) {
+				// I have no idea what GetRequiredPositionTags does, but it seems to return the required
+				// tag(s) for generic merchants. Probably the name should be GetRequiredSceneTags or something like this.
+				tags = embeddedScenes[0].storyScene.GetRequiredPositionTags();
+				ArrayOfNamesAppendUnique(tags, GetTags());
+				SetTags(tags);
+			}
+		}
+		// WMK
 		
 		if ( theGame.IsActive() )
 		{
@@ -69,7 +101,7 @@ class W3MerchantNPC extends CNewNPC
 				invComp.SetupFunds();
 				lastDayOfInteraction = GameTimeDays( theGame.GetGameTime() );
 			}
-			if ( invComp.GetMoney() == 0 )
+			if ( invComp.GetMoney() < 100 ) //modSigns
 			{
 				invComp.SetupFunds();
 			}
@@ -78,8 +110,9 @@ class W3MerchantNPC extends CNewNPC
 			{
 				
 				if ( invComp.GetItemModifierInt(ids[i], 'ItemQualityModified') <= 0 )
-					invComp.AddRandomEnhancementToItem(ids[i]);
+					invComp.AddRandomEnhancementToItem(ids[i], invComp.GetItemLevel(ids[i])); //modSigns
 			}
+			BalisseFruitTempFix(); //modSigns
 		}
 		else
 		{
@@ -190,7 +223,9 @@ class W3MerchantNPC extends CNewNPC
 		var	isPlayingChatScene	: bool;
 		var timeElapsed : int;
 		var gameTimeDay : int;
-
+		
+		//debug
+		//theGame.witcherLog.AddMessage("template: " + GetReadableName());
 		LogChannel( 'DialogueTest', "Event Interaction Used" );
 		if ( actionName == "Talk" )
 		{
@@ -202,6 +237,8 @@ class W3MerchantNPC extends CNewNPC
 
 				if ( timeElapsed >= invComp.GetDaysToIncreaseFunds() || timeElapsed < 0 )
 				{
+					BalisseFruitTempFix(); //modSigns
+					invComp.ClearLowLevelWeapons(); //modSigns
 					invComp.IncreaseFunds();
 					lastDayOfInteraction = gameTimeDay;
 				}

@@ -6,166 +6,190 @@
 <abilities>
 
 <!-- ARMOR WITCHER LYNX  -->
-	<ability name="Lynx Armor 4 _Stats">
-		<weight							type="base"	min="14.5" 				/>
+	<ability name="Lynx Armor 4 _Stats"> <!-- lvl 40 -->
+		<weight							type="base"	min="5" 				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="240" 				/>
-		<slashing_resistance_perc		type="base"	min="0.17"				/>
-		<piercing_resistance_perc		type="base"	min="0.12"				/>
-		<rending_resistance_perc		type="base"	min="0.17"				/>
-		<elemental_resistance_perc		type="base"	min="0.46"				/>
-		<attack_power					type="mult"	min="0.22"				/>
+		<armor							type="base"	min="225"				/>
+		<slashing_resistance_perc		type="base" min="0.08"				/>
+		<piercing_resistance_perc		type="base" min="0.07"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
+		<attack_power					type="mult"	min="0.30"				/>
 		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
 	</ability>
 
 <!-- ARMOR WITCHER GRYPHON  -->
 	<ability name="Gryphon Armor 4 _Stats">
-		<weight							type="base"	min="13.7" 				/>
-		<quality						type="add"	min="5" 				/>
-		<armor							type="base"	min="240"				/>
-		<slashing_resistance_perc		type="base"	min="0.24"				/>
-		<piercing_resistance_perc		type="base"	min="0.19"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.17"				/>
-		<rending_resistance_perc		type="base"	min="0.31"				/>
-		<spell_power 					type="mult"	min="0.22"				/>
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="225"				/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<spell_power 					type="mult"	min="0.30"				/>
 	</ability>
 
 <!-- ARMOR WITCHER BEAR  -->
 	<ability name="Bear Armor 4 _Stats">
-		<weight							type="base"	min="14.3" 				/>
-		<quality						type="add"	min="5" 				/>
-		<armor							type="base"	min="240"				/>
-		<slashing_resistance_perc		type="base"	min="0.32"				/>
-		<piercing_resistance_perc		type="base"	min="0.26"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.25"				/>
-		<rending_resistance_perc		type="base"	min="0.46"				/>
-		<focus_gain 					type="base" min="0.22" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>	
+		<weight							type="base"	min="15"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="225"				/>
+		<slashing_resistance_perc		type="base" min="0.22"				/>
+		<piercing_resistance_perc		type="base" min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<focus_gain 					type="base" min="0.30" 				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.20"				/>			
 	</ability>
 
 <!-- ARMOR WITCHER WOLF   -->
 	<ability name="Wolf Armor 4 _Stats">
-		<weight							type="base"	min="13.4" 				/>
-		<quality						type="add"	min="5" 				/>
-		<armor							type="base"	min="240"				/>
-		<slashing_resistance_perc		type="base"	min="0.24"				/>
-		<piercing_resistance_perc		type="base"	min="0.19"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.17"				/>
-		<rending_resistance_perc		type="base"	min="0.31"				/>
-		<focus_gain 					type="base" min="0.22" 				/>
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="225"				/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<focus_gain 					type="base" min="0.18" 				/>
+		<spell_power					type="mult"	min="0.18"				/>
+		<attack_power					type="mult" min="0.18"				/>
 	</ability>	
 
 <!-- ARMOR WITCHER RED WOLF -->
 	<ability name="Red Wolf Armor 1 _Stats">
-		<weight							type="base"	min="19.62" 			/>
-		<quality						type="add"	min="5" 				/>
-		<armor							type="base"	min="240"				/>
-		<slashing_resistance_perc		type="base"	min="0.24"				/>
-		<piercing_resistance_perc		type="base"	min="0.19"				/>
-		<rending_resistance_perc		type="base"	min="0.31"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="225"				/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
 		<toxicity 						type="base" min="10" 				/>
+		<potion_duration 				type="add"	min="0.1"				/>
 	</ability>	
 
 	<ability name="Red Wolf Armor 2 _Stats">
-		<weight							type="base"	min="21.7" 				/>
-		<quality						type="add"	min="5" 				/>
-		<armor							type="base"	min="390"				/>
-		<slashing_resistance_perc		type="base"	min="0.22"				/>
-		<piercing_resistance_perc		type="base"	min="0.17"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.16"				/>
-		<rending_resistance_perc		type="base"	min="0.30"				/>
-		<focus_gain 					type="base" min="0.20" 				/>
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="375"				/>
+		<slashing_resistance_perc		type="base" min="0.17"				/>
+		<piercing_resistance_perc		type="base" min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base" min="0.17"				/>
+		<elemental_resistance_perc		type="base" min="0.17"				/>
+		<toxicity 						type="base" min="10" 				/>
+		<potion_duration 				type="add"	min="0.1"				/>
 	</ability>	
 
 <!-- ARMOR GUARD LVL1 3 -->
-	<ability name="Guard Lvl1 Armor 3 _Stats">
-		<weight							type="base"	min="18.4" 				/>
+	<ability name="Guard Lvl1 Armor 3 _Stats"> <!-- lvl 43 -->
+		<weight							type="base"	min="6.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="240" 				/>
-		<slashing_resistance_perc		type="base"	min="0.27"				/>
-		<piercing_resistance_perc		type="base"	min="0.20"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.27"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
 		<bleeding_resistance_perc 		type="base" min="0.15" 				/>
-		<vitality 						type="base" min="250" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+		<vitality 						type="base" min="500" 				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
 <!-- ARMOR GUARD LVL1 A 3 -->
-	<ability name="Guard Lvl1 A Armor 3 _Stats">
-		<weight							type="base"	min="18.24" 				/>
+	<ability name="Guard Lvl1 A Armor 3 _Stats"> <!-- lvl 44 -->
+		<weight							type="base"	min="6.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="245" 				/>
-		<slashing_resistance_perc		type="base"	min="0.28"				/>
-		<piercing_resistance_perc		type="base"	min="0.21"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.28"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base" min="0.05"				/>
+		<elemental_resistance_perc		type="base" min="0.05"				/>
 		<bleeding_resistance_perc 		type="base" min="0.20" 				/>
-		<vitality 						type="base" min="300" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+		<vitality 						type="base" min="750" 				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
 <!-- ARMOR GUARD LVL2 3-->
-	<ability name="Guard Lvl2 Armor 3 _Stats">
-		<weight							type="base"	min="12.12" 				/>
+	<ability name="Guard Lvl2 Armor 3 _Stats"> <!-- lvl 46 -->
+		<weight							type="base"	min="13.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="255" 				/>
-		<slashing_resistance_perc		type="base"	min="0.35"				/>
-		<piercing_resistance_perc		type="base"	min="0.30"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
+		<slashing_resistance_perc		type="base"	min="0.14"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.14"				/>
+		<elemental_resistance_perc		type="base" min="0.14"				/>
 		<poison_resistance_perc 		type="base" min="0.15" 				/>
-		<vitality 						type="base" min="350" 				/>
+		<vitality 						type="base" min="500" 				/>
 	</ability>
 
 <!-- ARMOR GUARD LVL2 A 3-->
-	<ability name="Guard Lvl2 A Armor 3 _Stats">
-		<weight							type="base"	min="14.12" 				/>
+	<ability name="Guard Lvl2 A Armor 3 _Stats"> <!-- lvl 47 -->
+		<weight							type="base"	min="13.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="260" 				/>
-		<slashing_resistance_perc		type="base"	min="0.36"				/>
-		<piercing_resistance_perc		type="base"	min="0.31"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.31"				/>
+		<slashing_resistance_perc		type="base"	min="0.14"				/>
+		<piercing_resistance_perc		type="base"	min="0.06"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<rending_resistance_perc		type="base" min="0.14"				/>
+		<elemental_resistance_perc		type="base" min="0.14"				/>
 		<poison_resistance_perc 		type="base" min="0.20" 				/>
-		<vitality 						type="base" min="400" 				/>
+		<vitality 						type="base" min="750" 				/>
 	</ability>
 
 <!-- ARMOR KNIGHT GERALT 3 -->
-	<ability name="Knight Geralt Armor 3 _Stats">
-		<weight							type="base"	min="24.6" 				/>
+	<ability name="Knight Geralt Armor 3 _Stats"> <!-- lvl 49 -->
+		<weight							type="base"	min="17.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="270" 				/>
-		<slashing_resistance_perc		type="base"	min="0.41"				/>
-		<piercing_resistance_perc		type="base"	min="0.41"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.41"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
 		<bleeding_resistance_perc 		type="base" min="0.25" 				/>
-		<vitality 						type="base" min="450" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+		<vitality 						type="base" min="500" 				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.20"				/>
 	</ability>
 
 <!-- ARMOR KNIGHT GERALT A 3 -->
-	<ability name="Knight Geralt A Armor 3 _Stats">
-		<weight							type="base"	min="24.6" 				/>
+	<ability name="Knight Geralt A Armor 3 _Stats"> <!-- lvl 50 -->
+		<weight							type="base"	min="17.5"				/>
 		<quality						type="add"	min="4"					/>
 		<armor							type="base"	min="275" 				/>
-		<slashing_resistance_perc		type="base"	min="0.43"				/>
-		<piercing_resistance_perc		type="base"	min="0.43"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.43"				/>
-		<quen_chance_on_projectile 		type="add" 	min="0.25" 				/>
-		<vitality 						type="base" min="500" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
+		<quen_chance_on_projectile 		type="add" 	min="0.35" 				/>
+		<vitality 						type="base" min="750" 				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.20"				/>
 	</ability>
 	
 <!-- ARMOR TOUSSAINT -->
-	<ability name="Toussaint Armor 3 _Stats">
-		<weight							type="base"	min="10.8" 				/>
+	<ability name="Toussaint Armor 3 _Stats"> <!-- no recipe, autogen! -->
+		<weight							type="base"	min="17.5"				/>
 		<quality						type="add"	min="4"					/>
 		<item_level_min					type="add"	min="40"				/>
 		<item_level_max					type="add"	min="100"				/>
-		<slashing_resistance_perc		type="base"	min="0.41"				/>
-		<piercing_resistance_perc		type="base"	min="0.41"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.41"				/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base" min="0.22"				/>
+		<elemental_resistance_perc		type="base" min="0.22"				/>
 		<burning_resistance_perc 		type="base" min="0.25" 				/>
-		<vitality 						type="base" min="450" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+		<vitality 						type="base" min="1000" 				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.20"				/>
 	</ability>
 
 
@@ -180,36 +204,34 @@
 	<item
 		name							="Lynx Armor 4"
 		category						="armor"
-		price							="4546"
+		price							="4370"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
-		equip_template					="t_01_mg__lynx_lvl5"
+		equip_template					="t_02_mg__lynx_lvl5"
 		localisation_key_name			="item_name_lynx_armor_4"
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_armor_4_64x128.png"
 	>
 		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary, SetBonusPiece, EP1
 		</tags>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="2">Dwimeryte enriched ore</parts>
-										<parts count="4">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Draconide infused leather</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Armor 4 _Stats</a>
 		</base_abilities>
 		<variants>		
-						<variant equip_template="t_02a_mg__lynx_lvl5" all="true">
-						<item_category>mask</item_category>
-						<item_category>gloves</item_category>
-						</variant>
-						<variant equip_template="t_02_mg__lynx_lvl5" category="mask"></variant>						
-						<variant equip_template="t_01a_mg__lynx_lvl5" category="gloves"></variant>
+										<variant equip_template="t_02a_mg__lynx_lvl5" all="true">
+											<!-- <item_category>mask</item_category> -->
+											<item_category>gloves</item_category>
+										</variant>
+										<!-- <variant equip_template="t_02_mg__lynx_lvl5" category="mask"></variant> -->
+										<!-- <variant equip_template="t_01a_mg__lynx_lvl5" category="gloves"></variant> -->
 		</variants>
 	</item>
 
@@ -217,7 +239,7 @@
 	<item
 		name							="Gryphon Armor 4"
 		category						="armor"
-		price							="4576"
+		price							="5139"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -235,11 +257,11 @@
 										<a>Default armor _Stats</a>
 										<a>Gryphon Armor 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="2">Dwimeryte enriched ore</parts>
-										<parts count="4">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Orichalcum ingot</parts>
+										<parts count="1">Dwimeryte enriched ingot</parts>
+										<parts count="1">Draconide infused leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__gryphon_lvl5" category="gloves"></variant>
 		</variants>
@@ -249,7 +271,7 @@
 	<item
 		name							="Bear Armor 4"
 		category						="armor"
-		price							="4546"
+		price							="6182"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -266,11 +288,9 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Armor 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="2">Dwimeryte enriched ore</parts>
-										<parts count="4">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Dwimeryte enriched plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__bear_lvl5" category="gloves"></variant>
 		</variants>
@@ -280,7 +300,7 @@
 	<item
 		name							="Wolf Armor 4"
 		category						="armor"
-		price							="4546"
+		price							="5139"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -297,11 +317,11 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Wolf Armor 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="2">Dwimeryte enriched ore</parts>
-										<parts count="4">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Orichalcum ingot</parts>
+										<parts count="1">Dwimeryte enriched ingot</parts>
+										<parts count="1">Draconide infused leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__wolf_lvl5" category="gloves"></variant>
 		</variants>
@@ -312,7 +332,7 @@
 	<item
 		name							="Red Wolf Armor 1"
 		category						="armor"
-		price							="1998"
+		price							="3081"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -326,11 +346,11 @@
 	>
 		<tags>							Armor, MediumArmor, RedWolfSet, mod_armor, mod_legendary, SetBonusPiece, EP1
 		</tags>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="3">Dwimeryte ore</parts>
-										<parts count="2">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Orichalcum ingot</parts>
+										<parts count="1">Dwimeryte enriched ingot</parts>
+										<parts count="1">Draconide infused leather</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Red Wolf Armor 1 _Stats</a>
 		</base_abilities>
@@ -342,7 +362,7 @@
 	<item
 		name							="Red Wolf Armor 2"
 		category						="armor"
-		price							="4581"
+		price							="3901"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -356,11 +376,11 @@
 	>
 		<tags>							Armor, MediumArmor, RedWolfSet, mod_armor, mod_legendary, SetBonusPiece, EP1
 		</tags>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="3">Chitin scale</parts>
-										<parts count="3">Infused dust</parts>
-										<parts count="2">Dwimeryte enriched ore</parts>
-										<parts count="4">Glowing ore</parts>
+		<recycling_parts>				<parts count="1">Geralt Shirt</parts>
+										<parts count="1">Hardened leather</parts>
+										<parts count="1">Orichalcum ingot</parts>
+										<parts count="1">Dwimeryte enriched ingot</parts>
+										<parts count="1">Draconide infused leather</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Red Wolf Armor 2 _Stats</a>
 		</base_abilities>
@@ -373,7 +393,7 @@
 	<item
 		name							="Guard Lvl1 Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="568"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -387,11 +407,9 @@
 	>
 		<tags>							Armor, LightArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="6">Dark steel ingot</parts>
-										<parts count="3">Silk</parts>
+		<recycling_parts>				<parts count="2">Silk</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Guard Lvl1 Armor 3 _Stats</a>
@@ -404,7 +422,7 @@
 	<item
 		name							="Guard Lvl1 A Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="578"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -418,11 +436,9 @@
 	>
 		<tags>							Armor, LightArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="6">Dark steel ingot</parts>
-										<parts count="2">Silk</parts>
+		<recycling_parts>				<parts count="2">Silk</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Guard Lvl1 A Armor 3 _Stats</a>
@@ -435,7 +451,7 @@
 	<item
 		name							="Guard Lvl2 Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="823"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -449,11 +465,11 @@
 	>
 		<tags>							Armor, MediumArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="6">Leather squares</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="4">Leather</parts>
-										<parts count="4">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Guard Lvl2 Armor 3 _Stats</a>
@@ -466,7 +482,7 @@
 	<item
 		name							="Guard Lvl2 A Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="853"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -480,11 +496,11 @@
 	>
 		<tags>							Armor, MediumArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="6">Leather squares</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="4">Leather</parts>
-										<parts count="4">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="2">Hardened leather</parts>
+										<parts count="2">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Guard Lvl2 A Armor 3 _Stats</a>
@@ -497,7 +513,7 @@
 	<item
 		name							="Knight Geralt Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="1523"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -511,11 +527,9 @@
 	>
 		<tags>							Armor, HeavyArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="3">Linen</parts>
-										<parts count="2">String</parts>
-										<parts count="3">Iron ore</parts>
-										<parts count="6">Leather</parts>
-										<parts count="6">Dark iron ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Knight Geralt Armor 3 _Stats</a>
@@ -542,7 +556,7 @@
 	<item
 		name							="Knight Geralt A Armor 3"
 		category						="armor"
-		price							="3000"
+		price							="1623"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -556,11 +570,9 @@
 	>
 		<tags>							Armor, HeavyArmor, mod_armor, mod_legendary, EP1
 		</tags>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="4">String</parts>
-										<parts count="6">Leather</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="6">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Knight Geralt A Armor 3 _Stats</a>
@@ -588,7 +600,7 @@
 	<item
 		name							="Toussaint Armor 3"
 		category						="armor"
-		price							="236"
+		price							="1723"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="3"
@@ -600,16 +612,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/toussaint_armor_2_64x128.png"
 	>
-		<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel, Armor, HeavyArmor, mod_armor, mod_legendary, EP1
+		<tags>							Autogen, AutogenUseLevelRange, Armor, HeavyArmor, mod_armor, mod_legendary, EP1
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Toussaint Armor 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Linen</parts>
-										<parts count="4">Leather straps</parts>
-										<parts count="4">Hardened leather</parts>
-										<parts count="4">Chitin scale</parts>
-										<parts count="6">Orichalcum ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">String</parts>
 		</recycling_parts> 					
 		<variants>
 											<variant equip_template="t_03_mg__errant_knight"> 

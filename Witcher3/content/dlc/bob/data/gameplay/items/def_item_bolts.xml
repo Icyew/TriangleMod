@@ -29,7 +29,7 @@
 		localisation_key_description	="item_desc_quest_item"
 		icon_path						="icons/inventory/arrows/target_legendary_bolt_64x64.png"
 	>
-		<tags>							bolt, mod_weapon, mod_nosalem, Quest
+		<tags>							bolt, mod_weapon, mod_nosale, Quest
 		</tags>
 		<base_abilities>				<a>q704_vampire_lure_bolt _Stats</a>
 										<a>Default weapon _Stats</a>

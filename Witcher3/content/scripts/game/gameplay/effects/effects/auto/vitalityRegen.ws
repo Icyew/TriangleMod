@@ -47,7 +47,7 @@ class W3Effect_AutoVitalityRegen extends W3AutoRegenEffect
 		
 		super.OnUpdate(deltaTime);
 		
-		if( target.GetStatPercents( BCS_Vitality ) >= 1.0f && !target.HasAbility('Runeword 4 _Stats', true))
+		if( target.GetStatPercents( BCS_Vitality ) >= 1.0f && !((W3PlayerWitcher)target).HasRunewordActive('Runeword 4 _Stats')) //modSigns
 		{
 			target.StopVitalityRegen();
 		}

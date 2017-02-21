@@ -7,165 +7,189 @@
 
 		<!-- PANTS WITCHER LYNX  -->
 			<ability name="Lynx Pants 5 _Stats">
-				<weight 						type="base" min="4.84" 				/>
-				<quality 						type="add" 	min="5" 				/>
-				<armor 							type="base" min="91"			 	/>
-				<slashing_resistance_perc 		type="base" min="0.07"				/>
-				<piercing_resistance_perc 		type="base"	min="0.05"				/>
-				<rending_resistance_perc 		type="base" min="0.07"				/>
-				<elemental_resistance_perc 		type="base" min="0.16"				/>
-				<attack_power					type="mult"	min="0.11"				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+				<weight 						type="base" min="1" 				/>
+				<quality 						type="add" 	min="5" 			 	/>
+				<armor 							type="base" min="85"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base" min="0.05"				/>
+				<elemental_resistance_perc		type="base" min="0.05"				/>
+				<attack_power					type="mult"	min="0.12"				/>
+				<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 			</ability>
 
 		<!-- PANTS WITCHER GRYPHON  -->
 			<ability name="Gryphon Pants 5 _Stats">
-				<weight 						type="base"	min="2.64" 				/>
-				<quality 						type="add" 	min="5" 				/>
-				<armor 							type="base"	min="91" 				/>
-				<slashing_resistance_perc 		type="base" min="0.09"				/>
-				<piercing_resistance_perc 		type="base" min="0.06"				/>
-				<rending_resistance_perc 		type="base" min="0.11"				/>
-				<elemental_resistance_perc 		type="base" min="0.33"				/>
-				<spell_power					type="mult"	min="0.11"				/>
+				<weight 						type="base" min="3" 				/>
+				<quality 						type="add" 	min="5" 			 	/>
+				<armor 							type="base" min="85"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.07"				/>
+				<piercing_resistance_perc		type="base"	min="0.04"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+				<rending_resistance_perc		type="base" min="0.07"				/>
+				<elemental_resistance_perc		type="base" min="0.07"				/>
+				<spell_power					type="mult"	min="0.12"				/>
 			</ability>
 
 		<!-- PANTS WITCHER BEAR  -->
 			<ability name="Bear Pants 5 _Stats">
-				<weight 						type="base" min="4.24" 				/>
+				<weight 						type="base"	min="5" 				/>
 				<quality 						type="add" 	min="5" 			 	/>
-				<armor 							type="base" min="91" 				/>
-				<slashing_resistance_perc 		type="base" min="0.11" 				/>
-				<piercing_resistance_perc 		type="base" min="0.06" 				/>
-				<rending_resistance_perc 		type="base" min="0.16" 				/>
-				<elemental_resistance_perc 		type="base" min="0.25"				/>
-				<focus_gain 					type="base" min="0.11" 				/>
-				<staminaRegen_armor_mod 		type="mult" min="-0.10"				/>
+				<armor 							type="base" min="85"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base" min="0.09"				/>
+				<elemental_resistance_perc		type="base" min="0.09"				/>
+				<focus_gain 					type="base" min="0.12" 				/>
+				<staminaRegen_armor_mod 		type="mult"	min="-0.025" 			/>
 			</ability>
 
 		<!-- PANTS WITCHER WOLF  -->
 			<ability name="Wolf Pants 5 _Stats">
-				<weight 						type="base"	min="2.64" 				/>
-				<quality 						type="add" 	min="5" 				/>
-				<armor 							type="base"	min="91" 				/>
-				<slashing_resistance_perc 		type="base" min="0.09"				/>
-				<rending_resistance_perc 		type="base" min="0.11"				/>
-				<elemental_resistance_perc 		type="base" min="0.33"				/>
-				<attack_power					type="mult" min="0.11"				/>
-				<spell_power					type="mult"	min="0.11"				/>
+				<weight 						type="base" min="3" 				/>
+				<quality 						type="add" 	min="5"				 	/>
+				<armor 							type="base" min="85"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.07"				/>
+				<piercing_resistance_perc		type="base"	min="0.04"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+				<rending_resistance_perc		type="base" min="0.07"				/>
+				<elemental_resistance_perc		type="base" min="0.07"				/>
+				<focus_gain 					type="base" min="0.07" 				/>
+				<spell_power					type="mult"	min="0.07"				/>
+				<attack_power					type="mult" min="0.07"				/>
 			</ability>
 
 		<!-- PANTS WITCHER RED WOLF  -->
 			<ability name="Red Wolf Pants 1 _Stats">
-				<weight 						type="base"	min="2.64" 				/>
-				<quality 						type="add" 	min="5" 				/>
-				<armor 							type="base"	min="91" 				/>
-				<slashing_resistance_perc 		type="base" min="0.09"				/>
-				<rending_resistance_perc 		type="base" min="0.11"				/>
-				<elemental_resistance_perc 		type="base" min="0.33"				/>
-				<critical_hit_chance			type="add"	min="0.05"				/>
-				<toxicity 						type="base" min="10" 				/>
+				<weight 						type="base" min="3" 				/>
+				<quality 						type="add" 	min="5"				 	/>
+				<armor 							type="base" min="85"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.07"				/>
+				<piercing_resistance_perc		type="base"	min="0.04"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+				<rending_resistance_perc		type="base" min="0.07"				/>
+				<elemental_resistance_perc		type="base" min="0.07"				/>
+				<toxicity 						type="base" min="5" 				/>
+				<potion_duration 				type="add"	min="0.05"				/>
 			</ability>
 
 			<ability name="Red Wolf Pants 2 _Stats">
-				<weight 						type="base"	min="2.64" 				/>
-				<quality 						type="add" 	min="5" 				/>
-				<armor 							type="base"	min="151" 				/>
-				<slashing_resistance_perc 		type="base" min="0.08"				/>
-				<rending_resistance_perc 		type="base" min="0.10"				/>
-				<elemental_resistance_perc 		type="base" min="0.30"				/>
-				<attack_power					type="mult" min="0.10"				/>
-				<spell_power					type="mult"	min="0.10"				/>
+				<weight 						type="base" min="3" 				/>
+				<quality 						type="add" 	min="5"				 	/>
+				<armor 							type="base" min="145"			 	/>
+				<slashing_resistance_perc		type="base"	min="0.07"				/>
+				<piercing_resistance_perc		type="base"	min="0.04"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+				<rending_resistance_perc		type="base" min="0.07"				/>
+				<elemental_resistance_perc		type="base" min="0.07"				/>
+				<toxicity 						type="base" min="5" 				/>
+				<potion_duration 				type="add"	min="0.05"				/>
 			</ability>
 
 		<!-- PANTS GUARD LVL1 3 -->
 			<ability name="Guard Lvl1 Pants 3 _Stats">
-				<weight 						type="base"	min="1.64" 				/>
+				<weight							type="base"	min="1.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="91" 				/>
-				<slashing_resistance_perc		type="base"	min="0.10"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.10"				/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base" min="0.05"				/>
+				<elemental_resistance_perc		type="base" min="0.05"				/>
 				<bleeding_resistance_perc 		type="base" min="0.15" 				/>
 				<vitality 						type="base" min="250" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+				<staminaRegen_armor_mod 		type="mult" min="0.01"				/>
 			</ability>
 
 		<!-- PANTS GUARD LVL1 A 3 -->
 			<ability name="Guard Lvl1 A Pants 3 _Stats">
-				<weight 						type="base"	min="1.8" 				/>
+				<weight							type="base"	min="1.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="93" 				/>
-				<slashing_resistance_perc		type="base"	min="0.11"				/>
-				<piercing_resistance_perc		type="base"	min="0.08"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.11"				/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base" min="0.05"				/>
+				<elemental_resistance_perc		type="base" min="0.05"				/>
 				<bleeding_resistance_perc 		type="base" min="0.20" 				/>
 				<vitality 						type="base" min="300" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+				<staminaRegen_armor_mod 		type="mult" min="0.01"				/>
 			</ability>
 
 		<!-- PANTS GUARD LVL2 3-->
 			<ability name="Guard Lvl2 Pants 3 _Stats">
-				<weight 						type="base"	min="3.08" 				/>
+				<weight							type="base"	min="3.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="97" 				/>
-				<slashing_resistance_perc		type="base"	min="0.15"				/>
-				<piercing_resistance_perc		type="base"	min="0.10"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.10"				/>
+				<slashing_resistance_perc		type="base"	min="0.06"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base" min="0.06"				/>
+				<elemental_resistance_perc		type="base" min="0.06"				/>
 				<poison_resistance_perc 		type="base" min="0.15" 				/>
 				<vitality 						type="base" min="350" 				/>
 			</ability>
 
 		<!-- PANTS GUARD LVL2 A 3-->
 			<ability name="Guard Lvl2 A Pants 3 _Stats">
-				<weight 						type="base"	min="2.5" 				/>
+				<weight							type="base"	min="3.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="99" 				/>
-				<slashing_resistance_perc		type="base"	min="0.16"				/>
-				<piercing_resistance_perc		type="base"	min="0.11"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.11"				/>
+				<slashing_resistance_perc		type="base"	min="0.06"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base" min="0.06"				/>
+				<elemental_resistance_perc		type="base" min="0.06"				/>
 				<poison_resistance_perc 		type="base" min="0.20" 				/>
 				<vitality 						type="base" min="400" 				/>
 			</ability>
 
 		<!-- PANTS KNIGHT GERALT 3 -->
 			<ability name="Knight Geralt Pants 3 _Stats">
-				<weight 						type="base"	min="17.78" 				/>
+				<weight							type="base"	min="6.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="103" 				/>
-				<slashing_resistance_perc		type="base"	min="0.16"				/>
-				<piercing_resistance_perc		type="base"	min="0.15"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.15"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base" min="0.09"				/>
+				<elemental_resistance_perc		type="base" min="0.09"				/>
 				<poison_resistance_perc 		type="base" min="0.25" 				/>
 				<vitality 						type="base" min="450" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+				<staminaRegen_armor_mod 		type="mult" min="-0.025"			/>
 			</ability>
 
 		<!-- PANTS KNIGHT GERALT A 3 -->
 			<ability name="Knight Geralt A Pants 3 _Stats">
-				<weight 						type="base"	min="18.78" 				/>
+				<weight							type="base"	min="6.5"				/>
 				<quality 						type="add" 	min="4" 				/>
 				<armor 							type="base"	min="105" 				/>
-				<slashing_resistance_perc		type="base"	min="0.16"				/>
-				<piercing_resistance_perc		type="base"	min="0.16"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.16"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base" min="0.09"				/>
+				<elemental_resistance_perc		type="base" min="0.09"				/>
 				<burning_resistance_perc 		type="add" 	min="0.40" 				/>
 				<vitality 						type="base" min="500" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+				<staminaRegen_armor_mod 		type="mult" min="-0.025"			/>
 			</ability>	
 			
 		<!-- PANTS TOUSSAINT -->
 			<ability name="Toussaint Pants 3 _Stats">
-				<weight							type="base"	min="13.78" 			/>
+				<weight							type="base"	min="6.5"				/>
 				<quality						type="add"	min="4"					/>
 				<item_level_min					type="add"	min="40"				/>
 				<item_level_max					type="add"	min="100"				/>
-				<slashing_resistance_perc		type="base"	min="0.16"				/>
-				<piercing_resistance_perc		type="base"	min="0.15"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.15"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base" min="0.09"				/>
+				<elemental_resistance_perc		type="base" min="0.09"				/>
 				<bleeding_resistance_perc 		type="base" min="0.25" 				/>
 				<vitality 						type="base" min="450" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+				<staminaRegen_armor_mod 		type="mult" min="-0.025"			/>
 			</ability>
 
 
@@ -179,7 +203,7 @@
 			<item
 				name							="Lynx Pants 5"
 				category						="pants"
-				price							="155"
+				price							="1498"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -196,10 +220,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Lynx Pants 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="2">Dark iron ore</parts>
-												<parts count="1">Steel ingot</parts>
-												<parts count="2">Hardened timber</parts>
+				<recycling_parts>				<parts count="1">Silk</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 				<collapse>						<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -225,7 +248,7 @@
 			<item
 				name							="Gryphon Pants 5"
 				category						="pants"
-				price							="191"
+				price							="2584"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -242,10 +265,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Gryphon Pants 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="1">Leather straps</parts>
-												<parts count="2">Meteorite ore</parts>
-												<parts count="2">Silver ore</parts>
+				<recycling_parts>				<parts count="1">Leather</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 				<collapse>						<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -270,7 +292,7 @@
 			<item
 				name							="Bear Pants 5"
 				category						="pants"
-				price							="171"
+				price							="3500"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -287,10 +309,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Bear Pants 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="2">Leather</parts>
-												<parts count="2">Dark iron ore</parts>
-												<parts count="1">Steel ingot</parts>
+				<recycling_parts>				<parts count="1">Leather</parts>
+												<parts count="1">Silver ingot</parts>
+												<parts count="1">Dwimeryte enriched ingot</parts>
+												<parts count="1">Monstrous plate</parts>
 				</recycling_parts>
 				<collapse>						<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -315,7 +337,7 @@
 			<item
 				name							="Wolf Pants 5"
 				category						="pants"
-				price							="283"
+				price							="2602"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -332,9 +354,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Wolf Pants 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Leather</parts>
-												<parts count="1">Dark steel plate</parts>
-												<parts count="2">Silver ingot</parts>
+				<recycling_parts>				<parts count="1">Leather</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 					<collapse>			<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -359,7 +381,7 @@
 			<item
 				name							="Red Wolf Pants 1"
 				category						="pants"
-				price							="283"
+				price							="1545"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -376,9 +398,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Red Wolf Pants 1 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Leather</parts>
-												<parts count="1">Dark steel plate</parts>
-												<parts count="2">Silver ingot</parts>
+				<recycling_parts>				<parts count="1">Leather</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 					<collapse>			<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -402,7 +424,7 @@
 			<item
 				name							="Red Wolf Pants 2"
 				category						="pants"
-				price							="283"
+				price							="2105"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -419,9 +441,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Red Wolf Pants 2 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Leather</parts>
-												<parts count="1">Dark steel plate</parts>
-												<parts count="2">Silver ingot</parts>
+				<recycling_parts>				<parts count="1">Leather</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 					<collapse>			<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>
@@ -446,7 +468,7 @@
 			<item
 				name							="Guard Lvl1 Pants 3"
 				category						="pants"
-				price							="152"
+				price							="250"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -460,10 +482,9 @@
 			>
 				<tags>							Armor, LightArmor,mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="1">Silk</parts>
-												<parts count="6">Linen</parts>
-												<parts count="4">Leather straps</parts>
-												<parts count="3">Thread</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Leather squares</parts>
+												<parts count="1">Silk</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl1 Pants 3 _Stats</a>
@@ -492,7 +513,7 @@
 			<item
 				name							="Guard Lvl1 A Pants 3"
 				category						="pants"
-				price							="168"
+				price							="260"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -506,10 +527,9 @@
 			>
 				<tags>							Armor, LightArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="6">Linen</parts>
-												<parts count="4">Leather straps</parts>
-												<parts count="3">Thread</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Leather squares</parts>
+												<parts count="1">Silk</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl1 A Pants 3 _Stats</a>
@@ -538,7 +558,7 @@
 			<item
 				name							="Guard Lvl2 Pants 3"
 				category						="pants"
-				price							="210"
+				price							="405"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -552,11 +572,9 @@
 			>
 				<tags>							Armor, MediumArmor,mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="6">Linen</parts>
-												<parts count="6">Leather straps</parts>
-												<parts count="4">Thread</parts>
-												<parts count="2">Twine</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Silver ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl2 Pants 3 _Stats</a>
@@ -585,7 +603,7 @@
 			<item
 				name							="Guard Lvl2 A Pants 3"
 				category						="pants"
-				price							="366"
+				price							="415"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -599,11 +617,9 @@
 			>
 				<tags>							Armor, MediumArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="3">Silk</parts>
-												<parts count="5">Linen</parts>
-												<parts count="1">Leather squares</parts>
-												<parts count="4">Leather straps</parts>
-												<parts count="5">Thread</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Silver ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl2 A Pants 3 _Stats</a>
@@ -632,7 +648,7 @@
 			<item
 				name							="Knight Geralt Pants 3"
 				category						="pants"
-				price							="564"
+				price							="475"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -646,10 +662,9 @@
 			>
 				<tags>							Armor, HeavyArmor,mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="2">Linen</parts>
-												<parts count="6">Dark steel ingot</parts>
-												<parts count="5">Leather straps</parts>
+				<recycling_parts>				<parts count="2">Glowing ingot</parts>
+												<parts count="1">Silver Ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Knight Geralt Pants 3 _Stats</a>
@@ -678,7 +693,7 @@
 			<item
 				name							="Knight Geralt A Pants 3"
 				category						="pants"
-				price							="884"
+				price							="485"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -692,11 +707,9 @@
 			>
 				<tags>							Armor, HeavyArmor,mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="2">Silk</parts>
-												<parts count="2">Linen</parts>
-												<parts count="6">Dark steel ingot</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="2">Orichalcum ore</parts>
+				<recycling_parts>				<parts count="2">Glowing ingot</parts>
+												<parts count="1">Silver Ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Knight Geralt A Pants 3 _Stats</a>
@@ -724,7 +737,7 @@
 		<item 
 			name							="Toussaint Pants 3"
 			category						="pants"
-			price							="1532"
+			price							="495"
 			initial_durability				="100"
 			max_durability					="100"
 			enhancement_slots				="2"
@@ -736,16 +749,14 @@
 			localisation_key_description	="item_category_heavy_armor_description"
 			icon_path						="icons/inventory/armors/toussaint_pants_2_64x128.png"
 		>
-			<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel, EP1, Armor, HeavyArmor, mod_armor
+			<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel, EP1, Armor, HeavyArmor, mod_armor, mod_legendary
 			</tags>
 			<base_abilities>				<a>Default armor _Stats</a>
 											<a>Toussaint Pants 3 _Stats</a>
 			</base_abilities>
-			<recycling_parts>				<parts count="6">Orichalcum ore</parts>
-												<parts count="6">Linen</parts>
-												<parts count="1">Leather squares</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="2">Dark steel ingot</parts>
+			<recycling_parts>				<parts count="2">Glowing ingot</parts>
+											<parts count="1">Silver ingot</parts>
+											<parts count="2">Leather</parts>
 			</recycling_parts>
 			<collapse>						<category_cond name="armor" collapse="true"/>
 													<item_cond name="Body torso wet" collapse="false"/>

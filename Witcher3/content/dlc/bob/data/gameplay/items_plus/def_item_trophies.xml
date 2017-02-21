@@ -6,46 +6,40 @@
 <abilities>
 
 	<ability name="base_trophy_stats">
-		<weight type="base" min="2"/>
+		<weight type="base" min="5"/>
 		<quality type="add" min="4" max="4"/>
 	</ability>
 
 	<ability name="cyclops_trophy_stats">
-		<nonhuman_exp_bonus_when_fatal type="add" min="0.05"/>
+		<bludgeoning_resistance_perc type="add" min="0.15" />
 	</ability>
 	
 	<ability name="wight_trophy_stats">
-		<nonhuman_exp_bonus_when_fatal type="add" min="0.05"/>
+		<encumbrance type="add" min="20" />
 	</ability>
 
 	<ability name="garkain_trophy_stats">
-		<nonhuman_exp_bonus_when_fatal type="add" min="0.05"/>
+		<spell_power_axii type="mult" min="0.2" />
 	</ability>
 
 	<ability name="spriggan_trophy_stats">
-		<bonus_herb_chance type="add" min="0.05"/>
+		<bonus_herb_chance type="add" min="1.0"/>
 	</ability>
 
 	<ability name="dracolizard_trophy_stats">
-		<dismember_chance_mult type="add" min="0.1" />
+		<spell_power_igni type="mult" min="0.2" />
 	</ability>
 
 	<ability name="white_basilisk_trophy_stats">
-		<bonus_money type="add" min="0.01"/>
-		<nonhuman_exp_bonus_when_fatal type="add" min="0.01"/>
-		<human_exp_bonus_when_fatal type="add" min="0.01"/>
-		<dismember_chance_mult type="add" min="0.01" />
-		<bonus_herb_chance type="add" min="0.01"/>
+		<staminaRegen type="mult" min="0.1" />
 	</ability>
 
 	<ability name="sharley_matriarch_trophy_stats">
-		<bonus_money type="add" min="0.05"/>
+		<armor_reduction type="add" min="60" />
 	</ability>
 	
 	<ability name="camm_trophy_stats">
-		<bonus_money type="add" min="0.03"/>
-		<nonhuman_exp_bonus_when_fatal type="add" min="0.01"/>
-		<human_exp_bonus_when_fatal type="add" min="0.01"/>
+		<piercing_resistance_perc type="add" min="0.15" />
 	</ability>
 
 </abilities>
@@ -92,7 +86,7 @@
 	<item
 		name							="q704_garkain_trophy"
 		category						="trophy"
-		price							="150"
+		price							="350"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -111,7 +105,7 @@
 	<item
 		name							="mq7002_spriggan_trophy"
 		category						="trophy"
-		price							="250"
+		price							="350"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -130,7 +124,7 @@
 	<item 
 		name							="mq7009_griffin_trophy" 
 		category						="trophy"
-		price							="250"		
+		price							="200"		
 		stackable						="1"
 		grid_size						= "2"		
 		ability_mode					="OnMount" 
@@ -150,7 +144,7 @@
 	<item
 		name							="mq7017_zmora_trophy"
 		category						="trophy"
-		price							="250"
+		price							="350"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -169,7 +163,7 @@
 	<item
 		name							="mq7010_dracolizard_trophy"
 		category						="trophy"
-		price							="250"
+		price							="300"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -188,7 +182,7 @@
 	<item
 		name							="mq7018_basilisk_trophy"
 		category						="trophy"
-		price							="150"
+		price							="500"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -207,7 +201,7 @@
 	<item
 		name							="mh701_sharley_matriarch_trophy"
 		category						="trophy"
-		price							="250"
+		price							="400"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -231,11 +225,11 @@
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="trophy_cammerlengo_01"
-		localisation_key_name			="item_name_cammerlengo_trophy "
-		localisation_key_description	="item_desc_cammerlengo_trophy "
+		localisation_key_name			="item_name_cammerlengo_trophy"
+		localisation_key_description	="item_desc_cammerlengo_trophy"
 		icon_path						="icons/inventory/quests/trophy_cammerlengo_64x64.png"
 	>
-		<tags>							Quest, Trophy
+		<tags>							Trophy
 		</tags>
 		<base_abilities>				<a>base_trophy_stats</a>
 										<a>camm_trophy_stats</a>

@@ -1177,6 +1177,7 @@ class CR4ScriptedHud extends CR4Hud
 		if ( hudJournalUpdateModule )
 		{
 			hudJournalUpdateModule.AddQuestUpdate( journalQuest, isQuestUpdate );
+			FamilyIssuesAutosave( journalQuest ); //modSigns
 		}
 
 		manager = theGame.GetJournalManager();

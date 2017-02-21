@@ -26,12 +26,12 @@ class CBTTaskTaunt extends CBTTaskPlayAnimationEventDecorator
 			return false;
 		}
 		
-		if ( useXMLTauntChance )
-		{
+		//if ( useXMLTauntChance ) //modSigns: always use xml taunt chance
+		//{
 			chance = (int)(100*CalculateAttributeValue(GetActor().GetAttributeValue('taunt_chance')));
 			if ( !Roll(chance) )
 				return false;
-		}
+		//}
 		
 		return true;
 	}

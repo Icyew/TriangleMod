@@ -7,7 +7,7 @@
 
 		<!-- ######################## Geralt hair extensions definitions ######################## -->	
 
-			<item_extension name="Preview Hair">
+			<!-- <item_extension name="Preview Hair">
 				<variants>
 					<variant equip_template="c_01_mg__witcher_br02" category="mask" all="true">
 						<item>Lynx Armor 4</item>
@@ -85,7 +85,7 @@
 						<item>Lynx Armor 4</item>
 					</variant>					
 				</variants>
-			</item_extension>			
+			</item_extension> -->
 			
 		<!-- ######################## Geralt pants extensions definitions ######################## -->
 		

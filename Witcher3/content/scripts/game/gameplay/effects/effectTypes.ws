@@ -301,7 +301,9 @@ EET_Unused1,
 	EET_ToxicityVenom,
 	EET_BasicQuen,
 	
-	
+	//modSigns
+	EET_UndyingSkillImmortal,
+	EET_UndyingSkillCooldown,
 EET_EffectTypesSize,
 EET_ForceEnumTo16Bit = 10000
 }
@@ -372,39 +374,50 @@ struct SBuffPauseLock
 };
 
 
-function ModifyHitSeverityBuff(target : CActor, type : EEffectType) : EEffectType
+function AvoidBurnCS(target : CActor) : bool //modSigns
 {
-	var severityReduction, severity : int;
+	/*var chance : int;
+	
+	chance = RoundMath(CalculateAttributeValue(target.GetAttributeValue('avoid_burn_critical_state_chance')));
+	
+	if(RandF() < chance)
+	{
+		return true;
+	}*/
+		
+	return false;
+}
+		
+function ModifyHitSeverityBuff(target : CActor, type : EEffectType) : EEffectType //only used by knockdown applicator
+{
+	var /*severityReduction,*/ severity : int;
 	var npc : CNewNPC;
 	var witcher : W3PlayerWitcher;
 	var quenEntity : W3QuenEntity;
 
-	severityReduction = RoundMath(CalculateAttributeValue(target.GetAttributeValue('hit_severity')));
-		
-	
 	switch(type)
 	{
 		case EET_HeavyKnockdown : 	severity = 4; break;
 		case EET_Knockdown :		severity = 3; break;
 		case EET_LongStagger : 		severity = 2; break;
 		case EET_Stagger :			severity = 1; break;
-		default :					severity = 0; break;
+		default :					return EET_Undefined; //modSigns: no need to process further
 	}
 	
+	//modSigns: debug
+	//theGame.witcherLog.AddMessage("hit severity = " + severity);
 	
-	severity -= severityReduction;
-	
+	//severityReduction = RoundMath(CalculateAttributeValue(target.GetAttributeValue('hit_severity'))); //modSigns
+	//severity -= severityReduction;
 	
 	if(target.HasAlternateQuen())		
 	{
 		if( (CNewNPC)target )
 		{
-			
 			severity -= 1;
 		}
 		else
 		{
-			
 			witcher = (W3PlayerWitcher)target;
 			if(witcher)
 			{
@@ -417,12 +430,22 @@ function ModifyHitSeverityBuff(target : CActor, type : EEffectType) : EEffectTyp
 		}
 	}
 	
+	if( target.GetStaminaPercents() < 0.5 ) //modSigns
+	{
+		severity += 1;
+		if( target.GetStaminaPercents() < 0.1 )
+		{
+			severity += 1;
+		}
+	}
 	
-	if(severity == 4 && target.IsImmuneToBuff(EET_HeavyKnockdown))		severity = 3;
+	if(severity >= 4 && target.IsImmuneToBuff(EET_HeavyKnockdown))		severity = 3;
 	if(severity == 3 && target.IsImmuneToBuff(EET_Knockdown))			severity = 2;
 	if(severity == 2 && target.IsImmuneToBuff(EET_LongStagger))			severity = 1;
 	if(severity == 1 && target.IsImmuneToBuff(EET_Stagger))				severity = 0;
-			
+	
+	//modSigns: debug
+	//theGame.witcherLog.AddMessage("hit severity = " + severity);
 	
 	if(severity >= 4)
 		return EET_HeavyKnockdown;

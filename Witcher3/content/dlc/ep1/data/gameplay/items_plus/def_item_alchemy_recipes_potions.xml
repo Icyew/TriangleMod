@@ -2,6 +2,7 @@
 <redxml>
 	<definitions>	
 		<items>     
+<!-- modSigns: done -->
 			<!-- HACK this name must be the same as the one under custom definition -->
 
 	<!-- Recipe for Diarrhea Potion -->
@@ -20,8 +21,8 @@
 			<recipe name_name="q603_diarrhea_potion_recipe" type_name="q603_diarrhea_potion" level="1" cookedItem_name="q603_diarrhea_potion" cookedItemType="quest" cookedItemQuantity="1" localisation_key_name = "item_name_q603_diarrhea_potion_recipe">
 				<ingredients>
 					<ingredient item_name="Dwarven spirit" quantity="1" />
-					<ingredient item_name="Rotfiend blood" quantity="2" />
-					<ingredient item_name="Wolfsbane" quantity="2" />
+					<ingredient item_name="Rotfiend blood" quantity="1" />
+					<ingredient item_name="Wolfsbane" quantity="1" />
 				</ingredients>
 			</recipe>
 		</alchemy_recipes>

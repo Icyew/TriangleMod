@@ -229,6 +229,8 @@ function GetSetBonusAbility( setBonus : EItemSetBonus ) : name
 		case EISB_Bear_2:				return 'setBonusAbilityBear_2';
 		case EISB_RedWolf_2:			return 'setBonusAbilityRedWolf_2';
 		case EISB_Wolf_1:				return 'SetBonusAbilityWolf_1';
+		//modSigns
+		case EISB_Gryphon_1:			return 'SetBonusAbilityGryphon_1';
 		default: 						return '';
 	}
 }

@@ -14,6 +14,22 @@ class CBTTaskDefend extends IBehTreeTask
 	
 	private var m_activationTime : float;
 	
+	/*function IsAvailable() : bool //modSigns: check for stamina - removed
+	{
+		var npc : CNewNPC = GetNPC();
+		var counterStaminaCost : float;
+
+		counterStaminaCost = CalculateAttributeValue(npc.GetAttributeValue( 'counter_stamina_cost' ));
+		
+		//theGame.witcherLog.AddMessage("CBTTaskDefend: IsAvailable"); //modSigns: debug
+		//theGame.witcherLog.AddMessage("Stamina: " + npc.GetStat( BCS_Stamina )); //modSigns: debug
+		//theGame.witcherLog.AddMessage("counterStaminaCost: " + counterStaminaCost); //modSigns: debug
+		
+		if( npc.GetStat( BCS_Stamina ) >= counterStaminaCost )
+			return true;
+		return false;
+	}*/
+	
 	function OnActivate() : EBTNodeStatus
 	{
 		var npc : CNewNPC = GetNPC();
@@ -29,6 +45,13 @@ class CBTTaskDefend extends IBehTreeTask
 		m_activationTime = GetLocalTime();
 		
 		return BTNS_Active;
+		
+		//modSigns: skip defensive pose and force counter
+		//removed - can't do this as it breaks last breath ability (probably something else)
+		/*npc.ResetHitCounter(0, 0);
+		npc.DisableHitAnimFor(2.0);
+		npc.SetIsInHitAnim(false);
+		return BTNS_Completed;*/
 	}
 	
 	function OnDeactivate()
@@ -41,6 +64,10 @@ class CBTTaskDefend extends IBehTreeTask
 		{
 			npc.customHits = false;
 		}
+		
+		//modSigns: prevent player from interrupting a following counter attack
+		npc.SetIsInHitAnim(false);
+		npc.DisableHitAnimFor(2.0);
 	}
 	
 	function OnGameplayEvent( eventName : name ) : bool
@@ -59,12 +86,18 @@ class CBTTaskDefend extends IBehTreeTask
 			if( playParrySound )			
 				npc.SoundEvent( "cmb_play_parry" );
 				
+			//((CActor)(data.attacker)).AddEffectDefault( EET_Stagger, npc, "ParryStagger" ); //modSigns
+				
 			if ( data.customHitReactionRequested )
 			{
 				npc.RaiseEvent('CustomHit');
 				SetHitReactionDirection();
-				return true;
+				//return true;
 			}
+			
+			//modSigns: complete on hit
+			Complete(true);
+			return true;
 		}
 		else if ( listenToParryEvents && ( eventName == 'ParryPerform' || eventName == 'ParryStagger' ) && npc.CanPlayHitAnim() )
 		{

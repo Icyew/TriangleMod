@@ -16,480 +16,480 @@
 <!-- Fists-->
 	<ability name="NPC fists _Stats">
 		<BludgeoningDamage				type="base"	min="50"				/>
-		<SilverDamage					type="base"	min="50"				/>
+		<SilverDamage					type="base"	min="1"					/>
 		<vitality						type="mult"	min="-0.5"				/>
-		<attack_power					type="mult" min="-0.5"				/>
-		</ability>
+		<attack_power					type="mult"	min="-0.5"				/>
+	</ability>
 	
 	<ability name="Geralt fists _Stats">
-		<BludgeoningDamage				type="base"	min="5"					/>
-		<SilverDamage					type="base"	min="1"					/>
+		<BludgeoningDamage				type="base"	min="10"				/>
+		<SilverDamage					type="base"	min="10"				/>
 	</ability>
 	
 	<ability name="Geralt Fistfight Fists _Stats">
-		<BludgeoningDamage				type="base"	min="150"				/>
-		<SilverDamage					type="base"	min="1"					/>
+		<BludgeoningDamage				type="base"	min="300"				/>
+		<SilverDamage					type="base"	min="300"				/>
 	</ability>
 	
 	<ability name="Lightning fists _Stats">
 		<ElementalDamage				type="base"	min="150"				/>
-		<SilverDamage					type="base"	min="20"				/>
+		<SilverDamage					type="base"	min="50"				/>
+		<armor_reduction				type="add"	min="1000"	max="1000"	/>
 	</ability>
 	
 	<ability name="Fire fists _Stats">
 		<ElementalDamage				type="base"	min="150"				/>
-		<SilverDamage					type="base"	min="20"				/>
+		<SilverDamage					type="base"	min="50"				/>
+		<armor_reduction				type="add"	min="1000"	max="1000"	/>
 	</ability>
 
 <!-- STEEL -->
 
 	<ability name="Iron Poker _Stats">				
-				<SilverDamage min="1" max="1"/>
-				<weight type="base" min="12" max="12"/>
-				<quality						type="add"	min="1"					/>
+		<weight							type="base" min="12"	max="12"	/>
+		<quality						type="add"	min="1"					/>
+		<SilverDamage 					type="base" min="1"		max="1"		/>
 	</ability>
 			
-	<ability name="Wooden sword _Stats">
+	<ability name="Wooden sword _Stats"> <!-- q1 -->
 		<weight							type="base"	min="0.55"				/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="22"				/>
+		<BludgeoningDamage				type="base"	min="50"				/>
 		<SilverDamage					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Short sword 1 _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Short sword 1 _Stats"> <!-- q1 -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Short sword 2 _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Short sword 2 _Stats"> <!-- q1 -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Short Steel Sword _Stats">
-		<weight							type="base" min="3.2"				/>
+	<ability name="Short Steel Sword _Stats"> <!-- q1 -->
+		<weight							type="base" min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage					type="base" min="1"					/>
 	</ability>
 
-	<ability name="Long Steel Sword _Stats">
-		<weight							type="base"	min="3.45"				/>
-		<SlashingDamage 				type="base"	min="230" 	max="230"	/>
+	<ability name="Long Steel Sword _Stats"> <!-- starting steel sword -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"					/>
+		<SlashingDamage 				type="base"	min="265" 	max="265"	/>
 		<SilverDamage					type="base"	min="1"					/>
-		<armor_reduction				type="base"	min="25"				/>
 	</ability>
 	
-	<ability name="Rusty No Mans Land sword _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Rusty No Mans Land sword _Stats"> <!-- no autogen -->
+		<weight							type="base"	min="8"					/>
 		<SlashingDamage 				type="base"	min="4" 	max="20"	/>
 		<quality						type="add"	min="1"					/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="No Mans Land sword 1 _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="No Mans Land sword 1 _Stats"> <!-- q1, 0 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="No Mans Land sword 1 q2 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="No Mans Land sword 1 q2 _Stats"> <!-- q2, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="2"		max="2"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="No Mans Land sword 2 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="No Mans Land sword 2 _Stats"> <!-- q1-2, 0 slots -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="2"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="No Mans Land sword 3 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="No Mans Land sword 3 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="No Mans Land sword 4 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="No Mans Land sword 4 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Rusty Nilfgaardian sword _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Rusty Nilfgaardian sword _Stats"> <!-- no autogen -->
+		<weight							type="base"	min="8"					/>
 		<SlashingDamage 				type="base"	min="4" 	max="20"	/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Nilfgaardian sword 1 _Stats">
-		<weight							type="base"	min="6.2"				/>
+	<ability name="Nilfgaardian sword 1 _Stats"> <!-- q1, 0 slots -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Nilfgaardian sword 2 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Nilfgaardian sword 2 _Stats"> <!-- q1-2, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="2"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Nilfgaardian sword 3 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Nilfgaardian sword 3 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Nilfgaardian sword 4 _Stats">
-		<weight							type="base"	min="4.2"				/>
+	<ability name="Nilfgaardian sword 4 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Rusty Novigraadan sword _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Rusty Novigraadan sword _Stats"> <!-- no autogen -->
+		<weight							type="base"	min="8"					/>
 		<SlashingDamage 				type="base"	min="4" 	max="20"	/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Novigraadan sword 1 _Stats">
-		<weight							type="base"	min="4.7"				/>
+	<ability name="Novigraadan sword 1 _Stats"> <!-- q1-3, 0 slots -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Novigraadan sword 2 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Novigraadan sword 2 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Novigraadan sword 3 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Novigraadan sword 3 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Novigraadan sword 4 _Stats">
-		<weight							type="base"	min="4.4"				/>
+	<ability name="Novigraadan sword 4 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="sq304 Novigraadan sword 4 _Stats">
-		<weight							type="base"	min="4.4"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+	<ability name="sq304 Novigraadan sword 4 _Stats"> <!-- relic, 3 slots, Hattori quest reward -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<SilverDamage 					type="base"	min="1"					/>
+		<dismember_chance				type="add"	min="0.1"				/>
+		<armor_reduction				type="base"	min="80"				/>
+		<critical_hit_chance			type="add"	min="0.35"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<desc_confusionchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
+		<ConfusionEffect				is_ability="true"					/>
 	</ability>
 	
-	<ability name="Inquisitor sword 1 _Stats">
-		<weight							type="base"	min="4.6"				/>
+	<ability name="Inquisitor sword 1 _Stats"> <!-- q2-3, 0 slots -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="2"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Inquisitor sword 2 _Stats">
-		<weight							type="base"	min="4.1"				/>
+	<ability name="Inquisitor sword 2 _Stats"> <!-- q3, 1 slot -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="3"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Rusty Skellige sword _Stats">
-		<weight							type="base"	min="3.2"				/>
+	<ability name="Rusty Skellige sword _Stats"> <!-- no autogen -->
+		<weight							type="base"	min="8"					/>
 		<SlashingDamage 				type="base"	min="5" 	max="20"	/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage					type="base"	min="1"					/>
 	</ability>
 	
-	<ability name="Skellige sword 1 _Stats">
-		<weight							type="base"	min="3.8"				/>
+	<ability name="Skellige sword 1 _Stats"> <!-- q1, 0 slots, +15% crit damage -->
+		<weight							type="base"	min="8"					/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<SilverDamage 					type="base"	min="1"					/>
+		<critical_hit_damage_bonus		type="add"	min="0.15"				/>
+	</ability>
+	
+	<ability name="Skellige sword 2 _Stats"> <!-- q1-2, 1 slot, +15% crit damage -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="2"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-	
-	<ability name="Skellige sword 2 _Stats">
-		<weight							type="base"	min="3.2"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.15"				/>
 	</ability>
 
-	<ability name="q402 Skellige sword 3 _Stats">
-		<weight							type="base"	min="5.1"				/>
+	<ability name="q402 Skellige sword 3 _Stats"> <!-- relic, 3 slots, main quest, reward lvl 22 -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<armor_reduction				type="base"	min="40"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.55"				/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>	
-		<desc_freezingchance_mult 		type="add" 	min="0.1" 				/>
+		<FrostDamage 					type="add"  min="80" 	max="80"	/>
+		<spell_power_aard				type="mult"	min="0.25"	max="0.25"	/>
+		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<buff_apply_chance 				type="add" 	min="0.25" 				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.25" 				/>
 		<SlowdownFrostEffect 			is_ability="true" 					/>
 	</ability>
 	
-	<ability name="Skellige sword 3 _Stats">
-		<weight							type="base"	min="4.5"				/>
+	<ability name="Skellige sword 3 _Stats"> <!-- unused? +15% crit damage -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.15"				/>
 	</ability>
 
-	<ability name="Skellige sword 4 _Stats">
-		<weight							type="base"	min="4.2"				/>
+	<ability name="Skellige sword 4 _Stats"> <!-- q1-3, 1 slot, +15% crit damage -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.15"				/>
 	</ability>
 
-	<ability name="Scoiatael sword 1 _Stats">
-		<weight							type="base"	min="4.64"				/>
+	<ability name="Scoiatael sword 1 _Stats"> <!-- q1, 0 slots, +5% crit chance -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<SilverDamage 					type="base"	min="1"					/>
+		<critical_hit_chance			type="add"	min="0.05"				/>
+	</ability>
+
+	<ability name="Scoiatael sword 2 _Stats"> <!-- 2 slots, q1-3, +5% crit chance -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Scoiatael sword 2 _Stats">
-		<weight							type="base"	min="4.64"				/>
+	<ability name="Scoiatael sword 3 _Stats"> <!-- 2 slots, +5% crit chance -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Scoiatael sword 3 _Stats">
-		<weight							type="base"	min="4.64"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1" 				/>
-	</ability>
-
-	<ability name="Scoiatael sword 4 _Stats">
-		<weight							type="base"	min="4.64"				/>
+	<ability name="Scoiatael sword 4 _Stats"> <!-- 2 slots, +5% crit chance -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>			
-		<critical_hit_chance			type="add"	min="0.1"				/>
+		<critical_hit_chance			type="add"	min="0.05"				/>
 	</ability>
 
-	<ability name="Dwarven sword 1 _Stats">
-		<weight							type="base"	min="5.1"				/>
+	<ability name="Dwarven sword 1 _Stats"> <!-- q1-3, 2 slots, +5% armor reduction -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
 	</ability>
 
-	<ability name="Dwarven sword 2 _Stats">
-		<weight							type="base"	min="6.1"				/>
+	<ability name="Dwarven sword 2 _Stats"> <!-- q2-3, 2 slots, +5% armor reduction -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="2"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
 	</ability>
 	
-	<ability name="Gnomish sword 1 _Stats">
-		<weight							type="base"	min="5.4"				/>
+	<ability name="Gnomish sword 1 _Stats"> <!-- q1-3, 2 slots, +5% armor reduction -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
 	</ability>
 
-	<ability name="Gnomish sword 2 _Stats">
-		<weight							type="base"	min="5.7"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<dismember_chance				type="add"	min="0.01"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.35"				/>
-		<buff_apply_chance				type="add"	min="0.35"				/>
-		<BleedingEffect					is_ability="true"					/>
+	<ability name="Gnomish sword 2 _Stats"> <!-- q2-3, 2 slots, +5% armor reduction -->
+		<weight							type="base"	min="6"					/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<SilverDamage	 				type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
 	</ability>
 
-	<ability name="Wild Hunt sword 1 _Stats">
-		<weight							type="base"	min="4.2"				/>
-		<quality						type="add"	min="1"		max="3"		/>
+	<!-- dropped by early game wild hunt -->
+	<ability name="Wild Hunt sword 1 _Stats"> <!-- common, 1 slot, +20% crit damage, 5% freezing -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="1"		max="1"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
-		<buff_apply_chance 				type="add" 	min="0.01" 				/>	
-		<desc_freezingchance_mult 		type="add" 	min="0.01" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.65"				/>
+		<buff_apply_chance 				type="add" 	min="0.2" 				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.2" 				/>
 		<SlowdownFrostEffect 			is_ability="true" 					/>
 	</ability>
 	
-	<ability name="Wild Hunt sword 2 _Stats">
-		<weight							type="base"	min="4.25"				/>
-		<quality						type="add"	min="1"		max="3"		/>
+	<!-- dropped by Nitral (lvl 6 main quest) -->
+	<ability name="Wild Hunt sword 2 _Stats"> <!-- relic, 1 slot, 8% aard power, +25% crit damage, 8% freezing, 30 frost damage -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="4"		max="4"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
-		<buff_apply_chance 				type="add" 	min="0.02" 				/>	
-		<desc_freezingchance_mult 		type="add" 	min="0.02" 				/>
+		<spell_power_aard				type="mult"	min="0.25"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.65"				/>
+		<FrostDamage 					type="add"  min="80"				/>
+		<buff_apply_chance 				type="add" 	min="0.25" 				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.25" 				/>
 		<SlowdownFrostEffect			is_ability="true" 					/>
 	</ability>
 
-	<ability name="Wild Hunt sword 3 _Stats">
-		<weight							type="base"	min="5.4"				/>
-		<quality						type="add"	min="1"		max="3"		/>
+	<!-- dropped by KM battle wild hunt -->
+	<ability name="Wild Hunt sword 3 _Stats"> <!-- master, 2 slots +30% crit damage, 10% freezing -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"		max="2"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-		<buff_apply_chance 				type="add" 	min="0.03" 				/>	
-		<desc_freezingchance_mult 		type="add" 	min="0.03" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.7"				/>
+		<buff_apply_chance 				type="add" 	min="0.2" 				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.2" 				/>
 		<SlowdownFrostEffect 			is_ability="true" 					/>
 	</ability>
 	
-	<ability name="Wild Hunt sword 4 _Stats">
-		<weight							type="base"	min="5.8"				/>
-		<quality						type="add"	min="1"		max="3"		/>
+	<!-- dropped by late game wild hunt -->
+	<ability name="Wild Hunt sword 4 _Stats"> <!-- magic, 3 slots, +35% crit damage, 10% freezing, 10% aard power -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="3"		max="3"		/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<buff_apply_chance 				type="add" 	min="0.05" 				/>	
-		<desc_freezingchance_mult 		type="add" 	min="0.05" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.7"				/>
+		<buff_apply_chance 				type="add" 	min="0.2" 				/>	
+		<desc_freezingchance_mult 		type="add" 	min="0.2" 				/>
 		<SlowdownFrostEffect 			is_ability="true" 					/>
+		<spell_power_aard				type="mult"	min="0.2"				/>
 	</ability>
 
 <!-- SILVER -->
-	<ability name="Witcher Silver Sword _Stats">
-		<weight							type="base"	min="2.2"				/>
+	<ability name="Witcher Silver Sword _Stats"> <!-- starting silver sword -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="350" 	max="350"	/>
+		<SilverDamage 					type="base"	min="390" 	max="390"	/>
 	</ability>
 
-	<ability name="Silver sword 1 _Stats">
-		<weight							type="base"	min="2.05"				/>
+	<ability name="Silver sword 1 _Stats"> <!-- q1-2, 0 slots -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="2"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Silver sword 2 _Stats">
-		<weight							type="base"	min="2.05"				/>
+	<ability name="Silver sword 2 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Silver sword 3 _Stats">
-		<weight							type="base"	min="2.05"				/>
+	<ability name="Silver sword 3 _Stats"> <!-- q1-3, 1 slot -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Silver sword 4 _Stats">
-		<weight							type="base"	min="3.05"				/>
+	<ability name="Silver sword 4 _Stats"> <!-- q1-3, 1 slots -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Silver sword 5 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Silver sword 5 _Stats"> <!-- q1-3, 1 slot, +50% crit damage -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 	</ability>
 
-	<ability name="Silver sword 6 _Stats">
-		<weight							type="base"	min="3.1"				/>
+	<ability name="Silver sword 6 _Stats"> <!-- q1-3, 2 slot, +50% crit damage -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 	</ability>
 
-	<ability name="Silver sword 7 _Stats">
-		<weight							type="base"	min="3.6"				/>
+	<ability name="Silver sword 7 _Stats"> <!-- q1-3, 2 slots, +50% crit damage -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 	</ability>
 
-	<ability name="Silver sword 8 _Stats">
-		<weight							type="base"	min="5.6"				/>
+	<ability name="Silver sword 8 _Stats"> <!-- q1-3, 2 slots, +50% crit damage -->
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 	</ability>
 
-	<ability name="Elven silver sword 1 _Stats">
-		<weight							type="base"	min="3.4"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Elven silver sword 2 _Stats">
-		<weight							type="base"	min="3.4"				/>
-		<quality						type="add"	min="2"		max="3"		/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-	</ability>
-
-	<ability name="Dwarven silver sword 1 _Stats">
-		<weight							type="base"	min="5.9"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Dwarven silver sword 2 _Stats">
-		<weight							type="base"	min="5.9"				/>
-		<quality						type="add"	min="2"		max="3"		/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-	</ability>
-
-	<ability name="Gnomish silver sword 1 _Stats">
-		<weight							type="base"	min="5.5"				/>
+	<ability name="Elven silver sword 1 _Stats"> <!-- q1-3, 0 slot, +5% crit chance -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
 	</ability>
 
-	<ability name="Gnomish silver sword 2 _Stats">
-		<weight							type="base"	min="5.8"				/>
+	<ability name="Elven silver sword 2 _Stats"> <!-- q2-3, 1 slots, +5% crit chance -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="2"		max="3"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
 		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 	</ability>
-	
-<!-- DLC10 -->
+
+	<ability name="Dwarven silver sword 1 _Stats"> <!-- q1-3, 0 slot, +5% armor reduction -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="1"		max="3"		/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+	<ability name="Dwarven silver sword 2 _Stats"> <!-- q2-3, 1 slots, +5% armor reduction -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+	<ability name="Gnomish silver sword 1 _Stats"> <!-- q1-3, 0 slot, +5% armor reduction -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="1"		max="3"		/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+	<ability name="Gnomish silver sword 2 _Stats"> <!-- q2-3, 1 slots, +5% armor reduction -->
+		<weight							type="base"	min="5"					/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<armor_reduction_perc			type="base"	min="0.05"				/>
+	</ability>
+
+<!-- DLC10 (Wolf gear) additional sword lvl 21 -->
 	<ability name="DLC10_Remorse _Stats">
-		<weight							type="base"	min="4.7"				/>
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="4"					/>
 		<SlashingDamage 				type="base"	min="1"					/>	
-		<item_level_min					type="add"	min="17"				/>
-		<item_level_max					type="add"	min="100"				/>
-		<critical_hit_chance			type="add"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
-		<desc_bleedingchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
+		<critical_hit_chance			type="add"	min="0.3"	max="0.35"	/>
+		<critical_hit_damage_bonus		type="add"	min="0.65"	max="0.75"	/>
+		<desc_bleedingchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
 		<BleedingEffect					is_ability="true"					/>
-		<spell_power					type="mult"	min="0.15"				/>
-		<focus_gain 					type="add"	min="0.15" 				/>
+		<spell_power					type="mult"	min="0.2"	max="0.25"	/>
+		<focus_gain 					type="add"	min="0.2"	max="0.25"	/>
 	</ability>
 
 <!-- QUEST -->
-	<ability name="q505 crafted sword _Stats">
-		<weight							type="base"	min="4.5"				/>
+	<ability name="q505 crafted sword _Stats"> <!-- witcheress ending sword -->
+		<weight							type="base"	min="3"				/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.05"				/>
 		<critical_hit_chance			type="base"	min="0.05"				/>
 		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
 	</ability>
 
 <!-- Ciri Sword-->
 	<ability name="Zireael 01 _Stats">
-		<weight							type="base"	min="4.2"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<PhysicalDamage					type="base"	min="350"				/>
 		<SilverDamage 					type="base"	min="350"	max="350"	/>
-		<armor_reduction				type="add"	min="800"	max="800"	/>
+		<armor_reduction				type="add"	min="1000"	max="1000"	/>
 	</ability>
 
 <!-- Dandelion sword -->
 	<ability name="NPC Dandelion Short Steel Sword _Stats">
-		<weight							type="base"	min="3.0"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<PhysicalDamage					type="base"	min="5"					/>
 		<SilverDamage 					type="base"	min="5"					/>
@@ -499,54 +499,61 @@
 	
 <!-- NPC witcher steel sword -->
 	<ability name="NPC_Witcher_Steel_Sword _Stats">
-		<weight							type="base"	min="3.8"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<PhysicalDamage					type="base"	min="60"				/>
+		<PhysicalDamage					type="base"	min="290"				/>
 		<SilverDamage 					type="base"	min="10"				/>
+		<armor_reduction 				type="add"	min="1000"	max="1000"	/>
 	</ability>
 
 <!-- NPC witcher silver sword -->
 	<ability name="NPC_Witcher_Silver_Sword _Stats">
-		<weight							type="base"	min="4.3"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<PhysicalDamage					type="base"	min="10"				/>
-		<SilverDamage 					type="base"	min="60"				/>
+		<SilverDamage 					type="base"	min="350"				/>
+		<armor_reduction 				type="add"	min="1000"	max="1000"	/>
 	</ability>
 
-<!-- NPC witcher silver sword upgrade (q403)-->
+<!-- NPC witcher silver sword upgrade (q403)--> <!-- KM battle upgraded swords -->
 	<ability name="NPC_Witcher_Silver_Sword_q403_Upgrade _Stats">
-		<weight							type="base"	min="4.3"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<PhysicalDamage					type="base"	min="10"				/>
-		<SilverDamage 					type="base"	min="100"				/>
+		<SilverDamage 					type="base"	min="400"				/>
+		<armor_reduction 				type="add"	min="1000"	max="1000"	/>
 	</ability>
 	
 <!-- Caranthir's Staff -->
 	<ability name="Caranthil Staff _Stats">
-		<weight							type="base"	min="2.15"				/>
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="1000"				/>
+		<BludgeoningDamage				type="base"	min="400"				/>
 		<SilverDamage 					type="base"	min="10"				/>
+		<FrostDamage 					type="base"	min="40"	max="40"	/>
+		<!-- <SlowdownFrostEffect is_ability="true" /> -->
 	</ability>
 
 <!-- Imlerith's Mace -->
 	<ability name="Imlerith Mace _Stats">
-		<weight							type="base"	min="2.5"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="3"		max="3"		/>
-		<BludgeoningDamage				type="base"	min="600"				/>
+		<BludgeoningDamage				type="base"	min="400"				/>
 		<SilverDamage 					type="base"	min="50"				/>
+		<FrostDamage 					type="base"	min="40"	max="40"	/>
 	</ability>
 	
 <!-- Shields-->	
 	<ability name="Imlerith Shield_Stats">
-		<weight							type="base"	min="5.25"				/>
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="180"				/>
+		<BludgeoningDamage				type="base"	min="100"				/>
 		<SilverDamage 					type="base"	min="1"					/>
+		<FrostDamage 					type="base"	min="30"	max="30"	/>
 	</ability>
 
 	<ability name="Shield_Stats">
-		<weight							type="base"	min="4.72"				/>
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<BludgeoningDamage				type="base"	min="50"				/>
 		<SilverDamage 					type="base"	min="1"					/>
@@ -561,7 +568,7 @@
 	<item
 		name							="Wooden sword"
 		category						="steelsword" 
-		price							="10"
+		price							="12"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -591,7 +598,7 @@
 										<a>Wooden sword _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="1">Haft</parts>
+										<parts count="1">Timber</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -629,7 +636,7 @@
 	<item
 		name							="Short sword 1"
 		category						="steelsword"
-		price							="16"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -658,8 +665,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Short sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -697,7 +704,7 @@
 	<item
 		name							="Short sword 2" 
 		category						="steelsword" 
-		price							="16"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -726,8 +733,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Short sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -765,7 +772,7 @@
 	<item
 		name							="Short Steel Sword" 
 		category						="steelsword"
-		price							="16"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -794,8 +801,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Short Steel Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -834,7 +841,7 @@
 	<item
 		name							="Long Steel Sword"
 		category						="steelsword"
-		price							="27"
+		price							="57"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -856,15 +863,16 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_long_steel_sword" 
 		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/sword-01-b.png"
+		icon_path						="icons/inventory/weapons/nomansland_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Long Steel Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -902,7 +910,7 @@
 	<item
 		name							="Rusty No Mans Land sword" 
 		category						="steelsword"
-		price							="12"
+		price							="8"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -926,13 +934,12 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nomansland_sword_rusty_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nml, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Rusty No Mans Land sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -970,7 +977,7 @@
 	<item
 		name							="No Mans Land sword 1"
 		category						="steelsword"
-		price							="16"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -999,8 +1006,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1038,7 +1045,7 @@
 	<item
 		name							="No Mans Land sword 1 q2"
 		category						="steelsword"
-		price							="12"
+		price							="78"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1067,8 +1074,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 1 q2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1106,7 +1114,7 @@
 	<item
 		name							="No Mans Land sword 2"
 		category						="steelsword"
-		price							="12"
+		price							="40"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1135,8 +1143,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1174,7 +1183,7 @@
 	<item
 		name							="No Mans Land sword 3" 
 		category						="steelsword" 
-		price							="16"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1203,8 +1212,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1242,7 +1252,7 @@
 	<item
 		name							="No Mans Land sword 4"
 		category						="steelsword"
-		price							="16"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1271,8 +1281,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>No Mans Land sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1310,7 +1321,7 @@
 	<item
 		name							="Rusty Nilfgaardian sword"
 		category						="steelsword"
-		price							="16"
+		price							="8"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1334,13 +1345,12 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/nilfgaardian_sword_rusty_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nilfgaard
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nilfgaard, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Rusty Nilfgaardian sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1378,7 +1388,7 @@
 	<item
 		name							="Nilfgaardian sword 1"
 		category						="steelsword"
-		price							="24"
+		price							="28"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1407,8 +1417,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="4">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1446,7 +1456,7 @@
 	<item
 		name							="Nilfgaardian sword 2"
 		category						="steelsword"
-		price							="16"
+		price							="90"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1475,8 +1485,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1514,7 +1525,7 @@
 	<item
 		name							="Nilfgaardian sword 3"
 		category						="steelsword"
-		price							="16"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1543,8 +1554,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1582,7 +1594,7 @@
 	<item
 		name							="Nilfgaardian sword 4" 
 		category						="steelsword" 
-		price							="112"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1611,8 +1623,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Nilfgaardian sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1650,7 +1663,7 @@
 	<item
 		name							="Rusty Novigraadan sword"
 		category						="steelsword"
-		price							="16"
+		price							="8"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1674,13 +1687,12 @@
 		localisation_key_description	="item_desc_steel_sword"		
 		icon_path						="icons/inventory/weapons/novigraadan_sword_rusty_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Rusty Novigraadan sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1718,7 +1730,7 @@
 	<item
 		name							="Novigraadan sword 1"
 		category						="steelsword"
-		price							="20"
+		price							="53"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1747,8 +1759,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="3">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -1786,7 +1799,7 @@
 	<item
 		name							="Novigraadan sword 2"
 		category						="steelsword"
-		price							="16"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1815,8 +1828,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1854,7 +1868,7 @@
 	<item
 		name							="Novigraadan sword 3" 
 		category						="steelsword"
-		price							="16"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1883,8 +1897,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1922,7 +1937,7 @@
 	<item
 		name							="Novigraadan sword 4" 
 		category						="steelsword"
-		price							="120"
+		price							="103"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -1951,8 +1966,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Novigraadan sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1990,10 +2006,10 @@
 	<item
 		name							="sq304 Novigraadan sword 4" 
 		category						="steelsword"
-		price							="120"
+		price							="777"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1" 
+		enhancement_slots				="3" 
 		stackable						="1"
 		grid_size						="2"
 		equip_template					="novigraadan_sword_lvl4"
@@ -2014,13 +2030,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/novigraadan_sword_lvl4_64x128.png"
 	>
-		<tags>							Autogen, AutogenForceLevel, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad
+		<tags>							Autogen, AutogenForceLevel, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_novigraad, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>sq304 Novigraadan sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2058,7 +2075,7 @@
 	<item
 		name							="Inquisitor sword 1"
 		category						="steelsword"
-		price							="16"
+		price							="128"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -2087,8 +2104,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Inquisitor sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="3">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2126,7 +2144,7 @@
 	<item
 		name							="Inquisitor sword 2"
 		category						="steelsword"
-		price							="108"
+		price							="245"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -2155,8 +2173,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Inquisitor sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2194,7 +2213,7 @@
 	<item
 		name							="Rusty Skellige sword"
 		category						="steelsword"
-		price							="16"
+		price							="8"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -2218,13 +2237,12 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/skellige_sword_rusty_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Rusty Skellige sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2262,7 +2280,7 @@
 	<item
 		name							="Skellige sword 1" 
 		category						="steelsword" 
-		price							="44"
+		price							="53"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -2291,8 +2309,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -2330,7 +2348,7 @@
 	<item
 		name							="Skellige sword 2"
 		category						="steelsword"
-		price							="20"
+		price							="119"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -2359,8 +2377,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts> 
 		<anim_actions>
 										<action 
@@ -2398,7 +2417,7 @@
 	<item
 		name							="Skellige sword 4" 
 		category						="steelsword" 
-		price							="112"
+		price							="186"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1" 
@@ -2427,8 +2446,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Skellige sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2466,7 +2486,7 @@
 	<item
 		name							="Scoiatael sword 1"
 		category						="steelsword"
-		price							="168"
+		price							="53"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -2495,8 +2515,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Iron ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2534,7 +2554,7 @@
 	<item
 		name							="Scoiatael sword 2"
 		category						="steelsword"
-		price							="168"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2563,8 +2583,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2602,7 +2623,7 @@
 	<item
 		name							="Scoiatael sword 3"
 		category						="steelsword"
-		price							="168"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2631,8 +2652,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2670,7 +2692,7 @@
 	<item
 		name							="Scoiatael sword 4"
 		category						="steelsword"
-		price							="168"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2699,8 +2721,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Scoiatael sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="4">Meteorite ore</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2738,7 +2761,7 @@
 	<item
 		name							="Dwarven sword 1"
 		category						="steelsword" 
-		price							="181"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2767,8 +2790,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2806,7 +2830,7 @@
 	<item
 		name							="Dwarven sword 2"
 		category						="steelsword" 
-		price							="725"
+		price							="252"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2835,9 +2859,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2875,7 +2899,7 @@
 	<item
 		name							="Gnomish sword 1"
 		category						="steelsword" 
-		price							="686"
+		price							="262"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2904,9 +2928,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather straps</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -2944,7 +2968,7 @@
 	<item
 		name							="Gnomish sword 2"
 		category						="steelsword" 
-		price							="901"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -2973,10 +2997,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather straps</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="1">Ruby</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3014,7 +3037,7 @@
 	<item
 		name							="Wild Hunt sword 1"
 		category						="steelsword" 
-		price							="139"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3038,14 +3061,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/wildhunt_sword_lvl1_64x128.png"
 	>
-		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Wild Hunt sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="1">Sapphire dust</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3083,7 +3106,7 @@
 	<item
 		name							="Wild Hunt sword 2"
 		category						="steelsword" 
-		price							="341"
+		price							="236"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3107,14 +3130,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/wildhunt_sword_lvl2_64x128.png"
 	>
-		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Wild Hunt sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="2">Sapphire dust</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3152,7 +3175,7 @@
 	<item
 		name							="Wild Hunt sword 3"
 		category						="steelsword" 
-		price							="902"
+		price							="286"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3176,15 +3199,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/wildhunt_sword_lvl3_64x128.png"
 	>
-		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Wild Hunt sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
-										<parts count="1">Sapphire</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3222,7 +3244,7 @@
 	<item
 		name							="Wild Hunt sword 4"
 		category						="steelsword" 
-		price							="1134"
+		price							="336"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -3246,15 +3268,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/wildhunt_sword_lvl4_64x128.png"
 	>
-		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Wild Hunt sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
-										<parts count="1">Sapphire flawless</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3293,7 +3314,7 @@
 	<item
 		name							="Witcher Silver Sword"
 		category						="silversword" 
-		price							="108"
+		price							="68"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -3315,15 +3336,15 @@
 		holster_deact					="holster_steel_sword_back_deact"
 		localisation_key_name			="item_name_witcher_silver_sword" 
 		localisation_key_description	="item_desc_silver_sword"
-		icon_path						="icons/inventory/weapons/sword-02-b.png"
+		icon_path						="icons/inventory/weapons/silver_sword_lvl1_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon
+		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Witcher Silver Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="4">Silver ore</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3368,7 +3389,7 @@
 	<item
 		name							="Silver sword 1"
 		category						="silversword" 
-		price							="102"
+		price							="120"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -3397,8 +3418,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="4">Silver ore</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3443,7 +3464,7 @@
 	<item
 		name							="Silver sword 2"
 		category						="silversword" 
-		price							="102"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3471,8 +3492,10 @@
 		</tags>
 		<base_abilities>				<a>Silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 										<a>Default weapon _Stats</a>
 		<anim_actions>
@@ -3519,7 +3542,7 @@
 	<item
 		name							="Silver sword 3"
 		category						="silversword" 
-		price							="102"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3548,8 +3571,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3596,7 +3621,7 @@
 	<item
 		name							="Silver sword 4"
 		category						="silversword" 
-		price							="152"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3625,8 +3650,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3671,7 +3698,7 @@
 	<item
 		name							="Silver sword 5"
 		category						="silversword" 
-		price							="154"
+		price							="325"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -3700,8 +3727,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 5 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3746,7 +3775,7 @@
 	<item
 		name							="Silver sword 6"
 		category						="silversword" 
-		price							="154"
+		price							="375"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3775,8 +3804,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 6 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather straps</parts>
-										<parts count="3">Silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3821,7 +3852,7 @@
 	<item
 		name							="Silver sword 7"
 		category						="silversword" 
-		price							="266"
+		price							="375"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3850,8 +3881,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 7 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3896,7 +3929,7 @@
 	<item
 		name							="Silver sword 8"
 		category						="silversword" 
-		price							="694"
+		price							="375"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -3925,9 +3958,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Silver sword 8 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="1">Dwimeryte ore</parts>
-										<parts count="3">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -3972,7 +4006,7 @@
 	<item
 		name							="Elven silver sword 1"
 		category						="silversword" 
-		price							="236"
+		price							="275"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -4001,8 +4035,8 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Elven silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4047,7 +4081,7 @@
 	<item
 		name							="Elven silver sword 2"
 		category						="silversword" 
-		price							="236"
+		price							="378"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -4076,8 +4110,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Elven silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Meteorite silver ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4122,7 +4158,7 @@
 	<item
 		name							="Dwarven silver sword 1"
 		category						="silversword" 
-		price							="717"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -4151,9 +4187,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4198,7 +4235,7 @@
 	<item
 		name							="Dwarven silver sword 2"
 		category						="silversword" 
-		price							="717"
+		price							="410"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -4227,9 +4264,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Dwarven silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4274,7 +4312,7 @@
 	<item
 		name							="Gnomish silver sword 1"
 		category						="silversword" 
-		price							="679"
+		price							="350"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -4303,9 +4341,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish silver sword 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4350,7 +4389,7 @@
 	<item
 		name							="Gnomish silver sword 2"
 		category						="silversword" 
-		price							="702"
+		price							="460"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -4379,9 +4418,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Gnomish silver sword 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4422,11 +4462,12 @@
 		<player_override><bound_items>					<item>scabbard_silver_2_03</item>  
 		</bound_items></player_override>
 	</item>
-	
+
+<!-- DLC10 (Wolf gear) additional sword lvl 21 -->
 	<item
 		name							="DLC10_Remorse"
 		category						="silversword" 
-		price							="702"
+		price							="1200"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -4450,14 +4491,14 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/gnomish_silver_sword_lvl2-64x128.png"
 	>
-		<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel,  PlayerSilverWeapon, Weapon, sword1h, mod_weapon, mod_origin_nonhuman
+		<tags>							Autogen, PlayerSilverWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_nonhuman, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>DLC10_Remorse _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -4502,10 +4543,10 @@
 	<item
 		name							="q402 Skellige sword 3"
 		category						="steelsword"
-		price							="582"
+		price							="852"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		stackable						="1" 
 		grid_size						="2"
 		equip_template					="q402_item__epic_sword"
@@ -4526,15 +4567,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/q402_item_epic_sword-64x128.png"
 	>
-		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_skellige, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>q402 Skellige sword 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="2">Feather</parts>
-										<parts count="1">Sapphire flawless</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<!-- NOT CRAFTABLE -->
 		<anim_actions>
@@ -4867,7 +4907,7 @@
 	<item
 		name							="dwarven_hammer_test"
 		category						="steelsword" 
-		price							="25"
+		price							="16"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -4953,13 +4993,11 @@
 				  icon_path="icons/inventory/weapons/poker_01_64x128.png"
 				  localisation_key_name = "item_name_poker" 
 				  localisation_key_description = "item_category_secondary_desc"
-				  price	= "25" >
+				  price	= "36" >
 				<recycling_parts>
-					<parts count="2">Dark iron ore</parts>
-					<parts count="3">Leather straps</parts>
-					<parts count="2">Timber</parts>
+					<parts count="1">Iron ingot</parts>
 				</recycling_parts> 
-				<tags>Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon</tags>
+				<tags>Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeClub, SecondaryWeapon, mod_secondary</tags>
 				<base_abilities>
 					<a>Iron Poker _Stats</a>
 					<a>Default weapon _Stats</a>

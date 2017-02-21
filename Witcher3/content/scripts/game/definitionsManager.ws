@@ -235,7 +235,7 @@ import class CDefinitionsManagerAccessor extends CObject
 		var min, max : SAbilityAttributeValue;
 		var isWitcherGear : bool;
 		var isRelicGear : bool;
-		var level, baseLevel : int;
+		var level/*, baseLevel*/ : int; //modSigns
 		
 		isWitcherGear = false;
 		isRelicGear = false;
@@ -290,17 +290,18 @@ import class CDefinitionsManagerAccessor extends CObject
 				break;
 				
 			case 'crossbow' :
-				 GetItemAttributeValueNoRandom(itemName, false, 'attack_power', min, max);
+				GetItemAttributeValueNoRandom(itemName, false, 'attack_power', min, max);
 				itemAttributes.PushBack( max );
-				 break;
+				break;
 				 
 			default :
 				break;
 		}
 		
-		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName, baseLevel);
+		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName);
 		
-		if ( FactsQuerySum("NewGamePlus") > 0 )
+		//modSigns: no dancing around levels, level is already clamped by theGame.params.GetItemLevel
+		/*if ( FactsQuerySum("NewGamePlus") > 0 )
 		{
 			if ( baseLevel > GetWitcherPlayer().GetMaxLevel() ) 
 			{
@@ -312,13 +313,7 @@ import class CDefinitionsManagerAccessor extends CObject
 		if ( isRelicGear ) level = level - 1;
 		if ( level < 1 ) level = 1;
 		if ( ItemHasTag(itemName, 'OlgierdSabre') ) level = level - 3;
-		if ( ItemHasTag(itemName, 'EP1') )
-		{
-			if ( (isRelicGear || isWitcherGear) ) 
-			{
-				level = level - 1;
-			}
-		}
+		if ( (isRelicGear || isWitcherGear) && ItemHasTag(itemName, 'EP1') ) level = level - 1;
 		
 		if ( FactsQuerySum("NewGamePlus") > 0 )
 		{
@@ -326,7 +321,7 @@ import class CDefinitionsManagerAccessor extends CObject
 			{
 				level = GetWitcherPlayer().GetMaxLevel();
 			}
-		}
+		}*/
 		
 		return level;
 	}

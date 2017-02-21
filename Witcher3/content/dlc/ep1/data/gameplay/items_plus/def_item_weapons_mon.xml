@@ -2,30 +2,31 @@
 <redxml>
 	<definitions>
 		<abilities>
+<!-- modSigns: done -->
 		
 			<ability name="mon_toad_tongue_weapon _Stats">
 			<tags></tags>
-				<BludgeoningDamage min="650" max="650"/>
+				<BludgeoningDamage min="600" max="600"/>
 			</ability>
 			
 			<ability name="mon_toad_claw_weapon _Stats">
 			<tags></tags>
-				<BludgeoningDamage min="650" max="650"/>
+				<BludgeoningDamage min="600" max="600"/>
 			</ability>
 			
 			<ability name="mon_black_spider_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="350" max="350"/>
+				<RendingDamage min="300" max="300"/>
 			</ability>
 			
 			<ability name="mon_black_spider_large_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="450" max="450"/>
+				<RendingDamage min="350" max="350"/>
 			</ability>
 			
 			<ability name="mon_iris_weapon _Stats">
 			<tags></tags>
-				<ElementalDamage min="1" max="1"/>
+				<ElementalDamage min="100" max="100"/>
 			</ability>
 			
 		</abilities>

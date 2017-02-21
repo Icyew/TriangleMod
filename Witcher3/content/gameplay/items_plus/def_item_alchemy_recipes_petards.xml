@@ -218,17 +218,18 @@
 			<recipe name_name="Recipe for Dancing Star 1" countsTowardsAchievement="1" type_name="Pdancing" level="1" cookedItem_name="Dancing Star 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dancing_star" >
 				<ingredients>
 					<ingredient item_name="Saltpetre" quantity="1" />
-					<ingredient item_name="Sulfur" quantity="2" />
+					<ingredient item_name="Sulfur" quantity="1" />
+					<ingredient item_name="Hellebore petals" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Dancing Star 2" countsTowardsAchievement="1" type_name="Pdancing" level="2" cookedItem_name="Dancing Star 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dancing_star" >
 				<ingredients>
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Dancing Star 1" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="1" />
 					<ingredient item_name="Sulfur" quantity="1" />
-					<ingredient item_name="Sewant mushrooms" quantity="1" />
+					<ingredient item_name="Phosphorus" quantity="1" />
 					<ingredient item_name="Hellebore petals" quantity="1" />
+					<ingredient item_name="Sewant mushrooms" quantity="1" />
 					<ingredient item_name="Nostrix" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -236,10 +237,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Dancing Star 2" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="2" />
-					<ingredient item_name="Sulfur" quantity="2" />
-					<ingredient item_name="Sewant mushrooms" quantity="2" />
-					<ingredient item_name="Nostrix" quantity="2" />
+					<ingredient item_name="Sulfur" quantity="1" />
+					<ingredient item_name="Phosphorus" quantity="1" />
+					<ingredient item_name="Sewant mushrooms" quantity="1" />
+					<ingredient item_name="Nostrix" quantity="1" />
 					<ingredient item_name="Nigredo" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -248,15 +249,16 @@
 			<recipe name_name="Recipe for Devils Puffball 1" countsTowardsAchievement="1" type_name="Pdevils" level="1" cookedItem_name="Devils Puffball 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_devils_puffball" >
 				<ingredients>
 					<ingredient item_name="Saltpetre" quantity="1" />
-					<ingredient item_name="Sewant mushrooms" quantity="2" />
+					<ingredient item_name="Wine stone" quantity="1" />
+					<ingredient item_name="Sewant mushrooms" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Devils Puffball 2" countsTowardsAchievement="1" type_name="Pdevils" level="2" cookedItem_name="Devils Puffball 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_devils_puffball" >
 				<ingredients>
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Devils Puffball 1" quantity="1" />
-					<ingredient item_name="Calcium equum" quantity="1" />
-					<ingredient item_name="Endriag heart" quantity="1" />
+					<ingredient item_name="Wine stone" quantity="1" />
+					<ingredient item_name="Venom extract" quantity="1" />
 					<ingredient item_name="Sewant mushrooms" quantity="1" />
 					<ingredient item_name="Ginatia petals" quantity="1" />
 					<ingredient item_name="Green mold" quantity="1" />
@@ -266,10 +268,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Devils Puffball 2" quantity="1" />
-					<ingredient item_name="Calcium equum" quantity="2" />
-					<ingredient item_name="Endriag heart" quantity="2" />
-					<ingredient item_name="Sewant mushrooms" quantity="2" />
-					<ingredient item_name="Ginatia petals" quantity="2" />
+					<ingredient item_name="Wine stone" quantity="1" />
+					<ingredient item_name="Arachas venom" quantity="1" />
+					<ingredient item_name="Sewant mushrooms" quantity="1" />
+					<ingredient item_name="Ginatia petals" quantity="1" />
 					<ingredient item_name="Rebis" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -277,8 +279,9 @@
 			<!-- DWIMERITUM BOMB -->
 			<recipe name_name="Recipe for Dwimeritium Bomb 1" countsTowardsAchievement="1" type_name="Pdimeritum" level="1" cookedItem_name="Dwimeritium Bomb 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dwimeritium_bomb" >
 				<ingredients>
-					<ingredient item_name="Saltpetre" quantity="5" />
-					<ingredient item_name="Optima mater" quantity="2" />
+					<ingredient item_name="Saltpetre" quantity="1" />
+					<ingredient item_name="Optima mater" quantity="1" />
+					<ingredient item_name="Ginatia petals" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Dwimeritium Bomb 2" countsTowardsAchievement="1" type_name="Pdimeritum" level="2" cookedItem_name="Dwimeritium Bomb 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dwimeritium_bomb" >
@@ -286,7 +289,7 @@
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Dwimeritium Bomb 1" quantity="1" />
 					<ingredient item_name="Optima mater" quantity="1" />
-					<ingredient item_name="Powdered pearl" quantity="1" />
+					<ingredient item_name="Fifth essence" quantity="1" />
 					<ingredient item_name="Blowbill" quantity="1" />
 					<ingredient item_name="Ginatia petals" quantity="1" />
 					<ingredient item_name="Bloodmoss" quantity="1" />
@@ -296,10 +299,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Dwimeritium Bomb 2" quantity="1" />
-					<ingredient item_name="Optima mater" quantity="2" />
-					<ingredient item_name="Powdered pearl" quantity="2" />
-					<ingredient item_name="Pigskin puffball" quantity="2" />
-					<ingredient item_name="Bloodmoss" quantity="2" />
+					<ingredient item_name="Optima mater" quantity="1" />
+					<ingredient item_name="Fifth essence" quantity="1" />
+					<ingredient item_name="Pigskin puffball" quantity="1" />
+					<ingredient item_name="Bloodmoss" quantity="1" />
 					<ingredient item_name="Nigredo" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -308,7 +311,8 @@
 			<recipe name_name="Recipe for Dragons Dream 1" countsTowardsAchievement="1" type_name="Pdragons" level="1" cookedItem_name="Dragons Dream 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dragons_dream" >
 				<ingredients>
 					<ingredient item_name="Saltpetre" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="2" />
+					<ingredient item_name="Phosphorus" quantity="1" />
+					<ingredient item_name="Mistletoe" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Dragons Dream 2" countsTowardsAchievement="1" type_name="Pdragons" level="2" cookedItem_name="Dragons Dream 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_dragons_dream" >
@@ -326,10 +330,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Dragons Dream 2" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="2" />
-					<ingredient item_name="Optima mater" quantity="2" />
-					<ingredient item_name="Allspice root" quantity="2" />
-					<ingredient item_name="Bryonia" quantity="2" />
+					<ingredient item_name="Phosphorus" quantity="1" />
+					<ingredient item_name="Optima mater" quantity="1" />
+					<ingredient item_name="Allspice root" quantity="1" />
+					<ingredient item_name="Bryonia" quantity="1" />
 					<ingredient item_name="Aether" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -337,8 +341,9 @@
 			<!-- GRAPESHOT -->
 			<recipe name_name="Recipe for Grapeshot 1" countsTowardsAchievement="1" type_name="Pgrapeshot" level="1" cookedItem_name="Grapeshot 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_grapeshot" >
 				<ingredients>
-					<ingredient item_name="Saltpetre" quantity="2" />
-					<ingredient item_name="Calcium equum" quantity="2" />
+					<ingredient item_name="Saltpetre" quantity="1" />
+					<ingredient item_name="Calcium equum" quantity="1" />
+					<ingredient item_name="Crows eye" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Grapeshot 2" countsTowardsAchievement="1" type_name="Pgrapeshot" level="2" cookedItem_name="Grapeshot 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_grapeshot" >
@@ -346,8 +351,9 @@
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Grapeshot 1" quantity="1" />
 					<ingredient item_name="Calcium equum" quantity="1" />
-					<ingredient item_name="Blowbill" quantity="1" />
+					<ingredient item_name="Sulfur" quantity="1" />
 					<ingredient item_name="Crows eye" quantity="1" />
+					<ingredient item_name="Blowbill" quantity="1" />
 					<ingredient item_name="Longrube" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -355,10 +361,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Grapeshot 2" quantity="1" />
-					<ingredient item_name="Calcium equum" quantity="2" />
-					<ingredient item_name="Sulfur" quantity="2" />
-					<ingredient item_name="Longrube" quantity="2" />
-					<ingredient item_name="Hop umbels" quantity="2" />
+					<ingredient item_name="Calcium equum" quantity="1" />
+					<ingredient item_name="Blasting powder" quantity="1" />
+					<ingredient item_name="Longrube" quantity="1" />
+					<ingredient item_name="Hop umbels" quantity="1" />
 					<ingredient item_name="Nigredo" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -367,15 +373,16 @@
 			<recipe name_name="Recipe for Samum 1" countsTowardsAchievement="1" type_name="Psamum" level="1" cookedItem_name="Samum 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_samum_1" >
 				<ingredients>
 					<ingredient item_name="Saltpetre" quantity="1" />
-					<ingredient item_name="Celandine" quantity="2" />
+					<ingredient item_name="Lunar shards" quantity="1" />
+					<ingredient item_name="Celandine" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Samum 2" countsTowardsAchievement="1" type_name="Psamum" level="2" cookedItem_name="Samum 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_samum_2" >
 				<ingredients>
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Samum 1" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="1" />
-					<ingredient item_name="Fogling teeth" quantity="1" />
+					<ingredient item_name="Lunar shards" quantity="1" />
+					<ingredient item_name="Specter dust" quantity="1" />
 					<ingredient item_name="Celandine" quantity="1" />
 					<ingredient item_name="Blowbill" quantity="1" />
 				</ingredients>
@@ -384,10 +391,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Samum 2" quantity="1" />
-					<ingredient item_name="Phosphorus" quantity="2" />
-					<ingredient item_name="Fogling teeth" quantity="2" />
-					<ingredient item_name="Celandine" quantity="2" />
-					<ingredient item_name="Hellebore petals" quantity="2" />
+					<ingredient item_name="Lunar shards" quantity="1" />
+					<ingredient item_name="Gargoyle dust" quantity="1" />
+					<ingredient item_name="Celandine" quantity="1" />
+					<ingredient item_name="Hellebore petals" quantity="1" />
 					<ingredient item_name="Aether" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -396,7 +403,8 @@
 			<recipe name_name="Recipe for Silver Dust Bomb 1" countsTowardsAchievement="1" type_name="Psilver" level="1" cookedItem_name="Silver Dust Bomb 1" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_silver_dust_bomb" >
 				<ingredients>
 					<ingredient item_name="Saltpetre" quantity="1" />
-					<ingredient item_name="Quicksilver solution" quantity="2" />
+					<ingredient item_name="Quicksilver solution" quantity="1" />
+					<ingredient item_name="Hop umbels" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for Silver Dust Bomb 2" countsTowardsAchievement="1" type_name="Psilver" level="2" cookedItem_name="Silver Dust Bomb 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_silver_dust_bomb" >
@@ -404,7 +412,7 @@
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="Silver Dust Bomb 1" quantity="1" />
 					<ingredient item_name="Quicksilver solution" quantity="1" />
-					<ingredient item_name="Sulfur" quantity="1" />
+					<ingredient item_name="Lunar shards" quantity="1" />
 					<ingredient item_name="Hop umbels" quantity="1" />
 					<ingredient item_name="Blowbill" quantity="1" />
 					<ingredient item_name="Honeysuckle" quantity="1" />
@@ -414,10 +422,10 @@
 				<ingredients>
 					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="Silver Dust Bomb 2" quantity="1" />
-					<ingredient item_name="Quicksilver solution" quantity="2" />
-					<ingredient item_name="Sulfur" quantity="2" />
-					<ingredient item_name="Hop umbels" quantity="2" />
-					<ingredient item_name="Blowbill" quantity="2" />
+					<ingredient item_name="Quicksilver solution" quantity="1" />
+					<ingredient item_name="Lunar shards" quantity="1" />
+					<ingredient item_name="Hop umbels" quantity="1" />
+					<ingredient item_name="Blowbill" quantity="1" />
 					<ingredient item_name="Nigredo" quantity="1" />
 				</ingredients>
 			</recipe>
@@ -428,28 +436,28 @@
 					<ingredient item_name="Saltpetre" quantity="1" />
 					<ingredient item_name="Ducal water" quantity="1" />
 					<ingredient item_name="Powdered pearl" quantity="1" />
-					<ingredient item_name="Allspice root" quantity="2" />
+					<ingredient item_name="Allspice root" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for White Frost 2" countsTowardsAchievement="1" type_name="Pwhite" level="2" cookedItem_name="White Frost 2" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_white_frost" >
 				<ingredients>
 					<ingredient item_name="Stammelfords dust" quantity="1" />
 					<ingredient item_name="White Frost 1" quantity="1" />
-					<ingredient item_name="Ducal water" quantity="2" />
+					<ingredient item_name="Ducal water" quantity="1" />
 					<ingredient item_name="Powdered pearl" quantity="1" />
 					<ingredient item_name="Fools parsley leaves" quantity="1" />
 					<ingredient item_name="Verbena" quantity="1" />
-					<ingredient item_name="Allspice root" quantity="2" />
+					<ingredient item_name="Allspice root" quantity="1" />
 				</ingredients>
 			</recipe>
 			<recipe name_name="Recipe for White Frost 3" countsTowardsAchievement="1" type_name="Pwhite" level="3" cookedItem_name="White Frost 3" cookedItemType="petard" cookedItemQuantity="1" localisation_key_name = "item_name_recipe_for_white_frost" >
 				<ingredients>
-					<ingredient item_name="Saltpetre" quantity="1" />
+					<ingredient item_name="Alchemists powder" quantity="1" />
 					<ingredient item_name="White Frost 2" quantity="1" />
-					<ingredient item_name="Ducal water" quantity="3" />
-					<ingredient item_name="Powdered pearl" quantity="2" />
-					<ingredient item_name="Verbena" quantity="2" />
-					<ingredient item_name="Allspice root" quantity="3" />
+					<ingredient item_name="Ducal water" quantity="1" />
+					<ingredient item_name="Powdered pearl" quantity="1" />
+					<ingredient item_name="Verbena" quantity="1" />
+					<ingredient item_name="Allspice root" quantity="1" />
 					<ingredient item_name="Quebrith" quantity="1" />
 				</ingredients>
 			</recipe>

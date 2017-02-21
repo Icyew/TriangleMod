@@ -4,11 +4,12 @@
     <!-- ######################## ABILITY DEFINITIONS ######################## -->
     <abilities>
 
+	  <!-- modSigns -->
       <ability name="AcidEffect">
         <tags></tags>
-        <duration type="add" min="3"/>
+        <duration type="add" min="5"/> <!-- duration increased -->
 		<!-- final damage per point for entire duration of the effect -->
-        <DirectDamage type="add" min="0.005"/>
+        <DirectDamage type="add" min="0.002"/> <!-- damage decreased -->
       </ability>
 
       <ability name="Perk21InternalCooldownEffect">
@@ -17,7 +18,7 @@
       </ability>
       
 
-      <ability name="GryphonSetBonusEffect">
+      <ability name="GryphonSetBonusEffect"> <!-- modSigns: no longer used -->
         <tags>setBonusAbilityGryphon_1</tags>
         <duration type="add" min="3" />
       </ability>
@@ -25,16 +26,17 @@
       <ability name="GryphonSetBonusYrdenEffect">
         <tags>setBonusAbilityGryphon_2</tags>
         <duration type="add" min="-1" />
-        <staminaRegen type="mult" min="0.05" />
-        <spell_power type="mult" min="1.0" />
-        <gryphon_set_bns_dmg_reduction type="add" min="0.20" />
+        <!-- <staminaRegen type="mult" min="0.05" /> --> <!-- modSigns: removed -->
+        <spell_power type="mult" min="0.5" /> <!-- modSigns: reduced -->
+        <gryphon_set_bns_dmg_reduction type="add" min="0.15" /> <!-- modSigns: reduced -->
         <trigger_scale type="add" min="1.4" />
       </ability>
 
+	  <!-- modSigns -->
       <ability name="LynxSetBonusEffect">
         <tags>LynxSetBonusEffect</tags>
         <duration type="add" min="5" />
-        <lynx_dmg_boost type="add" min="0.1" />
+        <lynx_dmg_boost type="add" min="0.05" />
       </ability>
 
 	  <ability name="Mutation3Effect">
@@ -59,7 +61,7 @@
 
       <ability name="Mutation10Effect">
         <duration type="add" min="-1"/>
-        <mutation10_stat_boost type="mult" min="0.0075"/>
+        <mutation10_stat_boost type="mult" min="0.005"/> <!-- modSigns: decreased -->
       </ability>
 
       <ability name="Mutation11BuffEffect">
@@ -100,6 +102,11 @@
       <human_exp_bonus_when_fatal type="add" min="0.05" />
     </ability>
 	
+	<!-- modPreparations: new effect for alchemy table -->
+    <ability name="AlchemyTableEffect">
+      <duration type="add" min="3600"/>
+    </ability>
+
 	<ability name="PolishedGenitalsEffect">
 		<duration type="add" min="3600" />
 		<staminaOutOfCombatRegen type="mult" min="3" />		
@@ -107,7 +114,7 @@
 
     <ability name="AerondightEffect">
       <crit_chance_bonus type="add" min="1"/>
-      <dmg_bonus type="mult" min="0.1"/>
+      <crit_dmg_bonus type="add" min="0.05"/> <!-- modSigns -->
       <perm_dmg_boost type="add" min="2"/>
       <stacks_per_level type="add" min="5"/>
       <duration type="add" min="-1" />
@@ -149,6 +156,8 @@
 		<effect name_name="AerondightEffect"                  defaultAbilityName_name="AerondightEffect"                    showOnHUD="0" effectNameLocalisationKey_name="item_name_aerondight_ep2" iconType_name="icon_aerondight" />
 		<effect name_name="POIGorA10Effect"						defaultAbilityName_name="POIGorA10Effect" showOnHUD="0" />	
 		<effect name_name="ToxicityVenomEffect"					defaultAbilityName_name="ToxicityVenomEffect" 				showOnHUD="1" effectNameLocalisationKey_name="effect_toxicity_venom" iconType_name="icon_toxicity_venom" />	
+		<!-- modPreparations: new effect for alchemy table -->
+		<effect name_name="AlchemyTableEffect"                  defaultAbilityName_name="AlchemyTableEffect"                showOnHUD="1" effectNameLocalisationKey_name="effect_alchemytable" iconType_name="icon_alchemy_table"        />
     </effects>
 
     <effect_icons>
@@ -169,6 +178,8 @@
 	  <effect iconType_name="icon_polished_genitals"			  path="icons\inventory\quests\mq7015_reginalds_balls_64x64.png" />
 	  <effect iconType_name="icon_aerondight"						path="icons\buffs\aerondight_buff_icon_64x64.png" />
 	  <effect iconType_name="icon_toxicity_venom"					path="icons\buffs\toxicity_venom_debuff.png" />
+      <!-- modPreparations: new effect for alchemy table -->
+	  <effect iconType_name="icon_alchemy_table"					path="icons\buffs\icon_house_buff_alchemy.png" />
     </effect_icons>
 
   </custom>

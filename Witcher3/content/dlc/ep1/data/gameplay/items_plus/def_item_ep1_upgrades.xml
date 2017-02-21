@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
@@ -10,6 +12,7 @@
 	<ability name="Rune pierog _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
+		<vitalityRegen type="add" min="2" max="2" />
 	</ability>
 	
 <!-- WEAPON UPGRADE - RUNE - TVAROG -->
@@ -17,6 +20,7 @@
 	<ability name="Rune tvarog _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
+		<vitalityCombatRegen type="add" min="2" max="2" />
 	</ability>
 
 <!-- ARMOR UPGRADE - GLYPH - WARDING -->
@@ -24,19 +28,19 @@
 	<ability name="Glyph warding lesser _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<elemental_resistance_perc		type="mult"	min="0.01"		/>
+		<elemental_resistance_perc		type="base"	min="0.02"		/>
 	</ability>
 
 	<ability name="Glyph warding _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<elemental_resistance_perc		type="mult"	min="0.02"		/>
+		<elemental_resistance_perc		type="base"	min="0.03"		/>
 	</ability>
 
 	<ability name="Glyph warding greater _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<elemental_resistance_perc		type="mult"	min="0.03"		/>
+		<elemental_resistance_perc		type="base"	min="0.05"		/>
 	</ability>
 	
 <!-- ARMOR UPGRADE - GLYPH - BINDING -->
@@ -44,19 +48,19 @@
 	<ability name="Glyph binding lesser _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<bleeding_resistance_perc		type="mult"	min="0.02"		/>
+		<bleeding_resistance_perc		type="base"	min="0.02"		/>
 	</ability>
 
 	<ability name="Glyph binding _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<bleeding_resistance_perc		type="mult"	min="0.03"		/>
+		<bleeding_resistance_perc		type="base"	min="0.03"		/>
 	</ability>
 
 	<ability name="Glyph binding greater _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<bleeding_resistance_perc		type="mult"	min="0.05"		/>
+		<bleeding_resistance_perc		type="base"	min="0.05"		/>
 	</ability>
 	
 <!-- ARMOR UPGRADE - GLYPH - REINFORCEMENT -->
@@ -113,8 +117,8 @@
 	<item
 		name							="Rune pierog"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="170"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_pierog_rune"
@@ -124,9 +128,8 @@
 		<tags>							Upgrade, WeaponUpgrade, mod_upgrade
 		</tags>
 		<base_abilities>				<a>Rune pierog _Stats</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 	
@@ -136,8 +139,8 @@
 	<item
 		name							="Rune tvarog"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="180"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_tvarog_rune"
@@ -147,9 +150,8 @@
 		<tags>							Upgrade, WeaponUpgrade, mod_upgrade
 		</tags>
 		<base_abilities>				<a>Rune tvarog _Stats</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 	
@@ -159,7 +161,7 @@
 	<item
 		name							="Glyph warding lesser"
 		category						="upgrade"
-		price							="239"
+		price							="218"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -171,7 +173,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph warding lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -179,7 +181,7 @@
 	<item
 		name							="Glyph warding"
 		category						="upgrade"
-		price							="478"
+		price							="436"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -191,8 +193,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph warding _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -200,7 +201,7 @@
 	<item
 		name							="Glyph warding greater"
 		category						="upgrade"
-		price							="956"
+		price							="872"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -212,8 +213,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph warding greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 	
@@ -223,7 +223,7 @@
 	<item
 		name							="Glyph binding lesser"
 		category						="upgrade"
-		price							="239"
+		price							="156"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -235,7 +235,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph binding lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -243,7 +243,7 @@
 	<item
 		name							="Glyph binding"
 		category						="upgrade"
-		price							="478"
+		price							="312"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -255,8 +255,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph binding _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -264,7 +263,7 @@
 	<item
 		name							="Glyph binding greater"
 		category						="upgrade"
-		price							="956"
+		price							="624"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -276,8 +275,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph binding greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 	
@@ -287,7 +285,7 @@
 	<item
 		name							="Glyph reinforcement lesser"
 		category						="upgrade"
-		price							="239"
+		price							="186"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -299,7 +297,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph reinforcement lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -307,7 +305,7 @@
 	<item
 		name							="Glyph reinforcement"
 		category						="upgrade"
-		price							="478"
+		price							="372"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -319,8 +317,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph reinforcement _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -328,7 +325,7 @@
 	<item
 		name							="Glyph reinforcement greater"
 		category						="upgrade"
-		price							="956"
+		price							="744"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -340,8 +337,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph reinforcement greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 	
@@ -351,7 +347,7 @@
 	<item
 		name							="Glyph mending lesser"
 		category						="upgrade"
-		price							="239"
+		price							="172"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -363,7 +359,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph mending lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -371,7 +367,7 @@
 	<item
 		name							="Glyph mending"
 		category						="upgrade"
-		price							="478"
+		price							="344"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -383,8 +379,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph mending _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -392,7 +387,7 @@
 	<item
 		name							="Glyph mending greater"
 		category						="upgrade"
-		price							="956"
+		price							="688"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -404,8 +399,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph mending greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>
 	

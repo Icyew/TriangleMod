@@ -56,6 +56,7 @@
 	<res alias="iris"										path="dlc\ep1\data\characters\npc_entities\monsters\iris.w2ent" />
 	<res alias="ofir" 										path="dlc\ep1\data\characters\npc_entities\secondary_npc\hakland_mage.w2ent"/>	
 	<res alias="ofirs" 										path="dlc\ep1\data\quests\quest_files\q601_intro\characters\q601_hakland_soldiers.w2ent"/>	
+	<res alias="golem37"									path="dlc\ep1\data\living_world\enemy_templates\golem_37_strong.w2ent"/>
 	
 	<!-- summoned creatures-->
 	<res alias="ep1_poi1_ornesta_ghost_doppelganger" 		path="dlc\ep1\data\living_world\quests\ep1_poi_01\ep1_poi1_ornesta_ghost_doppelganger.w2ent"/>

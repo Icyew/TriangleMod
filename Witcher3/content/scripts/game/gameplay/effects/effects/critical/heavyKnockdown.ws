@@ -119,6 +119,9 @@ class W3Effect_HeavyKnockdown extends W3CriticalEffect
 	{
 		super.CalculateDuration(setInitialDuration);
 		
+		//modSigns: health % affects duration, 100% duration at 20% and below, 20% duration at 80% and above
+		//duration *= (1 - MaxF(0,target.GetHealthPercents() - 0.2));
+		
 		duration = MaxF(1.f,duration);
 	}
 }

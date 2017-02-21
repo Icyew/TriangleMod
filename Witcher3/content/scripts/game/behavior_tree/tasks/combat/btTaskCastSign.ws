@@ -121,6 +121,8 @@ abstract class CBTTaskCastSign extends CBTTaskAttack
 
 abstract class CBTTaskCastSignDef extends CBTTaskPlayAnimationEventDecoratorDef
 {
+	default xmlStaminaCostName = ''; //modSigns: stamina is drained by sign entity, removing task stamina cost/drain
+	default drainStaminaOnUse  = false; //modSigns
 };
 
 
@@ -398,6 +400,16 @@ class CBTTaskCastQuenDef extends CBTTaskCastSignDef
 	editable var completeAfterHit : bool;
 	editable var alternateFireMode : bool;
 	editable var processQuenOnCounterActivation : bool;
+	
+	//modSigns: remove quen task cost as stamina is drained by sign entity
+	function OnSpawn( task : IBehTreeTask )
+	{
+		var thisTask : CBTTaskCastQuen;
+		
+		thisTask = (CBTTaskCastQuen)task;
+		thisTask.xmlStaminaCostName = '';
+		thisTask.drainStaminaOnUse = false;
+	}
 	
 	function InitializeEvents()
 	{

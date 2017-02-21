@@ -120,14 +120,14 @@ abstract class CTicketBaseAlgorithm extends ITicketAlgorithmScript
 			if ( thePlayer.IsInHitAnim() )
 				return false;
 				
-			if ( thePlayer.IsCurrentlyDodging() )
-				return false;
+			//if ( thePlayer.IsCurrentlyDodging() ) //modSigns
+			//	return false;
 			
-			if ( resetImportanceOnSpecialCombatAction && ((W3PlayerWitcher)target) )
-			{
-				if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttackHeavy() )
-					return false;
-			}
+			//if ( resetImportanceOnSpecialCombatAction && ((W3PlayerWitcher)target) ) //modSigns
+			//{
+			//	if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttackHeavy() )
+			//		return false;
+			//}
 			
 			if ( thePlayer.IsPerformingFinisher() )
 				return false;
@@ -151,10 +151,10 @@ abstract class CTicketBaseAlgorithm extends ITicketAlgorithmScript
 			return false;
 		
 		
-		if ( owner == thePlayer.GetTarget() && thePlayer.IsInCombatAction_Attack() && !thePlayer.GetBIsInputAllowed() )
-		{
-			return false;
-		}
+		//if ( owner == thePlayer.GetTarget() && thePlayer.IsInCombatAction_Attack() && !thePlayer.GetBIsInputAllowed() ) //modSigns
+		//{
+		//	return false;
+		//}
 		
 		
 		if ( target != thePlayer && !target.GetGameplayVisibility() )
@@ -373,8 +373,8 @@ class CTicketAlgorithmMelee extends ITicketAlgorithmScript
 		if ( npc.IsHuman() )
 		{
 			isHuman = true;
-			if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttack() )
-				return 0;
+			/*if ( ((W3PlayerWitcher)target).IsInCombatAction_SpecialAttack() )  //modSigns
+				return 0;*/
 		}
 		
 		if ( !npc.CanAttackKnockeddownTarget() && ( target.HasBuff(EET_Knockdown) || target.HasBuff(EET_HeavyKnockdown) ) )

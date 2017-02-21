@@ -187,13 +187,13 @@
 	<ability name="Rune svarog _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<armor_reduction 				type="base"	min="20"		/>
+		<armor_reduction 				type="base"	min="15"		/>
 	</ability>
 
 	<ability name="Rune svarog greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<armor_reduction 				type="base" min="30"		/>
+		<armor_reduction 				type="base" min="20"		/>
 	</ability>
 
 <!-- WEAPON UPGRADE - RUNE - VELES -->
@@ -201,19 +201,19 @@
 	<ability name="Rune veles lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power					type="mult"  min="0.02"		/>
+		<spell_dmg_bonus				type="add"  min="0.02"		/>
 	</ability>
 
 	<ability name="Rune veles _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power					type="mult"  min="0.03"		/>
+		<spell_dmg_bonus				type="add"  min="0.03"		/>
 	</ability>
 
 	<ability name="Rune veles greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<spell_power 					type="mult"  min="0.05"		/>
+		<spell_dmg_bonus				type="add"  min="0.05"		/>
 	</ability>
 
 <!-- WEAPON UPGRADE - RUNE - PERUN -->
@@ -241,19 +241,19 @@
 	<ability name="Rune elemental lesser _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.02" 		/>
+		<sword_dmg_bonus				type="add" min="0.02" 		/>
 	</ability>
 
 	<ability name="Rune elemental _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.03" 		/>
+		<sword_dmg_bonus				type="add" min="0.03" 		/>
 	</ability>
 
 	<ability name="Rune elemental greater _Stats">
 		<tags>							Upgrade, WeaponUpgrade
 		</tags>
-		<attack_power					type="mult" min="0.05" 		/>
+		<sword_dmg_bonus				type="add" min="0.05" 		/>
 	</ability>
 
 <!-- ARMOR UPGRADE - GLYPH - AARD -->
@@ -267,13 +267,13 @@
 	<ability name="Glyph aard _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<spell_power_aard				type="mult"	min="0.05"		/>
+		<spell_power_aard				type="mult"	min="0.03"		/>
 	</ability>
 
 	<ability name="Glyph aard greater _Stats">
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
-		<spell_power_aard				type="mult"	min="0.1"		/>
+		<spell_power_aard				type="mult"	min="0.05"		/>
 	</ability>
 
 <!-- ARMOR UPGRADE - GLYPH - AXII -->
@@ -285,13 +285,13 @@
 	</ability>
 
 	<ability name="Glyph axii _Stats">
-		<spell_power_axii				type="mult"	min="0.05"		/>
+		<spell_power_axii				type="mult"	min="0.03"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph axii greater _Stats">
-		<spell_power_axii				type="mult"	min="0.1"		/>
+		<spell_power_axii				type="mult"	min="0.05"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -305,13 +305,13 @@
 	</ability>
 
 	<ability name="Glyph igni _Stats">
-		<spell_power_igni				type="mult"	min="0.05"		/>
+		<spell_power_igni				type="mult"	min="0.03"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph igni greater _Stats">
-		<spell_power_igni				type="mult"	min="0.1"		/>
+		<spell_power_igni				type="mult"	min="0.05"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -325,13 +325,13 @@
 	</ability>
 
 	<ability name="Glyph quen _Stats">
-		<spell_power_quen				type="mult"	min="0.05"		/>
+		<spell_power_quen				type="mult"	min="0.03"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph quen greater _Stats">
-		<spell_power_quen				type="mult"	min="0.1"		/>
+		<spell_power_quen				type="mult"	min="0.05"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
@@ -345,13 +345,13 @@
 	</ability>
 
 	<ability name="Glyph yrden _Stats">
-		<spell_power_yrden				type="mult"	min="0.05"		/>
+		<spell_power_yrden				type="mult"	min="0.03"		/>
 		<tags>							Upgrade, ArmorUpgrade
 		</tags>
 	</ability>
 
 	<ability name="Glyph yrden greater _Stats">
-		<spell_power_yrden				type="mult"	min="0.1"		/>
+		<spell_power_yrden				type="mult"	min="0.05"		/>
 		<tags>							Upgrade, ArmorUpgrade 
 		</tags>
 	</ability>
@@ -367,7 +367,7 @@
 	<item
 		name							="Rune stribog lesser"
 		category						="upgrade"
-		price							="155"
+		price							="169"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -379,7 +379,7 @@
 		</tags>
 		<base_abilities>				<a>Rune stribog lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -387,7 +387,7 @@
 	<item
 		name							="Rune stribog"
 		category						="upgrade"
-		price							="310"
+		price							="338"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -399,7 +399,7 @@
 		</tags>
 		<base_abilities>				<a>Rune stribog _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -407,7 +407,7 @@
 	<item
 		name							="Rune stribog greater"
 		category						="upgrade"
-		price							="620"
+		price							="676"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -429,7 +429,7 @@
 	<item
 		name							="Rune dazhbog lesser"
 		category						="upgrade"
-		price							="170"
+		price							="183"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -441,7 +441,7 @@
 		</tags>
 		<base_abilities>				<a>Rune dazhbog lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -449,7 +449,7 @@
 	<item
 		name							="Rune dazhbog"
 		category						="upgrade"
-		price							="340"
+		price							="366"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -461,7 +461,7 @@
 		</tags>
 		<base_abilities>				<a>Rune dazhbog _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -469,7 +469,7 @@
 	<item
 		name							="Rune dazhbog greater"
 		category						="upgrade"
-		price							="680"
+		price							="732"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -491,7 +491,7 @@
 	<item
 		name							="Rune devana lesser"
 		category						="upgrade"
-		price							="195"
+		price							="189"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -503,7 +503,7 @@
 		</tags>
 		<base_abilities>				<a>Rune devana lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -511,7 +511,7 @@
 	<item
 		name							="Rune devana"
 		category						="upgrade"
-		price							="390"
+		price							="378"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -523,7 +523,7 @@
 		</tags>
 		<base_abilities>				<a>Rune devana _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -531,7 +531,7 @@
 	<item
 		name							="Rune devana greater"
 		category						="upgrade"
-		price							="780"
+		price							="756"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -553,7 +553,7 @@
 	<item
 		name							="Rune zoria lesser"
 		category						="upgrade"
-		price							="205"
+		price							="199"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -565,7 +565,7 @@
 		</tags>
 		<base_abilities>				<a>Rune zoria lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -573,7 +573,7 @@
 	<item
 		name							="Rune zoria"
 		category						="upgrade"
-		price							="410"
+		price							="398"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -585,7 +585,7 @@
 		</tags>
 		<base_abilities>				<a>Rune zoria _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 	
@@ -593,7 +593,7 @@
 	<item
 		name							="Rune zoria greater"
 		category						="upgrade"
-		price							="820"
+		price							="796"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -615,7 +615,7 @@
 	<item
 		name							="Rune morana lesser"
 		category						="upgrade"
-		price							="220"
+		price							="217"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -627,7 +627,7 @@
 		</tags>
 		<base_abilities>				<a>Rune morana lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -635,7 +635,7 @@
 	<item
 		name							="Rune morana"
 		category						="upgrade"
-		price							="440"
+		price							="434"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -647,7 +647,7 @@
 		</tags>
 		<base_abilities>				<a>Rune morana _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -655,7 +655,7 @@
 	<item
 		name							="Rune morana greater"
 		category						="upgrade"
-		price							="880"
+		price							="868"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -740,7 +740,7 @@
 	<item
 		name							="Rune triglav lesser"
 		category						="upgrade"
-		price							="245"
+		price							="199"
 		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
@@ -752,7 +752,7 @@
 		</tags>
 		<base_abilities>				<a>Rune triglav lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -760,7 +760,7 @@
 	<item
 		name							="Rune triglav"
 		category						="upgrade"
-		price							="490"
+		price							="398"
 		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
@@ -772,7 +772,7 @@
 		</tags>
 		<base_abilities>				<a>Rune triglav _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -780,7 +780,7 @@
 	<item
 		name							="Rune triglav greater"
 		category						="upgrade"
-		price							="980"
+		price							="796"
 		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
@@ -802,8 +802,8 @@
 	<item
 		name							="Rune svarog lesser"
 		category						="upgrade"
-		price							="110"
-		weight							="0.05"
+		price							="183"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_svarog_lesser"
@@ -814,7 +814,7 @@
 		</tags>
 		<base_abilities>				<a>Rune svarog lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -822,8 +822,8 @@
 	<item
 		name							="Rune svarog"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="366"
+		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_svarog_rune"
@@ -834,7 +834,7 @@
 		</tags>
 		<base_abilities>				<a>Rune svarog _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -842,8 +842,8 @@
 	<item
 		name							="Rune svarog greater"
 		category						="upgrade"
-		price							="440"
-		weight							="0.2"
+		price							="732"
+		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_svarog_greater"
@@ -864,8 +864,8 @@
 	<item
 		name							="Rune veles lesser"
 		category						="upgrade"
-		price							="110"
-		weight							="0.05"
+		price							="219"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_veles_lesser"
@@ -876,7 +876,7 @@
 		</tags>
 		<base_abilities>				<a>Rune veles lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -884,8 +884,8 @@
 	<item
 		name							="Rune veles"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="438"
+		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_veles_rune"
@@ -896,7 +896,7 @@
 		</tags>
 		<base_abilities>				<a>Rune veles _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -904,8 +904,8 @@
 	<item
 		name							="Rune veles greater"
 		category						="upgrade"
-		price							="440"
-		weight							="0.2"
+		price							="876"
+		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_veles_greater"
@@ -926,8 +926,8 @@
 	<item
 		name							="Rune perun lesser"
 		category						="upgrade"
-		price							="110"
-		weight							="0.05"
+		price							="197"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_perun_lesser"
@@ -938,7 +938,7 @@
 		</tags>
 		<base_abilities>				<a>Rune perun lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -946,8 +946,8 @@
 	<item
 		name							="Rune perun"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="394"
+		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_perun_rune"
@@ -958,7 +958,7 @@
 		</tags>
 		<base_abilities>				<a>Rune perun _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -966,8 +966,8 @@
 	<item
 		name							="Rune perun greater"
 		category						="upgrade"
-		price							="440"
-		weight							="0.2"
+		price							="788"
+		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_perun_greater"
@@ -988,8 +988,8 @@
 	<item
 		name							="Rune elemental lesser"
 		category						="upgrade"
-		price							="110"
-		weight							="0.05"
+		price							="189"
+		weight							="0.06"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_elemental_lesser"
@@ -1000,7 +1000,7 @@
 		</tags>
 		<base_abilities>				<a>Rune elemental lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1008,8 +1008,8 @@
 	<item
 		name							="Rune elemental"
 		category						="upgrade"
-		price							="220"
-		weight							="0.10"
+		price							="378"
+		weight							="0.12"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_elementalrune"
@@ -1020,7 +1020,7 @@
 		</tags>
 		<base_abilities>				<a>Rune elemental _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1028,8 +1028,8 @@
 	<item
 		name							="Rune elemental greater"
 		category						="upgrade"
-		price							="440"
-		weight							="0.20"
+		price							="756"
+		weight							="0.24"
 		stackable						="100"
 		grid_size						="1"
 		localisation_key_name			="item_name_rune_elemental_greater"
@@ -1050,7 +1050,7 @@
 	<item
 		name							="Glyph aard lesser"
 		category						="upgrade"
-		price							="239"
+		price							="192"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -1062,7 +1062,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph aard lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1070,7 +1070,7 @@
 	<item
 		name							="Glyph aard"
 		category						="upgrade"
-		price							="478"
+		price							="384"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -1082,8 +1082,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph aard _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -1091,7 +1090,7 @@
 	<item
 		name							="Glyph aard greater"
 		category						="upgrade"
-		price							="956"
+		price							="768"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -1103,8 +1102,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph aard greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>	
 
@@ -1114,7 +1112,7 @@
 	<item
 		name							="Glyph axii lesser"
 		category						="upgrade"
-		price							="254"
+		price							="200"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -1126,7 +1124,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph axii lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1134,7 +1132,7 @@
 	<item
 		name							="Glyph axii"
 		category						="upgrade"
-		price							="508"
+		price							="400"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -1146,8 +1144,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph axii _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1155,7 +1152,7 @@
 	<item
 		name							="Glyph axii greater"
 		category						="upgrade"
-		price							="1016"
+		price							="800"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -1167,8 +1164,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph axii greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1178,7 +1174,7 @@
 	<item
 		name							="Glyph igni lesser"
 		category						="upgrade"
-		price							="204"
+		price							="186"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -1190,7 +1186,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph igni lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1198,7 +1194,7 @@
 	<item
 		name							="Glyph igni"
 		category						="upgrade"
-		price							="408"
+		price							="372"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -1210,8 +1206,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph igni _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 	
@@ -1219,7 +1214,7 @@
 	<item
 		name							="Glyph igni greater"
 		category						="upgrade"
-		price							="816"
+		price							="744"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -1231,8 +1226,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph igni greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1242,7 +1236,7 @@
 	<item
 		name							="Glyph quen lesser"
 		category						="upgrade"
-		price							="229"
+		price							="172"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -1254,7 +1248,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph quen lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1262,7 +1256,7 @@
 	<item
 		name							="Glyph quen"
 		category						="upgrade"
-		price							="458"
+		price							="344"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -1274,8 +1268,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph quen _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1283,7 +1276,7 @@
 	<item
 		name							="Glyph quen greater"
 		category						="upgrade"
-		price							="916"
+		price							="688"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -1295,8 +1288,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph quen greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1307,7 +1299,7 @@
 	<item
 		name							="Glyph yrden lesser"
 		category						="upgrade"
-		price							="189"
+		price							="162"
 		weight							="0.05"
 		stackable						="100"
 		grid_size						="1"
@@ -1319,7 +1311,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph yrden lesser _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1327,7 +1319,7 @@
 	<item
 		name							="Glyph yrden"
 		category						="upgrade"
-		price							="378"
+		price							="324"
 		weight							="0.1"
 		stackable						="100"
 		grid_size						="1"
@@ -1339,8 +1331,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph yrden _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="1">Infused dust</parts>
+		<recycling_parts>				<parts count="2">Infused dust</parts>
 		</recycling_parts>
 	</item>
 
@@ -1348,7 +1339,7 @@
 	<item
 		name							="Glyph yrden greater"
 		category						="upgrade"
-		price							="756"
+		price							="648"
 		weight							="0.20"
 		stackable						="100"
 		grid_size						="1"
@@ -1360,8 +1351,7 @@
 		</tags>
 		<base_abilities>				<a>Glyph yrden greater _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Silk</parts>
-										<parts count="2">Infused dust</parts>
+		<recycling_parts>				<parts count="4">Infused dust</parts>
 		</recycling_parts>
 	</item>
 

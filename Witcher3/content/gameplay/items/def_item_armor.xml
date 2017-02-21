@@ -17,304 +17,305 @@
 	</ability>
 
 <!-- ARMOR STARTING -->
-	<ability name="Starting Armor _Stats">
-		<weight							type="base"	min="3.12"				/>
+	<ability name="Starting Armor _Stats"> <!-- medium armor -->
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<armor							type="base"	min="15"	max="15"	/>
-		<slashing_resistance_perc		type="base" min="0.10"				/>
-		<piercing_resistance_perc		type="base" min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.07"				/>
-		<rending_resistance_perc		type="base" min="0.10"				/>
-		<elemental_resistance_perc		type="base" min="0.10"				/>
+		<armor							type="base"	min="24"	max="24"	/>
+		<slashing_resistance_perc		type="base" min="0.08"				/>
+		<piercing_resistance_perc		type="base" min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base" min="0.02"				/>
+		<rending_resistance_perc		type="base" min="0.08"				/>
+		<elemental_resistance_perc		type="base" min="0.08"				/>
 	</ability>
 
 <!-- ARMOR LIGHT -->
-	<ability name="Light armor 01 _Stats">
-		<weight							type="base" min="1.5"				/>
+	<ability name="Light armor 01 _Stats"> <!-- Cidarian Gambeson - low quality light armor - 0 slots -->
+		<weight							type="base" min="4"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<slashing_resistance_perc		type="base"	min="0.15"				/>
-		<piercing_resistance_perc		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.1"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.02"				/>
+		<piercing_resistance_perc		type="base"	min="0.0"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.02"				/>
+		<elemental_resistance_perc		type="base"	min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.05"				/>
 	</ability>
 	
-	<ability name="Light armor 02 _Stats">
-		<weight							type="base"	min="1.99"				/>
-		<quality						type="add"	min="1"		max="1"		/>
-		<slashing_resistance_perc		type="base"	min="0.15"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.15"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
-	</ability>
-	
-	<ability name="Light armor 03 _Stats">
-		<weight							type="base" min="3.46"				/>
+	<ability name="Light armor 02 _Stats"> <!-- Skellige Gambeson - random quality light armor - 1 slot -->
+		<weight							type="base"	min="5.75"				/>
 		<quality						type="add"	min="1"		max="2"		/>
-		<slashing_resistance_perc		type="base"	min="0.25"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.15"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.05"				/>
 	</ability>
 	
-	<ability name="Light armor 04 _Stats">
-		<weight 						type="base" min="3.62" 				/>
-		<quality 						type="add" 	min="1"		max="2"		/>
-		<slashing_resistance_perc		type="base" min="0.30"				/>
-		<piercing_resistance_perc		type="base" min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.15"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 03 _Stats"> <!-- Kaedveni Gambeson - medium quality light armor - 1 slot -->
+		<weight							type="base" min="6.5"				/>
+		<quality						type="add"	min="2"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base" min="0.01"				/>
+		<rending_resistance_perc		type="base" min="0.02"				/>
+		<elemental_resistance_perc		type="base" min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.06"				/>
+	</ability>
+	
+	<ability name="Light armor 04 _Stats"> <!-- Spikeroog Aketon - high quality light armor - 2 slots -->
+		<weight 						type="base" min="9" 				/>
+		<quality 						type="add" 	min="3"		max="3"		/>
+		<slashing_resistance_perc		type="base" min="0.03"				/>
+		<piercing_resistance_perc		type="base" min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base" min="0.02"				/>
+		<rending_resistance_perc		type="base" min="0.03"				/>
+		<elemental_resistance_perc		type="base" min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.07"				/>
 	</ability>
 	
 <!-- Light armor 02 variant -->
-	<ability name="Light armor 06 _Stats">
-		<weight							type="base"	min="3.89"				/>
+	<ability name="Light armor 06 _Stats">  <!-- Verden Archer's Gambeson - random quality light armor - 1 slot -->
+		<weight							type="base"	min="6.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base" min="0.20"				/>
-		<piercing_resistance_perc		type="base" min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.20"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.02"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.06"				/>
 	</ability>
 	
 <!-- Light armor 03 variant -->
-	<ability name="Light armor 07 _Stats">
-		<weight							type="base"	min="4.51"				/>
+	<ability name="Light armor 07 _Stats">  <!-- Bounty Hunter's Gambeson - random quality light armor - 1 slot -->
+		<weight							type="base"	min="6.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base" min="0.25"				/>
-		<piercing_resistance_perc		type="base" min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.25"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.02"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.06"				/>
 	</ability>
 	
 <!-- Light armor 04 variant -->
-	<ability name="Light armor 08 _Stats">
-		<weight							type="base"	min="5.28"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base" min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.10"				/>
+	<ability name="Light armor 08 _Stats">  <!-- Ard Skellig Aketon - random quality light armor - 2 slots -->
+		<weight							type="base"	min="7.75"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.06"				/>
 	</ability>
 
 <!-- Light armor 02 variant -->
-	<ability name="Light armor 09 _Stats">
-		<weight							type="base" min="4.53" 				/>
-		<quality 						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.10"				/>
+	<ability name="Light armor 09 _Stats">  <!-- Freya's Warriors' Armor - random quality light armor - 2 slots -->
+		<weight							type="base"	min="7.75"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.02"				/>
+		<elemental_resistance_perc		type="base"	min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.07"				/>
 	</ability>
 
 <!-- ARMOR MEDIUM -->		
-	<ability name="Medium armor 01 _Stats">
-		<weight 						type="base"	min="12.65"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.2"				/>
-		<piercing_resistance_perc		type="base" min="0.15"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.2"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+	<ability name="Medium armor 01 _Stats"> <!-- Salmian Brigandine - low quality medium armor - 0 slots -->
+		<weight 						type="base"	min="10"				/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base" min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 	</ability>
 	
-	<ability name="Medium armor 02 _Stats">
-		<weight							type="base"	min="16.49"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.15" 				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.2"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0" 				/>
+	<ability name="Medium armor 02 _Stats"> <!-- Cidarian Cavalry Armor - random quality medium armor - 1 slot -->
+		<weight							type="base"	min="11.75"				/>
+		<quality						type="add"	min="1"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.10"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.10"				/>
+		<elemental_resistance_perc		type="base"	min="0.10"				/>
 	</ability>
 	
-	<ability name="Medium armor 03 _Stats">
-		<weight							type="base"	min="16.01"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.30"				/>
-		<piercing_resistance_perc		type="base"	min="0.20"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.20"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+	<ability name="Medium armor 03 _Stats"> <!-- Redanian Halberdier's Armor - medium quality medium armor - 1 slot -->
+		<weight							type="base"	min="13.5"				/>
+		<quality						type="add"	min="2"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.10"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.10"				/>
+		<elemental_resistance_perc		type="base"	min="0.10"				/>
 	</ability>
 	
-	<ability name="Medium armor 04 _Stats">
-		<weight							type="base"	min="13.15"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.35"				/>
-		<piercing_resistance_perc		type="base"	min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.25"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+	<ability name="Medium armor 04 _Stats"> <!-- Angrenian Cuirass - high quality medium armor - 2 slots -->
+		<weight							type="base"	min="17"				/>
+		<quality						type="add"	min="3"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.12"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.12"				/>
+		<elemental_resistance_perc		type="base"	min="0.12"				/>
 	</ability>
 	
 <!-- Medium armor 01 alternate stats -->
-	<ability name="Medium armor 05 _Stats">
-		<weight							type="base"	min="13.49"				/>
+	<ability name="Medium armor 05 _Stats"> <!-- Belhaven Brigandine - random quality medium armor - 1 slot -->
+		<weight							type="base"	min="13.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base" min="0.20"				/>
-		<piercing_resistance_perc		type="base"	min="0.15"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.20"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 	</ability>
 	
 <!-- Medium armor 04 alternate stats -->
-	<ability name="Medium armor 07 _Stats">
-		<weight							type="base"	min="13.96"				/>
+	<ability name="Medium armor 07 _Stats"> <!-- Kaedveni Cuirass - random quality medium armor - 1 slot -->
+		<weight							type="base"	min="13.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base" min="0.3"				/>
-		<piercing_resistance_perc		type="base"	min="0.3"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.2"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 	</ability>
 	
 <!-- Medium armor 04 alternate stats -->
-	<ability name="Medium armor 10 _Stats">
-		<weight							type="base"	min="11.48"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.3"				/>
-		<piercing_resistance_perc		type="base"	min="0.25"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.25"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0" 				/>
+	<ability name="Medium armor 10 _Stats"> <!-- Witch Hunter's Armor - random quality medium armor - 2 slots -->
+		<weight							type="base"	min="15.25"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.11"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
 	</ability>
 	
-<!-- Medium armor 04 alternate stats QUEST ITEM-->
-	<ability name="q108 Medium armor 10 _Stats">
-		<weight							type="base"	min="12.11"				/>
-		<armor 							type="base" min="166" 	max="166"/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.3"				/>
-		<piercing_resistance_perc		type="base"	min="0.3"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.3"				/>
-		<rending_resistance_perc		type="base" min="0.1"				/>
-		<elemental_resistance_perc		type="base"	min="0.1" 				/>
-	</ability>
-
 <!-- Medium armor 04 alternate stats -->
-	<ability name="Medium armor 11 _Stats">
-		<weight							type="base"	min="12.73" 			/>
-		<quality 						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.3"				/>
-		<piercing_resistance_perc		type="base"	min="0.2"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.20"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+	<ability name="Medium armor 11 _Stats"> <!-- Eternal Fire Executioner's Armor - random quality medium armor - 2 slots -->
+		<weight							type="base"	min="15.25"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.11"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
 	</ability>
 
 <!-- ARMOR HEAVY -->	
-	<ability name="Heavy armor 01 _Stats">
-		<weight							type="base" min="24.95"				/>
-		<quality 						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.3"				/>
-		<piercing_resistance_perc 		type="base" min="0.3"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.25"				/>
-		<rending_resistance_perc 		type="base" min="0.0"				/>
-		<elemental_resistance_perc 		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod 		type="mult" min="-0.10"				/>
+	<ability name="Heavy armor 01 _Stats"> <!-- Mag Deira Cuirass - low quality heavy armor - 0 slots -->
+		<weight							type="base" min="15"				/>
+		<quality 						type="add"	min="1"		max="1"		/>
+		<slashing_resistance_perc		type="base"	min="0.15"				/>
+		<piercing_resistance_perc 		type="base" min="0.15"				/>
+		<bludgeoning_resistance_perc 	type="base" min="0.15"				/>
+		<rending_resistance_perc 		type="base" min="0.15"				/>
+		<elemental_resistance_perc 		type="base" min="0.15"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
 	</ability>
 	
-	<ability name="Heavy armor 02 _Stats">
-		<weight 						type="base" min="21.8"				/>
-		<quality 						type="add" 	min="1" 	max="3"		/>
-		<slashing_resistance_perc 		type="base" min="0.35"				/>
-		<piercing_resistance_perc 		type="base" min="0.3"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.2"				/>
-		<rending_resistance_perc 		type="base" min="0.0"				/>
-		<elemental_resistance_perc 		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod 		type="mult" min="-0.10"				/>
+	<ability name="Heavy armor 02 _Stats"> <!-- Ban Ard Breastplate - medium quality heavy armor - 1 slot -->
+		<weight 						type="base" min="17.5"				/>
+		<quality 						type="add" 	min="2" 	max="2"		/>
+		<slashing_resistance_perc 		type="base" min="0.17"				/>
+		<piercing_resistance_perc 		type="base" min="0.17"				/>
+		<bludgeoning_resistance_perc 	type="base" min="0.17"				/>
+		<rending_resistance_perc 		type="base" min="0.17"				/>
+		<elemental_resistance_perc 		type="base" min="0.17"				/>
+		<staminaRegen_armor_mod 		type="mult" min="-0.30"				/>
 	</ability>
 	
-	<ability name="Heavy armor 03 _Stats">
-		<weight							type="base"	min="20.32"				/>
-		<quality 						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.4" 				/>
-		<piercing_resistance_perc		type="base" min="0.35"				/>
-		<bludgeoning_resistance_perc	type="base" min="0.30"				/>
-		<rending_resistance_perc		type="base" min="0.0"				/>
-		<elemental_resistance_perc		type="base" min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+	<ability name="Heavy armor 03 _Stats"> <!-- Nilfgaardian Guardsman Armor - high quality heavy armor - 2 slots -->
+		<weight							type="base"	min="20"				/>
+		<quality 						type="add"	min="3"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.20" 				/>
+		<piercing_resistance_perc		type="base" min="0.20"				/>
+		<bludgeoning_resistance_perc	type="base" min="0.20"				/>
+		<rending_resistance_perc		type="base" min="0.20"				/>
+		<elemental_resistance_perc		type="base" min="0.20"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.30"				/>
 	</ability>
 	
-	<ability name="Heavy armor 04 _Stats">
-		<weight							type="base"	min="30.2"				/>
+	<ability name="Heavy armor 04 _Stats"> <!-- Hindarfjall Heavy Armor - random quality heavy armor - 1 slot -->
+		<weight							type="base"	min="17.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc 		type="base" min="0.45"				/>
-		<piercing_resistance_perc		type="base" min="0.40"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.30"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+		<slashing_resistance_perc		type="base"	min="0.18"				/>
+		<piercing_resistance_perc		type="base"	min="0.18"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.18"				/>
+		<rending_resistance_perc		type="base"	min="0.18"				/>
+		<elemental_resistance_perc		type="base"	min="0.18"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.30"				/>
 		</ability>
 	
 <!-- Heavy armor 01 variant -->
-	<ability name="Heavy armor 05 _Stats">
-		<weight							type="base"	min="30.65"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base" min="0.3"				/>
-		<piercing_resistance_perc		type="base" min="0.25" 				/>
-		<bludgeoning_resistance_perc	type="base" min="0.25" 				/>
-		<rending_resistance_perc		type="base" min="0.0" 				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+	<ability name="Heavy armor 05 _Stats"> <!-- Mahakaman Heavy Armor - random quality heavy armor - 2 slots -->
+		<weight							type="base"	min="18.75"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.19"				/>
+		<piercing_resistance_perc		type="base"	min="0.19"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.19"				/>
+		<rending_resistance_perc		type="base"	min="0.19"				/>
+		<elemental_resistance_perc		type="base"	min="0.19"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.30"				/>
 	</ability>
 	
 <!-- ARMOR QUEST -->
-	<ability name="Ciri armor 01 _Stats">
+	<ability name="Ciri armor 01 _Stats"> <!-- vanilla -->
 		<weight 						type="base" min="0.24"				/>
 		<quality						type="add"	min="1"					/>
 		<armor 							type="base"	min="2"					/>
 	</ability>
 
-	<ability name="Geralt_shirt _Stats">
-		<weight							type="base"	min="2.4"				/>
+	<ability name="Geralt_shirt _Stats"> <!-- weight -->
+		<weight							type="base"	min="0.5"				/>
 		<armor							type="base"	min="1"					/>
 		<quality						type="add"	min="1"					/>
 	</ability>
 
-	<ability name="Nilfgaardian_suit _Stats">
-		<weight 						type="base"	min="1.09"				/>
+	<ability name="Nilfgaardian_suit _Stats"> <!-- weight -->
+		<weight 						type="base"	min="1.0"				/>
 		<armor							type="base"	min="1"					/>
 		<quality						type="add"	min="1"					/>
 	</ability>
 
 <!-- For q201_pirates -->
-	<ability name="Skellige_suit _Stats">
-		<weight							type="base"	min="1.25" 				/>
+	<ability name="Skellige_suit _Stats"> <!-- weight -->
+		<weight							type="base"	min="1.0" 				/>
 		<quality						type="add"	min="1"					/>
 		<armor 							type="base"	min="1"					/>
 	</ability>
 
+<!-- Medium armor 04 alternate stats QUEST ITEM-->
+	<ability name="q108 Medium armor 10 _Stats"> <!-- this is reward armor (heavy, relic) -->
+		<weight							type="base"	min="15"				/>
+		<quality						type="add"	min="4"					/>
+		<slashing_resistance_perc		type="base"	min="0.22"				/>
+		<piercing_resistance_perc		type="base"	min="0.22"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.22"				/>
+		<rending_resistance_perc		type="base"	min="0.22"				/>
+		<elemental_resistance_perc		type="base"	min="0.22"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.15"				/>
+		<q108_bounce_arrows				type="add"	min="1.0"				/>
+	</ability>
+
 <!-- For sq108_master_blacksmith -->
-	<ability name="sq108_heavy_armor _Stats">
-		<weight							type="base"	min="12.76"				/>
-		<quality						type="add"	min="1"					/>
-		<armor 							type="base"	min="25" 				/>
-		<slashing_resistance_perc 		type="base"	min="0.10"				/>
-		<piercing_resistance_perc		type="base"	min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
-		<rending_resistance_perc		type="base"	min="0.10"				/>
-		<elemental_resistance_perc		type="base"	min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.10"				/>
+	<ability name="sq108_heavy_armor _Stats"> <!-- this is heavy armor Geralt wears during the test -->
+		<weight							type="base"	min="10"				/>
+		<armor 							type="base" min="25" 	max="25"	/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<slashing_resistance_perc 		type="base"	min="0.18"				/>
+		<piercing_resistance_perc		type="base"	min="0.18"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.18"				/>
+		<rending_resistance_perc		type="base"	min="0.18"				/>
+		<elemental_resistance_perc		type="base"	min="0.18"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.20"				/>
 	</ability>
 	
-	<ability name="Wild Hunt armor 01 _Stats">
+	<ability name="Wild Hunt armor 01 _Stats"> <!-- vanilla -->
 		<weight 						type="base" min="8.0" 				/>
 		<quality 						type="add"	min="1"		max="3"		/>
 		<armor 							type="base" min="80" 	max="100"	/>
@@ -330,11 +331,11 @@
 <!-- ######################## ITEM DEFINITIONS ######################## -->
 <items>
 
-<!-- ARMOR STARTING -->
+<!-- ARMOR STARTING --> <!-- price -->
 	<item
 		name							="Starting Armor"
 		category						="armor"
-		price							="88"
+		price							="80"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -346,26 +347,23 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/armor-01.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Starting Armor _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="1">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="2">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Linen</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__viper_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- ARMOR LIGHT -->
+<!-- ARMOR LIGHT --> <!-- low quality light armor - 0 slots -->
 	<item
 		name							="Light armor 01"
 		category						="armor"
-		price							="96"
+		price							="82"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -382,24 +380,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="4">Thread</parts>
-										<parts count="6">Cotton</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl1" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 2-->
+<!-- Light armor 2--> <!-- random quality light armor - 1 slot -->
 	<item
 		name							="Light armor 02"
 		category						="armor"
-		price							="142"
+		price							="157"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -413,21 +408,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 02 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Linen</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl2" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 3-->
+<!-- Light armor 3--> <!-- medium quality light armor - 1 slot -->
 	<item
 		name							="Light armor 03"
 		category						="armor"
-		price							="184"
+		price							="182"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -444,25 +436,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 03 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="2">Leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="3">Thread</parts>
-										<parts count="5">Leather squares</parts>
-										
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 4-->
+<!-- Light armor 4--> <!-- high quality light armor - 2 slots -->
 	<item
 		name							="Light armor 04"
 		category						="armor"
-		price							="212"
+		price							="355"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -476,21 +464,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 04 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Linen</parts>
-										<parts count="3">Leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="6">Thread</parts>
-										<parts count="5">String</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Hardened leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_light_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- Light armor 6 -->
+<!-- Light armor 6 -->  <!-- random quality light armor - 1 slot -->
 	<item
 		name							="Light armor 06"
 		category						="armor"
-		price							="230"
+		price							="225"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -507,21 +492,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 06 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="3">Leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl2" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 7 -->
+<!-- Light armor 7 -->  <!-- random quality light armor - 1 slot -->
 	<item
 		name							="Light armor 07"
 		category						="armor"
-		price							="238"
+		price							="225"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -538,24 +520,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 07 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="4">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 8 -->
+<!-- Light armor 8 -->  <!-- random quality light armor - 2 slots -->
 	<item
 		name							="Light armor 08"
 		category						="armor"
-		price							="236"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -569,24 +548,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 08 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Rope</parts>
-										<parts count="1">String</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Hardened leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_02a_mg__common_light_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Light armor 9 -->
+<!-- Light armor 9 --> <!-- random quality light armor - 2 slots -->
 	<item
 		name							="Light armor 09"
 		category						="armor"
-		price							="258"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -600,21 +576,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Light armor 09 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Hardened leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_03a_mg__common_light_lvl2" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- ARMOR MEDIUM -->
+<!-- ARMOR MEDIUM --> <!-- low quality medium armor - 0 slots -->
 	<item
 		name							="Medium armor 01"
 		category						="armor"
-		price							="198"
+		price							="145"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -631,21 +604,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="5">Nails</parts>
-										<parts count="4">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl1" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- Medium armor 2-->
+<!-- Medium armor 2--> <!-- random quality medium armor - 1 slot -->
 	<item
 		name							="Medium armor 02"
 		category						="armor"
-		price							="266"
+		price							="270"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -662,22 +632,19 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 02 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Steel plate</parts>
 										
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl2" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Medium armor 3-->
+<!-- Medium armor 3--> <!-- random quality medium armor - 1 slot -->
 	<item
 		name							="Medium armor 03"
 		category						="armor"
-		price							="266"
+		price							="334"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -694,24 +661,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 03 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Linen</parts>
-										<parts count="2">Hardened leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="4">Steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Medium armor 4-->
+<!-- Medium armor 4--> <!-- high quality medium armor - 2 slots -->
 	<item
 		name							="Medium armor 04"
 		category						="armor"
-		price							="270"
+		price							="506"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="1"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -725,21 +689,19 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 04 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="3">Steel plate</parts>
+		<recycling_parts>				<parts count="1">Hardened leather</parts>
+										<parts count="1">Meteorite plate</parts>
+										<parts count="1">Silver ingot</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_medium_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Medium armor 5-->
+<!-- Medium armor 5--> <!-- random quality medium armor - 1 slot -->
 	<item
 		name							="Medium armor 05"
 		category						="armor"
-		price							="222"
+		price							="335"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -756,24 +718,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 05 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="5">Nails</parts>
-										<parts count="4">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_02a_mg__common_medium_lvl1" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Medium armor 7-->
+<!-- Medium armor 7--> <!-- random quality medium armor - 1 slot -->
 	<item
 		name							="Medium armor 07"
 		category						="armor"
-		price							="283"
+		price							="335"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -787,21 +746,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 07 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Linen</parts>
-										<parts count="3">Hardened leather</parts>
-										<parts count="4">Leather straps</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="3">Steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_03a_mg__common_medium_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Medium armor 10-->
+<!-- Medium armor 10--> <!-- random quality medium armor - 2 slots -->
 	<item
 		name							="Medium armor 10"
 		category						="armor"
-		price							="408"
+		price							="450"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -818,57 +774,50 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 10 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather</parts>
-										<parts count="4">Hardened leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="1">Redanian special forces insignia</parts>
-										<parts count="2">Dark steel ingot</parts>
-										
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_02a_mg__common_medium_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- q108 Medium armor 10 / QUEST ITEM -->
+<!-- q108 Medium armor 10 / QUEST ITEM --> <!-- this is reward armor (heavy, relic) -->
 	<item
 		name							="q108 Medium armor 10"
 		category						="armor"
-		price							="408"
+		price							="1800"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
-		equip_template					="t_02_mg__common_medium_lvl4"
-		localisation_key_name			="item_name_medium_armor_10"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_medium_lvl4_02_64x128.png"
+		equip_template					="t_01_mg__common_heavy_lvl3"
+		localisation_key_name			="item_name_heavy_armor_03"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/common_heavy_lvl3_01_64x128.png"
 	>
-		<tags>							Armor,MediumArmor, mod_armor
+		<tags>							Autogen, Armor, HeavyArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>q108 Medium armor 10 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather</parts>
-										<parts count="4">Hardened leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="1">Redanian special forces insignia</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
-		<variants>						<variant equip_template="t_02a_mg__common_medium_lvl4" category="gloves"></variant>
+		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 	
 	
-<!-- Medium armor 11-->
+<!-- Medium armor 11--> <!-- random quality medium armor - 2 slots -->
 	<item
 		name							="Medium armor 11"
 		category						="armor"
-		price							="618"
+		price							="450"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="3"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -882,24 +831,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Medium armor 11 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="2">Leather</parts>
-										<parts count="1">Redanian special forces insignia</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_04a_mg__common_medium_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- ARMOR HEAVY -->
+<!-- ARMOR HEAVY --> <!-- low quality heavy armor - 0 slots -->
 	<item
 		name							="Heavy armor 01"
 		category						="armor"
-		price							="736"
+		price							="284"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -913,21 +859,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy armor 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="5">Wire</parts>
-										<parts count="2">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl1" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Heavy armor 2-->
+<!-- Heavy armor 2--> <!-- medium quality heavy armor - 1 slot -->
 	<item
 		name							="Heavy armor 02"
 		category						="armor"
-		price							="852"
+		price							="412"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="1"
@@ -944,21 +887,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy armor 02 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Silk</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="4">Leather straps</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="3">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Meteorite plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl2" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Heavy armor 3-->
+<!-- Heavy armor 3--> <!-- high quality heavy armor - 2 slots -->
 	<item
 		name							="Heavy armor 03"
 		category						="armor"
-		price							="824"
+		price							="856"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -975,24 +915,21 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy armor 03 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather squares</parts>
-										<parts count="1">Silk</parts>
-										<parts count="3">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Meteorite silver plate</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl3" category="gloves"></variant>
 		</variants>
 	</item>
 	
-<!-- Heavy armor 4-->
+<!-- Heavy armor 4--> <!-- random quality heavy armor - 1 slot -->
 	<item
 		name							="Heavy armor 04"
 		category						="armor"
-		price							="828"
+		price							="580"
 		initial_durability				="100"
 		max_durability					="100" 
-		enhancement_slots				="3"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1006,21 +943,18 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy armor 04 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="5">Leather squares</parts>
-										<parts count="6">Wire</parts>
-										<parts count="3">Dark steel plate</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Meteorite plate</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__common_heavy_lvl4" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- Heavy armor 5-->
+<!-- Heavy armor 5--> <!-- random quality heavy armor - 2 slots -->
 	<item
 		name							="Heavy armor 05"
 		category						="armor"
-		price							="872"
+		price							="675"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="2"
@@ -1037,11 +971,8 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy armor 05 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="5">Silk</parts>
-										<parts count="2">Draconide leather</parts>
-										<parts count="3">Meteorite ore</parts>
-										<parts count="9">Wire</parts>
-										<parts count="4">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite plate</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts> 				
 		<variants>						<variant equip_template="t_02a_mg__common_heavy_lvl1" category="gloves"></variant>
 		</variants>
@@ -1053,7 +984,7 @@
 	<item
 		name							="Ciri armor 01"
 		category						="armor"
-		price							="24"
+		price							="50"
 		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
@@ -1068,15 +999,14 @@
 		<base_abilities>				<a>Ciri armor 01 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="2">Thread</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Shirt Armor -->
+<!-- Shirt Armor --> <!-- price = 50 -->
 	<item
 		name							="Geralt Shirt"
 		category						="armor"
-		price							="60"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -1088,25 +1018,21 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/geralt_shirt_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, Sleevless
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_shirt _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Twine</parts>
-										<parts count="1">String</parts>
-										<parts count="2">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="t_01a_mg__shirt" category="gloves"></variant>
 		</variants>
 		<!-- this armor does not have arms, no variants needed-->
 	</item>
-
+	<!-- price = 50 -->
 	<item
 		name							="Geralt Shirt No Knife"
 		category						="armor"
-		price							="58"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100" 
 		enhancement_slots				="0"
@@ -1118,24 +1044,20 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/geralt_shirt_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, Sleevless
+		<tags>							Armor,LightArmor, mod_armor, DoNotEnhance, Sleevless
 		</tags>
 		<base_abilities>				<a>Geralt_shirt _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Twine</parts>
-										<parts count="1">String</parts>
-										<parts count="1">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 		</recycling_parts>
 		<!-- this armor does not have arms, no variants needed-->
 	</item>
 
-	<!-- For q002_emhyr Palace sequence -->
+	<!-- For q002_emhyr Palace sequence --> <!-- price = 50 -->
 	<item
 		name							="Nilfgaardian Casual Suit 01"
 		category						="armor"
-		price							="70"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1147,24 +1069,20 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path="icons/inventory/armors/nilfgaardian_casual_suit_01-64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard
+		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Nilfgaardian_suit _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="5">Thread</parts>
-										<parts count="6">Cotton</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="ta_01a_mg__casual_nilfgaardian_suit" category="gloves"></variant>
 		</variants>
 	</item>
-
+	<!-- price = 50 -->
 	<item
 		name							="Nilfgaardian Casual Suit 02"
 		category						="armor"
-		price							="72"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1176,24 +1094,20 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/nilfgaardian_casual_suit-02-64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard
+		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Nilfgaardian_suit _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="5">Thread</parts>
-										<parts count="4">Cotton</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Nilfgaardian special forces insignia</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="ta_02a_mg__casual_nilfgaardian_suit" category="gloves"></variant>
 		</variants>
 	</item>
-
+	<!-- price = 50 -->
 	<item
 		name							="Nilfgaardian Casual Suit 03"
 		category						="armor"
-		price							="62"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -1205,25 +1119,21 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/nilfgaardian_casual_suit_03-64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard
+		<tags>							Armor,LightArmor, mod_armor, mod_origin_nilfgaard, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Nilfgaardian_suit _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Linen</parts>
-										<parts count="4">Thread</parts>
-										<parts count="4">Cotton</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="ta_03a_mg__casual_nilfgaardian_suit" category="gloves"></variant>
 		</variants>
 	</item>
 
-<!-- For q201_pirates Feast sequence -->
+<!-- For q201_pirates Feast sequence --> <!-- price = 50 -->
 	<item
 		name							="Skellige Casual Suit 01"
 		category						="armor"
-		price							="122"
+		price							="50"
 		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
@@ -1233,24 +1143,20 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/skellige_casual_suit_01_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, mod_origin_skellige
+		<tags>							Armor,LightArmor, mod_armor, mod_origin_skellige, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Skellige_suit _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Linen</parts>
-										<parts count="3">String</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="ta_01a_mg__casual_skellige_suit" category="gloves"></variant>
 		</variants>
 	</item>
-
+	<!-- price = 50 -->
 	<item
 		name							="Skellige Casual Suit 02"
 		category						="armor"
-		price							="126"
+		price							="50"
 		stackable						="1"
 		enhancement_slots				="0"
 		equip_template					="ta_02_mg__casual_skellige_suit"
@@ -1260,25 +1166,21 @@
 		localisation_key_description	="item_desc_armor"
 		icon_path						="icons/inventory/armors/skellige_casual_suit_02_64x128.png"
 	>
-		<tags>							Armor,LightArmor, mod_armor, mod_origin_skellige
+		<tags>							Armor,LightArmor, mod_armor, mod_origin_skellige, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Skellige_suit _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Linen</parts>
-										<parts count="5">Thread</parts>
-										<parts count="4">Cotton</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Silk</parts>
+		<recycling_parts>				<parts count="1">Linen</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="ta_02a_mg__casual_skellige_suit" category="gloves"></variant>
 		</variants>
 	</item>			
 	
-<!-- For sq108_master_blacksmith -->
+<!-- For sq108_master_blacksmith --> <!-- price = 50 -->
 	<item
 		name							="sq108_heavy_armor"
 		category						="armor"
-		price							="808"
+		price							="700"
 		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
@@ -1293,11 +1195,7 @@
 		<base_abilities>				<a>bounce_arrows</a>
 										<a>sq108_heavy_armor _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Linen</parts>
-										<parts count="2">Dwimeryte ore</parts>
-										<parts count="2">Glowing ingot</parts>
-										<parts count="5">Leather squares</parts>
-										<parts count="4">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Steel plate</parts>
 		</recycling_parts>
 	</item>
 
@@ -1305,7 +1203,7 @@
 	<item
 		name							="Wild Hunt armor 01"
 		category						="armor"
-		price							="344"
+		price							="500"
 		stackable						="1"
 		enhancement_slots				="0"
 		equip_template					="t_01_mg__nithral"
@@ -1319,11 +1217,7 @@
 		</tags>
 		<base_abilities>				<a>Wild Hunt armor 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Dark iron ingot</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="4">Meteorite ore</parts>
+		<recycling_parts>				<parts count="1">Hardened leather</parts>
 		</recycling_parts>
 	</item>
 

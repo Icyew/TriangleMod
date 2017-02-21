@@ -29,6 +29,12 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	protected var charges		: int;
 	protected var isPlayerInside : bool;
 	protected var baseModeRange : float;
+	protected var maxCount		: int; //modSigns
+	protected var slowdownPrc	: float; //modSigns
+	protected var hasDrain		: bool; //modSigns
+	protected var yrdenPower, healthDrain	: SAbilityAttributeValue; //modSigns
+	protected var turretLevel	: int; //modSigns
+	protected var turretDamageBonus	: float; //modSigns
 	
 	public var notFromPlayerCast : bool;
 	public var fxEntities : array< CEntity >;
@@ -115,6 +121,11 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		allActorsInArea.Clear();
 	}
 	
+	public final function GetCachedYrdenPower() : SAbilityAttributeValue //modSigns: for damage manager
+	{
+		return yrdenPower;
+	}
+	
 	protected function GetSignStats()
 	{
 		var chargesAtt, trapDurationAtt : SAbilityAttributeValue;
@@ -125,11 +136,48 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		trapDurationAtt = owner.GetSkillAttributeValue(skillEnum, 'trap_duration', false, true);
 		baseModeRange = CalculateAttributeValue( owner.GetSkillAttributeValue(skillEnum, 'range', false, true) );
 		
-		trapDurationAtt += owner.GetActor().GetTotalSignSpellPower(skillEnum);
-		trapDurationAtt.valueMultiplicative -= 1;	
+		//modSigns: duration is not affected by spell power
+		//trapDurationAtt += owner.GetActor().GetTotalSignSpellPower(skillEnum);
+		//trapDurationAtt.valueMultiplicative -= 1;	//100% base spell power
 		
 		charges = (int)CalculateAttributeValue(chargesAtt);
 		trapDuration = CalculateAttributeValue(trapDurationAtt);
+		//level 3 petri philtre gives +50% to trap duration
+		if(owner.GetPlayer() && owner.GetPlayer().GetPotionBuffLevel(EET_PetriPhiltre) == 3)
+		{
+			trapDuration *= 1.34;
+			//theGame.witcherLog.AddMessage("Yrden; Duration: " + trapDuration); //modSigns: debug
+		}
+		
+		//combat log
+		//theGame.witcherLog.AddCombatMessage("Yrden trap duration:" + FloatToString(trapDuration), owner.GetActor(), NULL);
+		
+		//modSigns: cache skill dependent stats for Flood of Anger to work properly
+		maxCount = 1;
+		if(!IsAlternateCast() && owner.CanUseSkill(S_Magic_s10) && owner.GetSkillLevel(S_Magic_s10) >= 2)
+		{
+			maxCount += 1;
+		}
+		yrdenPower = owner.GetActor().GetTotalSignSpellPower(skillEnum);
+		slowdownPrc = 0.15 + PowerStatToPowerBonus(yrdenPower.valueMultiplicative);
+		hasDrain = owner.CanUseSkill(S_Magic_s11);
+		if( hasDrain && owner.GetPlayer() )
+		{
+			healthDrain = owner.GetPlayer().GetSkillAttributeValue(S_Magic_s11, 'direct_damage_per_sec', false, true);
+			healthDrain.valueMultiplicative *= (float)owner.GetPlayer().GetSkillLevel(S_Magic_s11);
+		}
+		if( owner.CanUseSkill(S_Magic_s03) )
+		{
+			turretLevel = owner.GetSkillLevel(S_Magic_s03);
+			turretDamageBonus = CalculateAttributeValue( owner.GetPlayer().GetSkillAttributeValue( S_Magic_s03, 'damage_bonus_flat_after_1', false, true ) ) * ( turretLevel - 1 );
+			if( owner.CanUseSkill(S_Magic_s16) )
+				turretDamageBonus += CalculateAttributeValue( owner.GetPlayer().GetSkillAttributeValue( S_Magic_s16, 'turret_bonus_damage', false, true ) ) * owner.GetSkillLevel(S_Magic_s16);
+		}
+		else
+		{
+			turretLevel = 0;
+			turretDamageBonus = 0;
+		}
 	}
 	
 	event OnStarted()
@@ -216,7 +264,7 @@ statemachine class W3YrdenEntity extends W3SignEntity
 	
 	private final function DisablePreviousYrdens()
 	{
-		var maxCount, i, size, currCount : int;
+		var /*maxCount,*/ i, size, currCount : int; //modSigns: cached
 		var isAlternate : bool;
 		var witcher : W3PlayerWitcher;
 		
@@ -226,13 +274,13 @@ statemachine class W3YrdenEntity extends W3SignEntity
 		size = witcher.yrdenEntities.Size();
 		
 		
-		maxCount = 1;
+		//maxCount = 1; //modSigns: cached
 		currCount = 0;
 		
-		if(!isAlternate && owner.CanUseSkill(S_Magic_s10) && owner.GetSkillLevel(S_Magic_s10) >= 2)
+		/*if(!isAlternate && owner.CanUseSkill(S_Magic_s10) && owner.GetSkillLevel(S_Magic_s10) >= 2)
 		{
 			maxCount += 1;
-		}
+		}*/ //modSigns: cached
 		
 		for(i=size-1; i>=0; i-=1)
 		{
@@ -404,9 +452,9 @@ state YrdenChanneled in W3YrdenEntity extends Channeling
 	
 	entry function ChannelYrden()
 	{
-		while( Update() )
+		while( Update(theTimer.timeDelta) ) //modSigns
 		{
-			Sleep( 0.0001f );
+			Sleep(theTimer.timeDelta); //modSigns
 		}
 		
 		OnSignAborted();
@@ -424,7 +472,8 @@ state YrdenShock in W3YrdenEntity extends Active
 		
 		super.OnEnterState( prevStateName );
 		
-		skillLevel = caster.GetSkillLevel(parent.skillEnum);
+		//skillLevel = caster.GetSkillLevel(parent.skillEnum);
+		skillLevel = parent.turretLevel; //modSigns
 		
 		if(skillLevel == 1)
 			usedShockAreaName = 'Shock_lvl_1';
@@ -751,24 +800,25 @@ state YrdenShock in W3YrdenEntity extends Active
 			action =  new W3DamageAction in theGame.damageMgr;
 			player = caster.GetPlayer();
 			skillType = virtual_parent.GetSkill();
-			skillLevel = player.GetSkillLevel(skillType);
+			//skillLevel = player.GetSkillLevel(skillType);
+			//skillLevel = parent.turretLevel; //modSigns
 			
 			
-			action.Initialize( casterActor, (CGameplayEntity)entity, this, casterActor.GetName()+"_sign", EHRT_Light, CPS_SpellPower, false, false, true, false, 'yrden_shock', 'yrden_shock', 'yrden_shock', 'yrden_shock');
+			action.Initialize( casterActor, (CGameplayEntity)entity, this, casterActor.GetName()+"_sign_yrden_alt" /*modSigns*/, EHRT_Light, CPS_SpellPower, false, false, true, false, 'yrden_shock', 'yrden_shock', 'yrden_shock', 'yrden_shock');
 			virtual_parent.InitSignDataForDamageAction(action);
 			action.hitLocation = hitPosition;
 			action.SetCanPlayHitParticle(true);
 			
 			
-			if(player && skillLevel > 1)
+			if(parent.turretDamageBonus > 0) //modSigns
 			{
 				action.GetDTs(damages);
-				damageBonusFlat = CalculateAttributeValue(player.GetSkillAttributeValue(skillType, 'damage_bonus_flat_after_1', false, true));
+				//damageBonusFlat = CalculateAttributeValue(player.GetSkillAttributeValue(skillType, 'damage_bonus_flat_after_1', false, true));
 				action.ClearDamage();
 				
 				for(i=0; i<damages.Size(); i+=1)
 				{
-					damages[i].dmgVal += damageBonusFlat * (skillLevel - 1);
+					damages[i].dmgVal += parent.turretDamageBonus; //damageBonusFlat * (skillLevel - 1);
 					action.AddDamage(damages[i].dmgType, damages[i].dmgVal);
 				}
 			}
@@ -781,7 +831,7 @@ state YrdenShock in W3YrdenEntity extends Active
 			entity.PlayEffect( 'yrden_shock' );
 		}
 		
-		if(casterActor.HasAbility('Glyphword 15 _Stats', true))
+		if((W3PlayerWitcher)casterActor && ((W3PlayerWitcher)casterActor).HasGlyphwordActive('Glyphword 15 _Stats')) //modSigns
 		{
 			glyphwordY = (W3YrdenEntity)theGame.CreateEntity(GetWitcherPlayer().GetSignTemplate(ST_Yrden), entity.GetWorldPosition(), entity.GetWorldRotation() );
 			glyphwordY.Init(caster, parent, true, true);
@@ -927,45 +977,52 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 		}
 	}
 	
+	private var hitFxDelay : float; //modSigns move it here
 	entry function YrdenSlowdown_Loop()
 	{
 		var params, paramsDrain : SCustomEffectParams;
 		var casterActor : CActor;
 		var i : int;
-		var min, max, scale, pts, prc : float;
+		var min, max, scale, pts, prc, slowdown, rawSP : float; //modSigns: new vars
 		var casterPlayer : CR4Player;
 		var npc : CNewNPC;
 		
 		casterActor = caster.GetActor();
 		casterPlayer = caster.GetPlayer();
 		
-		
-		min = CalculateAttributeValue(casterPlayer.GetSkillAttributeValue(S_Magic_3, 'min_slowdown', false, true));
-		max = CalculateAttributeValue(casterPlayer.GetSkillAttributeValue(S_Magic_3, 'max_slowdown', false, true));
+		//cache slowdown params
+		//min = CalculateAttributeValue(casterPlayer.GetSkillAttributeValue(S_Magic_3, 'min_slowdown', false, true));
+		//max = CalculateAttributeValue(casterPlayer.GetSkillAttributeValue(S_Magic_3, 'max_slowdown', false, true));
 
 		params.effectType = parent.actionBuffs[0].effectType;
 		params.creator = casterActor;
 		params.sourceName = "yrden_mode0";
 		params.isSignEffect = true;
-		params.customPowerStatValue = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
+		//params.customPowerStatValue = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
 		params.customAbilityName = parent.actionBuffs[0].effectAbilityName;
-		params.duration = 0.1;	
-		scale = params.customPowerStatValue.valueMultiplicative / 4;
-		params.effectValue.valueAdditive = min + (max - min) * scale;
-		params.effectValue.valueAdditive = ClampF( params.effectValue.valueAdditive, min, max );
-		
-		
-		if(thePlayer.CanUseSkill(S_Magic_s11))
+		params.duration = 0.2;	//continuous inside area
+		//scale = params.customPowerStatValue.valueMultiplicative / 4;
+		//params.effectValue.valueAdditive = min + (max - min) * scale;
+		//params.effectValue.valueAdditive = ClampF( params.effectValue.valueAdditive, min, max );
+		params.effectValue.valueAdditive = parent.slowdownPrc; //modSigns
+
+		//cache health drain params
+		if(parent.hasDrain) //modSigns
 		{
-			
-			paramsDrain = params;
-			paramsDrain.customAbilityName = '';
 			paramsDrain.effectType = EET_YrdenHealthDrain;
+			paramsDrain.creator = casterActor;
+			paramsDrain.sourceName = "yrden_mode0";
+			paramsDrain.isSignEffect = true;
+			paramsDrain.customAbilityName = '';
+			paramsDrain.duration = 0.2;	//continuous inside area
+			paramsDrain.effectValue = parent.healthDrain;
 		}
+		
+		hitFxDelay = 0; //modSigns
 						
 		while(true)
 		{
-			
+			//check if flyers landed / crashed
 			for(i=parent.flyersInArea.Size()-1; i>=0; i-=1)
 			{
 				npc = parent.flyersInArea[i];
@@ -979,22 +1036,33 @@ state YrdenSlowdown in W3YrdenEntity extends Active
 			
 			for(i=0; i<parent.validTargetsInArea.Size(); i+=1)
 			{			
-				
+				//slowdown if Shock Resistance < 100%
 				parent.validTargetsInArea[i].GetResistValue(CDS_ShockRes, pts, prc);
 				if(prc < 1)
 					parent.validTargetsInArea[i].AddEffectCustom(params);			
 				
 				
-				if(thePlayer.CanUseSkill(S_Magic_s11))
+				//hp drain
+				//if(thePlayer.CanUseSkill(S_Magic_s11))
+				if(parent.hasDrain) //modSigns
 				{
 					parent.validTargetsInArea[i].AddEffectCustom(paramsDrain);
+					//modSigns: move hit effect here
+					hitFxDelay -= 0.1;
+					if(hitFxDelay <= 0)
+					{
+						hitFxDelay = 1.0;
+						if(parent.validTargetsInArea[i].IsAlive())
+							parent.validTargetsInArea[i].PlayEffect('yrden_shock');
+					}
 				}
 				
-				
+				//hit
 				parent.validTargetsInArea[i].OnYrdenHit( casterActor );
 			}
 			
-			SleepOneFrame();
+			//SleepOneFrame();
+			Sleep(0.1f); //modSigns
 		}
 	}
 	

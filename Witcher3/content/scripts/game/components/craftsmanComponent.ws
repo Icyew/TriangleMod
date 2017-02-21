@@ -73,13 +73,14 @@ class W3CraftsmanComponent extends W3MerchantComponent
 		return false;
 	}
 
-	public function CalculateCostOfCrafting( craftedItemName : name ) : int
+	//modSigns
+	public function CalculateCostOfCrafting( schem : SCraftingSchematic ) : int
 	{
 		var i, size, craftingCost : int;		
 		var invItem : SInventoryItem;
 		var owner : W3MerchantNPC;
 		var items : array<SItemUniqueId>;
-
+		
 		if ( craftsmanData.Size() > 0 )
 		{
 			if ( true == craftsmanData[0].noCraftingCost )
@@ -89,17 +90,20 @@ class W3CraftsmanComponent extends W3MerchantComponent
 		}
 
 		owner = (W3MerchantNPC) this.GetEntity();
+		
 		if ( owner )
 		{
 			if ( owner.invComp )
 			{
-				items = owner.invComp.AddAnItem( craftedItemName, 1 );
+				items = owner.invComp.AddAnItem( schem.craftedItemName, 1 );
 				if ( items.Size() > 0 )
 				{
 					craftingCost = owner.invComp.GetItemPriceCrafting( owner.invComp.GetItem( items[ 0 ] ) );
 					owner.invComp.RemoveItem( items[ 0 ], 1 );
 					return craftingCost;
 				}
+				//modSigns: recipe based crafting cost -> removed due to price modifier changes
+				//return (int)(schem.baseCraftingPrice * 0.38f * owner.invComp.GetPriceModifierSimple());
 			}
 		}
 
@@ -143,7 +147,6 @@ class W3CraftsmanComponent extends W3MerchantComponent
 			}
 
 		}
-		
 	}
 	
 	function SetCrafterLevelTag( type : ECraftsmanType )

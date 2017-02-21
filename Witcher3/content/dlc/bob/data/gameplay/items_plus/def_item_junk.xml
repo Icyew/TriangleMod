@@ -6,7 +6,7 @@
 	<item
 		name							="Spoon"
 		category						="junk"
-		price							="5"
+		price							="4"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon"
@@ -22,7 +22,7 @@
 	<item
 		name							="Spoon wooden"
 		category						="junk"
-		price							="6"
+		price							="4"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_wooden"
@@ -38,7 +38,7 @@
 	<item
 		name							="Spoon wooden 2"
 		category						="junk"
-		price							="8"
+		price							="4"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_wooden2"
@@ -54,7 +54,7 @@
 	<item
 		name							="Spoon metal"
 		category						="junk"
-		price							="12"
+		price							="8"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_metal"
@@ -70,7 +70,7 @@
 	<item
 		name							="Spoon metal 2"
 		category						="junk"
-		price							="14"
+		price							="8"
 		weight							="0.02"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_metal2"
@@ -86,7 +86,7 @@
 	<item
 		name							="Spoon silver"
 		category						="junk"
-		price							="25"
+		price							="16"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_silver"
@@ -95,14 +95,14 @@
 	>
 		<base_abilities>				<a>Default Junk _Stats</a>
 		</base_abilities>
-		<tags>							mod_junk
+		<tags>							mod_junk, mod_valuable
 		</tags>
 	</item>
 	
 	<item
 		name							="Spoon silver 2"
 		category						="junk"
-		price							="28"
+		price							="16"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_silver2"
@@ -111,14 +111,14 @@
 	>
 		<base_abilities>				<a>Default Junk _Stats</a>
 		</base_abilities>
-		<tags>							mod_junk
+		<tags>							mod_junk, mod_valuable
 		</tags>
 	</item>
 
 	<item
 		name							="Spoon gold"
 		category						="junk"
-		price							="52"
+		price							="24"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_gold"
@@ -127,14 +127,14 @@
 	>
 		<base_abilities>				<a>Default Junk _Stats</a>
 		</base_abilities>
-		<tags>							mod_junk
+		<tags>							mod_junk, mod_valuable
 		</tags>
 	</item>
 
 	<item
 		name							="Spoon gold 2"
 		category						="junk"
-		price							="55"
+		price							="24"
 		weight							="0.05"
 		stackable						="100"
 		localisation_key_name			="item_name_spoon_gold2"
@@ -143,7 +143,7 @@
 	>
 		<base_abilities>				<a>Default Junk _Stats</a>
 		</base_abilities>
-		<tags>							mod_junk
+		<tags>							mod_junk, mod_valuable
 		</tags>
 	</item>
 
@@ -262,7 +262,8 @@
 	<item
 		name							="mq7024_gen_painting_landscape_a"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_landscape_a"
@@ -276,7 +277,8 @@
 	<item
 		name							="mq7024_gen_painting_landscape_b"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_landscape_b"
@@ -290,7 +292,8 @@
 	<item
 		name							="mq7024_gen_painting_landscape_c"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_landscape_c"
@@ -304,7 +307,8 @@
 	<item
 		name							="mq7024_gen_painting_landscape_d"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_landscape_d"
@@ -318,7 +322,8 @@
 	<item
 		name							="mq7024_gen_painting_portrait_a"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_portrait_a"
@@ -332,7 +337,8 @@
 	<item
 		name							="mq7024_gen_painting_portrait_b"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_portrait_b"
@@ -346,7 +352,8 @@
 	<item
 		name							="mq7024_gen_painting_portrait_c"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_gen_painting_portrait_c"
@@ -360,7 +367,8 @@
 	<item
 		name							="mq7024_mandragora_painting_02"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_mandragora_painting_02"
@@ -374,7 +382,8 @@
 	<item
 		name							="mq7024_mandragora_painting_03"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_mandragora_painting_03"
@@ -388,7 +397,8 @@
 	<item
 		name							="mq7024_mandragora_painting_04"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_mandragora_painting_04"
@@ -402,7 +412,8 @@
 	<item
 		name							="mq7024_palace_painting"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_palace_painting"
@@ -416,7 +427,8 @@
 	<item
 		name							="mq7024_painting_battlefield"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_battlefield"
@@ -430,7 +442,8 @@
 	<item
 		name							="mq7024_painting_harbour"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_harbour"
@@ -444,7 +457,8 @@
 	<item
 		name							="mq7024_painting_merchantwithpearl"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_merchantwithpearl"
@@ -458,7 +472,8 @@
 	<item
 		name							="mq7024_painting_prologue_village"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_prologue_village"
@@ -472,7 +487,8 @@
 	<item
 		name							="mq7024_painting_stilllife"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_stilllife"
@@ -486,7 +502,8 @@
 	<item
 		name							="mq7024_painting_knight_on_horse"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_knight_on_horse"
@@ -500,7 +517,8 @@
 	<item
 		name							="mq7024_painting_ciri_portrait"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_ciri_portrait"
@@ -514,7 +532,8 @@
 	<item
 		name							="mq7024_painting_emhyr_portrait"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_emhyr_portrait"
@@ -528,7 +547,8 @@
 	<item
 		name							="mq7024_painting_novigrad_dandelion"
 		category						="misc"
-		price							="10"
+		price							="25"
+		weight							="0.1"
 		stackable						="100"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq7024_painting_novigrad_dandelion"
@@ -542,8 +562,8 @@
 	<item
 		name							="Marovski necklace"
 		category						="junk"
-		price							="350"
-		weight							="0.6"
+		price							="300"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_pompadoux_necklace"
 		localisation_key_description	="item_desc_valuable"
@@ -553,16 +573,15 @@
 		</tags>
 		<base_abilities>				<a>Magic _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Thread</parts>
-										<parts count="2">Gold mineral</parts>
+		<recycling_parts>				<parts count="3">Gold mineral</parts>
 		</recycling_parts>
 	</item>
 
 		<item
 		name							="Marovski bracelet"
 		category						="junk"
-		price							="250"
-		weight							="0.3"
+		price							="300"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_pompadoux_bracelet"
 		localisation_key_description	="item_desc_valuable"
@@ -572,8 +591,7 @@
 		</tags>
 		<base_abilities>				<a>Magic _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Thread</parts>
-										<parts count="1">Ruby</parts>
+		<recycling_parts>				<parts count="1">Ruby</parts>
 		</recycling_parts>
 	</item>
 

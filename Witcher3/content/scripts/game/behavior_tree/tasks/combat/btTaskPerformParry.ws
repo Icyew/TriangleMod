@@ -11,17 +11,19 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 {
 	public var activationTimeLimitBonusHeavy 	: float;
 	public var activationTimeLimitBonusLight 	: float;
-	public var checkParryChance 				: bool;
+	//public var checkParryChance 				: bool; //modSigns: removing as it's not working properly
 	public var interruptTaskToExecuteCounter 	: bool;
 	public var allowParryOverlap 				: bool;
 	
 	private var activationTimeLimit 			: float;
 	private var action 							: CName;
 	private var runMain 						: bool;
-	private var parryChance 					: float;
+	//private var parryChance 					: float; //modSigns: removing as it's not working properly
+	private var parryStaminaCost 				: float; //modSigns
 	private var counterChance 					: float;
 	private var counterMultiplier 				: float;
 	private var hitsToCounter 					: int;
+	private var counterStaminaCost 				: float; //modSigns
 	private var swingType 						: int;
 	private var swingDir 						: int;
 	
@@ -33,6 +35,8 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 	
 	function IsAvailable() : bool
 	{
+		GetStats(); //modSigns
+			
 		InitializeCombatDataStorage();
 		if ( ((CHumanAICombatStorage)combatDataStorage).IsProtectedByQuen() )
 		{
@@ -43,7 +47,7 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		{
 			if ( GetLocalTime() < activationTimeLimit )
 			{
-				return true;
+				return GetNPC().GetStat( BCS_Stamina ) >= parryStaminaCost; //modSigns: check for stamina
 			}
 			activationTimeLimit = 0.0;
 			return false;
@@ -78,7 +82,7 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		npc.SetParryEnabled(true);
 		LogChannel( 'HitReaction', "TaskActivated. ParryEnabled" );
 		
-		if ( action == 'ParryPerform' )
+		if ( action == 'ParryPerform' ) //doesn't look like it's ever executed
 		{
 			if ( TryToParry() )
 			{
@@ -88,7 +92,7 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 			action = '';
 		}
 		
-		if ( CheckCounter() && interruptTaskToExecuteCounter )
+		if ( CheckCounter() && interruptTaskToExecuteCounter ) //doesn't look like it's ever executed
 		{
 			npc.DisableHitAnimFor(0.1);
 			activationTimeLimit = 0.0;
@@ -134,15 +138,17 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		LogChannel( 'HitReaction', "PerformParry Task Deactivated" );
 	}
 	
-	private function CheckCounter() : bool
+	private function CheckCounter() : bool //doesn't look like it's ever executed
 	{
 		var npc : CNewNPC = GetNPC();
 		var defendCounter : int;
 		
+		GetStats(); //modSigns
+			
 		defendCounter = npc.GetDefendCounter();
 		if ( defendCounter >= hitsToCounter )
 		{
-			if( Roll( counterChance ) )
+			if( Roll( counterChance ) && GetNPC().GetStat( BCS_Stamina ) >= counterStaminaCost ) //modSigns: check stamina cost
 			{
 				npc.SignalGameplayEvent('CounterFromDefence');
 				return true;
@@ -156,11 +162,13 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 	{
 		var actor : CActor = GetActor();
 		
-		parryChance = MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('parry_chance')));
+		//parryChance = MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('parry_chance'))); //modSigns: disabled
+		parryStaminaCost = CalculateAttributeValue(actor.GetAttributeValue( 'parry_stamina_cost' )); //modSigns
 		counterChance = MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('counter_chance')));
 		counterMultiplier = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('counter_chance_per_hit')));
 		hitsToCounter = (int)MaxF(0, CalculateAttributeValue(actor.GetAttributeValue('hits_to_roll_counter')));
 		counterChance += Max( 0, actor.GetDefendCounter() ) * counterMultiplier;
+		counterStaminaCost = CalculateAttributeValue(actor.GetAttributeValue( 'counter_stamina_cost' )); //modSigns
 		
 		if ( hitsToCounter < 0 )
 		{
@@ -168,7 +176,7 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		}
 	}
 	
-	private function CanParry() : bool
+	/*private function CanParry() : bool //modSigns: disabled (just in case), enabling messes up human AI, was never actually checked anyway
 	{
 		if ( checkParryChance )
 		{
@@ -179,32 +187,39 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 			
 			return false;
 		}
-		
+
 		return true;
-	}
+	}*/
 	
 	private function TryToParry(optional counter : bool) : bool
 	{
 		var npc : CNewNPC = GetNPC();
-		var mult : float;
+		//var mult : float; //modSigns: mult removed
 		
-		if ( isActive && npc.CanParryAttack() && allowParryOverlap )
+		GetStats(); //modSigns
+			
+		if ( isActive && npc.CanParryAttack() && allowParryOverlap && (!counter && npc.GetStat( BCS_Stamina ) >= parryStaminaCost || counter && npc.GetStat( BCS_Stamina ) >= counterStaminaCost) ) //modSigns: check stamina cost
 		{
 			LogChannel( 'HitReaction', "Parried" );
 			
 			npc.SignalGameplayEvent('SendBattleCry');
 			
-			mult = theGame.params.HEAVY_STRIKE_COST_MULTIPLIER;
+			//mult = theGame.params.HEAVY_STRIKE_COST_MULTIPLIER; //modSigns: removed
 			
 			if ( npc.RaiseEvent('ParryPerform') )
 			{
 				if( counter )
 				{
-					npc.DrainStamina( ESAT_Counterattack, 0, 0, '', 0 );
+					//theGame.witcherLog.AddMessage("Counter"); //modSigns: debug
+					//npc.DrainStamina( ESAT_Counterattack, 0, 0, '', 0 ); //modSigns: stamina is drained in corresponding attack task
 					npc.SignalGameplayEvent('Counter');
 				}
 				else
-					npc.DrainStamina( ESAT_Parry, 0, 0, '', 0, mult );
+				{
+					//theGame.witcherLog.AddMessage("Parry"); //modSigns: debug
+					//npc.DrainStamina( ESAT_Parry, 0, 0, '', 0, 0 ); //modSigns: mult removed
+					npc.DrainStamina(ESAT_FixedValue, parryStaminaCost, 0.5); //modSigns: to make stamina drains consistent
+				}
 				
 				((CHumanAICombatStorage)combatDataStorage).IncParryCount();
 				npc.IncDefendCounter();
@@ -245,6 +260,7 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 	{
 		var res : bool;
 		var isHeavy : bool;
+		var npc : CNewNPC = GetNPC();
 		
 		InitializeCombatDataStorage();
 		
@@ -262,15 +278,16 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		{
 			GetStats();
 			
-			if ( interruptTaskToExecuteCounter && CheckCounter() && !GetNPC().IsCountering() )
+			if ( interruptTaskToExecuteCounter && CheckCounter() && !npc.IsCountering() ) //doesn't look like it's ever executed
 			{
-				GetNPC().DisableHitAnimFor(0.1);
+				npc.DisableHitAnimFor(0.1);
 				activationTimeLimit = 0.0;
 				Complete(true);
 				return false;
 			}
 			
-			if ( CanParry() )
+			//if ( CanParry() ) //modSigns: disabled, wasn't actually used
+			if( npc.GetStat( BCS_Stamina ) >= parryStaminaCost ) //modSigns: stamina check
 			{
 				isHeavy = GetEventParamInt(-1);
 				
@@ -279,9 +296,9 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 				else
 					activationTimeLimit = GetLocalTime() + activationTimeLimitBonusLight;
 				
-				if ( GetNPC().HasShieldedAbility() )
+				if ( npc.HasShieldedAbility() )
 				{
-					GetNPC().SetParryEnabled(true);
+					npc.SetParryEnabled(true);
 				}
 			}
 			return true;
@@ -289,6 +306,8 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		
 		else if ( eventName == 'ParryPerform' )
 		{
+			GetStats(); //modSigns
+			
 			if( AdditiveParry() )
 				return true;
 			
@@ -296,10 +315,10 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 				return false;
 			
 			isHeavy = GetEventParamInt(-1);
-			if( ShouldCounter(isHeavy) )
+			if( ShouldCounter(isHeavy) )	//here's where actual parry check is performed
 				res = TryToParry(true);
 			else
-				res = TryToParry();
+				res = TryToParry(false);
 			
 			if( res )
 			{
@@ -309,8 +328,10 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 			return true;
 		}
 		
-		else if ( eventName == 'CounterParryPerform' )
+		else if ( eventName == 'CounterParryPerform' ) //when counter is launched from somewhere else
 		{
+			GetStats(); //modSigns
+			
 			if ( TryToParry(true) )
 			{
 				runMain = true;
@@ -321,18 +342,20 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		
 		else if( eventName == 'ParryStagger' )
 		{
+			GetStats(); //modSigns
+			
 			if( !isActive )
 				return false;
 				
-			if( GetNPC().HasShieldedAbility() )
+			if( npc.HasShieldedAbility() )
 			{
-				GetNPC().AddEffectDefault( EET_Stagger, GetCombatTarget(), "ParryStagger" );
+				npc.AddEffectDefault( EET_Stagger, GetCombatTarget(), "ParryStagger" );
 				runMain = false;
 				activationTimeLimit = 0.0;
 			}
 			else if ( TryToParry() )
 			{
-				GetNPC().LowerGuard();
+				npc.LowerGuard();
 				runMain = false;
 			}
 			return true;
@@ -359,10 +382,10 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		return super.OnGameplayEvent ( eventName );
 	}
 	
-	function ShouldCounter(isHeavy : bool) : bool
+	function ShouldCounter(isHeavy : bool) : bool //this appears to be actually used when checking for counter
 	{
 		var playerTarget : W3PlayerWitcher;
-		var temp, temp2		:int;
+		//var temp, temp2		:int; //modSigns
 		
 		if ( GetActor().HasAbility('DisableCounterAttack') )
 			return false;
@@ -375,9 +398,9 @@ class CBTTaskPerformParry extends CBTTaskPlayAnimationEventDecorator
 		if ( isHeavy && !GetActor().HasAbility('ablCounterHeavyAttacks') )
 			return false;
 			
-		temp = ((CHumanAICombatStorage)combatDataStorage).GetParryCount();
-		temp2 = hitsToCounter;
-		return ((CHumanAICombatStorage)combatDataStorage).GetParryCount() >= hitsToCounter && Roll(counterChance);
+		//temp = ((CHumanAICombatStorage)combatDataStorage).GetParryCount(); //modSigns
+		//temp2 = hitsToCounter; //modSigns
+		return ((CHumanAICombatStorage)combatDataStorage).GetParryCount() >= hitsToCounter && Roll(counterChance) && GetNPC().GetStat( BCS_Stamina ) >= counterStaminaCost; //modSigns
 	}
 	
 	function InitializeCombatDataStorage()

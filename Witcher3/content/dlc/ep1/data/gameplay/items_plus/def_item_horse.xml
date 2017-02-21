@@ -5,6 +5,7 @@
 <!-- ######################## ABILITY DEFINITONS ######################## -->
 <abilities>
 
+<!-- modSigns: done -->
 	
 <!-- Horse Saddle -->
 	<ability name="HorseSaddle5">
@@ -24,12 +25,12 @@
 	<ability name="OfirHorseBag">
 		<tags>							HorseBag1
 		</tags>
-		<encumbrance					type="add"	min="100"				/>
+		<encumbrance					type="add"	min="90"				/>
 	</ability>
 	
 	<!-- Horse Blinders -->
 	<ability name="OfirHorseBlinders">
-		<panic							type="add"	min="55"				/>
+		<panic							type="add"	min="70"				/>
 	</ability>
 
 </abilities>
@@ -42,7 +43,7 @@
 	<item
 		name							="Horse Saddle 5"
 		category						="horse_saddle"
-		price							="100"
+		price							="400"
 		weight							="10"
 		stackable						="1"
 		grid_size						="2"
@@ -64,7 +65,7 @@
 	<item
 		name							="Horse Saddle 6"
 		category						="horse_saddle"
-		price							="100"
+		price							="400"
 		weight							="10"
 		stackable						="1"
 		grid_size						="2"
@@ -87,7 +88,7 @@
 	<item
 		name							="Devil Saddle"
 		category						="horse_saddle"
-		price							="100"
+		price							="1000"
 		weight							="10"
 		stackable						="1"
 		grid_size						="2"
@@ -110,7 +111,7 @@
 	<item
 		name							="Ofir Horse Bag"
 		category						="horse_bag"
-		price							="100"
+		price							="400"
 		weight							="2.5"
 		stackable						="1"
 		grid_size						="2"
@@ -131,7 +132,7 @@
 	<item
 		name							="Ofir Horse Blinders"
 		category						="horse_blinder"
-		price							="100"
+		price							="200"
 		weight							="0.1"
 		stackable						="1"
 		grid_size						="2"

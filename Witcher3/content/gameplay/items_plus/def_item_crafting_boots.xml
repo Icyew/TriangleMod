@@ -6,426 +6,460 @@
 <abilities>
 
 <!-- BOOTS CRAFTED LIGHT -->
-	<ability name="Boots 01_crafted _Stats">
-		<weight 						type="base"	min="1.24"				/>
-		<quality 						type="add"	min="3"					/>
+	<ability name="Boots 01_crafted _Stats"> <!-- q1, lvl 32 -->
+		<weight 						type="base"	min="2.5"				/>
+		<quality 						type="add"	min="1"					/>
 		<armor 							type="base"	min="69"				/>
-		<slashing_resistance_perc		type="base"	min="0.01"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-	<ability name="Boots 02_crafted _Stats">
-		<weight 						type="base" min="1.32"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base" min="75"				/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.03"				/>
-	</ability>
-
-<!-- Medium -->
-	<ability name="Boots 03_crafted _Stats"> 
-		<weight 						type="base" min="1.56"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base"	min="81"				/>
 		<slashing_resistance_perc		type="base"	min="0.03"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<bleeding_resistance_perc		type="base" min="0.05"				/>
 	</ability>
 
-	<ability name="Boots 04_crafted _Stats">
-		<weight 						type="base" min="1.88"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base" min="87"				/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.03"				/>
+	<ability name="Boots 03_crafted _Stats"> <!-- q2, lvl 36 -->
+		<weight 						type="base"	min="2.5"				/>
+		<quality 						type="add"	min="2"					/>
+		<armor 							type="base" min="77"				/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<poison_resistance_perc			type="base"	min="0.05"				/>
 	</ability>
 
 <!-- Relic -->
-	<ability name="Boots 07_crafted _Stats">
-		<weight 						type="base" min="3.88"				/>
-		<quality 						type="add"	min="4"					/>
-		<armor 							type="base"	min="97"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<poison_resistance_perc			type="base"	min="0.25"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-<!-- BOOTS CRAFTED HEAVY -->
-	<ability name="Heavy boots 01_crafted _Stats">
-		<weight 						type="base" min="2.86"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base"	min="101"				/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.03"				/>
-	</ability>
-
-	<ability name="Heavy boots 02_crafted _Stats">
-		<weight							type="base" min="3.26"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base"	min="107"				/>
+	<ability name="Boots 04_crafted _Stats"> <!-- q4, lvl 42, 1 slot -->
+		<weight							type="base"	min="3"					/>
+		<quality						type="add"	min="4"					/>
+		<armor 							type="base"	min="89"				/>
 		<slashing_resistance_perc		type="base"	min="0.04"				/>
 		<piercing_resistance_perc		type="base"	min="0.02"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.03"				/>
-	</ability>
-		
-<!-- Medium -->
-	<ability name="Heavy boots 03_crafted _Stats">
-		<weight							type="base" min="2.46"				/>
-		<quality 						type="add"	min="3"					/>
-		<armor 							type="base"	min="110"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+		<bleeding_resistance_perc		type="base"	min="0.1"				/>
 	</ability>
 
-	<ability name="Heavy boots 04_crafted _Stats">
-		<weight							type="base" min="5.42"				/>
+	<ability name="Boots 07_crafted _Stats"> <!-- q4, lvl 46, 1 slot -->
+		<weight 						type="base"	min="2.5"				/>
+		<quality 						type="add"	min="4"					/>
+		<armor 							type="base"	min="97"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<poison_resistance_perc			type="base"	min="0.25"				/>
+	</ability>
+
+<!-- BOOTS CRAFTED MEDIUM -->
+	<ability name="Boots 02_crafted _Stats"> <!-- q2, lvl 35 -->
+		<weight 						type="base" min="4.5"				/>
+		<quality 						type="add"	min="2"					/>
+		<armor 							type="base"	min="75"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<vitality						type="base"	min="150"				/>
+	</ability>
+
+	<ability name="Heavy boots 03_crafted _Stats"> <!-- q3, lvl 39, 1 slot -->
+		<weight 						type="base" min="4.5"				/>
 		<quality 						type="add"	min="3"					/>
-		<armor 							type="base"	min="115"				/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<armor 							type="base"	min="83"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<burning_resistance_perc		type="base" min="0.05"				/>
 	</ability>
 
 <!-- Medium Relic -->
-<ability name="Heavy boots 07_crafted _Stats">
-		<weight 						type="base" min="3.96"				/>
+	<ability name="Heavy boots 07_crafted _Stats"> <!-- q4, lvl 45, 1 slot -->
+		<weight 						type="base" min="4.5"				/>
 		<quality 						type="add"	min="4"					/>
-		<armor 							type="base" min="127"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<bonus_money 					type="add" min="0.25"				/>
+		<armor 							type="base" min="95"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<armor_reduction 				min="35"							/>
+	</ability>
+
+<!-- BOOTS CRAFTED HEAVY -->
+	<ability name="Heavy boots 01_crafted _Stats"> <!-- q1, lvl 34 -->
+		<weight 						type="base" min="10"				/>
+		<quality 						type="add"	min="1"					/>
+		<armor 							type="base"	min="73"				/>
+		<slashing_resistance_perc		type="base"	min="0.12"				/>
+		<piercing_resistance_perc		type="base"	min="0.12"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.12"				/>
+		<rending_resistance_perc		type="base"	min="0.12"				/>
+		<elemental_resistance_perc		type="base"	min="0.12"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>
+		<focus_gain						type="add"	min="0.04"				/>
+	</ability>
+
+	<ability name="Heavy boots 02_crafted _Stats"> <!-- q2, lvl 40 -->
+		<weight 						type="base" min="11"				/>
+		<quality 						type="add"	min="2"					/>
+		<armor 							type="base"	min="85"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>
+		<vitality 						type="base" min="200" max="200"		/>
+	</ability>
+		
+	<ability name="Heavy boots 04_crafted _Stats"> <!-- q3, lvl 44, 1 slot -->
+		<weight 						type="base" min="11"				/>
+		<quality 						type="add"	min="3"					/>
+		<armor 							type="base"	min="93"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.10"				/>
+		<spell_power_igni				type="mult"	min="0.05"				/>
 	</ability>
 
 <!-- Relic -->
-	<ability name="Heavy boots 08_crafted _Stats">
-		<weight 						type="base" min="7.13"				/>
+	<ability name="Heavy boots 08_crafted _Stats"> <!-- q4, lvl 48, 1 slot -->
+		<weight 						type="base" min="11"				/>
 		<quality 						type="add"	min="4"					/>
-		<armor 							type="base" min="134"				/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<staminaRegen_armor_mod  		type="mult"	min="-0.03"				/>
+		<armor 							type="base" min="101"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.05"				/>
+		<vitality 						type="base" min="250" max="250"		/>
+	</ability>
+	
+<!-- BOOTS WITCHER LYNX: 12% to attack power + 2% per level, up to 18% attack power bonus -->
+	<ability name="Lynx Boots 1 _Stats"> <!-- lvl 49 -> 47  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="99"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.12"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 	</ability>
 
-<!-- BOOTS WITCHER LYNX -->
-	<ability name="Lynx Boots 1 _Stats">
-		<weight							type="base"	min="4.3"				/>
+	<ability name="Lynx Boots 2 _Stats"> <!-- lvl 55 -> 53  -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="103"				/>
+		<armor							type="base"	min="111"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.14"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+	<ability name="Lynx Boots 3 _Stats"> <!-- lvl 61 -> 59  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="123"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.16"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+	<ability name="Lynx Boots 4 _Stats"> <!-- lvl 66 -> 64  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="133"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.18"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+
+<!-- BOOTS WITCHER GRYPHON: 12% to spell power + 2% per level, up to 18% spell power bonus -->
+	<ability name="Gryphon Boots 1 _Stats"> <!-- lvl 43 -> 41  -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="87"				/>
 		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
 		<rending_resistance_perc		type="base"	min="0.06"				/>
 		<elemental_resistance_perc		type="base"	min="0.06"				/>
-		<attack_power					type="mult" min="0.11"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-	<ability name="Lynx Boots 2 _Stats">
-		<weight 						type="base"	min="4.3"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="115"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
-		<elemental_resistance_perc		type="base"	min="0.07"				/>
-		<attack_power					type="mult" min="0.12"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-	
-	<ability name="Lynx Boots 3 _Stats">
-		<weight							type="base"	min="5.1"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="127"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
-		<elemental_resistance_perc		type="base"	min="0.07"				/>
-		<attack_power					type="mult" min="0.13"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-	
-	<ability name="Lynx Boots 4 _Stats">
-		<weight							type="base"	min="5.1"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="137"				/>
-		<slashing_resistance_perc		type="base"	min="0.08"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<rending_resistance_perc		type="base"	min="0.08"				/>
-		<elemental_resistance_perc		type="base"	min="0.08"				/>
-		<attack_power					type="mult" min="0.15"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-<!-- BOOTS WITCHER GRYPHON -->
-	<ability name="Gryphon Boots 1 _Stats">
-		<weight							type="base"	min="2.42"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="91"				/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.06"				/>
-		<spell_power 					type="mult"	min="0.11"				/>
-	</ability>
-
-	<ability name="Gryphon Boots 2 _Stats">
-		<weight							type="base"	min="2.42"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="105"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
 		<spell_power 					type="mult"	min="0.12"				/>
 	</ability>
-	
-	<ability name="Gryphon Boots 3 _Stats">
-		<weight							type="base"	min="4.06"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="121"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
-		<spell_power 					type="mult"	min="0.13"				/>
-	</ability>
-	
-	<ability name="Gryphon Boots 4 _Stats">
-		<weight							type="base"	min="4.06"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="137"				/>
-		<slashing_resistance_perc		type="base"	min="0.08"				/>
-		<piercing_resistance_perc		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
-		<rending_resistance_perc		type="base"	min="0.08"				/>
-		<spell_power 					type="mult"	min="0.15"				/>
-	</ability>
 
-<!-- BOOTS WITCHER BEAR -->
-	<ability name="Bear Boots 1 _Stats">
-		<weight							type="base"	min="3.46"				/>
+	<ability name="Gryphon Boots 2 _Stats"> <!-- lvl 50 -> 48  -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="109"				/>
+		<armor							type="base"	min="101"				/>
 		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
 		<rending_resistance_perc		type="base"	min="0.06"				/>
-		<focus_gain 					type="base" min="0.11" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<spell_power 					type="mult"	min="0.14"				/>
+	</ability>
+	
+	<ability name="Gryphon Boots 3 _Stats"> <!-- lvl 58 -> 56  -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="117"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<spell_power 					type="mult"	min="0.16"				/>
+	</ability>
+	
+	<ability name="Gryphon Boots 4 _Stats"> <!-- lvl 66 -> 64  -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="133"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<spell_power 					type="mult"	min="0.18"				/>
 	</ability>
 
-	<ability name="Bear Boots 2 _Stats">
-		<weight							type="base"	min="3.46"				/>
+<!-- BOOTS WITCHER BEAR: 12% to focus gain + 2% per level, up to 18% focus gain bonus -->
+	<ability name="Bear Boots 1 _Stats"> <!-- lvl 52 -> 50 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="119"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
-		<focus_gain						type="add"	min="0.12"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<armor							type="base"	min="105"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<focus_gain 					type="base" min="0.12" 				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
+	</ability>
+
+	<ability name="Bear Boots 2 _Stats"> <!-- lvl 57 -> 55 -->
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="115"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<focus_gain						type="add"	min="0.14"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 	
-	<ability name="Bear Boots 3 _Stats">
-		<weight							type="base"	min="5.8"				/>
+	<ability name="Bear Boots 3 _Stats"> <!-- lvl 62 -> 60 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="129"				/>
-		<slashing_resistance_perc		type="base"	min="0.07"				/>
-		<piercing_resistance_perc		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.08"				/>
-		<rending_resistance_perc		type="base"	min="0.07"				/>
-		<focus_gain						type="add"	min="0.13"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<armor							type="base"	min="125"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<focus_gain						type="add"	min="0.16"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 	
-	<ability name="Bear Boots 4 _Stats">
-		<weight							type="base"	min="5.8"				/>
+	<ability name="Bear Boots 4 _Stats"> <!-- lvl 66 -> 64 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="137"				/>
-		<slashing_resistance_perc		type="base"	min="0.08"				/>
-		<piercing_resistance_perc		type="base"	min="0.08"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.10"				/>
-		<rending_resistance_perc		type="base"	min="0.08"				/>
-		<focus_gain						type="add"	min="0.15"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<armor							type="base"	min="133"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<focus_gain						type="add"	min="0.18"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 	
 <!--- Base Witcher gear -->
-<!-- BOOTS WITCHER LYNX -->
-	<ability name="Base Lynx Boots 1 _Stats">
-		<weight							type="base"	min="4.3"				/>
+<!-- BOOTS WITCHER LYNX: 4% to attack power + 2% per level, up to 10% attack power bonus -->
+	<ability name="Base Lynx Boots 1 _Stats"> <!-- lvl 19 -> 17  -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="43"				/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.05"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-	<ability name="Base Lynx Boots 2 _Stats">
-		<weight 						type="base"	min="4.3"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="55"				/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.06"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-	
-	<ability name="Base Lynx Boots 3 _Stats">
-		<weight							type="base"	min="5.1"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="67"				/>
+		<armor							type="base"	min="39"				/>
 		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.08"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-	
-	<ability name="Base Lynx Boots 4 _Stats">
-		<weight							type="base"	min="5.1"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="77"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-	</ability>
-
-<!-- BOOTS WITCHER GRYPHON -->
-	<ability name="Base Gryphon Boots 1 _Stats">
-		<weight							type="base"	min="2.42"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="31"				/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<spell_power 					type="mult"	min="0.05"				/>
-	</ability>
-
-	<ability name="Base Gryphon Boots 2 _Stats">
-		<weight							type="base"	min="2.42"				/>
-		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="45"				/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
 		<piercing_resistance_perc		type="base"	min="0.02"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+
+	<ability name="Base Lynx Boots 2 _Stats"> <!-- lvl 25 -> 23  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="51"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.06"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+	<ability name="Base Lynx Boots 3 _Stats"> <!-- lvl 31 -> 29  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="63"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.08"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+	<ability name="Base Lynx Boots 4 _Stats"> <!-- lvl 36 -> 34  -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="73"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<attack_power					type="mult" min="0.10"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+
+<!-- BOOTS WITCHER GRYPHON: 4% to spell power + 2% per level, up to 10% spell power bonus -->
+	<ability name="Base Gryphon Boots 1 _Stats"> <!-- lvl 13 -> 11  -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="27"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<spell_power 					type="mult"	min="0.04"				/>
+	</ability>
+
+	<ability name="Base Gryphon Boots 2 _Stats"> <!-- lvl 20 -> 18  -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<armor							type="base"	min="41"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
 		<spell_power 					type="mult"	min="0.06"				/>
 	</ability>
 	
-	<ability name="Base Gryphon Boots 3 _Stats">
-		<weight							type="base"	min="4.06"				/>
+	<ability name="Base Gryphon Boots 3 _Stats"> <!-- lvl 28 -> 26  -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="61"				/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<armor							type="base"	min="57"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
 		<spell_power 					type="mult"	min="0.08"				/>
 	</ability>
 	
-	<ability name="Base Gryphon Boots 4 _Stats">
-		<weight							type="base"	min="4.06"				/>
+	<ability name="Base Gryphon Boots 4 _Stats"> <!-- lvl 36 -> 34  -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="77"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<armor							type="base"	min="73"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
 		<piercing_resistance_perc		type="base"	min="0.04"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
 		<spell_power 					type="mult"	min="0.10"				/>
 	</ability>
 
-<!-- BOOTS WITCHER BEAR -->
-	<ability name="Base Bear Boots 1 _Stats">
-		<weight							type="base"	min="3.46"				/>
+<!-- BOOTS WITCHER BEAR: 4% to focus gain + 2% per level, up to 10% focus gain bonus -->
+	<ability name="Base Bear Boots 1 _Stats"> <!-- lvl 22 -> 20 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="49"				/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<focus_gain 					type="base" min="0.05" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<armor							type="base"	min="45"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<focus_gain 					type="base" min="0.04" 				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 
-	<ability name="Base Bear Boots 2 _Stats">
-		<weight							type="base"	min="3.46"				/>
+	<ability name="Base Bear Boots 2 _Stats"> <!-- lvl 27 -> 25 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="59"				/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<armor							type="base"	min="55"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
 		<focus_gain						type="add"	min="0.06"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 	
-	<ability name="Base Bear Boots 3 _Stats">
-		<weight							type="base"	min="5.8"				/>
+	<ability name="Base Bear Boots 3 _Stats"> <!-- lvl 32 -> 30 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="69"				/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<armor							type="base"	min="65"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
 		<focus_gain						type="add"	min="0.08"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 	
-	<ability name="Base Bear Boots 4 _Stats">
-		<weight							type="base"	min="5.8"				/>
+	<ability name="Base Bear Boots 4 _Stats"> <!-- lvl 36 -> 34 -->
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="5"					/>
-		<armor							type="base"	min="77"				/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<armor							type="base"	min="73"				/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
 		<focus_gain						type="add"	min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
 	</ability>
 
 </abilities>
@@ -438,7 +472,7 @@
 	<item
 		name							="Boots 01_crafted"
 		category						="boots"
-		price							="76"
+		price							="25"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -450,15 +484,12 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
@@ -466,7 +497,7 @@
 	<item
 		name							="Boots 02_crafted"
 		category						="boots"
-		price							="60"
+		price							="95"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -475,17 +506,17 @@
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl2"
 		localisation_key_name			="item_name_boots_02"
-		localisation_key_description	="item_category_light_armor_description "
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 	</item>
 
@@ -493,26 +524,25 @@
 	<item
 		name							="Boots 03_crafted"
 		category						="boots"
-		price							="72"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl3"
 		localisation_key_name			="item_name_boots_03"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl3_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Thread</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
@@ -520,7 +550,7 @@
 	<item
 		name							="Boots 04_crafted"
 		category						="boots"
-		price							="92"
+		price							="163"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -529,18 +559,16 @@
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl4"
 		localisation_key_name			="item_name_boots_04"
-		localisation_key_description	="item_category_light_armor_description "
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl4_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
@@ -548,7 +576,7 @@
 	<item
 		name							="Boots 07_crafted"
 		category						="boots"
-		price							="156"
+		price							="163"
 		initial_durability				="200"
 		max_durability					="200"
 		enhancement_slots				="1"
@@ -557,19 +585,16 @@
 		ability_mode					="OnMount"
 		equip_template					="s_02_mg__common_light_lvl4"
 		localisation_key_name			="item_name_boots_07"
-		localisation_key_description	="item_category_light_armor_description "
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl4_02_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 07_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="2">String</parts>
-										<parts count="2">Oil</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
@@ -577,7 +602,7 @@
 	<item
 		name							="Heavy boots 01_crafted"
 		category						="boots"
-		price							="106"
+		price							="150"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -589,15 +614,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="2">Leather</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 	</item>
 
@@ -605,7 +629,7 @@
 	<item
 		name							="Heavy boots 02_crafted"
 		category						="boots"
-		price							="86"
+		price							="262"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -615,17 +639,17 @@
 		equip_template					="s_01_mg__common_heavy_lvl2"
 		localisation_key_name			="item_name_heavy_boots_02"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="2">Leather</parts>
+										<parts count="2">Twine</parts>
 		</recycling_parts>
 	</item>
 
@@ -633,7 +657,7 @@
 	<item
 		name							="Heavy boots 03_crafted"
 		category						="boots"
-		price							="90"
+		price							="208"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -643,17 +667,15 @@
 		equip_template					="s_01_mg__common_heavy_lvl3"
 		localisation_key_name			="item_name_heavy_boots_03"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl3_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
 
@@ -661,7 +683,7 @@
 	<item
 		name							="Heavy boots 04_crafted"
 		category						="boots"
-		price							="150"
+		price							="400"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -671,28 +693,21 @@
 		equip_template					="s_01_mg__common_heavy_lvl4"
 		localisation_key_name			="item_name_heavy_boots_04"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl4_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="2">Leather</parts>
+										<parts count="2">Wire</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="s_01a_mg__common_heavy_lvl4">
 											<item>Gryphon Pants 1</item><!-- this item uses slim version -->
 											<item>Gryphon Pants 2</item><!-- this item uses slim version -->
-											<item>Gryphon Pants 3</item><!-- this item uses slim version -->
-											<item>Gryphon Pants 4</item><!-- this item uses slim version -->
-											<item>NGP Gryphon Pants 1</item><!-- this item uses slim version -->
-											<item>NGP Gryphon Pants 2</item><!-- this item uses slim version -->
-											<item>NGP Gryphon Pants 3</item><!-- this item uses slim version -->
-											<item>NGP Gryphon Pants 4</item><!-- this item uses slim version -->
 										</variant>
 		</variants>
 	</item>
@@ -701,28 +716,27 @@
 	<item
 		name							="Heavy boots 07_crafted"
 		category						="boots"
-		price							="140"
+		price							="286"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_02_mg__common_heavy_lvl3"
 		localisation_key_name			="item_name_heavy_boots_07"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl3_02_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 07_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire</parts>
 		</recycling_parts>
 	</item>
 
@@ -730,10 +744,10 @@
 	<item
 		name							="Heavy boots 08_crafted"
 		category						="boots"
-		price							="206"
+		price							="535"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -742,16 +756,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_boots_lvl4_02_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 08_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="5">Leather straps</parts>
-										<parts count="2">Thread</parts>
-										<parts count="6">Dark iron ore</parts>
-										<parts count="3">Steel ingot</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire</parts>
 		</recycling_parts>
 	</item>
 
@@ -759,349 +771,10 @@
 	<item
 		name							="Lynx Boots 1"
 		category						="boots"
-		price							="149"
+		price							="234"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__lynx_lvl1"
-		localisation_key_name			="item_name_newgame_lynx_boots_1"
-		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Lynx Boots 1 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Hardened timber</parts>
-		</recycling_parts>
-	</item>
-
-<!-- Upgrade -->
-	<item
-		name							="Lynx Boots 2"
-		category						="boots"
-		price							="149"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__lynx_lvl1"
-		localisation_key_name			="item_name_newgame_lynx_boots_2"
-		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Lynx Boots 2 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Hardened timber</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Upgrade -->
-	<item
-		name							="Lynx Boots 3"
-		category						="boots"
-		price							="151"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__lynx_lvl2"
-		localisation_key_name			="item_name_newgame_lynx_boots_3"
-		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Lynx Boots 3 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Leather straps</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Upgrade -->
-	<item
-		name							="Lynx Boots 4"
-		category						="boots"
-		price							="151"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__lynx_lvl2"
-		localisation_key_name			="item_name_newgame_lynx_boots_4"
-		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Lynx Boots 4 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Leather straps</parts>
-		</recycling_parts>
-	</item>
-
-<!-- BOOTS WITCHER GRYPHON -->
-	<item
-		name							="Gryphon Boots 1"
-		category						="boots"
-		price							="129"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__gryphon_lvl1"
-		localisation_key_name			="item_name_newgame_gryphon_boots_1"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Gryphon Boots 1 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="4">Leather squares</parts>
-		</recycling_parts>
-	</item>
-
-<!-- Upgrade -->
-	<item
-		name							="Gryphon Boots 2"
-		category						="boots"
-		price							="129"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__gryphon_lvl1"
-		localisation_key_name			="item_name_newgame_gryphon_boots_2"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Gryphon Boots 2 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="4">Leather squares</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Upgrade -->
-	<item
-		name							="Gryphon Boots 3"
-		category						="boots"
-		price							="236"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__gryphon_lvl2"
-		localisation_key_name			="item_name_newgame_gryphon_boots_3"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Gryphon Boots 3 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">String</parts>
-		</recycling_parts>
-	</item>
-
-<!-- Upgrade -->
-	<item
-		name							="Gryphon Boots 4"
-		category						="boots"
-		price							="236"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__gryphon_lvl2"
-		localisation_key_name			="item_name_newgame_gryphon_boots_4"
-		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Gryphon Boots 4 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">String</parts>
-		</recycling_parts>
-	</item>
-
-<!-- BOOTS WITCHER BEAR -->
-	<item
-		name							="Bear Boots 1"
-		category						="boots"
-		price							="150"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__bear_lvl1"
-		localisation_key_name			="item_name_newgame_bear_boots_1"
-		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Bear Boots 1 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">String</parts>
-										<parts count="1">Fur square</parts>
-		</recycling_parts>
-	</item>
-
-<!-- Upgrade -->
-	<item
-		name							="Bear Boots 2"
-		category						="boots"
-		price							="150"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__bear_lvl1"
-		localisation_key_name			="item_name_newgame_bear_boots_2"
-		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
-	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Bear Boots 2 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">String</parts>
-										<parts count="1">Fur square</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Upgrade -->
-	<item
-		name							="Bear Boots 3"
-		category						="boots"
-		price							="190"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__bear_lvl2"
-		localisation_key_name			="item_name_newgame_bear_boots_3"
-		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Bear Boots 3 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="2">Leather squares</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Upgrade -->
-	<item
-		name							="Bear Boots 4"
-		category						="boots"
-		price							="190"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="2"
-		stackable						="1"
-		grid_size						="2"
-		ability_mode					="OnMount"
-		equip_template					="s_01_mg__bear_lvl2"
-		localisation_key_name			="item_name_newgame_bear_boots_4"
-		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
-	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
-		</tags>
-		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Bear Boots 4 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="2">Leather squares</parts>
-		</recycling_parts>
-	</item>
-	
-<!-- Base Witcher gear -->
-<!-- BOOTS WITCHER LYNX -->
-	<item
-		name							="NGP Lynx Boots 1"
-		category						="boots"
-		price							="149"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1110,26 +783,24 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Lynx Boots 1 _Stats</a>
+										<a>Lynx Boots 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Hardened timber</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts>
 	</item>
 
 <!-- Upgrade -->
 	<item
-		name							="NGP Lynx Boots 2"
+		name							="Lynx Boots 2"
 		category						="boots"
-		price							="149"
+		price							="481"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1138,23 +809,22 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Lynx Boots 2 _Stats</a>
+										<a>Lynx Boots 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Hardened timber</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 	
 <!-- Upgrade -->
 	<item
-		name							="NGP Lynx Boots 3"
+		name							="Lynx Boots 3"
 		category						="boots"
-		price							="151"
+		price							="738"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1166,23 +836,22 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Lynx Boots 3 _Stats</a>
+										<a>Lynx Boots 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 	
 <!-- Upgrade -->
 	<item
-		name							="NGP Lynx Boots 4"
+		name							="Lynx Boots 4"
 		category						="boots"
-		price							="151"
+		price							="994"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1194,26 +863,25 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Lynx Boots 4 _Stats</a>
+										<a>Lynx Boots 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="2">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 
 <!-- BOOTS WITCHER GRYPHON -->
 	<item
-		name							="NGP Gryphon Boots 1"
+		name							="Gryphon Boots 1"
 		category						="boots"
-		price							="129"
+		price							="291"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1222,26 +890,25 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Gryphon Boots 1 _Stats</a>
+										<a>Gryphon Boots 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="4">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts>
 	</item>
 
 <!-- Upgrade -->
 	<item
-		name							="NGP Gryphon Boots 2"
+		name							="Gryphon Boots 2"
 		category						="boots"
-		price							="129"
+		price							="628"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1250,23 +917,23 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Gryphon Boots 2 _Stats</a>
+										<a>Gryphon Boots 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="4">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 	
 <!-- Upgrade -->
 	<item
-		name							="NGP Gryphon Boots 3"
+		name							="Gryphon Boots 3"
 		category						="boots"
-		price							="236"
+		price							="993"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1278,24 +945,23 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Gryphon Boots 3 _Stats</a>
+										<a>Gryphon Boots 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">String</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 
 <!-- Upgrade -->
 	<item
-		name							="NGP Gryphon Boots 4"
+		name							="Gryphon Boots 4"
 		category						="boots"
-		price							="236"
+		price							="1660"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1307,27 +973,26 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Gryphon Boots 4 _Stats</a>
+										<a>Gryphon Boots 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">String</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 
 <!-- BOOTS WITCHER BEAR -->
 	<item
-		name							="NGP Bear Boots 1"
+		name							="Bear Boots 1"
 		category						="boots"
-		price							="150"
+		price							="457"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1336,26 +1001,26 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Bear Boots 1 _Stats</a>
+										<a>Bear Boots 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
 										<parts count="1">Fur square</parts>
+										<parts count="1">Silver plate</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 
 <!-- Upgrade -->
 	<item
-		name							="NGP Bear Boots 2"
+		name							="Bear Boots 2"
 		category						="boots"
-		price							="150"
+		price							="1320"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -1364,23 +1029,23 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Bear Boots 2 _Stats</a>
+										<a>Bear Boots 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened leather</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
 										<parts count="1">Fur square</parts>
+										<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 	</item>
 	
 <!-- Upgrade -->
 	<item
-		name							="NGP Bear Boots 3"
+		name							="Bear Boots 3"
 		category						="boots"
-		price							="190"
+		price							="2586"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1392,23 +1057,23 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
-										<a>Base Bear Boots 3 _Stats</a>
+										<a>Bear Boots 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="2">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Monstrous plate</parts>
 		</recycling_parts>
 	</item>
 	
 <!-- Upgrade -->
 	<item
-		name							="NGP Bear Boots 4"
+		name							="Bear Boots 4"
 		category						="boots"
-		price							="190"
+		price							="4413"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -1420,15 +1085,346 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor,BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary, SetBonusPiece
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Bear Boots 4 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Monstrous plate</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Base Witcher gear -->
+<!-- BOOTS WITCHER LYNX -->
+	<item
+		name							="NGP Lynx Boots 1"
+		category						="boots"
+		price							="234"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__lynx_lvl1"
+		localisation_key_name			="item_name_lynx_boots_1"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Lynx Boots 1 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+		</recycling_parts>
+	</item>
+
+<!-- Upgrade -->
+	<item
+		name							="NGP Lynx Boots 2"
+		category						="boots"
+		price							="481"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__lynx_lvl1"
+		localisation_key_name			="item_name_lynx_boots_2"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/lynx_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Lynx Boots 2 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Upgrade -->
+	<item
+		name							="NGP Lynx Boots 3"
+		category						="boots"
+		price							="738"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__lynx_lvl2"
+		localisation_key_name			="item_name_lynx_boots_3"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Lynx Boots 3 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Upgrade -->
+	<item
+		name							="NGP Lynx Boots 4"
+		category						="boots"
+		price							="994"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__lynx_lvl2"
+		localisation_key_name			="item_name_lynx_boots_4"
+		localisation_key_description	="item_category_light_armor_description"
+		icon_path						="icons/inventory/armors/lynx_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Lynx Boots 4 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+
+<!-- BOOTS WITCHER GRYPHON -->
+	<item
+		name							="NGP Gryphon Boots 1"
+		category						="boots"
+		price							="291"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__gryphon_lvl1"
+		localisation_key_name			="item_name_gryphon_boots_1"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Gryphon Boots 1 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+		</recycling_parts>
+	</item>
+
+<!-- Upgrade -->
+	<item
+		name							="NGP Gryphon Boots 2"
+		category						="boots"
+		price							="628"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__gryphon_lvl1"
+		localisation_key_name			="item_name_gryphon_boots_2"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/gryphon_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Gryphon Boots 2 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Upgrade -->
+	<item
+		name							="NGP Gryphon Boots 3"
+		category						="boots"
+		price							="993"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__gryphon_lvl2"
+		localisation_key_name			="item_name_gryphon_boots_3"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Gryphon Boots 3 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+
+<!-- Upgrade -->
+	<item
+		name							="NGP Gryphon Boots 4"
+		category						="boots"
+		price							="1660"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__gryphon_lvl2"
+		localisation_key_name			="item_name_gryphon_boots_4"
+		localisation_key_description	="item_category_medium_armor_description"
+		icon_path						="icons/inventory/armors/gryphon_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Gryphon Boots 4 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+
+<!-- BOOTS WITCHER BEAR -->
+	<item
+		name							="NGP Bear Boots 1"
+		category						="boots"
+		price							="457"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__bear_lvl1"
+		localisation_key_name			="item_name_bear_boots_1"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Bear Boots 1 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Silver plate</parts>
+										<parts count="1">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+
+<!-- Upgrade -->
+	<item
+		name							="NGP Bear Boots 2"
+		category						="boots"
+		price							="1320"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="0"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__bear_lvl1"
+		localisation_key_name			="item_name_bear_boots_2"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/bear_boots_lvl1_64x128.png"
+	>
+		<tags>							Armor, HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Bear Boots 2 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Chitin scale</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Upgrade -->
+	<item
+		name							="NGP Bear Boots 3"
+		category						="boots"
+		price							="2586"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__bear_lvl2"
+		localisation_key_name			="item_name_bear_boots_3"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
+		</tags>
+		<base_abilities>				<a>Default armor _Stats</a>
+										<a>Base Bear Boots 3 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Meteorite silver plate</parts>
+										<parts count="1">Monstrous plate</parts>
+		</recycling_parts>
+	</item>
+	
+<!-- Upgrade -->
+	<item
+		name							="NGP Bear Boots 4"
+		category						="boots"
+		price							="4413"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="1"
+		stackable						="1"
+		grid_size						="2"
+		ability_mode					="OnMount"
+		equip_template					="s_01_mg__bear_lvl2"
+		localisation_key_name			="item_name_bear_boots_4"
+		localisation_key_description	="item_category_heavy_armor_description"
+		icon_path						="icons/inventory/armors/bear_boots_lvl2_64x128.png"
+	>
+		<tags>							Armor, HeavyArmor,BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Base Bear Boots 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="2">Leather squares</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Fur square</parts>
+										<parts count="1">Dwimeryte plate</parts>
+										<parts count="1">Monstrous plate</parts>
 		</recycling_parts>
 	</item>
 

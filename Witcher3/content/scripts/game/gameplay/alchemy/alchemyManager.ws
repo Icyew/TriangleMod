@@ -12,6 +12,11 @@ class W3AlchemyManager
 	private var recipes : array<SAlchemyRecipe>;									
 	private var isPlayerMounted  : bool;
 	private var isPlayerInCombat : bool;
+	//---=== modPreparations ===---
+	//Not actually used by Preparations (bHerbalist == false), but needed for Ghost Mode compatibility
+	//Used by Ghost Mode to allow using stash items for alchemy
+	private var bHerbalist : bool; default bHerbalist = false;
+	//---=== modPreparations ===---
 	
 	
 	public function Init(optional alchemyRecipes : array<name>)
@@ -29,6 +34,15 @@ class W3AlchemyManager
 		isPlayerInCombat = thePlayer.IsInCombat();
 	}
 	
+	
+	//---=== modPreparations ===---
+	//Not actually used by Preparations (bHerbalist == false), but needed for Ghost Mode compatibility
+	//Used by Ghost Mode to allow using stash items for alchemy
+	public function SetHerbalist( val: bool )
+	{
+		bHerbalist = val;
+	}
+	//---=== modPreparations ===---
 	
 	public function GetRecipe(recipeName : name, out ret : SAlchemyRecipe) : bool
 	{
@@ -194,10 +208,16 @@ class W3AlchemyManager
 			if (dm.ItemHasTag( itemName, 'MutagenIngredient' ))
 			{
 				cnt = thePlayer.inv.GetUnusedMutagensCount(itemName);
+				//---=== modPreparations ===---
+				cnt = GetWitcherPlayer().GetMutagenQuantityByNameForCrafting(itemName, bHerbalist); //modSigns
+				//---=== modPreparations ===---
 			}
 			else
 			{
 				cnt = thePlayer.inv.GetItemQuantityByName(itemName);
+				//---=== modPreparations ===---
+				cnt = GetWitcherPlayer().GetItemQuantityByNameForCrafting(itemName, bHerbalist); //modSigns
+				//---=== modPreparations ===---
 			}
 			
 			if(cnt < recipe.requiredIngredients[i].quantity)
@@ -249,6 +269,8 @@ class W3AlchemyManager
 		}
 		else
 		{
+			if( recipe.cookedItemType == EACIT_Edibles ) //modSigns: quantity for edibles
+				quantity = recipe.cookedItemQuantity;
 			ids = thePlayer.inv.AddAnItem(recipe.cookedItemName, quantity);
 			if(isSingletonItem)
 			{
@@ -267,7 +289,9 @@ class W3AlchemyManager
 			
 			if( dm.ItemHasTag( itemName, 'MutagenIngredient' ) )
 			{
-				thePlayer.inv.RemoveUnusedMutagensCount( itemName, recipe.requiredIngredients[i].quantity);
+				//---=== modPreparations ===---
+				GetWitcherPlayer().RemoveMutagenByNameForCrafting(itemName, recipe.requiredIngredients[i].quantity, bHerbalist); //modSigns
+				//---=== modPreparations ===---
 			}
 			else if( dm.IsItemAlchemyItem( itemName ))
 			{
@@ -294,7 +318,9 @@ class W3AlchemyManager
 			else
 			{
 				
-				thePlayer.inv.RemoveItemByName(itemName, recipe.requiredIngredients[i].quantity);
+				//---=== modPreparations ===---
+				GetWitcherPlayer().RemoveItemByNameForCrafting(itemName, recipe.requiredIngredients[i].quantity, bHerbalist); //modSigns
+				//---=== modPreparations ===---
 			}
 		}
 		

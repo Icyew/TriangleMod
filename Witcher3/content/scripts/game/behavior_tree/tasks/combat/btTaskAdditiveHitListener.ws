@@ -18,6 +18,7 @@ class BTTaskAdditiveHitListener extends IBehTreeTask
 	private var timeStamp 						: float;
 	private var hitsToRaiseGuard 				: float;
 	private var raiseGuardChance 				: float;
+	private var parryStaminaCost 				: float; //modSigns
 	private var hitsToCounter 					: float;
 	private var counterChance 					: float;
 	private var counterStaminaCost 				: float;
@@ -46,7 +47,7 @@ class BTTaskAdditiveHitListener extends IBehTreeTask
 		if ( hitCounter >= hitsToRaiseGuard && npc.CanGuard() )
 		{
 			
-			if( Roll( raiseGuardChance ) )
+			if( Roll( raiseGuardChance ) && npc.GetStat( BCS_Stamina ) >= parryStaminaCost ) //modSigns: parry stamina check
 			{		
 				if ( npc.RaiseGuard() )
 				{
@@ -78,6 +79,7 @@ class BTTaskAdditiveHitListener extends IBehTreeTask
 		hitsToRaiseGuard = (int)CalculateAttributeValue(actor.GetAttributeValue('hits_to_raise_guard'));
 		raiseGuardChance = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('raise_guard_chance')));
 		raiseGuardMultiplier = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('raise_guard_chance_mult_per_hit')));
+		parryStaminaCost = CalculateAttributeValue(actor.GetAttributeValue( 'parry_stamina_cost' )); //modSigns
 		
 		hitsToCounter = (int)CalculateAttributeValue(actor.GetAttributeValue('hits_to_roll_counter'));
 		counterChance = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('counter_chance')));

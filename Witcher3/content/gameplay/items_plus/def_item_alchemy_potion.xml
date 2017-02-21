@@ -6,11 +6,11 @@
 <abilities>
 
       <ability name="default_potion_stats">
-        <weight type="base" min="0" />
+        <weight type="base" min="0.1" />
       </ability>
 	  
       <ability name="ClearingPotion_stats">
-        <weight type="base" min="0" />
+        <weight type="base" min="0.1" />
 		<quality type="add" min="4" max="4"/>
       </ability>
 	  
@@ -73,7 +73,7 @@
       <!-- Heightened Senses-->
       <ability name="Cat_1">
         <toxicity min="15" max="15" type="add" />
-        <duration min="60" type="add" />
+        <duration min="240" type="add" />
         <ammo type="add" min="3" />
         <CatEffect_Level1 is_ability="true" />
 		<quality type="add" min="2" max="2"/>
@@ -81,7 +81,7 @@
       </ability>
       <ability name="Cat_2">
         <toxicity min="15" max="15" type="add" />
-        <duration min="120" type="add" />
+        <duration min="480" type="add" />
         <ammo type="add" min="4" />
         <CatEffect_Level2 is_ability="true" />
         <Cat_3 is_ability="true" />
@@ -90,7 +90,7 @@
       </ability>
       <ability name="Cat_3">
         <toxicity min="15" max="15" type="add" />
-        <duration min="180" type="add" />
+        <duration min="720" type="add" />
         <ammo type="add" min="5" />
         <CatEffect_Level3 is_ability="true" />
         <Cat_2 is_ability="true" />
@@ -100,7 +100,7 @@
 	  
       <!-- Vitality Pool Bonus-->
       <ability name="FullMoon_1">
-        <toxicity min="25" max="25" type="add" />
+        <toxicity min="35" max="35" type="add" />
         <duration min="60" max="60" type="add" />
         <ammo type="add" min="3" />
         <FullMoonEffect_Level1 is_ability="true" />
@@ -108,7 +108,7 @@
 		<level type="add" min="1" />
       </ability>
       <ability name="FullMoon_2">
-        <toxicity min="25" max="25" type="add" />
+        <toxicity min="35" max="35" type="add" />
         <duration min="90" max="90" type="add" />
         <ammo type="add" min="4" />
         <FullMoonEffect_Level2 is_ability="true" />
@@ -117,7 +117,7 @@
 		<quality type="add" min="3" max="3"/>
       </ability>
       <ability name="FullMoon_3">
-        <toxicity min="25" max="25" type="add" />
+        <toxicity min="35" max="35" type="add" />
         <duration min="180" max="180" type="add" />
         <ammo type="add" min="5" />
         <FullMoonEffect_Level3 is_ability="true" />

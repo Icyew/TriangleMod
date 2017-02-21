@@ -41,9 +41,9 @@ statemachine class W3AxiiEntity extends W3SignEntity
 		}
 		
 		ownerActor.SetBehaviorVariable( 'bStopSign', 0.f );
-		if ( inOwner.CanUseSkill(S_Magic_s17) && inOwner.GetSkillLevel(S_Magic_s17) > 1)
+		/*if ( inOwner.CanUseSkill(S_Magic_s17) && inOwner.GetSkillLevel(S_Magic_s17) > 1)
 			ownerActor.SetBehaviorVariable( 'bSignUpgrade', 1.f );
-		else
+		else*/ //modSigns: remove as it breaks Puppet
 			ownerActor.SetBehaviorVariable( 'bSignUpgrade', 0.f );
 		
 		return super.Init( inOwner, prevInstance, skipCastingAnimation );
@@ -171,6 +171,7 @@ statemachine class W3AxiiEntity extends W3SignEntity
 		if(actor && IsTargetValid(actor, false))
 		{
 			targets.PushBack(actor);
+			//theGame.witcherLog.AddMessage("Primary target"); //modSigns: debug
 			projCount -= 1;
 			
 			if(projCount == 0)
@@ -217,7 +218,10 @@ statemachine class W3AxiiEntity extends W3SignEntity
 			for(i=0; i<projCount; i+=1)
 			{
 				if(finalActors[i])
+				{
 					targets.PushBack(finalActors[i]);
+					//theGame.witcherLog.AddMessage("Secondary target"); //modSigns: debug
+				}
 				else
 					break;	
 			}
@@ -258,12 +262,13 @@ statemachine class W3AxiiEntity extends W3SignEntity
 		var buff : EEffectInteract;
 		var conf : W3ConfuseEffect;
 		var i : int;
-		var duration, durationAnimal : SAbilityAttributeValue;
+		var duration, durationAnimal, axiiPower, currentDuration : SAbilityAttributeValue; //modSigns: new vars
 		var casterActor : CActor;
 		var dur, durAnimals : float;
 		var params, staggerParams : SCustomEffectParams;
 		var npcTarget : CNewNPC;
 		var jobTreeType : EJobTreeType;
+		var sp, pts, prc, chance, durationBonus, durationPenalty : float; //modSigns: new vars
 		
 		casterActor = owner.GetActor();		
 		ProcessThrow();
@@ -286,89 +291,116 @@ statemachine class W3AxiiEntity extends W3SignEntity
 		
 		if (targets.Size() > 0 )
 		{
-			
 			duration = thePlayer.GetSkillAttributeValue(skillEnum, 'duration', false, true);
+			if(IsAlternateCast())
+				duration += thePlayer.GetSkillAttributeValue(S_Magic_s05, 'duration_bonus_after1', false, true) * (thePlayer.GetSkillLevel(S_Magic_s05) - 1);
 			durationAnimal = thePlayer.GetSkillAttributeValue(skillEnum, 'duration_animals', false, true);
 			
 			duration.valueMultiplicative = 1.0f;
 			durationAnimal.valueMultiplicative = 1.0f;
 			
-			
-			
-			
-			if(owner.CanUseSkill(S_Magic_s19))
+			if(owner.CanUseSkill(S_Magic_s19) && targets.Size() > 1) //modSigns: no penalty for single target
 			{
 				duration -= owner.GetSkillAttributeValue(S_Magic_s19, 'duration', false, true) * (3 - owner.GetSkillLevel(S_Magic_s19));
 				durationAnimal -= owner.GetSkillAttributeValue(S_Magic_s19, 'duration', false, true) * (3 - owner.GetSkillLevel(S_Magic_s19));
 			}
 			
+			//modSigns: duration bonus from Axii power
+			axiiPower = casterActor.GetTotalSignSpellPower(skillEnum);
+			durationBonus = PowerStatToPowerBonus(axiiPower.valueMultiplicative);
+			//modSigns: duration bonus from power skill
+			if(owner.CanUseSkill(S_Magic_s18))
+				durationBonus += CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s18, 'axii_duration_bonus', false, false)) * owner.GetSkillLevel(S_Magic_s18);
 			
-			dur = CalculateAttributeValue(duration);
-			durAnimals = CalculateAttributeValue(durationAnimal);
-			
+			//dur = CalculateAttributeValue(duration);
+			//durAnimals = CalculateAttributeValue(durationAnimal);
 			
 			params.creator = casterActor;
 			params.sourceName = "axii_" + skillEnum;			
 			params.customPowerStatValue = casterActor.GetTotalSignSpellPower(skillEnum);
 			params.isSignEffect = true;
 			
+			
 			for(i=0; i<targets.Size(); i+=1)
 			{
 				npcTarget = (CNewNPC)targets[i];
 				
-				
+				//modSigns: keep SAbilityAttributeValue
 				if( targets[i].IsAnimal() || npcTarget.IsHorse() )
 				{
-					params.duration = durAnimals;
+					currentDuration = durationAnimal;
 				}
 				else
 				{
-					params.duration = dur;
+					currentDuration = duration;
 				}
+				
+				//modSigns: target point resistance reduces effect duration (percent resistance reduction is calculated in baseEffect)
+				//apply chance is only affected by percent resistance
+				if( owner.GetActor() == thePlayer && GetAttitudeBetween(targets[i], owner.GetActor()) == AIA_Hostile )
+				{
+					targets[i].GetResistValue(CDS_WillRes, pts, prc);
+					durationPenalty = pts/100;
+					chance = ClampF(1 - prc, 0.0, 1.0);
+				}
+				else
+				{
+					durationPenalty = 0;
+					chance = 1;
+				}
+
+				currentDuration.valueBase *= MaxF(0, 1 + durationBonus - durationPenalty);
+				
+				params.duration = CalculateAttributeValue(currentDuration);
 				
 				jobTreeType = npcTarget.GetCurrentJTType();	
 					
-				if ( jobTreeType == EJTT_InfantInHand )
+				if( jobTreeType == EJTT_InfantInHand )
 				{
 					params.effectType = EET_AxiiGuardMe;
+					chance = 1;
 				}
-				
-				else if(IsAlternateCast() && owner.GetActor() == thePlayer && GetAttitudeBetween(targets[i], owner.GetActor()) == AIA_Friendly)
+				else if( IsAlternateCast() && owner.GetActor() == thePlayer && GetAttitudeBetween(targets[i], owner.GetActor()) == AIA_Friendly )
 				{
 					params.effectType = EET_Confusion;
+					chance = 1;
 				}
 				else
 				{
 					params.effectType = actionBuffs[0].effectType;
 				}
-			
 				
 				RemoveMagic17Effect(targets[i]);
-			
-				buff = targets[i].AddEffectCustom(params);
+				
+				//modSigns
+				if( params.duration > 0 && chance > 0 && RandF() < chance )
+				{
+					buff = targets[i].AddEffectCustom(params);
+				}
+				else
+					buff = EI_Deny;
+					
 				if( buff == EI_Pass || buff == EI_Override || buff == EI_Cumulate )
 				{
 					targets[i].OnAxiied( casterActor );
-									
-					if(owner.CanUseSkill(S_Magic_s18))
+					
+					/*if(owner.CanUseSkill(S_Magic_s18))
 					{
 						conf = (W3ConfuseEffect)(targets[i].GetBuff(params.effectType, "axii_" + skillEnum));
 						conf.SetDrainStaminaOnExit();
-					}
+					}*/ //modSigns: early design leftover code - Demotivate ability - removing
 				}
 				else
 				{
-					
 					if(owner.CanUseSkill(S_Magic_s17) && owner.GetSkillLevel(S_Magic_s17) == 3)
 					{
+						params.duration = 0.5; //modSigns
 						staggerParams = params;
 						staggerParams.effectType = EET_Stagger;
-						params.duration = 0;	
-						targets[i].AddEffectCustom(staggerParams);					
+						targets[i].AddEffectCustom(staggerParams);
 					}
 					else
 					{
-						
 						owner.GetActor().SetBehaviorVariable( 'axiiResisted', 1.f );
 					}
 				}
@@ -412,7 +444,7 @@ statemachine class W3AxiiEntity extends W3SignEntity
 			
 		RemoveMagic17Effect(orientationTarget);
 		orientationTarget = newTarget;
-		
+		//theGame.witcherLog.AddMessage("New target"); //modSigns: debug
 		AddMagic17Effect(orientationTarget);			
 	}
 	
@@ -427,7 +459,7 @@ statemachine class W3AxiiEntity extends W3SignEntity
 		buffParams.creator = this;
 		buffParams.sourceName = "axii_immobilize";
 		buffParams.duration = 10;
-		buffParams.effectValue.valueAdditive = 0.999f;
+		buffParams.effectValue.valueAdditive = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s17, 'axii_slowdown_prc', false, false)) * GetWitcherPlayer().GetSkillLevel(S_Magic_s17); //modSigns: new mechanic
 		buffParams.isSignEffect = true;
 		
 		target.AddEffectCustom(buffParams);
@@ -542,9 +574,9 @@ state AxiiChanneled in W3AxiiEntity extends Channeling
 	
 	entry function ChannelAxii()
 	{	
-		while( Update() )
+		while( Update(theTimer.timeDelta) ) //modSigns
 		{
-			Sleep( 0.0001f );
+			Sleep(theTimer.timeDelta); //modSigns
 		}
 	}
 }

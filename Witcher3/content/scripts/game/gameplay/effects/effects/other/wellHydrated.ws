@@ -25,32 +25,60 @@ class W3Effect_WellHydrated extends W3RegenEffect
 			iconPath = theGame.effectMgr.GetPathForEffectIconTypeName('icon_effect_Dumplings');
 		}
 	}
+
+	//modSigns: same as well fed
+	event OnPerk15Unequipped()
+	{
+		SetTimeLeft( initialDuration );
+		duration = initialDuration;
+	}
 	
+	//modSigns: same as well fed
 	protected function CalculateDuration(optional setInitialDuration : bool)
 	{
-		var val : SAbilityAttributeValue;
+		var min, max : SAbilityAttributeValue;
 		
 		super.CalculateDuration(setInitialDuration);
 		
-		if(isOnPlayer && thePlayer == GetWitcherPlayer() && GetWitcherPlayer().HasRunewordActive('Runeword 6 _Stats'))
-		{
-			val = target.GetAttributeValue('runeword6_duration_bonus');
-			duration *= 1 + val.valueMultiplicative;
+		if( isOnPlayer && GetWitcherPlayer() )
+		{	
+			
+			if( GetWitcherPlayer().CanUseSkill( S_Perk_15 ) )
+			{
+				min = GetWitcherPlayer().GetSkillAttributeValue( S_Perk_15, 'duration', false, false );
+				duration = min.valueAdditive;
+			}
+			if( GetWitcherPlayer().HasRunewordActive( 'Runeword 6 _Stats' ) )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Runeword 6 _Stats', 'runeword6_duration_bonus', min, max);
+				duration *= 1 + min.valueMultiplicative;
+			}
 		}
 	}
 	
+	//modSigns: same as well fed
 	protected function GetSelfInteraction( e : CBaseGameplayEffect) : EEffectInteract
 	{
-		var eff : W3Effect_WellHydrated;
+		var eff : W3Effect_WellFed;
+		var dm : CDefinitionsManagerAccessor;
+		var thisLevel, otherLevel : int;
+		var min, max : SAbilityAttributeValue;
 		
-		eff = (W3Effect_WellHydrated)e;
-		if(eff.level >= level)
+		dm = theGame.GetDefinitionsManager();
+		eff = (W3Effect_WellFed)e;
+		dm.GetAbilityAttributeValue(abilityName, 'level', min, max);
+		thisLevel = RoundMath(CalculateAttributeValue(GetAttributeRandomizedValue(min, max)));
+		dm.GetAbilityAttributeValue(eff.abilityName, 'level', min, max);
+		otherLevel = RoundMath(CalculateAttributeValue(GetAttributeRandomizedValue(min, max)));
+		
+		if(otherLevel >= thisLevel)
 			return EI_Cumulate;		
 		else
 			return EI_Deny;
 	}
 	
-	public function CacheSettings()
+	//modSigns: remove
+	/*public function CacheSettings()
 	{
 		var i : int;
 		var dm : CDefinitionsManagerAccessor;
@@ -75,5 +103,5 @@ class W3Effect_WellHydrated extends W3RegenEffect
 				break;
 			}
 		}
-	}
+	}*/
 }

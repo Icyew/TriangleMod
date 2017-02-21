@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
@@ -13,7 +15,7 @@
 		name							="mq6002_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q103_tamara_shrine_key"
 		localisation_key_description	="item_desc_sq102_barn_door_side_key"
 		icon_path						="icons/inventory/quests/q309_key_piece1.png"
@@ -22,14 +24,12 @@
 		</tags> 
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	<item
 		name							="mq6002_house_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q103_tamara_shrine_key"
 		localisation_key_description	="item_desc_sq102_barn_door_side_key"
 		icon_path						="icons/inventory/quests/q309_key_piece1.png"
@@ -38,14 +38,12 @@
 		</tags> 
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>	
 	<item
 		name							="mq6004_lab_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q103_tamara_shrine_key"
 		localisation_key_description	="item_desc_sq102_barn_door_side_key"
 		icon_path						="icons/inventory/quests/q309_key_piece1.png"
@@ -54,14 +52,12 @@
 		</tags> 
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 	<item
 		name							="q605_scholar_key"
 		category						="key"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		localisation_key_name			="item_name_q605_scholar_door_key"
 		localisation_key_description	="item_desc_q605_scholar_door_key"
 		icon_path						="icons/inventory/quests/q309_key_piece1.png"
@@ -70,8 +66,6 @@
 		</tags> 
 		<base_abilities>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Iron ore</parts>
-		</recycling_parts>
 	</item>
 </items>
 

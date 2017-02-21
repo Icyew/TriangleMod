@@ -111,8 +111,9 @@
       <!-- Strong Attack -->
       <ability name="sword_2">
         <tags>sword_2,attack_heavy</tags>
-		<armor_reduction type = "add" min="1000" max="1000"/>
-        <attack_power type="mult" min="0.333" />
+		<armor_reduction type = "add" min="200" max="200"/>
+		<heavy_attack_dmg_boost type="mult" min="0.25" /> <!-- modSigns -->
+        <!-- <attack_power type="mult" min="0.25" /> -->
       </ability>
 	  
 	  <!-- Battle Trance -->
@@ -127,21 +128,26 @@
         <tags>sword_s1,attack_light</tags>
         <stamina_cost_per_sec type="add" min="50" />
 		<focus_cost_per_sec_initial type="add" min="1" />
-		<cost_reduction type="mult" min="0.1" />
+		<!-- <cost_reduction type="mult" min="0.1" /> -->
         <stamina_delay type="add" min="2" />
+		<whirl_dmg_penalty type="mult" min="0.45" />
+		<whirl_penalty_reduction type="mult" min="0.05" /> <!-- per lvl > 1 -->
+		<whirl_dmg_reduction type="mult" min="0.1" /> <!-- per lvl -->
       </ability>
 	  
       <!-- Rend (ult) -->
+	  <!-- modSigns: stamina delay -->
       <ability name="sword_s2">
         <tags>sword_s2,attack_heavy</tags>
-		<armor_reduction min="1000" max="1000"/>
-		<critical_hit_chance type="add" min="0.1" />
-		<adrenaline_final_damage_bonus type="mult" min="0.334" />
-		<stamina_max_dmg_bonus type="mult" min="0.5" />
+		<!-- modSigns: should inherit armor reduction from strong attacks -->
+		<!-- <armor_reduction min="1000" max="1000"/> -->
+		<critical_hit_chance type="add" min="0.1" /> <!-- per skill level -->
+		<adrenaline_final_damage_bonus type="mult" min="0.05" /> <!-- per skill level -->
+		<stamina_max_dmg_bonus type="mult" min="0.05" /> <!-- per skill level -->
 		
 		<stamina_cost type="add" min="0" />
         <stamina_cost_per_sec type="add" min="50" />
-        <stamina_delay type="add" min="0.5" />
+        <stamina_delay type="add" min="2" />
       </ability>
 	  
       <!-- Overwhelm -->
@@ -157,10 +163,12 @@
       </ability>
 	  
       <!-- Crippling Strikes -->
+	  <!-- modSigns -->
       <ability name="sword_s5">
         <tags>sword_s5</tags>
-        <duration type="add" min="5" />
-        <dmg_per_sec type="add" min="25" />
+        <sword_s5_chance type="add" min="0.05" />
+        <sword_s5_duration type="add" min="8" />
+        <sword_s5_dmg_per_sec type="add" min="0.01" /> <!-- 1% per sec -->
       </ability>
 	  
       <!-- Sunder Armor -->
@@ -172,7 +180,8 @@
       <!-- Precision -->
       <ability name="sword_s7">
         <tags>sword_s7</tags>
-        <critical_hit_chance type="add" min="0.05" />
+		<critical_hit_chance type="add" min="0.05" />
+		<critical_hit_damage_bonus type="add" min="0.15" />
       </ability>
 	  
 	  <!-- Critical hits -->
@@ -185,7 +194,7 @@
 	  <!-- Fleet Footed -->
 	  <ability name="sword_s9"> 
         <tags>sword_s9</tags>
-		<damage_reduction type="add" min="0.20" />
+		<damage_reduction type="add" min="0.16" />
       </ability>
 	  
 	  <!-- Arrow Deflection-->
@@ -199,7 +208,8 @@
         <tags>sword_s11</tags>
         <attack_power type="mult" min="0.3" />
 		<critical_hit_chance type="add" min="1" />
-        <duration type="add" min="4" />
+        <s11_knockdown_chance type="add" min="0.2" />
+        <duration type="add" min="2" />
       </ability>
 	  
       <!-- Crippling Shot: ability added on affected monsters -->
@@ -236,9 +246,9 @@
 	  <!-- Undying -->
 	  <ability name="sword_s18">
         <tags>sword_s18</tags>
-		<healing_factor type="add" min="0.05" /> <!-- precentage of max health healed by FP -->
-		<healing_bonus type="add" min="0.25" />  <!-- healing bonus per ability level -->
-		<trigger_delay type="add" min="30" /> <!-- activation delay in seconds -->
+		<!-- <healing_factor type="add" min="0.05" /> --> <!-- precentage of max health healed by FP -->
+		<!-- <healing_bonus type="add" min="0.25" /> -->  <!-- healing bonus per ability level -->
+		<trigger_delay type="add" min="60" /> <!-- activation delay in seconds - modSigns: increased -->
       </ability>
 	  
       <!-- All Out -->
@@ -271,7 +281,7 @@
       <ability name="magic_1">
         <tags>magic_1</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="0.5" />
+        <stamina_delay type="base" min="1" />
         <stamina_delay type="mult" min="1" />
         <KnockdownTypeApplicator is_ability="true" />
       </ability>
@@ -280,20 +290,21 @@
       <ability name="magic_2">
         <tags>magic_2</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />		
-        <stamina_delay type="base" min="0.5" />
+        <stamina_delay type="base" min="1" />
         <stamina_delay type="mult" min="1" />
-        <FireDamage type="add" always_random="false" min="100" max="100" />
+        <FireDamage type="add" always_random="false" min="150" max="150" />
         <burn_threshold type="add" always_random="false" min="2.2" max="2.2" />
 		<BurningEffect is_ability="true" />
       </ability>
 	  
       <!-- Yrden -->
+	  <!-- modSigns: trap duration changed -->
       <ability name="magic_3">
         <tags>magic_3</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="0.5" />
+        <stamina_delay type="base" min="1" />
         <stamina_delay type="mult" min="1" />
-        <trap_duration type="base" min="10" />
+        <trap_duration type="base" min="5" />
         <trap_duration type="mult" min="1" />
 		<SlowdownEffect is_ability="true" />
 		<min_slowdown type="add" min="0.20" />
@@ -305,11 +316,12 @@
       <ability name="magic_4">
         <tags>magic_4</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="0.5" />
+        <stamina_delay type="base" min="1" />
         <stamina_delay type="mult" min="1" />
         <shield_duration type="base" min="30" />
         <shield_duration type="mult" min="1" />
-        <shield_health type="base" min="200" />
+		<!-- modSigns: shield hp buff -->
+        <shield_health type="base" min="400" />
         <shield_health type="mult" min="1" />
       </ability>
 	  
@@ -318,10 +330,9 @@
         <tags>magic_5</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
         <stamina_cost_per_sec type="add" always_random="false" min="0" max="0" />
-        <stamina_delay type="base" min="0.5" />
+        <stamina_delay type="base" min="1" />
         <stamina_delay type="mult" min="1" />
-        <!-- duration modified by other skills, no mult as spell power covers that -->
-        <duration type="base" min="5" />
+        <duration type="base" min="3" />
 		<duration_animals type="base" min="30" />
 		<ConfusionEffect is_ability="true" />
       </ability>
@@ -330,10 +341,10 @@
       <!-- Wave (ult) -->
       <ability name="magic_s1">
         <tags>magic_s1</tags>
-        <spell_power type="mult" always_random="false" min="-0.3" max="-0.3" />
-		<spell_power_penalty_reduction type="add" min="0.15" />
-        <stamina_cost type="add" always_random="false" min="60" max="60" />
-        <stamina_delay type="base" min="0.3" />
+        <spell_power type="mult" always_random="false" min="-0.4" max="-0.4" />
+		<spell_power_penalty_reduction type="add" min="0.2" />
+        <stamina_cost type="add" always_random="false" min="90" max="90" />
+        <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
         <KnockdownTypeApplicator is_ability="true" />
       </ability>
@@ -343,103 +354,112 @@
         <tags>magic_s2</tags>
         <stamina_cost_per_sec type="add" always_random="false" min="50.0" max="50.0" />
 		<stamina_cost_reduction_after_1 type="mult" min="0.25" />
-        <stamina_delay type="base" min="0.5" />
-        <stamina_delay type="mult" min="2" />
-        <FireDamage type="add" always_random="false" min="30" max="30" />
-		<channeling_damage type="add" min="60" max="70" />
+        <stamina_delay type="base" min="3" />
+        <stamina_delay type="mult" min="1" />
+        <FireDamage type="add" always_random="false" min="0" max="0" />
+		<channeling_damage type="add" min="35" max="35" />
+		<channeling_damage_after_1 type="add" min="20" max="20" />
         <BurningEffect_FireStream is_ability="true" />
       </ability>
 	  
       <!-- Shock (ult) -->
       <ability name="magic_s3">
         <tags>magic_s3</tags>
-        <stamina_cost_per_sec type="add" always_random="false" min="35" max="35" />
-        <stamina_delay type="base" min="0.3" />
+        <stamina_cost_per_sec type="add" always_random="false" min="55" max="55" />
+        <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
-        <charge_count type="base" min="5" />
+        <charge_count type="base" min="4" />
         <charge_count type="mult" min="1" />
-        <trap_duration type="base" min="18" />
+        <trap_duration type="base" min="10" />
         <trap_duration type="mult" min="1" />
-        <ShockDamage type="add" min="120" />
-		<damage_bonus_flat_after_1 type="add" min="5" />
+        <ShockDamage type="add" min="100" />
+		<damage_bonus_flat_after_1 type="add" min="25" />
 		<!-- range is set by using different trigger component in sign entity -->
       </ability>
 	  
       <!-- Channeling (ult) -->
       <ability name="magic_s4">
         <tags>magic_s4</tags>
-        <stamina_cost_per_sec type="add" always_random="false" min="15" max="15" />
+        <stamina_cost_per_sec type="add" always_random="false" min="20" max="20" />
 		<stamina_cost_reduction_after_1 type="mult" min="0.5" />
-		<shield_health_factor type="add" always_random="false" min="10" max="10" />
+		<shield_health_factor type="add" always_random="false" min="3" max="3" />
+		<shield_healing_factor type="add" always_random="false" min="0.25" max="0.25" />
+        <stamina_delay type="base" min="3" />
+        <stamina_delay type="mult" min="1" />
       </ability>
 	  
       <!-- Guard Me! (ult) -->
       <ability name="magic_s5">
         <tags>magic_s5</tags>
         <stamina_cost type="add" always_random="false" min="0" max="0" />
-        <stamina_cost_per_sec type="add" always_random="false" min="22.2" max="22.2" />
-        <!-- duration modified by other skills, no mult as spell power covers that -->
-        <duration type="base" min="3" />
-		<duration_animals type="base" min="18" />
+        <stamina_cost_per_sec type="add" always_random="false" min="30" max="30" />
+        <duration type="base" min="8" />
+		<duration_bonus_after1 type="base" min="4" />
+		<duration_animals type="base" min="20" />
 		<AxiiGuardMeEffect is_ability="true" />
-		
 		<!-- attack power bonus -->
 		<attack_power type="mult" min="0.2" />
+        <stamina_delay type="base" min="3" />
+        <stamina_delay type="mult" min="1" />
       </ability>
 	  
       <!-- Static Discharge -->
       <ability name="magic_s6">
         <tags>magic_s6, magic_1, magic_s1</tags>
-        <ForceDamage type="add" min="40" />
+        <ForceDamage type="add" min="70" />
       </ability>
 	  
       <!-- Igni Power -->
       <ability name="magic_s7">
         <tags>magic_s7,Igni</tags>
-        <spell_power type="mult" min="0.05" />
+		<fire_damage_bonus type="add" always_random="false" min="40" max="40" />
+		<channeling_damage_bonus type="add" always_random="false" min="15" max="15" />
       </ability>
 	  
       <!-- Melt Armor -->
+      <!-- modSigns -->
       <ability name="magic_s8">
         <tags>magic_s8</tags>
         <max_armor_reduction type="add" min="0.15" />
-        <armor type="mult" min="-0.006" />
+        <!-- <armor type="mult" min="-0.01" /> -->
+        <armor_reduction_bonus type="add" min="0.001" />
       </ability>
 	  
-	   <!-- Combustible -->
+	  <!-- Combustible -->
       <ability name="magic_s9">
         <tags>magic_s9</tags>
-        <chance_bonus type="add" min="0.20004" />
+        <chance_bonus type="add" min="0.05" />
       </ability>
 	  
       <!-- Glyph Sustenance -->
+	  <!-- modSigns: trap duration changed -->
       <ability name="magic_s10">
         <tags>magic_s10,Yrden</tags>
         <!-- +100% -->
         <charge_count type="add" min="2" />
-        <trap_duration type="add" min="5" />
+        <trap_duration type="mult" min="0.5" />
       </ability>
 	  
       <!-- Supercharge -->
+	  <!-- modSigns: multiplier instead of plain damage -->
       <ability name="magic_s11">
         <tags>magic_s11</tags>
-        <direct_damage_per_sec type="add" min="10" />
+        <direct_damage_per_sec type="mult" min="0.003" />
       </ability>
 	  
       <!-- aard passive spell power bonus -->
       <ability name="magic_s12">
         <tags>magic_s12,Aard</tags>
-        <spell_power min="0.05" type="mult" />
+        <heavy_knockdown_chance_bonus min="0.05" type="mult" /> <!-- modSigns -->
       </ability>
 	  
 	  <!-- quen impulse -->
+	  <!-- modSigns: damage increased and changed to direct -->
 	  <ability name="magic_s13">
         <tags>magic_s13</tags>
-        <PhysicalDamage type="add" min="3" max="12"/>
-		<SilverDamage type="add" min="3" max="12"/>
-		
+		<DirectDamage type="add" min="30" max="30"/>
 		<!-- chance multiplier for knockdown -->
-		<chance_multiplier type="add" min="0.15" />
+		<!-- <chance_multiplier type="add" min="0.15" /> -->
       </ability>	  
 	  
       <!-- Discharge -->
@@ -448,35 +468,35 @@
         <discharge_percent type="add" min="0.05" />
       </ability>
 	  
-      <!-- Auen Power -->
+      <!-- Quen Power -->
       <ability name="magic_s15">
         <tags>magic_s15,Quen</tags>
-        <!-- take a look at how it's used in scripts before modifying it -->
-        <spell_power type="mult" min="0.05" />
+        <shield_health_bonus type="add" min="40" />
       </ability>
 	  
       <!-- Yrden Power -->
       <ability name="magic_s16">
         <tags>magic_s16,Yrden</tags>
-        <spell_power type="mult" min="0.05" />
+        <turret_bonus_damage type="add" min="40" />
       </ability>
 	  
       <ability name="magic_s17">
         <tags>magic_s17,Axii</tags>
+        <axii_slowdown_prc type="add" min="0.3" /> <!-- modSigns: slowdown prc per lvl -->
 		<!-- if player has this skill on lvl 3 then if Axii buff duration (including target resistances) is less than this value then Stagger will be applied instead -->
         <duration_to_force_stagger type="add" min="0.9" />
       </ability>
 	  	  
-	   <!-- Axii Powe -->
+	   <!-- Axii Power -->
       <ability name="magic_s18">
         <tags>magic_s16,Axii</tags>
-        <spell_power type="mult" min="0.05" />
+        <axii_duration_bonus type="add" min="0.1" />
       </ability>
 	  
 	  <!-- Axii Dominate -->
       <ability name="magic_s19">
         <tags>magic_s19</tags>
-        <duration type="mult" min="0.15" />
+        <duration type="mult" min="0.25" />
       </ability>
 	  
 	  <!-- Aard Dispersion -->
@@ -546,23 +566,23 @@
       <!-- Fragmentation Casing -->
       <ability name="alchemy_s10">
         <tags>alchemy_s10</tags>
-        <PhysicalDamage type="add" min="30" />
-        <SilverDamage type="add" min="30" />
+        <PhysicalDamage type="add" min="50" />
+        <SilverDamage type="add" min="50" />
       </ability>
 	  
       <!-- Cluster Bomb -->
       <ability name="alchemy_s11">
         <tags>alchemy_s11</tags>
-        <PhysicalDamage type="add" min="120" />
-        <SilverDamage type="add" min="120" />
-        <FireDamage type="add" min="30" />
+        <PhysicalDamage type="add" min="150" />
+        <SilverDamage type="add" min="150" />
+        <FireDamage type="add" min="50" />
       </ability>
 	  
       <!-- Flexibility -->
       <ability name="alchemy_s12">
         <tags>alchemy_s12</tags>
         <PoisonEffect is_ability="true" />
-		<skill_chance type="add" min="0.03" />
+		<skill_chance type="add" min="0.05" />
 		<oil_level_chance type="add" min="0.1" />
       </ability>
 	  
@@ -587,8 +607,8 @@
       <!-- Frenzy -->
       <ability name="alchemy_s16">
         <tags>alchemy_s16</tags>
-        <slowdown_ratio type="add" min="0.12" />
-        <slowdown_duration type="add" min="0.3" />
+        <slowdown_ratio type="add" min="0.25" /> <!-- modSigns -->
+        <slowdown_duration type="add" min="0.5" /> <!-- modSigns -->
       </ability>
 	  
       <!-- Killing Spree -->
@@ -614,7 +634,7 @@
 			<perk_1_day_ability is_ability="true" />
 			<perk_1_night_ability is_ability="true" />
 			<vitalityRegen_tooltip type="add" min="10" />			
-			<staminaRegen_tooltip type="mult" min="0.01" />
+			<staminaRegen_tooltip type="mult" min="0.05" />
 		</ability>
 		<ability name="perk_1_day_ability">
 			<tags>perk_1, Day, GlobalPassiveBonus</tags>
@@ -622,12 +642,12 @@
 		</ability>		
 		<ability name="perk_1_night_ability">
 			<tags>perk_1, Night, GlobalPassiveBonus</tags>
-			<staminaRegen type="mult" min="0.01" />			
+			<staminaRegen type="mult" min="0.05" />			
 		</ability>
 		
 		<ability name="perk_2">
 			<tags>perk_2</tags>
-			<attack_power type="mult" min="0.25" />
+			<xbow_dmg_bonus type="mult" min="0.5" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_3">
 			<tags>perk_3</tags>
@@ -636,22 +656,29 @@
 		</ability>
 		<ability name="perk_4">
 			<tags>perk_4, GlobalPassiveBonus</tags>
-			<vitality type="base" min="500" />
+			<vitality type="base" min="750" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_5">
 			<tags>perk_5</tags>
-			<critical_hit_chance_fast_style type="add" min="0.25" />
-			<attack_power_fast_style type="mult" min="0.05" />
+			<!-- modSigns: this is actually critical hit damage bonus per armor piece -->
+			<!-- <critical_hit_chance_fast_style type="add" min="0.05" /> -->
+			<!-- <attack_power_fast_style type="mult" min="0.05" /> -->
+			<!-- modSigns: more and better crits -->
+			<critical_hit_chance type="add" min="0.025" />
+			<critical_hit_damage_bonus type="add" min="0.075" />
 		</ability>
 		<ability name="perk_6">
 			<tags>perk_6</tags>
 			<spell_power type="mult" min="0.05" />
-			<staminaRegen type="mult" min="0.05" />
+			<staminaRegen type="mult" min="0.0125" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_7">
 			<tags>perk_7</tags>
-			<vitality type="mult" min="0.05" />
-			<attack_power_heavy_style type="mult" min="0.05" />
+			<!-- <vitality type="mult" min="0.05" /> -->
+			<!-- <attack_power_heavy_style type="mult" min="0.05" /> -->
+			<!-- modSigns: more health and adrenaline gain -->
+			<vitality type="mult" min="0.075" />
+			<focus_gain type="add" min="0.025" />
 		</ability>
 		<ability name="perk_10">
 			<tags>perk_10, GlobalPassiveBonus</tags>
@@ -857,8 +884,8 @@
 		<!-- OILS -->
 		<!-- Flexibility -->
 		<skill skill_name="alchemy_s12" requiredPointsSpent="0"  maxLevel="5" priority="36" guiPositionID="11" localisationName="skill_name_alchemy_s12" localisationDescription="skill_desc_alchemy_s12" localisationDescriptionLevel2="skill_desc_alchemy_s12" localisationDescriptionLevel3="skill_desc_alchemy_s12" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s21.png" linkVertical="green" linkLeft="green" linkRight="green" />
-		<!-- Protective Coating -->
-        <skill skill_name="alchemy_s5"  requiredPointsSpent="8" maxLevel="5" priority="36" guiPositionID="8"  localisationName="skill_name_alchemy_s5" localisationDescription="skill_desc_alchemy_s5"  localisationDescriptionLevel2="skill_desc_alchemy_s5"  localisationDescriptionLevel3="skill_desc_alchemy_s5"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s5.png" linkVertical="green" linkLeft="green" linkRight="green" />
+		<!-- Protective Coating: modSigns - maxLevel reduced to 3 -->
+        <skill skill_name="alchemy_s5"  requiredPointsSpent="8" maxLevel="3" priority="36" guiPositionID="8"  localisationName="skill_name_alchemy_s5" localisationDescription="skill_desc_alchemy_s5"  localisationDescriptionLevel2="skill_desc_alchemy_s5"  localisationDescriptionLevel3="skill_desc_alchemy_s5"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s5.png" linkVertical="green" linkLeft="green" linkRight="green" />
 		<!-- Fixative Formula -->
         <skill skill_name="alchemy_s6"  requiredPointsSpent="20" maxLevel="3" priority="36" guiPositionID="20" localisationName="skill_name_alchemy_s6"  localisationDescriptionNotAcquired="skill_desc_prev_alchemy_s6"  localisationDescription="skill_desc_alchemy_s6"  localisationDescriptionLevel2="skill_desc_alchemy_s6_2"  localisationDescriptionLevel3="skill_desc_alchemy_s6_3"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s6.png" linkVertical="green" linkLeft="green" linkRight="green" />
 		<!-- Application -->
@@ -900,7 +927,7 @@
 		
 		<!-- Steady Shot -->
         <skill skill_name="perk_2" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="6" localisationName="skill_name_perk_2" localisationDescription="skill_desc_perk_2" cost="1" pathType_name="Perks" subpathType_name="Perks_col1" iconPath="icons\Perks\s_perk_18.png" linkVertical="" linkLeft="" linkRight="" />
-		<!-- Hot Hacker 
+		<!-- Hot Hacker
         <skill skill_name="perk_3" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_3" localisationDescription="skill_desc_perk_3" cost="1" pathType_name="Perks" subpathType_name="Perks_col3" iconPath="icons\Perks\s_perk_3.png" linkVertical="" linkLeft="" linkRight="" />
 		-->
 		<!-- To Your Health -->

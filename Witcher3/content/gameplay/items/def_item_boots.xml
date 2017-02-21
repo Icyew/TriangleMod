@@ -6,244 +6,238 @@
 <abilities>
 
 <!-- BOOTS STARTING -->
-	<ability name="Starting Boots _Stats">
-		<weight							type="base"	min="1.4"				/>
+	<ability name="Starting Boots _Stats"> <!-- medium boots -->
+		<weight							type="base"	min="3.0"				/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<armor							type="base"	min="1"					/>
-		<slashing_resistance_perc		type="base"	min="0.01"				/>
-		<piercing_resistance_perc		type="base"	min="0.0"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.02"				/>
+		<armor							type="base"	min="4"					/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
 	</ability>
 
 <!-- BOOTS LIGHT -->
-	<ability name="Boots 01 _Stats">
-		<weight							type="base"	min="1.0"				/>
+	<ability name="Boots 01 _Stats"> <!-- Hunting Boots - low-quality light boots -->
+		<weight							type="base"	min="2.0"				/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<slashing_resistance_perc		type="base"	min="0.01"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.0"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.01"				/>
+		<elemental_resistance_perc		type="base"	min="0.01"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
 	</ability>
 
-	<ability name="Boots 01 q2 _Stats">
-		<weight							type="base"	min="1.78"				/>
+	<ability name="Boots 01 q2 _Stats"> <!-- Hunting Boots - medium-quality light boots -->
+		<weight							type="base"	min="2.5"				/>
 		<quality						type="add"	min="2"		max="2"		/>
 		<slashing_resistance_perc		type="base"	min="0.02"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.01"				/>
+		<elemental_resistance_perc		type="base"	min="0.01"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
 	</ability>
 
-	<ability name="Boots 02 _Stats">
-		<weight							type="base"	min="1.28"				/>
+	<ability name="Boots 03 _Stats"> <!-- Tracker's Boots - low to medium quality light boots -->
+		<weight							type="base"	min="2.25"				/>
 		<quality						type="add"	min="1"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.01"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.01"				/>
+		<elemental_resistance_perc		type="base"	min="0.01"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+	</ability>
+
+	<ability name="Boots 05 _Stats"> <!-- Trapper's Boots - random quality light boots -->
+		<weight							type="base"	min="2.5"					/>
+		<quality						type="add"	min="1"		max="3"		/>
 		<slashing_resistance_perc		type="base"	min="0.02"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.02"				/>
+		<elemental_resistance_perc		type="base"	min="0.01"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
 	</ability>
 
-<!-- Medium -->
-	<ability name="Boots 03 _Stats">
-		<weight							type="base"	min="1.52"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-	</ability>
-
-	<ability name="Boots 04 _Stats">
-		<weight							type="base"	min="1.64"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.03"				/>
-	</ability>
-
-	<ability name="Boots 012 _Stats">
-		<weight							type="base"	min="1.0"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
-		<focus_gain 					type="add" min="0.05" max="0.06" />
-	</ability>
-
-	<ability name="Boots 022 _Stats">
-		<weight							type="base"	min="1.28"				/>
+<!-- LIGHT RELIC -->	
+	<ability name="Boots 012 _Stats"> <!-- Hunting Boots - relic light boots: +2 to resists, focus gain bonus -->
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="4"		max="4"		/>
 		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.03"				/>
-		<spell_power_quen 				type="mult" min="0.01" max="0.2"/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+		<focus_gain 					type="add" min="0.05"				/>
 	</ability>
 
-<!-- Medium -->
-	<ability name="Boots 032 _Stats">
-		<weight							type="base"	min="1.52"				/>
+	<ability name="Boots 032 _Stats"> <!-- Tracker's Boots - relic light boots: +2 to resists, +20% burning resistance -->
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<vitality type="base" 			min="100" max="350"/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+		<burning_resistance_perc		type="base" min="0.20"				/>
 	</ability>
 	
-	
-<!-- Boots 02 alternate -->
-	<ability name="Boots 05 _Stats">
-		<weight							type="base"	min="2.02"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
+	<ability name="Boots 04 _Stats"> <!-- Assassin's Boots - relic light boots: +2 to resists -->
+		<weight							type="base"	min="3"					/>
+		<quality						type="add"	min="4"		max="4"		/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+		<bleeding_resistance_perc		type="base"	min="0.05"	max="0.1"	/>
+	</ability>
+
+	<ability name="Boots 07 _Stats"> <!-- Mountain Folk Boots - relic light boots: +2 to resists, +20-25% poison resistance -->
+		<weight							type="base"	min="3"					/>
+		<quality						type="add"	min="4"		max="4"		/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.04"				/>
+		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01"				/>
+		<poison_resistance_perc			type="base"	min="0.20"	max="0.25"	/>
+	</ability>
+
+<!-- BOOTS MEDIUM -->
+	<ability name="Boots 02 _Stats"> <!-- Cavalry Boots - low quality medium boots -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
 	</ability>
 
-<!-- Boots 03 alternate - Medium -->
-	<ability name="Boots 06 _Stats">
-		<weight							type="base"	min="2.82"				/>
+	<ability name="Boots 06 _Stats"> <!-- Swordsman's Boots - medium quality medium boots -->
+		<weight							type="base"	min="4.5"				/>
+		<quality						type="add"	min="2"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+	</ability>
+
+	<ability name="Heavy boots 03 _Stats"> <!-- Reaver's Boots - random quality medium boots -->
+		<tags></tags>		
+		<weight							type="base"	min="4.5"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<slashing_resistance_perc		type="base"	min="0.04"				/>
 		<piercing_resistance_perc		type="base"	min="0.02"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
 	</ability>
 
-<!-- Relic -->
-	<ability name="Boots 07 _Stats">
-		<weight							type="base"	min="3.02"				/>
+<!-- MEDIUM RELIC -->
+	<ability name="Boots 022 _Stats"> <!-- Cavalry Boots - relic medium boots: +2 to resists, +20% bleeding resistance -->
+		<weight							type="base"	min="5"					/>
 		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<poison_resistance_perc			type="base"	min="0.25"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<bleeding_resistance_perc 		type="base" min="0.20"				/>
+	</ability>
+
+	<ability name="Heavy boots 07 _Stats" > <!-- Condotierre's Boots - relic medium boots: +2 to resists, +20-30 armor reduction -->
+		<weight	 						type="base" min="5"					/>
+		<quality 						type="add"	min="4"		max="4"		/>
+		<slashing_resistance_perc		type="base"	min="0.06"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc		type="base"	min="0.06"				/>
+		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<armor_reduction 				type="base"	min="20"	max="30"	/>
 	</ability>
 
 <!-- BOOTS HEAVY -->
-	<ability name="Heavy boots 01 _Stats">
-		<weight							type="base"	min="2.36"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.03"				/>
+	<ability name="Heavy boots 01 _Stats"> <!-- Axeman's Boots - low quality heavy boots -->
+		<weight							type="base"	min="10"				/>
+		<quality						type="add"	min="1"		max="1"		/>
+		<slashing_resistance_perc		type="base"	min="0.10"				/>
+		<piercing_resistance_perc		type="base"	min="0.10"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.10"				/>
+		<rending_resistance_perc		type="base"	min="0.10"				/>
+		<elemental_resistance_perc		type="base"	min="0.10"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.1"				/>
 	</ability>
 
-	<ability name="Heavy boots 02 _Stats">
-		<weight							type="base"	min="3.22"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+	<ability name="Heavy boots 02 _Stats"> <!-- Guardsman's Boots - medium quality heavy boots -->
+		<weight							type="base"	min="11"				/>
+		<quality						type="add"	min="2"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.11"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.11"				/>
+		<rending_resistance_perc		type="base"	min="0.11"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.1"				/>
 	</ability>
 
-<!-- Medium -->
-	<ability name="Heavy boots 03 _Stats">
-		<tags></tags>		
-		<weight							type="base"	min="2.32"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
+	<ability name="Heavy boots 04 _Stats"> <!-- Executioner's Boots - random quality heavy boots -->
+		<weight							type="base"	min="10.5"				/>
+		<quality						type="add"	min="1"		max="2"		/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.10"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.11"				/>
+		<rending_resistance_perc		type="base"	min="0.10"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.1"				/>
 	</ability>
 
-	<ability name="Heavy boots 04 _Stats">
-		<weight							type="base"	min="3.37"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+	<ability name="Heavy boots 05 _Stats"> <!-- Campaigner's Boots - random quality heavy boots -->
+		<weight							type="base"	min="11.5"				/>
+		<quality						type="add"	min="2"		max="3"		/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.12"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.12"				/>
+		<rending_resistance_perc		type="base"	min="0.12"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.1"				/>
 	</ability>
 
-<!-- Heavy boots 01 alternate -->
-	<ability name="Heavy boots 05 _Stats">
-		<weight							type="base"	min="2.92"				/>
+	<ability name="Heavy boots 06 _Stats"> <!-- Captain's boots - random quality heavy boots -->
+		<weight							type="base"	min="11"				/>
 		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.03"				/>
+		<slashing_resistance_perc		type="base"	min="0.11"				/>
+		<piercing_resistance_perc		type="base"	min="0.11"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.11"				/>
+		<rending_resistance_perc		type="base"	min="0.11"				/>
+		<elemental_resistance_perc		type="base"	min="0.11"				/>
+		<staminaRegen_armor_mod			type="mult" min="-0.1"				/>
 	</ability>
 
-<!-- Heavy Boots 02 alternate -->
-	<ability name="Heavy boots 06 _Stats">
-		<weight							type="base"	min="3.72"				/>
-		<quality						type="add"	min="1"		max="3"		/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.03"				/>
-	</ability>
-
-<!-- Medium Relic -->
-	<ability name="Heavy boots 07 _Stats" >
-		<weight	 						type="base" min="5.5"				/>
+<!-- HEAVY RELIC -->
+	<ability name="Heavy boots 08 _Stats"> <!-- Alder Folk Boots - relic heavy boots: +1 to resists, +150-200 to vitality, 50% less stamina penalty -->
+		<weight	 						type="base"	min="12"				/>
 		<quality 						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.0"				/>
-		<elemental_resistance_perc		type="base"	min="0.0"				/>
-		<armor_reduction 				min="50" max="60"/>
-	</ability>
-
-<!-- Relic -->
-	<ability name="Heavy boots 08 _Stats">
-		<weight	 						type="base"	min="6.77"				/>
-		<quality 						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<staminaRegen_armor_mod  		type="mult"	min="-0.03"				/>
-		<spell_power_igni type="mult" min="0.1" max="0.2"/>
+		<slashing_resistance_perc		type="base"	min="0.13"				/>
+		<piercing_resistance_perc		type="base"	min="0.13"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.13"				/>
+		<rending_resistance_perc		type="base"	min="0.13"				/>
+		<elemental_resistance_perc		type="base"	min="0.13"				/>
+		<staminaRegen_armor_mod  		type="mult"	min="-0.05"				/>
+		<vitality 						type="base" min="150" max="200"		/>
 	</ability>
 
 <!-- ######################## Replacers armor stats ######################## -->
 
-	<ability name="Wild Hunt boots 01 _Stats">
+	<ability name="Wild Hunt boots 01 _Stats"> <!-- vanilla -->
 		<weight							type="base"	min="1.65"				/>
 		<quality						type="add"	min="1"		max="3"		/>
 		<burning_resistance_perc		type="base"	min="0.03"	max="0.05"	/>
@@ -252,13 +246,13 @@
 		<physical_resistance			type="base"	min="20"				/>
 	</ability>
 
-	<ability name="Casual shoes _Stats">
+	<ability name="Casual shoes _Stats"> <!-- vanilla -->
 		<weight							type="base"	min="0.76"				/>
 		<quality						type="add"	min="1"		max="1"		/>
 		<armor							type="base"	min="1"					/>
 	</ability>
 
-	<ability name="Radovid boots 01 _Stats">
+	<ability name="Radovid boots 01 _Stats"> <!-- vanilla -->
 		<weight							type="base"	min="0.6"				/>
 		<quality						type="add"	min="2"		max="2"		/>
 		<physical_resistance			type="base"	min="10"				/>
@@ -274,11 +268,11 @@
 <!-- ######################## ITEM DEFINITONS ######################## -->
 <items> 
 
-<!-- Starting boots-->
+<!-- Starting boots--> <!-- price -->
 	<item
 		name							="Starting Boots"
 		category						="boots"
-		price							="28"
+		price							="25"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -295,17 +289,15 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Starting Boots _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="1">Iron ore</parts>
-										<parts count="1">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
-<!-- BOOTS LIGHT -->
+<!-- BOOTS LIGHT --> <!-- low-quality light boots -->
 	<item
 		name							="Boots 01"
 		category						="boots"
-		price							="64"
+		price							="25"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -322,46 +314,40 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
-
+	<!-- medium-quality light boots -->
 	<item
 		name							="Boots 01 q2"
 		category						="boots"
-		price							="82"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_02_mg__common_light_lvl1"
 		localisation_key_name			="item_name_boots_01"
 		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl1_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, LightArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 01 q2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="2">String</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 		
-<!-- Boots 2-->
+<!-- Boots 2--> <!-- low quality medium boots -->
 	<item
 		name							="Boots 02"
 		category						="boots"
-		price							="56"
+		price							="46"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -370,54 +356,51 @@
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl2"
 		localisation_key_name			="item_name_boots_02"
-		localisation_key_description	="item_category_light_armor_description"
+		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl2_64x128.png"
 	>
-		<tags>							Autogen, Armor, LightArmor, mod_armor
+		<tags>							Autogen, Armor, MediumArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 02 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Thread</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 		
-<!-- Boots 3-->
+<!-- Boots 3--> <!-- low to medium quality light boots -->
 	<item
 		name							="Boots 03"
 		category						="boots"
-		price							="68"
+		price							="38"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl3"
 		localisation_key_name			="item_name_boots_03"
-		localisation_key_description	="item_category_medium_armor_description"
+		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl3_64x128.png"
 	>
-		<tags>							Autogen, Armor, MediumArmor, mod_armor
+		<tags>							Autogen, Armor, LightArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 03 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
-	
+	<!-- relic light boots: +2 to resists, focus gain bonus -->
 	<item
 		name							="Boots 012"
 		category						="boots"
-		price							="64"
+		price							="170"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -426,50 +409,48 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
 	>
-		<tags>							Autogen, Armor, LightArmor, mod_armor
+		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 012 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 	
-<!-- Boots 22-->
+<!-- Boots 22--> <!-- relic medium boots: +2 to resists, +20% bleeding resistance -->
 	<item
 		name							="Boots 022"
 		category						="boots"
-		price							="56"
+		price							="286"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl2"
 		localisation_key_name			="item_name_boots_02"
-		localisation_key_description	="item_category_light_armor_description"
+		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl2_64x128.png"
 	>
-		<tags>							Autogen, Armor, LightArmor, mod_armor
+		<tags>							Autogen, Armor, MediumArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 022 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="2">Thread</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
 		
-<!-- Boots 32-->
+<!-- Boots 32--> <!-- relic light boots: +2 to resists, +20% burning resistance -->
 	<item
 		name							="Boots 032"
 		category						="boots"
-		price							="68"
+		price							="175"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -478,26 +459,25 @@
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_light_lvl3"
 		localisation_key_name			="item_name_boots_03"
-		localisation_key_description	="item_category_medium_armor_description"
+		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl3_64x128.png"
 	>
-		<tags>							Autogen, Armor, MediumArmor, mod_armor
+		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 032 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 	
 		
-<!-- Boots 4-->
+<!-- Boots 4--> <!-- relic light boots: +2 to resists -->
 	<item
 		name							="Boots 04"
 		category						="boots"
-		price							="80"
+		price							="163"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -509,23 +489,21 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_boots_lvl4_64x128.png"
 	>
-		<tags>							Autogen, Armor, LightArmor, mod_armor
+		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 04 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">String</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Boots 5-->
+<!-- Boots 5--> <!-- random quality light boots -->
 	<item
 		name							="Boots 05"
 		category						="boots"
-		price							="89"
+		price							="105"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -535,53 +513,49 @@
 		equip_template					="s_02_mg__common_light_lvl2"
 		localisation_key_name			="item_name_boots_05"
 		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl2_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, LightArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 05 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
 										<parts count="1">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Dye</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Boots 6-->
+<!-- Boots 6--> <!-- medium quality medium boots -->
 	<item
 		name							="Boots 06"
 		category						="boots"
-		price							="102"
+		price							="95"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_02_mg__common_light_lvl3"
 		localisation_key_name			="item_name_boots_06"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl3_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, MediumArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 06 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Boots 7-->
+<!-- Boots 7--> <!-- relic light boots: +2 to resists, +20% poison resistance -->
 	<item
 		name							="Boots 07"
 		category						="boots"
-		price							="122"
+		price							="175"
 		initial_durability				="200"
 		max_durability					="200"
 		enhancement_slots				="1"
@@ -591,26 +565,23 @@
 		equip_template					="s_02_mg__common_light_lvl4"
 		localisation_key_name			="item_name_boots_07"
 		localisation_key_description	="item_category_light_armor_description"
-		icon_path						="icons/inventory/armors/common_light_boots_lvl1_64x218.png"
+		icon_path						="icons/inventory/armors/common_light_boots_lvl4_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Boots 07 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Thread</parts>
-										<parts count="2">String</parts>
-										<parts count="1">Oil</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
-<!-- BOOTS HEAVY -->
+<!-- BOOTS HEAVY --> <!-- low quality heavy boots -->
 	<item
 		name							="Heavy boots 01"
 		category						="boots"
-		price							="104"
+		price							="170"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -627,17 +598,17 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 01 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="4">Thread</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Heavy Boots 2-->
+<!-- Heavy Boots 2--> <!-- medium quality heavy boots -->
 	<item
 		name							="Heavy boots 02"
 		category						="boots"
-		price							="80"
+		price							="262"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -647,25 +618,24 @@
 		equip_template					="s_01_mg__common_heavy_lvl2"
 		localisation_key_name			="item_name_heavy_boots_02"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl2_64x128.png"
 	>
 		<tags>							Autogen, Armor, HeavyArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 02 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="3">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="2">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Heavy Boots 3-->
+<!-- Heavy Boots 3--> <!-- random quality medium boots -->
 	<item
 		name							="Heavy boots 03"
 		category						="boots"
-		price							="100"
+		price							="160"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -675,44 +645,41 @@
 		equip_template					="s_01_mg__common_heavy_lvl3"
 		localisation_key_name			="item_name_heavy_boots_03"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl3_64x128.png"
 	>
 		<tags>							Autogen, Armor, MediumArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 03 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="3">Fur square</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Heavy Boots 4-->
+<!-- Heavy Boots 4--> <!-- random quality heavy boots -->
 	<item
 		name							="Heavy boots 04"
 		category						="boots"
-		price							="115"
+		price							="220"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="s_01_mg__common_heavy_lvl4"
 		localisation_key_name			="item_name_heavy_boots_04"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl4_64x128.png"
 	>
 		<tags>							Autogen, Armor, HeavyArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 04 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="3">Dark iron ore</parts>
-										<parts count="1">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="s_01a_mg__common_heavy_lvl4">
 											<item>Gryphon Pants 1</item><!-- this item uses slim version -->
@@ -722,11 +689,11 @@
 										</variant>
 		</variants>
 	</item>
-
+	<!-- random quality heavy boots -->
 	<item
 		name							="Heavy boots 05"
 		category						="boots"
-		price							="124"
+		price							="360"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -736,23 +703,23 @@
 		equip_template					="s_02_mg__common_heavy_lvl1"
 		localisation_key_name			="item_name_heavy_boots_05"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, HeavyArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 05 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
-
+	<!-- random quality heavy boots -->
 	<item
 		name							="Heavy boots 06"
 		category						="boots"
-		price							="156"
+		price							="360"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -762,23 +729,22 @@
 		equip_template					="s_02_mg__common_heavy_lvl2"
 		localisation_key_name			="item_name_heavy_boots_06"
 		localisation_key_description	="item_category_heavy_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl2_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, HeavyArmor, mod_armor
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 06 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather</parts>
-										<parts count="2">Leather squares</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
-
+	<!-- relic medium boots: +2 to resists, +30 armor reduction -->
 	<item
 		name							="Heavy boots 07"
 		category						="boots"
-		price							="158"
+		price							="286"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="2"
@@ -788,28 +754,26 @@
 		equip_template					="s_02_mg__common_heavy_lvl3"
 		localisation_key_name			="item_name_heavy_boots_07"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_boots_lvl1_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_boots_lvl3_02_64x128.png"
 	>
 		<tags>							Autogen, Armor, MediumArmor, mod_armor, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 07 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Hardened leather</parts>
-										<parts count="3">Fur square</parts>
-										<parts count="5">Thread</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="2">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
-
+	<!-- relic heavy boots: +1 to resists, +200 to vitality, 50% less stamina penalty -->
 	<item
 		name							="Heavy boots 08"
 		category						="boots"
-		price							="194"
+		price							="535"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -823,18 +787,17 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy boots 08 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="3">Thread</parts>
-										<parts count="3">Dark steel ingot</parts>
-										<parts count="1">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 	</item>
 
 <!-- ######################## Non-combat casual ######################## -->
+	<!-- price = 30 -->
 	<item
 		name							="Nilfgaardian casual shoes"
 		category						="boots"
-		price							="40"
+		price							="30"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -846,20 +809,19 @@
 		localisation_key_description	="item_desc_boots"
 		icon_path						="icons/inventory/armors/nilfgaardian_casual_shoes_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_origin_nilfgaard
+		<tags>							Armor, LightArmor, mod_armor, mod_origin_nilfgaard, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Casual shoes _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="1">Linen</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
 		</recycling_parts>
 	</item>
-
+	<!-- price = 30 -->
 	<item
 		name							="Skellige casual shoes"
 		category						="boots"
-		price							="72"
+		price							="30"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -871,18 +833,16 @@
 		localisation_key_description	="item_desc_boots"
 		icon_path						="icons/inventory/armors/skellige_casual_shoes_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_origin_skellige
+		<tags>							Armor, LightArmor, mod_armor, mod_origin_skellige, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Casual shoes _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Linen</parts>
-										<parts count="3">Fur square</parts>
-										<parts count="1">String</parts>
+		<recycling_parts>				<parts count="1">Fur square</parts>
 		</recycling_parts>
 	</item>
 
-<!-- Heavy Boots 4-->
+<!-- Heavy Boots 4--> <!-- vanilla -->
 	<item
 		name							="Radovid boots 01"
 		category						="boots"

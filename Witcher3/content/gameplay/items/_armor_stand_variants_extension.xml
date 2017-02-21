@@ -115,6 +115,17 @@
 				</variants>
 			</item_extension>
 
+			<item_extension name="q108 Light armor 09_crafted"> <!-- modSigns -->
+				<variants>
+					<variant equip_template="t_03_mg__common_light_lvl2_armor_stand">
+						<item>_armor_stand</item>
+					</variant>
+					<variant equip_template="t_03a_mg__common_light_lvl2_armor_stand" category="gloves" all="true">
+						<item>_armor_stand</item>
+					</variant> 
+				</variants>
+			</item_extension>
+
 			<item_extension name="Medium armor 01">
 				<variants>
 					<variant equip_template="t_01_mg__common_medium_lvl1_armor_stand">
@@ -194,10 +205,10 @@
 
 			<item_extension name="q108 Medium armor 10">
 				<variants>
-					<variant equip_template="t_02_mg__common_medium_lvl4_armor_stand">
+					<variant equip_template="t_01_mg__common_heavy_lvl3_armor_stand">
 						<item>_armor_stand</item>
 					</variant>
-					<variant equip_template="t_02a_mg__common_medium_lvl4_armor_stand" category="gloves" all="true">
+					<variant equip_template="t_01a_mg__common_heavy_lvl3_armor_stand" category="gloves" all="true">
 						<item>_armor_stand</item>
 					</variant> 
 				</variants>
@@ -434,6 +445,17 @@
 				</variants>
 			</item_extension>
 
+			<item_extension name="q108 Medium armor 03_crafted"> <!-- modSigns -->
+				<variants>
+					<variant equip_template="t_01_mg__common_medium_lvl3_armor_stand">
+						<item>_armor_stand</item>
+					</variant>
+					<variant equip_template="t_01a_mg__common_medium_lvl3_armor_stand" category="gloves" all="true">
+						<item>_armor_stand</item>
+					</variant> 
+				</variants>
+			</item_extension>
+
 			<item_extension name="Medium armor 04_crafted">
 				<variants>
 					<variant equip_template="t_01_mg__common_medium_lvl4_armor_stand">
@@ -479,6 +501,17 @@
 			</item_extension>
 
 			<item_extension name="Heavy armor 04_crafted">
+				<variants>
+					<variant equip_template="t_01_mg__common_heavy_lvl4_armor_stand">
+						<item>_armor_stand</item>
+					</variant>
+					<variant equip_template="t_01a_mg__common_heavy_lvl4_armor_stand" category="gloves" all="true">
+						<item>_armor_stand</item>
+					</variant> 
+				</variants>
+			</item_extension>
+
+			<item_extension name="q108 Heavy armor 04_crafted"> <!-- modSigns -->
 				<variants>
 					<variant equip_template="t_01_mg__common_heavy_lvl4_armor_stand">
 						<item>_armor_stand</item>

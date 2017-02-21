@@ -30,6 +30,8 @@ class W3Effect_OverEncumbered extends CBaseGameplayEffect
 		}
 		
 		((CR4Player)target).BlockAction( EIAB_RunAndSprint, 'OverEncumbered', true );
+		//modSigns
+		((CR4Player)target).BlockAction( EIAB_FastTravel, 'OverEncumbered', true );
 		
 		
 	}
@@ -39,6 +41,8 @@ class W3Effect_OverEncumbered extends CBaseGameplayEffect
 		super.OnEffectRemoved();
 		
 		((CR4Player)target).UnblockAction( EIAB_RunAndSprint, 'OverEncumbered');
+		//modSigns
+		((CR4Player)target).UnblockAction( EIAB_FastTravel, 'OverEncumbered');
 	}
 	
 	event OnUpdate(dt : float)

@@ -14,7 +14,7 @@ class W3Effect_BasicQuen extends CBaseGameplayEffect
 	{
 		super.OnEffectAddedPost();
 		
-		CacheQuen();		
+		//CacheQuen();		
 	}
 	
 	private final function CacheQuen()
@@ -26,7 +26,7 @@ class W3Effect_BasicQuen extends CBaseGameplayEffect
 	{
 		super.OnLoad(t, eff);
 		
-		CacheQuen();
+		//CacheQuen();
 	}
 	
 	
@@ -38,7 +38,7 @@ class W3Effect_BasicQuen extends CBaseGameplayEffect
 			CacheQuen();
 		}
 		
-		return CeilF( 100.f * quenEntity.GetShieldHealth() / quenEntity.GetInitialShieldHealth() );
+		return RoundMath( 100.f * quenEntity.GetShieldHealth() / quenEntity.GetInitialShieldHealth() ); //modSigns
 	}
 	
 	public final function GetMaxStacks() : int

@@ -996,7 +996,7 @@ state CombatSword in W3PlayerWitcher extends Combat
 		var actor 					: CActor;
 		var playerToTargetHeading, staminaCostPerSec	: float;
 		var newTarget : CActor;
-		var mutagen : W3Mutagen21_Effect;
+		//var mutagen : W3Mutagen21_Effect; //modSigns - hack removed
 	
 		if ( !thePlayer.IsCombatMusicEnabled() && enableAttack && 
 			( !isLightAttack && !thePlayer.CanAttackWhenNotInCombat( EBAT_SpecialAttack_Heavy, false, newTarget ) ) )
@@ -1043,11 +1043,11 @@ state CombatSword in W3PlayerWitcher extends Combat
 					
 					parent.ResumeStaminaRegen('WhirlSkill');
 					
-					if(thePlayer.HasBuff(EET_Mutagen21) && enableAttack)
+					/*if(thePlayer.HasBuff(EET_Mutagen21) && enableAttack) //modSigns - hack removed
 					{
 						mutagen = (W3Mutagen21_Effect)thePlayer.GetBuff(EET_Mutagen21);
 						mutagen.Heal();
-					}
+					}*/
 				}
 					
 				PerformSpecialAttackLight( enableAttack );
@@ -1073,11 +1073,13 @@ state CombatSword in W3PlayerWitcher extends Combat
 				{
 					parent.RemoveTimer('SpecialAttackHeavySustainCost');
 					
-					if(thePlayer.HasBuff(EET_Mutagen21))
+					parent.ResumeStaminaRegen('RendSkill'); //modSigns
+					
+					/*if(thePlayer.HasBuff(EET_Mutagen21)) //modSigns - hack removed
 					{
 						mutagen = (W3Mutagen21_Effect)thePlayer.GetBuff(EET_Mutagen21);
 						mutagen.Heal();
-					}
+					}*/
 				}
 					
 				PerformSpecialAttackHeavy( enableAttack );

@@ -32,6 +32,11 @@ class W3TooltipComponent
 		m_itemInv = invComponent;
 	}
 	
+	public function GetCurrentInventory() : CInventoryComponent //modSigns
+	{
+		return m_itemInv;
+	}
+	
 	public function setShopInventory( invComponent : CInventoryComponent ):void
 	{
 		m_shopInv = invComponent;
@@ -140,7 +145,7 @@ class W3TooltipComponent
 		
 		var allItems	: array< SItemUniqueId >;
 		var i,j : int;
-		var m_schematicList, m_recipeList : array< name >;
+		var m_schematicList, m_recipeList, arrNames, arrUniqueNames : array< name >; //modSigns: debug
 		var itemCategory : name;
 		
 		var requiredLevel		  : string;
@@ -287,6 +292,12 @@ class W3TooltipComponent
 			addRecipeInfo( item, itemInvComponent, additionalDescription );
 		}
 		
+		//modSigns: recycling parts
+		if( categoryName == 'junk' || categoryName == 'crafting_ingredient' || categoryName == 'alchemy_ingredient' )
+		{
+			AddPartsList( item, itemInvComponent, additionalDescription );
+		}
+		
 		
 		
 		AddItemStats(itemStats, statsList, tooltipData, ignorePrimaryStat, itemAttributePrefix, isArmorOrWeapon);
@@ -430,7 +441,15 @@ class W3TooltipComponent
 		uniqueDescription = "";
 		if (!isArmorOrWeapon)
 		{
-			uniqueDescription = GetLocStringByKeyExt( itemInvComponent.GetItemLocalizedDescriptionByUniqueID(item) );
+			//modSigns: restore unique descriptions
+			uniqueDescription = GetLocStringByKeyExt( StrReplaceAll(itemInvComponent.GetItemLocalizedNameByUniqueID(item), "item_name_", "item_desc_") );
+			if(uniqueDescription == "") //no unique description found
+			{
+				if( categoryName == 'junk' && !itemInvComponent.ItemHasRecyclingParts(item) ) //junk with no recycling parts
+					uniqueDescription = GetLocStringByKeyExt( "item_desc_junk_no_ingr" );
+				else //default description
+					uniqueDescription = GetLocStringByKeyExt( itemInvComponent.GetItemLocalizedDescriptionByUniqueID(item) );
+			}
 		}
 		if ( theGame.GetGuiManager().GetShowItemNames() )
 		{
@@ -570,10 +589,10 @@ class W3TooltipComponent
 			}
 			else
 			{
-				invItem = m_playerInv.GetItem( item );
+				invItem = itemInvComponent.GetItem( item ); //modSigns
 				invItemPrice = m_shopInv.GetInventoryItemPriceModified( invItem, true );
 				
-				if ( invItemPrice < 0 || m_playerInv.ItemHasTag(item, 'Quest'))
+				if ( invItemPrice < 0 || itemInvComponent.ItemHasTag(item, 'Quest')) //modSigns
 				{
 					tooltipData.SetMemberFlashString("WarningMessage", GetLocStringByKeyExt("panel_shop_not_for_sale"));
 					addGFxItemStat( propsList, "notforsale", " ");
@@ -582,9 +601,9 @@ class W3TooltipComponent
 				{
 					invItemPriceString = invItemPrice;
 					
-					if (m_playerInv.GetItemQuantity(item) > 1)
+					if (itemInvComponent.GetItemQuantity(item) > 1) //modSigns
 					{
-						invItemPriceString += " (" + (m_playerInv.GetItemQuantity(item) * invItemPrice) + ")";
+						invItemPriceString += " (" + (itemInvComponent.GetItemQuantity(item) * invItemPrice) + ")"; //modSigns
 					}
 					addGFxItemStat( propsList, "price", "<font color ='#FFFFFF'>" + invItemPriceString + "</font>", "panel_inventory_item_price" );
 				}
@@ -616,7 +635,30 @@ class W3TooltipComponent
 		tooltipData.SetMemberFlashInt("ItemRarityIdx", itemInvComponent.GetItemQuality(item));
 		tooltipData.SetMemberFlashString("ItemName", rarityColor + itemLabel + "</font>");
 		tooltipData.SetMemberFlashString("IconPath", itemInvComponent.GetItemIconPathByUniqueID(item) );
-		tooltipData.SetMemberFlashString("ItemCategory", categoryLabel);		
+		tooltipData.SetMemberFlashString("ItemCategory", categoryLabel);
+		//modSigns: debug
+		if( FactsQuerySum( "modSigns_debug_labels" ) > 0 )
+		{
+			uniqueDescription += "<br>Name: " + itemInvComponent.GetItemName(item);
+			itemInvComponent.GetItemTags(item, arrNames);
+			if(arrNames.Size() > 0)
+			{
+				uniqueDescription += "<br>Tags: ";
+				for( i = 0; i < arrNames.Size(); i += 1 )
+					uniqueDescription += arrNames[i] + ", ";
+				arrNames.Clear();
+			}
+			itemInvComponent.GetItemAbilities(item, arrNames);
+			arrUniqueNames.Clear();
+			ArrayOfNamesAppendUnique(arrUniqueNames, arrNames);
+			if(arrUniqueNames.Size() > 0)
+			{
+				uniqueDescription += "<br>Abilities: ";
+				for( i = 0; i < arrUniqueNames.Size(); i += 1 )
+					uniqueDescription += arrUniqueNames[i] + ", ";
+				arrUniqueNames.Clear();
+			}
+		}
 		tooltipData.SetMemberFlashString("Description", uniqueDescription);
 		
 		tooltipData.SetMemberFlashArray("SocketsList", socketsList);
@@ -633,6 +675,25 @@ class W3TooltipComponent
 		tooltipData.SetMemberFlashBool("EnableFullScreenInfo", isArmorOrWeapon);
 		
 		return tooltipData;
+	}
+	
+	//modSigns
+	private function AddPartsList( item: SItemUniqueId, itemInvComponent : CInventoryComponent, out description : string )
+	{
+		var partList : array <SItemParts>;
+		var i : int;
+		
+		partList = itemInvComponent.GetItemRecyclingParts( item );
+		if( partList.Size() > 0 )
+		{
+			description += "<font color=\"#FBEDCF\">";
+			description += "<br>" + GetLocStringByKeyExt("gm_recycling_parts") + ":";
+			for( i = 0; i < partList.Size(); i += 1 )
+			{
+				description += "<br>" + partList[i].quantity + " x " + GetLocStringByKeyExt( itemInvComponent.GetItemLocalizedNameByName( partList[i].itemName ) );
+			}
+			description += "</font>";
+		}
 	}
 	
 	private function addRecipeInfo( item: SItemUniqueId, itemInvComponent : CInventoryComponent, out description : string )
@@ -974,9 +1035,9 @@ class W3TooltipComponent
 		var oilMaxCharges : int;
 		var oilBonus 	  : float;
 		var oilStats 	  : array<SAttributeTooltip>;
-		var oilStatFirst  : SAttributeTooltip;
+		//var oilStatFirst  : SAttributeTooltip; //modSigns
 		var oilBonusValue : string;
-		var i, count	  : int;
+		var i, j, count	  : int; //modSigns
 		
 		var appliedOilsList : array< W3Effect_Oil >;
 		var appliedOil    	: W3Effect_Oil;
@@ -996,29 +1057,28 @@ class W3TooltipComponent
 				oilMaxCharges = appliedOil.GetAmmoMaxCount();		
 				itemInvComponent.GetItemStatsFromName( oilName, oilStats );
 				
-				if (oilStats.Size() > 0)
+				//modSigns
+				if( oilCharges < 1 )
+					continue;
+					
+				oilBonusValue = oilLocName + " (" + oilCharges + "/" + oilMaxCharges + ")";
+				flashDataObj.SetMemberFlashString("appliedOilInfo" +(string)(i + 1), oilBonusValue);
+				
+				/*for( j = 0; j < oilStats.Size(); j += 1 )
 				{
-					oilStatFirst = oilStats[0];
-					if( oilStatFirst.percentageValue )
+					if( oilStats[j].percentageValue )
 					{
-						oilBonusValue = "+" + RoundMath(oilStatFirst.value * 100) + " %";
+						oilBonusValue = "+" + RoundMath(oilStats[j].value * 100) + " %";
 					}
 					else
 					{
-						oilBonusValue = "+" + RoundMath(oilStatFirst.value);
+						oilBonusValue = "+" + RoundMath(oilStats[j].value);
 					}
-				}
-				
-				if(oilCharges <=0)
-				{
-					oilBonusValue = "<font color=\"#FF0000\">" + oilBonusValue +  " " + oilStatFirst.attributeName + " (" + oilLocName + ")(" + oilCharges + "/" + oilMaxCharges + ")"+ "</font>";
-				}
-				else
-				{
-					oilBonusValue = oilBonusValue +  " " + oilStatFirst.attributeName + " (" + oilLocName + ")(" + oilCharges + "/" + oilMaxCharges + ")";
-				}
-				
-				flashDataObj.SetMemberFlashString("appliedOilInfo" +(string)(i + 1), oilBonusValue);
+					
+					oilBonusValue = oilLocName + ": " + oilBonusValue +  " " + oilStats[j].attributeName;
+					
+					flashDataObj.SetMemberFlashString("appliedOilInfo" +(string)((i + 1)*count + j + 1), oilBonusValue);
+				}*/
 			}
 		}
 	}
@@ -1107,6 +1167,9 @@ class W3TooltipComponent
 				{
 					valueString = NoTrailZeros( RoundMath( currentStat.value ) );
 				}
+				//modSigns: remove + prefix for negative stat values
+				if( currentStat.value < 0 && valuePrefix == "+" )
+					valuePrefix = "";
 				
 				l_flashObject = rootGFxObject.CreateFlashObject();
 				l_flashObject.SetMemberFlashString("id", NameToString(currentStat.originName));
@@ -1134,12 +1197,20 @@ class W3TooltipComponent
 		
 		var isEdibles : bool;
 		var isDrinks  : bool;
+		var isPotion, isMutagenPotion  : bool; //modSigns
 		
 		var t1:int;
 		var t2:int;
 		
 		isEdibles = itemInvComponent.ItemHasTag(itemId, 'Edibles');
 		isDrinks = itemInvComponent.ItemHasTag(itemId, 'Drinks');
+		isPotion = itemInvComponent.ItemHasTag(itemId, 'Potion'); //modSigns
+		isMutagenPotion = itemInvComponent.ItemHasTag(itemId, 'Mutagen'); //modSigns
+		
+		if (isPotion) //modSigns
+		{
+			buffDuration = GetWitcherPlayer().CalculatePotionDuration( itemId, isMutagenPotion );
+		}
 		
 		if (isEdibles || isDrinks || itemInvComponent.IsItemBomb(itemId))
 		{
@@ -1167,6 +1238,10 @@ class W3TooltipComponent
 					curBufValue = curFlashObject.GetMemberFlashNumber("floatValue");
 					
 					curBufValue += buffDuration;
+					if (isPotion) //modSigns
+					{
+						curBufValue = buffDuration;
+					}
 					curBufValueStr = NoTrailZeros( RoundMath( curBufValue) ) + " " + GetLocStringByKeyExt("per_second");
 					
 					curFlashObject.SetMemberFlashString("value",  curBufValueStr);
@@ -1177,7 +1252,7 @@ class W3TooltipComponent
 			}
 			
 			curFlashObject = rootGFxObject.CreateFlashObject();
-			if (isEdibles && GetWitcherPlayer().HasRunewordActive('Runeword 6 _Stats') && GetWitcherPlayer().IsItemEquipped(itemId))
+			if (isEdibles && GetWitcherPlayer().HasRunewordActive('Runeword 6 _Stats') /*&& GetWitcherPlayer().IsItemEquipped(itemId)*/) //modSigns
 			{
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Runeword 6 _Stats', 'runeword6_duration_bonus', min, max);
 				curBufValueStr = "<font color='#E67E0B'>" + NoTrailZeros ( RoundMath( buffDuration * (1 + min.valueMultiplicative) )) + " " + GetLocStringByKeyExt("per_second") + "</font>";
@@ -1989,8 +2064,10 @@ class W3TooltipComponent
 		var min, max		: SAbilityAttributeValue;
 		var dm				: CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();
 		
-		dm.GetAbilityAttributeValue( 'AerondightEffect', 'dmg_bonus', min, max );		
-		argsString.PushBack( NoTrailZeros( RoundF( min.valueMultiplicative * 100 ) ) );
+		dm.GetAbilityAttributeValue( 'AerondightEffect', 'crit_dmg_bonus', min, max ); //modSigns
+		argsString.PushBack( NoTrailZeros( RoundF( min.valueAdditive * 100 ) ) );
+		dm.GetAbilityAttributeValue( 'AerondightEffect', 'crit_chance_bonus', min, max ); //modSigns
+		argsString.PushBack( NoTrailZeros( RoundF( min.valueAdditive * 100 ) ) );
 		uniqueDesc = GetLocStringByKeyExtWithParams( "attribute_name_aerondight",,, argsString );
 		
 		argsString.Clear();
@@ -2139,8 +2216,17 @@ function CalculateStatsComparance(itemStats : array<SAttributeTooltip>, compareI
 				
 				if (strDiffValue == "" && !statToCompareExist)
 				{
-					strDifference = "better";
-					strDiffPrefix = "<font color=\"#19D900\"> +";
+					//modSigns: fix negative modifiers comparison
+					if( itemStats[i].value < 0 )
+					{
+						strDifference = "worse";
+						strDiffPrefix = "<font color=\"#E00000\"> ";
+					}
+					else
+					{
+						strDifference = "better";
+						strDiffPrefix = "<font color=\"#19D900\"> +";
+					}
 					strDiffPostfix = "</font>";
 					if( itemStats[i].percentageValue )
 					{
@@ -2183,6 +2269,10 @@ function CalculateStatsComparance(itemStats : array<SAttributeTooltip>, compareI
 				valuePostfix = "";
 			}
 			
+			//modSigns: remove + prefix for negative stat values
+			if( itemStats[i].value < 0 && valuePrefix == "+" )
+				valuePrefix = "";
+					
 			if( itemStats[i].percentageValue )
 			{
 				l_flashObject.SetMemberFlashString("value", valuePrefix + RoundMath( itemStats[i].value * 100 ) + " %" + valuePostfix );
@@ -2218,17 +2308,28 @@ function CalculateStatsComparance(itemStats : array<SAttributeTooltip>, compareI
 				l_flashObject = rootGFxObject.CreateFlashObject();
 				l_flashObject.SetMemberFlashString("name",compareItemStats[j].attributeName);
 				l_flashObject.SetMemberFlashString("color",compareItemStats[j].attributeColor);
-				l_flashObject.SetMemberFlashString("icon", "worse");
+				//modSigns: negative modifiers comparison fix
+				if( compareItemStats[j].value < 0 )
+				{
+					l_flashObject.SetMemberFlashString("icon", "better");
+					diffValue = "<font color=\"#19D900\"> +";
+					compareItemStats[j].value *= -1;
+				}
+				else
+				{
+					l_flashObject.SetMemberFlashString("icon", "worse");
+					diffValue = "<font color=\"#E00000\"> -";
+				}
 				
 				if( compareItemStats[j].percentageValue )
 				{
 					strValue = valuePrefix + "0 %";
-					diffValue = "<font color=\"#E00000\"> -" + RoundMath( compareItemStats[j].value * 100 ) + " %</font>";
+					diffValue /*= "<font color=\"#E00000\"> -" +*/ += RoundMath( compareItemStats[j].value * 100 ) + " %</font>";
 				}
 				else
 				{
 					strValue = valuePrefix + "0";
-					diffValue = "<font color=\"#E00000\"> -" + RoundMath(compareItemStats[j].value) + "</font>";
+					diffValue /*= "<font color=\"#E00000\"> -" +*/ += RoundMath(compareItemStats[j].value) + "</font>";
 				}
 				
 				l_flashObject.SetMemberFlashString("value", strValue);

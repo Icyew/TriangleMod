@@ -498,10 +498,10 @@
 			</recipe>
 			<recipe name_name="Recipe for Mutagen 28" type_name="Mutagen28" level="1" cookedItem_name="Mutagen 28" cookedItemType="mutagen_potion" cookedItemQuantity="1" localisation_key_name = "">
 				<ingredients>
-					<ingredient item_name="Dwarven spirit" quantity="5" />
-					<ingredient item_name="Lesser mutagen red" quantity="4" />
-					<ingredient item_name="Lesser mutagen green" quantity="4" />
-					<ingredient item_name="Lesser mutagen blue" quantity="4" />
+					<ingredient item_name="Dwarven spirit" quantity="1" />
+					<ingredient item_name="Mutagen red" quantity="1" />
+					<ingredient item_name="Mutagen green" quantity="1" />
+					<ingredient item_name="Mutagen blue" quantity="1" />
 					<ingredient item_name="Wraith essence" quantity="1" />
 				</ingredients>
 			</recipe>

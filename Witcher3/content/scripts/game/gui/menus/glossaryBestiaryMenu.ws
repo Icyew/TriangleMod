@@ -117,6 +117,14 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 		var templatepath : string;
 		
 		
+		//modSigns
+		if(entryName == 'KillCount')
+		{
+			ShowRenderToTexture("");
+			m_fxSetImage.InvokeSelfOneArg(FlashArgString("bestiary_leshen_locked.png"));
+			return;
+		}
+		
 		creature = (CJournalCreature)m_journalManager.GetEntryByTag( entryName );
 		
 		if(creature)
@@ -173,6 +181,13 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 			l_CategoryTag = l_creatureGroup.GetUniqueScriptTag();
 			
 			l_Title = GetLocStringById( l_creature.GetNameStringId() );
+			//modSigns: debug
+			if( FactsQuerySum( "modSigns_debug_labels" ) > 0 )
+			{
+				l_Title = l_creature.GetNameStringId() + ":" + GetLocStringById( l_creature.GetNameStringId() );
+				LogChannel('modSigns', "Bestiary creature: " + l_Title);
+				theGame.witcherLog.AddMessage(l_Title);
+			}
 			l_Tag = l_creature.GetUniqueScriptTag();
 			l_IconPath = thePlayer.ProcessGlossaryImageOverride( l_creature.GetImage(), l_Tag );
 			l_IsNew	= m_journalManager.IsEntryUnread( l_creature );
@@ -192,6 +207,23 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 			
 			l_DataFlashArray.PushBackFlashObject(l_DataFlashObject);
 		}
+		
+		//modSigns: stats
+		l_GroupTitle = "* " + GetLocStringByKey("gm_kills_kill_count");
+		l_CategoryTag = 'KillCountCat';
+		l_Title = GetLocStringByKey("gm_kills_kill_count");
+		l_Tag = 'KillCount';
+		l_DataFlashObject = m_flashValueStorage.CreateTempFlashObject();
+		l_DataFlashObject.SetMemberFlashUInt( "tag", NameToFlashUInt(l_Tag) );
+		l_DataFlashObject.SetMemberFlashString( "dropDownLabel", l_GroupTitle );
+		l_DataFlashObject.SetMemberFlashUInt( "dropDownTag",  NameToFlashUInt(l_CategoryTag) );
+		l_DataFlashObject.SetMemberFlashBool( "dropDownOpened", expandedBestiaryCategories.Contains( l_CategoryTag ) );
+		l_DataFlashObject.SetMemberFlashString( "dropDownIcon", "icons/monsters/ICO_MonsterDefault.png" );
+		l_DataFlashObject.SetMemberFlashBool( "isNew", false );
+		l_DataFlashObject.SetMemberFlashBool( "selected", ( l_Tag == currentTag ) );
+		l_DataFlashObject.SetMemberFlashString( "label", l_Title );
+		l_DataFlashObject.SetMemberFlashString( "iconPath", "icons/monsters/bestiary_leshen_locked.png" );
+		l_DataFlashArray.PushBackFlashObject( l_DataFlashObject );
 		
 		if( l_DataFlashArray.GetLength() > 0 )
 		{
@@ -285,6 +317,12 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 		var description : string;
 		var title : string;
 		
+		//modSigns
+		if(entryName == 'KillCount')
+		{
+			UpdateKillCountEntry();
+			return;
+		}
 		
 		l_creature = (CJournalCreature)m_journalManager.GetEntryByTag( entryName );
 		description = GetDescription( l_creature );
@@ -293,6 +331,48 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 		m_fxSetTitle.InvokeSelfOneArg(FlashArgString(title));
 		m_fxSetText.InvokeSelfOneArg(FlashArgString(description));
 	}	
+	
+	//modSigns
+	function UpdateKillCountEntry()
+	{
+		var description, finalDescription : string;
+		var i, kills, total, humans, animals, monsters, bosses : int;
+		var locStr : string;
+		var witcher : W3PlayerWitcher;
+		
+		witcher = GetWitcherPlayer();
+		
+		for(i = EENT_HUMAN; i < EENT_MAX_TYPES; i += 1)
+		{
+			kills = witcher.GetKills(i);
+			if(kills > 0)
+			{
+				locStr = GetLocStringByEnemyType(i);
+				if(locStr != "")
+					description += locStr + ": " + kills + "<br>";
+			}
+			total += kills;
+		}
+		
+		humans = witcher.GetKills(EENT_HUMAN) + witcher.GetKills(EENT_WILD_HUNT_WARRIOR);
+		animals = witcher.GetKills(EENT_DOG) + witcher.GetKills(EENT_WOLF) + witcher.GetKills(EENT_BEAR) +
+				  witcher.GetKills(EENT_BOAR) + witcher.GetKills(EENT_PANTHER);
+		monsters = total - humans - animals;
+		
+		bosses = witcher.GetKills(EENT_BOSS);
+		total += bosses;
+		
+		finalDescription = GetLocStringByKey("gm_kills_total") + ": " + total + "<br>" +
+						   GetLocStringByKey("gm_kills_humans_total") + ": " + humans + "<br>" +
+					       GetLocStringByKey("gm_kills_animals_total") + ": " + animals + "<br>" +
+						   GetLocStringByKey("gm_kills_monsters_total") + ": " + monsters + "<br>" +
+						   GetLocStringByKey("gm_kills_bosses_total") + ": " + bosses;
+		if(description != "")
+			finalDescription += "<br><br>" + GetLocStringByKey("gm_kills_by_type") + ":<br>" + description;
+		
+		m_fxSetTitle.InvokeSelfOneArg(FlashArgString(GetLocStringByKey("gm_kills_kill_count")));
+		m_fxSetText.InvokeSelfOneArg(FlashArgString(finalDescription));
+	}
 
 	function UpdateItems( tag : name )
 	{
@@ -301,7 +381,12 @@ class CR4GlossaryBestiaryMenu extends CR4ListBaseMenu
 		var l_creatureParams : SJournalCreatureParams;
 		var l_creatureEntityTemplateFilename : string;
 		
-		
+		//modSigns
+		if(tag == 'KillCount')
+		{
+			m_flashValueStorage.SetFlashBool("journal.rewards.panel.visible", false);
+			return;
+		}
 		
 		l_creature = (CJournalCreature)m_journalManager.GetEntryByTag( tag );
 		

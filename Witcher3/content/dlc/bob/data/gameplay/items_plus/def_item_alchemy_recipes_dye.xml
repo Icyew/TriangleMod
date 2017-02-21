@@ -9,7 +9,7 @@
 	<item
 		name							="Recipe Dye Default"
 		category						="alchemy_recipe"
-		price							="38"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -81,7 +81,7 @@
 	<item
 		name							="Recipe Dye Green"
 		category						="alchemy_recipe"
-		price							="41"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -99,7 +99,7 @@
 	<item
 		name							="Recipe Dye Blue"
 		category						="alchemy_recipe"
-		price							="45"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -117,7 +117,7 @@
 	<item
 		name							="Recipe Dye Orange"
 		category						="alchemy_recipe"
-		price							="42"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -135,7 +135,7 @@
 	<item
 		name							="Recipe Dye Pink"
 		category						="alchemy_recipe"
-		price							="43"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -153,7 +153,7 @@
 	<item
 		name							="Recipe Dye Yellow"
 		category						="alchemy_recipe"
-		price							="34"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -171,7 +171,7 @@
 	<item
 		name							="Recipe Dye Black"
 		category						="alchemy_recipe"
-		price							="38"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -189,7 +189,7 @@
 	<item
 		name							="Recipe Dye White"
 		category						="alchemy_recipe"
-		price							="34"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -207,7 +207,7 @@
 	<item
 		name							="Recipe Dye Red"
 		category						="alchemy_recipe"
-		price							="42"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -225,7 +225,7 @@
 	<item
 		name							="Recipe Dye Purple"
 		category						="alchemy_recipe"
-		price							="33"
+		price							="44"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -259,7 +259,7 @@
 	>
 		<ingredients>					<ingredient item_name="Dye Solution"			quantity="1" 		/>
 										<ingredient item_name="Hydragenum"				quantity="1" 		/>
-										<ingredient item_name="Ashes"					quantity="1" 		/>
+										<ingredient item_name="Coal"					quantity="1" 		/>
 										<ingredient item_name="Sewant mushrooms"		quantity="1" 		/>
 										<ingredient item_name="Mandrake root"			quantity="1" 		/>
 		</ingredients>

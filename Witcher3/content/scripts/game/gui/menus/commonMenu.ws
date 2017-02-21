@@ -61,6 +61,7 @@ class CR4CommonMenu extends CR4MenuBase
 	
 	private var isCiri : bool;
 	
+	protected var stashHotkey:EInputKey; //modSigns
 	protected var inventoryHotkey:EInputKey;
 	protected var characterHotkey:EInputKey;
 	protected var mapHotkey:EInputKey;
@@ -525,13 +526,21 @@ class CR4CommonMenu extends CR4MenuBase
 		currentSubMenu = (CR4MenuBase)GetSubMenu();
 		menuInitData = (W3MenuInitData)GetMenuInitData();
 		
+		//theGame.witcherLog.AddMessage("MenuName = " + MenuName);
+		//theGame.witcherLog.AddMessage("MenuState = " + MenuState);
+		//theGame.witcherLog.AddMessage("SubMenuName = " + currentSubMenu.GetMenuName());
+		
 		if (menuInitData)
 		{
 			ignoreSaveData = menuInitData.ignoreSaveSystem;
 			
 			menuInitData.ignoreSaveSystem = false;
 		}
-		if( currentSubMenu && currentSubMenu.GetMenuName() == MenuName )
+		/*else if( MenuName == 'InventoryMenu' && ( MenuState == "" || MenuState == "None" ) ) //modSigns
+		{
+			MenuState = "StashInventory";
+		}*/
+		if( currentSubMenu && currentSubMenu.GetMenuName() == MenuName && MenuName != 'InventoryMenu' ) //modSigns
 		{
 			parentMenuName = GetMenuParentName(MenuName);
 			if ( MenuState != NameToString( GetSavedMenuFromParentName( parentMenuName ) ) )
@@ -676,6 +685,8 @@ class CR4CommonMenu extends CR4MenuBase
 	{
 		switch(stateName)
 		{
+			case "StashInventory" :			//modSigns
+				return 'StashInventory';
 			case "CharacterInventory" :
 				return 'CharacterInventory';
 			case "HorseInventory" :
@@ -765,10 +776,14 @@ class CR4CommonMenu extends CR4MenuBase
 				DefineMenuItem('GlossaryEncyclopediaMenu', "panel_title_glossary_dictionary",'GlossaryParent');
 				DefineMenuItem('GlossaryBooksMenu', "books_panel_title",'GlossaryParent');
 				DefineMenuItem('CraftingMenu', "panel_title_crafting", 'GlossaryParent');
+				DefineMenuItem('InventoryMenu', "panel_title_stash", 'GlossaryParent', 'StashInventory'); //modSigns
 				
 			DefineMenuItem('AlchemyMenu', "panel_title_alchemy", '');
 			
 			
+			//DefineMenuItem('InventoryParent', "panel_inventory"); //modSigns
+			//	DefineMenuItem('InventoryMenu', "panel_inventory", 'InventoryParent', 'CharacterInventory');
+			//	DefineMenuItem('InventoryMenu', "panel_title_stash", 'InventoryParent', 'StashInventory');
 			DefineMenuItem('InventoryMenu', "panel_inventory", '', 'CharacterInventory');
 		}
 		
@@ -813,6 +828,7 @@ class CR4CommonMenu extends CR4MenuBase
 		if( !thePlayer.IsActionAllowed( EIAB_OpenInventory ))
 		{
 			SetMenuTabeEnable( 'InventoryMenu',	false, 'CharacterInventory' );				
+			//SetMenuTabeEnable( 'InventoryParent',	false ); //modSigns
 		}	
 		if( !thePlayer.IsActionAllowed( EIAB_OpenAlchemy ))
 		{
@@ -861,6 +877,9 @@ class CR4CommonMenu extends CR4MenuBase
 			SetMenuTabeEnable( 'InventoryMenu',	blocked, 'CharacterInventory' );
 			tabName = 'InventoryMenu';
 			subTabName = 'CharacterInventory';
+			//SetMenuTabeEnable( 'InventoryParent',	blocked ); //modSigns
+			//tabName = 'InventoryParent'; //modSigns
+			//subTabName = ''; //modSigns
 		}	
 		if( action == EIAB_OpenAlchemy )
 		{
@@ -1804,6 +1823,18 @@ class CR4CommonMenu extends CR4MenuBase
 	{
 		var outKeys	: array< EInputKey >;
 		
+		//modSigns: stash hotkey
+		outKeys.Clear();
+		theInput.GetPCKeysForAction('PanelStash', outKeys);
+		if (outKeys.Size() > 0)
+		{
+			stashHotkey = outKeys[0];
+		}
+		else
+		{
+			stashHotkey = IK_None;
+		}
+		
 		outKeys.Clear();
 		theInput.GetPCKeysForAction('PanelInv', outKeys);
 		if (outKeys.Size() > 0)
@@ -1920,13 +1951,16 @@ class CR4CommonMenu extends CR4MenuBase
 		var craftMenu : CR4CraftingMenu;
 		
 		childMenu = GetLastChild();
+		//theGame.witcherLog.AddMessage("childMenu = " + childMenu.GetMenuName());
+		//theGame.witcherLog.AddMessage("IsLockedInHub = " + IsLockedInHub());
+		//theGame.witcherLog.AddMessage("IsLockedInMenu = " + IsLockedInMenu());
 		
 		if (childMenu && !IsLockedInHub() && !IsLockedInMenu())
 		{
 			if (keyCode == inventoryHotkey && theGame.GameplayFactsQuerySum("shopMode") == 0)
 			{
 				invMenu = (CR4InventoryMenu)childMenu;
-				if (invMenu)
+				if (invMenu && (invMenu.GetCurrentInventoryState() != IMS_Stash || theGame.GameplayFactsQuerySum("stashMode") == 1))
 				{
 					invMenu.CloseMenu();
 					CloseMenu();
@@ -1934,6 +1968,20 @@ class CR4CommonMenu extends CR4MenuBase
 				else if (HasMenuWithStateDefined('InventoryMenu', 'CharacterInventory') && thePlayer.IsActionAllowed( EIAB_OpenInventory ))
 				{
 					m_fxSelectTab.InvokeSelfTwoArgs(FlashArgUInt(NameToFlashUInt('InventoryMenu')), FlashArgString('CharacterInventory'));
+					m_fxEnterCurrentTab.InvokeSelf();
+				}
+			}
+			if (keyCode == stashHotkey && theGame.GameplayFactsQuerySum("shopMode") == 0) //modSigns
+			{
+				invMenu = (CR4InventoryMenu)childMenu;
+				if (invMenu && invMenu.GetCurrentInventoryState() == IMS_Stash)
+				{
+					invMenu.CloseMenu();
+					CloseMenu();
+				}
+				else if (HasMenuWithStateDefined('InventoryMenu', 'StashInventory') && thePlayer.IsActionAllowed( EIAB_OpenGlossary ))
+				{
+					m_fxSelectTab.InvokeSelfTwoArgs(FlashArgUInt(NameToFlashUInt('InventoryMenu')), FlashArgString('StashInventory'));
 					m_fxEnterCurrentTab.InvokeSelf();
 				}
 			}

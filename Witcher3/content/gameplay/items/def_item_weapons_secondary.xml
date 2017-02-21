@@ -4,92 +4,87 @@
 
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
+	<!-- modSigns: removed slashing damage as it breaks items levels -->
 
 	<ability name="W_Axe 1 _Stats">
-		<weight							type="base"	min="2.75"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<SlashingDamage					type="base"	min="10"	max="25"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
 	<ability name="W_Axe 2 _Stats">
-		<weight							type="base"	min="2.75"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<SlashingDamage					type="base"	min="15"	max="35"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
 	<ability name="W_Axe 3 _Stats">
-		<weight							type="base"	min="3.5"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="2"		max="3"		/>
-		<SlashingDamage					type="base"	min="20"	max="40"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
 	<ability name="W_Axe 4 _Stats">
-		<weight							type="base"	min="2.0"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="2"		max="3"		/>
-		<SlashingDamage					type="base"	min="25"	max="50"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
 	<ability name="W_Axe 5 _Stats">
-		<weight							type="base"	min="2.45"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="4"		max="4"		/>
-		<SlashingDamage					type="base"	min="30"	max="80"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 		<armor_reduction				type="base"	min="100"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
 		<dismember_chance				type="add"	min="0.1"				/>
 	</ability>
 
 	<ability name="W_Axe 6 _Stats">
-		<weight							type="base"	min="4.2"				/>
+		<weight							type="base"	min="8"					/>
 		<quality						type="add"	min="4"		max="4"		/>
-		<SlashingDamage					type="base"	min="40"	max="120"	/>
 		<SilverDamage 					type="base"	min="1"					/>
-		<armor_reduction				type="base"	min="200"				/>
+		<armor_reduction				type="base"	min="50"				/>
 		<dismember_chance				type="add"	min="0.1"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.25"				/>
 	</ability>
 
 	<ability name="W_Club _Stats">
-		<weight							type="base"	min="1.1"				/>
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="10"	max="40"	/>
+		<BludgeoningDamage				type="add"	min="8"		max="24"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
 	<ability name="W_Mace 1 _Stats">
-		<weight							type="base"	min="3.5"				/>
+		<weight							type="base"	min="12"				/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="10"	max="30"	/>
+		<BludgeoningDamage				type="add"	min="8"		max="24"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
 	<ability name="W_Mace 2 _Stats">
-		<weight							type="base"	min="12.5"				/>
+		<weight							type="base"	min="12"				/>
 		<quality						type="add"	min="1"		max="2"		/>
-		<BludgeoningDamage				type="base"	min="25"	max="45"	/>
+		<BludgeoningDamage				type="add"	min="16"	max="32"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
 	<ability name="W_Pickaxe _Stats">
-		<weight							type="base"	min="3.5"				/>
+		<weight							type="base"	min="10"				/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<PiercingDamage					type="base"	min="10"	max="30"	/>
+		<PiercingDamage					type="base"	min="8"		max="24"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 
 	<ability name="W_Poker _Stats">
-		<weight							type="base"	min="3"					/>
+		<weight							type="base"	min="6"					/>
 		<quality						type="add"	min="1"		max="2"		/>
-		<BludgeoningDamage				type="base"	min="25"	max="45"	/>
+		<BludgeoningDamage				type="add"	min="16"	max="32"	/>
 		<SilverDamage 					type="base"	min="1"					/>
 	</ability>
 	
 	<ability name="q302_Mace _Stats">
-		<weight							type="base"	min="3.5"				/>
+		<weight							type="base"	min="12"				/>
 		<quality						type="add"	min="1"		max="1"		/>
 	</ability>
 </abilities>
@@ -131,7 +126,7 @@
 										<a>W_Axe 1 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="3">Iron ore</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -198,7 +193,7 @@
 										<a>W_Axe 2 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="3">Iron ore</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -265,7 +260,7 @@
 										<a>W_Axe 3 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="4">Iron ore</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -332,7 +327,7 @@
 										<a>W_Axe 4 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="2">Steel ingot</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -399,7 +394,7 @@
 										<a>W_Axe 5 _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="2">Steel ingot</parts>
+										<parts count="1">Iron ingot</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -463,7 +458,7 @@
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeAxe, SecondaryWeapon, mod_secondary
 		</tags>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="2">Steel ingot</parts>
+										<parts count="1">Steel ingot</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Axe 6 _Stats</a>
@@ -529,8 +524,8 @@
 	>
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeClub, SecondaryWeapon, mod_secondary
 		</tags>
-		<recycling_parts>				<parts count="2">Haft</parts>
-										<parts count="2">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Haft</parts>
+										<parts count="1">Leather straps</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Club _Stats</a>
@@ -597,7 +592,7 @@
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 		</tags>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="2">Steel ingot</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Mace 1 _Stats</a>
@@ -664,7 +659,7 @@
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 		</tags>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="16">Nails</parts>
+										<parts count="2">Nails</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Mace 2 _Stats</a>
@@ -731,7 +726,7 @@
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeAxe, SecondaryWeapon, mod_secondary
 		</tags>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="4">Iron ore</parts>
+										<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Pickaxe _Stats</a>
@@ -797,7 +792,7 @@
 	>
 		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeClub, SecondaryWeapon, mod_secondary
 		</tags>
-		<recycling_parts>				<parts count="4">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Iron ore</parts>
 		</recycling_parts>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>W_Poker _Stats</a>
@@ -884,7 +879,9 @@
 										</action>
 		</anim_actions>
 		<anim_switches></anim_switches>			
-		<bound_items></bound_items>
+		<bound_items>
+			<item>NPC Scabbard Short</item>
+		</bound_items>
 	</item>
 
 <!-- NPC SHORT STEEL SWORD -->
@@ -935,7 +932,9 @@
 										</action>
 		</anim_actions>
 		<anim_switches></anim_switches>
-		<bound_items></bound_items>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC HJALMAR SHORT STEEL SWORD -->
@@ -965,7 +964,6 @@
 		  localisation_key_description = "item_desc_hjalmar_short_steel_sword"
 		  price	= "150" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Hjalmar_Short_Steel_Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -985,7 +983,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC DANDELION SHORT STEEL SWORD -->
@@ -1015,7 +1016,6 @@
 		  localisation_key_description = "item_desc_short_steel_sword"
 		  price	= "12" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Dandelion Short Steel Sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1035,7 +1035,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC RUSTY NO MANS LAND SWORD -->
@@ -1065,7 +1068,6 @@
 		  localisation_key_description = "item_desc_rusty_no_mans_land_sword"
 		  price	= "5" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Rusty No Mans Land sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1085,7 +1087,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC RUSTY SKELLIGE SWORD -->
@@ -1115,7 +1120,6 @@
 		  localisation_key_description = "item_name_rusty_skellige_sword"
 		  price	= "6" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Rusty Skellige sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1135,7 +1139,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC RUSTY NILFGAARDIAN SWORD -->
@@ -1165,7 +1172,6 @@
 		  localisation_key_description = "item_desc_rusty_nilfgaardian_sword"
 		  price	= "7" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Rusty Nilfgaardian sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1185,7 +1191,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 2</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC RUSTY NOVIGRAADAN SWORD -->
@@ -1215,7 +1224,6 @@
 		  localisation_key_description = "item_desc_rusty_novigraadan_sword"
 		  price	= "6" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Rusty Novigraadan sword _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1235,7 +1243,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 
 <!-- NPC SHORT SWORD 1 -->
@@ -1265,7 +1276,6 @@
 		  localisation_key_description = "item_desc_short_sword_1"
 		  price	= "10" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Short sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1285,7 +1295,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>		
 	</item>
 	
 <!-- NPC SHORT SWORD 2 -->
@@ -1315,7 +1328,6 @@
 		  localisation_key_description = "item_desc_short_sword_2"
 		  price	= "12" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Short sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1335,7 +1347,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NO MANS LAND SWORD 1 -->
@@ -1365,7 +1380,6 @@
 		  localisation_key_description = "item_desc_no_mans_land_sword_1"
 		  price	= "15" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC No Mans Land sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1386,6 +1400,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NO MANS LAND SWORD 1 Q2 -->
@@ -1415,7 +1432,6 @@
 		  localisation_key_description = "item_desc_no_mans_land_sword_1"
 		  price	= "30" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC No Mans Land sword 1 q2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1435,7 +1451,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NO MANS LAND SWORD 2 -->
@@ -1465,7 +1484,6 @@
 		  localisation_key_description = "item_desc_no_mans_land_sword_2"
 		  price	= "18" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC No Mans Land sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1485,7 +1503,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SKELLIGE SWORD 1 -->
@@ -1515,7 +1536,6 @@
 		  localisation_key_description = "item_desc_skellige_sword_1"
 		  price	= "25" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Skellige sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1535,7 +1555,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NILFGAARDIAN SWORD 1 -->
@@ -1565,7 +1588,6 @@
 		  localisation_key_description = "item_desc_nilfgaardian_sword_1"
 		  price	= "50" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Nilfgaardian sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1585,7 +1607,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 2</item>
+		</bound_items>
 	</item>
 		
 <item name="NPC Nilfgaardian sword 2" 
@@ -1614,7 +1639,6 @@
 		  localisation_key_description = "item_desc_nilfgaardian_sword_2"
 		  price	= "50" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Nilfgaardian sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1634,7 +1658,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 2</item>
+		</bound_items>
 	</item>
 
 <!-- NPC NOVIGRAADAN SWORD 1 -->
@@ -1664,7 +1691,6 @@
 		  localisation_key_description = "item_desc_novigraadan_sword_1"
 		  price	= "40" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Novigraadan sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1684,7 +1710,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NO MANS LAND SWORD 3 -->
@@ -1714,7 +1743,6 @@
 		  localisation_key_description = "item_desc_no_mans_land_sword_3"
 		  price	= "32" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC No Mans Land sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1735,6 +1763,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SKELLIGE SWORD 2 -->
@@ -1764,7 +1795,6 @@
 		  localisation_key_description = "item_desc_skellige_sword_2"
 		  price	= "25" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Skellige sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1785,6 +1815,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NOVIGRAADAN SWORD 2 -->
@@ -1814,7 +1847,6 @@
 		  localisation_key_description = "item_desc_novigraadan_sword_2"
 		  price	= "40" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Novigraadan sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1835,6 +1867,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SCOIATAEL SWORD 1 -->
@@ -1864,7 +1899,6 @@
 		  localisation_key_description = "item_desc_scoiatael_sword_1"
 		  price	= "200" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Scoiatael sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1885,6 +1919,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard Sabre</item>
+		</bound_items>
 	</item>
 
 	<!-- NPC CYPRIANWHORENSON SWORD -->
@@ -1914,7 +1951,6 @@
 		localisation_key_description = "item_desc_novigraadan_sword_2"
 		price	= "40" >
 	<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-	<bound_items></bound_items>
 	<base_abilities>
 	<a>NPC Cyprianwhorenson sword _Stats</a>
 	<a>Default weapon _Stats</a>
@@ -1935,6 +1971,9 @@
 	</anim_actions>
 	<anim_switches>
 	</anim_switches>
+	<bound_items>
+		<item>NPC Scabbard 1</item>
+	</bound_items>
 	</item>
 
 <!-- NPC SKELLIGE SWORD 3 -->
@@ -1964,7 +2003,6 @@
 		  localisation_key_description = "item_desc_skellige_sword_3"
 		  price	= "150" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Skellige sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -1985,6 +2023,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC Q402 SKELLIGE SWORD 3 -->
@@ -2014,7 +2055,6 @@
 		  localisation_key_description = "item_desc_skellige_sword_3"
 		  price	= "150" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>q402 Skellige sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2035,6 +2075,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NO MANS LAND SWORD 4 -->
@@ -2064,7 +2107,6 @@
 		  localisation_key_description = "item_desc_no_mans_land_sword_4"
 		  price	= "75" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC No Mans Land sword 4 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2084,7 +2126,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NOVIGRAADAN SWORD 3 -->
@@ -2114,7 +2159,6 @@
 		  localisation_key_description = "item_desc_novigraadan_sword_3"
 		  price	= "90" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Novigraadan sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2134,7 +2178,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SKELLIGE SWORD 4 -->
@@ -2164,7 +2211,6 @@
 		  localisation_key_description = "item_desc_skellige_sword_4"
 		  price	= "425" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Skellige sword 4 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2184,7 +2230,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>	
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 
 <!-- NPC NILFGAARDIAN SWORD 3 -->
@@ -2214,7 +2263,6 @@
 		  localisation_key_description = "item_desc_nilfgaardian_sword_3"
 		  price	= "275" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Nilfgaardian sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2234,7 +2282,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 2</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SCOIATAEL SWORD 2 -->
@@ -2264,7 +2315,6 @@
 		  localisation_key_description = "item_desc_scoiatael_sword_2"
 		  price	= "500" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Scoiatael sword 2 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2284,7 +2334,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard Sabre</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NOVIGRAADAN SWORD 4 -->
@@ -2314,7 +2367,6 @@
 		  localisation_key_description = "item_desc_novigraadan_sword_4"
 		  price	= "350" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Novigraadan sword 4 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2334,7 +2386,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC NILFGAARDIAN SWORD 4 -->
@@ -2364,7 +2419,6 @@
 		  localisation_key_description = "item_desc_nilfgaardian_sword_4"
 		  price	= "650" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Nilfgaardian sword 4 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2384,7 +2438,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 2</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SCOIATAEL SWORD 3 -->
@@ -2414,7 +2471,6 @@
 		  localisation_key_description = "item_desc_scoiatael_sword_3"
 		  price	= "750" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Scoiatael sword 3 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2434,7 +2490,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard Sabre</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC SCOIATAEL SWORD 4 -->
@@ -2464,7 +2523,6 @@
 		  localisation_key_description = "item_desc_scoiatael_sword_3"
 		  price	= "750" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Scoiatael sword 4 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2484,7 +2542,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>		
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard Sabre</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC INQUISITOR SWORD 1 -->
@@ -2514,7 +2575,6 @@
 		  localisation_key_description = "item_desc_inquisitor_sword_1"
 		  price	= "1000" >
 		<tags>SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 			<a>NPC Inquisitor sword 1 _Stats</a>
 			<a>Default weapon _Stats</a>
@@ -2534,7 +2594,10 @@
 			</action>
 		</anim_actions>
 		<anim_switches>
-		</anim_switches>			
+		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 <!-- NPC WILD HUNT SWORD 4 -->

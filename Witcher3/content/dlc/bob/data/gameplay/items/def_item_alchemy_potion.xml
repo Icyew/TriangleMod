@@ -6,7 +6,7 @@
 	<abilities>
 	
       <ability name="RestoringPotion_stats">
-        <weight type="base" min="0" />
+        <weight type="base" min="0.1" />
 		<quality type="add" min="4" max="4"/>
       </ability>
 	  

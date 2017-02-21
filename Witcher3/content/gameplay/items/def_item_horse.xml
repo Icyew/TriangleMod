@@ -114,19 +114,19 @@
 	<ability name="HorseBag1">
 		<tags>							HorseBag1
 		</tags>
-		<encumbrance					type="add"	min="30"				/>
+		<encumbrance					type="add"	min="40"				/>
 	</ability>
 
 	<ability name="HorseBag2">
 		<tags>							HorseBag2
 		</tags>
-		<encumbrance					type="add"	min="70"				/>
+		<encumbrance					type="add"	min="60"				/>
 	</ability>
 
 	<ability name="HorseBag3">
 		<tags>							HorseBag3
 		</tags>
-		<encumbrance					type="add"	min="100"				/>
+		<encumbrance					type="add"	min="80"				/>
 	</ability>
 
 </abilities>
@@ -139,7 +139,7 @@
 		name							="Horse Bag 1"
 		category						="horse_bag"
 		price							="100"
-		weight							="2.5"
+		weight							="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -159,7 +159,7 @@
 		name							="Horse Bag 2"
 		category						="horse_bag"
 		price							="175"
-		weight							="3.0"
+		weight							="1.1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -179,7 +179,7 @@
 		name							="Horse Bag 3"
 		category						="horse_bag"
 		price							="350"
-		weight							="3.5"
+		weight							="1.2"
 		stackable						="1"
 		ability_mode					="OnMount"
 		grid_size						="2"
@@ -239,7 +239,7 @@
 		name							="Horse Blinder 3"
 		category						="horse_blinder"
 		price							="150"
-		weight							="0.4"
+		weight							="0.3"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -308,7 +308,7 @@
 		name							="Horse Saddle 1"
 		category						="horse_saddle"
 		price							="100"
-		weight							="10"
+		weight							="5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -331,7 +331,7 @@
 		name							="Horse Saddle 1v2"
 		category						="horse_saddle"
 		price							="125"
-		weight							="12"
+		weight							="5.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -354,7 +354,7 @@
 		name							="Horse Saddle 1v3"
 		category						="horse_saddle"
 		price							="150"
-		weight							="13"
+		weight							="6"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -376,7 +376,7 @@
 		name							="Horse Saddle 1v4"
 		category						="horse_saddle"
 		price							="175"
-		weight							="15"
+		weight							="6.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -400,7 +400,7 @@
 		name							="Horse Saddle 2"
 		category						="horse_saddle"
 		price							="200"
-		weight							="12"
+		weight							="7"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -422,7 +422,7 @@
 		name							="Horse Saddle 2v2"
 		category						="horse_saddle"
 		price							="225"
-		weight							="13"
+		weight							="7.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -444,7 +444,7 @@
 		name							="Horse Saddle 2v3"
 		category						="horse_saddle"
 		price							="250"
-		weight							="15"
+		weight							="8"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -466,7 +466,7 @@
 		name							="Horse Saddle 2v4"
 		category						="horse_saddle"
 		price							="275"
-		weight							="16"
+		weight							="8.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -490,7 +490,7 @@
 		name							="Horse Saddle 3"
 		category						="horse_saddle"
 		price							="300"
-		weight							="13"
+		weight							="9"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -513,7 +513,7 @@
 		name							="Horse Saddle 3v2"
 		category						="horse_saddle"
 		price							="325"
-		weight							="14"
+		weight							="9.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -535,7 +535,7 @@
 		name							="Horse Saddle 3v3"
 		category						="horse_saddle"
 		price							="350"
-		weight							="16"
+		weight							="10"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -557,7 +557,7 @@
 		name							="Horse Saddle 3v4"
 		category						="horse_saddle"
 		price							="375"
-		weight							="17"
+		weight							="10.5"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -580,7 +580,7 @@
 		name							="Horse Saddle 4"
 		category						="horse_saddle"
 		price							="400"
-		weight							="16"
+		weight							="11"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"

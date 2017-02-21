@@ -45,6 +45,8 @@ class CBTTaskAttack extends CBTTaskPlayAnimationEventDecorator
 	public var hitActionReactionEventReceived 			: bool;
 	public var hitTimeStamp 							: float;
 	
+	public var myRandomID								: int; //modSigns
+	
 	default stopTask 									= false;
 	default spawnSparksFxOnCustomItemCollision 			= 'fx';
 	
@@ -53,7 +55,7 @@ class CBTTaskAttack extends CBTTaskPlayAnimationEventDecorator
 	function IsAvailable() : bool
 	{
 		var target : CActor = GetCombatTarget();
-		
+
 		if ( unavailableWhenInvisibleTarget && target && !target.GetGameplayVisibility() )
 		{
 			return false;
@@ -71,6 +73,27 @@ class CBTTaskAttack extends CBTTaskPlayAnimationEventDecorator
 		var minDistance : float;
 		var actorTarget : CActor;
 		var humanCombatDataStorage : CHumanAICombatStorage;
+		
+		//theGame.witcherLog.AddMessage("" + myRandomID + ": attackType = " + attackType + ": activated on = " + GetLocalTime()); //modSigns: debug
+		
+		if( !IsAvailable() ) //modSigns
+		{
+			//theGame.witcherLog.AddMessage("" + myRandomID + ": not available, deactivating"); //modSigns: debug
+			Complete(false);
+			return BTNS_Failed;
+		}
+		
+		//theGame.witcherLog.AddMessage("!!!!!!!!!OnActivate!!!!!!!!!"); //modSigns: debug
+		//theGame.witcherLog.AddMessage("myRandomID = " + myRandomID); //modSigns: debug
+		//theGame.witcherLog.AddMessage("AttackType = " + attackType); //modSigns: debug
+		//theGame.witcherLog.AddMessage("xmlStaminaCostName = " + xmlStaminaCostName); //modSigns: debug
+		//theGame.witcherLog.AddMessage("drainStaminaOnUse = " + drainStaminaOnUse); //modSigns: debug
+		//theGame.witcherLog.AddMessage("MaxStamina = " + npc.GetStatMax(BCS_Stamina)); //modSigns: debug
+		//theGame.witcherLog.AddMessage("Stamina = " + npc.GetStat(BCS_Stamina)); //modSigns: debug
+		//theGame.witcherLog.AddMessage("IsGuarded = " + npc.IsGuarded()); //modSigns: debug
+		//theGame.witcherLog.AddMessage("IsAttacking = " + GetNPC().IsAttacking()); //modSigns: debug
+		//theGame.witcherLog.AddMessage("IsCountering = " + npc.IsCountering()); //modSigns: debug
+		//theGame.witcherLog.AddMessage("CanPlayHitAnim = " + npc.CanPlayHitAnim()); //modSigns: debug
 		
 		extractedMotionDisabled = false;
 		
@@ -174,7 +197,14 @@ class CBTTaskAttack extends CBTTaskPlayAnimationEventDecorator
 		{	
 			SleepOneFrame();
 		}
+		//theGame.witcherLog.AddMessage("!!!!!!!!!Main!!!!!!!!!"); //modSigns: debug
+		//theGame.witcherLog.AddMessage("myRandomID = " + myRandomID); //modSigns: debug
 		combatDataStorage.SetIsAttacking( true, GetLocalTime() );
+		//modSigns: drain stamina only if actor is indeed attacking
+		if ( !drainStaminaOnUse && (xmlStaminaCostName == 'light_action_stamina_cost' || xmlStaminaCostName == 'counter_stamina_cost') )
+		{
+			GetNPC().DrainStamina(ESAT_FixedValue, CalculateAttributeValue(GetNPC().GetAttributeValue( xmlStaminaCostName )), 0.5);
+		}
 		theGame.GetBehTreeReactionManager().CreateReactionEventIfPossible( GetActor(), 'NpcAttackAction', 10.0, 15.0f, -1, -1, true); 
 		
 		return BTNS_Active;
@@ -184,6 +214,12 @@ class CBTTaskAttack extends CBTTaskPlayAnimationEventDecorator
 	{
 		var npc : CNewNPC = GetNPC();
 		var target : CActor = GetCombatTarget();
+		
+		//theGame.witcherLog.AddMessage("" + myRandomID + ": attackType = " + attackType + ": deactivated on = " + GetLocalTime()); //modSigns: debug
+		
+		//theGame.witcherLog.AddMessage("!!!!!!!!!OnDeactivate!!!!!!!!!"); //modSigns: debug
+		//theGame.witcherLog.AddMessage("myRandomID = " + myRandomID); //modSigns: debug
+		//theGame.witcherLog.AddMessage("IsAttacking = " + GetNPC().IsAttacking()); //modSigns: debug
 		
 		combatDataStorage.SetIsAttacking( false );
 		
@@ -501,6 +537,9 @@ class CBTTaskAttackDef extends CBTTaskPlayAnimationEventDecoratorDef
 	editable var customEffectPercentValue						: float;
 	editable var unavailableWhenInvisibleTarget 				: bool;
 	
+	default xmlStaminaCostName 									= 'light_action_stamina_cost'; //modSigns
+	default drainStaminaOnUse 									= false; //modSigns: check in parent, but drain manually
+	
 	default attackType 											= EAT_Attack1;
 	default stopTaskAfterDealingDmg 							= false;
 	default useDirectionalAttacks 								= false;
@@ -526,5 +565,14 @@ class CBTTaskAttackDef extends CBTTaskPlayAnimationEventDecoratorDef
 		{
 			thisTask.attackType	= GetValInt( attackParameter );
 		}
+		
+		if( attackType == EAT_Attack20 ) //modSigns: counterattack stamina cost
+		{
+			thisTask.xmlStaminaCostName = 'counter_stamina_cost';
+			thisTask.drainStaminaOnUse = false; //drain manually
+			thisTask.checkStats = true;
+		}
+		
+		thisTask.myRandomID = RandRange(1000) + RandRange(100) + RandRange(10);
 	}
 };

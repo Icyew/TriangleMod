@@ -64,7 +64,7 @@
 	<item
 		name							="Dye Solution"
 		category						="dye"
-		price							="150"
+		price							="25"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -72,9 +72,9 @@
 		localisation_key_description	="item_desc_dye_solution"
 		icon_path						="icons/inventory/dye/dye_solution_64x64.png"
 	>
-		<tags>							CraftingIngredient, mod_alchemy, mod_valuable
+		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
-		<base_abilities>				<a>Magic _Stats</a>
+		<base_abilities>
 		</base_abilities>
 	</item>
 
@@ -82,7 +82,7 @@
 	<item
 		name							="Dye Default"
 		category						="dye"
-		price							="247"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -93,7 +93,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Default Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -101,7 +100,7 @@
 	<item
 		name							="Dye Gray"
 		category						="dye"
-		price							="189"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -112,7 +111,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Gray Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -120,7 +118,7 @@
 	<item
 		name							="Dye Turquoise"
 		category						="dye"
-		price							="218"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -131,7 +129,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Turquoise Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -139,7 +136,7 @@
 	<item
 		name							="Dye Brown"
 		category						="dye"
-		price							="219"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -150,7 +147,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Brown Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -158,7 +154,7 @@
 	<item
 		name							="Dye Green"
 		category						="dye"
-		price							="207"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -169,7 +165,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Green Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 	
@@ -177,7 +172,7 @@
 	<item
 		name							="Dye Blue"
 		category						="dye"
-		price							="226"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -188,14 +183,13 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Blue Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 <!-- -->
 	<item
 		name							="Dye Orange"
 		category						="dye"
-		price							="212"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -206,7 +200,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Orange Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -214,7 +207,7 @@
 	<item
 		name							="Dye Pink"
 		category						="dye"
-		price							="213"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -225,7 +218,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Pink Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -233,7 +225,7 @@
 	<item
 		name							="Dye Yellow"
 		category						="dye"
-		price							="169"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -244,7 +236,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Yellow Color</a>
-										<a>Magic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -252,7 +243,7 @@
 	<item
 		name							="Dye Black"
 		category						="dye"
-		price							="191"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -263,7 +254,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Black Color</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -271,7 +261,7 @@
 	<item
 		name							="Dye White"
 		category						="dye"
-		price							="172"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -282,7 +272,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye White Color</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -290,7 +279,7 @@
 	<item
 		name							="Dye Red"
 		category						="dye"
-		price							="209"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -301,7 +290,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Red Color</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
 	</item>
 
@@ -309,7 +297,7 @@
 	<item
 		name							="Dye Purple"
 		category						="dye"
-		price							="164"
+		price							="50"
 		weight							="0.1"
 		grid_size						="1"
 		stackable						="100"
@@ -320,7 +308,6 @@
 		<tags>							CraftingIngredient, mod_crafting, mod_dye
 		</tags>
 		<base_abilities>				<a>Dye Purple Color</a>
-										<a>Relic _Stats</a>
 		</base_abilities>
 	</item>
 

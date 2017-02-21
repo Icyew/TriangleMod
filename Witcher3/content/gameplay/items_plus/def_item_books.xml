@@ -5,11 +5,11 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 	<ability name="Default Book _Stats">
-		<weight type="base" min="0.5" />
+		<weight type="base" min="0.2" />
 	</ability>
 
 	<ability name="Default Note _Stats">
-		<weight type="base" min="0.1" />
+		<weight type="base" min="0.05" />
 	</ability>
 </abilities>
 
@@ -3168,8 +3168,8 @@
 	<item
 		name							="Gwent Almanac"
 		category						="book"
-		price							="1"
-		stackable						="100"
+		price							="10"
+		stackable						="1"
 		ability_slots					="0"
 		localisation_key_name			="item_name_gwent_almanac"
 		localisation_key_description	="item_desc_gwent_almanac"

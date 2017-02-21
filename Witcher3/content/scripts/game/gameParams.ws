@@ -208,13 +208,13 @@ import class W3GameParams extends CObject
 		default TAG_REPAIR_CONSUMABLE_STEEL = 'RepairSteel';
 		default TAG_REPAIR_CONSUMABLE_SILVER = 'RepairSilver';
 		
-		default ITEM_DAMAGED_DURABILITY = 50;
+		default ITEM_DAMAGED_DURABILITY = 75;					//modSigns
 	
 		default DURABILITY_ARMOR_LOSE_CHANCE = 100;
 		default DURABILITY_WEAPON_LOSE_CHANCE = 100;
-		default DURABILITY_ARMOR_LOSE_VALUE = 0.6;	
-		default DURABILITY_WEAPON_LOSE_VALUE = 0.26; 
-		default DURABILITY_WEAPON_LOSE_VALUE_HARDCORE = 0.1;
+		default DURABILITY_ARMOR_LOSE_VALUE = 0.5;				//modSigns
+		default DURABILITY_WEAPON_LOSE_VALUE = 0.1;				//modSigns
+		default DURABILITY_WEAPON_LOSE_VALUE_HARDCORE = 0.05;	//modSigns
 		
 		
 		default DURABILITY_ARMOR_MISS_WEIGHT = 10;
@@ -256,16 +256,18 @@ import class W3GameParams extends CObject
 	public const var TAG_PLAYER_STEELSWORD : name;					
 	public const var TAG_PLAYER_SILVERSWORD : name;					
 	public const var TAG_INFINITE_USE : name;						
-	private var ARMOR_MASTERWORK_ABILITIES 	: array<name>;			
-	private var ARMOR_MAGICAL_ABILITIES 	: array<name>;			
-	private var GLOVES_MASTERWORK_ABILITIES	: array<name>;			
-	private var GLOVES_MAGICAL_ABILITIES 	: array<name>;			
-	private var PANTS_MASTERWORK_ABILITIES	: array<name>;			
-	private var PANTS_MAGICAL_ABILITIES 	: array<name>;			
-	private var BOOTS_MASTERWORK_ABILITIES	: array<name>;			
-	private var BOOTS_MAGICAL_ABILITIES 	: array<name>;			
-	private var WEAPON_MASTERWORK_ABILITIES	: array<name>;			
-	private var WEAPON_MAGICAL_ABILITIES 	: array<name>;			
+	private var ARMOR_COMMON_ABILITIES		: array<name>;			//modSigns: random resistances for all armors
+	private var ARMOR_MASTERWORK_ABILITIES 	: array<name>;			//abilities randomly added to masterwork or better armors
+	private var ARMOR_MAGICAL_ABILITIES 	: array<name>;			//abilities randomly added to magical or better armors
+	private var GLOVES_MASTERWORK_ABILITIES	: array<name>;			//abilities randomly added to masterwork or better gloves
+	private var GLOVES_MAGICAL_ABILITIES 	: array<name>;			//abilities randomly added to magical or better gloves
+	private var PANTS_MASTERWORK_ABILITIES	: array<name>;			//abilities randomly added to masterwork or better pants
+	private var PANTS_MAGICAL_ABILITIES 	: array<name>;			//abilities randomly added to magical or better pants
+	private var BOOTS_MASTERWORK_ABILITIES	: array<name>;			//abilities randomly added to masterwork or better boots
+	private var BOOTS_MAGICAL_ABILITIES 	: array<name>;			//abilities randomly added to magical or better boots
+	private var WEAPON_COMMON_ABILITIES		: array<name>;			//modSigns: random common abilities for weapons
+	private var WEAPON_MASTERWORK_ABILITIES	: array<name>;			//abilities randomly added to masterwork or better weapons
+	private var WEAPON_MAGICAL_ABILITIES 	: array<name>;			//abilities randomly added to magical or better armors
 	public const var ITEM_SET_TAG_BEAR, ITEM_SET_TAG_GRYPHON, ITEM_SET_TAG_LYNX, ITEM_SET_TAG_WOLF, ITEM_SET_TAG_RED_WOLF, ITEM_SET_TAG_VAMPIRE, ITEM_SET_TAG_VIPER : name;		
 	public const var BOUNCE_ARROWS_ABILITY : name;					
 	public const var TAG_ALCHEMY_REFILL_ALCO : name;				
@@ -633,18 +635,19 @@ import class W3GameParams extends CObject
 	
 	private function InitArmorAbilities()
 	{
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_Armor');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_SlashingResistance');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_PiercingResistance');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_BludgeoningResistance');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_RendingResistance');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_ElementalResistance');
-		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_BurningResistance');
+		//modSigns
+		ARMOR_COMMON_ABILITIES.PushBack('MA_SlashingResistance');
+		ARMOR_COMMON_ABILITIES.PushBack('MA_PiercingResistance');
+		ARMOR_COMMON_ABILITIES.PushBack('MA_BludgeoningResistance');
+		ARMOR_COMMON_ABILITIES.PushBack('MA_RendingResistance');
+		ARMOR_COMMON_ABILITIES.PushBack('MA_ElementalResistance');
 		
-		ARMOR_MAGICAL_ABILITIES.PushBack('MA_PoisonResistance');
-		ARMOR_MAGICAL_ABILITIES.PushBack('MA_BleedingResistance');
-		ARMOR_MAGICAL_ABILITIES.PushBack('MA_Vitality');
-		ARMOR_MAGICAL_ABILITIES.PushBack('MA_AdrenalineGain');
+		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_BurningResistance');
+		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_PoisonResistance');
+		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_BleedingResistance');
+		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_AdrenalineGain');
+		ARMOR_MASTERWORK_ABILITIES.PushBack('MA_Vitality');
+		
 		ARMOR_MAGICAL_ABILITIES.PushBack('MA_AardIntensity');
 		ARMOR_MAGICAL_ABILITIES.PushBack('MA_IgniIntensity');
 		ARMOR_MAGICAL_ABILITIES.PushBack('MA_QuenIntensity');
@@ -654,64 +657,72 @@ import class W3GameParams extends CObject
 	
 	private function InitGlovesAbilities()
 	{
-		GLOVES_MASTERWORK_ABILITIES.PushBack('MA_Armor');
+		//modSigns
 		GLOVES_MASTERWORK_ABILITIES.PushBack('MA_BurningResistance');
+		GLOVES_MASTERWORK_ABILITIES.PushBack('MA_PoisonResistance');
+		GLOVES_MASTERWORK_ABILITIES.PushBack('MA_BleedingResistance');
+		GLOVES_MASTERWORK_ABILITIES.PushBack('MA_AdrenalineGain');
 		
-		GLOVES_MAGICAL_ABILITIES.PushBack('MA_PoisonResistance');
-		GLOVES_MAGICAL_ABILITIES.PushBack('MA_BleedingResistance');
 		GLOVES_MAGICAL_ABILITIES.PushBack('MA_AardIntensity');
 		GLOVES_MAGICAL_ABILITIES.PushBack('MA_IgniIntensity');
 		GLOVES_MAGICAL_ABILITIES.PushBack('MA_QuenIntensity');
 		GLOVES_MAGICAL_ABILITIES.PushBack('MA_YrdenIntensity');
 		GLOVES_MAGICAL_ABILITIES.PushBack('MA_AxiiIntensity');
-		GLOVES_MAGICAL_ABILITIES.PushBack('MA_AttackPowerMult');
-		GLOVES_MAGICAL_ABILITIES.PushBack('MA_CriticalChance');
-		GLOVES_MAGICAL_ABILITIES.PushBack('MA_CriticalDamage');
 	}
 	
 	private function InitPantsAbilities()
 	{
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_Armor');
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_SlashingResistance');
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_PiercingResistance');
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_BludgeoningResistance');
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_RendingResistance');
-		PANTS_MASTERWORK_ABILITIES.PushBack('MA_ElementalResistance');
+		//modSigns
 		PANTS_MASTERWORK_ABILITIES.PushBack('MA_BurningResistance');
+		PANTS_MASTERWORK_ABILITIES.PushBack('MA_PoisonResistance');
+		PANTS_MASTERWORK_ABILITIES.PushBack('MA_BleedingResistance');
+		PANTS_MASTERWORK_ABILITIES.PushBack('MA_AdrenalineGain');
+		PANTS_MASTERWORK_ABILITIES.PushBack('MA_Vitality');
 		
-		PANTS_MAGICAL_ABILITIES.PushBack('MA_PoisonResistance');
-		PANTS_MAGICAL_ABILITIES.PushBack('MA_BleedingResistance');
-		PANTS_MAGICAL_ABILITIES.PushBack('MA_Vitality');
-		PANTS_MAGICAL_ABILITIES.PushBack('MA_StaminaRegeneration');
+		PANTS_MAGICAL_ABILITIES.PushBack('MA_AardIntensity');
+		PANTS_MAGICAL_ABILITIES.PushBack('MA_IgniIntensity');
+		PANTS_MAGICAL_ABILITIES.PushBack('MA_QuenIntensity');
+		PANTS_MAGICAL_ABILITIES.PushBack('MA_YrdenIntensity');
+		PANTS_MAGICAL_ABILITIES.PushBack('MA_AxiiIntensity');
 	}
 	
 	private function InitBootsAbilities()
 	{
-		BOOTS_MASTERWORK_ABILITIES.PushBack('MA_Armor');
+		//modSigns
 		BOOTS_MASTERWORK_ABILITIES.PushBack('MA_BurningResistance');
+		BOOTS_MASTERWORK_ABILITIES.PushBack('MA_PoisonResistance');
+		BOOTS_MASTERWORK_ABILITIES.PushBack('MA_BleedingResistance');
+		BOOTS_MASTERWORK_ABILITIES.PushBack('MA_AdrenalineGain');
 		
-		BOOTS_MAGICAL_ABILITIES.PushBack('MA_PoisonResistance');
-		BOOTS_MAGICAL_ABILITIES.PushBack('MA_BleedingResistance');
-		BOOTS_MAGICAL_ABILITIES.PushBack('MA_StaminaRegeneration');
-		BOOTS_MAGICAL_ABILITIES.PushBack('MA_AdrenalineGain');
+		BOOTS_MAGICAL_ABILITIES.PushBack('MA_AardIntensity');
+		BOOTS_MAGICAL_ABILITIES.PushBack('MA_IgniIntensity');
+		BOOTS_MAGICAL_ABILITIES.PushBack('MA_QuenIntensity');
+		BOOTS_MAGICAL_ABILITIES.PushBack('MA_YrdenIntensity');
+		BOOTS_MAGICAL_ABILITIES.PushBack('MA_AxiiIntensity');
 	}
 	
 	private function InitWeaponAbilities()
 	{
+		//modSigns
+		WEAPON_COMMON_ABILITIES.PushBack('MA_ArmorPenetration');
+		WEAPON_COMMON_ABILITIES.PushBack('MA_ArmorPenetrationPerc');
+		WEAPON_COMMON_ABILITIES.PushBack('MA_AttackPowerMult');
+		WEAPON_COMMON_ABILITIES.PushBack('MA_CriticalChance');
+		WEAPON_COMMON_ABILITIES.PushBack('MA_CriticalDamage');
+		WEAPON_COMMON_ABILITIES.PushBack('MA_AdrenalineGain');
 		
-		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_ArmorPenetration');
-		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_CriticalChance');
-		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_CriticalDamage');
 		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_BleedingChance');
+		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_FreezingChance');
+		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_PoisonChance');
+		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_ConfusionChance');
+		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_BurningChance');
+		WEAPON_MASTERWORK_ABILITIES.PushBack('MA_StaggerChance');
 		
-		WEAPON_MAGICAL_ABILITIES.PushBack('MA_AdrenalineGain');
 		WEAPON_MAGICAL_ABILITIES.PushBack('MA_AardIntensity');
 		WEAPON_MAGICAL_ABILITIES.PushBack('MA_IgniIntensity');
 		WEAPON_MAGICAL_ABILITIES.PushBack('MA_QuenIntensity');
 		WEAPON_MAGICAL_ABILITIES.PushBack('MA_YrdenIntensity');
 		WEAPON_MAGICAL_ABILITIES.PushBack('MA_AxiiIntensity');
-		WEAPON_MAGICAL_ABILITIES.PushBack('MA_PoisonChance');
-		
 	}
 	
 	
@@ -746,10 +757,26 @@ import class W3GameParams extends CObject
 	
 	public function GetDurabilityMultiplier(durabilityRatio : float, isWeapon : bool) : float
 	{
-		if(isWeapon)
+		/*if(isWeapon)
 			return GetDurMult(durabilityRatio, durabilityThresholdsWeapon);
 		else
-			return GetDurMult(durabilityRatio, durabilityThresholdsArmor);
+			return GetDurMult(durabilityRatio, durabilityThresholdsArmor);*/
+		//modSigns: make durability matter more
+		var currDiff : EDifficultyMode;
+		currDiff = theGame.GetDifficultyMode();
+		switch( currDiff )
+		{
+			case EDM_Easy:
+				return ClampF(1.0f - (1.0f - durabilityRatio)/4.0f, 0.8f, 1.0f);
+			case EDM_Medium:
+				return ClampF(1.0f - (1.0f - durabilityRatio)/4.0f, 0.7f, 1.0f);
+			case EDM_Hard:
+				return ClampF(1.0f - (1.0f - durabilityRatio)/2.0f, 0.6f, 1.0f);
+			case EDM_Hardcore:
+				return ClampF(1.0f - (1.0f - durabilityRatio)/2.0f, 0.5f, 1.0f);
+			default:
+				return 1.0f;
+		}
 	}
 	
 	private function GetDurMult(durabilityRatio : float, durs : array<SDurabilityThreshold>) : float
@@ -769,6 +796,11 @@ import class W3GameParams extends CObject
 		return durs[0].multiplier;
 	}
 	
+	//modSigns
+	public function GetRandomCommonArmorAbility() : name
+	{
+		return ARMOR_COMMON_ABILITIES[RandRange(ARMOR_COMMON_ABILITIES.Size())];
+	}
 	
 	public function GetRandomMasterworkArmorAbility() : name
 	{
@@ -808,6 +840,12 @@ import class W3GameParams extends CObject
 	public function GetRandomMagicalBootsAbility() : name
 	{
 		return BOOTS_MAGICAL_ABILITIES[RandRange(BOOTS_MAGICAL_ABILITIES.Size())];
+	}
+	
+	//modSigns
+	public function GetRandomCommonWeaponAbility() : name
+	{
+		return WEAPON_COMMON_ABILITIES[RandRange(WEAPON_COMMON_ABILITIES.Size())];
 	}
 	
 	public function GetRandomMasterworkWeaponAbility() : name
@@ -908,7 +946,7 @@ import class W3GameParams extends CObject
 		}		
 	}	
 	    
-  	public function GetItemLevel(itemCategory : name, itemAttributes : array<SAbilityAttributeValue>, optional itemName : name, optional out baseItemLevel : int) : int
+  	public function GetItemLevel(itemCategory : name, itemAttributes : array<SAbilityAttributeValue>, optional itemName : name/*, optional out baseItemLevel : int*/) : int //modSigns
 	{
 		var stat : SAbilityAttributeValue;
 		var stat_f : float;
@@ -916,51 +954,54 @@ import class W3GameParams extends CObject
 		var stat_min, stat_add : float;
 		var level : int;
 	
+		//modSigns: notes
+		//weapon level is determined by BASE damage value and armor level is determined by BASE armor reduction value
+		//bonuses with type="add" don't affect weapon level
 		if ( itemCategory == 'armor' )
 		{
-				stat_min = 25;
-				stat_add = 5;
+			stat_min = 25;
+			stat_add = 5;
 			stat = itemAttributes[0];
-			level = FloorF( 1 + ( stat.valueBase - stat_min ) / stat_add );
+			level = CeilF( ( stat.valueBase - stat_min ) / stat_add ); //modSigns
 		} else
 		if ( itemCategory == 'boots' )
 		{
-				stat_min = 5;
-				stat_add = 2;
+			stat_min = 5;
+			stat_add = 2;
 			stat = itemAttributes[0];
-			level = FloorF( 1 + ( stat.valueBase - stat_min ) / stat_add );
+			level = CeilF( ( stat.valueBase - stat_min ) / stat_add ); //modSigns
 		} else
 		if ( itemCategory == 'gloves' )
 		{
-				stat_min = 1;
-				stat_add = 2;
+			stat_min = 1;
+			stat_add = 2;
 			stat = itemAttributes[0];
-			level = FloorF( 1 + ( stat.valueBase - stat_min ) / stat_add );
+			level = CeilF( ( stat.valueBase - stat_min ) / stat_add ); //modSigns
 		} else
 		if ( itemCategory == 'pants' )
 		{
-				stat_min = 5;
-				stat_add = 2;
+			stat_min = 5;
+			stat_add = 2;
 			stat = itemAttributes[0];
-			level = FloorF( 1 + ( stat.valueBase - stat_min ) / stat_add );
+			level = CeilF( ( stat.valueBase - stat_min ) / stat_add ); //modSigns
 		} else
 		if ( itemCategory == 'silversword' )
 		{
-				stat_min = 90;
-				stat_add = 10;
+			stat_min = 90;
+			stat_add = 10;
 			stat1 = itemAttributes[0];
 			stat2 = itemAttributes[1];
 			stat3 = itemAttributes[2];
 			stat4 = itemAttributes[3];
 			stat5 = itemAttributes[4];
 			stat6 = itemAttributes[5];
-			stat_f = (stat1.valueBase - 1) + (stat2.valueBase - 1) + (stat3.valueBase - 1) + (stat4.valueBase - 1) + (stat5.valueBase - 1) + (stat6.valueBase - 1);
-			level = CeilF( 1 + ( 1 + stat_f - stat_min ) / stat_add );
+			stat_f = MaxF(0, stat1.valueBase - 1) + MaxF(0, stat2.valueBase - 1) + MaxF(0, stat3.valueBase - 1) + MaxF(0, stat4.valueBase - 1) + MaxF(0, stat5.valueBase - 1) + MaxF(0, stat6.valueBase - 1);
+			level = CeilF( ( stat_f - stat_min ) / stat_add );  //modSigns
 		} else
 		if ( itemCategory == 'steelsword' )
 		{
-				stat_min = 25;
-				stat_add = 8;
+			stat_min = 25;
+			stat_add = 8;
 			stat1 = itemAttributes[0];
 			stat2 = itemAttributes[1];
 			stat3 = itemAttributes[2];
@@ -968,8 +1009,8 @@ import class W3GameParams extends CObject
 			stat5 = itemAttributes[4];
 			stat6 = itemAttributes[5];
 			stat7 = itemAttributes[6];
-			stat_f = (stat1.valueBase - 1) + (stat2.valueBase - 1) + (stat3.valueBase - 1) + (stat4.valueBase - 1) + (stat5.valueBase - 1) + (stat6.valueBase - 1) + (stat7.valueBase - 1);
-			level = CeilF( 1 + ( 1 + stat_f - stat_min ) / stat_add );
+			stat_f = MaxF(0, stat1.valueBase - 1) + MaxF(0, stat2.valueBase - 1) + MaxF(0, stat3.valueBase - 1) + MaxF(0, stat4.valueBase - 1) + MaxF(0, stat5.valueBase - 1) + MaxF(0, stat6.valueBase - 1) + MaxF(0, stat7.valueBase - 1);
+			level = CeilF( ( stat_f - stat_min ) / stat_add );  //modSigns
 		} else
 		if ( itemCategory == 'bolt' )
 		{
@@ -980,7 +1021,7 @@ import class W3GameParams extends CObject
 			if ( itemName == 'Target Point Bolt' ) { level = 5; }  else
 			if ( itemName == 'Split Bolt' ) { level = 15; }  else
 			if ( itemName == 'Explosive Bolt' ) { level = 20; }  else
-			if ( itemName == 'Blunt Bolt Legendary' ) { level = 5; }  else
+			//if ( itemName == 'Blunt Bolt Legendary' ) { level = 5; }  else //modSigns: bug? removed
 			if ( itemName == 'Broadhead Bolt Legendary' ) { level = 20; }  else
 			if ( itemName == 'Target Point Bolt Legendary' ) { level = 15; }  else
 			if ( itemName == 'Blunt Bolt Legendary' ) { level = 12; }  else
@@ -1001,11 +1042,16 @@ import class W3GameParams extends CObject
 			if ( stat.valueMultiplicative > 1.7 ) level = 25;
 			if ( stat.valueMultiplicative > 1.8 ) level = 27;
 			if ( stat.valueMultiplicative > 1.9 ) level = 32;
+			//modSigns
+			if ( stat.valueMultiplicative > 2.0 ) level = 34;
+			if ( stat.valueMultiplicative > 2.1 ) level = 38;
 		} 
-		level = level - 1;
+		//modSigns: no dancing around levels
+		level = Clamp(level, 1, GetWitcherPlayer().GetMaxLevel());
+		/*level = level - 1;
 		if ( level < 1 ) level = 1;	
 		baseItemLevel = level;
-		if ( level > GetWitcherPlayer().GetMaxLevel() ) level = GetWitcherPlayer().GetMaxLevel();
+		if ( level > GetWitcherPlayer().GetMaxLevel() ) level = GetWitcherPlayer().GetMaxLevel();*/
 		
 		return level;
 	}
@@ -1035,5 +1081,71 @@ import class W3GameParams extends CObject
 	public final function GetPlayerMaxLevel() : int
 	{
 		return MAX_PLAYER_LEVEL;
+	}
+
+	//modSigns: menu config variables
+	public function GetEnemyHealthMult() : float
+	{
+		return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMHealthMultiplier'));
+	}
+	
+	public function GetEnemyDamageMult() : float
+	{
+		return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMDamageMultiplier'));
+	}
+	
+	public function GetEnemyScalingOption() : int
+	{
+		return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'Virtual_GMScaling'));
+	}
+
+	public function GetNoAnimalUpscaling() : bool
+	{
+		return (bool)(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMNoAnimalUpscaling'));
+	}
+	
+	public function GetRandomScalingMinLevel() : int
+	{
+		return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMRandomScalingMinLevel'));
+	}
+	
+	public function GetRandomScalingMaxLevel() : int
+	{
+		return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMRandomScalingMaxLevel'));
+	}
+	
+	public function GetFixedExp() : bool
+	{
+		return (bool)(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMUseXMLExp'));
+	}
+	
+	public function GetQuestExpModifier() : float
+	{
+		return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMQuestExpModifier'));
+	}
+	
+	public function GetMonsterExpModifier() : float
+	{
+		return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMMonsterExpModifier'));
+	}
+	
+	public function GetNoQuestLevels() : bool
+	{
+		return (bool)(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMNoQuestLevels'));
+	}
+	
+	public function GetBoatSinkOption() : bool
+	{
+		return (bool)(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMSinkBoat'));
+	}
+	
+	public function GetBoatSinkOverEncumbranceOption() : float
+	{
+		return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMSinkBoatOverEnc'));
+	}
+	
+	public function GetEncumbranceMult() : float
+	{
+		return ClampF(StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue('GhostMode', 'GMEncumbranceMultiplier'))/100, 0, 1);
 	}
 }

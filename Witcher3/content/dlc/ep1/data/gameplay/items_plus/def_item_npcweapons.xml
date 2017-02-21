@@ -192,7 +192,6 @@
 	>
 		<tags>	SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon
 		</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 				<a>NPC Long Steel Sword _Stats</a>
 				<a>Default weapon _Stats</a>
@@ -213,6 +212,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard HOS</item>
+		</bound_items>
 	</item>
 	
 	<item 
@@ -244,7 +246,6 @@
 	>
 		<tags>	SteelWeapon,Weapon,sword1h,1handedWeapon,NoShow,NoDrop, mod_weapon
 		</tags>
-		<bound_items></bound_items>
 		<base_abilities>
 				<a>NPC Long Steel Sword _Stats</a>
 				<a>Default weapon _Stats</a>
@@ -265,6 +266,9 @@
 		</anim_actions>
 		<anim_switches>
 		</anim_switches>
+		<bound_items>
+			<item>NPC Scabbard HOS</item>
+		</bound_items>
 	</item>
 
 <item name="q603_dwarf_wooden_sword"
@@ -321,7 +325,7 @@
 			switch_deact="bow_to_shortsword_deact">
 		</anim_switch>
 	</anim_switches>
-</item>	
+</item>
 	
 </items>
 

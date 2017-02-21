@@ -561,6 +561,15 @@ import class CR4Game extends CCommonGame
 	public function LoadQuestLevels( filePath: string ) : void
 	{	
 		var index : int;	
+		
+		//modSigns: no quest levels option
+		if( theGame.params.GetNoQuestLevels() )
+		{
+			questLevelsFilePaths.Clear();
+			questLevelsContainer.Clear();
+			return;
+		}
+		
 		index = questLevelsFilePaths.FindFirst( filePath );		
 		if( index == -1 )
 		{		
@@ -850,7 +859,7 @@ import class CR4Game extends CCommonGame
 		GetGuiManager().OnControllerDisconnected();
 	}
 	
-	
+	//modSigns: reworked
 	event OnGiveReward( target : CEntity, rewardName : name, rewrd : SReward )
 	{
 		var i 						: int;
@@ -862,86 +871,42 @@ import class CR4Game extends CCommonGame
 		var itemsCount				: int;
 		var ids						: array<SItemUniqueId>;
 		var itemCategory 			: name;
-		var lvlDiff					: int;
 		var moneyWon				: int;
-		var expModifier				: float;
-		var difficultyMode			: EDifficultyMode;
-		var rewardNameS				: string;
-		var ep1Content				: bool;
 		var rewardMultData			: SRewardMultiplier;
+		var lvlDiff					: int;
+		var playerLevel, rewardLevel: int;
+		var expModifier				: float;
+		var expPoints				: int;
 		
 		if ( target == thePlayer )
 		{
-			
+			// exp 
 			if ( rewrd.experience > 0 && GetWitcherPlayer())
 			{
-				
-				rewardNameS = NameToString(rewardName);
-				ep1Content = false;
-				if ( StrContains(rewardNameS, "q60") )
+				expModifier = 1.f; //start with 100% exp
+				playerLevel = thePlayer.GetLevel();
+				if(FactsQuerySum("NewGamePlus") > 0) //reward levels are set for base game
+					playerLevel -= params.GetNewGamePlusLevel(); //decrease player level for NG+
+				if(theGame.params.GetNoQuestLevels()) //no quest levels option
+					rewardLevel = 0;
+				else
+					rewardLevel = rewrd.level;
+				if(theGame.params.GetFixedExp() == false && rewardLevel > 0) //default exp option
 				{
-					ep1Content = true;
+					lvlDiff = rewardLevel - playerLevel; //level difference: negative for low level quests, positive for hight level quests
+					//lower lever quests give increasingly less exp and higher level quests give more
+					expModifier += lvlDiff * theGame.params.LEVEL_DIFF_XP_MOD;
+					//0% min, 150% max
+					expModifier = ClampF(expModifier, 0, theGame.params.MAX_XP_MOD);
 				}
-				
-				{
-					if(FactsQuerySum("witcher3_game_finished") > 1 && !ep1Content )
-					{
-						expModifier = 0.5f;		
-					}
-					else
-					{
-						if ( rewrd.level == 0 )
-						{
-							expModifier = 1.f;   
-						}
-						else
-						{
-							lvlDiff = rewrd.level - thePlayer.GetLevel();
-							
-							
-							if(FactsQuerySum("NewGamePlus") > 0)
-								lvlDiff += params.GetNewGamePlusLevel();
-								
-							if ( lvlDiff <= -theGame.params.LEVEL_DIFF_HIGH )
-							{
-								expModifier = 0.f; 		
-							}
-							else
-							{
-								difficultyMode = theGame.GetDifficultyMode();
-								if ( difficultyMode == EDM_Hardcore )
-								{
-									expModifier = 0.8;
-								}
-								else if ( difficultyMode == EDM_Hard )
-								{
-									expModifier = 0.9;
-								}
-								else
-								{
-									expModifier = 1.0;
-								}
-								
-								if ( ep1Content && lvlDiff < theGame.params.LEVEL_DIFF_HIGH )
-								{
-									expModifier += lvlDiff * theGame.params.LEVEL_DIFF_XP_MOD;
-									if ( expModifier > theGame.params.MAX_XP_MOD )
-										expModifier = theGame.params.MAX_XP_MOD;
-									if ( expModifier < 0.f )
-										expModifier = 0.f;
-								}
-							}
-						}
-					}
-				}
-				
-				if(expModifier > 0.f)
-					GetWitcherPlayer().AddPoints( EExperiencePoint, RoundF( rewrd.experience * expGlobalMod_quests * expModifier), true);
-				else if ( expModifier == 0.f && rewrd.experience > 0 )
-				{
-					expModifier = 0.05f;			
-					GetWitcherPlayer().AddPoints( EExperiencePoint, RoundF( rewrd.experience * expGlobalMod_quests * expModifier), true);
-				}
+				//calculate exp
+				expPoints = RoundMath(rewrd.experience * expGlobalMod_quests * expModifier);
+				//always get at least 5 exp
+				expPoints = Max(5, expPoints);
+				//final exp modifier
+				if( theGame.params.GetQuestExpModifier() != 0 )
+					expPoints = RoundMath(expPoints * (1 + theGame.params.GetQuestExpModifier()));
+				GetWitcherPlayer().AddPoints(EExperiencePoint, expPoints, true);
 			}
 			
 			if ( rewrd.achievement > 0 )
@@ -957,16 +922,22 @@ import class CR4Game extends CCommonGame
 			if ( inv )
 			{
 				rewardMultData = thePlayer.GetRewardMultiplierData( rewardName );
+				//modSigns: debug
+				//theGame.witcherLog.AddMessage("rewardName = " + rewardMultData.rewardName);
 				
 				if( rewardMultData.isItemMultiplier )
 				{
 					goldMultiplier = 1.0;
 					itemMultiplier = rewardMultData.rewardMultiplier;
+					//modSigns: debug
+					//theGame.witcherLog.AddMessage("itemMultiplier = " + rewardMultData.rewardMultiplier);
 				}
 				else
 				{
 					goldMultiplier = rewardMultData.rewardMultiplier;
 					itemMultiplier = 1.0;
+					//modSigns: debug
+					//theGame.witcherLog.AddMessage("goldMultiplier = " + rewardMultData.rewardMultiplier);
 				}
 				
 				
@@ -1804,10 +1775,10 @@ import class CR4Game extends CCommonGame
 				questCount = questLevels.GetNumRows();
 				for( i = 0; i < questCount; i += 1 )
 				{
-						questName  = questLevels.GetValueAtAsName( 0, i );
+					questName = questLevels.GetValueAtAsName( 0, i );
 					if ( questName == baseName )
 					{
-							questLevel  = NameToInt( questLevels.GetValueAtAsName( 1, i ) );
+						questLevel = NameToInt( questLevels.GetValueAtAsName( 1, i ) );
 						return playerLevel >= questLevel - 5;
 					}
 				}

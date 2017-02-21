@@ -190,7 +190,7 @@ class W3Effect_Oil extends CBaseGameplayEffect
 
 	public final function GetAmmoPercentage() : float
 	{
-		return currCount / maxCount;
+		return ((float)(currCount)) / ((float)(maxCount)); //modSigns
 	}
 	
 	public final function GetSwordItemId() : SItemUniqueId
@@ -227,6 +227,93 @@ class W3Effect_Oil extends CBaseGameplayEffect
 			
 		return MC_NotSet;
 	}
+	
+	//modSigns
+	public final function GetAttackPowerBonus( monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var attrVal, min, max : SAbilityAttributeValue;
+		
+		if( GetMonsterCategory() != monsterCategory || GetAmmoCurrentCount() < 1 )
+			return attrVal;
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( oilAbility, MonsterCategoryToAttackPowerBonus( monsterCategory ), min, max );
+		attrVal = GetAttributeRandomizedValue(min, max);
+		//theGame.witcherLog.AddCombatMessage("Ability: " + oilAbility, thePlayer, NULL);
+		//theGame.witcherLog.AddCombatMessage("Attribute: " + MonsterCategoryToAttackPowerBonus( monsterCategory ), thePlayer, NULL);
+		//theGame.witcherLog.AddCombatMessage("Value: " + attrVal.valueMultiplicative, thePlayer, NULL);
+		attrVal.valueBase *= GetAmmoPercentage();
+		attrVal.valueAdditive *= GetAmmoPercentage();
+		attrVal.valueMultiplicative *= GetAmmoPercentage();
+		//theGame.witcherLog.AddCombatMessage("Value modified: " + attrVal.valueMultiplicative, thePlayer, NULL);
+		return attrVal;
+	}
+
+	//modSigns
+	public final function GetResistReductionBonus( monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var attrVal, min, max : SAbilityAttributeValue;
+		
+		if( GetMonsterCategory() != monsterCategory || GetAmmoCurrentCount() < 1 )
+			return attrVal;
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( oilAbility, MonsterCategoryToResistReduction( monsterCategory ), min, max );
+		attrVal = GetAttributeRandomizedValue(min, max);
+		//theGame.witcherLog.AddCombatMessage("Ability: " + oilAbility, thePlayer, NULL);
+		//theGame.witcherLog.AddCombatMessage("Attribute: " + MonsterCategoryToResistReduction( monsterCategory ), thePlayer, NULL);
+		//theGame.witcherLog.AddCombatMessage("Value: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+		attrVal.valueBase *= GetAmmoPercentage();
+		attrVal.valueAdditive *= GetAmmoPercentage();
+		attrVal.valueMultiplicative *= GetAmmoPercentage();
+		//theGame.witcherLog.AddCombatMessage("Value modified: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+		return attrVal;
+	}
+	
+	//modSigns
+	public final function GetCriticalChanceBonus( monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var attrVal, min, max : SAbilityAttributeValue;
+		
+		if( GetAmmoCurrentCount() < 1 )
+			return attrVal;
+		if( GetMonsterCategory() == monsterCategory )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( oilAbility, MonsterCategoryToCriticalChanceBonus( monsterCategory ), min, max );
+			attrVal = GetAttributeRandomizedValue(min, max);
+			//theGame.witcherLog.AddCombatMessage("Ability: " + oilAbility, thePlayer, NULL);
+			//theGame.witcherLog.AddCombatMessage("Attribute: " + MonsterCategoryToCriticalChanceBonus( monsterCategory ), thePlayer, NULL);
+			//theGame.witcherLog.AddCombatMessage("Value: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+			attrVal.valueBase *= GetAmmoPercentage();
+			attrVal.valueAdditive *= GetAmmoPercentage();
+			attrVal.valueMultiplicative *= GetAmmoPercentage();
+		}
+		if( GetWitcherPlayer().IsSetBonusActive( EISB_Wolf_2 ) )
+			attrVal.valueAdditive += 0.05;
+		//theGame.witcherLog.AddCombatMessage("Value modified: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+		return attrVal;
+	}
+	
+	//modSigns
+	public final function GetCriticalDamageBonus( monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var attrVal, min, max : SAbilityAttributeValue;
+		
+		if( GetAmmoCurrentCount() < 1 )
+			return attrVal;
+		if( GetMonsterCategory() == monsterCategory )
+		{
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue( oilAbility, MonsterCategoryToCriticalDamageBonus( monsterCategory ), min, max );
+			attrVal = GetAttributeRandomizedValue(min, max);
+			//theGame.witcherLog.AddCombatMessage("Ability: " + oilAbility, thePlayer, NULL);
+			//theGame.witcherLog.AddCombatMessage("Attribute: " + MonsterCategoryToCriticalDamageBonus( monsterCategory ), thePlayer, NULL);
+			//theGame.witcherLog.AddCombatMessage("Value: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+			attrVal.valueBase *= GetAmmoPercentage();
+			attrVal.valueAdditive *= GetAmmoPercentage();
+			attrVal.valueMultiplicative *= GetAmmoPercentage();
+		}
+		if( GetWitcherPlayer().IsSetBonusActive( EISB_Wolf_2 ) )
+			attrVal.valueAdditive += 0.10;
+		//theGame.witcherLog.AddCombatMessage("Value modified: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+		return attrVal;
+	}
+	
 	
 	protected function GetSelfInteraction( e : CBaseGameplayEffect) : EEffectInteract
 	{

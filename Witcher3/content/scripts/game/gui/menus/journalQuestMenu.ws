@@ -413,6 +413,7 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 				}
 			}
 		}
+		
 		lvlDiff = questLevel - thePlayer.GetLevel();
 		
 		if(lvlDiff >= theGame.params.LEVEL_DIFF_HIGH && ShouldProcessTutorial('TutorialHighLevelQuests'))
@@ -523,6 +524,12 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 		l_questsDataFlashObject.SetMemberFlashString( "questArea", l_GroupTag );
 		
 		l_questsDataFlashObject.SetMemberFlashBool( "tracked", l_questIsTracked );
+		//modSigns: debug
+		if( FactsQuerySum( "modSigns_debug_labels" ) > 0 )
+		{
+			l_questTitle =  l_Tag + ": " + l_questTitle;
+			LogChannel('modSigns', "Quest: " + l_questTitle);
+		}
 		l_questsDataFlashObject.SetMemberFlashString(  "label", l_questTitle );
 		l_questsDataFlashObject.SetMemberFlashString( "secondLabel", l_areaTag );
 		l_questsDataFlashObject.SetMemberFlashString( "area", l_questLevel );
@@ -659,6 +666,18 @@ class CR4JournalQuestMenu extends CR4ListBaseMenu
 						
 						
 						l_objectiveTag = l_objective.GetUniqueScriptTag();
+						//modSigns: debug
+						if( FactsQuerySum( "modSigns_debug_labels" ) > 0 )
+						{
+							l_objectiveTitle = l_objectiveTag + ": " + l_objectiveTitle;
+							LogChannel('modSigns', "Objective: " + l_objectiveTag);
+						}
+						//modSigns: fix 5000 crowns for enchanter
+						if( NameToString(l_objectiveTag) == "Gather 5000 crowns for the enchanter 95C07E63-41549B12-5866D9AB-89B00199" ||
+							NameToString(l_objectiveTag) == "Deliver 5000 crowns to the enchanter 7EFEF80B-483E7F6F-BB78AEB6-8AC302D1" )
+						{
+							l_objectiveTitle = StrReplace( l_objectiveTitle, "5000", "3000" );
+						}
 						l_questObjectiveDataFlashObject.SetMemberFlashUInt(  "tag", NameToFlashUInt(l_objectiveTag) ); 
 						l_questObjectiveDataFlashObject.SetMemberFlashBool( "isNew", l_objectiveIsNew );
 						l_questObjectiveDataFlashObject.SetMemberFlashBool( "tracked", l_objectiveIsTracked );

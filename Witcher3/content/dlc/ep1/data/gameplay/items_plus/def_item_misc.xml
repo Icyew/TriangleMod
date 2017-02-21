@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ITEM DEFINITONS ######################## -->
 <items>
 
@@ -33,7 +35,7 @@
 	<item 	name="Shani Flower 1"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.05"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -58,7 +60,7 @@
 	<item 	name="Shani Flower 3"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.05"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -83,7 +85,7 @@
 		<item 	name="Shani Alcohol 1"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.1"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -108,7 +110,7 @@
 			<item 	name="Shani Alcohol 2"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.1"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -133,7 +135,7 @@
 	<item 	name="Censer"
 			category="usable"
 			price = "1"
-			weight="0.9"
+			weight="0.2"
 			equip_slot=""
 			hold_slot="l_weapon"
 			equip_template="q602_item__censer"
@@ -141,7 +143,7 @@
 			icon_path="icons/inventory/quests/censer_64x64.png" 
 			localisation_key_name = "item_name_q602_censer"
 			localisation_key_description = "item_desc_q602_censer" >
-		<tags>QuickSlot,Quest, UI_OilLamp</tags>
+		<tags>QuickSlot,Quest, UI_Censer</tags>
 		<anim_actions>
 			<action
 				name="holster"
@@ -152,6 +154,9 @@
 		</anim_actions>
 	</item>
 
+	<item name="Body palms cut" category="gloves" stackable="1" enhancement_slots="0" equip_template="g_01_mg__body_q602" ability_mode="OnMount">
+				<tags>NoDrop,NoShow,Body</tags>
+	</item>
 
 	<item
 		name							="q603_circus_bolt"
@@ -176,7 +181,7 @@
 		name							="q603_circus_crossbow"
 		category						="crossbow"
 		price							="22"
-		weight 							="1.53"
+		weight 							="1.5"
 		enhancement_slots				="0"
 		ability_slots					="0"
 		grid_size						="2"
@@ -192,7 +197,7 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Crossbow 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
+		<recycling_parts>				<parts count="1">Timber</parts>
 										<parts count="1">String</parts>
 										<parts count="1">Iron ore</parts>
 		</recycling_parts>

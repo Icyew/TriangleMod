@@ -32,10 +32,10 @@ class CBTTaskToadYrden extends IBehTreeTask
 		{
 			if ( leftYrden )
 				break;
-			else if (  npc.GetHitCounter() >= 3  )
+			/*else if (  npc.GetHitCounter() >= 3  )
 			{
 				break;
-			}
+			}*/ //modSigns: removed
 			else if ( theGame.GetEngineTimeAsSeconds() > enterTimestamp + leaveAfter )
 			{
 				break;

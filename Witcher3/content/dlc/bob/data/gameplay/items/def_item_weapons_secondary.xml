@@ -6,26 +6,24 @@
 		<abilities>
 
 			<ability name="Knight Mace 1 _Stats">
-				<weight							type="base"	min="4.05"				/>
-				<quality						type="add"	min="2"		max="2"		/>
+				<weight							type="base"	min="8"					/>
+				<quality						type="add"	min="2"					/>
 				<SilverDamage 					type="base"	min="1"					/>
 			</ability>
 
 			<ability name="Knight Mace 2 _Stats">
-				<weight							type="base"	min="4.2"				/>
-				<quality						type="add"	min="3"		max="3"		/>
+				<weight							type="base"	min="8"					/>
+				<quality						type="add"	min="3"					/>
 				<SilverDamage 					type="base"	min="1"					/>
 			</ability>
 
 			<ability name="Knight Mace 3 _Stats">
-				<weight							type="base"	min="4.2"				/>
+				<weight							type="base"	min="8"					/>
 				<quality						type="add"	min="4"					/>
 				<SilverDamage 					type="base"	min="1"					/>
-				<armor_reduction 				type="base" min="150" 				/>
+				<armor_reduction 				type="base" min="60" 				/>
 				<critical_hit_chance 			type="add" 	min="0.05" 				/>
 				<critical_hit_damage_bonus 		type="add" 	min="0.50" 				/>
-				<ConfusionEffect 				is_ability="true" 					/>
-				<desc_confusionchance_mult 		type="add" min="0.05" 				/>
 				<StaggerEffect 					is_ability="true" 					/>
 				<buff_apply_chance 				type="add" min="0.05" 				/>
 				<desc_staggerchance_mult 		type="add" min="0.05" 				/>
@@ -39,7 +37,7 @@
 			<item
 					name							="Nazairi Mace"
 					category						="steelsword"
-					price 							="64"
+					price 							="35"
 					initial_durability				="100"
 					max_durability					="100"
 					enhancement_slots				="0"
@@ -65,8 +63,7 @@
 				>
 					<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 					</tags>
-					<recycling_parts>				<parts count="2">Steel ingot</parts>
-													<parts count="1">Silver ingot</parts>
+					<recycling_parts>				<parts count="1">Iron ingot</parts>
 													<parts count="1">Leather straps</parts>
 					</recycling_parts>
 					<base_abilities>				<a>Default weapon _Stats</a>
@@ -107,7 +104,7 @@
 			<item
 					name							="Knight Mace 1"
 					category						="steelsword"
-					price 							="70"
+					price 							="35"
 					initial_durability				="100"
 					max_durability					="100"
 					enhancement_slots				="0"
@@ -133,9 +130,8 @@
 				>
 					<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 					</tags>
-					<recycling_parts>				<parts count="2">Steel ingot</parts>
-													<parts count="1">Silver ingot</parts>
-													<parts count="1">Leather squares</parts>
+					<recycling_parts>				<parts count="1">Iron ingot</parts>
+													<parts count="1">Leather straps</parts>
 					</recycling_parts>
 					<base_abilities>				<a>Default weapon _Stats</a>
 													<a>Knight Mace 1 _Stats</a>
@@ -175,7 +171,7 @@
 			<item
 					name							="Knight Mace 2"
 					category						="steelsword"
-					price 							="70"
+					price 							="65"
 					initial_durability				="100"
 					max_durability					="100"
 					enhancement_slots				="0"
@@ -201,8 +197,7 @@
 				>
 					<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 					</tags>
-					<recycling_parts>				<parts count="2">Steel ingot</parts>
-													<parts count="1">Silver ingot</parts>
+					<recycling_parts>				<parts count="1">Steel ingot</parts>
 													<parts count="1">Leather squares</parts>
 					</recycling_parts>
 					<base_abilities>				<a>Default weapon _Stats</a>
@@ -243,7 +238,7 @@
 			<item
 					name							="Knight Mace 3"
 					category						="steelsword"
-					price 							="70"
+					price 							="150"
 					initial_durability				="100"
 					max_durability					="100"
 					enhancement_slots				="0"
@@ -269,9 +264,8 @@
 				>
 					<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeMace, SecondaryWeapon, mod_secondary
 					</tags>
-					<recycling_parts>				<parts count="2">Steel ingot</parts>
-													<parts count="1">Silver ingot</parts>
-													<parts count="1">Leather squares</parts>
+					<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+													<parts count="1">Leather</parts>
 					</recycling_parts>
 					<base_abilities>				<a>Default weapon _Stats</a>
 													<a>Knight Mace 3 _Stats</a>

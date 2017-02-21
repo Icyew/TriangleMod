@@ -38,9 +38,9 @@ class W3Effect_BattleTrance extends CBaseGameplayEffect
 				else
 					target.RemoveAbilityMultiple(thePlayer.GetSkillAbilityName(S_Sword_5), Abs(delta));
 				
-				if(thePlayer.CanUseSkill(S_Magic_s07))
+				/*if(thePlayer.CanUseSkill(S_Magic_s07))
 					thePlayer.RemoveAbilityMultiple(thePlayer.GetSkillAbilityName(S_Magic_s07), Abs(delta));
-				
+				*/ //modSigns: early Igni design leftover code - Concentration ability - removing
 				if(thePlayer.CanUseSkill(S_Perk_11))
 					thePlayer.RemoveAbilityMultiple(thePlayer.GetSkillAbilityName(S_Perk_11), Abs(delta));
 			}
@@ -51,9 +51,9 @@ class W3Effect_BattleTrance extends CBaseGameplayEffect
 				else
 					target.AddAbilityMultiple(thePlayer.GetSkillAbilityName(S_Sword_5), delta);
 				
-				if(thePlayer.CanUseSkill(S_Magic_s07))
+				/*if(thePlayer.CanUseSkill(S_Magic_s07))
 					thePlayer.AddAbilityMultiple(thePlayer.GetSkillAbilityName(S_Magic_s07), delta);
-				
+				*/ //modSigns: early Igni design leftover code - Concentration ability - removing
 				if(thePlayer.CanUseSkill(S_Perk_11))
 					thePlayer.AddAbilityMultiple(thePlayer.GetSkillAbilityName(S_Perk_11), delta);
 			}
@@ -90,9 +90,9 @@ class W3Effect_BattleTrance extends CBaseGameplayEffect
 		else
 			target.AddAbilityMultiple(thePlayer.GetSkillAbilityName(S_Sword_5), currentFocusLevel);
 		
-		if( player.CanUseSkill(S_Magic_s07) )
+		/*if( player.CanUseSkill(S_Magic_s07) )
 			player.AddAbilityMultiple( player.GetSkillAbilityName(S_Magic_s07), currentFocusLevel);
-			
+		*/ //modSigns: early Igni design leftover code - Concentration ability - removing
 		if(player.CanUseSkill(S_Perk_11))
 			player.AddAbilityMultiple(player.GetSkillAbilityName(S_Perk_11), currentFocusLevel);
 	}
@@ -104,7 +104,7 @@ class W3Effect_BattleTrance extends CBaseGameplayEffect
 		super.OnEffectRemoved();
 		
 		player = (CR4Player)target;
-		player.RemoveAbilityAll( player.GetSkillAbilityName(S_Magic_s07) );
+		player.RemoveAbilityAll( player.GetSkillAbilityName(S_Magic_s07) ); //modSigns: leaving it here to clean things up in existing saves
 		player.RemoveAbilityAll( player.GetSkillAbilityName(S_Perk_11) );
 		player.RemoveAbilityAll( player.GetSkillAbilityName(S_Sword_5) );
 		player.RemoveAbilityAll( player.GetSkillAbilityName(S_Perk_19) );

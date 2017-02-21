@@ -14,6 +14,7 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 	
 	private var hitsToRaiseGuard 		: int;
 	private var raiseGuardChance 		: int;
+	private var parryStaminaCost 		: float; //modSigns
 	
 	private var hitsToCounter	 		: int;	
 	private var counterChance	 		: int;
@@ -52,7 +53,39 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 			return BTNS_Completed;
 		}
 		
+		if( RollUnstoppable() ) //modSigns
+		{
+			npc.ResetHitCounter(0, 0);
+			npc.DisableHitAnimFor(2.0);
+			npc.SetIsInHitAnim(false);
+			return BTNS_Completed;
+		}
+		
 		return BTNS_Active;
+	}
+	
+	function RollUnstoppable() : bool //modSigns
+	{
+		var npc : CNewNPC = GetNPC();
+		var hitsToRollUnstoppable, unstoppableChance, unstoppableMultiplier, hitCounter : int;
+		
+		hitsToRollUnstoppable = (int)CalculateAttributeValue(npc.GetAttributeValue('hits_to_roll_unstoppable'));
+		unstoppableChance = (int)MaxF(0, 100*CalculateAttributeValue(npc.GetAttributeValue('unstoppable_chance')));
+		unstoppableMultiplier = (int)MaxF(0, 100*CalculateAttributeValue(npc.GetAttributeValue('unstoppable_chance_per_hit')));
+		hitCounter = npc.GetHitCounter();
+		unstoppableChance += Max( 0, hitCounter - 1 ) * unstoppableMultiplier;
+		
+		if ( hitsToRollUnstoppable < 0 )
+		{
+			hitsToRollUnstoppable = 65536;
+		}
+		
+		if ( hitCounter >= hitsToRollUnstoppable && RandRange(100) < unstoppableChance )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	function OnDeactivate()
@@ -72,6 +105,7 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 		hitsToRaiseGuard = (int)CalculateAttributeValue(actor.GetAttributeValue('hits_to_raise_guard'));
 		raiseGuardChance = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('raise_guard_chance')));
 		raiseGuardMultiplier = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('raise_guard_chance_mult_per_hit')));
+		parryStaminaCost = CalculateAttributeValue(actor.GetAttributeValue( 'parry_stamina_cost' )); //modSigns
 		
 		hitsToCounter = (int)CalculateAttributeValue(actor.GetAttributeValue('hits_to_roll_counter'));
 		counterChance = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('counter_chance')));
@@ -105,7 +139,7 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 		hitCounter = npc.GetHitCounter();
 		if ( hitCounter >= hitsToRaiseGuard && npc.CanGuard() )
 		{
-			if( Roll( raiseGuardChance ) )
+			if( Roll( raiseGuardChance ) && npc.GetStat( BCS_Stamina ) >= parryStaminaCost ) //modSigns: parry stamina check
 			{		
 				if ( npc.RaiseGuard() )
 				{
@@ -161,7 +195,13 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 				return false;
 			}
 			
-			
+			if( isActive && RollUnstoppable() ) //modSigns
+			{
+				npc.ResetHitCounter(0, 0);
+				npc.DisableHitAnimFor(2.0);
+				Complete(true);
+				return false;
+			}
 			
 			if ( damageData.hitReactionAnimRequested  )
 				return true;

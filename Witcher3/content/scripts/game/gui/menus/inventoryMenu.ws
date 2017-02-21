@@ -76,6 +76,7 @@ class CR4InventoryMenu extends CR4MenuBase
 	protected var _currentState : EInventoryMenuState;	
 	private var optionsItemActions : array<EInventoryActionType>;
 	private var _sentStats : array<SentStatsData>;
+	public var _disableStashContext : bool; default _disableStashContext = false; //modSigns
 	
 	private var _currentQuickSlot : EEquipmentSlots;
 	default _currentQuickSlot = EES_InvalidSlot;
@@ -309,9 +310,15 @@ class CR4InventoryMenu extends CR4MenuBase
 		{
 			_defaultInventoryState = IMS_Stash;
 		}
+		else if ( m_menuState == 'StashInventory' )
+		{
+			_defaultInventoryState = IMS_Stash;
+			_disableStashContext = true;
+		}
 		else
 		{
 			_defaultInventoryState = IMS_Player;
+			FixQuestItems(); //modSigns
 		}
 		
 		defaultTab = SetInitialTabNewFlags( hasNewItems );
@@ -579,6 +586,12 @@ class CR4InventoryMenu extends CR4MenuBase
 		
 		currentlySelectedTab = tabIndex;
 		
+		if( _currentState == IMS_Stash && _horseInv.syncWithPlayer ) //modSigns
+		{
+			_horseInv.playerTabIndex = currentlySelectedTab;
+			UpdateHorseInventory();
+		}
+		
 		if(tabIndex == InventoryMenuTab_Potions && ShouldProcessTutorial('TutorialPotionCanEquip2'))
 		{
 			tutStatePot = (W3TutorialManagerUIHandlerStatePotions)theGame.GetTutorialSystem().uiHandler.GetCurrentState();
@@ -832,7 +845,7 @@ class CR4InventoryMenu extends CR4MenuBase
 				m_fxSetFilteringMode.InvokeSelfOneArg(FlashArgBool(false));
 				break;
 			case IMS_Stash:
-				_playerInv.stashMode = true;
+				_playerInv.stashMode = !_disableStashContext; //modSigns
 				_horseInv.dontShowEquipped = true;
 				UpdateHorseInventory();
 				break;
@@ -917,6 +930,9 @@ class CR4InventoryMenu extends CR4MenuBase
 		{
 			case 'CharacterInventory':
 				SetInventoryState(_defaultInventoryState);
+				break;
+			case 'StashInventory':	//modSigns
+				SetInventoryState(IMS_Stash);
 				break;
 			case 'HorseInventory':
 				SetInventoryState(IMS_HorseInventory);
@@ -1297,7 +1313,8 @@ class CR4InventoryMenu extends CR4MenuBase
 		}
 		else
 		{
-			return _inv;
+			//return _inv;
+			return _playerInv.GetInventoryComponent(); //modSigns
 		}
 	}
 	
@@ -2054,6 +2071,14 @@ class CR4InventoryMenu extends CR4MenuBase
 		var i		    : int;
 		var filterType  : EInventoryFilterType;
 		
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
 		OnSlot = false;
 		itemAlreadyEuipped = false;
 		
@@ -2246,6 +2271,13 @@ class CR4InventoryMenu extends CR4MenuBase
 	}
 	
 	
+	public function UpdateFace() //modSigns: razor shaving
+	{
+		PlayPaperdollAnimation( 'armor' );
+		UpdateGuiSceneEntityItems();
+	}
+	
+	
 	private function PlayPaperdollAnimation( category : name ):void
 	{
 		if (m_player)
@@ -2329,7 +2361,7 @@ class CR4InventoryMenu extends CR4MenuBase
 		return UnequipItem(item, moveToIndex);
 	}
 	
-	public function UnequipItem( item : SItemUniqueId, moveToIndex : int ) : bool
+	public function UnequipItem( item : SItemUniqueId, moveToIndex : int, optional forceUnequip : bool ) : bool
 	{
 		var forceInvAllUpdate : bool;
 		var isSetBonusActive  : bool;
@@ -2346,7 +2378,7 @@ class CR4InventoryMenu extends CR4MenuBase
 		
 		forceInvAllUpdate = false;
 		
-		if (thePlayer.IsInCombat())
+		if (thePlayer.IsInCombat() && !forceUnequip) //modSigns
 		{
 			showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
 			OnPlaySoundEvent("gui_global_denied");
@@ -2575,6 +2607,14 @@ class CR4InventoryMenu extends CR4MenuBase
 	
 	event  OnDropItem( item : SItemUniqueId, quantity : int ) 
 	{
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
 		if (( _inv.ItemHasTag(item, 'SilverOil') || _inv.ItemHasTag(item, 'SteelOil') || _inv.ItemHasTag(item, 'Petard') || ( _inv.ItemHasTag(item, 'Potion') && _inv.GetItemCategory(item)!='edibles' ) ) && _playerInv.CanDrop(item))
 		{
 			if (_destroyConfPopData)
@@ -2680,6 +2720,14 @@ class CR4InventoryMenu extends CR4MenuBase
 		var filterType : EInventoryFilterType;
 		var newItemID  : SItemUniqueId;
 		
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
 		if( _currentInv == _containerInv )
 		{
 			_containerInv.GiveItem( item, _playerInv, quantity, newItemID );
@@ -2709,6 +2757,14 @@ class CR4InventoryMenu extends CR4MenuBase
 		var invItem : SInventoryItem;
 		var itemPrice : int;
         var newShopItem : SItemUniqueId;
+		
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
 		
 		if (!_playerInv.GetInventoryComponent().IsIdValid(itemId))
 		{
@@ -2760,6 +2816,14 @@ class CR4InventoryMenu extends CR4MenuBase
 		var tutorialState : W3TutorialManagerUIHandlerStateShop;
 		var result : bool;
 		
+		
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
 		
 		LogChannel('QP', "OnBuyItem, quantity: " + quantity);
 		itemName = _shopInv.GetItemName(item);
@@ -2989,6 +3053,14 @@ class CR4InventoryMenu extends CR4MenuBase
 		var itemOnSlot :SItemUniqueId;
 		var boltSlot : SItemUniqueId;
 		var updateBoltsInInv : bool;		
+		
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
 		
 		updateBoltsInInv = false;		
 		
@@ -3305,6 +3377,42 @@ class CR4InventoryMenu extends CR4MenuBase
 		else
 		{
 			_currentInv = _playerInv;
+		}
+	}
+	
+	public function SwitchShowStashItems() //modSigns
+	{
+		if( _currentState == IMS_Stash )
+		{
+			_horseInv.syncWithPlayer = !_horseInv.syncWithPlayer;
+			_horseInv.playerTabIndex = currentlySelectedTab;
+			if( _horseInv.syncWithPlayer )
+				showNotification( GetLocStringByKeyExt( "gm_synchronized_inv_mode" ) );
+			else
+				showNotification( GetLocStringByKeyExt( "gm_normal_inv_mode" ) );
+			UpdateHorseInventory();
+		}
+		else if( _currentState == IMS_Shop )
+		{
+			if( _playerInv.IsOwner() )
+			{
+				_playerInv.SwitchToHorse( true );
+				_disableStashContext = true;
+				showNotification( GetLocStringByKeyExt( "gm_stash_inv_mode" ) );
+			}
+			else
+			{
+				_playerInv.SwitchToOwner( false );
+				_disableStashContext = false;
+				showNotification( GetLocStringByKeyExt( "gm_normal_inv_mode" ) );
+			}
+			PopulateTabData(InventoryMenuTab_Weapons);
+			PopulateTabData(InventoryMenuTab_Potions);
+			PopulateTabData(InventoryMenuTab_Ingredients);
+			PopulateTabData(InventoryMenuTab_QuestItems);
+			PopulateTabData(InventoryMenuTab_Default);
+			PopulateTabData(InventoryMenuTab_Books);
+			m_fxSetCurrentModule.InvokeSelfOneArg(FlashArgInt(0));
 		}
 	}
 	
@@ -4021,7 +4129,15 @@ class CR4InventoryMenu extends CR4MenuBase
 			{
 				InventoryRemoveItem(itemId);
 			}
-			PaperdollUpdateItem(curItemInSlot);
+			//modSigns: properly unequip item if level is higher than can be equipped
+			if( !thePlayer.HasRequiredLevelToEquipItem( curItemInSlot ) )
+			{
+				UnequipItem( curItemInSlot, -1, true );
+			}
+			else
+			{
+				PaperdollUpdateItem(curItemInSlot);
+			}
 		}
 		else
 		{
@@ -4044,6 +4160,14 @@ class CR4InventoryMenu extends CR4MenuBase
 	
 	event  OnMoveToStash( item : SItemUniqueId )
 	{
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
 		MoveToStash( item );
 	}
 	
@@ -4098,6 +4222,14 @@ class CR4InventoryMenu extends CR4MenuBase
 	
 	event  OnTakeFromStash(item : SItemUniqueId)
 	{
+		//modSigns
+		if( _disableStashContext )
+		{
+			showNotification( GetLocStringByKeyExt( "menu_cannot_perform_action_now" ) );
+			OnPlaySoundEvent( "gui_global_denied" );
+			return false;
+		}
+		
 		TakeItemFromStash(item);
 	}
 	

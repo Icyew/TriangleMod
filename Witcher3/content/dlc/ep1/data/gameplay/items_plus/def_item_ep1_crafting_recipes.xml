@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ITEM DEFINITIONS ######################## -->
 <items>
 
@@ -9,8 +11,8 @@
 	<item
 		name							="Rune pierog schematic"
 		category						="crafting_schematic"
-		price							="19"
-		weight							="0.05"
+		price							="34"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_rune_pierog_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -24,8 +26,8 @@
 	<item
 		name							="Rune tvarog schematic"
 		category						="crafting_schematic"
-		price							="25"
-		weight							="0.05"
+		price							="36"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_rune_tvarog_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -39,8 +41,8 @@
 	<item
 		name							="Glyph warding lesser schematic"
 		category						="crafting_schematic"
-		price							="31"
-		weight							="0.05"
+		price							="44"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_warding_lesser_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -54,7 +56,7 @@
 	<item
 		name							="Glyph warding schematic"
 		category						="crafting_schematic"
-		price							="62"
+		price							="88"
 		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_warding_schematic"
@@ -69,8 +71,8 @@
 	<item
 		name							="Glyph warding greater schematic"
 		category						="crafting_schematic"
-		price							="123"
-		weight							="0.2"
+		price							="175"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_warding_greater_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -85,7 +87,7 @@
 		name							="Glyph binding lesser schematic"
 		category						="crafting_schematic"
 		price							="32"
-		weight							="0.05"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_binding_lesser_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -99,7 +101,7 @@
 	<item
 		name							="Glyph binding schematic"
 		category						="crafting_schematic"
-		price							="64"
+		price							="62"
 		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_binding_schematic"
@@ -114,8 +116,8 @@
 	<item
 		name							="Glyph binding greater schematic"
 		category						="crafting_schematic"
-		price							="127"
-		weight							="0.2"
+		price							="125"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_binding_greater_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -129,8 +131,8 @@
 	<item
 		name							="Glyph reinforcement lesser schematic"
 		category						="crafting_schematic"
-		price							="30"
-		weight							="0.05"
+		price							="37"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_reinforcement_lesser_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -144,7 +146,7 @@
 	<item
 		name							="Glyph reinforcement schematic"
 		category						="crafting_schematic"
-		price							="61"
+		price							="74"
 		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_reinforcement_schematic"
@@ -159,8 +161,8 @@
 	<item
 		name							="Glyph reinforcement greater schematic"
 		category						="crafting_schematic"
-		price							="122"
-		weight							="0.2"
+		price							="148"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_reinforcement_greater_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -174,8 +176,8 @@
 	<item
 		name							="Glyph mending lesser schematic"
 		category						="crafting_schematic"
-		price							="32"
-		weight							="0.05"
+		price							="34"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_mending_lesser_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -189,7 +191,7 @@
 	<item
 		name							="Glyph mending schematic"
 		category						="crafting_schematic"
-		price							="64"
+		price							="68"
 		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_mending_schematic"
@@ -204,8 +206,8 @@
 	<item
 		name							="Glyph mending greater schematic"
 		category						="crafting_schematic"
-		price							="127"
-		weight							="0.2"
+		price							="138"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_glyph_mending_greater_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -231,10 +233,11 @@
 		craftedItem_name				="Rune pierog"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="96"
+		price							="170"
 	>
 		<ingredients>					<ingredient	quantity="1"	item_name="Runestone lesser"			/>
 										<ingredient	quantity="1"	item_name="Dumpling"					/>
+										<ingredient	quantity="1"	item_name="Amber dust"					/>
 		</ingredients>
 	</schematic>
 
@@ -245,10 +248,11 @@
 		craftedItem_name				="Rune tvarog"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="125"
+		price							="180"
 	>
 		<ingredients>					<ingredient	quantity="1"	item_name="Runestone lesser"			/>
 										<ingredient	quantity="1"	item_name="Cows milk"					/>
+										<ingredient	quantity="1"	item_name="Diamond dust"				/>
 		</ingredients>
 	</schematic>
 	
@@ -258,11 +262,11 @@
 		craftedItem_name				="Glyph warding lesser"
 		craftsmanLevel_name				="Journeyman"
 		craftsmanType_name				="Crafter"
-		price							="154"
+		price							="218"
 	>
 		<ingredients>					<ingredient quantity="1" item_name="Glyph infusion lesser"				/>
-										<ingredient quantity="1" item_name="Silver ore"							/>
-										<ingredient quantity="1" item_name="Infused dust"						/>
+										<ingredient quantity="1" item_name="Glowing ore"						/>
+										<ingredient quantity="1" item_name="Diamond dust"						/>
 		</ingredients>
 	</schematic>
 
@@ -272,7 +276,7 @@
 		craftedItem_name				="Glyph warding"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="308"
+		price							="436"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph warding lesser"				/>
 		</ingredients>
@@ -284,7 +288,7 @@
 		craftedItem_name				="Glyph warding greater"
 		craftsmanLevel_name				="Grand Master"
 		craftsmanType_name				="Crafter"
-		price							="616"
+		price							="872"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph warding"						/>
 		</ingredients>
@@ -296,11 +300,11 @@
 		craftedItem_name				="Glyph binding lesser"
 		craftsmanLevel_name				="Journeyman"
 		craftsmanType_name				="Crafter"
-		price							="159"
+		price							="156"
 	>
 		<ingredients>					<ingredient quantity="1" item_name="Glyph infusion lesser"				/>
-										<ingredient quantity="1" item_name="Meteorite ore"						/>
-										<ingredient quantity="1" item_name="Infused dust"						/>
+										<ingredient quantity="1" item_name="Dark iron ore"						/>
+										<ingredient quantity="1" item_name="Amethyst dust"						/>
 		</ingredients>
 	</schematic>
 
@@ -310,7 +314,7 @@
 		craftedItem_name				="Glyph binding"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="318"
+		price							="312"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph binding lesser"				/>
 		</ingredients>
@@ -322,7 +326,7 @@
 		craftedItem_name				="Glyph binding greater"
 		craftsmanLevel_name				="Grand Master"
 		craftsmanType_name				="Crafter"
-		price							="636"
+		price							="624"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph binding"						/>
 		</ingredients>
@@ -334,11 +338,11 @@
 		craftedItem_name				="Glyph reinforcement lesser"
 		craftsmanLevel_name				="Journeyman"
 		craftsmanType_name				="Crafter"
-		price							="152"
+		price							="186"
 	>
 		<ingredients>					<ingredient quantity="1" item_name="Glyph infusion lesser"				/>
-										<ingredient quantity="1" item_name="Dark iron ore"						/>
-										<ingredient quantity="1" item_name="Infused dust"						/>
+										<ingredient quantity="1" item_name="Meteorite ore"						/>
+										<ingredient quantity="1" item_name="Ruby dust"							/>
 		</ingredients>
 	</schematic>
 
@@ -348,7 +352,7 @@
 		craftedItem_name				="Glyph reinforcement"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="304"
+		price							="372"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph reinforcement lesser"			/>
 		</ingredients>
@@ -360,7 +364,7 @@
 		craftedItem_name				="Glyph reinforcement greater"
 		craftsmanLevel_name				="Grand Master"
 		craftsmanType_name				="Crafter"
-		price							="608"
+		price							="744"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph reinforcement"				/>
 		</ingredients>
@@ -372,11 +376,11 @@
 		craftedItem_name				="Glyph mending lesser"
 		craftsmanLevel_name				="Journeyman"
 		craftsmanType_name				="Crafter"
-		price							="159"
+		price							="172"
 	>
 		<ingredients>					<ingredient quantity="1" item_name="Glyph infusion lesser"				/>
-										<ingredient quantity="3" item_name="Gold mineral"						/>
-										<ingredient quantity="1" item_name="Infused dust"						/>
+										<ingredient quantity="1" item_name="Silver ore"							/>
+										<ingredient quantity="1" item_name="Amber dust"							/>
 		</ingredients>
 	</schematic>
 
@@ -386,7 +390,7 @@
 		craftedItem_name				="Glyph mending"
 		craftsmanLevel_name				="Master"
 		craftsmanType_name				="Crafter"
-		price							="318"
+		price							="344"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph mending lesser"				/>
 		</ingredients>
@@ -398,7 +402,7 @@
 		craftedItem_name				="Glyph mending greater"
 		craftsmanLevel_name				="Grand Master"
 		craftsmanType_name				="Crafter"
-		price							="636"
+		price							="688"
 	>
 		<ingredients>					<ingredient quantity="2" item_name="Glyph mending"						/>
 		</ingredients>

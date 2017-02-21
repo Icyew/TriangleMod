@@ -461,7 +461,7 @@ latent quest function SetupTrophySceneQuest( monsterTag : name, offset : float)
 
 latent quest function ProcessMonsterHuntTrophyQuest( trophyName : name, dontTeleportHorse : bool)
 {
-	var playerHorse			 : CNewNPC;
+	/*var playerHorse			 : CNewNPC;
 	var playerPosition 		 : Vector;
 	var newPosition			 : Vector;
 	var playerRotation 		 : EulerAngles;
@@ -510,7 +510,7 @@ latent quest function ProcessMonsterHuntTrophyQuest( trophyName : name, dontTele
 		}
 	}
 	
-	Sleep(0.5f);
+	Sleep(0.5f);*/ //modSigns: remove horse teleporting and trophy auto-equipping on looting a trophy
 }
 
 quest function AlwaysDisplayWolfHead( display : bool )

@@ -73,6 +73,8 @@ class CBehTreeTaskCSEffect extends IBehTreeTask
 	private var counterRequestTimeStamp 	: float;
 	private var counterType 				: ECriticalEffectCounterType;
 	
+	private var finisherRollResult			: bool; //modSigns
+	
 	
 	function IsAvailable () : bool
 	{
@@ -166,6 +168,8 @@ class CBehTreeTaskCSEffect extends IBehTreeTask
 		}
 		else
 			owner.LowerGuard();
+		
+		RollFinisher(); //modSigns
 		
 		if ( !owner.IsInAir() && owner.IsOnGround() )
 		{
@@ -447,6 +451,34 @@ class CBehTreeTaskCSEffect extends IBehTreeTask
 	
 	
 	
+	//modSigns
+	final function RollFinisher()
+	{
+		var finisherChance : int;
+		var actor : CActor;
+		
+		actor = GetActor();
+		finisherRollResult = false;
+
+		if( (W3MonsterHuntNPC)actor )
+		{
+			finisherChance = 0; //0% chance for monster hunt monsters
+		}
+		else
+		{
+			finisherChance = RoundMath(100*ExpF(-PowF(actor.GetHealthPercents(), 2)*4.8)); //bigger chance for less health
+			finisherChance = Clamp(finisherChance, 0, 100);
+		}
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("finisherChance = " + finisherChance);
+		if( RandRange(100) < finisherChance )
+		{
+			finisherRollResult = true;
+		}
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("finisherRollResult = " + finisherRollResult);
+	}
+	
 	final function ShouldEnableFinisher() : bool
 	{
 		var actor : CActor;
@@ -459,13 +491,10 @@ class CBehTreeTaskCSEffect extends IBehTreeTask
 		
 		if ( GetWitcherPlayer() && GetAttitudeBetween( actor, thePlayer ) == AIA_Hostile && actor.IsVulnerable() && actor.GetComponent( "Finish" ) )
 		{
-			if( actor.HasAbility('ResistFinisher') &&  actor.GetHealthPercents() > 0.2f )
-			{
-				return false;
-			};
-			
-			return true;
+			//modSigns: reworked
+			return finisherRollResult;
 		}
+		
 		return false;
 	}
 	

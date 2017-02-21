@@ -3,7 +3,27 @@
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
 /***********************************************************************/
-class W3Effect_SlowdownAxii extends W3Effect_Slowdown
+class W3Effect_SlowdownAxii extends CBaseGameplayEffect //modSigns
 {
 	default effectType = EET_SlowdownAxii;
+	
+	//modSigns
+	private saved var slowdownCauserId : int;
+	
+	default attributeName = 'slowdown';
+	default isPositive = false;
+	default isNeutral = false;
+	default isNegative = true;
+	
+	event OnEffectAdded(optional customParams : W3BuffCustomParams)
+	{
+		super.OnEffectAdded(customParams);
+		slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - ClampF(effectValue.valueAdditive, 0.0, 0.999) );
+	}
+	
+	event OnEffectRemoved()
+	{
+		super.OnEffectRemoved();		
+		target.ResetAnimationSpeedMultiplier(slowdownCauserId);
+	}
 }

@@ -37,8 +37,11 @@
 	<loot name="q702_knight_oath" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="q702_knight_oath" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
     </loot>	
-	<loot name="q702_love_letter" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
+	<loot name="q702_love_letter" quantity_min="2" quantity_max="2" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="q702_love_letter" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+		<!-- +++modWBC+++ -->
+        <loot_entry name="sq701_palmerin_note" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+		<!-- ---modWBC--- -->
     </loot>
 	<loot name="q702_regeneration_elixir" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="q702_regeneration_elixir" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
@@ -113,8 +116,11 @@
 	<loot name="q703_one_handed_adalard" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="q703_one_handed_adalard" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
     </loot>	
-	<loot name="q703_piece_of_scenario" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
+	<loot name="q703_piece_of_scenario" quantity_min="2" quantity_max="2" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="q703_piece_of_scenario" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+		<!-- +++modWBC+++ -->
+        <loot_entry name="q703_letter_of_refusal" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+		<!-- ---modWBC--- -->
     </loot>
 	<loot name="q703_unique_hunting_knife" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
 		<loot_entry name="q703_unique_hunting_knife" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
@@ -197,8 +203,10 @@
 	<loot name="mq7009_painter_accessories" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="mq7009_painter_accessories" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
     </loot>
-	<loot name="mq7009_griffon" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" respawn_time="0">
+	<loot name="mq7009_griffon" quantity_min="3" quantity_max="3" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="mq7009_griffin_trophy" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+        <loot_entry name="Guard lvl1 steel sword 3 Autogen" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />
+        <loot_entry name="Gryphon feathers" quantity_min="2" quantity_max="3" player_level_min="0" player_level_max="0" chance="100" />
     </loot>
 	<loot name="mq7009_painter_corpse" quantity_min="3" quantity_max="3" player_level_min="0" player_level_max="0" respawn_time="0">
         <loot_entry name="Dye" quantity_min="1" quantity_max="1" player_level_min="0" player_level_max="0" chance="100" />

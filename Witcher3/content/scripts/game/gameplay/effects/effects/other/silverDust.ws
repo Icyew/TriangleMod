@@ -37,11 +37,12 @@ class W3Effect_SilverDust extends CBaseGameplayEffect
 	{
 		var ret : bool;
 		
-		ret = target.BlockAbility('Swarm', block) || ret;
+		ret = target.BlockAbility('Swarms', block) || ret; //modSigns: it is Swarms, not Swarm
         ret = target.BlockAbility('SwarmShield', block) || ret;
         ret = target.BlockAbility('SwarmTeleport', block) || ret;
         ret = target.BlockAbility('Shapeshifter', block) || ret;
         ret = target.BlockAbility('ShadowForm', block) || ret;
+        ret = target.BlockAbility('Specter', block) || ret; //modSigns: spectres check for Specter ability and not for Teleport/Flashstep
         ret = target.BlockAbility('MistForm', block) || ret;
         ret = target.BlockAbility('MistCharge', block) || ret;
 		ret = target.BlockAbility('Flashstep', block) || ret;

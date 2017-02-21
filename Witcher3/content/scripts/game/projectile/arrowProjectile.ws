@@ -66,6 +66,8 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 		var arrowSize 		: Vector;
 		var hitPos 			: Vector;
 		
+		var attackPower		: SAbilityAttributeValue; //modSigns
+		
 		if ( yrdenAlternate )
 		{
 			return true;
@@ -175,7 +177,7 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 			{
 				isRolling = true;
 			}
-			else if(thePlayer.HasAbility( 'Glyphword 1 _Stats', true ))
+			/*else if((W3PlayerWitcher)thePlayer && ((W3PlayerWitcher)thePlayer).HasGlyphwordActive( 'Glyphword 1 _Stats' )) //modSigns
 			{
 				
 				thePlayer.PlayEffect('glyphword_reflection');
@@ -202,8 +204,8 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 					this.SoundEvent( "cmb_arrow_bounce" );
 					bounce = true;
 				}
-			}
-			else if(thePlayer.CanParryAttack() && thePlayer.CanUseSkill(S_Sword_s10))
+			}*/ //modSigns: moved
+			else if(thePlayer.CanParryAttack() && thePlayer.CanUseSkill(S_Sword_s10) || (W3PlayerWitcher)thePlayer && ((W3PlayerWitcher)thePlayer).HasGlyphwordActive( 'Glyphword 1 _Stats' )) //modSigns
 			{			
 				
 				parryInfo = thePlayer.ProcessParryInfo(((CActor)caster),((CActor)victim),AST_Jab,ASD_NotSet,'attack_light',((CActor)caster).GetInventory().GetItemFromSlot('l_weapon'), true);
@@ -214,10 +216,10 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 						casterPos = caster.GetWorldPosition();
 						casterPos.Z += 1.5;
 						this.Init(thePlayer);
-						if ( thePlayer.GetSkillLevel(S_Sword_s10) == 3 )
+						/*if ( thePlayer.GetSkillLevel(S_Sword_s10) == 3 )
 						{
 							this.projDMG *= 1 + CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s10, 'damage_increase', false, true) );
-						}
+						}*/ //modSigns: moved
 						this.ShootProjectileAtPosition(2,projSpeed*0.7,casterPos);
 						ActivateTrail('arrow_trail_red');
 						isBouncedArrow = true;
@@ -227,6 +229,14 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 					{
 						bounce = true;
 					}
+				}
+				else if( (W3PlayerWitcher)thePlayer && ((W3PlayerWitcher)thePlayer).HasGlyphwordActive( 'Glyphword 1 _Stats' ) ) //modSigns: moved here
+				{
+					thePlayer.PlayEffect('glyphword_reflection');
+					template = (CEntityTemplate)LoadResource('glyphword_1');
+					theGame.CreateEntity(template, GetWorldPosition(), thePlayer.GetWorldRotation(), , , true);
+					this.SoundEvent( "cmb_arrow_bounce" );
+					bounce = true;
 				}
 			}
 			
@@ -240,6 +250,16 @@ class W3ArrowProjectile extends W3AdvancedProjectile
 				{
 					FactsAdd("sq108_arrow_deflected");
 					thePlayer.PlayEffect( 'bolt_bump' );
+				}
+			}
+			
+			//modSigns: bounce arrow ability
+			if( !bounce && (W3PlayerWitcher)thePlayer )
+			{
+				if( RandF() < CalculateAttributeValue(((W3PlayerWitcher)thePlayer).GetAttributeValue('q108_bounce_arrows')) )
+				{
+					thePlayer.PlayEffect( 'bolt_bump' );
+					bounce = true;
 				}
 			}
 			

@@ -4,13 +4,13 @@
 		<abilities>		
 			<!-- BLACK BLOOD -->
 			<ability name="BlackBloodEffect_Level1">
-				<return_damage min="0.15" type="mult"/>									
+				<return_damage min="0.1" type="mult"/>									
 			</ability>
 			<ability name="BlackBloodEffect_Level2">
-				<return_damage min="0.2" type="mult"/>									
+				<return_damage min="0.15" type="mult"/>									
 			</ability>
 			<ability name="BlackBloodEffect_Level3">
-				<return_damage min="0.3" type="mult"/>									
+				<return_damage min="0.2" type="mult"/>									
 			</ability>
 			
 			<!-- BLIZZARD -->
@@ -41,15 +41,15 @@
 			<!-- FULL MOON -->
 			<ability name="FullMoonEffect_Level1">
 				<tags>passive</tags>
-				<vitality type="add" min="300" max="300"/>
+				<vitality type="add" min="900" max="900"/>
 			</ability>
 			<ability name="FullMoonEffect_Level2">
 				<tags>passive</tags>
-				<vitality type="add" min="650" max="650"/>
+				<vitality type="add" min="1300" max="1300"/>
 			</ability>
 			<ability name="FullMoonEffect_Level3">
 				<tags>passive</tags>
-				<vitality type="add" min="1000" max="1000"/>
+				<vitality type="add" min="1700" max="1700"/>
 			</ability>
 			
 			<!-- GOLDEN ORIOLE -->
@@ -93,26 +93,26 @@
 			</ability>
 			<ability name="MariborForestEffect_Level2">
 				<tags>passive</tags>
-				<focus_gain type="add" min="0.15" max="0.15"/>
+				<focus_gain type="add" min="0.2" max="0.2"/>
 			</ability>
 			<ability name="MariborForestEffect_Level3">
 				<tags>passive</tags>
-				<focus_gain type="add" min="0.15" max="0.15"/>
+				<focus_gain type="add" min="0.25" max="0.25"/>
 				<focus_on_drink type="add" min="1" />
 			</ability>
 			
 			<!-- PETRI PHILTRE -->
 			<ability name="PetriPhiltreEffect_Level1">
 				<tags>passive</tags>
-				<spell_power type="mult" min="0.15" max="0.15"/>
+				<spell_power type="mult" min="0.25" max="0.25"/>
 			</ability>
 			<ability name="PetriPhiltreEffect_Level2">
 				<tags>passive</tags>
-				<spell_power type="mult" min="0.2" max="0.2"/>
+				<spell_power type="mult" min="0.3" max="0.3"/>
 			</ability>
 			<ability name="PetriPhiltreEffect_Level3">
 				<tags>passive</tags>
-				<spell_power type="mult" min="0.25" max="0.25"/>
+				<spell_power type="mult" min="0.35" max="0.35"/>
 			</ability>
 			
 			<!-- PHEROMONES -->
@@ -154,7 +154,7 @@
 			<!-- THUNDERBOLT -->
 			<ability name="ThunderboltEffect_Level1">
 				<tags>passive</tags>
-				<attack_power type="mult" min="0.3"/>
+				<attack_power type="mult" min="0.25"/>
 			</ability>
 			<ability name="ThunderboltEffect_Level2">
 				<tags>passive</tags>

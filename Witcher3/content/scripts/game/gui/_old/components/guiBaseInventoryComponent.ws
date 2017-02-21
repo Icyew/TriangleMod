@@ -19,10 +19,17 @@ abstract class W3GuiBaseInventoryComponent
 	
 	private var ITEM_NEED_REPAIR_DISPLAY_VALUE : int;
 		
+	public var m_horseInv : CInventoryComponent; //modSigns
+	public var m_ownerInv : CInventoryComponent; //modSigns
+	
+	public var dontShowEquipped:bool; default dontShowEquipped = false; //modSigns: moved from container
+	
 	public function Initialize( inv : CInventoryComponent )
 	{
 		ITEM_NEED_REPAIR_DISPLAY_VALUE = theGame.params.ITEM_DAMAGED_DURABILITY;
 		_inv = inv;
+		m_ownerInv = inv; //modSigns
+		m_horseInv = GetWitcherPlayer().GetHorseManager().GetInventoryComponent(); //modSigns
 	}
 	
 	
@@ -32,9 +39,36 @@ abstract class W3GuiBaseInventoryComponent
 	
 	
 		
+	public function SetCurrentInventory( invComp : CInventoryComponent ) //modSigns
+	{
+		_inv = invComp;
+	}
+
+	public function SwitchToHorse( bDontShowEquipped : bool ) //modSigns
+	{
+		_inv = m_horseInv;
+		dontShowEquipped = bDontShowEquipped;
+	}
+
+	public function SwitchToOwner( bDontShowEquipped : bool ) //modSigns
+	{
+		_inv = m_ownerInv;
+		dontShowEquipped = bDontShowEquipped;
+	}
+
 	public function GetInventoryComponent() : CInventoryComponent
 	{
 		return _inv;
+	}
+
+	public function IsHorse() : bool //modSigns
+	{
+		return _inv == m_horseInv;
+	}
+
+	public function IsOwner() : bool //modSigns
+	{
+		return _inv == m_ownerInv;
 	}
 
 	public function GetItemName(item : SItemUniqueId):name
@@ -205,9 +239,26 @@ abstract class W3GuiBaseInventoryComponent
 			return false;
 		}
 		
+		if (dontShowEquipped) //modSigns: moved from container
+		{
+			if (isHorseItem(item))
+			{
+				if (GetWitcherPlayer().GetHorseManager().IsItemEquipped(item))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if ( _inv == GetWitcherPlayer().GetInventory() && GetWitcherPlayer().IsItemEquipped(item))
+				{
+					return false;
+				}
+			}
+		}
+		
 		return true;
 	}
-	
 	
 	public function GetItemActionType( item : SItemUniqueId, optional bGetDefault : bool ) : EInventoryActionType
 	{
@@ -471,7 +522,7 @@ abstract class W3GuiBaseInventoryComponent
 			flashObject.SetMemberFlashNumber( "durability", 1);
 		}
 		
-		if( thePlayer.IsInCombatAction() && IsUnequipSwordIsAlllowed(item))
+		if( thePlayer.IsInCombatAction() && IsUnequipSwordIsAlllowed(item) )
 		{
 			flashObject.SetMemberFlashInt( "actionType", IAT_None );	
 		}
@@ -499,7 +550,6 @@ abstract class W3GuiBaseInventoryComponent
 		
 		
 		flashObject.SetMemberFlashString( "category", _inv.GetItemCategory(item) );
-		
 	}
 	
 	public function GetItemQuantity( item : SItemUniqueId ):int
@@ -816,6 +866,8 @@ abstract class W3GuiBaseInventoryComponent
 		var minQuality 			: int;
 		var maxQuality 			: int;
 		var itemType 			: EInventoryFilterType;
+		//var category			: name; //modSigns
+		//var numRndAbls			: int; //modSigns
 		
 		var delimiter			: string;
 		var prefix				: string;
@@ -876,7 +928,7 @@ abstract class W3GuiBaseInventoryComponent
 			finalString += tempString;
 		}
 		
-		if (maxQuality > 1 && maxQuality < 4) 
+		/*if (maxQuality > 1 && maxQuality < 4) 
 		{
 			if (minQuality != maxQuality)
 			{
@@ -886,7 +938,32 @@ abstract class W3GuiBaseInventoryComponent
 			{
 				finalString += ("<font color=\"#AAFFFC\">" + GetLocStringByKeyExt("panel_crafting_number_random_attributes") + delimiter + (minQuality - 1)  + prefix + " </font>" + htmlNewline);
 			}
+		}*/ //modSigns
+		
+		//modSigns: show random abilities -> crafted items now have fixed abilities, removed
+		/*category = dm.GetItemCategory(craftedItemName);
+		numRndAbls = 0;
+		if( category == 'armor' )
+		{
+			if(minQuality == 4)
+				numRndAbls = 1;
+			else
+				numRndAbls = minQuality;
 		}
+		else if( category == 'steelsword' || category == 'silversword' )
+		{
+			if(minQuality < 4)
+				numRndAbls = minQuality;
+		}
+		else if( category == 'gloves' || category == 'pants' || category == 'boots' )
+		{
+			if(minQuality > 1 && minQuality < 4)
+				numRndAbls = minQuality - 1;
+		}
+		if( numRndAbls > 0 )
+		{
+			finalString += ("<font color=\"#AAFFFC\">" + GetLocStringByKeyExt("panel_crafting_number_random_attributes") + delimiter + numRndAbls + prefix + " </font>" + htmlNewline);
+		}*/
 		
 		if (minWeightAttribute.valueBase > 0)
 		{

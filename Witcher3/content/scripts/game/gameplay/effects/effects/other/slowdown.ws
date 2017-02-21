@@ -27,7 +27,7 @@ class W3Effect_Slowdown extends CBaseGameplayEffect
 	{
 		var dm : CDefinitionsManagerAccessor;
 		var min, max : SAbilityAttributeValue;
-		var prc, pts : float;
+		var prc, pts, raw : float; //modSigns
 		
 		super.OnEffectAdded(customParams);
 		
@@ -39,10 +39,21 @@ class W3Effect_Slowdown extends CBaseGameplayEffect
 		dm.GetAbilityAttributeValue(abilityName, 'decay_delay', min, max);
 		decayDelay = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 		
-		
-		slowdown = CalculateAttributeValue(effectValue);
+		//modSigns: calc final slowdown
+		//prcs are not clamped to make negative resistance possible
+		//points added (divided by 100 as slowdown factor < 1)
+		raw = CalculateAttributeValue(effectValue);
 		target.GetResistValue(CDS_ShockRes, pts, prc);
-		slowdown = slowdown * (1 - ClampF(prc, 0, 1) );
+		slowdown = MaxF(0, raw - pts/100) * (1 - prc);
+		//final slowdown factor is clamped to 10-90%
+		slowdown = ClampF(slowdown, 0.1, 0.9);
+		
+		//debug log
+		/*theGame.witcherLog.AddMessage("Slowdown effect:");
+		theGame.witcherLog.AddMessage("Raw slowdown prc: " + raw);
+		theGame.witcherLog.AddMessage("Shock resist pts: " + pts);
+		theGame.witcherLog.AddMessage("Shock resist prc: " + prc);
+		theGame.witcherLog.AddMessage("Slowdown prc: " + slowdown * 100);*/
 		
 		slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - slowdown );
 		delayTimer = 0;

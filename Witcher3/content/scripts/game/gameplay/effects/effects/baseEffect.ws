@@ -18,8 +18,10 @@ class CBaseGameplayEffect extends CObject
 	protected var timeLeft : float;								
 	protected var pauseCounters : array<SBuffPauseLock>;		
 	protected var isActive : bool;								
-	private   var resistStat : ECharacterDefenseStats;			
+	//modSigns: protected instead of private to make it accessible from child classes
+	protected var resistStat : ECharacterDefenseStats;			//resistance stat
 	protected var resistance : float;	 						
+	protected var resistancePts : float;	 					//modSigns: resistance stat value in points
 	protected var creatorPowerStat : SAbilityAttributeValue;	
 	protected var isPausedDuringDialogAndCutscene : bool;		
 	protected var dontAddAbilityOnTarget : bool;				
@@ -106,7 +108,7 @@ class CBaseGameplayEffect extends CObject
 	{
 		var min, max, null : SAbilityAttributeValue;
 		var durationSet : bool;
-		var points : float;
+		//var points : float; //modSigns
 		var dm : CDefinitionsManagerAccessor;
 	
 		EntityHandleSet(creatorHandle, params.owner);
@@ -135,7 +137,7 @@ class CBaseGameplayEffect extends CObject
 			duration = params.duration;
 			
 		isOnPlayer = (CPlayer)target;
-		target.GetResistValue(resistStat, points, resistance);
+		target.GetResistValue(resistStat, resistancePts, resistance); //modSigns
 		
 		if(params.powerStatValue == null)
 			params.powerStatValue.valueMultiplicative = 1;					
@@ -318,7 +320,7 @@ class CBaseGameplayEffect extends CObject
 		if( duration == -1)
 			return;
 			
-		
+		//modSigns
 		if(isNegative)
 		{
 			
@@ -326,9 +328,33 @@ class CBaseGameplayEffect extends CObject
 				durationResistance = MinF(0.99f, resistance);
 			else
 				durationResistance = resistance;
-				
-			duration = MaxF(0, initialDuration * MaxF(0, creatorPowerStat.valueMultiplicative) * (1 - durationResistance) );
+
+			//debug log
+			//theGame.witcherLog.AddMessage("Effect duration:");
+			//theGame.witcherLog.AddMessage("Target: " + target.GetDisplayName());
+			//theGame.witcherLog.AddMessage("Initial duration: " + duration);
+			//vanilla formula:
+			//duration = MaxF(0, initialDuration * MaxF(0, creatorPowerStat.valueMultiplicative) * (1 - durationResistance) );
+			//modSigns old formula:
+			//duration = MaxF(0, MaxF(0, initialDuration * (1 + PowerStatToPowerBonus(creatorPowerStat.valueMultiplicative) - resistancePts/100)) * (1 - durationResistance));
+			//modSigns new formula: power stat doesn't affect duration
+			duration = MaxF(0, duration * (1 - durationResistance));
+			//level 3 petri philtre gives +33% to sign effect duration
+			if(isSignEffect && duration > 0 && (W3PlayerWitcher)GetCreator() && ((W3PlayerWitcher)GetCreator()).GetPotionBuffLevel(EET_PetriPhiltre) == 3)
+			{
+				if( effectType == EET_HeavyKnockdown || effectType == EET_Confusion || effectType == EET_AxiiGuardMe || effectType == EET_Burning )
+				{
+					duration *= 1.34;
+					//theGame.witcherLog.AddMessage("Effect: " + effectType + "; Duration: " + duration); //modSigns: debug
+				}
+			}
 			LogEffects("BaseEffect.CalculateDuration: " + effectType + " duration with target resistance (" + NoTrailZeros(resistance) + ") and attacker power mul of (" + NoTrailZeros(creatorPowerStat.valueMultiplicative) + ") is " + NoTrailZeros(duration) + ", base was " + NoTrailZeros(initialDuration));
+			//debug log
+			//theGame.witcherLog.AddMessage("Effect type: " + EffectTypeToName(effectType));
+			//theGame.witcherLog.AddMessage("Power stat bonus: " + PowerStatToPowerBonus(creatorPowerStat.valueMultiplicative));
+			//theGame.witcherLog.AddMessage("Resist pts: " + resistancePts);
+			//theGame.witcherLog.AddMessage("Resist prc: " + durationResistance);
+			//theGame.witcherLog.AddMessage("Duration: " + duration);
 		}		
 	}
 	
@@ -620,7 +646,7 @@ class CBaseGameplayEffect extends CObject
 	
 	public function OnTimeUpdated(dt : float)
 	{	
-		var toxicityThreshold : float;
+		var toxicityThreshold, toxicityRange, toxicityOffset : float; //modSigns
 		
 		if( isActive && pauseCounters.Size() == 0)
 		{
@@ -630,12 +656,17 @@ class CBaseGameplayEffect extends CObject
 				timeLeft -= dt;				
 				if( timeLeft <= 0 )
 				{
-					if(isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction )				
+					//modSigns: remove WhiteRaffardDecoction from Delayed Recovery affected potions
+					if(isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction)				
 					{
-						toxicityThreshold = thePlayer.GetStatMax(BCS_Toxicity) * (1 - CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, true) ) * thePlayer.GetSkillLevel(S_Alchemy_s03));
+						//toxicityThreshold = thePlayer.GetStatMax(BCS_Toxicity) * (1 - CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, true) ) * thePlayer.GetSkillLevel(S_Alchemy_s03));
+						//modSigns: mutagen potions threshold
+						toxicityOffset = thePlayer.GetStat(BCS_Toxicity, false) - thePlayer.GetStat(BCS_Toxicity, true);
+						toxicityRange = thePlayer.GetStatMax(BCS_Toxicity) - toxicityOffset;
+						toxicityThreshold = toxicityOffset + toxicityRange * (1 - CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, true) ) * thePlayer.GetSkillLevel(S_Alchemy_s03));
 						if(thePlayer.GetStat(BCS_Toxicity, true) > toxicityThreshold)
 						{
-							
+							//keep it going for as long as there is some toxicity left
 						}
 						else
 						{
@@ -644,7 +675,7 @@ class CBaseGameplayEffect extends CObject
 					}
 					else
 					{
-						isActive = false;		
+						isActive = false;		//this will be the last call
 					}
 				}
 			}

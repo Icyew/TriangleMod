@@ -39,12 +39,19 @@ enum EAlchemyCookedItemType
 	EACIT_Potion,
 	EACIT_Bomb,
 	EACIT_Oil,
-EACIT_Substance,		
+	EACIT_Substance,		
 	EACIT_Bolt,
 	EACIT_MutagenPotion,
 	EACIT_Alcohol,
 	EACIT_Quest,
-	EACIT_Dye
+	EACIT_Dye,
+	EACIT_Edibles //modSigns
+}
+
+//modSigns
+function IsAlchemy18Recipe( type : EAlchemyCookedItemType ) : bool
+{
+	return ((type == EACIT_Potion) || (type == EACIT_Bomb) || (type == EACIT_Oil) || (type == EACIT_Substance) || (type == EACIT_MutagenPotion));
 }
 
 struct SCookable
@@ -66,6 +73,7 @@ function AlchemyCookedItemTypeStringToEnum(nam : string) : EAlchemyCookedItemTyp
 		case "alcohol"			: return EACIT_Alcohol;
 		case "quest"			: return EACIT_Quest;
 		case "dye"				: return EACIT_Dye;
+		case "edibles"			: return EACIT_Edibles; //modSigns
 		default	     			: return EACIT_Undefined;
 	}
 }
@@ -83,6 +91,7 @@ function AlchemyCookedItemTypeEnumToName( type : EAlchemyCookedItemType) : name
 		case EACIT_Alcohol 			: return 'alcohol';
 		case EACIT_Quest			: return 'quest';
 		case EACIT_Dye				: return 'dye';
+		case EACIT_Edibles			: return 'edibles'; //modSigns
 		default	     				: return '___'; 
 	}
 }
@@ -100,6 +109,7 @@ function AlchemyCookedItemTypeToLocKey( type : EAlchemyCookedItemType ) : string
 		case EACIT_Alcohol 			: return "panel_inventory_filter_type_alcohols";
 		case EACIT_Quest 			: return "panel_button_worldmap_showquests";
 		case EACIT_Dye				: return "item_category_dye";
+		case EACIT_Edibles			: return "item_category_edibles"; //modSigns
 		default	     				: return "";
 	}
 }

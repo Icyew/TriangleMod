@@ -64,7 +64,7 @@ class CBTTaskPlayAnimationEventDecorator extends IBehTreeTask
 		}
 		
 		if ( drainStaminaOnUse && staminaCost )
-			npc.DrainStamina(ESAT_FixedValue, staminaCost, 1);
+			npc.DrainStamina(ESAT_FixedValue, staminaCost, 0.5); //modSigns: less regen delay
 		if ( disableHitOnActivation )
 			npc.SetCanPlayHitAnim( false );
 		if ( disableLookatOnActivation )

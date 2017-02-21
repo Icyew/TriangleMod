@@ -926,6 +926,9 @@ statemachine abstract import class CR4Player extends CPlayer
 		for( i=0; i<oils.Size(); i+=1 )
 		{
 			oils[ i ].ReduceAmmo();
+			//modSigns
+			if( oils[ i ].GetAmmoCurrentCount() < 1 )
+				RemoveEffect( oils[ i ] );
 		}
 	}
 	
@@ -1663,10 +1666,16 @@ statemachine abstract import class CR4Player extends CPlayer
 							useKnockdown = false;
 							if ( CanUseSkill(S_Sword_s11) )
 							{
-								if( GetSkillLevel(S_Sword_s11) > 1 && RandRangeF(3,0) < GetWitcherPlayer().GetStat(BCS_Focus) )
+								//modSigns: xml param for knockdown chance
+								if( GetSkillLevel(S_Sword_s11) > 1 && RandF() < GetStat(BCS_Focus) * CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s11, 's11_knockdown_chance', false, true)) )
 								{
 									duration = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s11, 'duration', false, true));
 									useKnockdown = true;
+									//modSigns: drain focus points
+									if( !parryInfo.attacker.IsImmuneToBuff(EET_HeavyKnockdown) || !parryInfo.attacker.IsImmuneToBuff(EET_Knockdown) )
+									{
+										DrainFocus(GetStat(BCS_Focus));
+									}
 								}
 							}
 							else if ( parryInfo.attacker.IsHuman() )
@@ -3449,12 +3458,12 @@ statemachine abstract import class CR4Player extends CPlayer
 		witcher = GetWitcherPlayer();
 		if(isInFinisher && witcher)
 		{
-			if(HasAbility('Runeword 10 _Stats', true) && !witcher.runeword10TriggerredOnFinisher && ((bool)theGame.GetInGameConfigWrapper().GetVarValue('Gameplay', 'AutomaticFinishersEnabled')) == true)
+			if(witcher.HasRunewordActive('Runeword 10 _Stats') && !witcher.runeword10TriggerredOnFinisher && ((bool)theGame.GetInGameConfigWrapper().GetVarValue('Gameplay', 'AutomaticFinishersEnabled')) == true) //modSigns
 			{				
 				witcher.Runeword10Triggerred();
 				witcher.runeword10TriggerredOnFinisher = true;
 			}
-			else if(HasAbility('Runeword 12 _Stats', true) && !witcher.runeword12TriggerredOnFinisher)
+			else if(witcher.HasRunewordActive('Runeword 12 _Stats') && !witcher.runeword12TriggerredOnFinisher) //modSigns
 			{
 				witcher.Runeword12Triggerred();
 				witcher.runeword12TriggerredOnFinisher = true;
@@ -5077,7 +5086,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if(abilityManager.GetOverhealBonus() > (0.005 * GetStatMax(BCS_Vitality)))
 		{
-			hasSwordDrawn = HasAbility('Runeword 4 _Stats', true);
+			/*hasSwordDrawn = HasAbility('Runeword 4 _Stats', true);
 			
 			if(!hasSwordDrawn && GetWitcherPlayer())			
 			{
@@ -5093,7 +5102,8 @@ statemachine abstract import class CR4Player extends CPlayer
 				}
 			}
 			
-			if(hasSwordDrawn)
+			if(hasSwordDrawn)*/
+			if(GetWitcherPlayer().HasRunewordActive('Runeword 4 _Stats')) //modSigns
 			{
 				if(!IsEffectActive('runeword_4', true))
 					PlayEffect('runeword_4');
@@ -8204,7 +8214,8 @@ statemachine abstract import class CR4Player extends CPlayer
 		super.ReduceDamage(damageData);
 		
 		
-		if(damageData.attacker == this && (damageData.GetBuffSourceName() == "petard" || (W3Petard)damageData.causer) )
+		//modSigns: make Perk_16 more valuable
+		/*if(damageData.attacker == this && (damageData.GetBuffSourceName() == "petard" || (W3Petard)damageData.causer) )
 		{
 			if ( theGame.CanLog() )
 			{
@@ -8212,7 +8223,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			}
 			damageData.processedDmg.vitalityDamage = damageData.processedDmg.vitalityDamage / 2;
 			damageData.processedDmg.essenceDamage = damageData.processedDmg.essenceDamage / 2;
-		}
+		}*/
 	}
 	
 	
@@ -8224,6 +8235,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		var i : int;
 		var holdsCrossbow : bool;
 		var critVal : SAbilityAttributeValue;
+		var weaponId : SItemUniqueId; //modSigns
 		
 		critChance = 0;
 		
@@ -8250,29 +8262,38 @@ statemachine abstract import class CR4Player extends CPlayer
 			{
 				critVal = inv.GetItemAttributeValue( weapons[i], theGame.params.CRITICAL_HIT_CHANCE );
 				critChance -= CalculateAttributeValue( critVal );
-			}			
+			}
 		}
 		
-		
-		if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) )
+		//modSigns: exclude crossbow
+		if( !isBolt )
 		{
-			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s08 );
-		}
-		else if( isLightAttack && CanUseSkill( S_Sword_s17 ) )
-		{
-			critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s17 );
+			if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) )
+			{
+				critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s08 );
+			}
+			else if( isLightAttack && CanUseSkill( S_Sword_s17 ) )
+			{
+				critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s17 );
+			}
 		}
 	
 		if( target && target.HasBuff( EET_Confusion ) )
 		{
 			critChance += ( ( W3ConfuseEffect )target.GetBuff( EET_Confusion ) ).GetCriticalHitChanceBonus();
+			//theGame.witcherLog.AddMessage("Crit chance = " + ( ( W3ConfuseEffect )target.GetBuff( EET_Confusion ) ).GetCriticalHitChanceBonus());
 		}
 		
-		
-		oilChanceAttribute = MonsterCategoryToCriticalChanceBonus( victimMonsterCategory );
+		//modSigns: oil ammo percentage
+		/*oilChanceAttribute = MonsterCategoryToCriticalChanceBonus( victimMonsterCategory );
 		if( IsNameValid( oilChanceAttribute ) )
 		{
 			critChance += CalculateAttributeValue( GetAttributeValue( oilChanceAttribute ) );
+		}*/
+		weaponId = inv.GetCurrentlyHeldSword();
+		if( !isBolt && (isHeavyAttack || isLightAttack) /*&& inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory )*/ ) //modSigns
+		{
+			critChance += CalculateAttributeValue( inv.GetOilCriticalChanceBonus( weaponId, victimMonsterCategory ) );
 		}
 	
 		return critChance;
@@ -8286,12 +8307,16 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
-		
-		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
+		//modSigns: oil ammo percentage
+		/*if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
 		{
 			vsAttributeName = MonsterCategoryToCriticalDamageBonus(victimMonsterCategory);
 			oilBonus = inv.GetItemAttributeValue(weaponId, vsAttributeName);
 			bonus += oilBonus;
+		}*/
+		//if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) ) //modSigns
+		{
+			bonus += inv.GetOilCriticalDamageBonus( weaponId, victimMonsterCategory );
 		}
 		
 		return bonus;
@@ -10307,14 +10332,20 @@ statemachine abstract import class CR4Player extends CPlayer
 		var defaultReward : SRewardMultiplier;
 		var i 			  : int;
 		
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("rewardName = " + rewardName);
 		for(i = 0; i < rewardsMultiplier.Size(); i += 1 )
 		{
 			if( rewardsMultiplier[i].rewardName == rewardName )
 			{
+				//modSigns: debug
+				//theGame.witcherLog.AddMessage("reward found");
 				return rewardsMultiplier[i];
 			}
 		}
 		
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("reward not found");
 		defaultReward.rewardName = rewardName;
 		defaultReward.rewardMultiplier = 1.0;
 		defaultReward.isItemMultiplier = false;
@@ -10353,16 +10384,23 @@ statemachine abstract import class CR4Player extends CPlayer
 		var i : int;
 		var rewardMultiplier : SRewardMultiplier;
 		
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("rewardName = " + rewardName);
+		//theGame.witcherLog.AddMessage("value = " + value);
 		for(i = 0; i < rewardsMultiplier.Size(); i += 1 )
 		{
 			if( rewardsMultiplier[i].rewardName == rewardName )
 			{
+				//modSigns: debug
+				//theGame.witcherLog.AddMessage("reward updated");
 				rewardsMultiplier[i].rewardMultiplier = value;
 				rewardsMultiplier[i].isItemMultiplier = isItemMultiplier;
 				return;
 			}
 		}
 		
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("reward added");
 		rewardMultiplier.rewardName = rewardName;
 		rewardMultiplier.rewardMultiplier = value;
 		rewardMultiplier.isItemMultiplier = isItemMultiplier;
@@ -10606,12 +10644,13 @@ statemachine abstract import class CR4Player extends CPlayer
 				AddEffectCustom(params);
 			}
 			
-			
-			if ( inv.ItemHasTag(itemId, 'Alcohol') )
+			//custom hack - modSigns: add uncooked tag
+			if ( inv.ItemHasTag(itemId, 'Alcohol') || inv.ItemHasTag(itemId, 'Uncooked') )
 			{
 				potionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(itemId, 'toxicity'));
 				abilityManager.GainStat(BCS_Toxicity, potionToxicity );				
-				AddEffectDefault(EET_Drunkenness, NULL, inv.GetItemName(itemId));
+				if(inv.ItemHasTag(itemId, 'Alcohol')) //modSigns
+					AddEffectDefault(EET_Drunkenness, NULL, inv.GetItemName(itemId));
 			}
 			PlayItemConsumeSound( itemId );
 		}
@@ -10869,6 +10908,12 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 		cost = GetSkillStaminaUseCost(skill, perSec);
 		
+		//modSigns: gryphon set bonus - reduce sign skills cost
+		if((W3PlayerWitcher)this && IsSkillSign(skill) && GetWitcherPlayer().IsSetBonusActive( EISB_Gryphon_1 ))
+		{
+			cost *= 1 - GetWitcherPlayer().GetGryphonSetStaminaCostReduction();
+		}
+		
 		ret = ( CanUseSkill(skill) && (abilityManager.GetStat(BCS_Stamina, signHack) >= cost) );
 		
 		
@@ -10878,10 +10923,10 @@ statemachine abstract import class CR4Player extends CPlayer
 		}
 			
 		
-		if( !ret && IsSkillSign( skill ) && GetWitcherPlayer().HasBuff( EET_GryphonSetBonus ) )
+		/*if( !ret && IsSkillSign( skill ) && GetWitcherPlayer().HasBuff( EET_GryphonSetBonus ) ) //modSigns: no longer used
 		{
 			ret = true;
-		}
+		}*/
 		
 		if(!ret)
 		{

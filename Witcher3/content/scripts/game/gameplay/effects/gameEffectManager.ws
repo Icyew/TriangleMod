@@ -339,6 +339,9 @@ class W3GameEffectManager
 			case EET_ToxicityVenom :			effects[effect] = new W3Effect_ToxicityVenom in this;				break;
 			case EET_BasicQuen :				effects[effect] = new W3Effect_BasicQuen in this;					break;
 			
+			//modSigns
+			case EET_UndyingSkillImmortal :		effects[effect] = new W3Effect_UndyingSkillImmortal in this;		break;
+			case EET_UndyingSkillCooldown :		effects[effect] = new W3Effect_UndyingSkillCooldown in this;		break;
 			
 			case EET_Fact : 					effects[effect] = new W3Potion_Fact in this;						break;
 			
@@ -728,6 +731,10 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 		case "ToxicityVenomEffect" :						type = EET_ToxicityVenom;				break;
 		case "BasicQuenEffect" : 							type = EET_BasicQuen;					break;
 		
+
+		//modSigns:
+		case "UndyingSkillImmortalEffect" :					type = EET_UndyingSkillImmortal;		break;
+		case "UndyingSkillCooldownEffect" :					type = EET_UndyingSkillCooldown;		break;
 		
 		case "StaggerAuraEffect" : 							type = EET_StaggerAura; 				break;
 		case "FireAuraEffect" : 							type = EET_FireAura; 					break;
@@ -925,6 +932,10 @@ function EffectTypeToName(effectType : EEffectType) : name
 		case EET_ToxicityVenom :						return 'ToxicityVenomEffect';
 		case EET_BasicQuen :							return 'BasicQuenEffect';
 		
+
+		//modSigns:
+		case EET_UndyingSkillImmortal :				return 'UndyingSkillImmortalEffect';
+		case EET_UndyingSkillCooldown :				return 'UndyingSkillCooldownEffect';
 		
 		case EET_StaggerAura : 							return 'StaggerAuraEffect';
 		case EET_FireAura : 							return 'FireAuraEffect';

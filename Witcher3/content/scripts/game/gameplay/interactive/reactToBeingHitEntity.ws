@@ -130,12 +130,17 @@ class W3ReactToBeingHitEntity extends CGameplayEntity
 		
 		if ( !IsNameValid( attributeName ) )
 		{
-			attributeName = GetBasicAttackDamageAttributeName( theGame.params.ATTACK_NAME_HEAVY, theGame.params.DAMAGE_NAME_PHYSICAL );
+			//attributeName = GetBasicAttackDamageAttributeName( theGame.params.ATTACK_NAME_HEAVY, theGame.params.DAMAGE_NAME_PHYSICAL ); //modSigns
+			attributeName = damageTypeName; //modSigns
 		}
 		attacker = (CActor) action.attacker;
 		if ( attacker )
 		{
 			damage = CalculateAttributeValue( attacker.GetAttributeValue( attributeName ) );
+			if ( damage < 1 ) //modSigns
+			{
+				damage = MaxF(500, 0.5 * thePlayer.GetMaxHealth()); //modSigns
+			}
 			if ( killOnHpBelowPerc > 0 && attacker.GetHealthPercents() <= killOnHpBelowPerc )
 			{
 				if ( IsNameValid( setBehVarOnKill ) )
@@ -161,7 +166,7 @@ class W3ReactToBeingHitEntity extends CGameplayEntity
 				}
 				
 				action.attacker = this;
-				action.Initialize( this, attacker, NULL, this.GetName(), EHRT_Light, CPS_Undefined, false, false, false, true );
+				action.Initialize( this, attacker, NULL, this.GetName(), EHRT_Heavy, CPS_Undefined, false, false, false, true ); //modSigns
 				action.AddDamage( damageTypeName, damage );
 				theGame.damageMgr.ProcessAction( action );
 				if ( IsNameValid( effectOnHitVictim ) )

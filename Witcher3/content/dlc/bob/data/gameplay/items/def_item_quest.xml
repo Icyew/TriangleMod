@@ -129,8 +129,6 @@
 				>
 					<tags>							mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -145,8 +143,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -161,8 +157,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>			
 			<item
 					name							="q701_swan_item"
@@ -176,8 +170,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -304,8 +296,6 @@
 			>
 				<tags>							mod_junk
 				</tags>
-				<recycling_parts>				<parts count="1">Silver ingot</parts>
-				</recycling_parts>
 			</item>
 			
 			<item
@@ -449,8 +439,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>		
 			
 			<item
@@ -633,8 +621,6 @@
 					>
 						<tags>							ReadableItem, mod_book, QuestEP2							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -648,8 +634,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -663,8 +647,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -678,8 +660,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -693,8 +673,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -708,8 +686,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -723,8 +699,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -738,8 +712,6 @@
 					>
 						<tags>							key							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -753,8 +725,6 @@
 				>
 					<tags>							q702_secret_urn
 					</tags>
-					<recycling_parts>				<parts count="1">Gold ore</parts>
-					</recycling_parts>
 				</item>
 				
 				<item
@@ -768,8 +738,6 @@
 				>
 					<tags>							q702_marlena_dowry, mq7024_trophy
 					</tags>
-					<recycling_parts>				<parts count="1">Gold ore</parts>
-					</recycling_parts>
 				</item>
 				
 				<item
@@ -783,8 +751,6 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
@@ -798,14 +764,12 @@
 					>
 						<tags>							ReadableItem, mod_book							
 						</tags>
-						<recycling_parts>				<parts count="1">Book</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
 						name							="q702_vampire_mask"
 						category						="mask"
-						price							="1"
+						price							="300"
 						enhancement_slots				="0"
 						stackable						="1"
 						grid_size						="2"
@@ -822,14 +786,12 @@
 														<a>Geralt_mask _Stats</a>
 														<a>Relic _Stats</a>
 						</base_abilities>
-						<recycling_parts>				<parts count="1">Leather</parts>
-						</recycling_parts>
 				</item>
 				
 				<item
 						name							="q704_vampire_mask"
 						category						="mask"
-						price							="1"
+						price							="300"
 						enhancement_slots				="0"
 						stackable						="1"
 						grid_size						="2"
@@ -846,8 +808,6 @@
 														<a>Geralt_mask _Stats</a>
 														<a>Relic _Stats</a>
 						</base_abilities>
-						<recycling_parts>				<parts count="1">Leather</parts>
-						</recycling_parts>
 				</item>
 
 			
@@ -1236,8 +1196,6 @@
 				>
 					<tags>							Quest, ReadableItem, NoNotification, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>	
 			<item
 					name							="q705_note_ab_syanna"
@@ -1251,8 +1209,6 @@
 				>
 					<tags>							ReadableItem, mod_junk
 					</tags>
-					<recycling_parts>				<parts count="1">Note</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_note_from_sasha1"
@@ -1266,8 +1222,6 @@
 				>
 					<tags>							ReadableItem, mod_junk
 					</tags>
-					<recycling_parts>				<parts count="1">Note</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_note_from_sasha2"
@@ -1281,8 +1235,6 @@
 				>
 					<tags>							ReadableItem, mod_junk
 					</tags>
-					<recycling_parts>				<parts count="1">Note</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_ah_letter"
@@ -1296,8 +1248,6 @@
 				>
 					<tags>							Quest, ReadableItem, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_dirty_clothes"
@@ -1311,8 +1261,6 @@
 				>
 					<tags>							Quest, Q705_Laundry, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_soap"
@@ -1326,8 +1274,6 @@
 				>
 					<tags>							Quest, Q705_Laundry, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_medal"
@@ -1341,8 +1287,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			<item
 					name							="q705_white_roses"
@@ -1356,8 +1300,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1372,8 +1314,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1388,8 +1328,6 @@
 				>
 					<tags>							Quest, ReadableItem, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1404,8 +1342,6 @@
 				>
 					<tags>							Quest, mod_junk, q705_prison_stash, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1420,8 +1356,6 @@
 				>
 					<tags>							ReadableItem, Painting, mq7024_picture
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1453,8 +1387,6 @@
 				>
 					<tags>							Quest, ReadableItem, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -1469,8 +1401,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 
 			<item
@@ -1485,8 +1415,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 
 			<item
@@ -1501,8 +1429,6 @@
 				>
 					<tags>							Quest, mod_junk, QuestEP2
 					</tags>
-					<recycling_parts>				<parts count="1">Silver ingot</parts>
-					</recycling_parts>
 			</item>
 			
 			<item
@@ -2064,8 +1990,6 @@
 			>
 				<tags>							Quest, ReadableItem, mod_book, QuestEP2
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 <!-- Minor Quests -->
 			<item
@@ -2080,8 +2004,6 @@
 			>
 				<tags>							Quest, ReadableItem, mod_book, QuestEP2
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 			
 			<item
@@ -2096,8 +2018,6 @@
 			>
 				<tags>							Quest, ReadableItem, mod_book, QuestEP2
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 			
 			<item
@@ -2112,8 +2032,6 @@
 			>
 				<tags>							Quest, ReadableItem, QuestEP2
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 			
 			<item
@@ -2213,8 +2131,6 @@
 			>
 				<tags>							ReadableItem, mod_book
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 			
 			<item
@@ -2229,8 +2145,6 @@
 			>
 				<tags>							ReadableItem, mod_book
 				</tags>
-				<recycling_parts>				<parts count="1">Note</parts>
-				</recycling_parts>
 			</item>
 			
 <!-- MQ7018 - LAST ONE -->			

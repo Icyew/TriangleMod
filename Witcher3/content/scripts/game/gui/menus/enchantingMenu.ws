@@ -228,7 +228,7 @@ class CR4EnchantingMenu extends CR4MenuBase
 					ingredientData = m_flashValueStorage.CreateTempFlashObject();
 					curIngredientName  = schematic.ingredients[j].itemName;
 					requiredIngredientsCount = schematic.ingredients[j].quantity;
-					availableIngredientsCount = m_playerInventory.GetItemQuantityByName(curIngredientName);
+					availableIngredientsCount = GetWitcherPlayer().GetItemQuantityByNameForCrafting(curIngredientName, true); //modSigns: count stash items
 					m_playerInventory.GetItemQualityFromName(curIngredientName, minQuality, maxQuality);
 					ingredientLocName = GetLocStringByKeyExt(m_definitionsManager.GetItemLocalisationKeyName(curIngredientName));
 					
@@ -428,6 +428,13 @@ class CR4EnchantingMenu extends CR4MenuBase
 		
 		m_playerInventory.UnenchantItem(itemId);
 		enchantResult = m_playerInventory.EnchantItem( itemId, enchantmentName, getEnchamtmentStatName(enchantmentName) );
+		//modSigns: fix armor bonuses
+		if( enchantmentName == 'Glyphword 2' || enchantmentName == 'Glyphword 3' || enchantmentName == 'Glyphword 4' )
+		{
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_05);
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_06);
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_07);
+		}
 		
 		if (enchantResult)
 		{
@@ -436,7 +443,7 @@ class CR4EnchantingMenu extends CR4MenuBase
 			for (i = 0; i < ingredientsCount; i=i+1 )
 			{
 				curIngredient = enchantSchematic.ingredients[i];
-				m_playerInventory.RemoveItemByName(curIngredient.itemName, curIngredient.quantity);
+				GetWitcherPlayer().RemoveItemByNameForCrafting(curIngredient.itemName, curIngredient.quantity, true); //modSigns: count stash items
 			}
 			
 			
@@ -467,8 +474,18 @@ class CR4EnchantingMenu extends CR4MenuBase
 	event  OnRemoveEnchantment(itemId : SItemUniqueId):void
 	{
 		var unenchantResult : bool;
+		var hasArmorTypeEnchantment : bool; //modSigns
+		
+		hasArmorTypeEnchantment = m_playerInventory.ItemHasAbility(itemId, 'Glyphword 2 _Stats') || m_playerInventory.ItemHasAbility(itemId, 'Glyphword 3 _Stats') || m_playerInventory.ItemHasAbility(itemId, 'Glyphword 4 _Stats');
 		
 		unenchantResult = m_playerInventory.UnenchantItem(itemId);
+		//modSigns: fix armor bonuses
+		if( hasArmorTypeEnchantment )
+		{
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_05);
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_06);
+			((W3PlayerAbilityManager)(GetWitcherPlayer().GetAbilityManager())).SetPerkArmorBonus(S_Perk_07);
+		}
 		if (unenchantResult)
 		{
 			theGame.GetGuiManager().ShowNotification(GetLocStringByKeyExt("panel_enchanting_notification_enchant_removed"));

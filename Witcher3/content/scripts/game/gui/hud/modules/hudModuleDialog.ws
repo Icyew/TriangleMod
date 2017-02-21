@@ -351,7 +351,8 @@ class CR4HudModuleDialog extends CR4HudModuleBase
 		{			
 			currentRewardMultiply = 1.f;
 			minimalHagglingReward = FloorF(rewardValue);
-			maxMult = RandRangeF(0.5, 0.35);						
+			//maxMult = RandRangeF(0.5, 0.35);						
+			maxMult = 1; //modSigns: double randomization removed, upper limit increased
 			maxHaggleValue = FloorF( rewardValue * (1.f + maxMult) );
 			currentReward = minimalHagglingReward;
 			

@@ -29,6 +29,11 @@ class W3MerchantComponent extends CScriptedComponent
 
 	public function GetMapPinType() : name
 	{
+		//modSigns: fix Yolar map pin
+		var merchantNPC : W3MerchantNPC;
+		merchantNPC = (W3MerchantNPC)GetEntity();
+		if( merchantNPC.HasTag('druid_yolar') && mapPinType != EMMPT_Herbalist ) mapPinType = EMMPT_Herbalist;
+		
 		switch( mapPinType )
 		{
 			case EMMPT_Shopkeeper:

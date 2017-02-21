@@ -5,143 +5,142 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
-	<ability name="Crafted Ofir Steel Sword _Stats">
-		<weight							type="base"	min="4.75"				/>
+<!-- STEEL -->
+
+	<ability name="Crafted Ofir Steel Sword _Stats"> <!-- lvl 62 -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="4"					/>
-		<SlashingDamage 				type="base"	min="590"				/>
+		<SlashingDamage 				type="base"	min="522"				/>
 		<SilverDamage 					type="base"	min="1"					/>	
-		<critical_hit_chance			type="add"	min="0.15"				/>
+		<critical_hit_chance			type="add"	min="0.35"				/>
 		<critical_hit_damage_bonus 		type="add" 	min="0.75" 				/>
-		<spell_power_axii				type="mult" min="0.10" 				/>
-		<spell_power_aard				type="mult" min="0.10" 				/>
-		<spell_power_igni 				type="mult" min="0.20" 				/>
+		<spell_power_axii				type="mult" min="0.25" 				/>
+		<spell_power_aard				type="mult" min="0.25" 				/>
+		<spell_power_igni 				type="mult" min="0.25" 				/>
 	</ability>
 	
-	<ability name="Crafted Burning Rose Sword _Stats"> 
-		<weight 						type="base"	min="4.35"				/>
+	<ability name="Crafted Burning Rose Sword _Stats"> <!-- lvl 63 -->
+		<weight 						type="base"	min="4"					/>
 		<quality 						type="add" 	min="4" 				/>
-		<SlashingDamage 				type="base"	min="574"				/>
-		<SilverDamage 					min="1" 	max="1"					/>						
+		<SlashingDamage 				type="base"	min="530"				/>
+		<SilverDamage 					type="base"	min="1"					/>						
+		<dismember_chance_mult 			type="add"	min="0.5" 				/>
+		<buff_apply_chance 				type="add" 	min="0.08" 				/>
 		<StaggerEffect 					is_ability="true" 					/>
-		<desc_staggerchance_mult 		type="add" 	min="0.1" 				/>
-		<BurningEffect 					is_ability="true" 					/>
-		<desc_burningchance_mult 		type="add" 	min="0.1" 				/>
+		<desc_staggerchance_mult 		type="add" 	min="0.08" 				/>
 		<ConfusionEffect 				is_ability="true" 					/>
-		<desc_confusionchance_mult 		type="add" 	min="0.1" 				/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>
-		<instant_kill_chance_mult 		type="add" 	min="0.03" 				/>
-		<dismember_chance_mult 			type="add"	min="0.03" 				/>
+		<desc_confusionchance_mult 		type="add" 	min="0.08" 				/>
+		<BurningEffect 					is_ability="true" 					/>
+		<desc_burningchance_mult 		type="add" 	min="0.08" 				/>
 	</ability>
 	
-	<ability name="EP1 Crafted Witcher Silver Sword _Stats">
-		<weight							type="base"	min="7.9"				/>
+<!-- SILVER -->
+
+	<ability name="EP1 Crafted Witcher Silver Sword _Stats"> <!-- lvl 63 -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="4"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="765" 				/>
-		<spell_power_axii 				type="mult" min="0.15" 				/>
-		<spell_power_aard 				type="mult" min="0.15" 				/>
-		<spell_power_igni 				type="mult" min="0.15" 				/>
+		<SilverDamage 					type="base"	min="721" 				/>
+		<spell_power_aard 				type="mult" min="0.25" 				/>
+		<spell_power_yrden 				type="mult" min="0.25" 				/>
+		<critical_hit_chance 			type="add" 	min="0.35" 				/>
 		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<critical_hit_chance 			type="add" 	min="0.10" 				/>
-	</ability>
-	
-	<ability name="EP1 Viper School steel sword _Stats">
-		<weight							type="base"	min="8.6"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage					type="base"	min="604"				/>
-		<SilverDamage					type="base"	min="1"					/>
-		<desc_poinsonchance_mult		type="add"	min="0.15"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
-		<PoisonEffect					is_ability="true"					/>
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-		<spell_power_aard				type="mult"	min="0.25"				/>
 	</ability>
 
-	<ability name="EP1 Viper School silver sword _Stats">
-		<weight							type="base"	min="8.6"				/>
+<!-- STEEL WITCHER -->
+
+	<ability name="EP1 Viper School steel sword _Stats"> <!-- lvl 64 -->
+		<weight							type="base"	min="4"					/>
 		<quality						type="add"	min="5"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="814"				/>
-		<desc_poinsonchance_mult		type="add"	min="0.15"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
-		<PoisonEffect					is_ability="true"					/>
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.20"				/>
-		<spell_power_aard				type="mult"	min="0.25"				/>
-	</ability>
-	
-	<!-- NG+ Variants -->
-	<ability name="NGP Crafted Ofir Steel Sword _Stats">
-		<weight							type="base"	min="4.75"				/>
-		<quality						type="add"	min="4"					/>
-		<SlashingDamage 				type="base"	min="350"				/>
-		<SilverDamage 					type="base"	min="1"					/>	
-		<critical_hit_chance			type="add"	min="0.15"				/>
-		<critical_hit_damage_bonus 		type="add" 	min="0.75" 				/>
-		<spell_power_axii				type="mult" min="0.10" 				/>
-		<spell_power_aard				type="mult" min="0.10" 				/>
-		<spell_power_igni 				type="mult" min="0.20" 				/>
-	</ability>
-	
-	<ability name="NGP Crafted Burning Rose Sword _Stats"> 
-		<weight 						type="base"	min="4.35"				/>
-		<quality 						type="add" 	min="4" 				/>
-		<SlashingDamage 				type="base"	min="332"				/>
-		<SilverDamage 					min="1" 	max="1"					/>						
-		<StaggerEffect 					is_ability="true" 					/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>
-		<desc_staggerchance_mult 		type="add" 	min="0.1" 				/>
-		<BurningEffect 					is_ability="true" 					/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>
-		<desc_burningchance_mult 		type="add" 	min="0.1" 				/>
-		<instant_kill_chance_mult 		type="add" 	min="0.03" 				/>
-		<dismember_chance_mult 			type="add"	min="0.03" 				/>
-		<ConfusionEffect 				is_ability="true" 					/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>
-		<desc_confusionchance_mult 		type="add" 	min="0.1" 				/>
-	</ability>
-	
-	<ability name="NGP EP1 Crafted Witcher Silver Sword _Stats">
-		<weight							type="base"	min="5.7"				/>
-		<quality						type="add"	min="4"					/>
-		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="465" 				/>
-		<spell_power_axii 				type="mult" min="0.15" 				/>
-		<spell_power_aard 				type="mult" min="0.15" 				/>
-		<spell_power_igni 				type="mult" min="0.15" 				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<critical_hit_chance 			type="add" 	min="0.10" 				/>
-	</ability>
-	
-	<ability name="NGP EP1 Viper School steel sword _Stats">
-		<weight							type="base"	min="5.1"				/>
-		<quality						type="add"	min="5"					/>
-		<SlashingDamage					type="base"	min="364"				/>
+		<SlashingDamage					type="base"	min="538"				/>
 		<SilverDamage					type="base"	min="1"					/>
-		<desc_poinsonchance_mult		type="add"	min="0.15"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
 		<PoisonEffect					is_ability="true"					/>
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<human_exp_bonus_when_fatal		type="add"	min="0.05"				/>
-		<spell_power_aard				type="mult"	min="0.25"				/>
+		<PoisonDamage 					type="add"  min="90"				/>
 	</ability>
-	
-	<ability name="NGP EP1 Viper School silver sword _Stats">
-		<weight							type="base"	min="5.95"				/>
+
+<!-- SILVER WITCHER -->
+
+	<ability name="EP1 Viper School silver sword _Stats"> <!-- lvl 64 -->
+		<weight							type="base"	min="2"					/>
 		<quality						type="add"	min="5"					/>
 		<SlashingDamage 				type="base"	min="1"					/>
-		<SilverDamage 					type="base"	min="514"				/>
-		<desc_poinsonchance_mult		type="add"	min="0.15"				/>
-		<buff_apply_chance				type="add"	min="0.15"				/>
+		<SilverDamage 					type="base"	min="731"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
 		<PoisonEffect					is_ability="true"					/>
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.75"				/>
-		<nonhuman_exp_bonus_when_fatal	type="add"	min="0.20"				/>
-		<spell_power_aard				type="mult"	min="0.25"				/>
+		<PoisonDamage 					type="add"  min="100"				/>
+	</ability>
+	
+<!-- NG+ Variants -->
+
+<!-- STEEL -->
+
+	<ability name="NGP Crafted Ofir Steel Sword _Stats"> <!-- lvl 32 -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="4"					/>
+		<SlashingDamage 				type="base"	min="282"				/>
+		<SilverDamage 					type="base"	min="1"					/>	
+		<critical_hit_chance			type="add"	min="0.2"				/>
+		<critical_hit_damage_bonus 		type="add" 	min="0.5" 				/>
+		<spell_power_axii				type="mult" min="0.15" 				/>
+		<spell_power_aard				type="mult" min="0.15" 				/>
+		<spell_power_igni 				type="mult" min="0.15" 				/>
+	</ability>
+	
+	<ability name="NGP Crafted Burning Rose Sword _Stats"> <!-- lvl 33 -->
+		<weight 						type="base"	min="4"					/>
+		<quality 						type="add" 	min="4" 				/>
+		<SlashingDamage 				type="base"	min="290"				/>
+		<SilverDamage 					min="1" 	max="1"					/>						
+		<dismember_chance_mult 			type="add"	min="0.5" 				/>
+		<buff_apply_chance 				type="add" 	min="0.05" 				/>
+		<StaggerEffect 					is_ability="true" 					/>
+		<desc_staggerchance_mult 		type="add" 	min="0.05" 				/>
+		<ConfusionEffect 				is_ability="true" 					/>
+		<desc_confusionchance_mult 		type="add" 	min="0.05" 				/>
+		<BurningEffect 					is_ability="true" 					/>
+		<desc_burningchance_mult 		type="add" 	min="0.05" 				/>
+	</ability>
+	
+<!-- SILVER -->
+
+	<ability name="NGP EP1 Crafted Witcher Silver Sword _Stats"> <!-- lvl 33 -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="4"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="421" 				/>
+		<spell_power_aard 				type="mult" min="0.15" 				/>
+		<spell_power_yrden 				type="mult" min="0.15" 				/>
+		<critical_hit_chance 			type="add" 	min="0.25" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.65"				/>
+	</ability>
+
+<!-- STEEL WITCHER -->
+
+	<ability name="NGP EP1 Viper School steel sword _Stats"> <!-- lvl 34 -->
+		<weight							type="base"	min="4"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage					type="base"	min="298"				/>
+		<SilverDamage					type="base"	min="1"					/>
+		<desc_poinsonchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<PoisonDamage 					type="add"  min="80"				/>
+	</ability>
+
+<!-- SILVER WITCHER -->
+
+	<ability name="NGP EP1 Viper School silver sword _Stats"> <!-- lvl 34 -->
+		<weight							type="base"	min="2"					/>
+		<quality						type="add"	min="5"					/>
+		<SlashingDamage 				type="base"	min="1"					/>
+		<SilverDamage 					type="base"	min="431"				/>
+		<desc_poinsonchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
+		<PoisonEffect					is_ability="true"					/>
+		<PoisonDamage 					type="add"  min="90"				/>
 	</ability>
 	
 </abilities>
@@ -151,7 +150,7 @@
 	<item
 		name							="Crafted Ofir Steel Sword"
 		category						="steelsword"
-		price							="1298"
+		price							="1200"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -175,16 +174,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/ofir_steel_sabre_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, mod_valuable, Ofir, EP1
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>				<a>Crafted Ofir Steel Sword _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="3">Dwimeryte ingot</parts>
-										<parts count="1">Monstrous brain</parts>
-										<parts count="3">Monstrous blood</parts>
-										<parts count="2">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -222,7 +220,7 @@
 	<item
 		name							="Crafted Burning Rose Sword"
 		category						="steelsword"
-		price							="1519"
+		price							="1250"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -246,16 +244,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/burning_rose_sword_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_valuable EP1
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Crafted Burning Rose Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="3">Dwimeryte ingot</parts>
-										<parts count="1">Sapphire dust</parts>
-										<parts count="3">Monstrous blood</parts>
-										<parts count="2">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -295,7 +292,7 @@
 	<item
 		name							="EP1 Crafted Witcher Silver Sword"
 		category						="silversword" 
-		price							="890"
+		price							="1550"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -319,15 +316,15 @@
 		localisation_key_description	="item_desc_silver_sword"
 		icon_path						="icons/inventory/weapons/ep1_silver_sword_64x128.png"
 	>
-		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon, mod_legendar, EP1
+		<tags>							PlayerSilverWeapon, Weapon, Upgradeable, sword1h, mod_weapon, mod_legendary, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>EP1 Crafted Witcher Silver Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="1">Amethyst dust</parts>
-										<parts count="1">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -372,7 +369,7 @@
 	<item
 		name							="EP1 Viper School steel sword"
 		category						="steelsword" 
-		price							="890"
+		price							="1400"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -401,10 +398,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>EP1 Viper School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="1">Amethyst dust</parts>
-										<parts count="1">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -442,7 +439,7 @@
 	<item
 		name							="EP1 Viper School silver sword"
 		category						="silversword" 
-		price							="1039"
+		price							="1700"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -471,10 +468,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>EP1 Viper School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="1">Sapphire dust</parts>
-										<parts count="2">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -520,7 +517,7 @@
 	<item
 		name							="NGP Crafted Ofir Steel Sword"
 		category						="steelsword"
-		price							="226"
+		price							="1200"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -544,15 +541,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/ofir_steel_sabre_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, mod_valuable, Ofir, EP1
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>				<a>NGP Crafted Ofir Steel Sword _Stats</a>
 										<a>Default weapon _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
-										<parts count="3">Feather</parts>
-										<parts count="1">Ruby dust</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -590,7 +587,7 @@
 	<item
 		name							="NGP Crafted Burning Rose Sword"
 		category						="steelsword"
-		price							="404"
+		price							="1250"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -614,15 +611,15 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/burning_rose_sword_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_valuable, EP1
+		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>NGP Crafted Burning Rose Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Dark iron ore</parts>
-										<parts count="1">Amethyst dust</parts>
-										<parts count="1">Amber dust</parts>
-										<parts count="1">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
+										<parts count="1">Haft</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -662,7 +659,7 @@
 	<item
 		name							="NGP EP1 Crafted Witcher Silver Sword"
 		category						="silversword" 
-		price							="890"
+		price							="1550"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -691,11 +688,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>NGP EP1 Crafted Witcher Silver Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Silver ingot</parts>
-										<parts count="3">Gold ore</parts>
-										<parts count="1">Amethyst dust</parts>
-										<parts count="1">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="2">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -740,7 +736,7 @@
 	<item
 		name							="NGP EP1 Viper School steel sword"
 		category						="steelsword" 
-		price							="890"
+		price							="1400"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -769,10 +765,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>NGP EP1 Viper School steel sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="1">Amethyst dust</parts>
-										<parts count="1">Diamond dust</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -810,7 +806,7 @@
 	<item
 		name							="NGP EP1 Viper School silver sword"
 		category						="silversword" 
-		price							="1039"
+		price							="1700"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -839,10 +835,10 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>NGP EP1 Viper School silver sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="2">Dwimeryte ingot</parts>
-										<parts count="1">Sapphire dust</parts>
-										<parts count="2">Emerald dust</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Leather</parts>
+										<parts count="1">Wire rope</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 

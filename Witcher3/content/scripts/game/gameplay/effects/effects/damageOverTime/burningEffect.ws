@@ -74,7 +74,7 @@ class W3Effect_Burning extends W3CriticalDOTEffect
 			powerStatType = CPS_Undefined;
 			
 		
-		if(!isOnPlayer && GetCreator() == thePlayer && thePlayer.HasAbility('Glyphword 12 _Stats', true) && isSignEffect && IsRequiredAttitudeBetween(thePlayer, target, true))
+		if(!isOnPlayer && GetCreator() == GetWitcherPlayer() && GetWitcherPlayer().HasGlyphwordActive('Glyphword 12 _Stats') && isSignEffect && IsRequiredAttitudeBetween(thePlayer, target, true)) //modSigns
 		{
 			isWithGlyphword12 = true;
 			template = (CEntityTemplate)LoadResource('glyphword_12');

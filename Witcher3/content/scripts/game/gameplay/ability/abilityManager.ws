@@ -167,8 +167,9 @@ import abstract class W3AbilityManager extends IScriptable
 	public function GetAttributeValue(attributeName : name, optional tags : array<name>) : SAbilityAttributeValue
 	{
 		var val : SAbilityAttributeValue;
-	
-		if(CheckForbiddenAttribute(attributeName))
+
+		//modSigns: make spell_power accessible to show it on character screen	
+		if(CheckForbiddenAttribute(attributeName) && attributeName != 'spell_power') //to be able to get pure spell power with no modifiers
 		{
 			val.valueBase = -9999;
 			val.valueAdditive = -9999;
@@ -463,7 +464,6 @@ import abstract class W3AbilityManager extends IScriptable
 		
 		return cost;
 	}
-	
 	
 	public function GetStaminaActionCost(action : EStaminaActionType, out cost : float, out delay : float, optional fixedCost : float, optional fixedDelay : float, optional abilityName : name, optional dt : float, optional costMult : float)
 	{

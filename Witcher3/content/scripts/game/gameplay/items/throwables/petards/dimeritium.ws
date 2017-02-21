@@ -156,7 +156,7 @@ class W3Dimeritium extends W3Petard
 					}
 				}
 				
-				else if(bombLevel == 3)
+				else /*if(bombLevel == 3)*/ // modSigns - enable for all tiers
 				{
 					theGame.GetDefinitionsManager().GetItemAttributeValueNoRandom(itemName, true, 'duration_out_of_cloud', min, max);
 					duration = CalculateAttributeValue(min);

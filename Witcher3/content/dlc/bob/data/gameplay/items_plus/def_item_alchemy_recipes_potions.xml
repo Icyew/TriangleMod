@@ -69,8 +69,8 @@
 				localisation_key_name = "item_name_recipe_for_alraune_reagent" >
 					<ingredients>
 						<ingredient item_name="Ducal water" quantity="1" />
-						<!-- <ingredient item_name="mq7014_herb" quantity="2" /> -->
-						<ingredient item_name="White myrtle" quantity="2" />
+						<!-- <ingredient item_name="mq7014_herb" quantity="1" /> -->
+						<ingredient item_name="White myrtle" quantity="1" />
 					</ingredients>
 			</recipe>
 
@@ -86,7 +86,7 @@
 				localisation_key_name = "item_name_mh701_sharley_lure" >
 					<ingredients>
 						<ingredient item_name="mh701_fresh_blood" quantity="1" />
-						<ingredient item_name="Sewant mushrooms" quantity="3" />
+						<ingredient item_name="Sewant mushrooms" quantity="1" />
 					</ingredients>
 			</recipe>			
 			

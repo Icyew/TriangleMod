@@ -6,63 +6,62 @@
 	<!-- MONSTER WEAPONS STATS-->
 			<ability name="mon_sharley_young_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="360" max="360"/>
+				<RendingDamage min="350" max="350"/>
 			</ability>
 			
 			<ability name="mon_sharley_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="190" max="190"/>
+				<RendingDamage min="250" max="250"/>
 			</ability>
 			
 			<ability name="mon_dettlaff_claws_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="750" max="750"/>
+				<RendingDamage min="650" max="650"/>
 			</ability>
-			
 			
 			<ability name="mon_sharley_black_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="500" max="500"/>
+				<RendingDamage min="400" max="400"/>
 			</ability>
 			
 			<ability name="mon_bruxa_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="150" max="150"/>
+				<RendingDamage min="350" max="350"/>
 			</ability>
 
 			<ability name="mon_dracolizard_tail_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="125" max="125"/>
+				<RendingDamage min="350" max="350"/>
 			</ability>
 			
 			<ability name="mon_dracolizard_head_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="125" max="125"/>
+				<RendingDamage min="350" max="350"/>
 			</ability>
 			
 			<ability name="mon_barghest_body _Stats">
 			<tags></tags>
-				<RendingDamage min="125" max="125"/>
+				<RendingDamage min="150" max="150"/>
 			</ability>
 			
 			<ability name="mon_barghest_bite _Stats">
 			<tags></tags>
-				<RendingDamage min="150" max="150"/>
+				<RendingDamage min="200" max="200"/>
 			</ability>
 			
 			<ability name="mon_boar_charge _Stats">
 			<tags></tags>
-				<RendingDamage min="150" max="150"/>
+				<RendingDamage min="250" max="250"/>
 			</ability>
 			
 			<ability name="mon_black_spider_ep2_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="350" max="350"/>
+				<RendingDamage min="250" max="250"/>
 			</ability>
 			
 			<ability name="mon_black_spider_large_ep2_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="450" max="450"/>
+				<RendingDamage min="300" max="300"/>
 			</ability>
 			
 			<ability name="mon_q701_giant_ep2_weapon _Stats">
@@ -72,29 +71,28 @@
 			
 			<ability name="mon_q701_giant_ep2_fist _Stats">
 			<tags></tags>
-				<RendingDamage min="350" max="350"/>
+				<RendingDamage min="450" max="450"/>
 			</ability>
 
 				<ability name="mon_dettlaff_monster_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="700" max="700"/>
+				<RendingDamage min="650" max="650"/>
 			</ability>
 			
 			<ability name="mon_archespor_weapon _Stats">
 			<tags></tags>
-			<BludgeoningDamage min="500" max="500"/>
+			<BludgeoningDamage min="450" max="450"/>
 			</ability>
 			
 			<ability name="mon_scolopendromorph_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="250" max="250"/>
+				<RendingDamage min="450" max="450"/>
 			</ability>
 			
 			<ability name="mon_banshee_weapon _Stats">
 			<tags></tags>
-				<RendingDamage min="125" max="125"/>
+				<RendingDamage min="200" max="200"/>
 			</ability>
-			
 			
 		</abilities>
 		

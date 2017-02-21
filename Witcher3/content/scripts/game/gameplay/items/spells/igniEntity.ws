@@ -100,7 +100,7 @@ statemachine class W3IgniEntity extends W3SignEntity
 		}
 		else
 		{
-			if(owner.GetActor().HasAbility('Glyphword 7 _Stats', true))
+			if((W3PlayerWitcher)owner.GetActor() && ((W3PlayerWitcher)owner.GetActor()).HasGlyphwordActive('Glyphword 7 _Stats')) //modSigns
 				fireMode = 2;
 				
 			GotoState( 'IgniCast' );
@@ -158,6 +158,8 @@ statemachine class W3IgniEntity extends W3SignEntity
 	protected function InitThrown()
 	{
 		var entity : CEntity;
+		var spellPower : SAbilityAttributeValue; //modSigns
+		var sp : float;
 		
 		entity = theGame.GetEntityByTag( 'forest' );		
 		if(entity)
@@ -169,7 +171,10 @@ statemachine class W3IgniEntity extends W3SignEntity
 		}
 		else
 		{
-			if(!IsAlternateCast() && owner.CanUseSkill(S_Magic_s07))
+			//modSigns: make fx depend on sign power
+			spellPower = owner.GetActor().GetTotalSignSpellPower(GetSkill());
+			sp = spellPower.valueMultiplicative - 1;
+			if(!IsAlternateCast() && sp > 1.0 /*owner.CanUseSkill(S_Magic_s07)*/)
 			{
 				PlayEffect( effects[fireMode].throwEffectSpellPower );
 			}
@@ -178,7 +183,7 @@ statemachine class W3IgniEntity extends W3SignEntity
 				PlayEffect( effects[fireMode].throwEffect );
 			}
 		}
-			
+		
 		
 		if(!IsAlternateCast())
 		{
@@ -483,21 +488,23 @@ state IgniChanneled in W3IgniEntity extends Channeling
 	
 	entry function ChannelIgni()
 	{
-		var lastTime, currTime : float;
+		//var lastTime, currTime : float;
 		
-		lastTime = -1;
+		//lastTime = -1;
 		caster.GetActor().OnSignCastPerformed(ST_Igni, true);
-		while( Update() )
+		while( Update(theTimer.timeDelta) ) //modSigns
 		{
-			currTime = theGame.GetEngineTimeAsSeconds();
+			/*currTime = theGame.GetEngineTimeAsSeconds();
 			if(lastTime == -1)
-				lastTime = currTime;	
+				lastTime = currTime;	//on first run dt is 0
 			
-			if(currTime - lastTime > 0)	
+			if(currTime - lastTime > 0)	//because SleepOneFrame() is broken - why am I not surprised?
 				ProcessThrow(currTime - lastTime);
 				
-			lastTime = currTime;			
-			SleepOneFrame();
+			lastTime = currTime;
+			SleepOneFrame();*/
+			ProcessThrow(theTimer.timeDelta); //modSigns
+			Sleep(theTimer.timeDelta); //modSigns
 		}
 	}
 	

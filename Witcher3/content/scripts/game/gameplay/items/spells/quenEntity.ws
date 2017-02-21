@@ -28,11 +28,14 @@ statemachine class W3QuenEntity extends W3SignEntity
 	protected var ownerBoneIndex	: int;
 	protected var blockedAllDamage  : bool;
 	protected var shieldStartTime	: EngineTime;
+	protected var impulseLevel		: int; //modSigns
+	protected var quenPower			: SAbilityAttributeValue; //modSigns
+	protected var healingFactor		: float; //modSigns
 	private var hitEntityTimestamps : array<EngineTime>;
 	private const var MIN_HIT_ENTITY_SPAWN_DELAY : float;
 	private var hitDoTEntities : array<W3VisualFx>;
 	public var showForceFinishedFX : bool;
-	public var freeFromBearSetBonus	: bool;
+	public var freeCast	: bool; //modSigns
 	
 	default skillEnum = S_Magic_4;
 	default MIN_HIT_ENTITY_SPAWN_DELAY = 0.25f;
@@ -77,15 +80,30 @@ statemachine class W3QuenEntity extends W3SignEntity
 		
 	protected function GetSignStats()
 	{
+		var skillBonus : float;
+		var spellPower : SAbilityAttributeValue;
 		var min, max : SAbilityAttributeValue;
 		
 		super.GetSignStats();
 		
-		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_duration', true, true));
-		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_health', false, true));
-		initialShieldHealth = shieldHealth;
+		//modSigns: cache impulse and discharge skills
+		quenPower = owner.GetActor().GetTotalSignSpellPower(S_Magic_4);
+		if( owner.CanUseSkill(S_Magic_s13) )
+			impulseLevel = owner.GetSkillLevel(S_Magic_s13);
+		else
+			impulseLevel = 0;
 		
-		if ( owner.CanUseSkill(S_Magic_s14))
+		//modSigns: use base quen ability to get shield stats, because they're defined there
+		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_4, 'shield_duration', true, true));
+		//level 3 petri philtre gives +30% to shield duration
+		if(owner.GetPlayer() && owner.GetPlayer().GetPotionBuffLevel(EET_PetriPhiltre) == 3)
+		{
+			shieldDuration *= 1.34;
+			//theGame.witcherLog.AddMessage("Quen shield; Duration: " + shieldDuration); //modSigns: debug
+		}
+		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_4, 'shield_health', false, true));
+		
+		if( owner.CanUseSkill(S_Magic_s14) )
 		{			
 			dischargePercent = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s14, 'discharge_percent', false, true)) * owner.GetSkillLevel(S_Magic_s14);
 			if( owner.GetPlayer().IsSetBonusActive( EISB_Bear_2 ) )
@@ -98,6 +116,21 @@ statemachine class W3QuenEntity extends W3SignEntity
 		{
 			dischargePercent = 0;
 		}
+		
+		if( owner.CanUseSkill(S_Magic_s15) )
+			skillBonus = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s15, 'shield_health_bonus', false, true)) * owner.GetSkillLevel(S_Magic_s15);
+		else
+			skillBonus = 0;
+		
+		shieldHealth += skillBonus;
+		shieldHealth *= quenPower.valueMultiplicative;
+
+		initialShieldHealth = shieldHealth;
+		
+		if( owner.CanUseSkill(S_Magic_s04) )
+			healingFactor = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s04, 'shield_healing_factor', false, true)) * owner.GetSkillLevel(S_Magic_s04);
+		else
+			healingFactor = 0;
 	}
 	
 	public final function AddBuffImmunities()
@@ -123,6 +156,8 @@ statemachine class W3QuenEntity extends W3SignEntity
 			}
 			
 			
+			//modSigns: casting quen doesn't remove active DoT effects, but having quen on denies adding DoT (see effectManager)
+			/*
 			if( !IsDoTEffect( crits[i] ) )
 			{
 				continue;
@@ -135,6 +170,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 			}
 			
 			actor.RemoveEffect( crits[i], true );			
+			*/
 		}		
 	}
 	
@@ -203,7 +239,7 @@ statemachine class W3QuenEntity extends W3SignEntity
 				PlayEffect( effects[1].castEffect );
 			}
 			
-			if( witcherOwner && witcherOwner.CanUseSkill( S_Magic_s14) && witcherOwner.IsSetBonusActive( EISB_Bear_2 ) )
+			if( witcherOwner && dischargePercent > 0 /*modSigns*/ && witcherOwner.IsSetBonusActive( EISB_Bear_2 ) )
 			{
 				PlayEffect( 'default_fx_bear_abl2' );
 				witcherOwner.PlayEffect( 'quen_lasting_shield_bear_abl2' );
@@ -297,6 +333,8 @@ statemachine class W3QuenEntity extends W3SignEntity
 	{
 		shieldHealth = health;
 		shieldDuration = duration;
+		if( shieldHealth > initialShieldHealth ) //modSigns
+			initialShieldHealth = shieldHealth;
 		shieldStartTime = theGame.GetEngineTime();
 		AddTimer('Expire', shieldDuration, false, , , true, true);
 	}
@@ -373,20 +411,20 @@ state Expired in W3QuenEntity
 
 state ShieldActive in W3QuenEntity extends Active
 {
+	//modSigns: function was rewritten to make fx depend on sign power
 	private final function GetLastingFxName() : name
 	{
-		var level : int;
+		//var spellPower : SAbilityAttributeValue;
+		var sp/*, level*/ : float;
 		
-		if(caster.CanUseSkill(S_Magic_s15))
-		{
-			level = caster.GetSkillLevel(S_Magic_s15);
-			if(level == 1)
-				return parent.effects[0].lastingEffectUpg1;
-			else if(level == 2)
-				return parent.effects[0].lastingEffectUpg2;
-			else if(level >= 3)
-				return parent.effects[0].lastingEffectUpg3;
-		}
+		//spellPower = caster.GetActor().GetTotalSignSpellPower(virtual_parent.GetSkill());
+		sp = parent.quenPower.valueMultiplicative - 1;
+		if(sp < 0.5)
+			return parent.effects[0].lastingEffectUpg1;
+		else if(sp < 1.5)
+			return parent.effects[0].lastingEffectUpg2;
+		else
+			return parent.effects[0].lastingEffectUpg3;
 
 		return parent.effects[0].lastingEffectUpgNone;
 	}
@@ -415,7 +453,7 @@ state ShieldActive in W3QuenEntity extends Active
 		
 		caster.GetActor().PlayEffect(GetLastingFxName());
 		
-		if( witcher && witcher.IsSetBonusActive( EISB_Bear_2 ) && witcher.CanUseSkill( S_Magic_s14 ) )
+		if( witcher && witcher.IsSetBonusActive( EISB_Bear_2 ) && parent.dischargePercent > 0 /*modSigns*/ )
 		{
 			witcher.PlayEffect( 'quen_force_discharge_bear_abl2_armour' );
 		}
@@ -426,7 +464,7 @@ state ShieldActive in W3QuenEntity extends Active
 		
 		if( witcher )
 		{
-			if( !parent.freeFromBearSetBonus )
+			if( !parent.freeCast ) //modSigns
 			{
 				parent.ManagePlayerStamina();
 				parent.ManageGryphonSetBonusBuff();
@@ -436,6 +474,8 @@ state ShieldActive in W3QuenEntity extends Active
 		{
 			caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ) );
 		}
+		
+		parent.freeCast = false; //modSigns: reset free casting
 		
 		
 		if( !witcher.IsSetBonusActive( EISB_Bear_1 ) || ( !witcher.HasBuff( EET_HeavyKnockdown ) && !witcher.HasBuff( EET_Knockdown ) ) )
@@ -454,6 +494,7 @@ state ShieldActive in W3QuenEntity extends Active
 		
 		
 		witcher = (W3PlayerWitcher)caster.GetActor();
+		//theGame.witcherLog.AddMessage("Quen shield; OnLeaveState"); //modSigns: debug
 		if(witcher && parent == witcher.GetSignEntity(ST_Quen))
 		{
 			witcher.StopEffect(parent.effects[0].lastingEffectUpg1);
@@ -494,29 +535,49 @@ state ShieldActive in W3QuenEntity extends Active
 		var i : int;
 		var isBleeding : bool;
 		
-		if( damageData.WasDodged() ||
-			damageData.GetHitReactionType() == EHRT_Reflect )
+		//modSigns: DoT damage is not reduced
+		if(damageData.IsDoTDamage())
+			return true;
+
+		//skip if dodged or reflected
+		if( damageData.WasDodged() || damageData.GetHitReactionType() == EHRT_Reflect )
 		{
 			return true;
 		}
 		
-		parent.OnTargetHit(damageData);
-		
-		
-		
-			
-		
-		
-			
-		
+		//skip if parried or countered
 		inAttackAction = (W3Action_Attack)damageData;
 		if(inAttackAction && inAttackAction.CanBeParried() && (inAttackAction.IsParried() || inAttackAction.IsCountered()) )
 			return true;
 		
+		parent.OnTargetHit(damageData);
+		
+		//#Quen hack
+		/*
+		if(damageData.IsDoTDamage())
+		{
+			damageData.SetAllProcessedDamageAs(0);
+			return true;
+		}
+		*/
+			
+		//all damage from DOTs is blocked
+		/*
+		if(damageData.IsDoTDamage())
+		{	
+			if(theGame.CanLog())
+			{
+				LogDMHits("QuenShieldActive.OnTargetHit: all DOT's damage is reduced to 0", damageData);
+			}
+			damageData.processedDmg.vitalityDamage = 0;
+			parent.SetBlockedAllDamage(true);
+			return true;
+		}*/
+			
 		casterActor = caster.GetActor();
 		reducedDamage = 0;		
 				
-		
+		//calulcate reduced damage
 		damageData.GetDTs(damageTypes);
 		for(i=0; i<damageTypes.Size(); i+=1)
 		{
@@ -527,7 +588,7 @@ state ShieldActive in W3QuenEntity extends Active
 			}
 		}
 		
-		
+		//special handling for bleeding
 		if( (W3Effect_Bleeding)damageData.causer )
 		{
 			incomingDamage = directDamage;
@@ -539,12 +600,12 @@ state ShieldActive in W3QuenEntity extends Active
 			incomingDamage = MaxF(0, damageData.processedDmg.vitalityDamage - directDamage);
 		}
 		
-		if(incomingDamage < parent.shieldHealth)
+		if(incomingDamage < parent.shieldHealth) //modSigns: now this value holds scaled shield HP
 			reducedDamage = incomingDamage;
 		else
-			reducedDamage = MaxF(incomingDamage, parent.shieldHealth);
+			reducedDamage = parent.shieldHealth; //modSigns: only shieldHealth amount of damage can be reduced
 		
-		
+		//quen hit fx
 		if(!damageData.IsDoTDamage())
 		{
 			casterActor.PlayEffect( 'quen_lasting_shield_hit' );	
@@ -552,7 +613,7 @@ state ShieldActive in W3QuenEntity extends Active
 			GCameraShake( parent.effects[parent.fireMode].cameraShakeStranth, true, parent.GetWorldPosition(), 30.0f );
 		}
 		
-		
+		//modify incoming damage action
 		if ( theGame.CanLog() )
 		{
 			LogDMHits("Quen ShieldActive.OnTargetHit: reducing damage from " + damageData.processedDmg.vitalityDamage + " to " + (damageData.processedDmg.vitalityDamage - reducedDamage), action );
@@ -560,34 +621,47 @@ state ShieldActive in W3QuenEntity extends Active
 		
 		damageData.SetHitAnimationPlayType( EAHA_ForceNo );		
 		damageData.SetCanPlayHitParticle( false );
-		
+
+		//combat log
+		/*theGame.witcherLog.AddCombatMessage("Quen shield:", casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Health: " + FloatToString(parent.shieldHealth), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Dmg: " + FloatToString(incomingDamage), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Reduced Dmg: " + FloatToString(reducedDamage), casterActor, NULL);*/
+
 		if(reducedDamage > 0)
 		{
-			
-			spellPower = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
+			//reduce shield health
+			//modSigns: moved to shield HP caclulation code
+			/*spellPower = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
 			
 			if ( caster.CanUseSkill( S_Magic_s15 ) )
 				skillBonus = CalculateAttributeValue( caster.GetSkillAttributeValue( S_Magic_s15, 'bonus', false, true ) );
 			else
 				skillBonus = 0;
 				
-			drainedHealth = reducedDamage / (skillBonus + spellPower.valueMultiplicative);			
-			parent.shieldHealth -= drainedHealth;
+			drainedHealth = reducedDamage / (skillBonus + spellPower.valueMultiplicative);
+			parent.shieldHealth -= drainedHealth;*/
 			
+			parent.shieldHealth -= reducedDamage; //modSigns: reduce shield HP
 				
 			damageData.processedDmg.vitalityDamage -= reducedDamage;
 			
-			
+			//?
 			if( damageData.processedDmg.vitalityDamage >= 20 )
 				casterActor.RaiseForceEvent( 'StrongHitTest' );
 				
-			
-			if (!damageData.IsDoTDamage() && casterActor == thePlayer && damageData.attacker != casterActor && GetWitcherPlayer().CanUseSkill(S_Magic_s14) && parent.dischargePercent > 0 && !damageData.IsActionRanged() && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) 
+			//discharge effect's damage
+			//modSigns: discharge should return % of reduced damage
+			if (reducedDamage > 0 && !damageData.IsDoTDamage() && casterActor == thePlayer && damageData.attacker != casterActor && parent.dischargePercent > 0 /*modSigns*/ && parent.dischargePercent > 0 && !damageData.IsActionRanged() && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) //~3.5^2
 			{
 				action = new W3DamageAction in theGame.damageMgr;
 				action.Initialize( casterActor, damageData.attacker, parent, 'quen', EHRT_Light, CPS_SpellPower, false, false, true, false, 'hit_shock' );
 				parent.InitSignDataForDamageAction( action );		
-				action.AddDamage( theGame.params.DAMAGE_NAME_SHOCK, parent.dischargePercent * incomingDamage );
+				//modSigns: make it % of reduced damage and make it direct, spell power already affects the damage via reducedDamage amount
+				//action.AddDamage( theGame.params.DAMAGE_NAME_SHOCK, parent.dischargePercent * incomingDamage );
+				action.AddDamage( theGame.params.DAMAGE_NAME_DIRECT, parent.dischargePercent * reducedDamage );
+				//combat log
+				//theGame.witcherLog.AddCombatMessage("Quen discharge dmg: " + FloatToString(parent.dischargePercent * reducedDamage), thePlayer, NULL);
 				action.SetCanPlayHitParticle(true);
 				action.SetHitEffect('hit_electric_quen');
 				action.SetHitEffect('hit_electric_quen', true);
@@ -597,26 +671,28 @@ state ShieldActive in W3QuenEntity extends Active
 				theGame.damageMgr.ProcessAction( action );		
 				delete action;
 				
-				
+				//fx
 				casterActor.PlayEffect('quen_force_discharge');
 			}			
 		}
 		
-		
-		if(reducedDamage > 0 && (!damageData.DealsAnyDamage() || (isBleeding && reducedDamage >= directDamage)) )
+		//if quen blocked all damage (at this point damageData's damage is modified by quen, so DealsAnyDamage() checks if there is some damage AFTER quen processing
+		//modSigns: reducedDamage >= incomingDamage
+		if(reducedDamage >= incomingDamage && (!damageData.DealsAnyDamage() || (isBleeding && reducedDamage >= directDamage)) )
 			parent.SetBlockedAllDamage(true);
 		else
 			parent.SetBlockedAllDamage(false);
 		
-		
+		//break shield if all shield's health is used up
 		if( parent.shieldHealth <= 0 )
 		{
-			if ( parent.owner.CanUseSkill(S_Magic_s13) )
+			if( parent.impulseLevel > 0 ) //modSigns
 			{				
 				casterActor.PlayEffect( 'lasting_shield_impulse' );
-				caster.GetPlayer().QuenImpulse( false, parent, "quen_impulse" );
+				caster.GetPlayer().QuenImpulse( false, parent, "quen_impulse", parent.impulseLevel, parent.quenPower /*modSigns*/ );
 			}
-			
+			//combat log
+			//theGame.witcherLog.AddCombatMessage("SetEndsQuen", thePlayer, NULL);
 			damageData.SetEndsQuen(true);
 		}
 	}
@@ -671,7 +747,7 @@ state QuenChanneled in W3QuenEntity extends Channeling
 							
 		caster.OnDelayOrientationChange();
 		
-		parent.GetSignStats();
+		//parent.GetSignStats(); //modSigns: already happens on change aspect
 		
 		
 		casterActor.GetMovingAgentComponent().SetVirtualRadius( 'QuenBubble' );
@@ -720,8 +796,9 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		
 		parent.RemoveHitDoTEntities();
 		
-		if(isEnd && caster.CanUseSkill(S_Magic_s13))
-			caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse" );
+		//modSigns: creates too many ways for exploiting alt cast
+		//if(isEnd && caster.CanUseSkill(S_Magic_s13))
+		//	caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse" );
 	}
 	
 	event OnSignAborted( optional force : bool )
@@ -731,10 +808,12 @@ state QuenChanneled in W3QuenEntity extends Channeling
 	
 	entry function ChannelQuen()
 	{
-		while( Update() )
+		while( Update(theTimer.timeDelta) ) //modSigns
 		{
 			ProcessQuenCollisionForRiders();
-			SleepOneFrame();
+			//SleepOneFrame();
+			//modSigns
+			Sleep(theTimer.timeDelta);
 		}
 	}
 	
@@ -821,7 +900,7 @@ state QuenChanneled in W3QuenEntity extends Channeling
 				hasPoisonDamage = damageData.GetDamageValue(theGame.params.DAMAGE_NAME_POISON) > 0;		
 				hasElectricDamage = damageData.GetDamageValue(theGame.params.DAMAGE_NAME_SHOCK) > 0;
 		
-				if( witcher && witcher.CanUseSkill( S_Magic_s14 ) && witcher.IsSetBonusActive( EISB_Bear_2 ) )
+				if( witcher && parent.dischargePercent > 0 /*modSigns*/ && witcher.IsSetBonusActive( EISB_Bear_2 ) )
 				{
 					parent.PlayHitEffect( 'quen_rebound_sphere_bear_abl2', rot );
 				}
@@ -856,20 +935,24 @@ state QuenChanneled in W3QuenEntity extends Channeling
 	event OnTargetHit( out damageData : W3DamageAction )
 	{
 		var reducedDamage, skillBonus, drainedStamina, reducibleDamage, directDamage, shieldFactor : float;		
-		var spellPower : SAbilityAttributeValue;
+		//var spellPower : SAbilityAttributeValue;
 		var drainAllStamina, isBleeding : bool;
 		var casterActor : CActor;
 		var attackerVictimEuler : EulerAngles;
 		var action : W3DamageAction;		
-		var shieldHP : float;
+		var shieldHP, staminaPrc : float; //modSigns: new vars
+
+		//modSigns: DoT damage is not reduced
+		if(damageData.IsDoTDamage())
+			return true;
 
 		parent.OnTargetHit(damageData);
 		
 		casterActor = caster.GetActor();
 		directDamage = damageData.GetDamageValue(theGame.params.DAMAGE_NAME_DIRECT);
 		
-		
-		
+		//show hit fx
+		//get rotation towards where the hit came from
 		if( !( (CBaseGameplayEffect) damageData.causer ) )
 		{
 			attackerVictimEuler = VecToRotation(damageData.attacker.GetWorldPosition() - casterActor.GetWorldPosition());
@@ -879,19 +962,19 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			ShowHitFX(damageData, attackerVictimEuler);
 		}
 	
-		
+		//reaction to strong hit
 		if( damageData.processedDmg.vitalityDamage >= 20 )
 			casterActor.RaiseForceEvent( 'StrongHitTest' );
 		
+		//spell power
+		//spellPower = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
 		
-		spellPower = casterActor.GetTotalSignSpellPower(virtual_parent.GetSkill());
-		
-		if ( caster.CanUseSkill( S_Magic_s15 ) )
+		/*if ( caster.CanUseSkill( S_Magic_s15 ) )
 			skillBonus = CalculateAttributeValue( caster.GetSkillAttributeValue( S_Magic_s15, 'bonus', false, true ) );
 		else
-			skillBonus = 0;
+			skillBonus = 0;*/ //modSigns: early design leftover code - Resilience ability - removing
 		
-		
+		//direct damage cannot be reduced
 		if( (W3Effect_Bleeding)damageData.causer )
 		{
 			isBleeding = true;
@@ -904,7 +987,10 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		}
 		
 		shieldFactor = CalculateAttributeValue( caster.GetSkillAttributeValue( S_Magic_s04, 'shield_health_factor', false, true ) );
-		
+		//modSigns: get stamina in prc and calculate shild HP
+		staminaPrc = casterActor.GetStat(BCS_Stamina)/casterActor.GetStatMax(BCS_Stamina);
+		shieldHP = parent.shieldHealth * shieldFactor * staminaPrc;
+		//reduced damage is capped by stamina
 		if(reducibleDamage > 0)
 		{
 			if( casterActor.HasBuff( EET_Mutation11Buff ) )
@@ -914,8 +1000,10 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			}
 			else
 			{
-				shieldHP = casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative);
-				reducedDamage = MinF( reducibleDamage, casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative) );
+				//shieldHP = casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative);
+				//reducedDamage = MinF( reducibleDamage, casterActor.GetStat( BCS_Stamina ) * shieldFactor * (skillBonus + spellPower.valueMultiplicative) );
+				//modSigns: can't absorb more damage than shield HP
+				reducedDamage = MinF(reducibleDamage, shieldHP);
 			}
 			
 			if(reducedDamage < reducibleDamage)
@@ -929,6 +1017,15 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		}
 
 		
+		//combat log
+		/*theGame.witcherLog.AddCombatMessage("Quen active shield:", casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Stamina %: " + FloatToString(staminaPrc * 100), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Base health: " + FloatToString(parent.shieldHealth), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Health: " + FloatToString(shieldHP), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Dmg: " + FloatToString(reducibleDamage), casterActor, NULL);
+		theGame.witcherLog.AddCombatMessage("Reduced Dmg: " + FloatToString(reducedDamage), casterActor, NULL);*/
+
+		//reduce damage
 		if ( reducedDamage > 0 || (!damageData.DealsAnyDamage() || (isBleeding && reducedDamage >= reducibleDamage)) )
 		{
 			if ( theGame.CanLog() )
@@ -944,12 +1041,13 @@ state QuenChanneled in W3QuenEntity extends Channeling
 			damageData.SetCanPlayHitParticle(false);
 						
 			
-			if( casterActor == thePlayer && parent.dischargePercent > 0 && !damageData.IsActionRanged() && IsRequiredAttitudeBetween( thePlayer, damageData.attacker, true) && GetWitcherPlayer().CanUseSkill(S_Magic_s14) && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) 
+			if( casterActor == thePlayer && parent.dischargePercent > 0 && !damageData.IsActionRanged() && IsRequiredAttitudeBetween( thePlayer, damageData.attacker, true) && parent.dischargePercent > 0 /*modSigns*/ && VecDistanceSquared( casterActor.GetWorldPosition(), damageData.attacker.GetWorldPosition() ) <= 13 ) 
 			{
 				action = new W3DamageAction in theGame.damageMgr;
 				action.Initialize( casterActor, damageData.attacker, parent, 'quen', EHRT_Light, CPS_SpellPower, false, false, true, false, 'hit_shock' );
 				parent.InitSignDataForDamageAction( action );		
-				action.AddDamage( theGame.params.DAMAGE_NAME_SHOCK, parent.dischargePercent * reducibleDamage );
+				//action.AddDamage( theGame.params.DAMAGE_NAME_SHOCK, parent.dischargePercent * reducibleDamage );
+				action.AddDamage( theGame.params.DAMAGE_NAME_DIRECT, parent.dischargePercent * reducedDamage ); //modSigns
 				action.SetCanPlayHitParticle(true);
 				action.SetHitEffect('hit_electric_quen');
 				action.SetHitEffect('hit_electric_quen', true);
@@ -965,27 +1063,38 @@ state QuenChanneled in W3QuenEntity extends Channeling
 		}		
 		parent.SetBlockedAllDamage( !damageData.DealsAnyDamage() );
 		
-		
+		//drain stamina
 		if(!drainAllStamina)
 		{
-			drainedStamina = reducedDamage / ((skillBonus + spellPower.valueMultiplicative) * shieldFactor);		
+			//drainedStamina = reducedDamage / ((skillBonus + spellPower.valueMultiplicative) * shieldFactor);		
+			//modSigns: drain stamina
+			drainedStamina = reducedDamage / (parent.shieldHealth * shieldFactor) * casterActor.GetStatMax(BCS_Stamina);
 			casterActor.DrainStamina( ESAT_FixedValue, drainedStamina, 1 );
 		}
 		else
 		{
+			//modSigns: for logging
+			drainedStamina = casterActor.GetStat(BCS_Stamina);
 			casterActor.DrainStamina( ESAT_FixedValue, casterActor.GetStat(BCS_Stamina), 2 );
 		}
 		
-		
-		caster.GetActor().Heal(reducedDamage * HEALING_FACTOR);
+		//combat log
+		//theGame.witcherLog.AddCombatMessage("Drained stamina %: " + FloatToString(reducedDamage / (parent.shieldHealth * shieldFactor) * 100), casterActor, NULL);
+
+		//heal
+		//caster.GetActor().Heal(reducedDamage * HEALING_FACTOR);
+		caster.GetActor().Heal(reducedDamage * parent.healingFactor);
+		//debug log
+		//theGame.witcherLog.AddMessage("Healing factor: " + parent.healingFactor);
+		//theGame.witcherLog.AddMessage("HP healed: " + reducedDamage * parent.healingFactor);
 		
 		
 		if( casterActor.GetStat( BCS_Stamina ) <= 0 && !casterActor.HasBuff( EET_Mutation11Buff ) )
 		{
-			if ( caster.CanUseSkill(S_Magic_s13) )
+			if( parent.impulseLevel > 0 ) //modSigns
 			{
 				parent.PlayHitEffect( 'quen_rebound_sphere_impulse', attackerVictimEuler );
-				caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse" );
+				caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse", parent.impulseLevel, parent.quenPower /*modSigns*/ );
 			}
 			
 			damageData.SetEndsQuen(true);			

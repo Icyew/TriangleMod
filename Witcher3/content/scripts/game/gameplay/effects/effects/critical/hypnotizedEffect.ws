@@ -42,7 +42,7 @@ class W3Effect_Hypnotized extends W3CriticalEffect
 			timeLeft = 0;
 		
 		
-		if(isOnPlayer && witcher.HasBuff( EET_Cat ) && witcher.GetPotionBuffLevel( EET_Cat ) >= 2 )
+		if(isOnPlayer && witcher.HasBuff( EET_Cat ) && witcher.GetPotionBuffLevel( EET_Cat ) == 3 ) //modSigns
 			timeLeft = 0;
 		
 		super.OnUpdate(deltaTime);

@@ -7,165 +7,189 @@
 
 		<!-- GLOVES WITCHER LYNX  -->
 			<ability name="Lynx Gloves 5 _Stats">
-				<weight							type="base"	min="5.3"				/>
+				<weight							type="base"	min="1"					/>
 				<quality						type="add"	min="5"					/>
-				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<rending_resistance_perc		type="base"	min="0.05"				/>
-				<elemental_resistance_perc		type="base"	min="0.06"				/>
-				<attack_power					type="mult" min="0.11"				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
+				<armor							type="base"	min="81"				/>
+				<slashing_resistance_perc		type="base"	min="0.03"				/>
+				<piercing_resistance_perc		type="base"	min="0.01"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+				<rending_resistance_perc		type="base"	min="0.03"				/>
+				<elemental_resistance_perc		type="base"	min="0.03"				/>
+				<attack_power					type="mult" min="0.12"				/>
+				<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 			</ability>
 
 		<!-- GLOVES WITCHER GRYPHON -->
 			<ability name="Gryphon Gloves 5 _Stats">
-				<weight							type="base"	min="6.0"				/>
-				<quality 						type="add"	min="5"					/>
-				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<rending_resistance_perc		type="base"	min="0.06"				/>
-				<elemental_resistance_perc		type="base"	min="0.12"				/>
-				<spell_power 					type="mult"	min="0.11"				/>
+				<weight							type="base"	min="3"					/>
+				<quality						type="add"	min="5"					/>
+				<armor							type="base"	min="81"				/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base"	min="0.05"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
+				<spell_power 					type="mult"	min="0.12"				/>
 			</ability>
 
 		<!-- GLOVES WITCHER BEAR -->
 			<ability name="Bear Gloves 5 _Stats">
-				<weight							type="base"	min="5.5"				/>
+				<weight							type="base" min="5"					/>
 				<quality						type="add"	min="5"					/>
-				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.06"				/>
-				<rending_resistance_perc		type="base"	min="0.06"				/>
-				<elemental_resistance_perc		type="base"	min="0.06"				/>
-				<focus_gain						type="add"	min="0.11"				/>
-				<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+				<armor							type="base"	min="81"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base"	min="0.09"				/>
+				<elemental_resistance_perc		type="base"	min="0.09"				/>
+				<focus_gain						type="add"	min="0.12"				/>
+				<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 			</ability>
 
 		<!-- GLOVES WITCHER WOLF  -->
 			<ability name="Wolf Gloves 5 _Stats">
-				<weight							type="base"	min="5.5"				/>
+				<weight							type="base"	min="3"					/>
 				<quality						type="add"	min="5"					/>
-				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<rending_resistance_perc		type="base"	min="0.06"				/>
-				<elemental_resistance_perc		type="base"	min="0.12"				/>
-				<spell_power					type="mult"	min="0.11"				/>
+				<armor							type="base"	min="81"				/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base"	min="0.05"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
+				<focus_gain 					type="base" min="0.07" 				/>
+				<spell_power					type="mult"	min="0.07"				/>
+				<attack_power					type="mult" min="0.07"				/>
 			</ability>
 
 		<!-- GLOVES WITCHER RED WOLF  -->
 			<ability name="Red Wolf Gloves 1 _Stats">
-				<weight							type="base"	min="5.7"				/>
+				<weight							type="base"	min="3"					/>
 				<quality						type="add"	min="5"					/>
-				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<elemental_resistance_perc		type="base"	min="0.12"				/>
-				<critical_hit_chance			type="add"	min="0.05"				/>
+				<armor							type="base"	min="81"				/>
+				<slashing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base"	min="0.05"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
 				<toxicity 						type="base" min="5" 				/>
+				<potion_duration 				type="add"	min="0.05"				/>
 			</ability>
 
 			<ability name="Red Wolf Gloves 2 _Stats">
-				<weight							type="base"	min="8.65"				/>
+				<weight							type="base"	min="3"					/>
 				<quality						type="add"	min="5"					/>
-				<armor							type="base"	min="147"				/>
+				<armor							type="base"	min="141"				/>
 				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.04"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
 				<rending_resistance_perc		type="base"	min="0.05"				/>
-				<elemental_resistance_perc		type="base"	min="0.10"				/>
-				<spell_power					type="mult"	min="0.10"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
+				<toxicity 						type="base" min="5" 				/>
+				<potion_duration 				type="add"	min="0.05"				/>
 			</ability>
 
 		<!-- GLOVES GUARD LVL1 3 -->
 			<ability name="Guard Lvl1 Gloves 3 _Stats">
-				<weight							type="base"	min="3.66"				/>
+				<weight							type="base"	min="1.5"				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="87"				/>
-				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.03"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
+				<slashing_resistance_perc		type="base"	min="0.03"				/>
+				<piercing_resistance_perc		type="base"	min="0.01"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+				<rending_resistance_perc		type="base"	min="0.03"				/>
+				<elemental_resistance_perc		type="base"	min="0.03"				/>
 				<bleeding_resistance_perc 		type="base" min="0.10" 				/>
 				<vitality 						type="base" min="250" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+				<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 			</ability>
 
 		<!-- GLOVES GUARD LVL1 A 3 -->
 			<ability name="Guard Lvl1 A Gloves 3 _Stats">
-				<weight							type="base"	min="2.76"				/>
+				<weight							type="base"	min="1.5"				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="89"				/>
-				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.04"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
+				<slashing_resistance_perc		type="base"	min="0.03"				/>
+				<piercing_resistance_perc		type="base"	min="0.01"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+				<rending_resistance_perc		type="base"	min="0.03"				/>
+				<elemental_resistance_perc		type="base"	min="0.03"				/>
 				<bleeding_resistance_perc 		type="base" min="0.15" 				/>
 				<vitality 						type="base" min="300" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="0.03"				/>
+				<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 			</ability>
 
 		<!-- GLOVES GUARD LVL2 3-->
 			<ability name="Guard Lvl2 Gloves 3 _Stats">
-				<weight							type="base"	min="2.17"				/>
+				<weight							type="base"	min="3.5" 				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="93"				/>
 				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
 				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base"	min="0.05"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
 				<poison_resistance_perc 		type="base" min="0.10" 				/>
 				<vitality 						type="base" min="350" 				/>
 			</ability>
 
 		<!-- GLOVES GUARD LVL2 A 3-->
 			<ability name="Guard Lvl2 A Gloves 3 _Stats">
-				<weight							type="base"	min="1.72"				/>
+				<weight							type="base"	min="3.5" 				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="95"				/>
 				<slashing_resistance_perc		type="base"	min="0.05"				/>
-				<piercing_resistance_perc		type="base"	min="0.05"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+				<piercing_resistance_perc		type="base"	min="0.03"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+				<rending_resistance_perc		type="base"	min="0.05"				/>
+				<elemental_resistance_perc		type="base"	min="0.05"				/>
 				<poison_resistance_perc 		type="base" min="0.15" 				/>
 				<vitality 						type="base" min="400" 				/>
 			</ability>
 
 		<!-- GLOVES KNIGHT GERALT 3 -->
 			<ability name="Knight Geralt Gloves 3 _Stats">
-				<weight							type="base"	min="5.08"				/>
+				<weight							type="base"	min="6.5"				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="99"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.06"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base"	min="0.09"				/>
+				<elemental_resistance_perc		type="base"	min="0.09"				/>
 				<bleeding_resistance_perc 		type="base" min="0.25" 				/>
 				<vitality 						type="base" min="450" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+				<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 			</ability>
 
 		<!-- GLOVES KNIGHT GERALT A 3 -->
 			<ability name="Knight Geralt A Gloves 3 _Stats">
-				<weight							type="base"	min="6.1"				/>
+				<weight							type="base"	min="6.5"				/>
 				<quality						type="add"	min="4"					/>
 				<armor							type="base"	min="101"				/>
-				<slashing_resistance_perc		type="base"	min="0.07"				/>
-				<piercing_resistance_perc		type="base"	min="0.07"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.07"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base"	min="0.09"				/>
+				<elemental_resistance_perc		type="base"	min="0.09"				/>
 				<bleeding_resistance_perc 		type="base" min="0.40" 				/>
 				<vitality 						type="base" min="500" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+				<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 			</ability>
 			
 		<!-- GLOVES TOUSSAINT -->
 			<ability name="Toussaint Gloves 3 _Stats">
-				<weight							type="base"	min="4.71" 				/>
+				<weight							type="base"	min="6.5"				/>
 				<quality						type="add"	min="4"					/>
 				<item_level_min					type="add"	min="40"				/>
 				<item_level_max					type="add"	min="100"				/>
-				<slashing_resistance_perc		type="base"	min="0.06"				/>
-				<piercing_resistance_perc		type="base"	min="0.06"				/>
-				<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
+				<slashing_resistance_perc		type="base"	min="0.09"				/>
+				<piercing_resistance_perc		type="base"	min="0.09"				/>
+				<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+				<rending_resistance_perc		type="base"	min="0.09"				/>
+				<elemental_resistance_perc		type="base"	min="0.09"				/>
 				<burning_resistance_perc 		type="base" min="0.25" 				/>
 				<vitality 						type="base" min="450" 				/>
-				<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+				<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 			</ability>
 
 		</abilities>
@@ -178,7 +202,7 @@
 			<item
 				name							="Lynx Gloves 5"
 				category						="gloves"
-				price							="564"
+				price							="1435"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -195,9 +219,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Lynx Gloves 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Dwimeryte ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="2">Chitin scale</parts>
 				</recycling_parts>
 				<variants>						<variant equip_template="g_01a_mg__lynx_lvl3">
 													<item>Geralt Shirt</item>
@@ -211,7 +235,7 @@
 			<item
 				name							="Gryphon Gloves 5"
 				category						="gloves"
-				price							="594"
+				price							="2298"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -228,9 +252,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Gryphon Gloves 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Dwimeryte ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Dwimeryte enriched ingot</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="1">Chitin scale</parts>
 				</recycling_parts>
 				<variants>						<variant equip_template="g_01a_mg__gryphon_lvl3">
 													<item>Geralt Shirt</item>
@@ -244,7 +269,7 @@
 		<item
 				name							="Bear Gloves 5"
 				category						="gloves"
-				price							="594"
+				price							="3120"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -261,9 +286,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Bear Gloves 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Dwimeryte ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Wire</parts>
+												<parts count="1">Silver ingot</parts>
+												<parts count="1">Monstrous plate</parts>
 				</recycling_parts>
 				<variants>						<variant equip_template="g_01a_mg__bear_lvl3">
 													<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -277,7 +303,7 @@
 			<item
 				name							="Wolf Gloves 5"
 				category						="gloves"
-				price							="549"
+				price							="2298"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -294,9 +320,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Wolf Gloves 5 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Dwimeryte ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Dwimeryte enriched ingot</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="1">Chitin scale</parts>
 				</recycling_parts>
 				<variants>				
 												<variant equip_template="g_01a_mg__wolf_lvl3">
@@ -311,7 +338,7 @@
 			<item
 				name							="Red Wolf Gloves 1"
 				category						="gloves"
-				price							="430"
+				price							="1150"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -328,10 +355,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Red Wolf Gloves 1 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Meteorite ore</parts>
-												<parts count="2">Silver ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Dwimeryte enriched ingot</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="1">Chitin scale</parts>
 				</recycling_parts>
 				<variants>				
 												<variant equip_template="g_01a_mg__red_wolf_lvl1">
@@ -345,7 +372,7 @@
 			<item
 				name							="Red Wolf Gloves 2"
 				category						="gloves"
-				price							="714"
+				price							="1580"
 				initial_durability				="100"
 				max_durability					="100"
 				enhancement_slots				="2"
@@ -362,9 +389,10 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Red Wolf Gloves 2 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="2">Dwimeryte ore</parts>
+				<recycling_parts>				<parts count="1">Leather straps</parts>
+												<parts count="1">Dwimeryte enriched ingot</parts>
+												<parts count="1">Monstrous hide</parts>
+												<parts count="1">Chitin scale</parts>
 				</recycling_parts>
 				<variants>				
 												<variant equip_template="g_01a_mg__red_wolf_lvl2">
@@ -379,7 +407,7 @@
 			<item
 				name							="Guard Lvl1 Gloves 3"
 				category						="gloves"
-				price							="144"
+				price							="163"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -393,10 +421,8 @@
 			>
 				<tags>							Armor, LightArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="1">String</parts>
-												<parts count="2">Cotton</parts>
+				<recycling_parts>				<parts count="1">Glowing ingot</parts>
+												<parts count="2">Leather straps</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl1 Gloves 3 _Stats</a>
@@ -414,7 +440,7 @@
 			<item
 				name							="Guard Lvl1 A Gloves 3"
 				category						="gloves"
-				price							="120"
+				price							="173"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -428,10 +454,8 @@
 			>
 				<tags>							Armor, LightArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="1">String</parts>
-												<parts count="2">Cotton</parts>
+				<recycling_parts>				<parts count="1">Glowing ingot</parts>
+												<parts count="2">Leather straps</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl1 A Gloves 3 _Stats</a>
@@ -449,7 +473,7 @@
 			<item
 				name							="Guard Lvl2 Gloves 3"
 				category						="gloves"
-				price							="94"
+				price							="283"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -463,10 +487,9 @@
 			>
 				<tags>							Armor, MediumArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Cotton</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Glowing ingot</parts>
+												<parts count="1">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl2 Gloves 3 _Stats</a>
@@ -484,7 +507,7 @@
 			<item
 				name							="Guard Lvl2 A Gloves 3"
 				category						="gloves"
-				price							="76"
+				price							="293"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -498,10 +521,9 @@
 			>
 				<tags>							Armor, MediumArmor, mod_armor, mod_legendary, EP1
 				</tags>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="5">Leather straps</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Cotton</parts>
+				<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+												<parts count="1">Glowing ingot</parts>
+												<parts count="1">Leather</parts>
 				</recycling_parts>
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Guard Lvl2 A Gloves 3 _Stats</a>
@@ -519,7 +541,7 @@
 			<item
 				name							="Knight Geralt Gloves 3"
 				category						="gloves"
-				price							="152"
+				price							="470"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -536,11 +558,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Knight Geralt Gloves 3 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="2">Steel ingot</parts>
-												<parts count="4">Dark iron ore</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Cotton</parts>
+				<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+												<parts count="1">Dark steel ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<variants>						<variant equip_template="g_01a_mg__errant_knight">
 												<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -564,7 +584,7 @@
 			<item
 				name							="Knight Geralt A Gloves 3"
 				category						="gloves"
-				price							="468"
+				price							="480"
 				initial_durability				="100"
 				max_durability					="100" 
 				enhancement_slots				="2"
@@ -581,11 +601,9 @@
 				<base_abilities>				<a>Default armor _Stats</a>
 												<a>Knight Geralt A Gloves 3 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="5">Leather squares</parts>
-												<parts count="2">Steel ingot</parts>
-												<parts count="4">Dark iron ore</parts>
-												<parts count="2">Leather straps</parts>
-												<parts count="2">Orichalcum ore</parts>
+				<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+												<parts count="1">Dark steel ingot</parts>
+												<parts count="2">Leather</parts>
 				</recycling_parts>
 				<variants>						<variant equip_template="g_02a_mg__errant_knight">
 												<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -608,7 +626,7 @@
 		<item
 			name							="Toussaint Gloves 3"
 			category						="gloves"
-			price							="838"
+			price							="490"
 			initial_durability				="100"
 			max_durability					="100"
 			enhancement_slots				="2"
@@ -620,16 +638,14 @@
 			localisation_key_description	="item_category_heavy_armor_description"
 			icon_path						="icons/inventory/armors/toussaint_gloves_2_64x128.png"
 		>
-			<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel, Armor, HeavyArmor, mod_armor, EP1
+			<tags>							Autogen, AutogenUseLevelRange, AutogenForceLevel, Armor, HeavyArmor, mod_armor, mod_legendary, EP1
 			</tags>
 			<base_abilities>				<a>Default armor _Stats</a>
 											<a>Toussaint Gloves 3 _Stats</a>
 			</base_abilities>
-			<recycling_parts>				<parts count="2">Hardened leather</parts>
-												<parts count="5">Chitin scale</parts>
-												<parts count="4">Orichalcum ore</parts>
-												<parts count="1">Leather straps</parts>
-												<parts count="4">Thread</parts>
+			<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+											<parts count="1">Dark steel ingot</parts>
+											<parts count="2">Leather</parts>
 			</recycling_parts>
 			<variants>						<variant equip_template="g_03a_mg__errant_knight">
 												<item>Geralt Shirt</item>         <!-- this item uses slim version -->

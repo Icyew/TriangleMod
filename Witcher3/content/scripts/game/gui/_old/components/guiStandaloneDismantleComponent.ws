@@ -44,6 +44,12 @@ class W3StandaloneDismantleComponent extends W3GuiPlayerInventoryComponent
 		var curItemPart   : SItemParts;
 		var newItems	  : array <SItemUniqueId>;
 		var dismantleList : array <SItemParts>;
+		var dontMarkAsNew : bool; //modSigns
+		
+		if( _inv == GetWitcherPlayer().GetInventory() ) //modSigns
+			dontMarkAsNew = false;
+		else
+			dontMarkAsNew = true;
 		
 		dismantleList = GetDismantlingParts( item ); 
 		count = dismantleList.Size();
@@ -51,7 +57,7 @@ class W3StandaloneDismantleComponent extends W3GuiPlayerInventoryComponent
 		for( i = 0; i < count; i += 1 )
 		{
 			curItemPart = dismantleList[i];
-			newItems = _inv.AddAnItem( curItemPart.itemName, dismantleCount );
+			newItems = _inv.AddAnItem( curItemPart.itemName, dismantleCount, , dontMarkAsNew ); //modSigns
 			
 			if( newItems.Size() > 0 )
 			{

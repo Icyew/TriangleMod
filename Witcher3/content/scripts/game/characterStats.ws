@@ -186,11 +186,14 @@ function ResistStatNameToEnum(n : name, out isPointResistance : bool) : ECharact
 	switch(n)
 	{
 		case 'physical_resistance' 				: return CDS_PhysicalRes;
+		case 'bleeding_resistance'	 			: return CDS_BleedingRes; //modSigns
 		case 'poison_resistance' 				: return CDS_PoisonRes;
 		case 'fire_resistance' 					: return CDS_FireRes;
 		case 'frost_resistance' 				: return CDS_FrostRes;
 		case 'shock_resistance' 				: return CDS_ShockRes;
 		case 'force_resistance' 				: return CDS_ForceRes;
+		case 'will_resistance'	 				: return CDS_WillRes; //modSigns
+		case 'burning_resistance' 				: return CDS_BurningRes; //modSigns
 		case 'slashing_resistance' 				: return CDS_SlashingRes;
 		case 'piercing_resistance'				: return CDS_PiercingRes;
 		case 'bludgeoning_resistance'			: return CDS_BludgeoningRes;
@@ -199,7 +202,7 @@ function ResistStatNameToEnum(n : name, out isPointResistance : bool) : ECharact
 		case 'burning_DoT_damage_resistance'	: return CDS_DoTBurningDamageRes;
 		case 'poison_DoT_damage_resistance'		: return CDS_DoTPoisonDamageRes;
 		case 'bleeding_DoT_damage_resistance'	: return CDS_DoTBleedingDamageRes;
-		default :								;
+		default :								;//nothing, just continue
 	}
 	
 	isPointResistance = false;
@@ -234,11 +237,14 @@ function ResistStatEnumToName(s : ECharacterDefenseStats, isPointResistance : bo
 		switch(s)
 		{
 			case CDS_PhysicalRes :				return 'physical_resistance';
+			case CDS_BleedingRes : 				return 'bleeding_resistance'; //modSigns
 			case CDS_PoisonRes :				return 'poison_resistance';
 			case CDS_FireRes :					return 'fire_resistance';
 			case CDS_FrostRes :					return 'frost_resistance';
 			case CDS_ShockRes :					return 'shock_resistance';
 			case CDS_ForceRes :					return 'force_resistance';
+			case CDS_WillRes :					return 'will_resistance'; //modSigns
+			case CDS_BurningRes : 				return 'burning_resistance'; //modSigns
 			case CDS_SlashingRes :	 			return 'slashing_resistance';
 			case CDS_PiercingRes :				return 'piercing_resistance';
 			case CDS_BludgeoningRes:			return 'bludgeoning_resistance';
@@ -395,30 +401,49 @@ function IsPhysicalResistStat(stat : ECharacterDefenseStats) : bool
 
 struct SPlayerOffenseStats
 {
+	var steelFastAP:float; //modSigns
 	var steelFastDmg:float;
 	var steelFastCritChance:float;
+	var steelFastCritAP:float; //modSigns
 	var steelFastCritDmg:float;
-	var steelFastDPS:float;
+	var steelFastDPS:float; //modSigns: average
 	
+	var steelStrongAP:float; //modSigns
 	var steelStrongDmg:float;
 	var steelStrongCritChance:float;
+	var steelStrongCritAP:float; //modSigns
 	var steelStrongCritDmg:float;
-	var steelStrongDPS:float;
+	var steelStrongDPS:float; //modSigns: average
 	
+	var silverFastAP:float; //modSigns
 	var silverFastDmg:float;
 	var silverFastCritChance:float;
+	var silverFastCritAP:float; //modSigns
 	var silverFastCritDmg:float;
-	var silverFastDPS:float;
+	var silverFastDPS:float; //modSigns: average
 	
+	var silverStrongAP:float; //modSigns
 	var silverStrongDmg:float;
 	var silverStrongCritChance:float;
+	var silverStrongCritAP:float; //modSigns
 	var silverStrongCritDmg:float;
-	var silverStrongDPS:float;
+	var silverStrongDPS:float; //modSigns: average
 	
 	var crossbowCritChance:float;
 	var crossbowSteelDmg:float;
 	var crossbowSteelDmgType:name;
 	var crossbowSilverDmg:float;
+	//modSigns
+	var crossbowElementaDmgType:name;
+	var crossbowElementaDmg:float;
+	var crossbowAttackPower:float;
+	var crossbowCritDmgBonus:float;
+}
+
+//modSigns
+function PowerStatToPowerBonus( valueMult : float ) : float
+{
+	return ClampF(valueMult - 1, 0, 1)*0.5 + ClampF(valueMult - 2, 0, 1)*0.3 + ClampF(valueMult - 3, 0, 1)*0.2;
 }
 	
 import class CCharacterStats

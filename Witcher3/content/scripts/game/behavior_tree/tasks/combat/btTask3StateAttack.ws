@@ -126,7 +126,8 @@ class CBTTask3StateAttack extends CBTTaskAttack
 			npc = GetNPC();
 			target = GetCombatTarget();
 			startPos = npc.GetWorldPosition();
-			dotProduct = 0;
+			dotProduct = 0; //modSigns: 0 -> 1, otherwise dotProduct >= 0.0f is never true -> restoring, can't see where it's used
+			//theGame.witcherLog.AddMessage("!!!dotProduct!!!"); //modSigns: debug
 			
 			if ( playFX )
 			{

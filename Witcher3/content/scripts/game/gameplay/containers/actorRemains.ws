@@ -69,12 +69,12 @@ class W3ActorRemains extends W3AnimatedContainer
 		
 		super.OnItemTaken(itemId, quantity);
 		
-		if ( inv.IsItemTrophy ( itemId ) )
+		/*if ( inv.IsItemTrophy ( itemId ) )
 		{
 			itemName = inv.GetItemName ( itemId );
 		
 			trophyItemNames.PushBack ( itemName );
-		}
+		}*/ //modSigns: no auto-equipping trophies
 		if(!HasQuestItem())
 			StopEffect('quest_highlight_fx');
 	}
@@ -151,13 +151,13 @@ class W3ActorRemains extends W3AnimatedContainer
 	
 	function FinalizeLooting ()
 	{
-		var i : int;
+		//var i : int;
 		var commonMapManager : CCommonMapManager;
-		var trophyIds : array <SItemUniqueId>;
-		var eqId	  : SItemUniqueId;
-		var witcher : W3PlayerWitcher;
+		//var trophyIds : array <SItemUniqueId>;
+		//var eqId	  : SItemUniqueId;
+		//var witcher : W3PlayerWitcher;
 		
-		witcher = GetWitcherPlayer();
+		/*witcher = GetWitcherPlayer();
 		
 		if( !manualTrophyTransfer || !owner )
 		{
@@ -177,7 +177,7 @@ class W3ActorRemains extends W3AnimatedContainer
 				
 				trophyItemNames.Clear();
 			}
-		}
+		}*/ //modSigns: no auto-equipping trophies
 		
 		if(IsEmpty())
 		{

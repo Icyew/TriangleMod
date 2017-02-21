@@ -3,46 +3,26 @@
   <definitions>
   <abilities>
 		<!-- NOONWRAITH VARIANTS -->
-		<!-- Iris-->
+		<!-- Iris - inherits from mon_noonwraith_base -->
 		<ability name="mon_nightwraith_iris">
 		<tags> </tags>
 			<level type="add" always_random="false" min="1" max="1" />
 			<threat_level type="add" always_random="false" min="3" max="3" />
-			<essence type="base" always_random="false" min="3600" max="3600" />
-			
-			<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
-			
-			<physical_resistance_perc type="add" min="0.7" max="0.7" />
-			
-			<slashing_resistance_perc type="add" min="0.7" max="0.7" />
-			<piercing_resistance_perc type="add" min="0.7" max="0.7" />
-			<bludgeoning_resistance_perc type="add" min="0.5" max="0.5" />
-			<rending_resistance_perc type="add" min="0.7" max="0.7" />
-			<critical_hit_damage_reduction type="add" min="0.7" max="0.7"/>
-			
-			<hits_to_roll_counter type="add" always_random="false" min="2" max="2" />
-			<counter_chance type="add" always_random="false" min="0.5" max="0.5" />
-			<armor type="base" always_random="false" min="0" max="0" />
-			<physical_resistance_perc type="base" min="0" max="0" />
-			<slashing_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<piercing_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<bludgeoning_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<rending_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<elemental_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<fire_resistance type="base" always_random="false" min="0" max="0" />
-			<fire_resistance_perc type="base" min="-1" max="-1" />
-			<frost_resistance type="base" always_random="false" min="0" max="0" />
-			<frost_resistance_perc type="base" min="1" max="1" />
-			<force_resistance type="base" always_random="false" min="0" max="0" />
-			<force_resistance_perc type="base" min="0" max="0" />
-			<shock_resistance type="base" always_random="false" min="0" max="0" />
-			<shock_resistance_perc type="base" min="-0.4" max="-0.4" />
-			<poison_resistance type="base" always_random="false" min="0" max="0" />	
-			<poison_resistance_perc type="base" min="1" max="1" />
-			<bleeding_resistance_perc type="base" min="1" max="1" />
-			<will_resistance_perc type="base" min="0" max="0" />
-			<burning_resistance_perc type="base" min="-0.4" max="-0.4" />
-			<igni_damage_amplifier type="mult" min="1.0" max="1.0" />
+			<essence type="add" always_random="false" min="3000" max="3000" />
+			<attack_power type="mult" always_random="false" min="-0.5" max="-0.5" />
+			<staminaRegen type="mult" min="0.2" max="0.2" />
+			<!-- Resistances group -->
+			<!-- witcher weapons -->
+			<physical_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<!-- human weapons -->
+			<slashing_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<piercing_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<bludgeoning_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<!-- monster/magical weapons -->
+			<rending_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<elemental_resistance_perc type="base" always_random="false" min="0.6" max="0.6" />
+			<!-- crit damage reduction -->
+			<critical_hit_damage_reduction always_random="false" type="add" min="0.5" max="0.5"/>
 				
 			<mon_iriseasy_ep1 is_ability="true" />
 			<mon_irismedium_ep1 is_ability="true" />
@@ -64,155 +44,138 @@
 		 
 		 <ability name="mon_irishard_ep1">
 			<tags>DifficultyModeAbility, Hard</tags>
-			<essenceRegen type="mult" always_random="false" min="0.049" max="0.045" />
+			<essenceRegen type="mult" always_random="false" min="0.049" max="0.049" />
 		</ability>	
 			
 		<ability name="mon_irishardcore_ep1"> 
 			<tags>DifficultyModeAbility, Hardcore</tags>	
-			<essenceRegen type="mult" always_random="false" min="0.049" max="0.045" />
+			<essenceRegen type="mult" always_random="false" min="0.049" max="0.049" />
 		</ability>	
 			
 		<!-- TOAD -->
 		<ability name="mon_toad_base">
 			<tags> "base","Boss" </tags>
-			<level type="add" min="27" max="27" />
-			<essence type="base" min="19000" max="19000" />
-			<stamina type="base" min="200" max="200" />
+			<level type="add" min="1" max="1" />
+			<essence type="base" min="3000" max="3000" />
+			<stamina type="base" min="100" max="100" />
+			<morale type="base" min="100" max="100" />
 			<experience type="add" min="100" max="100" />
 			<threat_level type="add" min="5" max="5" />
 			<staminaRegen type="mult" min="0.2" max="0.2" />
-			<hits_to_roll_counter type="add" min="2" max="2" />
-			<counter_chance type="add" min="1" max="1" />
-			<attack_power type="mult" min="0" max="0" />
-			<critical_hit_damage_reduction type="add" min="0.88" max="0.88"/>
-			<igni_damage_amplifier type="add" min="13" max="13" />
-
+			<moraleRegen type="mult" min="0.05" max="0.05" />
+			<!-- Combat action params -->
+			<!-- modSigns: unstoppable attack chance -->
+			<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+			<unstoppable_chance type="add" always_random="false" min="0.2" max="0.2" /> <!-- base chance to roll an unstoppable attack -->
+			<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+			<!-- dodge burn immobilizing effect -->
+			<avoid_burn_critical_state_chance type="add" always_random="false" min="0.6" max="0.6" /> <!-- if successful, burning won't lock an npc in pain animation -->
+			<!-- guard -->
+			<hits_to_raise_guard type="add" always_random="false" min="-1" max="-1" /> <!-- how much hits and npc will take before rolling for raise guard -->
+			<raise_guard_chance type="add" always_random="false" min="0.0" max="0.0" /> <!-- base raise guard chance -->
+			<lower_guard_chance type="add" always_random="false" min="1.0" max="1.0" /> <!-- chance to lower guard if already guarded -->
+			<!-- counter -->
+			<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much hits an npc will take before rolling for counter -->
+			<counter_chance type="add" always_random="false" min="0.4" max="0.4" /> <!-- base counter chance -->
+			<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional hit  -->
 			<!-- Resistances group -->
-			<armor type="base" always_random="false" min="70" max="70" />
-			<physical_resistance_perc type="base" min="0.7" max="0.7" />
-			<slashing_resistance_perc type="base" always_random="false" min="0.68" max="0.68" />
-			<piercing_resistance_perc type="base" always_random="false" min="0.68" max="0.68" />
-			<bludgeoning_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
-			<rending_resistance_perc type="base" always_random="false" min="0.68" max="0.68" />
-			<elemental_resistance_perc type="base" always_random="false" min="0.3" max="0.3" />
-			<fire_resistance type="base" always_random="false" min="0" max="0" />
-			<fire_resistance_perc type="base" min="0" max="0" />
-			<frost_resistance type="base" always_random="false" min="0" max="0" />
-			<frost_resistance_perc type="base" min="0" max="0" />
-			<force_resistance type="base" always_random="false" min="0" max="0" />
-			<force_resistance_perc type="base" min="0.5" max="0.5" />
-			<shock_resistance type="base" always_random="false" min="0" max="0" />
-			<shock_resistance_perc type="base" min="0.95" max="0.95" />
-			<poison_resistance type="base" always_random="false" min="0" max="0" />
-			<poison_resistance_perc type="base" min="1" max="1" />
-			<bleeding_resistance_perc type="base" min="0.7" max="0.7" />
-			<will_resistance_perc type="base" min="1.0" max="1.0" />
-			<burning_resistance_perc type="base" min="0.3" max="0.3" />
-			<burning_resistance type="base" min="0" max="0" />
-			<burning_DoT_damage_resistance_perc type="add" min="0" max="0" />
+			<armor type="base" always_random="false" min="100" max="100" />
+			<!-- witcher weapons -->
+			<physical_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<!-- human weapons -->
+			<slashing_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<piercing_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<bludgeoning_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<!-- monster/magical weapons -->
+			<rending_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<elemental_resistance_perc type="base" always_random="false" min="0.7" max="0.7" />
+			<!-- fire -->
+			<fire_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<burning_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
+			<burning_DoT_damage_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
+			<!-- aard/knockdown, yrden, axii -->
+			<force_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<shock_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<will_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<!-- other effects -->
+			<bleeding_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<bleeding_DoT_damage_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<poison_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<poison_DoT_damage_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<frost_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<!-- crit damage reduction -->
+			<critical_hit_damage_reduction always_random="false" type="add" min="0.5" max="0.5"/>
+
 			<mon_frogiehard_ep1 is_ability="true" />
 			<mon_frogiehardcore_ep1 is_ability="true" />
 		  </ability>
 		  
 		 <ability name="mon_frogiehard_ep1">
 			<tags>DifficultyModeAbility, Hard</tags>
-			<essence type="mult" always_random="false" min="0.7" max="0.7" />	
+			<essence type="mult" always_random="false" min="0.5" max="0.5" />	
 			<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 		</ability>	
 		
 		 <ability name="mon_frogiehardcore_ep1">
 		 <tags>DifficultyModeAbility, Hardcore</tags>
-			<essence type="mult" always_random="false" min="0.84" max="0.84" />	
+			<essence type="mult" always_random="false" min="1.0" max="1.0" />	
 			<attack_power type="mult" always_random="false" min="-0.1" max="-0.1" />
 		 </ability>	
 	  
-
-		  
-		  	<!-- BOARR -->
-		<ability name="mon_boar_base">
-			<tags> "base" </tags>
-			<level type="add" min="34" max="34" />
-			<vitality type="base" min="2000" max="2000" />
-			<vitality type="mult" min="1.4" max="1.4" />
-			<stamina type="base" min="200" max="200" />
-			<experience type="add" min="100" max="100" />
-			<threat_level type="add" min="1" max="1" />
-			<staminaRegen type="mult" min="0.2" max="0.2" />
-			<hits_to_roll_counter type="add" min="2" max="2" />
-			<counter_chance type="add" min="1" max="1" />
-			<attack_power type="base" always_random="false" min="550" max="550" />
-			<attack_power type="mult" always_random="false" min="1.0" max="1.0" />
-			<!-- Resistances group -->
-			<armor type="base" always_random="false" min="0" max="0" />
-			<physical_resistance_perc type="base" min="0" max="0" />
-			<slashing_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<piercing_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<bludgeoning_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<rending_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<elemental_resistance_perc type="base" always_random="false" min="0" max="0" />
-			<fire_resistance type="base" always_random="false" min="0" max="0" />
-			<fire_resistance_perc type="base" min="0" max="0" />
-			<frost_resistance type="base" always_random="false" min="0" max="0" />
-			<frost_resistance_perc type="base" min="0" max="0" />
-			<force_resistance type="base" always_random="false" min="0" max="0" />
-			<force_resistance_perc type="base" min="" max="" />
-			<shock_resistance type="base" always_random="false" min="0" max="0" />
-			<shock_resistance_perc type="base" min="0" max="0" />
-			<poison_resistance type="base" always_random="false" min="0" max="0" />
-			<poison_resistance_perc type="base" min="0" max="0" />
-			<bleeding_resistance_perc type="base" min="0" max="0" />
-			<will_resistance_perc type="base" min="" max="0" />
-			<burning_resistance_perc type="base" min="0" max="0" />
-		  </ability>
-		 
-		<!-- CARETAKER -->
+		<!-- CARETAKER - inherits from mon_wild_hunt_default -->
 		<ability name="q604_caretaker">
 		<tags> </tags>
-			<essence type="mult" always_random="false" min="-0.2" max="-0.2" />
-			<essenceRegen type="mult" always_random="false" min="0.0" max="0.0" />
 			<experience type="add" min="100" max="100" />
 			<threat_level type="add" min="5" max="5" />
-			<staminaRegen type="mult" min="0.03" max="0.03" />	
-			<light_attack_damage_vitality type="add" min="0" max="0" />
-			<light_attack_damage_essence type="add" min="0" max="0" />
-			<heavy_attack_damage_vitality type="add" min="10" max="10" />
-			<heavy_attack_damage_essence type="add" min="10" max="10" />
-			<hits_to_roll_counter type="add" min="1" max="1" />
-			<counter_chance type="add" min="1" max="1" />
-			<hits_to_raise_guard type="add" min="1" max="1" />
-			<raise_guard_chance type="add" min="1" max="1" />
-			<lower_guard_chance type="add" min="0" max="0" />
-			<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
-			<critical_hit_damage_reduction type="mult" min="0.8" max="0.8"/>	
-			<igni_damage_amplifier type="add" min="20" max="20" />
-			
-			<!-- Stamina group -->
-			<parry_stamina_cost type="add" min="-20" max="-20" />
-			<counter_stamina_cost type="add" min="-20" max="-20" />
-			<!-- / -->
-			
+			<attack_power type="mult" always_random="false" min="-0.5" max="-0.5" />
+			<!-- Combat action params -->
+			<!-- modSigns: unstoppable attack chance -->
+			<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+			<unstoppable_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base chance to roll an unstoppable attack -->
+			<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+			<!-- guard -->
+			<delay_between_raise_guard type="add" always_random="false" min="0.0" max="0.0" /> <!-- how often an npc can raise his guard (sec) -->
+			<hits_to_raise_guard type="add" always_random="false" min="0" max="0" /> <!-- how much hits and npc will take before rolling for raise guard -->
+			<raise_guard_chance type="add" always_random="false" min="0.8" max="0.8" /> <!-- base raise guard chance -->
+			<raise_guard_chance_mult_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- raise guard chance increment per additional hit -->
+			<lower_guard_chance type="add" always_random="false" min="0.0" max="0.0" /> <!-- chance to lower guard if already guarded -->
+			<!-- counter -->
+			<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much hits an npc will take before rolling for counter -->
+			<counter_chance type="add" always_random="false" min="0.6" max="0.6" /> <!-- base counter chance -->
+			<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional hit  -->
 			<!-- Resistances group -->
-			<armor type="add" min="0" max="0" />		
-			<physical_resistance_perc 		type="add" min="0.4" max="0.4" />
-			<slashing_resistance_perc 		type="add" min="0.4" max="0.4" />
-			<piercing_resistance_perc 		type="add" min="0.4" max="0.4" />
-			<bludgeoning_resistance_perc 	type="add" min="0.4" max="0.4" />
-			<rending_resistance_perc 		type="add" min="0.4" max="0.4" />
-			<elemental_resistance_perc 		type="add" min="0.4" max="0.4" />
-			<will_resistance_perc 			type="add" min="1" max="1" />
-			<shock_resistance_perc 			type="add" min="0.0" max="0.0" />
-			<burning_resistance_perc 		type="add" min="0.1" max="0.1" />
-			<burning_DoT_damage_resistance_perc type="add" min="0.1" max="0.1" />
-			<fire_resistance_perc 			type="add" min="0.1" max="0.1" />
-			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.8" max="0.8" />
-			<bleeding_DoT_damage_resistance_perc type="add" always_random="false" min="0.8" max="0.8" />
+			<!-- witcher weapons -->
+			<physical_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<!-- human weapons -->
+			<slashing_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<piercing_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<bludgeoning_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<!-- monster/magical weapons -->
+			<rending_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<elemental_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<!-- fire -->
+			<burning_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<burning_DoT_damage_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<!-- aard/knockdown, yrden, axii -->
+			<force_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<shock_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<will_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<!-- other effects -->
+			<bleeding_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<bleeding_DoT_damage_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<poison_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<poison_DoT_damage_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<!-- crit damage reduction -->
+			<critical_hit_damage_reduction type="mult" min="0.5" max="0.5"/>
+			
+			<!-- / -->
 			<mon_caretakerhard_ep1 is_ability="true" />
 			<mon_caretakerhardcore_ep1 is_ability="true" />		
 			<mon_caretakereasy_ep1 is_ability="true" />
 			<mon_caretakermedium_ep1 is_ability="true" />		
 		</ability>
 		
-			<ability name="mon_caretakereasy_ep1">
+		<ability name="mon_caretakereasy_ep1">
 		<tags>DifficultyModeAbility, Easy</tags>
 		<healing_per_hit_perc type="add" always_random="false" min="0.015" max="0.015" />
 		<number_of_shades type="add" always_random="false" min="1.0" max="1.0" />
@@ -236,22 +199,86 @@
 		<number_of_shades type="add" always_random="false" min="1.3" max="1.3" />
 		</ability>
 		
+		<!-- BOARR -->
+		<ability name="mon_boar_base">
+			<tags> "base" </tags>
+			<level type="add" min="1" max="1" />
+			<threat_level type="add" min="1" max="1" />
+			<experience type="add" min="100" max="100" />
+			<!-- Resources group -->
+			<vitality type="base" min="250" max="250" />
+			<essence type="base" always_random="false" min="0" max="0" />
+			<stamina type="base" always_random="false" min="100" max="100" />
+			<morale type="base" always_random="false" min="100" max="100" />
+			<!-- Regen group -->
+			<vitalityRegen type="mult" always_random="false" min="0" max="0" />
+			<essenceRegen type="mult" always_random="false" min="0" max="0" />
+			<staminaRegen type="mult" always_random="false" min="0.2" max="0.2" />
+			<moraleRegen type="mult" always_random="false" min="0.05" max="0.05" />
+			<!-- Stamina group -->
+			<light_action_stamina_cost type="base" always_random="false" min="16" max="16" /> <!-- modSigns: used for all attacks that don't have stamina cost set -->
+			<heavy_action_stamina_cost type="base" always_random="false" min="20" max="20" /> <!-- is sometimes used by some attacks -->
+			<light_special_stamina_cost type="base" always_random="false" min="20" max="20" /> <!-- is sometimes used by some attacks -->
+			<heavy_special_stamina_cost type="base" always_random="false" min="33" max="33" /> <!-- is sometimes used by some attacks -->
+			<parry_stamina_cost type="base" always_random="false" min="20" max="20" />
+			<counter_stamina_cost type="base" always_random="false" min="20" max="20" />
+			<dodge_stamina_cost type="base" always_random="false" min="16" max="16" />
+			<stamina_cost_modifier type="mult" always_random="false" min="0.0" max="0.0" /> <!-- not always accounted for properly, better avoid using it -->
+			<!-- Combat action params -->
+			<!-- modSigns: unstoppable attack chance -->
+			<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+			<unstoppable_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- base chance to roll an unstoppable attack -->
+			<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+			<!-- dodge burn immobilizing effect -->
+			<avoid_burn_critical_state_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- if successful, burning won't lock an npc in pain animation -->
+			<!-- guard -->
+			<hits_to_raise_guard type="add" always_random="false" min="-1" max="-1" /> <!-- how much hits and npc will take before rolling for raise guard -->
+			<raise_guard_chance type="add" always_random="false" min="0.0" max="0.0" /> <!-- base raise guard chance -->
+			<lower_guard_chance type="add" always_random="false" min="1.0" max="1.0" /> <!-- chance to lower guard if already guarded -->
+			<!-- counter: monsters roll for counter on hit -->
+			<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much defence actions an npc will perform before rolling for counter -->
+			<counter_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base counter on defence chance -->
+			<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional defence action -->
+			<!-- dodge -->
+			<dodge_melee_light_chance type="add" always_random="false" min="0.2" max="0.2" />
+			<dodge_melee_heavy_chance type="add" always_random="false" min="0.4" max="0.4" />
+			<!-- taunt -->
+			<taunt_chance type="add" always_random="false" min="1.0" max="1.0" />
+			<!-- modSigns -->
+			<armor type="base" always_random="false" min="0" max="0" />
+			<!-- witcher weapons -->
+			<physical_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<!-- human weapons -->
+			<slashing_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<piercing_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<bludgeoning_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<!-- monster/magical weapons -->
+			<rending_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<elemental_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<!-- fire -->
+			<fire_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<burning_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<burning_DoT_damage_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<!-- aard/knockdown, yrden, axii -->
+			<force_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<shock_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<will_resistance_perc type="base" always_random="false" min="0.3" max="0.3" />
+			<!-- other effects -->
+			<bleeding_resistance_perc type="base" always_random="false" min="0.3" max="0.3" />
+			<bleeding_DoT_damage_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<poison_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<poison_DoT_damage_resistance_perc type="base" always_random="false" min="0" max="0" />
+			<frost_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+		  </ability>
+		 
 		<!-- WRAITH VARIANTS -->	  
-		<!-- Shades-->
+		<!-- Shades - inherits from mon_wraith_base -->
 		<ability name="q604_shades">
 			<level type="add" always_random="false" min="1" max="1" />
 			<threat_level type="add" always_random="false" min="2" max="2" />
-			<essence type="base" always_random="false" min="1" max="1" />
+			<essence type="add" always_random="false" min="1" max="1" />
 			<!-- Stamina group -->
-			<light_action_stamina_cost type="base" always_random="false" min="10" max="10" />
-			<heavy_action_stamina_cost type="base" always_random="false" min="15" max="15" />
-			<light_special_stamina_cost type="base" always_random="false" min="40" max="40" />
-			<heavy_special_stamina_cost type="base" always_random="false" min="40" max="40" />
-			<parry_stamina_cost type="base" always_random="false" min="20" max="20" />
-			<counter_stamina_cost type="base" always_random="false" min="40" max="40" />
-			<dodge_stamina_cost type="base" always_random="false" min="35" max="35" />
-			<stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
-			<staminaRegen type="mult" always_random="false" min="0.06" max="0.06" />
+			<staminaRegen type="mult" always_random="false" min="0.2" max="0.2" />
 			<!-- weather bonus -->
 			<WeatherBonusEffect_wraith is_ability="false" />
 		</ability>
@@ -261,7 +288,6 @@
 		<!-- Black Spider Base-->
 		<ability name="mon_black_spider_base">
 		<tags> "base" </tags>
-			<essence type="base" always_random="false" min="210" max="210" />		
 			<level type="add" always_random="false" min="1" max="1" />
 			<threat_level type="add" always_random="false" min="2" max="2" />
 			<combat_ticket_weight type="add" always_random="false" min="50" max="50" />
@@ -269,68 +295,76 @@
 			<camera_weight type="add" always_random="false" min="1" max="1" />
 			<ticket_request_interval type="add" always_random="false" min="3.5" max="3.5" />
 			<humanoid type="add" always_random="false" min="0.0" max="0.0" />	
-			<!-- Attack group -->
-			<light_attack_damage_vitality type="base" always_random="false" min="0" max="0" />
-			<light_attack_damage_essence type="base" always_random="false" min="0" max="0" />
-			<heavy_attack_damage_vitality type="base" always_random="false" min="0" max="0" />
-			<heavy_attack_damage_essence type="base" always_random="false" min="0" max="0" />
-			<super_heavy_attack_damage_vitality type="base" always_random="false" min="0" max="0" />
-			<super_heavy_attack_damage_essence type="base" always_random="false" min="0" max="0" />			
+			<!-- Resources group -->
+			<vitality type="base" always_random="false" min="0" max="0" />
+			<essence type="base" always_random="false" min="210" max="210" />
+			<stamina type="base" always_random="false" min="100" max="100" />
+			<morale type="base" always_random="false" min="100" max="100" />
+			<!-- Regen group -->
+			<vitalityRegen type="mult" always_random="false" min="0" max="0" />
+			<essenceRegen type="mult" always_random="false" min="0" max="0" />
+			<staminaRegen type="mult" always_random="false" min="0.2" max="0.2" />
+			<moraleRegen type="mult" always_random="false" min="0.05" max="0.05" />
 			<!-- Stamina group -->
-			<light_action_stamina_cost type="base" always_random="false" min="10" max="10" />
-			<heavy_action_stamina_cost type="base" always_random="false" min="15" max="15" />
-			<light_special_stamina_cost type="base" always_random="false" min="30" max="30" />
-			<heavy_special_stamina_cost type="base" always_random="false" min="60" max="60" />
+			<light_action_stamina_cost type="base" always_random="false" min="16" max="16" /> <!-- modSigns: used for all attacks that don't have stamina cost set -->
+			<heavy_action_stamina_cost type="base" always_random="false" min="20" max="20" /> <!-- is sometimes used by some attacks -->
+			<light_special_stamina_cost type="base" always_random="false" min="20" max="20" /> <!-- is sometimes used by some attacks -->
+			<heavy_special_stamina_cost type="base" always_random="false" min="33" max="33" /> <!-- is sometimes used by some attacks -->
 			<parry_stamina_cost type="base" always_random="false" min="20" max="20" />
 			<counter_stamina_cost type="base" always_random="false" min="20" max="20" />
-			<dodge_stamina_cost type="base" always_random="false" min="20" max="20" />
-			<stamina_cost_modifier type="mult" always_random="false" min="0" max="0" />
-			<staminaRegen type="mult" always_random="false" min="0.04" max="0.04" />
-			<!-- Resistances group -->
-			<physical_resistance_perc type="base" min="0.0" max="0.0" />
-			<slashing_resistance_perc type="base" always_random="false" min="0.0" max="0.0" />
-			<piercing_resistance_perc type="base" always_random="false" min="0.0" max="0.0" />
-			<bludgeoning_resistance_perc type="base" always_random="false" min="0.0" max="0.0" />
-			<rending_resistance_perc type="base" always_random="false" min="0.0" max="0.0" />
+			<dodge_stamina_cost type="base" always_random="false" min="16" max="16" />
+			<stamina_cost_modifier type="mult" always_random="false" min="0.0" max="0.0" /> <!-- not always accounted for properly, better avoid using it -->
+			<!-- Combat action params -->
+			<!-- modSigns: unstoppable attack chance -->
+			<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+			<unstoppable_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- base chance to roll an unstoppable attack -->
+			<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+			<!-- dodge burn immobilizing effect -->
+			<avoid_burn_critical_state_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- if successful, burning won't lock an npc in pain animation -->
+			<!-- guard -->
+			<hits_to_raise_guard type="add" always_random="false" min="-1" max="-1" /> <!-- how much hits and npc will take before rolling for raise guard -->
+			<raise_guard_chance type="add" always_random="false" min="0.0" max="0.0" /> <!-- base raise guard chance -->
+			<lower_guard_chance type="add" always_random="false" min="1.0" max="1.0" /> <!-- chance to lower guard if already guarded -->
+			<!-- counter: monsters roll for counter on hit -->
+			<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much defence actions an npc will perform before rolling for counter -->
+			<counter_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base counter on defence chance -->
+			<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional defence action -->
+			<!-- dodge -->
+			<dodge_melee_light_chance type="add" always_random="false" min="0.2" max="0.2" />
+			<dodge_melee_heavy_chance type="add" always_random="false" min="0.6" max="0.6" />
+			<!-- taunt -->
+			<taunt_chance type="add" always_random="false" min="0.25" max="0.25" />
 		</ability>		
 
 		<!-- Black Spider-->
 		<ability name="mon_black_spider">
-			<!-- Resources group -->
-			<essence type="mult" always_random="false" min="0.6" max="0.6" />			
-			<stamina type="base" always_random="false" min="100" max="100" />
-			<morale type="base" always_random="false" min="100" max="100" />	
-			<!-- Resistances group -->
+			<!-- modSigns -->
 			<elemental_resistance_perc type="base" always_random="false" min="0.1" max="0.1" />
-			<will_resistance_perc 			type="add" min="0.3" max="0.3" />
-			<burning_resistance_perc type="base" min="0.2" max="0.2" />
-			<force_resistance type="base" always_random="false" min="0.3" max="0.3" />
-			<force_resistance_perc type="base" min="" max="" />
-			<poison_resistance_perc type="base" min="1" max="1" />
+			<will_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
+			<bleeding_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<bleeding_DoT_damage_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<poison_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<poison_DoT_damage_resistance_perc type="base" always_random="false" min="1" max="1" />
 		</ability>	
 		
 		<!-- Black Spider Large-->
 		<ability name="mon_black_spider_large">
 			<!-- Resources group -->
-			<essence type="base" always_random="false" min="3000" max="3000" />			
-			<stamina type="base" always_random="false" min="100" max="100" />
-			<morale type="base" always_random="false" min="100" max="100" />	
-			<!-- Resistances group -->
+			<essence type="mult" always_random="false" min="0.5" max="0.5" />
+			<!-- modSigns -->
 			<elemental_resistance_perc type="base" always_random="false" min="0.1" max="0.1" />
-			<will_resistance_perc 			type="add" min="0.8" max="0.8" />
-			<burning_resistance_perc type="base" min="0.3" max="0.3" />
-			<force_resistance type="base" always_random="false" min="0.8" max="0.8" />
-			<force_resistance_perc type="base" min="" max="" />
-			<poison_resistance_perc type="base" min="1" max="1" />
+			<force_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
+			<will_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
+			<bleeding_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<bleeding_DoT_damage_resistance_perc type="base" always_random="false" min="0.5" max="0.5" />
+			<poison_resistance_perc type="base" always_random="false" min="1" max="1" />
+			<poison_DoT_damage_resistance_perc type="base" always_random="false" min="1" max="1" />
 		</ability>		
 		
-		
-		<!-- Monsters Difficulty level custom stats--> 
-				
 		<!-- EP1 additional stats-->
 		<ability name="mon_ghoul_ep1">
-			<essence type="mult" always_random="false" min="0.5" max="0.5" />	
-			<attack_power type="mult" always_random="false" min="0.8" max="0.8" />
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />	
+			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 		</ability>		
 		
 		<ability name="mon_omerta_ep1">	
@@ -339,8 +373,8 @@
 		</ability>		
 		
 		<ability name="mon_spiders604_ep1">
-			<essence type="mult" always_random="false" min="0.5" max="0.5" />	
-			<attack_power type="mult" always_random="false" min="0.5" max="0.3" />
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />	
+			<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
 		</ability>		
 		
 		<ability name="mon_boarNG_ep1">
@@ -350,26 +384,25 @@
 		</ability>	
 		
 		<ability name="mon_gryphon_ep1">
-			<essence type="mult" always_random="false" min="3.5" max="3.5" />	
+			<essence type="mult" always_random="false" min="2.0" max="2.0" />
 			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 		</ability>		
 		
 		<ability name="mon_golem_ep1">
-			<essence type="mult" always_random="false" min="3.0" max="3.0" />	
+			<essence type="mult" always_random="false" min="2.0" max="2.0" />	
 		</ability>		
-		
 		
 		<ability name="mon_bear_ep1">
 			<vitality type="mult" always_random="false" min="2.0" max="2.0" />	
 		</ability>		
 
 		<ability name="mon_nekkers_ep1">
-			<essence type="mult" always_random="false" min="0.4" max="0.4" />	
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />	
 		</ability>				
 		
 		<ability name="mon_drowner_ep1">
-			<essence type="mult" always_random="false" min="1.2" max="1.2" />	
-			<attack_power type="mult" always_random="false" min="0.1" max="0.1" />
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />	
+			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 		</ability>		
 		
 		<ability name="mon_guardsWooden">
@@ -379,23 +412,20 @@
 		
 		<ability name="mon_flaming_rose_noARM">
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
-			<attack_power type="mult" always_random="false" min="0.1" max="0.1" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 		</ability>
 		
 		<ability name="mon_flaming_rose_buff">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 			<armor type="base" always_random="false" min="65" max="65" />
-			<attack_power type="mult" always_random="false" min="0.1" max="0.1" />
 		</ability>
 		
 		<ability name="mon_flaming_rose_hammer_ep1">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 			<armor type="base" always_random="false" min="65" max="65" />
-			<attack_power type="mult" always_random="false" min="1.7" max="1.7" />
-			<light_attack_damage_vitality type="mult" always_random="false" min="-0.9" max="-0.9" />
+			<attack_power type="mult" always_random="false" min="1.5" max="1.5" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<bleeding_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
@@ -403,9 +433,8 @@
 		
 		<ability name="mon_flaming_rose_halberd_ep1">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 			<armor type="base" always_random="false" min="65" max="65" />
-			<attack_power type="mult" always_random="false" min="-0.1" max="-0.1" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<bleeding_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
@@ -413,7 +442,7 @@
 				
 		<ability name="mon_flaming_mace_ep1">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 			<armor type="base" always_random="false" min="65" max="65" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
@@ -422,7 +451,7 @@
 		
 		<ability name="mon_flaming_sword_ep1">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="2.5" max="2.5" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 			<armor type="base" always_random="false" min="65" max="65" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
@@ -436,24 +465,22 @@
 		<ability name="mon_horst_guards">	
 			<tags> "base" </tags>
 			<vitality type="mult" always_random="false" min="1.0" max="1.0" />
-			<armor type="base" always_random="false" min="70" max="70" />
+			<armor type="base" always_random="false" min="40" max="40" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 			<bleeding_DoT_damage_resistance_perc type="add" always_random="false" min="0.3" max="0.3" />
 		</ability>
 		
-		<ability name="mon_cannibals_ep1">	
-			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="0.0" max="0.0" />
-			<attack_power type="mult" always_random="false" min="-0.5" max="-0.5" />
-		</ability>
-		
 		<ability name="mon_brothers_ep1">	
 			<tags> "base" </tags>
-			<vitality type="mult" always_random="false" min="-0.7" max="-0.7" />
-			<attack_power type="mult" always_random="false" min="-0.6" max="-0.6" />
+			<vitality type="mult" always_random="false" min="-0.8" max="-0.8" />
+			<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
 		</ability>
 				
+		<ability name="mon_cannibals_ep1">	
+			<tags> "base" </tags>
+		</ability>
+		
 		<ability name="mon_horst">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
@@ -464,12 +491,13 @@
 		<ability name="mon_auctionGuards_ep1">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="-1.0" max="-1.0" />
+			<attack_power type="add" always_random="false" min="100" max="100" />
 		</ability>
 		
 		<ability name="mon_wyvern_ep1">
 			<tags> "base" </tags>
-			<essence type="mult" always_random="false" min="3.0" max="3.0" />
-			<attack_power type="mult" always_random="false" min="1.1" max="1.1" />
+			<essence type="mult" always_random="false" min="2.0" max="2.0" />
+			<attack_power type="mult" always_random="false" min="1.0" max="1.0" />
 			<burning_DoT_damage_resistance_perc type="add" always_random="false" min="0.2" max="0.2" />
 			<poison_DoT_damage_resistance_perc type="add" always_random="false" min="1.0" max="1.0" />
 			<bleeding_DoT_damage_resistance_perc type="add" always_random="false" min="0.6" max="0.6" />
@@ -478,15 +506,14 @@
 		<ability name="mon_hammer2h_ep1">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="1.5" max="1.5" />
-			<vitality type="mult" always_random="false" min="3.0" max="3.0" />
+			<vitality type="mult" always_random="false" min="2.0" max="2.0" />
 		</ability>
 		
 		<ability name="mon_companions_ep1">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="-1.2" max="-1.2" />
+			<attack_power type="add" always_random="false" min="300" max="300" />
 		</ability>
-		
-
 		
 		<ability name="mon_alghoulsghost_ep1">
 			<tags> "base" </tags>
@@ -501,8 +528,9 @@
 		<ability name="mon_ghosts_ep1">
 			<tags> "base" </tags>
 			<vitality type="base" always_random="false" min="-1962.4" max="-1962.4" />
-			<essence type="base" always_random="false" min="150" max="150" />
-			<essence type="mult" always_random="false" min="-0.49" max="-0.49" />
+			<vitality type="mult" always_random="false" min="-1" max="-1" />
+			<essence type="add" always_random="false" min="150" max="150" />
+			<essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 			<attack_power type="mult" always_random="false" min="-0.4" max="-0.4" />
 		</ability>
 				
@@ -511,11 +539,10 @@
 			<attack_power type="mult" always_random="false" min="-0.8" max="-0.8" />
 		</ability>
 		
-		
 		<ability name="mon_boarnerf_ep1">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="-0.8" max="-0.8" />
-			<vitality type="mult" always_random="false" min="1.5" max="1.5" />
+			<vitality type="mult" always_random="false" min="1.0" max="1.0" />
 		</ability>
 		
 		<ability name="mon_hym_ep1">
@@ -534,7 +561,6 @@
 			<attack_power type="mult" always_random="false" min="-0.5" max="-0.5" />
 		</ability>
 		
-		
 		<ability name="mon_ghostbigspider_ep1">
 			<tags> "base" </tags>
 			<attack_power type="mult" always_random="false" min="0.4" max="0.4" />
@@ -545,7 +571,7 @@
 			<tags> "base" </tags>
 			<vitality type="mult" always_random="false" min="3.0" max="3.0" />
 			<burning_DoT_damage_resistance_perc type="add" min="0.1" max="0.1" />
-			<attack_power type="mult" always_random="false" min="0.66" max="0.66" />
+			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 			<burning_resistance_perc type="add" min="0.1" max="0.1" />
 			<armor type="base" always_random="false" min="100" max="100" />
 			<will_resistance_perc type="base" min="1.0" max="1.0" />
@@ -553,26 +579,22 @@
 				
 		<ability name="mon_ethereal_ep1">
 			<tags> "base" </tags>
-			<attack_power type="mult" always_random="false" min="0" max="0" />]
-			<essence type="mult" always_random="false" min="1.0" max="1.0" />
 		</ability>
 		
 		<ability name="mon_wraiths_ep1">
 			<tags> "base" </tags>
-			<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
-			<essence type="mult" always_random="false" min="1.0" max="1.0" />
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />
+			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 		</ability>
 		
 		<ability name="mon_wolf_ep1">
 			<tags> "base" </tags>
-			<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
-			<vitality type="mult" always_random="false" min="1.5" max="1.5" />
 		</ability>
 				
 		<ability name="mon_nekker_ep1">
 			<tags> "base" </tags>
-			<attack_power type="mult" always_random="false" min="0.7" max="0.7" />
-			<essence type="mult" always_random="false" min="1.7" max="1.7" />
+			<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
+			<essence type="mult" always_random="false" min="0.3" max="0.3" />
 		</ability>
 				
 		<ability name="mon_spiderboss_ep1">
@@ -590,44 +612,41 @@
 			
 		<ability name="mon_caretaker_ep1">	
 			<tags> "base" </tags>
-			<essence type="mult" always_random="false" min="2.5" max="2.5" />
+			<essence type="add" min="8000" max="8000" />
 			<armor type="base" always_random="false" min="100" max="100" />
 			<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
 		</ability>
-		
 					
 		<ability name="mon_trapmonsters_ep1">	
 			<tags> "base" </tags>
+			<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
 		</ability>
-		
 		
 		<ability name="ToadYrden">
 			<tags> "ToadYrden" </tags>
 		</ability>
 		
-		
-	 <!-- MONSTER OPPONENTS-->
+	  <!-- MONSTER OPPONENTS-->
       <!-- Additional Abilities -->	  
-	   <ability name="ToadStuck" on_added="" on_ended="">
+	  <ability name="ToadStuck" on_added="" on_ended="">
         <tags> "ToadStuck" </tags>
 		<hits_to_roll_counter type="add" min="2" max="2" />
       </ability>
-            <ability name="BlackSpiderLarge" on_added="" on_ended="">
+      <ability name="BlackSpiderLarge" on_added="" on_ended="">
         <tags> "BlackSpiderLarge" </tags>
       </ability>
-           <ability name="InSmallSpace" on_added="" on_ended="">
+      <ability name="InSmallSpace" on_added="" on_ended="">
         <tags> "InSmallSpace" </tags>
       </ability>
-           <ability name="FoglingNoSummons" on_added="" on_ended="">
+      <ability name="FoglingNoSummons" on_added="" on_ended="">
         <tags> FoglingNoSummons </tags>
-      </ability>  
-			<ability name="ep1_poi1_ornesta_ghost" on_added="" on_ended="">
+      </ability> 
+	  <ability name="ep1_poi1_ornesta_ghost" on_added="" on_ended="">
         <tags> ep1_poi1_ornesta_ghost </tags>
       </ability>  
-      			<ability name="EP1Leshy" on_added="" on_ended="">
+      <ability name="EP1Leshy" on_added="" on_ended="">
         <tags> EP1Leshy </tags>
       </ability>
-	  
 	  
   </abilities>
   </definitions>

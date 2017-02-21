@@ -59,14 +59,14 @@ class CBTTaskTornadoAttack extends CBTTaskAttack
 		var i 						: int;
 		
 		
-		attributeName = GetBasicAttackDamageAttributeName(theGame.params.ATTACK_NAME_LIGHT, theGame.params.DAMAGE_NAME_PHYSICAL);
+		/*attributeName = GetBasicAttackDamageAttributeName(theGame.params.ATTACK_NAME_LIGHT, theGame.params.DAMAGE_NAME_PHYSICAL);
 		damage = CalculateAttributeValue( npc.GetAttributeValue( attributeName ) );
 		if ( damage <= 0 )
 		{
 			damage = CalculateAttributeValue( npc.GetAttributeValue( 'light_attack_damage_vitality' ) );
 		}
-		
-		damage *= damageMultiplier;
+		damage = CalculateAttributeValue( npc.GetAttributeValue( attributeName ) ); //modSigns
+		damage *= damageMultiplier;*/ //modSigns
 		action = new W3DamageAction in this;
 		timeStamp = GetLocalTime();
 		
@@ -167,13 +167,16 @@ class CBTTaskTornadoAttack extends CBTTaskAttack
 						
 						if ( victims[i] != npc && !actorVictims.IsCurrentlyDodging() )
 						{
-							action.Initialize( npc, actorVictims, this, npc.GetName(), EHRT_None, CPS_Undefined, false, true, false, false );
+							action.Initialize( npc, actorVictims, this, npc.GetName(), EHRT_None, CPS_Undefined, false, true, false, false ); //modSigns
 							action.SetHitAnimationPlayType(EAHA_ForceNo);
 							action.attacker = npc;
 							action.SetSuppressHitSounds(true);
 							action.SetHitEffect( '' );
-							action.SetIgnoreArmor(true);
-							action.AddDamage(theGame.params.DAMAGE_NAME_PHYSICAL, damage );
+							//action.SetIgnoreArmor(true); //modSigns
+							damage = MaxF(250, 0.1 * ((CActor)victims[i]).GetMaxHealth()); //modSigns
+							//theGame.witcherLog.AddMessage("Tornado DoT: " + 0.1 * ((CActor)victims[i]).GetMaxHealth());
+							//theGame.witcherLog.AddMessage("Tornado DoT: " + damage);
+							action.AddDamage(theGame.params.DAMAGE_NAME_DIRECT, damage ); //modSigns
 							action.SetIsDoTDamage( damageInterval );
 							theGame.damageMgr.ProcessAction( action );
 							

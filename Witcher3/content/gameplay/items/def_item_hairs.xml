@@ -29,9 +29,14 @@
 					<variant equip_template="c_01_mg__witcher_br02">
 						<item>Bear Armor 2</item>
 						<item>Bear Armor 3</item>
+						<item>Bear Armor 4</item>
+						<item>Wolf Armor</item>
+						<item>Wolf Armor 1</item>
+						<item>Wolf Armor 2</item>
+						<item>Wolf Armor 3</item>
+						<item>Wolf Armor 4</item>
 					</variant>
 					<variant equip_template="c_01_mg__witcher_inq">
-						<item>q108 Medium armor 10</item>
 						<item>Medium armor 10</item>
 						<item>Medium armor 11</item>
 					</variant>
@@ -63,9 +68,14 @@
 					<variant equip_template="c_01_mg__witcher_br02">
 						<item>Bear Armor 2</item>
 						<item>Bear Armor 3</item>
+						<item>Bear Armor 4</item>
+						<item>Wolf Armor</item>
+						<item>Wolf Armor 1</item>
+						<item>Wolf Armor 2</item>
+						<item>Wolf Armor 3</item>
+						<item>Wolf Armor 4</item>
 					</variant>
 					<variant equip_template="c_01_mg__witcher_inq">
-						<item>q108 Medium armor 10</item>
 						<item>Medium armor 10</item>
 						<item>Medium armor 11</item>
 					</variant>
@@ -112,9 +122,14 @@
 						<item>Bear Armor 1</item>
 						<item>Bear Armor 2</item>
 						<item>Bear Armor 3</item>
+						<item>Bear Armor 4</item>
+						<item>Wolf Armor</item>
+						<item>Wolf Armor 1</item>
+						<item>Wolf Armor 2</item>
+						<item>Wolf Armor 3</item>
+						<item>Wolf Armor 4</item>
 					</variant>
 					<variant equip_template="c_03_mg__witcher_inq">
-						<item>q108 Medium armor 10</item>
 						<item>Medium armor 10</item>
 						<item>Medium armor 11</item>
 					</variant>

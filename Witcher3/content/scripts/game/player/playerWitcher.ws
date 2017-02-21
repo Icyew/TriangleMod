@@ -25,11 +25,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	private saved var booksRead 						: array<name>; 					
 	
+	private saved var enemiesKilledByType				: array<int>; //modSigns
+	
 	
 	private 			var fastAttackCounter, heavyAttackCounter	: int;		
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
-	private saved 		var cannotUseUndyingSkill : bool;						
+	//private saved 		var cannotUseUndyingSkill : bool;						
 	
 	
 	protected saved			var amountOfSetPiecesEquipped			: array<int>;
@@ -182,6 +184,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		itemSlots.Resize( EnumGetMax('EEquipmentSlots')+1 );
 
+		//modSigns
+		if( FactsQuerySum("ModSignsRecipesAdded") < 1 )
+		{
+			AddAlchemyRecipe('Recipe for Tawny Owl 1', true, true); // fix missing Tawny Owl recipe
+			AddCraftingSchematic('Meteorite plate schematic', true, true); //add missing meteorite plate schematic
+			FactsAdd("ModSignsRecipesAdded");
+		}
+		
 		if(!spawnData.restored)
 		{
 			levelManager = new W3LevelManager in this;			
@@ -294,7 +304,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		RemoveAbility('Ciri_Q501');
 		RemoveAbility('SkillCiri');
 		
-		if(spawnData.restored)
+		/*if(spawnData.restored)
 		{
 			RestoreQuen(savedQuenHealth, savedQuenDuration);			
 		}
@@ -302,7 +312,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			savedQuenHealth = 0.f;
 			savedQuenDuration = 0.f;
-		}
+		}*/ //modSigns: removed, params aren't saved properly anyway
+		savedQuenHealth = 0.f;
+		savedQuenDuration = 0.f;
 		
 		if(spawnData.restored)
 		{
@@ -336,8 +348,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		ResumeStaminaRegen('WhirlSkill');
+		ResumeStaminaRegen('RendSkill'); //modSigns
 		
-		if(HasAbility('Runeword 4 _Stats', true))
+		if(HasRunewordActive('Runeword 4 _Stats')) //modSigns
 			StartVitalityRegen();
 		
 		
@@ -346,12 +359,22 @@ statemachine class W3PlayerWitcher extends CR4Player
 			RemoveTemporarySkills();
 		}
 		
-		HACK_UnequipWolfLiver();
+		//HACK_UnequipWolfLiver(); //modSigns
+		
+		if( enemiesKilledByType.Size() == 0 )
+		{
+			enemiesKilledByType.Resize(EENT_MAX_TYPES);
+		}
 		
 		
 		if( HasBuff( EET_GryphonSetBonusYrden ) )
 		{
 			RemoveBuff( EET_GryphonSetBonusYrden, false, "GryphonSetBonusYrden" );
+		}
+		
+		if( HasBuff( EET_GryphonSetBonus ) ) //modSigns: remove this buff as it is no longer used
+		{
+			RemoveBuff( EET_GryphonSetBonus );
 		}
 		
 		if( spawnData.restored )
@@ -362,6 +385,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			RemoveBuff( EET_Mutation11Immortal );
 			RemoveBuff( EET_Mutation11Buff );
+			
+			//modSigns:
+			RemoveBuff( EET_UndyingSkillImmortal );
 		}
 		
 		
@@ -409,6 +435,31 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
+	public function IncKills( et : EEnemyType ) //modSigns
+	{
+		enemiesKilledByType[et] += 1;
+		//theGame.witcherLog.AddMessage(et + ": " + enemiesKilledByType[et]);
+	}
+	
+	public function GetKills( et : EEnemyType ) : int //modSigns
+	{
+		return enemiesKilledByType[et];
+	}
+	
+	public function GetExpModifierByEnemyType( et : EEnemyType ) : float //modSigns
+	{
+		switch(et)
+		{
+			case EENT_BOSS:
+				return 1;
+			case EENT_GENERIC:
+			case EENT_ANIMAL:
+				return 0;
+			default:
+				return 1 - MinF(100.0f, (float)GetKills(et))/100.0f;
+		}
+	}
+	
 	
 	
 	
@@ -434,12 +485,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		super.OnAbilityAdded(abilityName);
 		
-		if( HasAbility('Runeword 4 _Stats', true) )
+		if( HasRunewordActive('Runeword 4 _Stats') ) //modSigns
 		{
 			StartVitalityRegen();
 		}
 			
-		if ( abilityName == 'Runeword 8 _Stats' && GetStat(BCS_Focus, true) >= GetStatMax(BCS_Focus) && !HasBuff(EET_Runeword8) )
+		if ( HasRunewordActive('Runeword 8 _Stats') && GetStat(BCS_Focus, true) >= GetStatMax(BCS_Focus) && !HasBuff(EET_Runeword8) ) //modSigns
 		{
 			AddEffectDefault(EET_Runeword8, this, "equipped item");
 		}
@@ -711,6 +762,27 @@ statemachine class W3PlayerWitcher extends CR4Player
 			Patch_MutagenStacking();		
 			FactsAdd( "Patch_Mutagen_Ing_Stacking" );
 		}
+		
+		//modSigns
+		if( FactsQuerySum( "modSigns_S_Alchemy_s05_Fix" ) < 1 )
+		{
+			pam = (W3PlayerAbilityManager)abilityManager;
+			if( !pam.HasLearnedSkill( S_Alchemy_s05 ) )
+			{
+				pam.ResetAlchemy05SkillMaxLevel();
+				FactsAdd( "modSigns_S_Alchemy_s05_Fix" );
+			}
+		}
+		if( FactsQuerySum( "modSigns_S_Alchemy_s18_Fix" ) < 1 )
+		{
+			if( IsSkillEquipped( S_Alchemy_s18 ) )
+			{
+				slot = GetSkillSlotID( S_Alchemy_s18 );
+				UnequipSkill( slot );
+				EquipSkill( S_Alchemy_s18, slot );
+			}
+			FactsAdd( "modSigns_S_Alchemy_s18_Fix" );
+		}
 	}
 	
 	private final function Patch_MutagenStacking()
@@ -812,6 +884,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				restoredQuen.SetAlternateCast( S_Magic_s04 );
 			}
 			
+			restoredQuen.freeCast = true; //modSigns
 			restoredQuen.OnStarted();
 			restoredQuen.OnThrowing();
 			
@@ -1703,18 +1776,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var baseRepairValue		  	: float;
 		var reapirValue				: float;
 		var itemAttribute			: SAbilityAttributeValue;
+		var dmgBoost				: float; //modSigns
 		
 		itemMaxDurablity = inv.GetItemMaxDurability(usedOnItem);
 		itemCurrDurablity = inv.GetItemDurability(usedOnItem);
 		itemAttribute = inv.GetItemAttributeValue ( rapairKitId, 'repairValue' );
 		
-		if( itemCurrDurablity >= itemMaxDurablity )
+		/*if( itemCurrDurablity >= itemMaxDurablity )
 		{
 			return;
-		}
+		}*/ //modSigns
 		
 		if ( inv.IsItemAnyArmor ( usedOnItem )|| inv.IsItemWeapon( usedOnItem ) )
 		{			
+			//modSigns: master repair kits increase item level
+			if( inv.ItemHasTag( rapairKitId, 'ArmorReapairKit_Master' ) || inv.ItemHasTag( rapairKitId, 'WeaponReapairKit_Master' ) )
+			{
+				inv.AddItemLevelAbility( usedOnItem );
+				if( inv.ItemHasTag( usedOnItem, 'Aerondight' ) )
+				{
+					dmgBoost = inv.GetItemModifierFloat( usedOnItem, 'PermDamageBoost' );
+					if( dmgBoost > 10 )
+						inv.SetItemModifierFloat( usedOnItem, 'PermDamageBoost', dmgBoost - 10 );
+				}
+			}
 			
 			baseRepairValue = itemMaxDurablity * itemAttribute.valueMultiplicative;					
 			reapirValue = MinF( itemCurrDurablity + baseRepairValue, itemMaxDurablity );
@@ -1739,7 +1824,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 	public function IsItemRepairAble ( item : SItemUniqueId ) : bool
 	{
-		return inv.GetItemDurabilityRatio(item) <= 0.99999f;
+		return inv.HasItemDurability(item); //inv.GetItemDurabilityRatio(item) <= 0.99999f; //modSigns
 	}
 	
 	
@@ -1798,6 +1883,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	//modSigns: rewritten
 	function ReduceDamage(out damageData : W3DamageAction)
 	{
 		var actorAttacker : CActor;
@@ -1806,30 +1892,34 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var attackerMovementAdjustor : CMovementAdjustor;
 		var dist, distToAttacker, actionHeading, attackerHeading, currAdrenaline, adrenReducedDmg, focus : float;
 		var attackName : name;
-		var useQuenForBleeding : bool;
+		var isDodging : bool;
 		var min, max : SAbilityAttributeValue;
 		var skillLevel : int;
+		var chance : float;
 		
 		super.ReduceDamage(damageData);
 		
-		
-		
-		quen = (W3QuenEntity)signs[ST_Quen].entity;
-		useQuenForBleeding = false;
-		if(quen && !damageData.DealsAnyDamage() && ((W3Effect_Bleeding)damageData.causer) && damageData.GetDamageValue(theGame.params.DAMAGE_NAME_DIRECT) > 0.f)
-			useQuenForBleeding = true;
-		
-		
-		if(!useQuenForBleeding && !damageData.DealsAnyDamage())
+		//damage prevented in super
+		if(!damageData.DealsAnyDamage())
 			return;	
 		
+		quen = (W3QuenEntity)signs[ST_Quen].entity;
 		actorAttacker = (CActor)damageData.attacker;
 		
+		//modSigns: debug
+		//theGame.witcherLog.AddMessage("Attack can be dodged: " + (int)damageData.CanBeDodged());
+		//theGame.witcherLog.AddMessage("Player is dodging: " + (int)IsCurrentlyDodging());
+		//theGame.witcherLog.AddMessage("Is in combat action: " + (int)IsInCombatAction());
+		//theGame.witcherLog.AddMessage("Player action: " + GetBehaviorVariable( 'combatActionType' ));
 		
-		if(actorAttacker && IsCurrentlyDodging() && damageData.CanBeDodged())
+		//dodging
+		//modSigns: fix dodge detection bug
+		isDodging = IsCurrentlyDodging() || IsInCombatAction() && ((int)GetBehaviorVariable( 'combatActionType' ) == CAT_Dodge || (int)GetBehaviorVariable( 'combatActionType' ) == CAT_Roll);
+		//theGame.witcherLog.AddCombatMessage("Player is dodging mod: " + (int)isDodging, thePlayer, NULL);
+		//modSigns: make Fleet Footed reduce damage from non-dodgeable attacks.
+		if(actorAttacker && isDodging)
 		{
-			
-			
+			//check if we're dodging straight on attacker or +/- 30 degrees off. If so then the damage will not be prevented
 			actionHeading = evadeHeading;
 			attackerHeading = actorAttacker.GetHeading();
 			dist = AngleDistance(actionHeading, attackerHeading);
@@ -1837,8 +1927,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 			attackName = actorAttacker.GetLastAttackRangeName();
 			attackRange = theGame.GetAttackRangeForEntity( actorAttacker, attackName );
 			attackerMovementAdjustor = actorAttacker.GetMovingAgentComponent().GetMovementAdjustor();
-			if( ( AbsF(dist) < 150 && attackName != 'stomp' && attackName != 'anchor_special_far' && attackName != 'anchor_far' ) 
-				|| ( ( attackName == 'stomp' || attackName == 'anchor_special_far' || attackName == 'anchor_far' ) && distToAttacker > attackRange.rangeMax * 0.75 ) )
+			//modSigns: move CanBeDodged check here, so regular dodge won't help to avoid non-dodgeable attacks.
+			if( damageData.CanBeDodged() && ( ( AbsF(dist) < 150 && attackName != 'stomp' && attackName != 'anchor_special_far' && attackName != 'anchor_far' ) 
+				|| ( ( attackName == 'stomp' || attackName == 'anchor_special_far' || attackName == 'anchor_far' ) 
+					&& distToAttacker > attackRange.rangeMax * 0.75 ) ) )
 			{
 				if ( theGame.CanLog() )
 				{
@@ -1847,42 +1939,67 @@ statemachine class W3PlayerWitcher extends CR4Player
 				damageData.SetAllProcessedDamageAs(0);
 				damageData.SetWasDodged();
 			}
-			
-			else if( !damageData.IsActionEnvironment() && !damageData.IsDoTDamage() && CanUseSkill( S_Sword_s09 ) )
+			// S_sword_s9 - decrease damage while dodging
+			else if (!(damageData.IsActionEnvironment() || damageData.IsDoTDamage()) && CanUseSkill(S_Sword_s09))
 			{
-				skillLevel = GetSkillLevel( S_Sword_s09 );
-				if( skillLevel == GetSkillMaxLevel( S_Sword_s09 ) )
-				{
-					damageData.SetAllProcessedDamageAs(0);
-					damageData.SetWasDodged();
-				}
-				else
-				{
-					damageData.processedDmg.vitalityDamage *= 1 - CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, true)) * skillLevel;
-				}
-				
+				damageData.processedDmg.vitalityDamage *= ClampF( 1 - ( CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, true)) * GetSkillLevel(S_Sword_s09) ), 0, 1 );
 				if ( theGame.CanLog() )
 				{
 					LogDMHits("W3PlayerWitcher.ReduceDamage: skill S_Sword_s09 reduced damage while dodging", damageData );
 				}
+				//modSigns: if resulting damage is zero
+				if(damageData.processedDmg.vitalityDamage < 1)
+				{
+					damageData.processedDmg.vitalityDamage = 0;
+					damageData.SetAllProcessedDamageAs(0);
+					damageData.SetWasDodged();
+				}
 			}
 		}
 		
-		
-		if(quen && damageData.GetBuffSourceName() != "FallingDamage")
+		//modSigns: cast quen on projectile ability, moved here
+		if((!quen || !quen.IsAnyQuenActive()) && damageData.IsActionRanged() && !damageData.IsActionWitcherSign() && !damageData.IsDoTDamage() && !damageData.WasDodged())
+		{
+			chance = CalculateAttributeValue(GetAttributeValue('quen_chance_on_projectile'));
+			if(chance > 0)
+			{
+				chance = ClampF(chance, 0, 1);
+				
+				if(RandF() < chance)
+				{
+					if(!quen)
+					{
+						quen = (W3QuenEntity)theGame.CreateEntity(signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
+					}
+					quen.Init(signOwner, signs[ST_Quen].entity, true );
+					quen.freeCast = true;
+					quen.OnStarted();
+					quen.OnThrowing();
+					quen.OnEnded();
+					if ( theGame.CanLog() )
+					{		
+						LogDMHits("W3PlayerWitcher.ReduceDamage: Processing Quen On Projectile armor ability...", damageData);
+					}
+					quen.OnTargetHit( damageData );
+					damageData.SetEndsQuen(true);
+				}
+			}
+		}
+		//damage reduction from signs
+		else if((quen && quen.IsAnyQuenActive()) && damageData.GetBuffSourceName() != "FallingDamage")
 		{
 			if ( theGame.CanLog() )
 			{		
 				LogDMHits("W3PlayerWitcher.ReduceDamage: Processing Quen sign damage reduction...", damageData);
 			}
 			quen.OnTargetHit( damageData );
-		}	
+		}
 		
-		
+		//modSigns: gryphon set tier 2 damage reduction
 		if( HasBuff( EET_GryphonSetBonusYrden ) )
 		{
 			min = GetAttributeValue( 'gryphon_set_bns_dmg_reduction' );
-			damageData.processedDmg.vitalityDamage *= 1 - min.valueAdditive;
+			damageData.processedDmg.vitalityDamage *= ClampF(1 - min.valueAdditive, 0, 1);
 		}
 		
 		
@@ -1894,7 +2011,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation5', 'mut5_dmg_red_perc', min, max );
 				adrenReducedDmg = ( currAdrenaline * min.valueAdditive );
-				damageData.processedDmg.vitalityDamage *= 1 - adrenReducedDmg;
+				damageData.processedDmg.vitalityDamage *= ClampF(1 - adrenReducedDmg, 0, 1);
 				
 				
 				theGame.MutationHUDFeedback( MFT_PlayOnce );
@@ -1954,10 +2071,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
-	timer function UndyingSkillCooldown(dt : float, id : int)
+	/*timer function UndyingSkillCooldown(dt : float, id : int)
 	{
 		cannotUseUndyingSkill = false;
-	}
+	}*/
 	
 	event OnTakeDamage( action : W3DamageAction)
 	{
@@ -1967,11 +2084,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var abilityCount, maxStack, itemDurability : float;
 		var addAbility : bool;
 		var min, max : SAbilityAttributeValue;
-		var mutagenQuen : W3SignEntity;
+		//var mutagenQuen : W3SignEntity; //modSigns
 		var equipped : array<SItemUniqueId>;
 		var i : int;
 		var killSourceName : string;
 		var aerondight	: W3Effect_Aerondight;
+		var quen : W3QuenEntity; //modSigns
 	
 		currVitality = GetStat(BCS_Vitality);
 		
@@ -1983,27 +2101,28 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			if( killSourceName != "Quest" && killSourceName != "Kill Trigger" && killSourceName != "Trap" && killSourceName != "FallingDamage" )
 			{			
-				
-				if(!cannotUseUndyingSkill && FloorF(GetStat(BCS_Focus)) >= 1 && CanUseSkill(S_Sword_s18) && HasBuff(EET_BattleTrance) )
-				{
-					healingFactor = CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_factor', false, true) );
-					healingFactor *= GetStatMax(BCS_Vitality);
-					healingFactor *= GetStat(BCS_Focus);
-					healingFactor *= 1 + CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_bonus', false, true) ) * (GetSkillLevel(S_Sword_s18) - 1);
-					ForceSetStat(BCS_Vitality, GetStatMax(BCS_Vitality));
-					DrainFocus(GetStat(BCS_Focus));
-					RemoveBuff(EET_BattleTrance);
-					cannotUseUndyingSkill = true;
-					AddTimer('UndyingSkillCooldown', CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'trigger_delay', false, true) ), false, , , true);
-				}
-				
-				else if( IsMutationActive( EPMT_Mutation11 ) && !HasBuff( EET_Mutation11Debuff ) && !IsInAir() )
+				//modSigns: Second Live mutation will now have priority over Undying skill
+				if( IsMutationActive( EPMT_Mutation11 ) && !HasBuff( EET_Mutation11Debuff ) && !IsInAir() )
 				{
 					theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation11', 'health_prc', min, max );
 
 					action.SetAllProcessedDamageAs( 0 );
 					
 					OnMutation11Triggered();					
+				}
+				else if(/*!cannotUseUndyingSkill*/ !HasBuff( EET_UndyingSkillImmortal ) && !HasBuff( EET_UndyingSkillCooldown ) && GetStat(BCS_Focus) >= 1 && CanUseSkill(S_Sword_s18) /*&& HasBuff(EET_BattleTrance)*/ )
+				{
+					//healingFactor = CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_factor', false, true) );
+					//healingFactor *= GetStatMax(BCS_Vitality);
+					//healingFactor *= GetStat(BCS_Focus);
+					//healingFactor *= 1 + CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'healing_bonus', false, true) ) * (GetSkillLevel(S_Sword_s18) - 1);
+					action.SetAllProcessedDamageAs( 0 ); //modSigns
+					ForceSetStat(BCS_Vitality, 1); //modSigns: heal 1 point of damage
+					//DrainFocus(GetStat(BCS_Focus));
+					//RemoveBuff(EET_BattleTrance);
+					//cannotUseUndyingSkill = true;
+					AddEffectDefault( EET_UndyingSkillImmortal, NULL, "UndyingSkill" ); //modSigns: brief immortality
+					//AddTimer('UndyingSkillCooldown', CalculateAttributeValue( GetSkillAttributeValue(S_Sword_s18, 'trigger_delay', false, true) ), false, , , true);
 				}
 				else
 				{
@@ -2044,18 +2163,23 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 				
 		
-		if(HasBuff(EET_Mutagen19))
+		quen = (W3QuenEntity)signs[ST_Quen].entity; //modSigns
+		if(HasBuff(EET_Mutagen19) && (!quen || !quen.IsAnyQuenActive())) //modSigns
 		{
 			theGame.GetDefinitionsManager().GetAbilityAttributeValue(GetBuff(EET_Mutagen19).GetAbilityName(), 'max_hp_perc_trigger', min, max);
 			hpTriggerTreshold = GetStatMax(BCS_Vitality) * CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
 			
 			if(action.GetDamageDealt() >= hpTriggerTreshold)
 			{
-				mutagenQuen = (W3SignEntity)theGame.CreateEntity( signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
-				mutagenQuen.Init( signOwner, signs[ST_Quen].entity, true );
-				mutagenQuen.OnStarted();
-				mutagenQuen.OnThrowing();
-				mutagenQuen.OnEnded();
+				if(!quen) //modSigns
+				{
+					quen = (W3QuenEntity)theGame.CreateEntity( signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
+				}
+				quen.Init( signOwner, signs[ST_Quen].entity, true );
+				quen.freeCast = true; //modSigns
+				quen.OnStarted();
+				quen.OnThrowing();
+				quen.OnEnded();
 			}
 		}
 		
@@ -2199,18 +2323,21 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
-		
 		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && GetStat( BCS_Focus ) >= 3 && CanUseSkill( S_Alchemy_s07 ) )
 		{
 			monsterBonusType = MonsterCategoryToAttackPowerBonus( victimMonsterCategory );
 			oilBonus = inv.GetItemAttributeValue( weaponId, monsterBonusType );
 			if(oilBonus != null)	
 			{
-				bonus += GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
+				//bonus += GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
+				//modSigns: fix crit bonus
+				bonus += GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false) * GetSkillLevel(S_Alchemy_s07);
 			}
+			//combat log
+			//theGame.witcherLog.AddCombatMessage("Crit dmg bonus: " + FloatToString(bonus.valueAdditive), thePlayer, NULL);
 		}
 		
-		
+		// Mutagen 11 - back strike bonus
 		if (isStrikeAtBack && HasBuff(EET_Mutagen11))
 		{
 			mutagen = GetBuff(EET_Mutagen11);
@@ -2254,6 +2381,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var dm : CDefinitionsManagerAccessor;
 		var items : array<SItemUniqueId>;
 		var weaponEnt : CEntity;
+		var lynxSetBuff : W3Effect_LynxSetBonus; //modSigns
+		var min, max, nullBonus, oilBonus : SAbilityAttributeValue; //modSigns
+		var victimMonsterCategory : EMonsterCategory; //modSigns
+		var monsterBonusType : name; //modSigns
+		var tmpName : name; //modSigns
+		var tmpBool	: bool; //modSigns
 		
 		super.OnProcessActionPost(action);
 		
@@ -2267,13 +2400,17 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 				if(SkillNameToEnum(attackAction.GetAttackTypeName()) == S_Sword_s02)
 				{
-					rendLoad = GetSpecialAttackTimeRatio();
+					//rendLoad = GetSpecialAttackTimeRatio();
 					
 					
-					rendLoad = MinF(rendLoad * GetStatMax(BCS_Focus), GetStat(BCS_Focus));
+					//rendLoad = MinF(rendLoad * GetStatMax(BCS_Focus), GetStat(BCS_Focus));
 					
 					
-					rendLoad = FloorF(rendLoad);					
+					//rendLoad = FloorF(rendLoad);					
+					
+					//modSigns
+					rendLoad = GetSpecialAttackTimeRatio() * GetStat(BCS_Focus);
+
 					DrainFocus(rendLoad);
 					
 					OnSpecialAttackHeavyActionProcess();
@@ -2302,6 +2439,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 					}
 					
 					GainStat(BCS_Focus, 0.1f * (1 + CalculateAttributeValue(value)) );
+					
+					//modSigns: lynx set tier 2 bonus - doubled adrenaline gain for critical hits
+					if( attackAction.IsCriticalHit() && IsSetBonusActive( EISB_Lynx_2 ) && !inv.IsItemFists( attackAction.GetWeaponId() ) && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() )
+					{
+						GainStat(BCS_Focus, 0.1f * (1 + CalculateAttributeValue(value)) );
+					}
 				}
 				
 				
@@ -2334,7 +2477,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				}
 				
 				
-				if(!action.WasDodged() && HasAbility('Runeword 1 _Stats', true))
+				if(!action.WasDodged() && HasRunewordActive('Runeword 1 _Stats')) //modSigns
 				{
 					if(runewordInfusionType == ST_Axii)
 					{
@@ -2426,11 +2569,36 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}		
 		
 		
-		if( attackAction && IsHeavyAttack( attackAction.GetAttackName() ) && !IsUsingHorse() && attackAction.DealtDamage() && IsSetBonusActive( EISB_Lynx_1 ) && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() && ( inv.IsItemSteelSwordUsableByPlayer( attackAction.GetWeaponId() ) || inv.IsItemSilverSwordUsableByPlayer( attackAction.GetWeaponId() ) ) )
+		//modSigns: light attacks boosts heavy attacks and vice versa - lynx set bonus 1
+		if( attackAction && attackAction.IsActionMelee() && !IsUsingHorse() && attackAction.DealtDamage() && IsSetBonusActive( EISB_Lynx_1 ) && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() && ( inv.IsItemSteelSwordUsableByPlayer( attackAction.GetWeaponId() ) || inv.IsItemSilverSwordUsableByPlayer( attackAction.GetWeaponId() ) ) )
 		{
-			AddEffectDefault( EET_LynxSetBonus, NULL, "HeavyAttack" );
+			lynxSetBuff = (W3Effect_LynxSetBonus)GetBuff( EET_LynxSetBonus );
+			if( IsHeavyAttack( attackAction.GetAttackName() ) )
+			{
+				if( lynxSetBuff && lynxSetBuff.GetSourceName() == "LightAttack" )
+				{
+					RemoveEffect( lynxSetBuff );
+				}
+				AddEffectDefault( EET_LynxSetBonus, NULL, "HeavyAttack" );
+			}
+			else
+			{
+				if( lynxSetBuff && lynxSetBuff.GetSourceName() == "HeavyAttack" )
+				{
+					RemoveEffect( lynxSetBuff );
+				}
+				AddEffectDefault( EET_LynxSetBonus, NULL, "LightAttack" );
+			}
 			SoundEvent( "ep2_setskill_lynx_activate" );
 		}		
+		
+		//modSigns: move PhantomWeapon charging here
+		if( attackAction && attackAction.IsActionMelee() && inv.ItemHasTag( attackAction.GetWeaponId(), 'PhantomWeapon' )
+			&& IsLightAttack( attackAction.GetAttackName() ) && !IsUsingHorse()
+			&& attackAction.DealtDamage() && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() )
+		{
+			GetPhantomWeaponMgr().IncrementHitCounter();
+		}
 	}
 	
 	
@@ -2491,7 +2659,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	event OnCombatStart()
 	{
-		var quenEntity, glyphQuen : W3QuenEntity;
+		var quenEntity/*, glyphQuen*/ : W3QuenEntity; //modSigns
 		var focus, stamina : float;
 		var glowTargets, moTargets, actors : array< CActor >;
 		var delays : array< float >;
@@ -2555,15 +2723,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 
-		if ( HasAbility('Glyphword 17 _Stats', true) && RandF() < CalculateAttributeValue(GetAttributeValue('quen_apply_chance')) )
+		if ( HasGlyphwordActive('Glyphword 17 _Stats') && (!quenEntity || !quenEntity.IsAnyQuenActive()) && RandF() < CalculateAttributeValue(GetAttributeValue('quen_apply_chance')) ) //modSigns
 		{
-			stamina = GetStat(BCS_Stamina);
-			glyphQuen = (W3QuenEntity)theGame.CreateEntity( signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
-			glyphQuen.Init( signOwner, signs[ST_Quen].entity, true );
-			glyphQuen.OnStarted();
-			glyphQuen.OnThrowing();
-			glyphQuen.OnEnded();
-			ForceSetStat(BCS_Stamina, stamina);
+			//stamina = GetStat(BCS_Stamina); //modSigns
+			if(!quenEntity)
+			{
+				quenEntity = (W3QuenEntity)theGame.CreateEntity( signs[ST_Quen].template, GetWorldPosition(), GetWorldRotation() );
+			}
+			quenEntity.Init( signOwner, signs[ST_Quen].entity, true );
+			quenEntity.freeCast = true; //modSigns
+			quenEntity.OnStarted();
+			quenEntity.OnThrowing();
+			quenEntity.OnEnded();
+			//ForceSetStat(BCS_Stamina, stamina); //modSigns
 		}
 		
 		
@@ -2599,10 +2771,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		else if( IsMutationActive( EPMT_Mutation10 ) )
 		{
-			if( !HasBuff( EET_Mutation10 ) && GetStat( BCS_Toxicity ) > 0.f )
+			/*if( !HasBuff( EET_Mutation10 ) && GetStat( BCS_Toxicity ) > 0.f )
 			{
 				AddEffectDefault( EET_Mutation10, this, "Mutation 10" );
-			}
+			}*/
 			
 			
 			PlayEffect( 'mutation_10' );
@@ -2610,6 +2782,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			PlayEffect( 'critical_toxicity' );
 			AddTimer( 'Mutation10StopEffect', 5.f );
+			//modSigns
+			if( !HasBuff( EET_Mutation10 ) )
+			{
+				AddEffectDefault( EET_Mutation10, NULL, "Mutation 10" );
+			}
 		}
 	}
 	
@@ -2844,23 +3021,34 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		var mutagen17 : W3Mutagen17_Effect;
 		
+		//modSigns: check for mutagen17 activation
+		if(HasBuff(EET_Mutagen17))
+		{
+			mutagen17 = (W3Mutagen17_Effect)GetBuff(EET_Mutagen17);
+			if(mutagen17.IsBoostAvailable())
+			{
+				mutagen17.ActivateBoost();
+				//theGame.witcherLog.AddMessage("mutagen17 boost activated: attack"); //modSigns: debug
+			}
+		}
+		
 		super.Attack(hitTarget, animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity);
 		
-		if( (CActor)hitTarget && HasBuff(EET_Mutagen17) )
+		/*if( (CActor)hitTarget && HasBuff(EET_Mutagen17) )
 		{
 			mutagen17 = (W3Mutagen17_Effect)GetBuff(EET_Mutagen17);
 			if(mutagen17.HasBoost())
 			{
 				mutagen17.ClearBoost();
 			}
-		}
+		}*/ //modSigns: move to other place
 	}
 	
 	public final timer function SpecialAttackLightSustainCost(dt : float, id : int)
 	{
 		var focusPerSec, cost, delay : float;
 		var reduction : SAbilityAttributeValue;
-		var skillLevel : int;
+		//var skillLevel : int;
 		
 		if(abilityManager && abilityManager.IsInitialized() && IsAlive())
 		{
@@ -2870,13 +3058,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				cost = GetStaminaActionCost(ESAT_Ability, GetSkillAbilityName(S_Sword_s01), dt);
 				delay = GetStaminaActionDelay(ESAT_Ability, GetSkillAbilityName(S_Sword_s01), dt);
-				skillLevel = GetSkillLevel(S_Sword_s01);
+				/*skillLevel = GetSkillLevel(S_Sword_s01); //modSigns: remove stamina cost per level bonus
 				
 				if(skillLevel > 1)
 				{
 					reduction = GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, true) * (skillLevel - 1);
 					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive);
-				}
+				}*/
 				
 				DrainStamina(ESAT_FixedValue, cost, delay, GetSkillAbilityName(S_Sword_s01));
 			}
@@ -2898,13 +3086,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		var ability : SAbilityAttributeValue;
 		var val : float;
-		var skillLevel : int;
+		//var skillLevel : int;
 		
 		ability = GetSkillAttributeValue(S_Sword_s01, 'focus_cost_per_sec_initial', false, false);
-		skillLevel = GetSkillLevel(S_Sword_s01);
+		/*skillLevel = GetSkillLevel(S_Sword_s01); //modSigns: remove focus cost per level bonus
 		
 		if(skillLevel > 1)
-			ability -= GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, false) * (skillLevel-1);
+			ability -= GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, false) * (skillLevel-1);*/
 			
 		val = CalculateAttributeValue(ability);
 		
@@ -2917,6 +3105,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var hud : CR4ScriptedHud;
 		var hudWolfHeadModule : CR4HudModuleWolfHead;		
 
+		PauseStaminaRegen('RendSkill'); //modSigns
 		
 		DrainStamina(ESAT_Ability, 0, 0, GetSkillAbilityName(S_Sword_s02), dt);
 
@@ -2934,9 +3123,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		SetSpecialAttackTimeRatio(ratio);
 		
 		
-		focusHighlight = ratio * GetStatMax(BCS_Focus);
-		focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
-		focusHighlight = FloorF(focusHighlight);
+		//focusHighlight = ratio * GetStatMax(BCS_Focus);
+		//focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
+		//focusHighlight = FloorF(focusHighlight);
+		//modSigns
+		/*focusHighlight = FloorF(ratio * GetStat(BCS_Focus));
 		
 		hud = (CR4ScriptedHud)theGame.GetHud();
 		if ( hud )
@@ -2946,7 +3137,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				hudWolfHeadModule.LockFocusPoints((int)focusHighlight);
 			}		
-		}
+		}*/
 	}
 	
 	public function OnSpecialAttackHeavyActionProcess()
@@ -3036,6 +3227,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if( (bufferAction == EBAT_Dodge && IsActionAllowed(EIAB_Dodge)) || (bufferAction == EBAT_Roll && IsActionAllowed(EIAB_Roll)) )
 		{
+			//modSigns: check for stamina
+			if( bufferAction == EBAT_Dodge && !HasStaminaToUseAction(ESAT_Dodge, '', 0, 0 ) ||
+				bufferAction == EBAT_Roll && !HasStaminaToUseAction(ESAT_Roll, '', 0, 0 ) )
+			{
+				thePlayer.SoundEvent("gui_no_stamina");
+				return;
+			}
 			
 			if(bufferAction != EBAT_Roll && ShouldProcessTutorial('TutorialDodge'))
 			{
@@ -3915,15 +4113,14 @@ statemachine class W3PlayerWitcher extends CR4Player
 				break;
 			
 			case EPMT_Mutation6 :	
-				
+				//modSigns: raw and total damage
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'full_freeze_chance', min, max );
-				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );	
-				
-				
+				arrStr.PushBack( RoundMath( 100 * min.valueMultiplicative ) );
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation6', 'ForceDamage', min, max );
+				val = CalculateAttributeValue( min );
+				arrStr.PushBack( RoundMath( val ) );
 				sp = GetTotalSignSpellPower( S_Magic_1 );
-				val = sp.valueAdditive + sp.valueMultiplicative * ( sp.valueBase + min.valueAdditive );
-				arrStr.PushBack( NoTrailZeros( RoundMath( val ) ) );	
+				arrStr.PushBack( RoundMath( val * sp.valueMultiplicative ) );
 			
 				break;
 				
@@ -3975,16 +4172,20 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 				
 				
-				stats = GetOffenseStatsList( 1 );
-				arrStr.PushBack( NoTrailZeros( RoundMath( stats.crossbowSteelDmg ) ) );
+				//stats = GetOffenseStatsList( 1 ); //modSigns
+				//arrStr.PushBack( NoTrailZeros( RoundMath( stats.crossbowSteelDmg ) ) );
 				
 				
-				stats2 = GetOffenseStatsList( 2 );
-				arrStr.PushBack( NoTrailZeros( RoundMath( stats2.crossbowSteelDmg ) ) );
+				//stats2 = GetOffenseStatsList( 2 ); //modSigns
+				//arrStr.PushBack( NoTrailZeros( RoundMath( stats2.crossbowSteelDmg ) ) );
 				
 				
 				dm.GetAbilityAttributeValue( 'Mutation9', 'critical_hit_chance', min, max );
 				arrStr.PushBack( NoTrailZeros( 100 * min.valueMultiplicative ) );
+				
+				//modSigns: crit damage
+				dm.GetAbilityAttributeValue( 'Mutation9', 'critical_damage', min, max );
+				arrStr.PushBack( NoTrailZeros( 100 * min.valueAdditive ) );
 				
 				
 				dm.GetAbilityAttributeValue( 'Mutation9', 'health_reduction', min, max );
@@ -4169,7 +4370,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(CanUseSkill(S_Alchemy_s18))
 		{
-			if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+			//modSigns
+			//if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
+			if(IsAlchemy18Recipe(recipe.cookedItemType) && recipe.level <= GetSkillLevel(S_Alchemy_s18))
 				AddAbility(SkillEnumToName(S_Alchemy_s18), true);
 			
 		}
@@ -4499,7 +4702,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		GetItemEquippedOnSlot(slot, item);
 		if(inv.ItemHasTag(item, 'Edibles'))
 		{
-			ConsumeItem( item );
+			//modSigns
+			if(inv.ItemHasTag(item, 'Alcohol') || inv.ItemHasTag(item, 'Uncooked'))
+			{
+				if(ToxicityLowEnoughToDrinkPotion(slot))
+					ConsumeItem(item);
+				else
+					SendToxicityTooHighMessage();
+			}
+			else
+				ConsumeItem(item);
 		}
 		else
 		{			
@@ -5821,7 +6033,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			retBool = true;
 		}		
 		
-		if(retBool && !reequipped)
+		/*if(retBool && !reequipped)
 		{
 			theTelemetry.LogWithLabelAndValue( TE_INV_ITEM_UNEQUIPPED, inv.GetItemName(item), slot );
 			
@@ -5839,7 +6051,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if( !IsAnyItemEquippedOnSlot(EES_Armor) && !IsAnyItemEquippedOnSlot(EES_Gloves) && !IsAnyItemEquippedOnSlot(EES_Boots) && !IsAnyItemEquippedOnSlot(EES_Pants))
 					RemoveBuff(EET_EnhancedArmor);
 			}
-		}
+		}*/ //modSigns: removed
 		
 		
 		if(inv.ItemHasAbility(item, 'MA_HtH'))
@@ -5948,6 +6160,102 @@ statemachine class W3PlayerWitcher extends CR4Player
 				
 		return false;
 	}
+	
+	//---=== modPreparations ===---
+	//Not actually used by Preparations (bCrafter == false), but needed for Ghost Mode compatibility
+	//Used by Ghost Mode to allow using stash items for crafting and alchemy
+	public function GetItemQuantityByNameForCrafting(itemName : name, bCrafter : bool) : int
+	{
+		if( bCrafter ) //blacksmith/armorer/alchemist/herbalist
+		{
+			return inv.GetItemQuantityByName(itemName) + GetHorseManager().GetInventoryComponent().GetItemQuantityByName(itemName);
+		}
+		return inv.GetItemQuantityByName(itemName);
+	}
+	
+	public function GetMutagenQuantityByNameForCrafting(itemName : name, bCrafter : bool) : int
+	{
+		if( bCrafter ) //blacksmith/armorer/alchemist/herbalist
+		{
+			return inv.GetUnusedMutagensCount(itemName) + GetHorseManager().GetInventoryComponent().GetItemQuantityByName(itemName);
+		}
+		return inv.GetUnusedMutagensCount(itemName);
+	}
+	
+	public function RemoveItemByNameForCrafting(itemName : name, quantity : int, bCrafter : bool) : bool
+	{
+		var playerQuantity, horseQuantity, quantityToRemove, removedQuantity : int;
+		if( bCrafter ) //blacksmith/armorer/alchemist/herbalist
+		{
+			quantityToRemove = quantity;
+			playerQuantity = inv.GetItemQuantityByName(itemName);
+			if( playerQuantity < quantityToRemove )
+			{
+				quantityToRemove = playerQuantity;
+			}
+			if( quantityToRemove > 0 && inv.RemoveItemByName(itemName, quantityToRemove) )
+			{
+				removedQuantity = quantityToRemove;
+			}
+			quantityToRemove = quantity - removedQuantity;
+			if( quantityToRemove > 0 )
+			{
+				horseQuantity = GetHorseManager().GetInventoryComponent().GetItemQuantityByName(itemName);
+				if( horseQuantity < quantityToRemove )
+				{
+					quantityToRemove = horseQuantity;
+				}
+				if( quantityToRemove > 0 && GetHorseManager().GetInventoryComponent().RemoveItemByName(itemName, quantityToRemove) )
+				{
+					removedQuantity += quantityToRemove;
+				}
+			}
+			if( removedQuantity == quantity )
+			{
+				return true;
+			}
+			return false;
+		}
+		return inv.RemoveItemByName(itemName, quantity);
+	}
+	
+	public function RemoveMutagenByNameForCrafting(itemName : name, quantity : int, bCrafter : bool) : bool
+	{
+		var playerQuantity, horseQuantity, quantityToRemove, removedQuantity : int;
+		if( bCrafter ) //blacksmith/armorer/alchemist/herbalist
+		{
+			quantityToRemove = quantity;
+			playerQuantity = inv.GetUnusedMutagensCount(itemName);
+			if( playerQuantity < quantityToRemove )
+			{
+				quantityToRemove = playerQuantity;
+			}
+			if( quantityToRemove > 0 && inv.RemoveUnusedMutagensCount(itemName, quantityToRemove) )
+			{
+				removedQuantity = quantityToRemove;
+			}
+			quantityToRemove = quantity - removedQuantity;
+			if( quantityToRemove > 0 )
+			{
+				horseQuantity = GetHorseManager().GetInventoryComponent().GetItemQuantityByName(itemName);
+				if( horseQuantity < quantityToRemove )
+				{
+					quantityToRemove = horseQuantity;
+				}
+				if( quantityToRemove > 0 && GetHorseManager().GetInventoryComponent().RemoveItemByName(itemName, quantityToRemove) )
+				{
+					removedQuantity += quantityToRemove;
+				}
+			}
+			if( removedQuantity == quantity )
+			{
+				return true;
+			}
+			return false;
+		}
+		return inv.RemoveUnusedMutagensCount(itemName, quantity);
+	}
+	//---=== modPreparations ===---
 	
 	public function GetMaxRunEncumbrance(out usesHorseBonus : bool) : float
 	{
@@ -6316,6 +6624,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var spawnPos : Vector;
 		var slotMatrix : Matrix;
 		var target : CActor;
+		var mutagen17 : W3Mutagen17_Effect; //modSigns
 		
 		if ( IsInAir() )
 		{
@@ -6323,6 +6632,17 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		AddTemporarySkills();
+		
+		//modSigns: check for mutagen17 activation
+		if(HasBuff(EET_Mutagen17))
+		{
+			mutagen17 = (W3Mutagen17_Effect)GetBuff(EET_Mutagen17);
+			if(mutagen17.IsBoostAvailable())
+			{
+				mutagen17.ActivateBoost();
+				//theGame.witcherLog.AddMessage("mutagen17 boost activated: sign"); //modSigns: debug
+			}
+		}
 		
 		
 		
@@ -6403,7 +6723,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 		isInFrenzy = true;
 		skillLevel = GetSkillLevel(S_Alchemy_s16);
-		ratio = 0.48f - skillLevel * CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s16, 'slowdown_ratio', false, true));
+		//modSigns: direct slowdown percentage
+		ratio = 1.0f - skillLevel * CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s16, 'slowdown_ratio', false, true));
 		duration = skillLevel * CalculateAttributeValue(GetSkillAttributeValue(S_Alchemy_s16, 'slowdown_duration', false, true));
 	
 		theGame.SetTimeScale(ratio, theGame.GetTimescaleSource(ETS_SkillFrenzy), theGame.GetTimescalePriority(ETS_SkillFrenzy) );
@@ -6470,7 +6791,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 			mutagenSkillMod = val.valueMultiplicative * GetSkillLevel(S_Alchemy_s14);
 		}
 		
-		duration = duration * (1 + skillPassiveMod + mutagenSkillMod);
+		//modSigns: don't add passive skill mod to mutagen potions
+		//duration = duration * (1 + skillPassiveMod + mutagenSkillMod);
+		if(isMutagenPotion)
+			duration = duration * (1 + mutagenSkillMod);
+		else
+			duration = duration * (1 + skillPassiveMod);
 		
 		return duration;
 	}
@@ -6607,7 +6933,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			potionParams.buffSpecificParams = mutagenParams;
 			
-			if( IsMutationActive( EPMT_Mutation10 ) && !HasBuff( EET_Mutation10 ) )
+			if( IsMutationActive( EPMT_Mutation10 ) && !HasBuff( EET_Mutation10 ) && IsInCombat() ) //modSigns
 			{
 				AddEffectDefault( EET_Mutation10, this, "Mutation 10" );
 			}
@@ -6712,7 +7038,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		randomPotions.PushBack( EET_Blizzard );
 		randomPotions.PushBack( EET_FullMoon );
 		randomPotions.PushBack( EET_GoldenOriole );
-		randomPotions.PushBack( EET_KillerWhale );
+		//randomPotions.PushBack( EET_KillerWhale ); //modSigns
 		randomPotions.PushBack( EET_MariborForest );
 		randomPotions.PushBack( EET_PetriPhiltre );
 		randomPotions.PushBack( EET_Swallow );
@@ -6843,20 +7169,37 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var item : SItemUniqueId;
 		var hasRuneword : bool;
 		
-		if(GetItemEquippedOnSlot(EES_SteelSword, item))
+		hasRuneword = false;
+		
+		if(GetItemEquippedOnSlot(EES_SteelSword, item) && (IsItemHeld(item) || abilityName == 'Runeword 5 _Stats' || abilityName == 'Runeword 6 _Stats')) //modSigns: only drawn sword (or equipped - for runeword 5 and 6)
 		{
 			hasRuneword = inv.ItemHasAbility(item, abilityName);				
 		}
 		
 		if(!hasRuneword)
 		{
-			if(GetItemEquippedOnSlot(EES_SilverSword, item))
+			if(GetItemEquippedOnSlot(EES_SilverSword, item) && (IsItemHeld(item) || abilityName == 'Runeword 5 _Stats' || abilityName == 'Runeword 6 _Stats')) //modSigns: only drawn sword (or equipped - for runeword 5 and 6)
 			{
 				hasRuneword = inv.ItemHasAbility(item, abilityName);
 			}
 		}
 		
 		return hasRuneword;
+	}
+	
+	public final function HasGlyphwordActive(abilityName : name) : bool //modSigns
+	{
+		var item : SItemUniqueId;
+		var hasGlyphword : bool;
+		
+		hasGlyphword = false;
+		
+		if(GetItemEquippedOnSlot(EES_Armor, item))
+		{
+			hasGlyphword = inv.ItemHasAbility(item, abilityName);
+		}
+		
+		return hasGlyphword;
 	}
 	
 	public final function GetShrineBuffs() : array<CBaseGameplayEffect>
@@ -6875,13 +7218,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		added = false;
 		
-		if(weapon && (IsAnyItemEquippedOnSlot(EES_SilverSword) || IsAnyItemEquippedOnSlot(EES_SteelSword)) )
+		if(weapon /*&& (IsAnyItemEquippedOnSlot(EES_SilverSword) || IsAnyItemEquippedOnSlot(EES_SteelSword))*/ ) //modSigns: restrictions removed
 		{
 			AddEffectDefault(EET_EnhancedWeapon, this, "repair_object", false);
 			added = true;
 		}
 		
-		if(armor && (IsAnyItemEquippedOnSlot(EES_Armor) || IsAnyItemEquippedOnSlot(EES_Gloves) || IsAnyItemEquippedOnSlot(EES_Boots) || IsAnyItemEquippedOnSlot(EES_Pants)) )
+		if(armor /*&& (IsAnyItemEquippedOnSlot(EES_Armor) || IsAnyItemEquippedOnSlot(EES_Gloves) || IsAnyItemEquippedOnSlot(EES_Boots) || IsAnyItemEquippedOnSlot(EES_Pants))*/ ) //modSigns: restrictions removed
 		{
 			AddEffectDefault(EET_EnhancedArmor, this, "repair_object", false);
 			added = true;
@@ -7206,10 +7549,25 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	event OnCombatActionEnd()
 	{
+		var mutagen17 : W3Mutagen17_Effect; //modSigns
+
+		//theGame.witcherLog.AddMessage("OnCombatActionEnd"); //modSigns: debug
+
 		this.CleanCombatActionBuffer();		
 		super.OnCombatActionEnd();
 		
 		RemoveTemporarySkills();
+		
+		//modSigns: clear mutagen17 effect
+		if(HasBuff(EET_Mutagen17))
+		{
+			mutagen17 = (W3Mutagen17_Effect)GetBuff(EET_Mutagen17);
+			if(mutagen17.HasBoost())
+			{
+				mutagen17.ClearBoost();
+				//theGame.witcherLog.AddMessage("mutagen17 boost removed"); //modSigns: debug
+			}
+		}
 	}
 	
 	event OnCombatActionFriendlyEnd()
@@ -7230,7 +7588,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		
 		result = super.GetPowerStatValue( stat, ablName, ignoreDeath );
-		ApplyMutation10StatBoost( result );
+		//modSigns: W3DamageAction.GetPowerStatValue calls for actor.GetPowerStatValue twice:
+		//second time with attackName as ablName to obtain attack specific boosts, so Euphoria boost ends up
+		//being applied twice. Character stats for popup menu don't use ablName as there is no attack and no attackName,
+		//so bonus is displayed properly there, but gets doubled when actual damage is calculated in combat.
+		//To fix this we need to check for non-ability specific calls:
+		if( !IsNameValid(ablName) && stat != CPS_Undefined )
+			ApplyMutation10StatBoost( result );
 		
 		return result;
 	}
@@ -7370,26 +7734,48 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 
+	//modSigns: chance to ignore hit anim
+	public function GetChanceToIgnoreHitAnim() : float
+	{
+		var armorPieces : array<int>;
+		
+		inv.CountArmorPieces(armorPieces);
+		return armorPieces[0] * 0 + armorPieces[1] * 2.5 + armorPieces[2] * 10;
+	}
+	
 	public function ReactToBeingHit(damageAction : W3DamageAction, optional buffNotApplied : bool) : bool
 	{
 		var chance : float;
 		var procQuen : W3SignEntity;
+		var quen : W3QuenEntity; //modSigns
 		
-		if(!damageAction.IsDoTDamage() && damageAction.DealsAnyDamage())
+		//modSigns: chance to ignore hit anim
+		chance = GetChanceToIgnoreHitAnim();
+		quen = (W3QuenEntity)signs[ST_Quen].entity;
+		//theGame.witcherLog.AddMessage("Chance to ignore hit anim: " + chance); //modSigns: debug
+		if(RandF() * 100 < chance && !quen.IsAnyQuenActive() || IsDoingSpecialAttack(false))
 		{
-			if(inv.IsItemBomb(selectedItemId))
+			damageAction.SetHitAnimationPlayType(EAHA_ForceNo);
+			//theGame.witcherLog.AddMessage("Hit anim was ignored!"); //modSigns: debug
+		}
+		
+		if(IsThrowingItem() || IsThrowingItemWithAim()) //modSigns: no need to abort throwing if not in fact throwing
+		{
+			if(!damageAction.IsDoTDamage() && damageAction.DealsAnyDamage() && damageAction.GetHitAnimationPlayType() != EAHA_ForceNo) //modSigns
 			{
-				BombThrowAbort();
+				if(inv.IsItemBomb(selectedItemId))
+				{
+					BombThrowAbort();
+				}
+				else
+				{
+					ThrowingAbort();
+				}			
 			}
-			else
-			{
-				
-				ThrowingAbort();
-			}			
-		}		
+		}
 		
 		
-		if(damageAction.IsActionRanged())
+		/*if(damageAction.IsActionRanged())
 		{
 			chance = CalculateAttributeValue(GetAttributeValue('quen_chance_on_projectile'));
 			if(chance > 0)
@@ -7405,15 +7791,15 @@ statemachine class W3PlayerWitcher extends CR4Player
 					procQuen.OnEnded();
 				}
 			}
-		}
+		}*/ //modSigns: moved to reduce damage
 		
 		
 		if( !((W3Effect_Toxicity)damageAction.causer) )
 			MeditationForceAbort(true);
 		
 		
-		if(IsDoingSpecialAttack(false))
-			damageAction.SetHitAnimationPlayType(EAHA_ForceNo);
+		/*if(IsDoingSpecialAttack(false))
+			damageAction.SetHitAnimationPlayType(EAHA_ForceNo);*/ //modSigns: moved up
 		
 		return super.ReactToBeingHit(damageAction, buffNotApplied);
 	}
@@ -7421,7 +7807,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	protected function ShouldPauseHealthRegenOnHit() : bool
 	{
 		
-		if( ( HasBuff( EET_Swallow ) && GetPotionBuffLevel( EET_Swallow ) >= 3 ) || HasBuff( EET_Runeword8 ) || HasBuff( EET_Mutation11Buff ) )
+		if( ( HasBuff( EET_Swallow ) && GetPotionBuffLevel( EET_Swallow ) >= 3 ) || HasBuff( EET_Runeword8 ) || HasBuff( EET_Mutation11Buff ) || HasBuff( EET_UndyingSkillImmortal ) ) //modSigns
 		{
 			return false;
 		}
@@ -7591,306 +7977,295 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	//modSigns: redone
 	public final function CalculatedArmorStaminaRegenBonus() : float
 	{
 		var armorEq, glovesEq, pantsEq, bootsEq : bool;
-		var tempItem : SItemUniqueId;
+		var armorId, glovesId, pantsId, bootsId : SItemUniqueId;
 		var staminaRegenVal : float;
 		var armorRegenVal : SAbilityAttributeValue;
 		
-		if( HasAbility( 'Glyphword 2 _Stats', true ) )
-		{
-			armorEq = inv.GetItemEquippedOnSlot( EES_Armor, tempItem );
-			glovesEq = inv.GetItemEquippedOnSlot( EES_Gloves, tempItem );
-			pantsEq = inv.GetItemEquippedOnSlot( EES_Pants, tempItem );
-			bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, tempItem );
-			
-			if ( armorEq )
-				staminaRegenVal += 0.1;
-			if ( glovesEq )
-				staminaRegenVal += 0.02;
-			if ( pantsEq )
-				staminaRegenVal += 0.1;
-			if ( bootsEq )
-				staminaRegenVal += 0.03;
-			
-		}
-		else if( HasAbility( 'Glyphword 3 _Stats', true ) )
-		{
-			staminaRegenVal = 0;
-		}
-		else if( HasAbility( 'Glyphword 4 _Stats', true ) )
-		{
-			armorEq = inv.GetItemEquippedOnSlot( EES_Armor, tempItem );
-			glovesEq = inv.GetItemEquippedOnSlot( EES_Gloves, tempItem );
-			pantsEq = inv.GetItemEquippedOnSlot( EES_Pants, tempItem );
-			bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, tempItem );
-			
-			if ( armorEq )
-				staminaRegenVal -= 0.1;
-			if ( glovesEq )
-				staminaRegenVal -= 0.02;
-			if ( pantsEq )
-				staminaRegenVal -= 0.1;
-			if ( bootsEq )
-				staminaRegenVal -= 0.03;
-		}
-		else
-		{
-			armorRegenVal = GetAttributeValue('staminaRegen_armor_mod');
-			staminaRegenVal = armorRegenVal.valueMultiplicative;
-		}
+		//base armor stamina regen bonus/penalty
+		armorRegenVal = GetAttributeValue('staminaRegen_armor_mod');
+		staminaRegenVal = armorRegenVal.valueMultiplicative;
+
+		//equipped pieces
+		armorEq = inv.GetItemEquippedOnSlot( EES_Armor, armorId );
+		glovesEq = inv.GetItemEquippedOnSlot( EES_Gloves, glovesId );
+		pantsEq = inv.GetItemEquippedOnSlot( EES_Pants, pantsId );
+		bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, bootsId );
 		
+		//glyphwords change stamina, not replace it
+		if( HasGlyphwordActive( 'Glyphword 2 _Stats' ) )
+		{
+			if ( armorEq && !inv.ItemHasTag(armorId, 'LightArmor') )
+				staminaRegenVal += 0.07;
+			if ( glovesEq && !inv.ItemHasTag(glovesId, 'LightArmor') )
+				staminaRegenVal += 0.01;
+			if ( pantsEq && !inv.ItemHasTag(pantsId, 'LightArmor') )
+				staminaRegenVal += 0.01;
+			if ( bootsEq && !inv.ItemHasTag(bootsId, 'LightArmor') )
+				staminaRegenVal += 0.01;
+		}
+		else if( HasGlyphwordActive( 'Glyphword 3 _Stats' ) )
+		{
+		}
+		else if( HasGlyphwordActive( 'Glyphword 4 _Stats' ) )
+		{
+			if ( armorEq && !inv.ItemHasTag(armorId, 'HeavyArmor') )
+				staminaRegenVal -= 0.20;
+			if ( glovesEq && !inv.ItemHasTag(glovesId, 'HeavyArmor') )
+				staminaRegenVal -= 0.025;
+			if ( pantsEq && !inv.ItemHasTag(pantsId, 'HeavyArmor') )
+				staminaRegenVal -= 0.025;
+			if ( bootsEq && !inv.ItemHasTag(bootsId, 'HeavyArmor') )
+				staminaRegenVal -= 0.05;
+		}
+
+		//stamina regen bonus for missing armor pieces
+		if ( !armorEq )
+			staminaRegenVal += 0.11;
+		if ( !glovesEq )
+			staminaRegenVal += 0.02;
+		if ( !pantsEq )
+			staminaRegenVal += 0.03;
+		if ( !bootsEq )
+			staminaRegenVal += 0.04;
+		
+		//debug
+		//theGame.witcherLog.AddMessage( "staminaRegenVal = " + staminaRegenVal );
+
 		return staminaRegenVal;
 	}
 	
+	//modSigns: reworked
 	public function GetOffenseStatsList( optional hackMode : int ) : SPlayerOffenseStats
 	{
-		var playerOffenseStats:SPlayerOffenseStats;
+		var playerOffenseStats : SPlayerOffenseStats;
+		var min, max, value : SAbilityAttributeValue;
+		var attackPower : SAbilityAttributeValue;
+		var fastAPBonus, strongAPBonus, steelAPBonus, silverAPBonus : SAbilityAttributeValue;
+		var critChance, critPowerBonus, fastCritChanceBonus, strongCritChanceBonus, fastCritPowerBonus, strongCritPowerBonus : float;
+		var steelCritChanceBonus, silverCritChanceBonus, steelCritPowerBonus, silverCritPowerBonus : float;
 		var steelDmg, silverDmg, elementalSteel, elementalSilver : float;
-		var steelCritChance, steelCritDmg : float;
-		var silverCritChance, silverCritDmg : float;
-		var attackPower	: SAbilityAttributeValue;
-		var fastCritChance, fastCritDmg : float;
-		var strongCritChance, strongCritDmg : float;
-		var fastAP, strongAP, min, max : SAbilityAttributeValue;
-		var item, crossbow : SItemUniqueId;
-		var value : SAbilityAttributeValue;
+		var attackPowerCrossbow : SAbilityAttributeValue;
+		var silverSword, steelSword, crossbow, bolt : SItemUniqueId;
 		var mutagen : CBaseGameplayEffect;
 		var thunder : W3Potion_Thunderbolt;
+		var strongDmgMult, bonusDmgMult, bonusDmgMultCrossbow, bonusDmgMultSteel, bonusDmgMultSilver : float;
+		var steelFastAP, silverFastAP, steelStrongAP, silverStrongAP, steelFastCritAP, silverFastCritAP, steelStrongCritAP, silverStrongCritAP : SAbilityAttributeValue;
+		var steelFastCritChance, silverFastCritChance, steelStrongCritChance, silverStrongCritChance : float;
 		
 		if(!abilityManager || !abilityManager.IsInitialized())
 			return playerOffenseStats;
 		
+		//base damage increase for heavy attacks
+		value = GetSkillAttributeValue(S_Sword_2, 'heavy_attack_dmg_boost', false, true);
+		strongDmgMult = 1 + value.valueMultiplicative;
+
+		//generic bonuses
+		attackPower = GetPowerStatValue(CPS_AttackPower);
+		critChance = CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
+		critPowerBonus = CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+		
+		//attack type specific bonuses
+		fastAPBonus = GetSkillAttributeValue(S_Sword_1, PowerStatEnumToName(CPS_AttackPower), false, true);
+		strongAPBonus = GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
 		if (CanUseSkill(S_Sword_s21))
-			fastAP += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
-		if (CanUseSkill(S_Perk_05))
-		{
-			fastAP += GetAttributeValue('attack_power_fast_style');
-			fastCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
-			strongCritDmg += CalculateAttributeValue(GetAttributeValue('critical_hit_chance_fast_style'));
-		}
+			fastAPBonus += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		if (CanUseSkill(S_Sword_s04))
-			strongAP += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
-		if (CanUseSkill(S_Perk_07))
-			strongAP +=	GetAttributeValue('attack_power_heavy_style');
-			
+			strongAPBonus += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
 		if (CanUseSkill(S_Sword_s17)) 
 		{
-			fastCritChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
-			fastCritDmg += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
+			fastCritChanceBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
+			fastCritPowerBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
 		}
-		
 		if (CanUseSkill(S_Sword_s08)) 
 		{
-			strongCritChance += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
-			strongCritDmg += CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);
+			strongCritChanceBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
+			strongCritPowerBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);
 		}
 		
-		if ( HasBuff(EET_Mutagen05) && (GetStat(BCS_Vitality) == GetStatMax(BCS_Vitality)) )
+		//steel sword specific bonuses
+		if (GetItemEquippedOnSlot(EES_SteelSword, steelSword))
 		{
-			attackPower += GetAttributeValue('damageIncrease');
-		}
-		
-		steelCritChance += CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
-		silverCritChance += CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_CHANCE));
-		steelCritDmg += CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-		silverCritDmg += CalculateAttributeValue(GetAttributeValue(theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-		attackPower += GetPowerStatValue(CPS_AttackPower);
-		
-		if (GetItemEquippedOnSlot(EES_SteelSword, item))
-		{
-			steelDmg = GetTotalWeaponDamage(item, theGame.params.DAMAGE_NAME_SLASHING, GetInvalidUniqueId());
-			steelDmg += GetTotalWeaponDamage(item, theGame.params.DAMAGE_NAME_PIERCING, GetInvalidUniqueId());
-			steelDmg += GetTotalWeaponDamage(item, theGame.params.DAMAGE_NAME_BLUDGEONING, GetInvalidUniqueId());
-			elementalSteel = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_FIRE));
-			elementalSteel += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_FROST)); 
-			if ( GetInventory().IsItemHeld(item) )
+			steelDmg = GetTotalWeaponDamage(steelSword, theGame.params.DAMAGE_NAME_SLASHING, GetInvalidUniqueId());
+			steelDmg += GetTotalWeaponDamage(steelSword, theGame.params.DAMAGE_NAME_PIERCING, GetInvalidUniqueId());
+			steelDmg += GetTotalWeaponDamage(steelSword, theGame.params.DAMAGE_NAME_BLUDGEONING, GetInvalidUniqueId());
+			elementalSteel = CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.DAMAGE_NAME_FIRE));
+			elementalSteel += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.DAMAGE_NAME_FROST)); 
+			elementalSteel += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.DAMAGE_NAME_POISON)); //modSigns
+			//weapon bonuses are added OnHold, so we need to retrieve them specifically if we want to show them
+			if (!GetInventory().IsItemHeld(steelSword))
 			{
-				steelCritChance -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-				silverCritChance -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-				steelCritDmg -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-				silverCritDmg -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+				steelCritChanceBonus += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.CRITICAL_HIT_CHANCE));
+				steelCritPowerBonus += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+				steelAPBonus += GetInventory().GetItemAttributeValue(steelSword, 'attack_power');
 			}
-			steelCritChance += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-			steelCritDmg += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-			
-			thunder = (W3Potion_Thunderbolt)GetBuff(EET_Thunderbolt);
-			if(thunder && thunder.GetBuffLevel() == 3 && GetCurWeather() == EWE_Storm)
+			//New bonus for Chernobog rune
+			bonusDmgMultSteel += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, 'sword_dmg_bonus'));
+		}
+		
+		//silver sword specific bonuses
+		if (GetItemEquippedOnSlot(EES_SilverSword, silverSword))
+		{
+			silverDmg = GetTotalWeaponDamage(silverSword, theGame.params.DAMAGE_NAME_SILVER, GetInvalidUniqueId());
+			elementalSilver = CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.DAMAGE_NAME_FIRE));
+			elementalSilver += CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.DAMAGE_NAME_FROST));
+			elementalSilver += CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.DAMAGE_NAME_POISON)); //modSigns
+			//weapon bonuses are added OnHold, so we need to retrieve them specifically if we want to show them
+			if (!GetInventory().IsItemHeld(silverSword))
 			{
-				steelCritChance += 1.0f;
+				silverCritChanceBonus += CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.CRITICAL_HIT_CHANCE));
+				silverCritPowerBonus += CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+				silverAPBonus += GetInventory().GetItemAttributeValue(silverSword, 'attack_power');
 			}
-		}
-		else
-		{
-			steelDmg += 0;
-			steelCritChance += 0;
-			steelCritDmg +=0;
+			//New bonus for Chernobog rune
+			bonusDmgMultSilver += CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, 'sword_dmg_bonus'));
 		}
 		
-		if (GetItemEquippedOnSlot(EES_SilverSword, item))
+		//since drawn sword adds its stats to character stats, we now need to do this hackiest shit ever
+		if (GetInventory().IsItemHeld(steelSword))
 		{
-			silverDmg = GetTotalWeaponDamage(item, theGame.params.DAMAGE_NAME_SILVER, GetInvalidUniqueId());
-			elementalSilver = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_FIRE));
-			elementalSilver += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_FROST));
-			if ( GetInventory().IsItemHeld(item) )
-			{
-				steelCritChance -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-				silverCritChance -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-				steelCritDmg -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-				silverCritDmg -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-			}
-			silverCritChance += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_CHANCE));
-			silverCritDmg += CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
-			
-			thunder = (W3Potion_Thunderbolt)GetBuff(EET_Thunderbolt);
-			if(thunder && thunder.GetBuffLevel() == 3 && GetCurWeather() == EWE_Storm)
-			{
-				silverCritChance += 1.0f;
-			}
+			//remove steel bonuses from silver stats
+			silverCritChanceBonus -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.CRITICAL_HIT_CHANCE));
+			silverCritPowerBonus -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+			silverAPBonus -= GetInventory().GetItemAttributeValue(steelSword, 'attack_power');
 		}
-		else
+		if (GetInventory().IsItemHeld(silverSword))
 		{
-			silverDmg += 0;
-			silverCritChance += 0;
-			silverCritDmg +=0;
+			//remove silver bonuses from steel stats
+			steelCritChanceBonus -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.CRITICAL_HIT_CHANCE));
+			steelCritPowerBonus -= CalculateAttributeValue(GetInventory().GetItemAttributeValue(silverSword, theGame.params.CRITICAL_HIT_DAMAGE_BONUS));
+			steelAPBonus -= GetInventory().GetItemAttributeValue(silverSword, 'attack_power');
 		}
-		
-		if ( HasAbility('Runeword 4 _Stats', true) )
-		{
-			steelDmg += steelDmg * (abilityManager.GetOverhealBonus() / GetStatMax(BCS_Vitality));
-			silverDmg += silverDmg * (abilityManager.GetOverhealBonus() / GetStatMax(BCS_Vitality));
-		}
-		
-		fastAP += attackPower;
-		strongAP += attackPower;
-		
-		playerOffenseStats.steelFastCritChance = (steelCritChance + fastCritChance) * 100;
-		playerOffenseStats.steelFastCritDmg = steelCritDmg + fastCritDmg;
-		if ( steelDmg != 0 )
-		{
-			playerOffenseStats.steelFastDmg = (steelDmg + fastAP.valueBase) * fastAP.valueMultiplicative + fastAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelFastCritDmg = (steelDmg + fastAP.valueBase) * (fastAP.valueMultiplicative + playerOffenseStats.steelFastCritDmg) + fastAP.valueAdditive + elementalSteel;
-		}
-		else
-		{
-			playerOffenseStats.steelFastDmg = 0;
-			playerOffenseStats.steelFastCritDmg = 0;
-		}
-		playerOffenseStats.steelFastDPS = (playerOffenseStats.steelFastDmg * (100 - playerOffenseStats.steelFastCritChance) + playerOffenseStats.steelFastCritDmg * playerOffenseStats.steelFastCritChance) / 100;
-		playerOffenseStats.steelFastDPS = playerOffenseStats.steelFastDPS / 0.6;
-		
-		
-		playerOffenseStats.steelStrongCritChance = (steelCritChance + strongCritChance) * 100;
-		playerOffenseStats.steelStrongCritDmg = steelCritDmg + strongCritDmg;
-		if ( steelDmg != 0 )
-		{
-			playerOffenseStats.steelStrongDmg = (steelDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongDmg *= 1.833f;
-			playerOffenseStats.steelStrongCritDmg = (steelDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.steelStrongCritDmg) + strongAP.valueAdditive + elementalSteel;
-			playerOffenseStats.steelStrongCritDmg *= 1.833f;		}
-		else
-		{
-			playerOffenseStats.steelStrongDmg = 0;
-			playerOffenseStats.steelStrongCritDmg = 0;
-		}
-		playerOffenseStats.steelStrongDPS = (playerOffenseStats.steelStrongDmg * (100 - playerOffenseStats.steelStrongCritChance) + playerOffenseStats.steelStrongCritDmg * playerOffenseStats.steelStrongCritChance) / 100;
-		playerOffenseStats.steelStrongDPS = playerOffenseStats.steelStrongDPS / 1.1;
-		
-	
-		
-		playerOffenseStats.silverFastCritChance = (silverCritChance + fastCritChance) * 100;
-		playerOffenseStats.silverFastCritDmg = silverCritDmg + fastCritDmg;
-		if ( silverDmg != 0 )
-		{
-			playerOffenseStats.silverFastDmg = (silverDmg + fastAP.valueBase) * fastAP.valueMultiplicative + fastAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverFastCritDmg = (silverDmg + fastAP.valueBase) * (fastAP.valueMultiplicative + playerOffenseStats.silverFastCritDmg) + fastAP.valueAdditive + elementalSilver;	
-		}
-		else
-		{
-			playerOffenseStats.silverFastDmg = 0;
-			playerOffenseStats.silverFastCritDmg = 0;	
-		}
-		playerOffenseStats.silverFastDPS = (playerOffenseStats.silverFastDmg * (100 - playerOffenseStats.silverFastCritChance) + playerOffenseStats.silverFastCritDmg * playerOffenseStats.silverFastCritChance) / 100;
-		playerOffenseStats.silverFastDPS = playerOffenseStats.silverFastDPS / 0.6;
-		
-		
-		playerOffenseStats.silverStrongCritChance = (silverCritChance + strongCritChance) * 100;
-		playerOffenseStats.silverStrongCritDmg = silverCritDmg + strongCritDmg;		
-		if ( silverDmg != 0 )
-		{
-			playerOffenseStats.silverStrongDmg = (silverDmg + strongAP.valueBase) * strongAP.valueMultiplicative + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongDmg *= 1.833f;
-			playerOffenseStats.silverStrongCritDmg = (silverDmg + strongAP.valueBase) * (strongAP.valueMultiplicative + playerOffenseStats.silverStrongCritDmg) + strongAP.valueAdditive + elementalSilver;
-			playerOffenseStats.silverStrongCritDmg *= 1.833f;
-		}
-		else
-		{
-			playerOffenseStats.silverStrongDmg = 0;
-			playerOffenseStats.silverStrongCritDmg = 0;
-		}
-		playerOffenseStats.silverStrongDPS = (playerOffenseStats.silverStrongDmg * (100 - playerOffenseStats.silverStrongCritChance) + playerOffenseStats.silverStrongCritDmg * playerOffenseStats.silverStrongCritChance) / 100;
-		playerOffenseStats.silverStrongDPS = playerOffenseStats.silverStrongDPS / 1.1;
-		
-		
-		playerOffenseStats.crossbowCritChance = GetCriticalHitChance( false, false, NULL, MC_NotSet, true );
-	
-		
-		playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_PIERCING;
-		if (GetItemEquippedOnSlot(EES_Bolt, item))
-		{
-			
-			
-			steelDmg = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_FIRE));
-			if(steelDmg > 0)
-			{
-				playerOffenseStats.crossbowSteelDmg = steelDmg;
-				
-				playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_FIRE;
-				playerOffenseStats.crossbowSilverDmg = steelDmg;
-			}
-			else
-			{
-				playerOffenseStats.crossbowSilverDmg = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_SILVER));
-				
-				steelDmg = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_PIERCING));
-				if(steelDmg > 0)
-				{
-					playerOffenseStats.crossbowSteelDmg = steelDmg;
-					playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_PIERCING;
-				}
-				else
-				{
-					playerOffenseStats.crossbowSteelDmg = CalculateAttributeValue(GetInventory().GetItemAttributeValue(item, theGame.params.DAMAGE_NAME_BLUDGEONING));
-					playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_BLUDGEONING;
-				}
-			}
-		}
-		
-		if (GetItemEquippedOnSlot(EES_RangedWeapon, item))
-		{
-			attackPower += GetInventory().GetItemAttributeValue(item, PowerStatEnumToName(CPS_AttackPower));
-			if(CanUseSkill(S_Perk_02))
-			{				
-				attackPower += GetSkillAttributeValue(S_Perk_02, PowerStatEnumToName(CPS_AttackPower), false, true);
-			}
 
-			
-			if( hackMode != 1 && ( IsMutationActive( EPMT_Mutation9 ) || hackMode == 2 ) )
-			{
-				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation9', 'damage', min, max );
-				playerOffenseStats.crossbowSteelDmg += min.valueAdditive;
-				playerOffenseStats.crossbowSilverDmg += min.valueAdditive;
-			}		
-			
-			playerOffenseStats.crossbowSteelDmg = (playerOffenseStats.crossbowSteelDmg + attackPower.valueBase) * attackPower.valueMultiplicative + attackPower.valueAdditive;
-			playerOffenseStats.crossbowSilverDmg = (playerOffenseStats.crossbowSilverDmg + attackPower.valueBase) * attackPower.valueMultiplicative + attackPower.valueAdditive;
-		}
-		else
+		//Overheal bonus from the enchantment
+		if ( HasRunewordActive('Runeword 4 _Stats') ) //modSigns
 		{
-			playerOffenseStats.crossbowSteelDmg = 0;
-			playerOffenseStats.crossbowSilverDmg = 0;
-			playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_PIERCING;
+			if( GetInventory().IsItemHeld(steelSword) )
+				bonusDmgMultSteel += abilityManager.GetOverhealBonus() / GetStatMax(BCS_Vitality);
+			else if (GetInventory().IsItemHeld(silverSword))
+				bonusDmgMultSilver += abilityManager.GetOverhealBonus() / GetStatMax(BCS_Vitality);
+		}
+		//Thunderbolt lvl 3 crit chance
+		thunder = (W3Potion_Thunderbolt)GetBuff(EET_Thunderbolt);
+		if(thunder && thunder.GetBuffLevel() == 3 && GetCurWeather() == EWE_Storm)
+		{
+			critPowerBonus += 1.0f;
+		}
+		//Water Hag decoction
+		if ( HasBuff(EET_Mutagen05) && GetHealthPercents() > 0.99 )
+		{
+			mutagen = GetBuff(EET_Mutagen05);
+			theGame.GetDefinitionsManager().GetAbilityAttributeValue(mutagen.GetAbilityName(), 'damageIncrease', min, max);
+			bonusDmgMult += min.valueMultiplicative;
+		}
+		//new bonus for grindstone
+		if(HasBuff(EET_EnhancedWeapon))
+			bonusDmgMult += CalculateAttributeValue(GetAbilityAttributeValue('EnhancedWeaponEffect', 'sword_dmg_bonus'));
+		
+		//final attributes
+		steelFastAP = attackPower + fastAPBonus + steelAPBonus;
+		silverFastAP = attackPower + fastAPBonus + silverAPBonus;
+		steelStrongAP = attackPower + strongAPBonus + steelAPBonus;
+		silverStrongAP = attackPower + strongAPBonus + silverAPBonus;
+		steelFastCritAP = steelFastAP;
+		steelFastCritAP.valueMultiplicative += critPowerBonus + fastCritPowerBonus + steelCritPowerBonus;
+		silverFastCritAP = silverFastAP;
+		silverFastCritAP.valueMultiplicative += critPowerBonus + fastCritPowerBonus + silverCritPowerBonus;
+		steelStrongCritAP = steelStrongAP;
+		steelStrongCritAP.valueMultiplicative += critPowerBonus + strongCritPowerBonus + steelCritPowerBonus;
+		silverStrongCritAP = silverStrongAP;
+		silverStrongCritAP.valueMultiplicative += critPowerBonus + strongCritPowerBonus + silverCritPowerBonus;
+		steelFastCritChance = critChance + fastCritChanceBonus + steelCritChanceBonus;
+		silverFastCritChance = critChance + fastCritChanceBonus + silverCritChanceBonus;
+		steelStrongCritChance = critChance + strongCritChanceBonus + steelCritChanceBonus;
+		silverStrongCritChance = critChance + strongCritChanceBonus + silverCritChanceBonus;
+		
+		//fill offense stats
+		playerOffenseStats.steelFastAP = steelFastAP.valueMultiplicative;
+		playerOffenseStats.silverFastAP = silverFastAP.valueMultiplicative;
+		playerOffenseStats.steelStrongAP = steelStrongAP.valueMultiplicative;
+		playerOffenseStats.silverStrongAP = silverStrongAP.valueMultiplicative;
+		playerOffenseStats.steelFastCritAP = steelFastCritAP.valueMultiplicative;
+		playerOffenseStats.silverFastCritAP = silverFastCritAP.valueMultiplicative;
+		playerOffenseStats.steelStrongCritAP = steelStrongCritAP.valueMultiplicative;
+		playerOffenseStats.silverStrongCritAP = silverStrongCritAP.valueMultiplicative;
+		playerOffenseStats.steelFastCritChance = steelFastCritChance * 100;
+		playerOffenseStats.silverFastCritChance = silverFastCritChance * 100;
+		playerOffenseStats.steelStrongCritChance = steelStrongCritChance * 100;
+		playerOffenseStats.silverStrongCritChance = silverStrongCritChance * 100;
+		if ( steelDmg != 0 )
+		{
+			playerOffenseStats.steelFastDmg = ((steelDmg + elementalSteel) * (1 + bonusDmgMult + bonusDmgMultSteel) + steelFastAP.valueBase) * steelFastAP.valueMultiplicative + steelFastAP.valueAdditive;
+			playerOffenseStats.steelFastCritDmg = ((steelDmg + elementalSteel) * (1 + bonusDmgMult + bonusDmgMultSteel) + steelFastCritAP.valueBase) * steelFastCritAP.valueMultiplicative + steelFastCritAP.valueAdditive;
+			playerOffenseStats.steelFastDPS = playerOffenseStats.steelFastDmg * (1 - steelFastCritChance) + playerOffenseStats.steelFastCritDmg * steelFastCritChance;
+			playerOffenseStats.steelStrongDmg = ((steelDmg + elementalSteel) * (strongDmgMult + bonusDmgMult + bonusDmgMultSteel) + steelStrongAP.valueBase) * steelStrongAP.valueMultiplicative + steelStrongAP.valueAdditive;
+			playerOffenseStats.steelStrongCritDmg = ((steelDmg + elementalSteel) * (strongDmgMult + bonusDmgMult + bonusDmgMultSteel) + steelStrongCritAP.valueBase) * steelStrongCritAP.valueMultiplicative + steelStrongCritAP.valueAdditive;
+			playerOffenseStats.steelStrongDPS = playerOffenseStats.steelStrongDmg * (1 - steelStrongCritChance) + playerOffenseStats.steelStrongCritDmg * steelStrongCritChance;
+		}
+		if ( silverDmg != 0 )
+		{
+			playerOffenseStats.silverFastDmg = ((silverDmg + elementalSilver) * (1 + bonusDmgMult + bonusDmgMultSilver) + silverFastAP.valueBase) * silverFastAP.valueMultiplicative + silverFastAP.valueAdditive;
+			playerOffenseStats.silverFastCritDmg = ((silverDmg + elementalSilver) * (1 + bonusDmgMult + bonusDmgMultSilver) + silverFastCritAP.valueBase) * silverFastCritAP.valueMultiplicative + silverFastCritAP.valueAdditive;
+			playerOffenseStats.silverFastDPS = playerOffenseStats.silverFastDmg * (1 - silverFastCritChance) + playerOffenseStats.silverFastCritDmg * silverFastCritChance;
+			playerOffenseStats.silverStrongDmg = ((silverDmg + elementalSilver) * (strongDmgMult + bonusDmgMult + bonusDmgMultSilver) + silverStrongAP.valueBase) * silverStrongAP.valueMultiplicative + silverStrongAP.valueAdditive;
+			playerOffenseStats.silverStrongCritDmg = ((silverDmg + elementalSilver) * (strongDmgMult + bonusDmgMult + bonusDmgMultSilver) + silverStrongCritAP.valueBase) * silverStrongCritAP.valueMultiplicative + silverStrongCritAP.valueAdditive;
+			playerOffenseStats.silverStrongDPS = playerOffenseStats.silverStrongDmg * (1 - silverStrongCritChance) + playerOffenseStats.silverStrongCritDmg * silverStrongCritChance;
+		}
+		
+		//modSigns: crossbow redone
+		playerOffenseStats.crossbowSteelDmgType = theGame.params.DAMAGE_NAME_PIERCING;
+		playerOffenseStats.crossbowElementaDmgType = '';
+		if (GetItemEquippedOnSlot(EES_RangedWeapon, crossbow))
+		{
+			attackPowerCrossbow = attackPower + GetInventory().GetItemAttributeValue(crossbow, PowerStatEnumToName(CPS_AttackPower));
+			playerOffenseStats.crossbowAttackPower = attackPowerCrossbow.valueMultiplicative;
+			playerOffenseStats.crossbowCritChance = GetCriticalHitChance( false, false, NULL, MC_NotSet, true );
+
+			value = GetCriticalHitDamageBonus( crossbow, MC_NotSet, false );
+			//Cat Eyes mutation crit damage boost
+			if( IsMutationActive( EPMT_Mutation9 ) )
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue( 'Mutation9', 'critical_damage', min, max );
+				value += min;
+			}
+			if( CanUseSkill(S_Sword_s07) )
+			{
+				value += GetSkillAttributeValue(S_Sword_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * GetSkillLevel(S_Sword_s07);
+			}
+			playerOffenseStats.crossbowCritDmgBonus = CalculateAttributeValue(value);
+			
+			//bolt stats
+			if (GetItemEquippedOnSlot(EES_Bolt, bolt))
+			{
+				playerOffenseStats.crossbowSteelDmgType = GetCrossbowSteelDmgName();
+				inv.GetItemStatByName(inv.GetItemName(bolt), playerOffenseStats.crossbowSteelDmgType, playerOffenseStats.crossbowSteelDmg);
+				inv.GetItemStatByName(inv.GetItemName(bolt), 'SilverDamage', playerOffenseStats.crossbowSilverDmg);
+				playerOffenseStats.crossbowElementaDmgType = GetCrossbowElementaDmgName();
+				if(IsNameValid(playerOffenseStats.crossbowElementaDmgType))
+					inv.GetItemStatByName(inv.GetItemName(bolt), playerOffenseStats.crossbowElementaDmgType, playerOffenseStats.crossbowElementaDmg);
+			}
+			
+			//Water Hag decoction
+			if ( HasBuff(EET_Mutagen05) && GetHealthPercents() > 0.99 )
+			{
+				mutagen = GetBuff(EET_Mutagen05);
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue(mutagen.GetAbilityName(), 'damageIncrease', min, max);
+				bonusDmgMultCrossbow += min.valueMultiplicative;
+			}
+			
+			//perk 2
+			if( CanUseSkill(S_Perk_02) )
+			{
+				min = GetSkillAttributeValue(S_Perk_02, 'xbow_dmg_bonus', false, true);
+				bonusDmgMultCrossbow += min.valueMultiplicative;
+			}
+			
+			playerOffenseStats.crossbowSteelDmg = (playerOffenseStats.crossbowSteelDmg * (1 + bonusDmgMultCrossbow) + attackPowerCrossbow.valueBase) * attackPowerCrossbow.valueMultiplicative;
+			playerOffenseStats.crossbowSilverDmg = (playerOffenseStats.crossbowSilverDmg * (1 + bonusDmgMultCrossbow) + attackPowerCrossbow.valueBase) * attackPowerCrossbow.valueMultiplicative;
+			playerOffenseStats.crossbowElementaDmg = (playerOffenseStats.crossbowElementaDmg * (1 + bonusDmgMultCrossbow) + attackPowerCrossbow.valueBase) * attackPowerCrossbow.valueMultiplicative;
 		}
 		
 		return playerOffenseStats;
@@ -7901,15 +8276,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var damage, durRatio, durMod, itemMod : float;
 		var repairObjectBonus, min, max : SAbilityAttributeValue;
 		
-		durMod = 0;
+		//durMod = 0;
+		durMod = 1; //modSigns: zero value effectively removes all non-physical damages from weapon
 		damage = super.GetTotalWeaponDamage(weaponId, damageTypeName, crossbowId);
 		
 		
-		if( IsMutationActive( EPMT_Mutation9 ) && inv.IsItemBolt( weaponId ) && IsDamageTypeAnyPhysicalType( damageTypeName ) )
+		/*if( IsMutationActive( EPMT_Mutation9 ) && inv.IsItemBolt( weaponId ) && IsDamageTypeAnyPhysicalType( damageTypeName ) )
 		{
 			theGame.GetDefinitionsManager().GetAbilityAttributeValue('Mutation9', 'damage', min, max);
 			damage += min.valueAdditive;
-		}
+		}*/ //modSigns
 		
 		
 		if(IsPhysicalResistStat(GetResistForDamage(damageTypeName, false)))
@@ -8107,7 +8483,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	}
 	
 	
-	public function QuenImpulse( isAlternate : bool, signEntity : W3QuenEntity, source : string, optional forceSkillLevel : int )
+	public function QuenImpulse( isAlternate : bool, signEntity : W3QuenEntity, source : string, optional forceSkillLevel : int, optional forceSpellPower : SAbilityAttributeValue /*modSigns*/ )
 	{
 		var level, i, j : int;
 		var atts, damages : array<name>;
@@ -8118,6 +8494,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var dmg : float;
 		var min, max : SAbilityAttributeValue;
 		var pos : Vector;
+		var spellPower : SAbilityAttributeValue; //modSigns: spell power
+		var staminaPrc : float; //modSigns
 		
 		if( forceSkillLevel > 0 )
 		{
@@ -8131,9 +8509,17 @@ statemachine class W3PlayerWitcher extends CR4Player
 		dm = theGame.GetDefinitionsManager();
 		skillAbilityName = GetSkillAbilityName(S_Magic_s13);
 		
+		if( forceSpellPower.valueMultiplicative > 0 ) //modSigns
+		{
+			spellPower = forceSpellPower;
+		}
+		else
+		{
+			spellPower = GetTotalSignSpellPower(S_Magic_4);
+		}
+		
 		if(level >= 2)
 		{
-			
 			dm.GetAbilityAttributes(skillAbilityName, atts);
 			for(i=0; i<atts.Size(); i+=1)
 			{
@@ -8145,14 +8531,20 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		
-		pos = signEntity.GetWorldPosition();
-		FindGameplayEntitiesInSphere(ents, pos, 3, 1000, '', FLAG_OnlyAliveActors + FLAG_ExcludeTarget + FLAG_Attitude_Hostile + FLAG_Attitude_Neutral + FLAG_TestLineOfSight, this);
+		//pos = signEntity.GetWorldPosition();
+		//FindGameplayEntitiesInSphere(ents, pos, 3, 1000, '', FLAG_OnlyAliveActors + FLAG_ExcludeTarget + FLAG_Attitude_Hostile + FLAG_Attitude_Neutral + FLAG_TestLineOfSight, this);
+		//modSigns: the above variant doesn't work properly. Use box instead of a sphere.
+		FindGameplayEntitiesInRange(ents, this, 3, 100, , FLAG_OnlyAliveActors + FLAG_ExcludeTarget + FLAG_Attitude_Hostile, this);
 		
 		
 		for(i=0; i<ents.Size(); i+=1)
 		{
+			//combat log
+			//theGame.witcherLog.AddCombatMessage("Quen impulse:", this, ents[i]);
+			//theGame.witcherLog.AddCombatMessage("Target # " + IntToString(i + 1) + ": " + ents[i].GetDisplayName(), this, ents[i]);
+			
 			action = new W3DamageAction in theGame;
-			action.Initialize(this, ents[i], signEntity, source, EHRT_Heavy, CPS_SpellPower, false, false, true, false);
+			action.Initialize(this, ents[i], signEntity, source, EHRT_None, CPS_SpellPower, false, false, true, false); //modSigns
 			action.SetSignSkill(S_Magic_s13);
 			action.SetCannotReturnDamage(true);
 			action.SetProcessBuffsIfNoDamage(true);
@@ -8175,18 +8567,34 @@ statemachine class W3PlayerWitcher extends CR4Player
 				for(j=0; j<damages.Size(); j+=1)
 				{
 					dm.GetAbilityAttributeValue(skillAbilityName, damages[j], min, max);
-					dmg = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
+					//dmg = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
+					//modSigns: damage scales with ability level
+					dmg = CalculateAttributeValue(GetAttributeRandomizedValue(min, max)) * (level - 1);
+					//modSigns: scale direct damage with sign power
+					if(damages[j] == theGame.params.DAMAGE_NAME_DIRECT && spellPower.valueMultiplicative > 1)
+						dmg *= spellPower.valueMultiplicative;
+					if( isAlternate ) //modSigns: scale alt quen dmg with stamina spent
+					{
+						staminaPrc = 1 - GetStaminaPercents();
+						dmg *= staminaPrc;
+						//combat log
+						//theGame.witcherLog.AddMessage("Quen impulse stamina used %: " + staminaPrc * 100);
+					}
 					if( IsSetBonusActive( EISB_Bear_2 ) )
 					{
 						dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Bear_2 ), 'quen_dmg_boost', min, max );
 						dmg *= 1 + min.valueMultiplicative;						
-					}					
+					}
+					//combat log
+					//theGame.witcherLog.AddMessage("Quen impulse dmg: " + FloatToString(dmg) + " (" + NameToString(damages[j]) + ")");
 					action.AddDamage(damages[j], dmg);
 				}
 			}
 			if(level == 3)
 			{
 				action.AddEffectInfo(EET_KnockdownTypeApplicator);
+				//combat log
+				//theGame.witcherLog.AddCombatMessage("Knockdown effect added", ownerActor, ents[i]);
 			}
 			
 			theGame.damageMgr.ProcessAction( action );
@@ -8211,6 +8619,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 					signEntity.PlayHitEffect('quen_electric_explode_bear_abl2', signEntity.GetWorldRotation());
 				}
 			}
+			//modSigns: drain all remaining stamina - removed: Impulse is no longer triggered for aborted sign
+			//DrainStamina( ESAT_FixedValue, GetStat(BCS_Stamina), 2 );
 		}
 		else
 		{
@@ -8218,16 +8628,25 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}		
 	}
 
+	//called after both Aard casts, after normal Igni cast, for alt Igni called at the beginning of channeling,
+	//after normal Yrden cast, for alt Yrden - at the end of channeling if it wasn't aborted,
+	//after normal Quen cast, for alt Quen - at the beginning of channeling,
+	//after normal Axii cast, for alt Axii - at the end of channeling if it wasn't aborted
 	public function OnSignCastPerformed(signType : ESignType, isAlternate : bool)
 	{
 		var items : array<SItemUniqueId>;
 		var weaponEnt : CEntity;
 		var fxName : name;
 		var pos : Vector;
+		//modSigns: new vars
+		var abilityName : name;
+		var abilityCount, maxStack : float;
+		var min, max : SAbilityAttributeValue;
+		var addAbility : bool;
 		
 		super.OnSignCastPerformed(signType, isAlternate);
 		
-		if(HasAbility('Runeword 1 _Stats', true) && GetStat(BCS_Focus) >= 1.0f)
+		if(HasRunewordActive('Runeword 1 _Stats') && GetStat(BCS_Focus) >= 1.0f) //modSigns
 		{
 			DrainFocus(1.0f);
 			runewordInfusionType = signType;
@@ -8263,6 +8682,39 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 			theGame.GetSurfacePostFX().AddSurfacePostFXGroup( pos, 0.f, 3.f, 2.f, 5.f, 0 );
 		}
+		
+		//modSigns: ancient leshed decoction
+		if(HasBuff(EET_Mutagen22) && IsInCombat() && IsThreatened() && !isAlternate)
+		{
+			abilityName = GetBuff(EET_Mutagen22).GetAbilityName();
+			abilityCount = GetAbilityCount(abilityName);
+			
+			if(abilityCount == 0)
+			{
+				addAbility = true;
+			}
+			else
+			{
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue(abilityName, 'mutagen22_max_stack', min, max);
+				maxStack = CalculateAttributeValue(GetAttributeRandomizedValue(min, max));
+				
+				if(maxStack >= 0)
+				{
+					addAbility = (abilityCount < maxStack);
+				}
+				else
+				{
+					addAbility = true;
+				}
+			}
+			
+			if(addAbility)
+			{
+				AddAbility(abilityName, true);
+			}
+		}
+		
+		//theGame.witcherLog.AddMessage("OnSignCastPerformed: " + signType + "; isAlternate: " + isAlternate); //modSigns: debug
 	}
 	
 	public saved var savedQuenHealth, savedQuenDuration : float;
@@ -8323,20 +8775,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var penalty : SAbilityAttributeValue;
 		var penaltyReduction : float;
 		var penaltyReductionLevel : int; 
-		
-		
+		var mutagen : CBaseGameplayEffect; //modSigns
+		var min, max : SAbilityAttributeValue; //modSigns
+
+		//character SP + spell specific skills
 		sp = GetSkillAttributeValue(signSkill, PowerStatEnumToName(CPS_SpellPower), true, true);
 		
-		
+		//skill custom
 		if ( signSkill == S_Magic_s01 )
 		{
-			
-			penaltyReductionLevel = GetSkillLevel(S_Magic_s01) + 1;
+			//wave leveling penalty reduction
+			/*penaltyReductionLevel = GetSkillLevel(S_Magic_s01) + 1;
 			if(penaltyReductionLevel > 0)
 			{
 				penaltyReduction = 1 - penaltyReductionLevel * CalculateAttributeValue(GetSkillAttributeValue(S_Magic_s01, 'spell_power_penalty_reduction', true, true));
 				penalty = GetSkillAttributeValue(S_Magic_s01, PowerStatEnumToName(CPS_SpellPower), false, false);
-				sp += penalty * penaltyReduction;	
+				sp += penalty * penaltyReduction;	//add amount equal to penalty reduction (since full penalty is already applied)
+			}*/
+			//modSigns: fix percentages as they are completely off from what skill description says
+			penaltyReductionLevel = GetSkillLevel(S_Magic_s01) - 1;
+			if(penaltyReductionLevel > 0)
+			{
+				penaltyReduction = penaltyReductionLevel * CalculateAttributeValue(GetSkillAttributeValue(S_Magic_s01, 'spell_power_penalty_reduction', false, false));
+				//penalty was already applied, so we revert it based on penalty reduction and skill level
+				sp.valueMultiplicative += penaltyReduction;
 			}
 		}
 		
@@ -9592,10 +10054,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		else if( setType == EIST_Gryphon )
 		{
 			
-			if( !IsSetBonusActive( EISB_Gryphon_1 ) )
+			/*if( !IsSetBonusActive( EISB_Gryphon_1 ) ) //modSigns: no longer used
 			{
 				RemoveBuff( EET_GryphonSetBonus );
-			}
+			}*/
 			
 			if( IsSetBonusActive( EISB_Gryphon_2 ) && !HasBuff( EET_GryphonSetBonusYrden ) )
 			{
@@ -9821,24 +10283,29 @@ statemachine class W3PlayerWitcher extends CR4Player
 			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
 			break;
 		case EISB_Lynx_2:
-			dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Lynx_2 ), 'lynx_2_dmg_boost', min, max );
+			/*dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Lynx_2 ), 'lynx_2_dmg_boost', min, max );
 			arrString.PushBack( FloatToString( min.valueAdditive * 100 ) );
 			
 			dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Lynx_2 ), 'lynx_2_adrenaline_cost', min, max );
-			arrString.PushBack( FloatToString( min.valueAdditive ) );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );*/
+			//modSigns: bonus changed
 			
 			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
 			break;
 		case EISB_Gryphon_1:
-			dm.GetAbilityAttributeValue( 'GryphonSetBonusEffect', 'duration', min, max );
-			arrString.PushBack( FloatToString( min.valueAdditive ) );
-			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString ); 
+			/*dm.GetAbilityAttributeValue( 'GryphonSetBonusEffect', 'duration', min, max );
+			arrString.PushBack( FloatToString( min.valueAdditive ) );*/
+			//modSigns: new mechanic
+			dm.GetAbilityAttributeValue( GetSetBonusAbility( EISB_Gryphon_1 ), 'gryphon_1_stamina_cost_reduction', min, max );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100 ) );
+			arrString.PushBack( FloatToString( min.valueMultiplicative * 100 * amountOfSetPiecesEquipped[ EIST_Gryphon ] ) );
+			finalString = GetLocStringByKeyExtWithParams( tempString,,,arrString );
 			break;		
 		case EISB_Gryphon_2:
 			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'trigger_scale', min, max );
 			arrString.PushBack( FloatToString( ( min.valueAdditive - 1 )* 100) );
-			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'staminaRegen', min, max );
-			arrString.PushBack( FloatToString( min.valueMultiplicative * 100) );
+			//dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'staminaRegen', min, max ); //modSigns: removed
+			//arrString.PushBack( FloatToString( min.valueMultiplicative * 100) );
 			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'spell_power', min, max );
 			arrString.PushBack( FloatToString( min.valueMultiplicative * 100) );
 			dm.GetAbilityAttributeValue( 'GryphonSetBonusYrdenEffect', 'gryphon_set_bns_dmg_reduction', min, max );
@@ -9944,7 +10411,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		newQuen = (W3QuenEntity)theGame.CreateEntity( GetSignTemplate( ST_Quen ), GetWorldPosition(), GetWorldRotation() );
 		newQuen.Init( signOwner, GetSignEntity( ST_Quen ), true );
-		newQuen.freeFromBearSetBonus = true;
+		newQuen.freeCast = true; //modSigns
 		newQuen.OnStarted();
 		newQuen.OnThrowing();
 		newQuen.OnEnded();
@@ -9952,6 +10419,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 		m_quenReappliedCount += 1;
 		
 		RemoveTimer( 'BearSetBonusQuenReapply');
+	}
+	
+	//modSigns: gryphon set tier 1 ability
+	public function GetGryphonSetStaminaCostReduction() : float
+	{
+		var min, max 	: SAbilityAttributeValue;
+		var bonus		: float;
+		
+		theGame.GetDefinitionsManager().GetAbilityAttributeValue( GetSetBonusAbility( EISB_Gryphon_1 ), 'gryphon_1_stamina_cost_reduction', min, max );
+		bonus = min.valueMultiplicative * amountOfSetPiecesEquipped[ EIST_Gryphon ];
+		bonus = ClampF(bonus, 0, 1);
+		
+		return bonus;
 	}
 	
 	public final function StandaloneEp1_1()

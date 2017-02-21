@@ -5,11 +5,11 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 	<ability name="Default Book _Stats">
-		<weight type="base" min="0.5" />
+		<weight type="base" min="0.2" />
 	</ability>
 
 	<ability name="Default Note _Stats">
-		<weight type="base" min="0.1" />
+		<weight type="base" min="0.05" />
 	</ability>
 </abilities>
 

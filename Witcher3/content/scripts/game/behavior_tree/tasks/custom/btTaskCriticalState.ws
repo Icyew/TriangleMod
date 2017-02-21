@@ -15,6 +15,8 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 	
 	private var currentCS : ECriticalStateType;		
 	
+	private var csStopped			: bool; //modSigns
+	
 	function IsAvailable () : bool
 	{
 		if ( forceActivate )
@@ -88,6 +90,12 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			forceActivate = true;
 		}
 		
+		if( csStopped ) //modSigns
+		{
+			forceActivate = false;
+			csStopped = false;
+		}
+		
 		currentCS = ECST_None;
 		owner.EnableCollisions( true );
 		owner.SetIsInHitAnim(false);
@@ -116,8 +124,9 @@ class CBehTreeTaskCriticalState extends IBehTreeTask
 			
 			
 			
-			if ( receivedBuffType == ECST_BurnCritical && npc.HasAbility( 'BurnNoAnim' ) )
+			if ( receivedBuffType == ECST_BurnCritical && ( npc.HasAbility( 'BurnNoAnim' ) || AvoidBurnCS( npc ) ) ) //modSigns
 			{
+				csStopped = true; //modSigns
 				npc.SignalGameplayEvent('CSBurningNoAnim');
 				return false;
 			}

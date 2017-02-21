@@ -134,7 +134,29 @@ class  W3InventoryItemContext extends W3UIContext
 			}
 			if( invComponentRef.ItemHasTag(currentItemId, 'Edibles') || invComponentRef.ItemHasTag(currentItemId, 'Drinks') || invComponentRef.ItemHasTag(currentItemId, 'Consumable'))
 			{
-				invMenuRef.OnConsumeItem(currentItemId);
+				//modSigns
+				if(invComponentRef.ItemHasTag(currentItemId, 'Alcohol') || invComponentRef.ItemHasTag(currentItemId, 'Uncooked'))
+				{
+					if(GetWitcherPlayer().ToxicityLowEnoughToDrinkPotion(EES_Potion1,currentItemId))
+						invMenuRef.OnConsumeItem(currentItemId);
+					else
+					{
+						notificationText = GetLocStringByKeyExt("menu_cannot_perform_action_now") + "<br/>" + GetLocStringByKeyExt("panel_common_statistics_tooltip_current_toxicity");
+						theGame.GetGameLanguageName(audioLanguage,language);
+						if (language == "AR")
+						{
+							notificationText += (int)(thePlayer.abilityManager.GetStat(BCS_Toxicity, false)) + " / " +  (int)(thePlayer.abilityManager.GetStatMax(BCS_Toxicity)) + " :";
+						}
+						else
+						{
+							notificationText += ": " + (int)(thePlayer.abilityManager.GetStat(BCS_Toxicity, false)) + " / " +  (int)(thePlayer.abilityManager.GetStatMax(BCS_Toxicity));
+						}
+						theSound.SoundEvent("gui_global_denied");
+						invMenuRef.showNotification(notificationText);
+					}
+				}
+				else
+					invMenuRef.OnConsumeItem(currentItemId);
 			} else
 			if (invComponentRef.ItemHasTag(currentItemId, 'Potion'))
 			{
@@ -265,7 +287,11 @@ class W3InventoryGridContext extends W3InventoryItemContext
 		}
 		currentInventoryState = invMenuRef.GetCurrentInventoryState();
 		
-		if (invComponentRef.IsIdValid(currentItemId))
+		//modSigns
+		if( currentInventoryState == IMS_Stash || currentInventoryState == IMS_Shop )
+			AddInputBinding("gm_switch_inv_mode", "gamepad_R2", IK_T, true);
+		
+		if (invComponentRef.IsIdValid(currentItemId) && !invMenuRef._disableStashContext) //modSigns
 		{
 			canDrop = !invComponentRef.ItemHasTag(currentItemId, 'NoDrop');
 			isQuestItem = invComponentRef.ItemHasTag(currentItemId,'Quest');
@@ -359,6 +385,10 @@ class W3InventoryGridContext extends W3InventoryItemContext
 							AddInputBinding("panel_button_hud_interaction_useitem", "enter-gamepad_A", IK_E, true);
 						}
 					}
+					else if ( invComponentRef.GetItemName(currentItemId) == 'Razor' ) //modSigns: razor shaving
+					{
+						AddInputBinding("panel_button_hud_interaction_useitem", "enter-gamepad_A", IK_E, true);
+					}
 					break;
 				case IMS_Shop:
 					if (!isBodkinBolt)
@@ -399,6 +429,20 @@ class W3InventoryGridContext extends W3InventoryItemContext
 		m_managerRef.updateInputFeedback();
 	}
 	
+	public  function HandleUserFeedback(keyName:string):void //modSigns
+	{
+		var currentInventoryState : EInventoryMenuState;
+		currentInventoryState = invMenuRef.GetCurrentInventoryState();
+		if( ( currentInventoryState == IMS_Stash || currentInventoryState == IMS_Shop ) && keyName == "gamepad_R2" )
+		{
+			invMenuRef.SwitchShowStashItems();
+		}
+		else
+		{
+			super.HandleUserFeedback(keyName);
+		}
+	}
+	
 	protected  function execurePrimaryAction():void
 	{
 		var currentInventoryState : EInventoryMenuState;
@@ -409,7 +453,7 @@ class W3InventoryGridContext extends W3InventoryItemContext
 		{
 			currentInventoryState = invMenuRef.GetCurrentInventoryState();
 			itemsCount = invComponentRef.GetItemQuantity( currentItemId );
-
+			
 			switch (currentInventoryState)
 			{
 				case IMS_Player:
@@ -438,6 +482,13 @@ class W3InventoryGridContext extends W3InventoryItemContext
 						 invComponentRef.ItemHasTag(currentItemId, 'SilverOil'))
 					{
 						invMenuRef.ShowApplyOilMode(currentItemId);
+					}
+					else if (invComponentRef.GetItemName(currentItemId) == 'Razor') //modSigns: razor shaving
+					{
+						ShaveGeralt_Quest();
+						invMenuRef.UpdateFace();
+						theSound.SoundEvent("gui_inventory_other_attach");
+						invMenuRef.showNotification(GetLocStringByKeyExt("gm_used_razor_success"));
 					}
 					else if (!invMenuRef.TryEquipToPockets(currentItemId, currentSlot))
 					{
@@ -493,7 +544,10 @@ class W3ExternalGridContext extends W3InventoryItemContext
 		
 		if (currentInventoryState == IMS_Stash)
 		{
-			AddInputBinding("panel_button_inventory_transfer", "enter-gamepad_A", IK_Space, true);
+			if( !invMenuRef._disableStashContext ) //modSigns
+				AddInputBinding("panel_button_inventory_transfer", "enter-gamepad_A", IK_Space, true);
+			else
+				AddInputBinding("gm_switch_inv_mode", "gamepad_R2", IK_T, true);
 		}
 		else
 		{
@@ -546,6 +600,10 @@ class W3ExternalGridContext extends W3InventoryItemContext
 				{
 					execurePrimaryAction();
 				}
+			}
+			else if( keyName == "gamepad_R2" ) //modSigns
+			{
+				invMenuRef.SwitchShowStashItems();
 			}
 		}
 		else
@@ -691,5 +749,43 @@ class W3PlayerStatsContext extends W3UIContext
 		m_contextBindings.Clear();
 		m_managerRef.updateInputFeedback();
 		invMenuRef.ShowStatTooltip(statName);
+	}
+}
+
+//modSigns: blacksmith menu context
+class W3BlacksmithContext extends W3UIContext
+{
+	protected var blacksmithMenuRef : CR4BlacksmithMenu;
+
+	public function SetBlacksmithMenuRef(ref : CR4BlacksmithMenu) 
+	{
+		blacksmithMenuRef = ref;
+	}
+	
+	public function UpdateContext()
+	{
+		updateInputFeedback();
+	}
+	
+	protected function updateInputFeedback()
+	{
+		m_inputBindings.Clear();
+		m_contextBindings.Clear();
+		
+		AddInputBinding("gm_switch_inv_mode", "gamepad_R2", IK_T, true);
+			
+		m_managerRef.updateInputFeedback();
+	}
+
+	public function HandleUserFeedback(keyName:string):void 
+	{
+		if (keyName == "gamepad_R2")
+		{
+			blacksmithMenuRef.SwitchShowStashItems();
+		}
+		else
+		{
+			super.HandleUserFeedback(keyName);
+		}
 	}
 }

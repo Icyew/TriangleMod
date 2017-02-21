@@ -5,7 +5,7 @@
       <ability name="CommonMutagenAbility">
         <ammo type="add" min="1" />
         <toxicity_offset type="mult" min="1" />
-	    <weight type="base" min="1" />
+	    <weight type="base" min="0.1" />
 		<quality type="add" min="4" max="4"/>
         <duration min="1800" max="1800" type="add" />        
       </ability>

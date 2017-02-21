@@ -11,6 +11,7 @@ class W3Effect_Aerondight extends CBaseGameplayEffect
 	private saved var m_aerondightTime		: float;
 	private var m_attribute					: SAbilityAttributeValue;
 	private var m_stacksPerLevel			: SAbilityAttributeValue;
+	private var m_dmgBonus					: SAbilityAttributeValue; //modSigns
 	private saved var m_currChargingEffect	: name;	
 	private var m_aerondightDelay			: float;
 	private saved var timeOfPause			: GameTime;
@@ -62,6 +63,8 @@ class W3Effect_Aerondight extends CBaseGameplayEffect
 		m_maxCount = (int) val.valueAdditive;
 		val = target.GetAbilityAttributeValue( 'AerondightEffect', 'stackDrainDelay' );
 		m_aerondightDelay = val.valueAdditive;
+		
+		m_dmgBonus = target.GetAbilityAttributeValue( 'AerondightEffect', 'crit_dmg_bonus' ); //modSigns
 	}
 	
 	public function OnLoad( t : CActor, eff : W3EffectManager )
@@ -156,6 +159,9 @@ class W3Effect_Aerondight extends CBaseGameplayEffect
 		
 		
 		l_inv.SetItemModifierFloat( l_sword, 'PermDamageBoost', l_newPermDmgBoost );
+		
+		if(l_newPermDmgBoost > 10)
+			CheckForSwordLevelUp(); //modSigns
 
 		ResetCurrentCount();
 
@@ -164,6 +170,31 @@ class W3Effect_Aerondight extends CBaseGameplayEffect
 		m_currChargingEffect = '';
 		
 		return true;
+	}
+	
+	//modSigns
+	protected function CheckForSwordLevelUp()
+	{
+		var l_inv					: CInventoryComponent;
+		var l_sword					: SItemUniqueId;
+		var l_currPermDmgBoost		: float;
+		var l_level, l_count, l_added	: int;
+
+		l_inv = target.GetInventory();
+		l_sword = l_inv.GetCurrentlyHeldSword();
+		l_currPermDmgBoost = l_inv.GetItemModifierFloat( l_sword, 'PermDamageBoost' );
+		l_level = target.GetLevel();
+		l_count = (int)(l_currPermDmgBoost / 10.0);
+		l_added = 0;
+		
+		while( l_count > 0 && l_inv.GetItemLevel( l_sword ) < l_level )
+		{
+			l_inv.AddItemCraftedAbility( l_sword, 'autogen_silver_dmg', true );
+			l_count -= 1;
+			l_added += 1;
+		}
+		if( l_added > 0 )
+			l_inv.SetItemModifierFloat( l_sword, 'PermDamageBoost', l_currPermDmgBoost - 10 * l_added );
 	}
 	
 	protected function OnPaused()
@@ -236,6 +267,11 @@ class W3Effect_Aerondight extends CBaseGameplayEffect
 	public function GetMaxCount() : int
 	{
 		return m_maxCount;
+	}
+	
+	public function GetCurrentDmgBonus() : SAbilityAttributeValue //modSigns
+	{
+		return m_dmgBonus * m_currCount;
 	}
 	
 	

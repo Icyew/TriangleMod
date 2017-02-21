@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
@@ -15,7 +17,7 @@
 		name							="mq6002_strange_meat"
 		category						="junk"
 		price							="0"
-		weight							="0.45"
+		weight							="0.1"
 		stackable						="100"
 		localisation_key_name			="item_name_mq6002_strange_meat"
 		localisation_key_description	="item_desc_mq6002_strange_meat"
@@ -23,7 +25,7 @@
 	>
 		<base_abilities>				
 		</base_abilities>
-		<tags>							Junk
+		<tags>							Junk, mod_junk
 		</tags>
 	</item>
 	

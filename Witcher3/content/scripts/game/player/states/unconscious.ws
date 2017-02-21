@@ -47,6 +47,8 @@ state Unconscious in CR4Player extends ExtendedMovable
 		ResetInteractionPriority();
 		
 		parent.Revive();
+		if( (W3PlayerWitcher)parent ) //modSigns
+			((W3PlayerWitcher)parent).UpdateEncumbrance();
 	}
 	
 	event OnPlayerTickTimer( deltaTime : float )
@@ -159,16 +161,16 @@ state Unconscious in CR4Player extends ExtendedMovable
 	
 	function TakeMoneyFromPlayer()
 	{
-		var amount : float = thePlayer.GetMoney();
+		var amount : float = thePlayer.GetMoney() * 0.25; //modSigns: guards always take 25% of player's money
 		
-		switch ( theGame.GetDifficultyLevel() )
+		/*switch ( theGame.GetDifficultyLevel() ) //modSigns: removed
 		{
 			case EDM_Easy:		amount *= 0.25; break;
 			case EDM_Medium:	amount *= 0.50; break;
 			case EDM_Hard:		amount *= 0.75; break;
 			case EDM_Hardcore:	 break;
 			default : 			amount *= 0; 	break;
-		}
+		}*/
 		
 		thePlayer.RemoveMoney((int)amount);
 	}

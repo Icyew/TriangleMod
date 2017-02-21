@@ -6,233 +6,265 @@
 <abilities>
 
 <!-- GLOVES CRAFTED LIGHT -->
-	<ability name="Gloves 01_crafted _Stats">
-		<weight							type="base"	min="1.32"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="4"		max="4"		/>
-		<slashing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.02"				/>
-	</ability>
-	
-<!-- Medium -->
-	<ability name="Gloves 02_crafted _Stats">
-		<weight							type="base"	min="1.72" 				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="14"	max="14"	/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-	</ability>
-	
-	<ability name="Gloves 03_crafted _Stats">
-		<weight							type="base"	min="2.32"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="20"	max="20"	/>
+	<ability name="Gloves 01_crafted _Stats"> <!-- Hunting Gauntlets - q2, lvl 5 -->
+		<weight							type="base"	min="1.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="11"				/>
 		<slashing_resistance_perc		type="base"	min="0.03"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<staminaRegen_armor_mod			type="mult" min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<bleeding_resistance_perc		type="base" min="0.05"				/>
+	</ability>
+	
+	<ability name="Gloves 03_crafted _Stats"> <!-- Tracker's Gauntlets - q3, lvl 10 -->
+		<weight							type="base"	min="1.5"				/>
+		<quality						type="add"	min="3"					/>
+		<armor							type="base"	min="21"				/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<poison_resistance_perc			type="base" min="0.05"				/>
 	</ability>
 
 <!-- Relic -->	
-	<ability name="Gloves 04_crafted _Stats"> 
-		<weight							type="base"	min="1.92"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base" min="28"	max="28"	/>
+	<ability name="Gloves 04_crafted _Stats"> <!-- Assassin's Gauntlets - q4, lvl 14, 1 slot -->
+		<weight							type="base"	min="1.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base" min="29"				/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<critical_hit_chance			type="add"	min="0.10"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+<!-- GLOVES CRAFTED MEDIUM -->
+	<ability name="Gloves 02_crafted _Stats"> <!-- Cavalry Gauntlets - q2, lvl 4 -->
+		<weight							type="base"	min="3.5" 				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="9"					/>
 		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<critical_hit_chance			type="add"	min="0.1"				/>
-		<bonus_herb_chance				type="add"	min="0.05"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<vitality						type="base"	min="150"				/>
+	</ability>
+	
+	<ability name="Heavy gloves 02_crafted _Stats"> <!-- Knight's Gauntlets - q3, lvl 8 -->
+		<weight							type="base"	min="3.5" 				/>
+		<quality						type="add"	min="3"					/>
+		<armor 							type="base"	min="17"				/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<burning_resistance_perc		type="base" min="0.05"				/>
 	</ability>
 	
 <!-- GLOVES CRAFTED HEAVY -->
-	<ability name="Heavy gloves 01_crafted _Stats">
-		<weight							type="base"	min="4.64"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor							type="base"	min="34"	max="34"	/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+	<ability name="Heavy gloves 01_crafted _Stats"> <!-- Axeman's Gauntlets - q2, lvl 6 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="2"					/>
+		<armor							type="base"	min="13"				/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
+		<focus_gain						type="add"	min="0.04"				/>
 	</ability>
 	
-<!-- Medium -->
-	<ability name="Heavy gloves 02_crafted _Stats"> 
-		<weight 						type="base"	min="5.48"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor 							type="base"	min="45"	max="45"	/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
-	</ability>
-	
-	<ability name="Heavy gloves 03_crafted _Stats">
-		<weight							type="base"	min="6.32"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<armor 							type="base"	min="55"	max="55"	/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+	<ability name="Heavy gloves 03_crafted _Stats"> <!-- Assault Gauntlets - q3, lvl 15 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="3"					/>
+		<armor 							type="base"	min="31"				/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.05"				/>
+		<attack_power					type="mult"	min="0.1"				/>
 	</ability>
 
 <!-- Relic -->
-	<ability name="Heavy gloves 04_crafted _Stats"> 
-		<weight							type="base"	min="4.88"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor 							type="base"	min="65"	max="65"	/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<critical_hit_damage_bonus		type="add"	min="0.5"				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.02"				/>
+	<ability name="Heavy gloves 04_crafted _Stats"> <!-- Nilfgaardian Guardsman's Gauntlets - q4, lvl 17, 1 slot -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor 							type="base"	min="35"				/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<critical_hit_damage_bonus		type="add"	min="0.50"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 	</ability>
 	
-<!-- GLOVES CRAFTED LYNX -->
-	<ability name="Lynx Gloves 1 _Stats">
-		<weight							type="base"	min="4.8"				/>
+<!-- GLOVES CRAFTED LYNX: 4% to attack power + 2% per level, up to 10% attack power bonus -->
+	<ability name="Lynx Gloves 1 _Stats"> <!-- lvl 19 -> 17  -->
+		<weight							type="base"	min="1"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="39"	max="39"	/>
-		<slashing_resistance_perc		type="base"	min="0.01"				/>
+		<armor							type="base"	min="35"	max="35"	/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.01"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.05"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<attack_power					type="mult" min="0.04"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 	</ability>
 
-	<ability name="Lynx Gloves 2 _Stats">
-		<weight							type="base"	min="4.8"				/>
+	<ability name="Lynx Gloves 2 _Stats"> <!-- lvl 25 -> 23  -->
+		<weight							type="base"	min="1"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="51"	max="51"	/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<armor							type="base"	min="47"	max="47"	/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
 		<attack_power					type="mult" min="0.06"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
 	</ability>
 	
-	<ability name="Lynx Gloves 3 _Stats">
-		<weight							type="base"	min="4.0"				/>
+	<ability name="Lynx Gloves 3 _Stats"> <!-- lvl 31 -> 29  -->
+		<weight							type="base"	min="1"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="63"	max="63"	/>
+		<armor							type="base"	min="59"	max="59"	/>
 		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.08"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
-	</ability>
-	
-	<ability name="Lynx Gloves 4 _Stats">
-		<weight							type="base"	min="4.0"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="73"	max="73"	/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<attack_power					type="mult" min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="0.02"				/>
-	</ability>
-	
-<!-- GLOVES CRAFTED GRYPHON -->
-	<ability name="Gryphon Gloves 1 _Stats">
-		<weight							type="base"	min="1.63"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="27"	max="27"	/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
 		<piercing_resistance_perc		type="base"	min="0.01"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<attack_power					type="mult" min="0.08"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+	<ability name="Lynx Gloves 4 _Stats"> <!-- lvl 36 -> 34  -->
+		<weight							type="base"	min="1"					/>
+		<quality						type="add"	min="5"		max="5"		/>
+		<armor							type="base"	min="69"	max="69"	/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<attack_power					type="mult" min="0.10"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+	</ability>
+	
+<!-- GLOVES CRAFTED GRYPHON: 4% to spell power + 2% per level, up to 10% spell power bonus -->
+	<ability name="Gryphon Gloves 1 _Stats"> <!-- lvl 13 -> 11  -->
+		<weight							type="base"	min="3"					/>
+		<quality						type="add"	min="5"		max="5"		/>
+		<armor							type="base"	min="23"	max="23"	/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
 		<elemental_resistance_perc		type="base"	min="0.05"				/>
-		<spell_power 					type="mult"	min="0.05"				/>
+		<spell_power 					type="mult"	min="0.04"				/>
 	</ability>
 
-	<ability name="Gryphon Gloves 2 _Stats">
-		<weight							type="base"	min="1.63"				/>
+	<ability name="Gryphon Gloves 2 _Stats"> <!-- lvl 20 -> 18  -->
+		<weight							type="base"	min="3"					/>
 		<quality 						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="41"	max="41"	/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
-		<elemental_resistance_perc		type="base"	min="0.06"				/>
+		<armor							type="base"	min="37"	max="37"	/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
 		<spell_power 					type="mult"	min="0.06"				/>
 	</ability>
 	
-	<ability name="Gryphon Gloves 3 _Stats">
-		<weight							type="base"	min="3.46"				/>
+	<ability name="Gryphon Gloves 3 _Stats"> <!-- lvl 28 -> 26  -->
+		<weight							type="base"	min="3"					/>
 		<quality 						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="57"	max="57"	/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
+		<armor							type="base"	min="53"	max="53"	/>
+		<slashing_resistance_perc		type="base"	min="0.05"				/>
 		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
-		<elemental_resistance_perc		type="base"	min="0.08"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
+		<rending_resistance_perc		type="base"	min="0.05"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
 		<spell_power 					type="mult"	min="0.08"				/>
 	</ability>
 	
-	<ability name="Gryphon Gloves 4 _Stats">
-		<weight							type="base"	min="3.46"				/>
+	<ability name="Gryphon Gloves 4 _Stats"> <!-- lvl 36 -> 34  -->
+		<weight							type="base"	min="3"					/>
 		<quality 						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="73"	max="73"	/>
+		<armor							type="base"	min="69"	max="69"	/>
 		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.03"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.03"				/>
 		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<elemental_resistance_perc		type="base"	min="0.10"				/>
+		<elemental_resistance_perc		type="base"	min="0.05"				/>
 		<spell_power 					type="mult"	min="0.10"				/>
 	</ability>
 	
-<!-- GLOVES CRAFTED BEAR -->
-	<ability name="Bear Gloves 1 _Stats">
-		<weight							type="base" min="3.8"				/>
+<!-- GLOVES CRAFTED BEAR: 4% to focus gain + 2% per level, up to 10% focus gain bonus -->
+	<ability name="Bear Gloves 1 _Stats"> <!-- lvl 22 -> 20 -->
+		<weight							type="base" min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="45"	max="45"	/>
-		<slashing_resistance_perc		type="base"	min="0.02"				/>
-		<piercing_resistance_perc		type="base"	min="0.02"				/>
-		<rending_resistance_perc		type="base"	min="0.02"				/>
-		<elemental_resistance_perc		type="base"	min="0.02"				/>
-		<focus_gain 					type="base" min="0.05" 				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+		<armor							type="base"	min="41"	max="41"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<focus_gain 					type="base" min="0.04" 				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 	</ability>
 
-	<ability name="Bear Gloves 2 _Stats">
-		<weight							type="base"	min="3.8"				/>
+	<ability name="Bear Gloves 2 _Stats"> <!-- lvl 27 -> 25 -->
+		<weight							type="base" min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="55"	max="55"	/>
-		<slashing_resistance_perc		type="base"	min="0.03"				/>
-		<piercing_resistance_perc		type="base"	min="0.03"				/>
-		<rending_resistance_perc		type="base"	min="0.03"				/>
-		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<armor							type="base"	min="51"	max="51"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 		<focus_gain						type="add"	min="0.06"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 	</ability>
 	
-	<ability name="Bear Gloves 3 _Stats">
-		<weight							type="base"	min="3.85"				/>
+	<ability name="Bear Gloves 3 _Stats"> <!-- lvl 32 -> 30 -->
+		<weight							type="base" min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="65"	max="65"	/>
-		<slashing_resistance_perc		type="base"	min="0.04"				/>
-		<piercing_resistance_perc		type="base"	min="0.04"				/>
-		<rending_resistance_perc		type="base"	min="0.04"				/>
-		<elemental_resistance_perc		type="base"	min="0.04"				/>
+		<armor							type="base"	min="61"	max="61"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 		<focus_gain						type="add"	min="0.08"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 	</ability>
 	
-	<ability name="Bear Gloves 4 _Stats">
-		<weight							type="base"	min="3.85"				/>
+	<ability name="Bear Gloves 4 _Stats"> <!-- lvl 36 -> 34 -->
+		<weight							type="base" min="5"					/>
 		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base"	min="73"	max="73"	/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
-		<piercing_resistance_perc		type="base"	min="0.05"				/>
-		<rending_resistance_perc		type="base"	min="0.05"				/>
-		<elemental_resistance_perc		type="base"	min="0.05"				/>
+		<armor							type="base"	min="69"	max="69"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
 		<focus_gain						type="add"	min="0.10"				/>
-		<staminaRegen_armor_mod			type="mult"	min="-0.02"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
 	</ability>
 
 </abilities>
@@ -244,7 +276,7 @@
 	<item
 		name							="Gloves 01_crafted"
 		category						="gloves"
-		price							="60"
+		price							="50"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -256,15 +288,13 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gloves 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Leather squares</parts>
-										<parts count="1">Leather</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Steel ingot</parts>
+										<parts count="2">Leather straps</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_light_lvl1">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -278,7 +308,7 @@
 	<item
 		name							="Gloves 02_crafted"
 		category						="gloves"
-		price							="76"
+		price							="95"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -290,15 +320,13 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl2_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gloves 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Leather</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_light_lvl2">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -312,10 +340,10 @@
 	<item
 		name							="Gloves 03_crafted"
 		category						="gloves"
-		price							="100"
+		price							="85"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -324,15 +352,13 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl3_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gloves 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Leather</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Silver ingot</parts>
+										<parts count="2">Leather straps</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_light_lvl3">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -346,7 +372,7 @@
 	<item
 		name							="Gloves 04_crafted"
 		category						="gloves"
-		price							="84"
+		price							="163"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -358,16 +384,13 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/common_light_lvl4_64x128.png"
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gloves 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="4">Leather straps</parts>
-										<parts count="2">Leather</parts>
-										<parts count="2">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="2">Leather straps</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_light_lvl4">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -381,7 +404,7 @@
 	<item
 		name							="Heavy gloves 01_crafted"
 		category						="gloves"
-		price							="80"
+		price							="195"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -393,15 +416,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy gloves 01_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_heavy_lvl1">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -415,28 +437,25 @@
 	<item
 		name							="Heavy gloves 02_crafted"
 		category						="gloves"
-		price							="107"
+		price							="154"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
 		equip_template					="g_01a_mg__common_heavy_lvl2"
 		localisation_key_name			="item_name_heavy_gloves_02"
 		localisation_key_description	="item_category_medium_armor_description"
-		icon_path						="icons/inventory/armors/common_heavy_64x128.png"
+		icon_path						="icons/inventory/armors/common_heavy_lvl2_64x128.png"
 	>
-		<tags>							Armor, MediumArmor, mod_armor
+		<tags>							Armor, MediumArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy gloves 02_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="2">Thread</parts>
-										<parts count="1">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="1">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_heavy_lvl2">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -450,10 +469,10 @@
 	<item
 		name							="Heavy gloves 03_crafted"
 		category						="gloves"
-		price							="134"
+		price							="300"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="0"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -462,16 +481,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl3_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy gloves 03_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="3">Thread</parts>
-										<parts count="2">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="2">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_heavy_lvl3">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -485,10 +502,10 @@
 	<item
 		name							="Heavy gloves 04_crafted"
 		category						="gloves"
-		price							="144"
+		price							="470"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -497,15 +514,14 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/common_heavy_lvl4_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Heavy gloves 04_crafted _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="4">Dark iron ore</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">String</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dark steel ingot</parts>
+										<parts count="2">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__common_heavy_lvl4">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -519,7 +535,7 @@
 	<item
 		name							="Lynx Gloves 1"
 		category						="gloves"
-		price							="133"
+		price							="190"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -531,16 +547,13 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_gloves_lvl1_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Gloves 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Nails</parts>
-										<parts count="1">Hardened timber</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__lynx_lvl1">
 											<item>Geralt Shirt</item>
@@ -554,7 +567,7 @@
 	<item
 		name							="Lynx Gloves 2"
 		category						="gloves"
-		price							="133"
+		price							="438"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -566,16 +579,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_gloves_lvl1_64x128.png"
 	>
-		<tags>							Armor, LightArmor, LynxSet, mod_armor, mod_legendary
+		<tags>							Armor, LightArmor, LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Gloves 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="2">Nails</parts>
-										<parts count="1">Hardened timber</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__lynx_lvl1">
 											<item>Geralt Shirt</item>
@@ -589,7 +600,7 @@
 	<item
 		name							="Lynx Gloves 3"
 		category						="gloves"
-		price							="160"
+		price							="694"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -601,16 +612,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary
+		<tags>							Armor,LightArmor,LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Gloves 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="4">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__lynx_lvl2">
 											<item>Geralt Shirt</item>
@@ -624,7 +633,7 @@
 	<item
 		name							="Lynx Gloves 4"
 		category						="gloves"
-		price							="160"
+		price							="1051"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -636,16 +645,14 @@
 		localisation_key_description	="item_category_light_armor_description"
 		icon_path						="icons/inventory/armors/lynx_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,LightArmor,LynxSet, mod_armor, mod_legendary
+		<tags>							Armor,LightArmor,LynxSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Lynx Gloves 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="4">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="2">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__lynx_lvl2">
 											<item>Geralt Shirt</item>
@@ -659,7 +666,7 @@
 	<item
 		name							="Gryphon Gloves 1"
 		category						="gloves"
-		price							="134"
+		price							="226"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -671,16 +678,14 @@
 		localisation_key_name			="item_name_gryphon_gloves_1"
 		localisation_key_description	="item_category_medium_armor_description"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Gloves 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Monstrous hide</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__gryphon_lvl1">
 											<item>Geralt Shirt</item>
@@ -694,7 +699,7 @@
 	<item
 		name							="Gryphon Gloves 2"
 		category						="gloves"
-		price							="134"
+		price							="570"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -706,16 +711,15 @@
 		localisation_key_name			="item_name_gryphon_gloves_2"
 		localisation_key_description	="item_category_medium_armor_description"
 	>
-		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor, MediumArmor, GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Gloves 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Thread</parts>
-										<parts count="2">Cotton</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__gryphon_lvl1">
 											<item>Geralt Shirt</item>
@@ -729,7 +733,7 @@
 	<item
 		name							="Gryphon Gloves 3"
 		category						="gloves"
-		price							="188"
+		price							="934"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -741,16 +745,15 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,MediumArmor,GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor,MediumArmor,GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Gloves 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="1">String</parts>
-										<parts count="2">Thread</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__gryphon_lvl2">
 											<item>Geralt Shirt</item>
@@ -764,7 +767,7 @@
 	<item
 		name							="Gryphon Gloves 4"
 		category						="gloves"
-		price							="188"
+		price							="1338"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -776,16 +779,15 @@
 		localisation_key_description	="item_category_medium_armor_description"
 		icon_path						="icons/inventory/armors/gryphon_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,MediumArmor,GryphonSet, mod_armor, mod_legendary
+		<tags>							Armor,MediumArmor,GryphonSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Gryphon Gloves 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="2">Meteorite ore</parts>
-										<parts count="2">Silver ore</parts>
-										<parts count="1">String</parts>
-										<parts count="2">Thread</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__gryphon_lvl2">
 											<item>Geralt Shirt</item>
@@ -799,7 +801,7 @@
 	<item
 		name							="Bear Gloves 1"
 		category						="gloves"
-		price							="136"
+		price							="319"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -811,16 +813,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_gloves_lvl1_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Gloves 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="3">Silver mineral</parts>
-										<parts count="2">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__bear_lvl1">
 											<item>Geralt Shirt</item>
@@ -834,7 +835,7 @@
 	<item
 		name							="Bear Gloves 2"
 		category						="gloves"
-		price							="136"
+		price							="733"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0"
@@ -846,16 +847,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_gloves_lvl1_64x128.png"
 	>
-		<tags>							Armor, HeavyArmor, BearSet, mod_armor, mod_legendary
+		<tags>							Armor, HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Gloves 2 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather</parts>
-										<parts count="4">Leather squares</parts>
-										<parts count="1">Dark iron ore</parts>
-										<parts count="3">Silver mineral</parts>
-										<parts count="2">Leather straps</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__bear_lvl1">
 											<item>Geralt Shirt</item>
@@ -869,7 +869,7 @@
 	<item
 		name							="Bear Gloves 3"
 		category						="gloves"
-		price							="190"
+		price							="1326"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -881,15 +881,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Gloves 3 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Leather squares</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Meteorite ore</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__bear_lvl2">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -903,7 +903,7 @@
 	<item
 		name							="Bear Gloves 4"
 		category						="gloves"
-		price							="190"
+		price							="2322"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -915,15 +915,15 @@
 		localisation_key_description	="item_category_heavy_armor_description"
 		icon_path						="icons/inventory/armors/bear_gloves_lvl2_64x128.png"
 	>
-		<tags>							Armor,HeavyArmor, BearSet, mod_armor, mod_legendary
+		<tags>							Armor,HeavyArmor, BearSet, mod_armor, DoNotEnhance, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Bear Gloves 4 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="6">Leather squares</parts>
-										<parts count="2">Dark iron ore</parts>
-										<parts count="1">Steel ingot</parts>
-										<parts count="1">Meteorite ore</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Wire</parts>
+										<parts count="1">Silver ingot</parts>
+										<parts count="1">Monstrous plate</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__bear_lvl2">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->

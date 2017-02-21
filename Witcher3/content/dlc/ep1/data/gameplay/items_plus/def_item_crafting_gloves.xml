@@ -5,75 +5,102 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 	
-	<ability name="Crafted Ofir Gloves _Stats">
-		<weight							type="base"	min="4.8"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base" min="141"	max="141"	/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
+<!-- LIGHT -->
+	
+	<ability name="Crafted Ofir Gloves _Stats"> <!-- lvl 62 -->
+		<weight							type="base"	min="1.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base" min="125"	max="125"	/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<spell_power_igni 				type="mult" min="0.05" 				/>
+		<spell_power_aard 				type="mult" min="0.05" 				/>
+		<spell_power_axii 				type="mult" min="0.05" 				/>
+	</ability>
+	
+<!-- HEAVY -->
+
+	<ability name="Crafted Burning Rose Gloves _Stats"> <!-- lvl 63 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base" min="127"	max="127"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
+		<burning_resistance_perc 		type="base" min="0.1" 				/>
+	</ability>
+	
+<!-- MEDIUM -->
+
+	<ability name="EP1 Witcher Gloves _Stats"> <!-- lvl 64 -->
+		<weight							type="base"	min="3"					/>
+		<quality 						type="add"	min="5"		max="5"		/>
+		<armor							type="base" min="129"	max="129"	/>
+		<slashing_resistance_perc		type="base"	min="0.08"				/>
+		<piercing_resistance_perc		type="base"	min="0.05"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<spell_power_igni 				type="mult" min="0.10" 				/>
-		<spell_power_aard 				type="mult" min="0.10" 				/>
-		<spell_power_axii 				type="mult" min="0.20" 				/>
-		<staminaRegen_armor_mod			type="mult" min="0.02"				/>
+		<rending_resistance_perc		type="base"	min="0.08"				/>
+		<elemental_resistance_perc		type="base"	min="0.08"				/>
+		<poison_resistance_perc			type="base"	min="0.1"				/>
+		<toxicity 						type="base" min="5" 				/>
+		<vitality 						type="base" min="50"				/>
 	</ability>
 	
-	<ability name="Crafted Burning Rose Gloves _Stats">
-		<weight							type="base"	min="6.92"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base" min="137"	max="137"	/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
-		<elemental_resistance_perc		type="base"	min="0.10"				/>
-		<burning_resistance_perc 		type="base" min="0.10" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.02"				/>
+<!-- NG+ variants -->
+
+<!-- LIGHT -->
+	
+	<ability name="NGP Crafted Ofir Gloves _Stats"> <!-- lvl 32 -->
+		<weight							type="base"	min="1.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base" min="65"	max="65"	/>
+		<slashing_resistance_perc		type="base"	min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.01"				/>
+		<rending_resistance_perc		type="base"	min="0.03"				/>
+		<elemental_resistance_perc		type="base"	min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult"	min="0.01"				/>
+		<spell_power_igni 				type="mult" min="0.05" 				/>
+		<spell_power_aard 				type="mult" min="0.05" 				/>
+		<spell_power_axii 				type="mult" min="0.05" 				/>
 	</ability>
 	
-	<ability name="EP1 Witcher Gloves _Stats">
-		<weight							type="base"	min="1.96"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base" min="145"	max="145"	/>
-		<slashing_resistance_perc		type="base" min="0.05"				/>
-		<piercing_resistance_perc		type="base" min="0.05"				/>
-		<rending_resistance_perc		type="base" min="0.05"				/>
-		<elemental_resistance_perc		type="base" min="0.05"				/>
-		<poison_resistance_perc			type="base"	min="0.10"				/>
+<!-- HEAVY -->
+
+	<ability name="NGP Crafted Burning Rose Gloves _Stats"> <!-- lvl 33 -->
+		<weight							type="base"	min="6.5"				/>
+		<quality						type="add"	min="4"					/>
+		<armor							type="base" min="67"	max="67"	/>
+		<slashing_resistance_perc		type="base"	min="0.09"				/>
+		<piercing_resistance_perc		type="base"	min="0.09"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.09"				/>
+		<rending_resistance_perc		type="base"	min="0.09"				/>
+		<elemental_resistance_perc		type="base"	min="0.09"				/>
+		<staminaRegen_armor_mod			type="mult"	min="-0.025"			/>
+		<burning_resistance_perc 		type="base" min="0.1" 				/>
 	</ability>
 	
-	<!-- NG+ variants -->
-	<ability name="NGP Crafted Ofir Gloves _Stats">
-		<weight							type="base"	min="4.8"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base" min="81"	max="81"	/>
-		<slashing_resistance_perc		type="base"	min="0.05"				/>
+<!-- MEDIUM -->
+
+	<ability name="NGP EP1 Witcher Gloves _Stats"> <!-- lvl 34 -->
+		<weight							type="base"	min="3"					/>
+		<quality 						type="add"	min="5"		max="5"		/>
+		<armor							type="base" min="69"	max="69"	/>
+		<slashing_resistance_perc		type="base"	min="0.08"				/>
+		<piercing_resistance_perc		type="base"	min="0.05"				/>
 		<bludgeoning_resistance_perc	type="base"	min="0.05"				/>
-		<spell_power_igni 				type="mult" min="0.10" 				/>
-		<spell_power_aard 				type="mult" min="0.10" 				/>
-		<spell_power_axii 				type="mult" min="0.20" 				/>
-		<staminaRegen_armor_mod			type="mult" min="0.02"				/>
-	</ability>
-	
-	<ability name="NGP Crafted Burning Rose Gloves _Stats">
-		<weight							type="base"	min="6.92"				/>
-		<quality						type="add"	min="4"		max="4"		/>
-		<armor							type="base" min="77"	max="77"	/>
-		<slashing_resistance_perc		type="base"	min="0.06"				/>
-		<piercing_resistance_perc		type="base"	min="0.06"				/>
-		<bludgeoning_resistance_perc	type="base"	min="0.06"				/>
-		<elemental_resistance_perc		type="base"	min="0.10"				/>
-		<burning_resistance_perc 		type="base" min="0.10" 				/>
-		<staminaRegen_armor_mod			type="mult" min="-0.02"				/>
-	</ability>
-	
-	<ability name="NGP EP1 Witcher Gloves _Stats">
-		<weight							type="base"	min="1.96"				/>
-		<quality						type="add"	min="5"		max="5"		/>
-		<armor							type="base" min="85"	max="85"	/>
-		<slashing_resistance_perc		type="base" min="0.05"				/>
-		<piercing_resistance_perc		type="base" min="0.05"				/>
-		<rending_resistance_perc		type="base" min="0.05"				/>
-		<elemental_resistance_perc		type="base" min="0.05"				/>
-		<poison_resistance_perc			type="base"	min="0.10"				/>
+		<rending_resistance_perc		type="base"	min="0.08"				/>
+		<elemental_resistance_perc		type="base"	min="0.08"				/>
+		<poison_resistance_perc			type="base"	min="0.1"				/>
+		<toxicity 						type="base" min="5" 				/>
+		<vitality 						type="base" min="25"				/>
 	</ability>
 	
 </abilities>
@@ -85,10 +112,10 @@
 	<item 
 		name							="Crafted Ofir Gloves" 
 		category						="gloves" 
-		price							="511"
+		price							="170"
 		initial_durability				="100" 
 		max_durability					="100" 
-		enhancement_slots				="2" 
+		enhancement_slots				="1" 
 		stackable						="1"
 		grid_size 						="2"
 		upgrade_list_name				="list6"
@@ -98,17 +125,14 @@
 		localisation_key_description 	="item_category_light_armor_description" 
 		icon_path						="icons/inventory/armors/ofir_gloves_1_64x128.png" 
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_origin_ofir, mod_valuable, Ofir, EP1
+		<tags>							Armor, LightArmor, mod_armor, mod_legendary, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>
 										<a>Crafted Ofir Gloves _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="4">Iron ore</parts>
-										<parts count="1">Sapphire dust</parts>
-										<parts count="2">Emerald dust</parts>
-										<parts count="1">Amber dust</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="2">Leather straps</parts>
 		</recycling_parts> 	
 		<variants>						<variant equip_template="g_01a_mg__ofir_lv1">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -125,10 +149,10 @@
 	<item
 		name							="Crafted Burning Rose Gloves"
 		category						="gloves"
-		price							="140"
+		price							="500"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -142,11 +166,9 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>Crafted Burning Rose Gloves _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Thread</parts>
-										<parts count="4">Cotton</parts>
-										<parts count="4">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dark steel ingot</parts>
+										<parts count="2">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__flamingrose">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -159,10 +181,10 @@
 	<item 
 		name							="EP1 Witcher Gloves" 
 		category						="gloves" 
-		price							="88"
+		price							="1400"
 		initial_durability				="100" 
 		max_durability					="100" 
-		enhancement_slots				="2" 
+		enhancement_slots				="1" 
 		stackable						="1"
 		grid_size 						="2"
 		upgrade_list_name				="list6"
@@ -178,12 +200,10 @@
 										<a>EP1 Witcher Gloves _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Thread</parts>
-										<parts count="2">Cotton</parts>
-										<parts count="1">Draconide leather</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts> 	
 		<variants>						<variant equip_template="g_01a_mg__viper_v2">
 											<item>Geralt Shirt</item>
@@ -197,10 +217,10 @@
 	<item 
 		name							="NGP Crafted Ofir Gloves" 
 		category						="gloves" 
-		price							="511"
+		price							="170"
 		initial_durability				="100" 
 		max_durability					="100" 
-		enhancement_slots				="2" 
+		enhancement_slots				="1" 
 		stackable						="1"
 		grid_size 						="2"
 		upgrade_list_name				="list6"
@@ -210,17 +230,14 @@
 		localisation_key_description 	="item_category_light_armor_description" 
 		icon_path						="icons/inventory/armors/ofir_gloves_1_64x128.png" 
 	>
-		<tags>							Armor, LightArmor, mod_armor, mod_origin_ofir, mod_valuable, Ofir, EP1
+		<tags>							Armor, LightArmor, mod_armor, mod_legendary, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>
 										<a>NGP Crafted Ofir Gloves _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="4">Iron ore</parts>
-										<parts count="1">Sapphire dust</parts>
-										<parts count="2">Emerald dust</parts>
-										<parts count="1">Amber dust</parts>
+		<recycling_parts>				<parts count="1">Glowing ingot</parts>
+										<parts count="2">Leather straps</parts>
 		</recycling_parts> 	
 		<variants>						<variant equip_template="g_01a_mg__ofir_lv1">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -237,10 +254,10 @@
 	<item
 		name							="NGP Crafted Burning Rose Gloves"
 		category						="gloves"
-		price							="140"
+		price							="500"
 		initial_durability				="200"
 		max_durability					="200"
-		enhancement_slots				="2"
+		enhancement_slots				="1"
 		stackable						="1"
 		grid_size						="2"
 		ability_mode					="OnMount"
@@ -254,11 +271,9 @@
 		<base_abilities>				<a>Default armor _Stats</a>
 										<a>NGP Crafted Burning Rose Gloves _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="3">Leather squares</parts>
-										<parts count="2">Steel ingot</parts>
-										<parts count="1">Thread</parts>
-										<parts count="4">Cotton</parts>
-										<parts count="4">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Meteorite silver ingot</parts>
+										<parts count="1">Dark steel ingot</parts>
+										<parts count="2">Leather</parts>
 		</recycling_parts>
 		<variants>						<variant equip_template="g_01a_mg__flamingrose">
 											<item>Geralt Shirt</item>         <!-- this item uses slim version -->
@@ -271,10 +286,10 @@
 	<item 
 		name							="NGP EP1 Witcher Gloves" 
 		category						="gloves" 
-		price							="88"
+		price							="1400"
 		initial_durability				="100" 
 		max_durability					="100" 
-		enhancement_slots				="2" 
+		enhancement_slots				="1" 
 		stackable						="1"
 		grid_size 						="2"
 		upgrade_list_name				="list6"
@@ -290,12 +305,10 @@
 										<a>NGP EP1 Witcher Gloves _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Leather squares</parts>
-										<parts count="1">Meteorite ore</parts>
-										<parts count="2">Leather straps</parts>
-										<parts count="1">Thread</parts>
-										<parts count="2">Cotton</parts>
-										<parts count="1">Draconide leather</parts>
+		<recycling_parts>				<parts count="1">Leather straps</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Monstrous hide</parts>
+										<parts count="1">Chitin scale</parts>
 		</recycling_parts> 	
 		<variants>						<variant equip_template="g_01a_mg__viper_v2">
 											<item>Geralt Shirt</item>

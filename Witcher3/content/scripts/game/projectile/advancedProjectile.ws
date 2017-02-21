@@ -375,6 +375,8 @@ class W3ElementalIfrytProjectile extends W3TraceGroundProjectile
 class W3EredinFrostProjectile extends W3TraceGroundProjectile
 {
 	private var action : W3DamageAction;
+	//modSigns: effect added
+	default projEfect = EET_SlowdownFrost;
 	
 	
 	event OnProjectileCollision( pos, normal : Vector, collidingComponent : CComponent, hitCollisionsGroups : array< name >, actorIndex : int, shapeIndex : int )

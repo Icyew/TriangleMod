@@ -17,7 +17,8 @@ class W3Mutagen09_Effect extends W3Mutagen_Effect
 	{
 		super.OnUpdate(dt);
 		
-		if(GetCurWeather() == EWE_Clear)
+		//modSigns: fix weather condition
+		if(GetCurWeather() != EWE_Rain && GetCurWeather() != EWE_Snow && GetCurWeather() != EWE_Storm)
 		{
 			if(hasAbility)
 			{

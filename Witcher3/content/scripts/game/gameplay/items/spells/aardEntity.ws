@@ -233,7 +233,7 @@ statemachine class W3AardEntity extends W3SignEntity
 			projectile.ShootCakeProjectileAtPosition( aspects[fireMode].cone, 3.5f, 0.0f, 30.0f, spawnPos + heading * distance, distance, projectileCollision );			
 		}
 		
-		if(ownerActor.HasAbility('Glyphword 6 _Stats', true))
+		if((W3PlayerWitcher)ownerActor && ((W3PlayerWitcher)ownerActor).HasGlyphwordActive('Glyphword 6 _Stats')) //modSigns
 		{
 			staminaDrain = CalculateAttributeValue(ownerActor.GetAttributeValue('glyphword6_stamina_drain_perc'));
 			projectile.SetStaminaDrainPerc(staminaDrain);			
@@ -279,6 +279,8 @@ statemachine class W3AardEntity extends W3SignEntity
 	{
 		var dispersionLevel : int;
 		var hasMutation6 : bool;
+		var spellPower : SAbilityAttributeValue; //modSigns
+		var sp : float; //modSigns
 		
 		hasMutation6 = owner.GetPlayer().IsMutationActive(EPMT_Mutation6);
 		
@@ -345,7 +347,7 @@ statemachine class W3AardEntity extends W3SignEntity
 		}
 		
 		
-		if(owner.CanUseSkill(S_Magic_s12))
+		/*if(owner.CanUseSkill(S_Magic_s12))
 		{
 			
 			switch(dispersionLevel)
@@ -363,24 +365,36 @@ statemachine class W3AardEntity extends W3SignEntity
 					PlayEffect( effects[fireMode].throwEffectSPUpgrade3 );
 					break;
 			}
-		}
+		}*/
+		//modSigns: make power upgrade fx depend on sign power, not power skill
+		spellPower = owner.GetActor().GetTotalSignSpellPower(GetSkill());
+		sp = spellPower.valueMultiplicative - 1;
+		if(sp < 0.25)
+			PlayEffect( effects[fireMode].throwEffectSPNoUpgrade );
+		else if(sp < 0.75)
+			PlayEffect( effects[fireMode].throwEffectSPUpgrade1 );
+		else if(sp < 1.25)
+			PlayEffect( effects[fireMode].throwEffectSPUpgrade2 );
+		else if(sp < 1.75)
+			PlayEffect( effects[fireMode].throwEffectSPUpgrade3 );
 		
 		
 		if(owner.CanUseSkill(S_Magic_s06))
 		{
+			dispersionLevel = owner.GetSkillLevel(S_Magic_s06); //modSigns
 			
 			switch(dispersionLevel)
 			{
-				case 0:
+				case 1: //modSigns
 					PlayEffect( effects[fireMode].throwEffectDmgNoUpgrade );
 					break;
-				case 1:
+				case 2: //modSigns
 					PlayEffect( effects[fireMode].throwEffectDmgUpgrade1 );
 					break;
-				case 2:
+				case 3: //modSigns
 					PlayEffect( effects[fireMode].throwEffectDmgUpgrade2 );
 					break;
-				case 3:
+				default: //modSigns
 					PlayEffect( effects[fireMode].throwEffectDmgUpgrade3 );
 					break;
 			}

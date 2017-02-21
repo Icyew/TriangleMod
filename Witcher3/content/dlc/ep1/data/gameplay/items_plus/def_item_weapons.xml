@@ -8,53 +8,52 @@
 	<ability name="Plank _Stats">
 		<weight							type="base"	min="0.0"				/>
 		<quality						type="add"	min="1"		max="1"		/>
-		<BludgeoningDamage				type="base"	min="22"				/>
+		<BludgeoningDamage				type="base"	min="50"				/>
 		<SilverDamage					type="base"	min="1"					/>
 	</ability>
 	
 	<ability name="NPC Long Steel Sword _Stats">
-				<SlashingDamage min="200" max="200"/>
-				<SilverDamage min="5" max="5"/>						
-				<quality type="add" min="1" max="1"/>
-				<weight type="base" min="8" />
+		<SlashingDamage min="250" max="250"/>
+		<SilverDamage min="5" max="5"/>						
+		<quality type="add" min="1" max="1"/>
+		<weight type="base" min="8" />
 	</ability>
 	
 	
-			<ability name="NPC torch _Stats">
-				<BludgeoningDamage min="20" max="20"/>
-				<SilverDamage min="3" max="3"/>				
-				<BurningEffect is_ability="true" />
-				<buff_apply_chance type="add" min="1.0" />	
-				<quality type="add" min="1" max="1"/>
-				<weight type="base" min="2" />
-			</ability>
+	<ability name="NPC torch _Stats">
+		<BludgeoningDamage min="250" max="250"/>
+		<SilverDamage min="5" max="5"/>				
+		<BurningEffect is_ability="true" />
+		<buff_apply_chance type="add" min="1.0" />	
+		<quality type="add" min="1" max="1"/>
+		<weight type="base" min="2" />
+	</ability>
 	
 	<ability name="Shovel _Stats">
-				<SlashingDamage min="300" max="300"/>
-				<SilverDamage min="80" max="80"/>		
-				<critical_hit_damage_bonus type="add" min="0.25" />				
-				<quality type="add" min="1" max="1"/>
-				<weight type="base" min="8" />
+		<SlashingDamage min="300" max="300"/>
+		<SilverDamage min="80" max="80"/>
+		<critical_hit_damage_bonus type="add" min="0.25" />				
+		<quality type="add" min="1" max="1"/>
+		<weight type="base" min="8" />
 	</ability>
 	
 	<ability name="PC Caretaker Shovel _Stats">
-		<SilverDamage 					min="1" 	max="1"					/>
-		<quality 						type="add" 	min="4" 				/>
-		<weight 						type="base" min="8" 				/>
-		<lifesteal						type="add" 	min="0.1" 				/>
+		<SilverDamage min="1" max="1" />
+		<quality type="add" min="4" />
+		<weight type="base" min="4" />
+		<lifesteal type="add" min="0.1" />
 	</ability>
 	
 	<ability name="NPC Olgierd Sabre _Stats">
-				<SlashingDamage min="100" max="100"/>
-				<SilverDamage min="80" max="80"/>		
-				<critical_hit_damage_bonus type="add" min="0.25" />				
-				<quality type="add" min="1" max="1"/>
-				<weight type="base" min="8" />
+		<SlashingDamage min="850" max="850"/>
+		<SilverDamage min="80" max="80"/>		
+		<critical_hit_damage_bonus type="add" min="0.25" />				
+		<quality type="add" min="1" max="1"/>
+		<weight type="base" min="8" />
 	</ability>
 	
 	<ability name="PC Olgierd Sabre _Stats">
-		<SlashingDamage min="603" max="603"/>
-		<SilverDamage min="1"/>					
+		<SilverDamage min="1" max="1"/>				
 		<quality type="add" min="4" max="4"/>
 		<weight type="base" min="8" />
 	</ability>
@@ -62,86 +61,63 @@
 	<ability name="Ofir Sabre 1 _Stats">
 		<SilverDamage 					min="1" 	max="1"					/>	
 		<quality 						type="add" 	min="4" 	max="4"		/>
-		<weight 						type="base"	min="4.05"				/>
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<armor_reduction				type="base"	min="100"				/>
-		<desc_burningchance_mult		type="add"	min="0.10"				/>
-		<buff_apply_chance				type="add"	min="0.10"				/>
+		<weight 						type="base"	min="4"					/>
+		<critical_hit_chance			type="add"	min="0.35"				/>
+		<armor_reduction				type="base"	min="80"				/>
+		<desc_burningchance_mult		type="add"	min="0.25"				/>
+		<buff_apply_chance				type="add"	min="0.25"				/>
 		<BurningEffect 					is_ability="true" 					/>
-		<spell_power_igni 				type="mult" min="0.15" 				/>
-		<spell_power_aard 				type="mult" min="0.15" 				/>
-		<item_level_min					type="add"	min="33"				/>
-		<item_level_max					type="add"	min="35"				/>
+		<spell_power_igni 				type="mult" min="0.25" 				/>
+		<spell_power_aard 				type="mult" min="0.25" 				/>
 	</ability>
 	
 	<ability name="Ofir Sabre 2 _Stats">
-		<SlashingDamage 				min="548" 	max="548"				/>
 		<SilverDamage 					min="1" 	max="1"					/>						
-		<critical_hit_chance			type="add"	min="0.10"				/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
 		<armor_reduction				type="base"	min="50"				/>
 		<quality 						type="add" 	min="3" 	max="3"		/>
-		<weight 						type="base"	min="4.05"				/>
+		<weight 						type="base"	min="6"					/>
 	</ability>
 	
 	<ability name="Hakland Sabre _Stats">
 		<SilverDamage 					min="1" 	max="1"					/>						
-		<critical_hit_chance			type="add"	min="0.10"				/>
+		<critical_hit_chance			type="add"	min="0.15"				/>
 		<quality 						type="add" 	min="2" 	max="2"		/>
-		<weight 						type="base"	min="4.05"				/>
-		<item_level_min					type="add"	min="30"				/>
-		<item_level_max					type="add"	min="34"				/>
+		<weight 						type="base"	min="6"					/>
 	</ability>
 	
 	<ability name="Burning Rose Sword B _Stats"> 
 		<SilverDamage 					min="1" 	max="1"					/>						
-		<dismember_chance_mult 			type="add"	min="0.03" 				/>
-		<quality 						type="add" 	min="2" 	max="2"		/>
-		<weight 						type="base"	min="4.05"				/>
-		<item_level_min					type="add"	min="35"				/>
-		<item_level_max					type="add"	min="36"				/>
+		<dismember_chance_mult 			type="add"	min="0.5" 				/>
+		<quality 						type="add" 	min="3" 	max="3"		/>
+		<weight 						type="base"	min="8"					/>
 	</ability>
 	
 	<ability name="Burning Rose Sword _Stats"> 
 		<SilverDamage 					min="1" 	max="1"					/>						
-		<dismember_chance_mult 			type="add"	min="0.03" 				/>
+		<dismember_chance_mult 			type="add"	min="0.5" 				/>
 		<BurningEffect 					is_ability="true" 					/>
-		<buff_apply_chance 				type="add" 	min="0.1" 				/>
-		<desc_burningchance_mult 		type="add" 	min="0.1" 				/>
-		<quality 						type="add" 	min="3" 	max="3"		/>
-		<weight 						type="base"	min="4.05"				/>
-		<item_level_min					type="add"	min="35"				/>
-		<item_level_max					type="add"	min="36"				/>
-	</ability>
-	
-	<ability name="Ofir Crossbow _Stats">
-		<weight 						type="base" min="2.64" 				/>
-		<attack_power 					type="mult" min="1.65" 	max="1.65"	/>
-		<quality 						type="add" 	min="2" 	max="2"		/>
-		<ammo 							type="add" 	min="3" 				/>
-	</ability>
-	
-	<ability name="Ofir Crossbow R _Stats">
-		<weight 						type="base" min="2.64"				/>
-		<attack_power 					type="mult" min="2" 	max="2"		/>
+		<buff_apply_chance 				type="add" 	min="0.25" 				/>
+		<desc_burningchance_mult 		type="add" 	min="0.25" 				/>
 		<quality 						type="add" 	min="4" 	max="4"		/>
+		<weight 						type="base"	min="4"					/>
+	</ability>
+	
+	<ability name="Ofir Crossbow _Stats"> <!-- lvl 27 -->
+		<quality 						type="add" 	min="2" 	max="2"		/>
+		<weight 						type="base" min="2"					/>
+		<attack_power 					type="mult" min="2.0" 	max="2.0"	/>
 		<ammo 							type="add" 	min="3" 				/>
+		<armor_reduction				type="base"	min="130"	max="155"	/>
 	</ability>
 	
-	<!-- NGP variants -->
-	<ability name="NGP PC Olgierd Sabre _Stats">
-		<SlashingDamage min="363" max="363"/>
-		<SilverDamage min="1" max="1"/>				
-		<quality type="add" min="4" max="4"/>
-		<weight type="base" min="8" />
-	</ability>
-	
-	<ability name="NGP Ofir Sabre 2 _Stats">
-		<SlashingDamage 				min="308" 	max="308"				/>
-		<SilverDamage 					min="1" 	max="1"					/>						
-		<critical_hit_chance			type="add"	min="0.10"				/>
-		<armor_reduction				type="base"	min="50"				/>
-		<quality 						type="add" 	min="3" 	max="3"		/>
-		<weight 						type="base"	min="4.05"				/>
+	<ability name="Ofir Crossbow R _Stats"> <!-- lvl 32 -->
+		<quality 						type="add" 	min="4" 	max="4"		/>
+		<weight 						type="base" min="2"					/>
+		<attack_power 					type="mult" min="2.1" 	max="2.1"	/>
+		<ammo 							type="add" 	min="3" 				/>
+		<critical_hit_damage_bonus		type="add"	min="0.75"	max="0.75"	/>
+		<armor_reduction				type="base"	min="170"	max="170"	/>
 	</ability>
 
 </abilities>
@@ -176,7 +152,8 @@
 		localisation_key_description	="item_desc_q602_plank"
 		icon_path						="icons/inventory/weapons/q304_item_wooden_training_sword-64x128.png"
 	>
-	<tags>								Quest, PlayerSteelWeapon, Weapon, sword1h,1handedWeapon,Wooden, mod_weapo</tags>
+	<tags>								Wooden, Quest, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+	</tags>
 	<player_override><bound_items>
 	</bound_items></player_override>
 	<base_abilities>
@@ -272,6 +249,7 @@
 										</anim_switch>
 		</anim_switches>
 	</item>
+
 	<!-- ////////////////////// Torch Blunt Burning ////////////////////// -->
 	<item 
 		name							="Torch Blunt Burning"
@@ -416,7 +394,7 @@
 		localisation_key_description	="item_desc_olgierd_sabre"
 		icon_path						="icons/inventory/weapons/scoiataels_sword_lvl1_64x128.png"
 	>
-		<tags>							SteelWeapon, Weapon, sword1h, 1handedWeapon, NoShow, NoDrop, mod_weapon, PhantomWeapon
+		<tags>							SteelWeapon, Weapon, sword1h, 1handedWeapon, NoShow, NoDrop, mod_weapon, mod_legendary, PhantomWeapon
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>NPC Olgierd Sabre _Stats</a>
@@ -437,13 +415,16 @@
 											deact="holster_sword_deact">
 										</action>
 		</anim_actions>
+		<bound_items>
+			<item>NPC Scabbard HOS</item>
+		</bound_items>
 	</item>
 	
 	<!-- ////////////////////// Olgierd Sabre for PC////////////////////// -->
 	<item
 		name							="Olgierd Sabre"
 		category						="steelsword"
-		price							="16"
+		price							="700"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="3"
@@ -467,13 +448,14 @@
 		localisation_key_description	="item_desc_olgierd_sabre"
 		icon_path						="icons/inventory/weapons/olgierd_sabre_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, PhantomWeapon, OlgierdSabre, EP1
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, PhantomWeapon, OlgierdSabre, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>PC Olgierd Sabre _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Haft</parts>
+										<parts count="1">Dark steel ingot</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -504,7 +486,7 @@
 											switch_deact="silver_to_steel_deact">
 										</anim_switch>
 		</anim_switches>			
-		<player_override><bound_items>				<item>Sabre Scabbard 07</item>		 
+		<player_override><bound_items>				<item>Sabre Scabbard 07</item>  	 
 		</bound_items></player_override>
 	</item>
 		
@@ -559,7 +541,7 @@
 	<item
 		name							="PC Caretaker Shovel"
 		category						="steelsword"
-		price							="14"
+		price							="600"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="0" 
@@ -583,13 +565,13 @@
 		localisation_key_description 	="item_category_secondary_desc"
 		icon_path						="icons/inventory/weapons/caretaker_shovel_64x128.png"
 	>
-		<tags>							Autogen, AutogenForceLevel, PlayerSteelWeapon, Weapon, sword1h, TypeAxe, SecondaryWeapon, mod_secondary
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, TypeAxe, SecondaryWeapon, mod_secondary, mod_legendary
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>PC Caretaker Shovel _Stats</a>
 		</base_abilities>
 		<recycling_parts>				<parts count="1">Haft</parts>
-										<parts count="3">Iron ore</parts>
+										<parts count="1">Dark iron plate</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -643,15 +625,15 @@
 					<a>ablAttackKnockeddownTarget</a>
 			</base_abilities>
 		</item>
-		
+			
 	<!-- ////////////////////// Ofir Sabres ////////////////////// -->
 	<item
 		name							="Ofir Sabre 1"
 		category						="steelsword"
-		price							="106"
+		price							="777"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="2"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		equip_template					="steel_sword_ep1_01"
@@ -672,13 +654,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/ofir_steel_sabre_2_64x128.png"
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, mod_valuable, Ofir, EP1
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Ofir Sabre 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Ruby dust</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -709,15 +692,87 @@
 											switch_deact="silver_to_steel_deact">
 										</anim_switch>
 		</anim_switches>			
-		<player_override><bound_items>					 
-				<item>Sabre Scabbard 07</item> 
-		</bound_items></player_override>
+		<player_override><bound_items>				
+					<item>Sabre Scabbard 07</item>  	 
+		</bound_items>
+		</player_override>
 	</item>
 	
 	<item
 		name							="Ofir Sabre 2"
 		category						="steelsword"
-		price							="106"
+		price							="295"
+		initial_durability				="100"
+		max_durability					="100"
+		enhancement_slots				="2"
+		stackable						="1"
+		grid_size						="2"
+		equip_template					="steel_sword_ep1_02"
+		equip_slot						="steel_sword_back_slot" 
+		hold_slot						="r_weapon" 
+		weapon							="true" 
+		lethal							="true"
+		ability_mode					="OnHold"
+		hand							="right"
+		sound_identification			="long steel"
+		draw_event						="DrawWeapon"
+		draw_act						="draw_steel_sword_back_act"
+		draw_deact						="draw_steel_sword_back_deact"
+		holster_event					="HolsterWeapon"
+		holster_act						="holster_steel_sword_back_act"
+		holster_deact					="holster_steel_sword_back_deact"
+		localisation_key_name			="item_name_ofir_steel_sabre_3" 
+		localisation_key_description	="item_desc_steel_sword"
+		icon_path						="icons/inventory/weapons/ofir_steel_sabre_3_64x128.png"
+	>
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, Ofir, EP1
+		</tags>
+		<base_abilities>				<a>Default weapon _Stats</a>
+										<a>Ofir Sabre 2 _Stats</a>
+		</base_abilities>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel ingot</parts>
+		</recycling_parts>
+		<anim_actions>
+										<action 
+											name="draw" 
+											event="DrawWeapon"
+											act="draw_steel_sword_back_act" 
+											deact="draw_steel_sword_back_deact">
+										</action>
+										<action 
+											name="holster" 
+											event="HolsterWeapon" 
+											act="holster_steel_sword_back_act" 
+											deact="holster_steel_sword_back_deact">
+										</action>
+										<action 
+											name="attack" 
+											event="attack_steel_sword_back" 
+											act="attack_steel_sword_back_act" 
+											deact="attack_steel_sword_back_deact">
+										</action>
+		</anim_actions>
+		<anim_switches>
+										<anim_switch 
+											category="silversword" 
+											equip_slot="silver_sword_back_slot"
+											event="silver_to_steel"
+											switch_act="silver_to_steel_act"
+											switch_deact="silver_to_steel_deact">
+										</anim_switch>
+		</anim_switches>			
+		<player_override>
+		<bound_items>				
+							<item>Sabre Scabbard 02</item>  	 
+		</bound_items>
+		</player_override>
+	</item>
+	
+	<item
+		name							="Hakland Sabre"
+		category						="steelsword"
+		price							="110"
 		initial_durability				="100"
 		max_durability					="100"
 		enhancement_slots				="1"
@@ -741,82 +796,13 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/ofir_steel_sabre_3_64x128.png"
 	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, mod_valuable, Ofir, EP1
-		</tags>
-		<base_abilities>				<a>Default weapon _Stats</a>
-										<a>Ofir Sabre 2 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Dark steel ingot</parts>
-		</recycling_parts>
-		<anim_actions>
-										<action 
-											name="draw" 
-											event="DrawWeapon"
-											act="draw_steel_sword_back_act" 
-											deact="draw_steel_sword_back_deact">
-										</action>
-										<action 
-											name="holster" 
-											event="HolsterWeapon" 
-											act="holster_steel_sword_back_act" 
-											deact="holster_steel_sword_back_deact">
-										</action>
-										<action 
-											name="attack" 
-											event="attack_steel_sword_back" 
-											act="attack_steel_sword_back_act" 
-											deact="attack_steel_sword_back_deact">
-										</action>
-		</anim_actions>
-		<anim_switches>
-										<anim_switch 
-											category="silversword" 
-											equip_slot="silver_sword_back_slot"
-											event="silver_to_steel"
-											switch_act="silver_to_steel_act"
-											switch_deact="silver_to_steel_deact">
-										</anim_switch>
-		</anim_switches>			
-		<player_override><bound_items>		
-						<item>Sabre Scabbard 02</item> 
-		</bound_items></player_override>
-	</item>
-	
-	<item
-		name							="Hakland Sabre"
-		category						="steelsword"
-		price							="106"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="0"
-		stackable						="1"
-		grid_size						="2"
-		equip_template					="steel_sword_ep1_02"
-		equip_slot						="steel_sword_back_slot" 
-		hold_slot						="r_weapon" 
-		weapon							="true" 
-		lethal							="true"
-		ability_mode					="OnHold"
-		hand							="right"
-		sound_identification			="long steel"
-		draw_event						="DrawWeapon"
-		draw_act						="draw_steel_sword_back_act"
-		draw_deact						="draw_steel_sword_back_deact"
-		holster_event					="HolsterWeapon"
-		holster_act						="holster_steel_sword_back_act"
-		holster_deact					="holster_steel_sword_back_deact"
-		localisation_key_name			="item_name_ofir_steel_sabre_3" 
-		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/ofir_steel_sabre_3_64x128.png"
-	>
-		<tags>							Autogen, AutogenUseLevelRange, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, Ofir
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, Ofir
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Hakland Sabre _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather squares</parts>
+										<parts count="1">Steel ingot</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -857,10 +843,10 @@
 	<item
 		name							="Burning Rose Sword"
 		category						="steelsword"
-		price							="106"
+		price							="800"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="1"
+		enhancement_slots				="3"
 		stackable						="1"
 		grid_size						="2"
 		equip_template					="steel_sword_ep1_04"
@@ -881,13 +867,14 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/burning_rose_sword_64x128.png"
 	>
-		<tags>							Autogen, AutogenUseLevelRange, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, EP1
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_legendary, EP1
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Burning Rose Sword _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dwimeryte ingot</parts>
+										<parts count="1">Ruby dust</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -930,10 +917,10 @@
 	<item
 		name							="Burning Rose Sword B"
 		category						="steelsword"
-		price							="106"
+		price							="320"
 		initial_durability				="100"
 		max_durability					="100"
-		enhancement_slots				="0"
+		enhancement_slots				="2"
 		stackable						="1"
 		grid_size						="2"
 		equip_template					="steel_sword_ep1_04"
@@ -954,13 +941,13 @@
 		localisation_key_description	="item_desc_steel_sword"
 		icon_path						="icons/inventory/weapons/burning_rose_sword_64x128.png"
 	>
-		<tags>							Autogen, AutogenUseLevelRange, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
+		<tags>							Autogen, PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Burning Rose Sword B _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
+		<recycling_parts>				<parts count="1">Leather</parts>
+										<parts count="1">Dark steel ingot</parts>
 		</recycling_parts>
 		<anim_actions>
 										<action 
@@ -1048,6 +1035,9 @@
 											deact="holster_sword_deact">
 										</action>
 		</anim_actions>
+		<bound_items>
+			<item>NPC Scabbard 1</item>
+		</bound_items>
 	</item>
 	
 	<!-- ////////////////////// Ofir Crossbow ////////////////////// -->
@@ -1060,7 +1050,7 @@
 		localisation_key_name 			="item_name_ofir_crossbow"
 		localisation_key_description 	="item_desc_crossbow_1"
 		hold_slot						="l_weapon"
-		price 							="200"
+		price 							="140"
 		grid_size 						="2"
 		icon_path						="icons/inventory/weapons/crossbow/ofir_crossbow_64x128.png"
 		enhancement_slots				="0" 
@@ -1071,10 +1061,9 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Ofir Crossbow _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="3">String</parts>
-										<parts count="1">Resin</parts>
-										<parts count="1">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Hardened timber</parts>
+										<parts count="1">Meteorite ingot</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
 	</item>
 	
@@ -1087,164 +1076,23 @@
 		localisation_key_name 			="item_name_ofir_crossbow"
 		localisation_key_description 	="item_desc_crossbow_1"
 		hold_slot						="l_weapon"
-		price 							="73"
+		price 							="160"
 		grid_size 						="2"
 		icon_path						="icons/inventory/weapons/crossbow/ofir_crossbow_64x128.png"
 		enhancement_slots				="0" 
 	>
 		
-		<tags>							Weapon, crossbow, mod_weapon, mod_origin_ofir
+		<tags>							Weapon, crossbow, mod_weapon, mod_legendary, mod_origin_ofir
 		</tags>
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Ofir Crossbow R _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Hardened timber</parts>
-										<parts count="3">String</parts>
-										<parts count="1">Resin</parts>
-										<parts count="1">Dark iron ore</parts>
+		<recycling_parts>				<parts count="1">Hardened timber</parts>
+										<parts count="1">Glowing ingot</parts>
+										<parts count="1">String</parts>
 		</recycling_parts>
-	</item>
-	
-	<!-- NGP variants -->
-	<item
-		name							="NGP Olgierd Sabre"
-		category						="steelsword"
-		price							="16"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="3"
-		stackable						="1"
-		grid_size						="2"
-		equip_template					="olgierd_sabre"
-		equip_slot						="steel_sword_back_slot" 
-		hold_slot						="r_weapon" 
-		weapon							="true" 
-		lethal							="true"
-		ability_mode					="OnHold"
-		hand							="right"
-		sound_identification			="long steel"
-		draw_event						="DrawWeapon"
-		draw_act						="draw_steel_sword_back_act"
-		draw_deact						="draw_steel_sword_back_deact"
-		holster_event					="HolsterWeapon"
-		holster_act						="holster_steel_sword_back_act"
-		holster_deact					="holster_steel_sword_back_deact"
-		localisation_key_name			="item_name_olgierd_sabre" 
-		localisation_key_description	="item_desc_olgierd_sabre"
-		icon_path						="icons/inventory/weapons/olgierd_sabre_64x128.png"
-	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, PhantomWeapon, OlgierdSabre, EP1
-		</tags>
-		<base_abilities>				<a>Default weapon _Stats</a>
-										<a>NGP PC Olgierd Sabre _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather squares</parts>
-										<parts count="2">Iron ingot</parts>
-		</recycling_parts>
-		<anim_actions>
-										<action 
-											name="draw" 
-											event="DrawWeapon"
-											act="draw_steel_sword_back_act" 
-											deact="draw_steel_sword_back_deact">
-										</action>
-										<action 
-											name="holster" 
-											event="HolsterWeapon" 
-											act="holster_steel_sword_back_act" 
-											deact="holster_steel_sword_back_deact">
-										</action>
-										<action 
-											name="attack" 
-											event="attack_steel_sword_back" 
-											act="attack_steel_sword_back_act" 
-											deact="attack_steel_sword_back_deact">
-										</action>
-		</anim_actions>
-		<anim_switches>
-										<anim_switch 
-											category="silversword" 
-											equip_slot="silver_sword_back_slot"
-											event="silver_to_steel"
-											switch_act="silver_to_steel_act"
-											switch_deact="silver_to_steel_deact">
-										</anim_switch>
-		</anim_switches>			
-		<player_override><bound_items>				<item>Sabre Scabbard 07</item>  	 
-		</bound_items></player_override>
 	</item>
 
-	<item
-		name							="NGP Ofir Sabre 2"
-		category						="steelsword"
-		price							="106"
-		initial_durability				="100"
-		max_durability					="100"
-		enhancement_slots				="1"
-		stackable						="1"
-		grid_size						="2"
-		equip_template					="steel_sword_ep1_02"
-		equip_slot						="steel_sword_back_slot" 
-		hold_slot						="r_weapon" 
-		weapon							="true" 
-		lethal							="true"
-		ability_mode					="OnHold"
-		hand							="right"
-		sound_identification			="long steel"
-		draw_event						="DrawWeapon"
-		draw_act						="draw_steel_sword_back_act"
-		draw_deact						="draw_steel_sword_back_deact"
-		holster_event					="HolsterWeapon"
-		holster_act						="holster_steel_sword_back_act"
-		holster_deact					="holster_steel_sword_back_deact"
-		localisation_key_name			="item_name_ofir_steel_sabre_3" 
-		localisation_key_description	="item_desc_steel_sword"
-		icon_path						="icons/inventory/weapons/ofir_steel_sabre_3_64x128.png"
-	>
-		<tags>							PlayerSteelWeapon, Weapon, sword1h, 1handedWeapon, mod_weapon, mod_origin_ofir, mod_valuable, Ofir
-		</tags>
-		<base_abilities>				<a>Default weapon _Stats</a>
-										<a>NGP Ofir Sabre 2 _Stats</a>
-		</base_abilities>
-		<recycling_parts>				<parts count="1">Leather straps</parts>
-										<parts count="2">Dark steel ingot</parts>
-		</recycling_parts>
-		<anim_actions>
-										<action 
-											name="draw" 
-											event="DrawWeapon"
-											act="draw_steel_sword_back_act" 
-											deact="draw_steel_sword_back_deact">
-										</action>
-										<action 
-											name="holster" 
-											event="HolsterWeapon" 
-											act="holster_steel_sword_back_act" 
-											deact="holster_steel_sword_back_deact">
-										</action>
-										<action 
-											name="attack" 
-											event="attack_steel_sword_back" 
-											act="attack_steel_sword_back_act" 
-											deact="attack_steel_sword_back_deact">
-										</action>
-		</anim_actions>
-		<anim_switches>
-										<anim_switch 
-											category="silversword" 
-											equip_slot="silver_sword_back_slot"
-											event="silver_to_steel"
-											switch_act="silver_to_steel_act"
-											switch_deact="silver_to_steel_deact">
-										</anim_switch>
-		</anim_switches>			
-		<player_override>
-		<bound_items>				
-							<item>Sabre Scabbard 02</item>  	 
-		</bound_items>
-		</player_override>
-	</item>
-	
 </items>
 
 </definitions>

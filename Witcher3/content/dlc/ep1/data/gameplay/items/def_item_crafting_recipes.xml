@@ -25,7 +25,7 @@
 	<item
 		name							="Crafted Ofir Steel Sword schematic"
 		category						="crafting_schematic"
-		price							="1000"
+		price							="240"
 		stackable						="100"
 		localisation_key_name			="item_name_ofir_steel_sabre_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -40,7 +40,7 @@
 	<item
 		name							="EP1 Viper School steel sword schematic"
 		category						="crafting_schematic"
-		price							="77"
+		price							="280"
 		stackable						="100"
 		localisation_key_name			="item_name_hosviper_school_steel_sword_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -55,7 +55,7 @@
 	<item
 		name							="Crafted Burning Rose Sword schematic"
 		category						="crafting_schematic"
-		price							="81"
+		price							="250"
 		stackable						="100"
 		localisation_key_name			="item_name_burning_rose_steel_sword_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -71,7 +71,7 @@
 	<item
 		name							="EP1 Crafted Witcher Silver Sword schematic"
 		category						="crafting_schematic"
-		price							="148"
+		price							="310"
 		stackable						="100"
 		localisation_key_name			="item_name_electrum_sword_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -86,7 +86,7 @@
 	<item
 		name							="EP1 Viper School silver sword schematic"
 		category						="crafting_schematic"
-		price							="208"
+		price							="340"
 		stackable						="100"
 		localisation_key_name			="item_name_hosviper_school_silver_sword_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -102,7 +102,7 @@
 	<item
 		name							="Crafted Ofir Armor schematic"
 		category						="crafting_schematic"
-		price							="198"
+		price							="120"
 		stackable						="100"
 		localisation_key_name			="item_name_ofir_armor_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -117,7 +117,7 @@
 	<item
 		name							="Crafted Ofir Boots schematic"
 		category						="crafting_schematic"
-		price							="112"
+		price							="34"
 		stackable						="100"
 		localisation_key_name			="item_name_ofir_shoes_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -132,7 +132,7 @@
 	<item
 		name							="Crafted Ofir Gloves schematic"
 		category						="crafting_schematic"
-		price							="102"
+		price							="34"
 		stackable						="100"
 		localisation_key_name			="item_name_ofir_gloves_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -147,7 +147,7 @@
 	<item
 		name							="Crafted Ofir Pants schematic"
 		category						="crafting_schematic"
-		price							="102"
+		price							="54"
 		stackable						="100"
 		localisation_key_name			="item_name_ofir_pants_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -162,7 +162,7 @@
 	<item
 		name							="Crafted Burning Rose Armor schematic"
 		category						="crafting_schematic"
-		price							="166"
+		price							="320"
 		stackable						="100"
 		localisation_key_name			="item_name_rose_armor_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -177,7 +177,7 @@
 	<item
 		name							="Crafted Burning Rose Gloves schematic"
 		category						="crafting_schematic"
-		price							="67"
+		price							="100"
 		stackable						="100"
 		localisation_key_name			="item_name_rose_gloves_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -192,7 +192,7 @@
 	<item
 		name							="EP1 Witcher Armor schematic"
 		category						="crafting_schematic"
-		price							="150"
+		price							="320"
 		stackable						="100"
 		localisation_key_name			="item_name_hoscorset_armor_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -207,7 +207,7 @@
 	<item
 		name							="EP1 Witcher Boots schematic"
 		category						="crafting_schematic"
-		price							="150"
+		price							="170"
 		stackable						="100"
 		localisation_key_name			="item_name_hoscorset_boots_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -222,7 +222,7 @@
 	<item
 		name							="EP1 Witcher Gloves schematic"
 		category						="crafting_schematic"
-		price							="150"
+		price							="140"
 		stackable						="100"
 		localisation_key_name			="item_name_hoscorset_gloves_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -237,7 +237,7 @@
 	<item
 		name							="EP1 Witcher Pants schematic"
 		category						="crafting_schematic"
-		price							="150"
+		price							="170"
 		stackable						="100"
 		localisation_key_name			="item_name_hoscorset_pants_schematic"
 		localisation_key_description	="item_desc_crafting_schematic"
@@ -263,7 +263,7 @@
 		craftedItem_name				="Concealment Kit"
 		craftsmanType_name				="Crafter"
 		craftsmanLevel_name				="Journeyman"
-		price							="10"
+		price							="110"
 	>
 		<ingredients>					<ingredient	quantity="1"	item_name="q602_donkey_ears"				/>
 										<ingredient	quantity="1"	item_name="q603_magister_glasses"			/>
@@ -276,11 +276,13 @@
 		craftedItem_name				="Crafted Ofir Steel Sword"
 		craftsmanType_name				="Smith"
 		craftsmanLevel_name				="Grand Master"
-		price							="226"
+		price							="1200"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Leather squares"					/>
-										<ingredient	quantity="2"	item_name="Dark steel ingot"				/>
-										<ingredient	quantity="3"	item_name="Feather"							/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="2"	item_name="Wire rope"						/>
+										<ingredient	quantity="1"	item_name="Haft"							/>
+										<ingredient	quantity="1"	item_name="Amber dust"						/>
+										<ingredient	quantity="1"	item_name="Sapphire dust"					/>
 										<ingredient	quantity="1"	item_name="Ruby dust"						/>
 		</ingredients>
 	</schematic>
@@ -290,12 +292,14 @@
 		craftedItem_name				="EP1 Viper School steel sword"
 		craftsmanType_name				="Smith"
 		craftsmanLevel_name				="Grand Master"
-		price							="385"
+		price							="1400"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Leather squares"					/>
-										<ingredient	quantity="2"	item_name="Dark steel ingot"				/>
-										<ingredient	quantity="1"	item_name="Monstrous brain"					/>
-										<ingredient	quantity="2"	item_name="Emerald dust"					/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="1"	item_name="Leather"							/>
+										<ingredient	quantity="2"	item_name="Wire rope"						/>
+										<ingredient	quantity="1"	item_name="Haft"							/>
+										<ingredient	quantity="1"	item_name="Arachas venom"					/>
+										<ingredient	quantity="1"	item_name="Emerald dust"					/>
 		</ingredients>
 	</schematic>
 	
@@ -304,10 +308,11 @@
 		craftedItem_name				="Crafted Burning Rose Sword"
 		craftsmanType_name				="Smith"
 		craftsmanLevel_name				="Master"
-		price							="404"
+		price							="1250"
 	>
-		<ingredients>					<ingredient	quantity="1"	item_name="Monstrous claw"					/>
-										<ingredient	quantity="2"	item_name="Dark steel ingot"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="2"	item_name="Wire rope"						/>
+										<ingredient	quantity="1"	item_name="Haft"							/>
 										<ingredient	quantity="1"	item_name="Amethyst dust"					/>
 										<ingredient	quantity="1"	item_name="Amber dust"						/>
 										<ingredient	quantity="1"	item_name="Diamond dust"					/>
@@ -320,12 +325,13 @@
 		craftedItem_name				="EP1 Crafted Witcher Silver Sword"
 		craftsmanType_name				="Smith"
 		craftsmanLevel_name				="Grand Master"
-		price							="742"
+		price							="1550"
 	>
-		<ingredients>					<ingredient	quantity="1"	item_name="Leather"							/>
-										<ingredient	quantity="4"	item_name="Silver ingot"					/>
-										<ingredient quantity="3"	item_name="Gold ore"						/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Meteorite silver ingot"			/>
+										<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="2"	item_name="Wire rope"						/>
 										<ingredient	quantity="1"	item_name="Amethyst dust"					/>
+										<ingredient	quantity="1"	item_name="Sapphire dust"					/>
 										<ingredient	quantity="1"	item_name="Diamond dust"					/>
 		</ingredients>
 	</schematic>
@@ -335,13 +341,14 @@
 		craftedItem_name				="EP1 Viper School silver sword"
 		craftsmanType_name				="Smith"
 		craftsmanLevel_name				="Grand Master"
-		price							="1039"
+		price							="1700"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Leather squares"					/>
-										<ingredient	quantity="2"	item_name="Dwimeryte ingot"					/>
-										<ingredient	quantity="1"	item_name="Monstrous brain"					/>
-										<ingredient	quantity="1"	item_name="Sapphire dust"					/>
-										<ingredient	quantity="2"	item_name="Emerald dust"					/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Meteorite silver ingot"			/>
+										<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient quantity="1"	item_name="Leather"							/>
+										<ingredient	quantity="2"	item_name="Wire rope"						/>
+										<ingredient	quantity="1"	item_name="Arachas venom"					/>
+										<ingredient	quantity="1"	item_name="Emerald dust"					/>
 		</ingredients>
 	</schematic>
 
@@ -351,12 +358,13 @@
 		craftedItem_name				="Crafted Ofir Armor"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="989"
+		price							="600"
 	>
-		<ingredients>					<ingredient	quantity="3"	item_name="Draconide leather"				/>
-										<ingredient	quantity="2"	item_name="Leather"							/>
+		<ingredients>					<ingredient	quantity="2"	item_name="Silk"							/>
+										<ingredient	quantity="2"	item_name="Hardened leather"				/>
+										<ingredient	quantity="1"	item_name="Glowing ore"						/>
 										<ingredient	quantity="1"	item_name="Amethyst dust"					/>
-										<ingredient	quantity="2"	item_name="Ruby dust"						/>
+										<ingredient	quantity="1"	item_name="Ruby dust"						/>
 										<ingredient	quantity="1"	item_name="Emerald dust"					/>
 		</ingredients>
 	</schematic>
@@ -366,13 +374,14 @@
 		craftedItem_name				="Crafted Ofir Boots"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="562"
+		price							="170"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Hardened leather"				/>
-										<ingredient	quantity="2"	item_name="Steel ingot"						/>
-										<ingredient	quantity="2"	item_name="Amber dust"						/>
-										<ingredient	quantity="2"	item_name="Ruby dust"						/>
-										<ingredient	quantity="2"	item_name="Amethyst dust"					/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Glowing ingot"					/>
+										<ingredient	quantity="1"	item_name="Leather squares"					/>
+										<ingredient	quantity="2"	item_name="Thread"							/>
+										<ingredient	quantity="1"	item_name="Amber dust"						/>
+										<ingredient	quantity="1"	item_name="Ruby dust"						/>
+										<ingredient	quantity="1"	item_name="Amethyst dust"					/>
 		</ingredients>
 	</schematic>
 
@@ -381,12 +390,13 @@
 		craftedItem_name				="Crafted Ofir Gloves"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="511"
+		price							="170"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Leather"							/>
-										<ingredient	quantity="2"	item_name="Steel ingot"						/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Glowing ingot"					/>
+										<ingredient	quantity="2"	item_name="Leather straps"					/>
+										<ingredient	quantity="1"	item_name="String"							/>
 										<ingredient	quantity="1"	item_name="Sapphire dust"					/>
-										<ingredient	quantity="2"	item_name="Emerald dust"					/>
+										<ingredient	quantity="1"	item_name="Emerald dust"					/>
 										<ingredient	quantity="1"	item_name="Amber dust"						/>
 		</ingredients>
 	</schematic>
@@ -396,11 +406,12 @@
 		craftedItem_name				="Crafted Ofir Pants"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="508"
+		price							="270"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Silk"							/>
-										<ingredient	quantity="2"	item_name="Leather"							/>
-										<ingredient	quantity="2"	item_name="Sapphire dust"					/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Meteorite ingot"					/>
+										<ingredient	quantity="1"	item_name="Leather squares"					/>
+										<ingredient	quantity="1"	item_name="Silk"							/>
+										<ingredient	quantity="1"	item_name="Sapphire dust"					/>
 										<ingredient	quantity="1"	item_name="Ruby dust"						/>
 										<ingredient	quantity="1"	item_name="Amethyst dust"					/>
 		</ingredients>
@@ -412,13 +423,11 @@
 		craftedItem_name				="Crafted Burning Rose Armor"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Master"
-		price							="832"
+		price							="1600"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Hardened leather"				/>
-										<ingredient	quantity="2"	item_name="Draconide leather"				/>
-										<ingredient	quantity="5"	item_name="Leather"							/>
-										<ingredient	quantity="4"	item_name="Wire"							/>
-										<ingredient	quantity="2"	item_name="Dark steel plate"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Dwimeryte plate"					/>
+										<ingredient	quantity="1"	item_name="Leather"							/>
+										<ingredient	quantity="1"	item_name="String"							/>
 		</ingredients>
 	</schematic>
 	
@@ -427,12 +436,12 @@
 		craftedItem_name				="Crafted Burning Rose Gloves"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Master"
-		price							="336"
+		price							="500"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Hardened leather"				/>
-										<ingredient	quantity="1"	item_name="Meteorite silver plate"			/>
-										<ingredient	quantity="5"	item_name="Leather straps"					/>
-										<ingredient	quantity="2"	item_name="Monstrous eye"					/>					
+		<ingredients>					<ingredient	quantity="1"	item_name="Meteorite silver ingot"			/>
+										<ingredient	quantity="1"	item_name="Dark steel ingot"				/>
+										<ingredient	quantity="2"	item_name="Leather"							/>
+										<ingredient	quantity="2"	item_name="String"							/>					
 		</ingredients>
 	</schematic>
 	
@@ -441,13 +450,14 @@
 		craftedItem_name				="EP1 Witcher Armor"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="438"
+		price							="3200"
 	>
-		<ingredients>					<ingredient	quantity="4"	item_name="Linen"							/>
-										<ingredient	quantity="4"	item_name="Hardened leather"				/>
-										<ingredient	quantity="5"	item_name="Leather straps"					/>
-										<ingredient	quantity="4"	item_name="Wire"							/>
-										<ingredient	quantity="1"	item_name="Draconide leather"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Geralt Shirt"					/>
+										<ingredient	quantity="2"	item_name="Hardened leather"				/>
+										<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="1"	item_name="Meteorite ingot"					/>
+										<ingredient	quantity="1"	item_name="Troll skin"						/>
+										<ingredient	quantity="1"	item_name="Basilisk plate"					/>
 		</ingredients>
 	</schematic>
 	
@@ -456,13 +466,12 @@
 		craftedItem_name				="EP1 Witcher Boots"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="438"
+		price							="1700"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Linen"							/>
-										<ingredient	quantity="2"	item_name="Hardened leather"				/>
-										<ingredient	quantity="3"	item_name="Leather straps"					/>
-										<ingredient	quantity="2"	item_name="Wire"							/>
-										<ingredient	quantity="1"	item_name="Draconide leather"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Leather"							/>
+										<ingredient	quantity="1"	item_name="Wire"							/>
+										<ingredient	quantity="1"	item_name="Troll skin"						/>
+										<ingredient	quantity="1"	item_name="Wyvern plate"					/>
 		</ingredients>
 	</schematic>
 	
@@ -471,13 +480,12 @@
 		craftedItem_name				="EP1 Witcher Gloves"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="438"
+		price							="1400"
 	>
-		<ingredients>					<ingredient	quantity="2"	item_name="Linen"							/>
-										<ingredient	quantity="2"	item_name="Hardened leather"				/>
-										<ingredient	quantity="3"	item_name="Leather straps"					/>
-										<ingredient	quantity="2"	item_name="Wire"							/>
-										<ingredient	quantity="1"	item_name="Draconide leather"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Leather straps"					/>
+										<ingredient	quantity="1"	item_name="Dwimeryte ingot"					/>
+										<ingredient	quantity="1"	item_name="Monstrous hide"					/>
+										<ingredient	quantity="2"	item_name="Dragon scales"					/>
 		</ingredients>
 	</schematic>
 	
@@ -486,13 +494,11 @@
 		craftedItem_name				="EP1 Witcher Pants"
 		craftsmanType_name				="Armorer"
 		craftsmanLevel_name				="Grand Master"
-		price							="438"
+		price							="1700"
 	>
-		<ingredients>					<ingredient	quantity="3"	item_name="Linen"							/>
-										<ingredient	quantity="3"	item_name="Hardened leather"				/>
-										<ingredient	quantity="4"	item_name="Leather straps"					/>
-										<ingredient	quantity="4"	item_name="Wire"							/>
-										<ingredient	quantity="1"	item_name="Draconide leather"				/>
+		<ingredients>					<ingredient	quantity="1"	item_name="Leather"							/>
+										<ingredient	quantity="1"	item_name="Monstrous hide"					/>
+										<ingredient	quantity="1"	item_name="Forktail plate"					/>
 		</ingredients>
 	</schematic>
 

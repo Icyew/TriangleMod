@@ -99,34 +99,44 @@ class W3IceSpike extends W3DurationObstacle
 			if ( l_actor == l_summoner ) continue;
 			
 			l_damageAction = new W3DamageAction in this;
-			l_damageAction.Initialize( l_summoner, l_actor, l_summoner, l_summoner.GetName(), EHRT_Heavy, CPS_Undefined, false, false, false, true );			
+			l_damageAction.Initialize( l_summoner, l_actor, l_summoner, l_summoner.GetName(), EHRT_Heavy, CPS_AttackPower, false, false, false, true ); //modSigns
 			
 			l_summoner.GetVisualDebug().AddSphere('DetectionRange', l_range, GetWorldPosition(), true);
 			l_summoner.GetVisualDebug().AddText('DetectionRangeText', "Ice", GetWorldPosition(), true);
+			
+			if ( damageValue < 1 ) //modSigns
+			{
+				damageValue = 100;
+			}
 			
 			if( l_summoner && IsNameValid( weaponSlot ) )
 			{
 				l_inv 		= l_summoner.GetInventory();		
 				l_weaponId 	= l_inv.GetItemFromSlot( weaponSlot );
 				l_inv.GetWeaponDTNames( l_weaponId, l_damageNames );
-				l_attribute = GetBasicAttackDamageAttributeName( theGame.params.ATTACK_NAME_HEAVY, theGame.params.DAMAGE_NAME_FROST);
-				l_damageAttr = l_summoner.GetAttributeValue( l_attribute );
+				//l_attribute = GetBasicAttackDamageAttributeName( theGame.params.ATTACK_NAME_HEAVY, theGame.params.DAMAGE_NAME_FROST); //modSigns
+				//l_damageAttr = l_summoner.GetAttributeValue( l_attribute ); //modSigns
+				l_damageAttr.valueAdditive = 0; //modSigns
+				l_damageAttr.valueMultiplicative = 1; //modSigns
 				l_damageAttr.valueBase  = l_summoner.GetTotalWeaponDamage( l_weaponId, l_damageNames[0], GetInvalidUniqueId() );
-				l_damageValue = l_damageAttr.valueBase * l_damageAttr.valueMultiplicative + l_damageAttr.valueAdditive;
+				//l_damageValue = l_damageAttr.valueBase * l_damageAttr.valueMultiplicative + l_damageAttr.valueAdditive; //modSigns
+				l_damageValue = CalculateAttributeValue(l_damageAttr); //modSigns
 				
-				if( l_damageValue > 0 )
+				/*if( l_damageValue > 0 )
 				{
 					l_damageAction.AddDamage( theGame.params.DAMAGE_NAME_FROST, l_damageValue );
 				}
 				else
 				{
 					l_damageAction.AddDamage( theGame.params.DAMAGE_NAME_PHYSICAL, damageValue );
-				}
+				}*/ //modSigns
 			}
-			else
+			/*else
 			{
 				l_damageAction.AddDamage( theGame.params.DAMAGE_NAME_PHYSICAL, damageValue );
-			}
+			}*/ //modSigns
+			
+			l_damageAction.AddDamage( theGame.params.DAMAGE_NAME_FROST, damageValue ); //modSigns
 			
 			theGame.damageMgr.ProcessAction( l_damageAction );
 			delete l_damageAction;

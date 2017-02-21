@@ -6,22 +6,22 @@
 		
 	<!-- Steel swords-->
 			<ability name="NPC Long Steel Sword _Stats">
-				<SlashingDamage min="200" max="200"/>
+				<SlashingDamage min="250" max="250"/>
 				<SilverDamage min="5" max="5"/>						
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Short_Steel_Sword_Stats">
-				<SlashingDamage min="200" max="200"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Hjalmar_Short_Steel_Sword _Stats">
-				<SlashingDamage min="200" max="200"/>
-				<SilverDamage min="210" max="210"/>				
+				<SlashingDamage min="350" max="350"/>
+				<SilverDamage min="300" max="300"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
@@ -29,77 +29,76 @@
 			<ability name="NPC Wooden sword _Stats">
 				<BludgeoningDamage min="2" max="5"/>
 				<SilverDamage min="1" max="1"/>
-				<armor_reduction type = "add" min="200" max="200"/>
+				<armor_reduction type = "add" min="1000" max="1000"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Rusty No Mans Land sword _Stats">
-				<SlashingDamage min="150" max="150"/>
-				<SilverDamage min="10" max="20"/>				
+				<SlashingDamage min="250" max="200"/>
+				<SilverDamage min="5" max="5"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Rusty Skellige sword _Stats">
-				<SlashingDamage min="150" max="150"/>
-				<SilverDamage min="10" max="20"/>
+				<SlashingDamage min="250" max="200"/>
+				<SilverDamage min="5" max="5"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Rusty Nilfgaardian sword _Stats">
-				<SlashingDamage min="150" max="150"/>
-				<SilverDamage min="10" max="20"/>				
+				<SlashingDamage min="250" max="200"/>
+				<SilverDamage min="5" max="5"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Rusty Novigraadan sword _Stats">
-				<SlashingDamage min="160" max="160"/>
-				<SilverDamage min="10" max="20"/>				
-				<SilverDamage min="10" max="20"/>				
+				<SlashingDamage min="250" max="200"/>
+				<SilverDamage min="5" max="5"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Short sword 1 _Stats">
-				<SlashingDamage min="200" max="200"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Short sword 2 _Stats">
-				<SlashingDamage min="220" max="220"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC No Mans Land sword 1 _Stats">
-				<SlashingDamage min="200" max="200"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="3"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC No Mans Land sword 1 q2 _Stats">
-				<SlashingDamage min="220" max="220"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC No Mans Land sword 2 _Stats">
-				<SlashingDamage min="220" max="220"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Skellige sword 1 _Stats">
-				<SlashingDamage min="230" max="230"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>								
 				<critical_hit_damage_bonus type="add" min="0.75" />				
 				<quality type="add" min="1" max="1"/>
@@ -107,28 +106,28 @@
 			</ability>
 			
 			<ability name="NPC Nilfgaardian sword 1 _Stats">
-				<SlashingDamage min="240" max="240"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Novigraadan sword 1 _Stats">
-				<SlashingDamage min="650" max="650"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="40" max="40"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC No Mans Land sword 3 _Stats">
-				<SlashingDamage min="290" max="290"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Skellige sword 2 _Stats">
-				<SlashingDamage min="250" max="250"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>		
 				<critical_hit_damage_bonus type="add" min="0.75" />					
 				<quality type="add" min="1" max="1"/>
@@ -137,21 +136,21 @@
 
 			
 			<ability name="NPC Nilfgaardian sword 2 _Stats">
-				<SlashingDamage min="270" max="270"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Novigraadan sword 2 _Stats">
-				<SlashingDamage min="260" max="260"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 				
 			<ability name="NPC Cyprianwhorenson sword _Stats">
-				<SlashingDamage min="150" max="150"/>
+				<SlashingDamage min="200" max="200"/>
 				<SilverDamage min="1" max="1"/>	
 				<PoisonEffect is_ability="true" />
 				<buff_apply_chance type="add" min="0.6" />					
@@ -160,7 +159,7 @@
 			</ability>
 			
 			<ability name="NPC Scoiatael sword 1 _Stats">
-				<SlashingDamage min="300" max="300"/>
+				<SlashingDamage min="340" max="340"/>
 				<SilverDamage min="60" max="60"/>		
 				<critical_hit_chance type="add" min="0.1" />				
 				<quality type="add" min="1" max="1"/>
@@ -168,7 +167,7 @@
 			</ability>
 			
 			<ability name="NPC Skellige sword 3 _Stats">
-				<SlashingDamage min="270" max="270"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>		
 				<critical_hit_damage_bonus type="add" min="0.75" />				
 				<quality type="add" min="1" max="1"/>
@@ -183,14 +182,14 @@
 			</ability>
 			
 			<ability name="NPC Novigraadan sword 3 _Stats">
-				<SlashingDamage min="290" max="290"/>
+				<SlashingDamage min="320" max="320"/>
 				<SilverDamage min="50" max="50"/>
 				<quality type="add" min="1" max="1"/>	
 				<weight type="base" min="8" />				
 			</ability>
 			
 			<ability name="NPC Skellige sword 4 _Stats">
-				<SlashingDamage min="310" max="310"/>
+				<SlashingDamage min="340" max="340"/>
 				<SilverDamage min="60" max="60"/>				
 				<critical_hit_damage_bonus type="add" min="0.75" />
 				<quality type="add" min="1" max="1"/>
@@ -198,14 +197,14 @@
 			</ability>
 			
 			<ability name="NPC Nilfgaardian sword 3 _Stats">
-				<SlashingDamage min="330" max="330"/>
-				<SilverDamage min="6" max="6"/>				
+				<SlashingDamage min="340" max="340"/>
+				<SilverDamage min="60" max="60"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Scoiatael sword 2 _Stats">
-				<SlashingDamage min="300" max="300"/>
+				<SlashingDamage min="340" max="340"/>
 				<SilverDamage min="60" max="60"/>		
 				<critical_hit_chance type="add" min="0.1" />
 				<quality type="add" min="1" max="1"/>
@@ -213,21 +212,21 @@
 			</ability>
 			
 			<ability name="NPC Novigraadan sword 4 _Stats">
-				<SlashingDamage min="330" max="330"/>
+				<SlashingDamage min="340" max="340"/>
 				<SilverDamage min="60" max="60"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Nilfgaardian sword 4 _Stats">
-				<SlashingDamage min="370" max="370"/>
+				<SlashingDamage min="360" max="360"/>
 				<SilverDamage min="70" max="70"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Scoiatael sword 3 _Stats">
-				<SlashingDamage min="330" max="330"/>
+				<SlashingDamage min="340" max="340"/>
 				<SilverDamage min="60" max="60"/>			
 				<critical_hit_chance type="add" min="0.1" />	
 				<quality type="add" min="1" max="1"/>
@@ -235,7 +234,7 @@
 			</ability>
 			
 			<ability name="NPC Scoiatael sword 4 _Stats">
-				<SlashingDamage min="330" max="330"/>
+				<SlashingDamage min="380" max="380"/>
 				<SilverDamage min="80" max="80"/>			
 				<critical_hit_chance type="add" min="0.1" />	
 				<quality type="add" min="1" max="1"/>
@@ -243,21 +242,21 @@
 			</ability>
 			
 			<ability name="NPC Inquisitor sword 1 _Stats">
-				<SlashingDamage min="370" max="370"/>
+				<SlashingDamage min="360" max="360"/>
 				<SilverDamage min="70" max="70"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Inquisitor sword 2 _Stats">
-				<SlashingDamage min="410" max="410"/>
+				<SlashingDamage min="380" max="380"/>
 				<SilverDamage min="80" max="80"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Dwarven sword 1 _Stats">
-				<SlashingDamage min="400" max="400"/>
+				<SlashingDamage min="380" max="380"/>
 				<SilverDamage min="80" max="80"/>	
 				<critical_hit_damage_bonus type="add" min="0.75" />				
 				<quality type="add" min="1" max="1"/>
@@ -272,7 +271,7 @@
 			</ability>
 			
 			<ability name="NPC Dwarven sword 2 _Stats">
-				<SlashingDamage min="460" max="460"/>
+				<SlashingDamage min="400" max="400"/>
 				<SilverDamage min="90" max="90"/>	
 				<critical_hit_damage_bonus type="add" min="0.75" />	
 				<quality type="add" min="1" max="1"/>
@@ -280,7 +279,7 @@
 			</ability>
 			
 			<ability name="NPC Gnomish sword 1 _Stats">
-				<SlashingDamage min="400" max="400"/>
+				<SlashingDamage min="380" max="380"/>
 				<SilverDamage min="80" max="80"/>	
 				<critical_hit_chance type="add" min="0.05" />
 				<critical_hit_damage_bonus type="add" min="0.5" />				
@@ -289,23 +288,25 @@
 			</ability>
 			
 			<ability name="NPC Wild Hunt sword 1 _Stats">
-				<SlashingDamage min="100" max="100"/>
-				<SilverDamage min="80" max="80"/>		
+				<SlashingDamage min="220" max="220"/>
+				<SilverDamage min="80" max="80"/>
+				<FrostDamage min="30" max="30" />
 				<critical_hit_damage_bonus type="add" min="0.25" />				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Wild Hunt sword 2 _Stats">
-				<SlashingDamage min="310" max="310"/>
-				<SilverDamage min="80" max="80"/>	
+				<SlashingDamage min="260" max="260"/>
+				<SilverDamage min="80" max="80"/>
+				<FrostDamage min="30" max="30" />
 				<critical_hit_damage_bonus type="add" min="0.25" />				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Gnomish sword 2 _Stats">
-				<SlashingDamage min="450" max="450"/>
+				<SlashingDamage min="400" max="400"/>
 				<SilverDamage min="90" max="90"/>	
 				<critical_hit_chance type="add" min="0.05" />
 				<critical_hit_damage_bonus type="add" min="0.5" />					
@@ -313,24 +314,28 @@
 			</ability>
 			
 			<ability name="NPC Wild Hunt sword 3 _Stats">
-				<SlashingDamage min="420" max="420"/>
-				<SilverDamage min="80" max="80"/>	
+				<SlashingDamage min="300" max="300"/>
+				<SilverDamage min="80" max="80"/>
+				<FrostDamage min="30" max="30" />
 				<critical_hit_damage_bonus type="add" min="0.5" />				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Wild Hunt sword 4 _Stats">
-				<SlashingDamage min="460" max="460"/>
-				<SilverDamage min="90" max="90"/>
+				<SlashingDamage min="350" max="350"/>
+				<SilverDamage min="80" max="80"/>
+				<FrostDamage min="30" max="30" />
 				<critical_hit_damage_bonus type="add" min="0.5" />
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="NPC Eredin Sword _Stats">
-				<SlashingDamage min="390" max="390"/>
-				<SilverDamage min="90" max="90"/>
+				<SlashingDamage min="350" max="350"/>
+				<SilverDamage min="80" max="80"/>
+				<FrostDamage min="30" max="30" />
+				<!-- <SlowdownFrostEffect is_ability="true" /> -->
 				<critical_hit_damage_bonus type="add" min="0.5" />
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="8" />
@@ -339,114 +344,114 @@
 		
 	<!--  ONLY NPC WEAPONS -->
 			<ability name="Spear 1 _Stats">
-				<PiercingDamage min="350" max="350"/>
+				<PiercingDamage min="250" max="200"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="mult" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Spear 2 _Stats">
-				<PiercingDamage min="200" max="200"/>
+				<PiercingDamage min="250" max="200"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="mult" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Halberd 1 _Stats">
-				<SlashingDamage min="250" max="250"/>
+				<SlashingDamage min="300" max="250"/>
 				<SilverDamage min="5" max="5"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Halberd 2 _Stats">
-				<SlashingDamage min="250" max="250"/>
+				<SlashingDamage min="300" max="250"/>
 				<SilverDamage min="5" max="5"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Guisarme 1 _Stats">
-				<SlashingDamage min="250" max="250"/>
+				<SlashingDamage min="350" max="250"/>
 				<SilverDamage min="5" max="5"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Guisarme 2 _Stats">
-				<SlashingDamage min="250" max="250"/>
+				<SlashingDamage min="350" max="250"/>
 				<SilverDamage min="5" max="5"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Long metal pole _Stats">
-				<BludgeoningDamage min="150" max="150"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="3" max="3"/>
 				<weight type="base" min="3" max="3"/>
 			</ability>
 			
 			<ability name="Mace 1 _Stats">
-				<BludgeoningDamage min="350" max="350"/>
+				<BludgeoningDamage min="300" max="300"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="base" min="2" />
 				<quality type="add" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Mace 2 _Stats">
-				<BludgeoningDamage min="400" max="400"/>
+				<BludgeoningDamage min="300" max="300"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="base" min="2" />
 				<quality type="add" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Club _Stats">
-				<BludgeoningDamage min="350" max="350"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="3" max="3"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Axe 1 _Stats">
-				<SlashingDamage min="350" max="350"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="4" max="4"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Axe 2 _Stats">
-				<SlashingDamage min="400" max="400"/>
+				<SlashingDamage min="300" max="300"/>
 				<SilverDamage min="4" max="4"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Great Axe 1 _Stats">
-				<SlashingDamage min="400" max="400"/>
+				<SlashingDamage min="350" max="350"/>
 				<SilverDamage min="6" max="6"/>
 				<weight type="base" min="7" max="7"/>
 			</ability>
 			
 			<ability name="Great Axe 2 _Stats">
-				<SlashingDamage min="400" max="400"/>
+				<SlashingDamage min="350" max="350"/>
 				<SilverDamage min="6" max="6"/>
 				<weight type="base" min="7" max="7"/>
 			</ability>
 			
 			<ability name="Dwarven Axe _Stats">
-				<SlashingDamage min="450" max="450"/>
+				<SlashingDamage min="400" max="400"/>
 				<SilverDamage min="7" max="7"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Dwarven Hammer _Stats">
-				<BludgeoningDamage min="450" max="450"/>
+				<BludgeoningDamage min="400" max="400"/>
 				<SilverDamage min="7" max="7"/>
 				<weight type="base" min="6" max="6"/>
 			</ability>
 			
 			<ability name="Twohanded Hammer 1 _Stats">
-				<BludgeoningDamage min="400" max="400"/>
+				<BludgeoningDamage min="450" max="450"/>
 				<SilverDamage min="6" max="6"/>
 				<weight type="base" min="7" max="7"/>
 			</ability>
 			
 			<ability name="Twohanded Hammer 2 _Stats">
-				<BludgeoningDamage min="500" max="500"/>
+				<BludgeoningDamage min="450" max="450"/>
 				<SilverDamage min="6" max="6"/>
 				<weight type="base" min="7" max="7"/>
 			</ability>
@@ -459,107 +464,107 @@
 			</ability>
 			
 			<ability name="Small Blackjack _Stats">
-				<BludgeoningDamage min="50" max="50"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Blackjack _Stats">
-				<BludgeoningDamage min="100" max="100"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="2" max="2"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Poker _Stats">
-				<BludgeoningDamage min="70" max="70"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Staff _Stats">
-				<BludgeoningDamage min="70" max="70"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Lucerne Hammer _Stats">
-				<BludgeoningDamage min="200" max="200"/>
+				<BludgeoningDamage min="300" max="300"/>
 				<SilverDamage min="4" max="4"/>
 				<weight type="base" min="5" max="5"/>
 			</ability>
 			
 			<ability name="Wand _Stats">
-				<BludgeoningDamage min="50" max="50"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Oar _Stats">
-				<BludgeoningDamage min="70" max="70"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="2" max="2"/>
 			</ability>
 			
 			<ability name="Rake _Stats">
-				<BludgeoningDamage min="70" max="70"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="2" max="2"/>
 			</ability>
 			
 			<ability name="Scoop _Stats">
-				<BludgeoningDamage min="50" max="50"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Shovel _Stats">
-				<SlashingDamage min="70" max="70"/>
+				<SlashingDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Broom_Not_Work _Stats">
-				<BludgeoningDamage min="10" max="10"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Paling _Stats">
-				<BludgeoningDamage min="50" max="50"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="base" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Pitchfork _Stats">
-				<PiercingDamage min="100" max="100"/>
+				<PiercingDamage min="250" max="250"/>
 				<SilverDamage min="4" max="4"/>
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
 			</ability>
 			
 			<ability name="Scythe _Stats">
-				<PiercingDamage min="100" max="100"/>
+				<PiercingDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="mult" min="1" max="1"/>
 			</ability>
 			
 			<ability name="Shepard stick _Stats">
-				<PiercingDamage min="50" max="50"/>
+				<PiercingDamage min="250" max="250"/>
 				<SilverDamage min="1" max="1"/>
 				<weight type="mult" min="1" max="1"/>
 			</ability>
 			
 			<ability name="q308 Iron Poker _Stats">
-				<BludgeoningDamage min="100" max="100"/>
+				<BludgeoningDamage min="250" max="250"/>
 				<SilverDamage min="4" max="4"/>
-				<weight type="base" min="12" max="12"/>
-				<quality						type="add"	min="1"					/>
+				<weight	type="base" min="12" max="12"/>
+				<quality	type="add"	min="1"					/>
 			</ability>
 
 			<ability name="Pickaxe _Stats">
-				<PiercingDamage min="90" max="90"/>
+				<PiercingDamage min="250" max="250"/>
 				<SilverDamage min="3" max="3"/>				
 				<quality type="add" min="1" max="1"/>
 				<weight type="base" min="2" />
@@ -597,20 +602,20 @@
 			</ability>
 						
 			<ability name="Crossbow 01 _Stats">
-				<PiercingDamage min="150" max="150"/>
+				<PiercingDamage min="250" max="250"/>
 				<SilverDamage min="3" max="3"/>
 				<weight type="base" min="8" />
 			</ability>
 			
 			<ability name="Dwarven crossbow _Stats">
-				<PiercingDamage min="200" max="200"/>
+				<PiercingDamage min="300" max="300"/>
 				<SilverDamage min="3" max="3"/>
 				<weight type="base" min="5" max="5"/>
 				<ammo type="add" min="5" />
 			</ability>
 			
 			<ability name="Nilfgaardian crossbow _Stats">
-				<PiercingDamage min="250" max="250"/>
+				<PiercingDamage min="300" max="300"/>
 				<SilverDamage min="3" max="3"/>
 				<weight type="base" min="5" max="5"/>
 				<ammo type="add" min="5" />

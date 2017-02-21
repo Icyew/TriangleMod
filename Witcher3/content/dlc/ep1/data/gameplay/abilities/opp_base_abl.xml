@@ -49,18 +49,26 @@
 				<tags> "SandAttack" </tags>
 			</ability>
 			
+			<!-- Also has ConDefault -->
 			<ability name="HaklandMage">
-				<vitality type="mult" always_random="false" min="1.8" max="1.8" />
-				<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" />
-				<hits_to_raise_guard type="add" always_random="false" min="3" max="3" />
-				<raise_guard_chance type="add" always_random="false" min="1.0" max="1.0" />
-				
-				<light_attack_damage_vitality type="base" always_random="false" min="400" max="400" />
-				<light_attack_damage_essence type="base" always_random="false" min="0" max="0" />
-				<heavy_attack_damage_vitality type="base" always_random="false" min="400" max="400" />
-				<heavy_attack_damage_vitality type="mult" always_random="false" min="0.0" max="0.0" />
-				<heavy_attack_damage_essence type="base" always_random="false" min="0" max="0" />
-				
+				<tags> "HaklandMage" </tags>
+				<vitality type="mult" always_random="false" min="2.0" max="2.0" />
+				<!-- modSigns: unstoppable attack chance -->
+				<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+				<unstoppable_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base chance to roll an unstoppable attack -->
+				<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+				<!-- modSigns: dodge burn immobilizing effect -->
+				<avoid_burn_critical_state_chance type="add" always_random="false" min="0.5" max="0.5" /> <!-- if successful, burning won't lock an npc in pain animation -->
+				<!-- guard -->
+				<delay_between_raise_guard type="add" always_random="false" min="0.0" max="0.0" /> <!-- how often an npc can raise his guard (sec) -->
+				<hits_to_raise_guard type="add" always_random="false" min="0" max="0" /> <!-- how much hits and npc will take before rolling for raise guard -->
+				<raise_guard_chance type="add" always_random="false" min="0.8" max="0.8" /> <!-- base raise guard chance -->
+				<raise_guard_chance_mult_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- raise guard chance increment per additional hit -->
+				<lower_guard_chance type="add" always_random="false" min="0.2" max="0.2" /> <!-- chance to lower guard if already guarded -->
+				<!-- counter: NPC will automatically parry an attack if guarded, roll for counter is performed on successive parries -->
+				<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much defence actions an npc will perform before rolling for counter -->
+				<counter_chance type="add" always_random="false" min="0.6" max="0.6" /> <!-- base counter on defence chance -->
+				<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional defence action -->
 				<!-- Resistances group -->
 				<armor type="base" always_random="false" min="0" max="0" />
 				<physical_resistance_perc type="base" min="0.25" max="0.25" />
@@ -69,25 +77,20 @@
 				<bludgeoning_resistance_perc type="base" always_random="false" min="0.25" max="0.25" />
 				<rending_resistance_perc type="base" always_random="false" min="0.25" max="0.25" />
 				<elemental_resistance_perc type="base" always_random="false" min="0.25" max="0.25" />
-				<fire_resistance type="base" always_random="false" min="0" max="0" />
 				<fire_resistance_perc type="base" min="0" max="0" />
-				<frost_resistance type="base" always_random="false" min="0" max="0" />
 				<frost_resistance_perc type="base" min="0.8" max="0.8" />
-				<force_resistance type="base" always_random="false" min="0" max="0" />
 				<force_resistance_perc type="base" min="" max="" />
-				<shock_resistance type="base" always_random="false" min="0" max="0" />
 				<shock_resistance_perc type="base" min="0" max="0" />
-				<poison_resistance type="base" always_random="false" min="0" max="0" />
 				<poison_resistance_perc type="base" min="0" max="0" />
 				<bleeding_resistance_perc type="base" min="0" max="0" />
 				<will_resistance_perc type="base" min="0.8" max="0.8" />
 				<burning_resistance_perc type="base" min="0.5" max="0.5" />
 				<critical_hit_damage_reduction type="mult" min="0.5" max="0.5"/>	
 				<burning_DoT_damage_resistance_perc type="add" min="0.8" max="0.8" />
-				<tags> "HaklandMage" </tags>
 			</ability>
 			
 			<ability name="HaklandMagePhase1">
+				<tags> "HaklandMage" </tags>
 				<!-- Resistances group -->
 				<armor type="base" always_random="false" min="0" max="0" />
 				<physical_resistance_perc type="base" min="0.65" max="0.65" />
@@ -96,54 +99,51 @@
 				<bludgeoning_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
 				<rending_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
 				<elemental_resistance_perc type="base" always_random="false" min="0.8" max="0.8" />
-				<fire_resistance type="base" always_random="false" min="0" max="0" />
 				<fire_resistance_perc type="base" min="0.8" max="0.8" />
-				<frost_resistance type="base" always_random="false" min="0" max="0" />
 				<frost_resistance_perc type="base" min="0.8" max="0.8" />
-				<force_resistance type="base" always_random="false" min="0" max="0" />
 				<force_resistance_perc type="base" min="0.8" max="0.8" />
-				<shock_resistance type="base" always_random="false" min="0.8" max="0.8" />
 				<shock_resistance_perc type="base" min="0.8" max="0.8" />
-				<poison_resistance type="base" always_random="false" min="0.8" max="0.8" />
 				<poison_resistance_perc type="base" min="0.8" max="0.8" />
 				<bleeding_resistance_perc type="base" min="0.8" max="0.8" />
 				<will_resistance_perc type="base" min="0.8" max="0.8" />
 				<burning_resistance_perc type="base" min="0.8" max="0.8" />
 				<burning_DoT_damage_resistance_perc type="add" min="0.8" max="0.8" />
-				<tags> "HaklandMage" </tags>
 			</ability>
 			
 			<ability name="HaklandSoldier">
-				<vitality type="mult" always_random="false" min="0.4" max="0.4" />
-				<light_attack_damage_vitality type="mult" always_random="false" min="-0.5" max="-0.5" />
-				<heavy_attack_damage_vitality type="mult" always_random="false" min="-0.5" max="-0.5" />
 				<tags> "HaklandSoldier" </tags>
+				<vitality type="mult" always_random="false" min="0.3" max="0.3" />
 			</ability>
 			
 			<ability name="olgierd_default_stats">
 				<tags> "base", "Boss"  </tags>
-				
 				<!-- Base stats -->
-				<level type="add" min="32" max="32" />
+				<level type="add" min="1" max="1" />
 				<experience type="add" min="0" max="0" />
 				<threat_level type="add" min="5" max="5" />
 				<humanoid type="add" min="1.0" max="1.0" />
-				<vitality type="base" min="6400" max="6400" />
+				<vitality type="base" min="8000" max="8000" />
 				<stamina type="base" min="100" max="100" />
+				<morale type="base" min="100" max="100" />
 				<vitalityRegen type="mult" min="0" max="0" />
-				<staminaRegen type="mult" min="0.07" max="0.07" />
-				
-				<!-- Damage -->
-				<light_attack_damage_vitality type="base" min="750" max="750" />
-				<heavy_attack_damage_vitality type="base" min="850" max="850" />
-				
-				<!-- Defence -->
-				<hits_to_roll_counter type="add" min="2" max="2" />
-				<counter_chance type="add" min="1" max="1" />
-				<hits_to_raise_guard type="add" min="0" max="0" />
-				<raise_guard_chance type="add" min="1" max="1" />
-				<lower_guard_chance type="add" min="0" max="0" />
-				
+				<staminaRegen type="mult" min="0.2" max="0.2" />
+				<!-- Combat action params -->
+				<!-- modSigns: unstoppable attack chance -->
+				<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+				<unstoppable_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base chance to roll an unstoppable attack -->
+				<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+				<!-- dodge burn immobilizing effect -->
+				<avoid_burn_critical_state_chance type="add" always_random="false" min="0.5" max="0.5" /> <!-- if successful, burning won't lock an npc in pain animation -->
+				<!-- guard -->
+				<delay_between_raise_guard type="add" always_random="false" min="0.0" max="0.0" /> <!-- how often an npc can raise his guard (sec) -->
+				<hits_to_raise_guard type="add" always_random="false" min="0" max="0" /> <!-- how much hits and npc will take before rolling for raise guard -->
+				<raise_guard_chance type="add" always_random="false" min="0.8" max="0.8" /> <!-- base raise guard chance -->
+				<raise_guard_chance_mult_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- raise guard chance increment per additional hit -->
+				<lower_guard_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- chance to lower guard if already guarded -->
+				<!-- counter -->
+				<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much defence actions an npc will perform before rolling for counter -->
+				<counter_chance type="add" always_random="false" min="0.6" max="0.6" /> <!-- base counter on defence chance -->
+				<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional defence action -->
 				<!-- Resistances -->
 				<armor type="base" min="0" max="0" />
 				<physical_resistance_perc type="base" min="0.85" max="0.85" />
@@ -151,15 +151,14 @@
 				<piercing_resistance_perc type="base" min="0.85" max="0.85" />
 				<bludgeoning_resistance_perc type="base" min="0.5" max="0.5" />
 				<rending_resistance_perc type="base" min="0.85" max="0.85" />
-				<elemental_resistance_perc type="base" min="0" max="0" />	
 				<shock_resistance_perc type="base" min="0.5" max="0.5" />
 				<force_resistance_perc type="base" min="0.5" max="0.5" />
 				<burning_resistance_perc type="base" min="1.0" max="1.0" />
 				<will_resistance_perc type="base" min="1.0" max="1.0" />
-				<fire_resistance_perc type="add" min="1.0" max="1.0" />
+				<fire_resistance_perc type="add" min="0.5" max="0.5" />
 				<critical_hit_damage_reduction type="mult" min="0.85" max="0.85"/>	
-			
-			
+				<mon_olgierdeasy_ep1 is_ability="true" />
+				<mon_olgierdmedium_ep1 is_ability="true" />			
 				<mon_olgierdhard_ep1 is_ability="true" />
 				<mon_olgierhardcore_ep1 is_ability="true" />
 				<!-- Skills -->
@@ -167,43 +166,55 @@
 				<attack_heavy is_ability="true" />
 			</ability>
 			
+			<ability name="mon_olgierdeasy_ep1">
+			<tags>DifficultyModeAbility, Easy</tags>	
+			</ability>	
 			
-		<ability name="mon_olgierdhard_ep1">
-		<tags>DifficultyModeAbility, Hard</tags>
-			<vitality type="mult" always_random="false" min="0.5" max="0.5" />	
-			<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
-		</ability>	
-		
-		<ability name="mon_olgierhardcore_ep1">
-		<tags>DifficultyModeAbility, Hardcore</tags>
-			<vitality type="mult" always_random="false" min="0.5" max="0.5" />	
-			<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
-		</ability>	
+			<ability name="mon_olgierdmedium_ep1">
+			<tags>DifficultyModeAbility, Medium</tags>	
+			</ability>	
+			
+			<ability name="mon_olgierdhard_ep1">
+			<tags>DifficultyModeAbility, Hard</tags>
+				<vitality type="mult" always_random="false" min="0.5" max="0.5" />	
+				<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
+			</ability>	
+			
+			<ability name="mon_olgierhardcore_ep1">
+			<tags>DifficultyModeAbility, Hardcore</tags>
+				<vitality type="mult" always_random="false" min="0.5" max="0.5" />	
+				<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
+			</ability>	
 			
 			<ability name="ethereal_default_stats">
 				<tags> "base", "Boss" </tags>
-				
 				<!-- Base stats -->
-				<level type="add" min="35" max="35" />
+				<level type="add" min="1" max="1" />
 				<experience type="add" min="0" max="0" />
 				<threat_level type="add" min="5" max="5" />
 				<humanoid type="add" min="1.0" max="1.0" />
-				<essence type="base" min="4000" max="4000" />
+				<essence type="base" min="2000" max="2000" />
 				<stamina type="base" min="100" max="100" />
+				<morale type="base" min="100" max="100" />
 				<vitalityRegen type="mult" min="0" max="0" />
-				<staminaRegen type="mult" min="0.07" max="0.07" />
-				
-				<!-- Damage -->
-				<light_attack_damage_vitality type="base" min="700" max="700" />
-				<heavy_attack_damage_vitality type="base" min="1000" max="1000" />
-				
-				<!-- Defence -->
-				<hits_to_roll_counter type="add" min="2" max="2" />
-				<counter_chance type="add" min="1" max="1" />
-				<hits_to_raise_guard type="add" min="3" max="3" />
-				<raise_guard_chance type="add" min="1" max="1" />
-				<lower_guard_chance type="add" min="0" max="0" />
-				
+				<staminaRegen type="mult" min="0.2" max="0.2" />
+				<!-- Combat action params -->
+				<!-- modSigns: unstoppable attack chance -->
+				<hits_to_roll_unstoppable type="add" always_random="false" min="0" max="0" /> <!-- how many hits an npc will take before rolling for unstoppable attack -->
+				<unstoppable_chance type="add" always_random="false" min="0.3" max="0.3" /> <!-- base chance to roll an unstoppable attack -->
+				<unstoppable_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- unstoppable attack chance increment per additional hit -->
+				<!-- dodge burn immobilizing effect -->
+				<avoid_burn_critical_state_chance type="add" always_random="false" min="0.5" max="0.5" /> <!-- if successful, burning won't lock an npc in pain animation -->
+				<!-- guard -->
+				<delay_between_raise_guard type="add" always_random="false" min="0.0" max="0.0" /> <!-- how often an npc can raise his guard (sec) -->
+				<hits_to_raise_guard type="add" always_random="false" min="0" max="0" /> <!-- how much hits and npc will take before rolling for raise guard -->
+				<raise_guard_chance type="add" always_random="false" min="0.8" max="0.8" /> <!-- base raise guard chance -->
+				<raise_guard_chance_mult_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- raise guard chance increment per additional hit -->
+				<lower_guard_chance type="add" always_random="false" min="0.1" max="0.1" /> <!-- chance to lower guard if already guarded -->
+				<!-- counter -->
+				<hits_to_roll_counter type="add" always_random="true" min="0" max="0" /> <!-- how much defence actions an npc will perform before rolling for counter -->
+				<counter_chance type="add" always_random="false" min="0.6" max="0.6" /> <!-- base counter on defence chance -->
+				<counter_chance_per_hit type="add" always_random="false" min="0.1" max="0.1" /> <!-- counter chance increment per additional defence action -->
 				<!-- Resistances -->
 				<armor type="base" min="0" max="0" />
 				<physical_resistance_perc type="base" min="0.25" max="0.25" />
@@ -218,12 +229,10 @@
 				<will_resistance_perc type="base" min="1.0" max="1.0" />
 				<fire_resistance_perc type="add" min="1.0" max="1.0" />
 				<burning_DoT_damage_resistance_perc type="add" min="0.75" max="0.75" />
-				
 				<!-- Skills -->
 				<attack_light is_ability="true" />
 				<attack_heavy is_ability="true" />
 			</ability>
-			
 		</abilities>
 	</definitions>
 </redxml>

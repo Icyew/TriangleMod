@@ -352,7 +352,7 @@ import class W3Container extends W3LockableEntity
 			if ( inv.GetItemModifierInt(items[i], 'ItemQualityModified') > 0 )
 					continue;
 					
-			inv.AddRandomEnhancementToItem(items[i]);
+			inv.AddRandomEnhancementToItem(items[i], inv.GetItemLevel(items[i])); //modSigns
 		}
 	}
 	

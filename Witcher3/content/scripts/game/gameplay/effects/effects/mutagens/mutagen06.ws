@@ -11,6 +11,13 @@ class W3Mutagen06_Effect extends W3Mutagen_Effect
 	default effectType = EET_Mutagen06;
 	default dontAddAbilityOnTarget = true;
 	
+	public function CumulateWith(effect: CBaseGameplayEffect) //modSigns
+	{
+		super.CumulateWith(effect);
+		
+		target.RemoveAbilityAll(abilityName);
+	}
+	
 	event OnEffectRemoved()
 	{
 		super.OnEffectRemoved();

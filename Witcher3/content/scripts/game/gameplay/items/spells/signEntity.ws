@@ -40,7 +40,7 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 		{
 			OnThrowing();
 		}
-		else if( eventName == 'cast_end' )
+		else if( eventName == 'cast_end' ) //Aaard: alternate only, Axii: both, Igni: neither, Quen: neither, Yrden: neither
 		{
 			OnEnded();
 		}
@@ -194,11 +194,11 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 	event OnEnded(optional isEnd : bool)
 	{
 		var witcher : W3PlayerWitcher;
-		var abilityName : name;
+		/*var abilityName : name;
 		var abilityCount, maxStack : float;
 		var min, max : SAbilityAttributeValue;
 		var addAbility : bool;
-		var mutagen17 : W3Mutagen17_Effect;
+		var mutagen17 : W3Mutagen17_Effect;*/ //modSigns: moved
 
 		var camHeading : float;
 		
@@ -216,8 +216,9 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 			witcher.ResetLastAxisInputIsMovement();
 		}
 		
-		
-		witcher = (W3PlayerWitcher)owner.GetActor();
+		//since OnEnded is called to process animations and some child classes override it, the code below
+		//is called under very rare circumstances, so it needs to be moved to an appropriate place
+		/*witcher = (W3PlayerWitcher)owner.GetActor();
 		if(witcher && witcher.HasBuff(EET_Mutagen17))
 		{
 			 mutagen17 = (W3Mutagen17_Effect)witcher.GetBuff(EET_Mutagen17);
@@ -256,11 +257,10 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 			{
 				witcher.AddAbility(abilityName, true);
 			}
-		}
+		}*/
 		
 		CleanUp();
 	}
-
 	
 	
 	
@@ -525,15 +525,15 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 	{
 		var l_player			: W3PlayerWitcher;
 		var l_cost, l_stamina	: float;
-		var l_gryphonBuff		: W3Effect_GryphonSetBonus;
+		//var l_gryphonBuff		: W3Effect_GryphonSetBonus; //modSigns: no longer used
 		
 		l_player = owner.GetPlayer();
 		
-		l_gryphonBuff = (W3Effect_GryphonSetBonus)l_player.GetBuff( EET_GryphonSetBonus );
-		l_gryphonBuff.SetWhichSignForFree( this );
+		//l_gryphonBuff = (W3Effect_GryphonSetBonus)l_player.GetBuff( EET_GryphonSetBonus );
+		//l_gryphonBuff.SetWhichSignForFree( this );
 		
-		if( !l_gryphonBuff || l_gryphonBuff.GetWhichSignForFree() != this )
-		{
+		//if( !l_gryphonBuff || l_gryphonBuff.GetWhichSignForFree() != this )
+		//{
 			if( l_player.CanUseSkill( S_Perk_09 ) )
 			{
 				l_cost = l_player.GetStaminaActionCost(ESAT_Ability, SkillEnumToName( skillEnum ), 0);
@@ -553,12 +553,12 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 			{
 				l_player.DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( skillEnum ) );
 			}
-		}		
+		//}		
 	}
 	
-	public function ManageGryphonSetBonusBuff()
+	public function ManageGryphonSetBonusBuff() //modSigns: no longer used
 	{
-		var l_player		: W3PlayerWitcher;
+		/*var l_player		: W3PlayerWitcher;
 		var l_gryphonBuff	: W3Effect_GryphonSetBonus;
 		
 		l_player = owner.GetPlayer();
@@ -571,7 +571,7 @@ statemachine abstract class W3SignEntity extends CGameplayEntity
 		else if( l_gryphonBuff && l_gryphonBuff.GetWhichSignForFree() == this )
 		{
 			l_player.RemoveBuff( EET_GryphonSetBonus, false, "gryphonSetBonus" );
-		}
+		}*/
 	}
 }
 
@@ -649,7 +649,7 @@ state BaseCast in W3SignEntity
 	event OnThrowing()
 	{		
 		var l_player : W3PlayerWitcher;
-		var l_gryphonBuff : W3Effect_GryphonSetBonus;
+		//var l_gryphonBuff : W3Effect_GryphonSetBonus; //modSigns: no longer used
 		
 		l_player = caster.GetPlayer();
 		
@@ -658,12 +658,12 @@ state BaseCast in W3SignEntity
 			FactsAdd("ach_sign", 1, 4 );		
 			theGame.GetGamerProfile().CheckLearningTheRopes();
 			
-			l_gryphonBuff = (W3Effect_GryphonSetBonus)l_player.GetBuff( EET_GryphonSetBonus );
+			/*l_gryphonBuff = (W3Effect_GryphonSetBonus)l_player.GetBuff( EET_GryphonSetBonus );
 			
 			if( l_gryphonBuff && !l_gryphonBuff.GetWhichSignForFree() )
 			{
 				l_gryphonBuff.SetWhichSignForFree( parent );
-			}
+			}*/
 			
 		}
 		return true;
@@ -677,13 +677,13 @@ state BaseCast in W3SignEntity
 	
 	event OnSignAborted( optional force : bool )
 	{
-		var l_gryphonBuff	: W3Effect_GryphonSetBonus;
+		//var l_gryphonBuff	: W3Effect_GryphonSetBonus; //modSigns: no longer used
 		
-		l_gryphonBuff = (W3Effect_GryphonSetBonus)caster.GetActor().GetBuff( EET_GryphonSetBonus );
+		/*l_gryphonBuff = (W3Effect_GryphonSetBonus)caster.GetActor().GetBuff( EET_GryphonSetBonus );
 		if( l_gryphonBuff )
 		{
 			l_gryphonBuff.SetWhichSignForFree( NULL );
-		}
+		}*/
 		
 		parent.CleanUp();
 		parent.StopAllEffects();
@@ -780,8 +780,9 @@ state Channeling in W3SignEntity extends BaseCast
 		return true;
 	}
 	
-	
-	function Update() : bool
+	//called when channeling all signs EXCEPT aard
+	//modSigns: dt
+	function Update(dt : float) : bool
 	{
 		var multiplier, stamina, leftStaminaCostPerc, leftStaminaCost : float;
 		var player : CR4Player;
@@ -850,21 +851,20 @@ state Channeling in W3SignEntity extends BaseCast
 				multiplier = 1 - costReduction.valueMultiplicative;
 			}
 			
-			
-			if (!(virtual_parent.GetSignType() == ST_Quen && caster.CanUseSkill(S_Magic_s04) && multiplier == 0))
+			//if (!(virtual_parent.GetSignType() == ST_Quen && caster.CanUseSkill(S_Magic_s04) && multiplier == 0))
 			{
 				if(player)
 				{
 					if( parent.cachedCost <= 0.0f )
 					{	
-						parent.cachedCost = multiplier * player.GetStaminaActionCost( ESAT_Ability, SkillEnumToName( parent.skillEnum ), theTimer.timeDelta );
+						parent.cachedCost = multiplier * player.GetStaminaActionCost( ESAT_Ability, SkillEnumToName( parent.skillEnum ), dt ); //modSigns
 					}
 				
 					stamina = player.GetStat(BCS_Stamina);
 				}
 				
 				if(multiplier > 0.f)
-					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ), theTimer.timeDelta, multiplier );
+					caster.GetActor().DrainStamina( ESAT_Ability, 0, 0, SkillEnumToName( parent.skillEnum ), dt, multiplier ); //modSigns
 				
 				if(player && parent.cachedCost > stamina)
 				{

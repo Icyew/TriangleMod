@@ -113,7 +113,8 @@ class W3CraftingManager
 		
 		for(i=0; i<schem.ingredients.Size(); i+=1)
 		{
-			cnt = thePlayer.inv.GetItemQuantityByName(schem.ingredients[i].itemName);							
+			//modSigns: count stash items
+			cnt = GetWitcherPlayer().GetItemQuantityByNameForCrafting(schem.ingredients[i].itemName, true);
 			if(cnt < schem.ingredients[i].quantity)
 				return ECE_TooFewIngredients;
 		}
@@ -150,7 +151,7 @@ class W3CraftingManager
 	
 		if ( GetSchematic(schematic, schem) )
 		{
-			return craftMasterComp.CalculateCostOfCrafting( schem.craftedItemName );
+			return craftMasterComp.CalculateCostOfCrafting( schem );
 		}
 
 		return -1;
@@ -200,7 +201,8 @@ class W3CraftingManager
 			ArrayOfNamesAppend(upgrades, temp);
 			temp.Clear();
 			
-			thePlayer.inv.RemoveItemByName(schem.ingredients[i].itemName, schem.ingredients[i].quantity);
+			//modSigns: count stash items
+			GetWitcherPlayer().RemoveItemByNameForCrafting(schem.ingredients[i].itemName, schem.ingredients[i].quantity, true);
 		}
 		
 		

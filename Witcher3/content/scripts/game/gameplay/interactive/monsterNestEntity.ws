@@ -39,9 +39,9 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	editable var linkedEncounterHandle 						: EntityHandle;
 	editable var linkedEncounterTag							: name;
 	editable var setDestructionFactImmediately 				: bool;
-	editable var expOnNestDestroyed							: int; default expOnNestDestroyed = 20;
-	editable var bonusExpOnBossKilled						: int; default expOnNestDestroyed = 100;
-	editable var addExpOnlyOnce								: bool; default addExpOnlyOnce = false;
+	editable var expOnNestDestroyed							: int; default expOnNestDestroyed = 25;
+	editable var bonusExpOnBossKilled						: int; default bonusExpOnBossKilled = 25; //modSigns
+	editable var addExpOnlyOnce								: bool; default addExpOnlyOnce = true; //modSigns
 	editable saved var nestUpdateDefintion					: SMonsterNestUpdateDefinition;
 	editable var monsterNestType							: ENestType; 
 	editable var regionType									: EEP2PoiType;
@@ -49,6 +49,10 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	
 		hint desiredPlayerToEntityDistance = "if set to < 0 player will stay in position where interaction was pressed";
 		hint setDestructionFactImmediately = "if set then destrution fact is added immediately on destruction";
+	
+	var expOnNestDestroyedMod	: int; default expOnNestDestroyedMod = 25; //modSigns
+	var bonusExpOnBossKilledMod	: int; default bonusExpOnBossKilledMod = 25; //modSigns
+	var addExpOnlyOnceMod		: bool; default addExpOnlyOnceMod = true; //modSigns
 	
 	var explodeAfter 			: float;
 	var nestBurnedAfter 		: float;
@@ -283,8 +287,17 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	{
 		var i,j : int;
 		var items : array<SItemUniqueId>;
+		var selectedItem : SItemUniqueId; //modSigns
 		
 		playerInventory = thePlayer.GetInventory();
+		
+		//modSigns: use selected bomb
+		selectedItem = thePlayer.GetSelectedItemId();
+		if( selectedItem != GetInvalidUniqueId() && bombActivators.Contains( playerInventory.GetItemName( selectedItem ) ) && playerInventory.SingletonItemGetAmmo( selectedItem ) > 0 )
+		{
+			usedBomb = selectedItem;
+			return true;
+		}
 		
 		for( i = 0; i < bombActivators.Size(); i += 1 )
 		{
@@ -350,13 +363,13 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	
 	function AddExp ()
 	{
-		if ( addExpOnlyOnce && expWasAdded )
+		if ( addExpOnlyOnceMod && expWasAdded )
 		{
 			return;
 		}
 		
 		expWasAdded = true;
-		GetWitcherPlayer().AddPoints(EExperiencePoint, expOnNestDestroyed, true );
+		GetWitcherPlayer().AddPoints(EExperiencePoint, expOnNestDestroyedMod, true ); //GM
 		
 	}
 	
@@ -369,7 +382,7 @@ statemachine class CMonsterNestEntity extends CInteractiveEntity
 	
 	function AddBonusExp ()
 	{
-		GetWitcherPlayer().AddPoints(EExperiencePoint, bonusExpOnBossKilled, true );
+		GetWitcherPlayer().AddPoints(EExperiencePoint, bonusExpOnBossKilledMod, true ); //GM
 	}
 	
 	function GetEncounter()

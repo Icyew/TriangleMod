@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ITEM DEFINITIONS ######################## -->
 <items>
 
@@ -11,7 +13,7 @@
 		name							="mq6002_contract"
 		category						="misc"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		stackable						="20"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq6002_contract"
@@ -26,7 +28,7 @@
 		name							="mq6005_notice"
 		category						="misc"
 		price							="1"
-		weight							="0.1"
+		weight							="0.05"
 		stackable						="20"
 		ability_slots					="0"
 		localisation_key_name			="item_name_mq6005_notice"

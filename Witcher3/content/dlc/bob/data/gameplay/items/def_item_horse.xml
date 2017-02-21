@@ -15,12 +15,12 @@
 			<ability name="ToussaintHorseBag">
 				<tags> 								HorseBag1
 				</tags>
-				<encumbrance 						type="add" 		min="110"			/>
+				<encumbrance 						type="add" 		min="100"			/>
 			</ability>
 
 			<!--HORSE BLINDERS -->
 			<ability name="ToussaintHorseBlinders">
-				<panic 								type="add" 		min="60" 			/>
+				<panic 								type="add" 		min="75" 			/>
 			</ability>
 
 		</abilities>
@@ -34,7 +34,7 @@
 			<item
 				name							="Toussaint saddle"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -57,7 +57,7 @@
 			<item
 				name							="Toussaint saddle 2"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -80,7 +80,7 @@
 			<item
 				name							="Toussaint saddle 3"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -103,7 +103,7 @@
 			<item
 				name							="Toussaint saddle 4"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -127,7 +127,7 @@
 			<item
 				name							="Toussaint saddle 5"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -151,7 +151,7 @@
 			<item
 				name							="Toussaint saddle 6"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -175,7 +175,7 @@
 			<item
 				name							="Tourney Geralt Saddle"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -198,7 +198,7 @@
 			<item
 				name							="Tourney Ravix Saddle"
 				category						="horse_saddle"
-				price							="100"
+				price							="450"
 				weight							="10"
 				stackable						="1"
 				grid_size						="2"
@@ -223,7 +223,7 @@
 			<item
 				name							="Toussaint horsebag"
 				category						="horse_bag"
-				price							="100"
+				price							="450"
 				weight							="2.5"
 				stackable						="1"
 				grid_size						="2"
@@ -245,7 +245,7 @@
 			<item
 				name							="Toussaint horse blinders"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"
@@ -265,7 +265,7 @@
 			<item
 				name							="Toussaint horse blinders 2"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"
@@ -285,7 +285,7 @@
 			<item
 				name							="Toussaint horse blinders 3"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"
@@ -305,7 +305,7 @@
 			<item
 				name							="Toussaint horse blinders 4"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"
@@ -325,7 +325,7 @@
 			<item
 				name							="Toussaint horse blinders 5"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"
@@ -345,7 +345,7 @@
 			<item
 				name							="Toussaint horse blinders 6"
 				category						="horse_blinder"
-				price							="150"
+				price							="250"
 				weight							="0.4"
 				stackable						="1"
 				grid_size						="2"

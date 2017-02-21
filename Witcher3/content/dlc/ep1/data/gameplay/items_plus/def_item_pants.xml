@@ -5,61 +5,78 @@
 <!-- ######################## ABILITY DEFINITIONS ######################## -->
 <abilities>
 
+<!-- MEDIUM -->
+
 	<ability name="Thief Pants _Stats">
-		<weight							type="base"	min="1.71"				/>
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="4"		max="4"		/>
-		<slashing_resistance_perc 		type="base"	min="0.15"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.10"				/>
-		<bonus_money 					type="add" 	min="0.05" 				/>
-		<critical_hit_chance			type="add" 	min="0.04" 				/>
-		<critical_hit_damage_bonus		type="add" 	min="0.20" 				/>
-		<item_level_min					type="add"	min="34"				/>
-		<item_level_max					type="add"	min="36"				/>
+		<slashing_resistance_perc 		type="base"	min="0.07"				/>
+		<piercing_resistance_perc		type="base"	min="0.04"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.04"				/>
+		<rending_resistance_perc 		type="base"	min="0.07"				/>
+		<elemental_resistance_perc 		type="base" min="0.07"				/>
+		<bonus_money 					type="add" 	min="0.1" 				/>
+		<encumbrance					type="add"	min="8"					/>
 	</ability>
 	
 	<ability name="Thief Pants B _Stats">
-		<weight							type="base"	min="1.71"				/>
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="2"		max="2"		/>
-		<slashing_resistance_perc 		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.10"				/>
-		<item_level_max					type="add"	min="34"				/>
+		<slashing_resistance_perc 		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc 		type="base"	min="0.04"				/>
+		<elemental_resistance_perc 		type="base" min="0.04"				/>
+		<bonus_money 					type="add" 	min="0.05" 				/>
+		<encumbrance					type="add"	min="6"					/>
 	</ability>
 	
 	<ability name="Thief Pants Y _Stats">
-		<weight							type="base"	min="1.71"				/>
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="3"		max="3"		/>
-		<slashing_resistance_perc 		type="base"	min="0.15"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.10"				/>
-		<item_level_min					type="add"	min="33"				/>
-		<item_level_max					type="add"	min="35"				/>
+		<slashing_resistance_perc 		type="base"	min="0.05"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc 		type="base"	min="0.05"				/>
+		<elemental_resistance_perc 		type="base" min="0.05"				/>
+		<bonus_money 					type="add" 	min="0.05" 				/>
+		<encumbrance					type="add"	min="6"					/>
 	</ability>
 	
 	<ability name="Thief Pants No Medallion _Stats">
-		<weight							type="base"	min="1.71"				/>
+		<weight							type="base"	min="3"					/>
 		<quality						type="add"	min="2"		max="2"		/>
-		<slashing_resistance_perc 		type="base"	min="0.10"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.10"				/>
-		<item_level_max					type="add"	min="34"				/>
+		<slashing_resistance_perc 		type="base"	min="0.04"				/>
+		<piercing_resistance_perc		type="base"	min="0.02"				/>
+		<bludgeoning_resistance_perc	type="base"	min="0.02"				/>
+		<rending_resistance_perc 		type="base"	min="0.04"				/>
+		<elemental_resistance_perc 		type="base" min="0.04"				/>
+		<bonus_money 					type="add" 	min="0.05" 				/>
+		<encumbrance					type="add"	min="6"					/>
 	</ability>
 	
+<!-- LIGHT -->
+
 	<ability name="Ofir Pants _Stats">
-		<weight							type="base"	min="2.52"				/>
-		<quality						type="add"	min="3"		max="3"		/>
-		<slashing_resistance_perc 		type="base"	min="0.08"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.08"				/>
-		<staminaRegen_armor_mod 		type="mult" min="0.10"				/>
-		<item_level_min					type="add"	min="32"				/>
-		<item_level_max					type="add"	min="34"				/>
+		<weight 						type="base" min="2" 				/>
+		<quality 						type="add" 	min="3" 	max="3" 	/>
+		<slashing_resistance_perc 		type="base" min="0.03"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc 	type="base" min="0.01"				/>
+		<rending_resistance_perc		type="base" min="0.03"				/>
+		<elemental_resistance_perc 		type="base" min="0.03"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01" 				/>
 	</ability>
 	
 	<ability name="Ofir Pants B _Stats">
-		<weight							type="base"	min="2.52"				/>
-		<quality						type="add"	min="2"		max="2"		/>
-		<slashing_resistance_perc 		type="base"	min="0.07"				/>
-		<bludgeoning_resistance_perc 	type="base" min="0.07"				/>
-		<staminaRegen_armor_mod 		type="mult" min="0.10"				/>
-		<item_level_min					type="add"	min="30"				/>
-		<item_level_max					type="add"	min="34"				/>
+		<weight 						type="base" min="1.5" 				/>
+		<quality 						type="add" 	min="2" 	max="2" 	/>
+		<slashing_resistance_perc 		type="base" min="0.02"				/>
+		<piercing_resistance_perc		type="base"	min="0.01"				/>
+		<bludgeoning_resistance_perc 	type="base" min="0.01"				/>
+		<rending_resistance_perc		type="base" min="0.02"				/>
+		<elemental_resistance_perc 		type="base" min="0.02"				/>
+		<staminaRegen_armor_mod			type="mult" min="0.01" 				/>
 	</ability>
 
 </abilities>
@@ -70,7 +87,7 @@
 	<item 
 		name							="Thief Pants" 
 		category						="pants" 
-		price							="114"
+		price							="294"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="2" 
@@ -83,16 +100,16 @@
 		localisation_key_description 	="item_category_medium_armor_description" 
 		icon_path						="icons/inventory/armors/thief_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor, MediumArmor, mod_armor, mod_valuable, EP1
+		<tags>							Autogen, Armor, MediumArmor, mod_armor, mod_legendary, EP1
 		</tags>
 		<base_abilities>
 										<a>Thief Pants _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="2">Silk</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
+										<parts count="1">Silver ingot</parts>
 										<parts count="1">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="3">Thread</parts>
+										<parts count="1">Silk</parts>
 		</recycling_parts> 	
 		<variants>				
 										<variant equip_template="l_01a_mg__thief" category="boots"></variant>
@@ -102,7 +119,7 @@
 	<item 
 		name							="Thief Pants B" 
 		category						="pants" 
-		price							="114"
+		price							="131"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="0" 
@@ -115,16 +132,15 @@
 		localisation_key_description 	="item_category_medium_armor_description" 
 		icon_path						="icons/inventory/armors/thief_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor, MediumArmor, mod_armor, DoNotEnhance
+		<tags>							Autogen, AutogenForceLevel, Armor, MediumArmor, mod_armor
 		</tags>
 		<base_abilities>
 										<a>Thief Pants B _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="1">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Linen</parts>
 		</recycling_parts> 	
 		<variants>				
 										<variant equip_template="l_01a_mg__thief" category="boots"></variant>
@@ -134,7 +150,7 @@
 	<item 
 		name							="Thief Pants Y" 
 		category						="pants" 
-		price							="114"
+		price							="209"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="1" 
@@ -147,16 +163,15 @@
 		localisation_key_description 	="item_category_medium_armor_description" 
 		icon_path						="icons/inventory/armors/thief_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenUseLevelRange, Armor, MediumArmor, mod_armor, EP1
+		<tags>							Autogen, Armor, MediumArmor, mod_armor, EP1
 		</tags>
 		<base_abilities>
 										<a>Thief Pants Y _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="2">Silk</parts>
+		<recycling_parts>				<parts count="1">Meteorite ingot</parts>
 										<parts count="1">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="3">Thread</parts>
+										<parts count="1">Silk</parts>
 		</recycling_parts> 	
 		<variants>				
 										<variant equip_template="l_01a_mg__thief" category="boots"></variant>
@@ -166,7 +181,7 @@
 	<item 
 		name							="Thief Pants No Medallion" 
 		category						="pants" 
-		price							="114"
+		price							="131"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="0" 
@@ -179,16 +194,15 @@
 		localisation_key_description 	="item_category_medium_armor_description" 
 		icon_path						="icons/inventory/armors/thief_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenForceLevel, AutogenUseLevelRange, Armor, MediumArmor, mod_armor, DoNotEnhance
+		<tags>							Autogen, AutogenForceLevel, Armor, MediumArmor, mod_armor
 		</tags>
 		<base_abilities>
 										<a>Thief Pants No Medallion _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="2">Silk</parts>
-										<parts count="1">Leather</parts>
-										<parts count="3">Leather straps</parts>
-										<parts count="3">Thread</parts>
+		<recycling_parts>				<parts count="1">Dark steel ingot</parts>
+										<parts count="1">Leather squares</parts>
+										<parts count="1">Linen</parts>
 		</recycling_parts> 	
 		<variants>				
 										<variant equip_template="l_01a_mg__thief" category="boots"></variant>
@@ -198,7 +212,7 @@
 	<item 
 		name							="Ofir Pants" 
 		category						="pants" 
-		price							="176"
+		price							="156"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="1" 
@@ -210,17 +224,14 @@
 		localisation_key_description 	="item_category_light_armor_description" 
 		icon_path						="icons/inventory/armors/ofir_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenUseLevelRange, Armor, LightArmor, mod_armor, mod_origin_ofir, Ofir, EP1
+		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_origin_ofir, Ofir, EP1
 		</tags>
 		<base_abilities>
 										<a>Ofir Pants _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Silk</parts>
-										<parts count="2">Linen</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Silver ingot</parts>
 		</recycling_parts> 	
 		<collapse>
 										<category_cond name="armor" collapse="true"/>
@@ -236,7 +247,7 @@
 	<item 
 		name							="Ofir Pants B" 
 		category						="pants" 
-		price							="176"
+		price							="73"
 		initial_durability				="100" 
 		max_durability					="100" 
 		enhancement_slots				="0" 
@@ -248,17 +259,14 @@
 		localisation_key_description 	="item_category_light_armor_description" 
 		icon_path						="icons/inventory/armors/ofir_pants_64x128.png" 
 	>
-		<tags>							Autogen, AutogenUseLevelRange, Armor, LightArmor, mod_armor, mod_origin_ofir, Ofir, DoNotEnhance
+		<tags>							Autogen, Armor, LightArmor, mod_armor, mod_origin_ofir, Ofir
 		</tags>
 		<base_abilities>
 										<a>Ofir Pants B _Stats</a>
 										<a>Default armor _Stats</a>
 		</base_abilities>		
-		<recycling_parts>				<parts count="4">Silk</parts>
-										<parts count="2">Linen</parts>
-										<parts count="3">Thread</parts>
-										<parts count="1">Leather straps</parts>
-										<parts count="1">Iron ore</parts>
+		<recycling_parts>				<parts count="1">Silk</parts>
+										<parts count="1">Leather squares</parts>
 		</recycling_parts> 	
 		<collapse>
 										<category_cond name="armor" collapse="true"/>

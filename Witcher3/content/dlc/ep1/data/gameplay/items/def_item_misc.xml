@@ -2,6 +2,8 @@
 <redxml>
 <definitions>
 
+<!-- modSigns: done -->
+
 <!-- ######################## ITEM DEFINITONS ######################## -->
 <items>
 
@@ -33,7 +35,7 @@
 	<item 	name="Shani Flower 1"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.05"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -58,7 +60,7 @@
 	<item 	name="Shani Flower 3"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.05"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -83,7 +85,7 @@
 		<item 	name="Shani Alcohol 1"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.1"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -108,7 +110,7 @@
 			<item 	name="Shani Alcohol 2"
 			category="usable"
 			price = "5"
-			weight ="0.5"
+			weight ="0.1"
 			equip_slot=""
 			stackable="100"
 			grid_size = "1"
@@ -133,7 +135,7 @@
 	<item 	name="Censer"
 			category="usable"
 			price = "1"
-			weight="0.9"
+			weight="0.2"
 			equip_slot=""
 			hold_slot="l_weapon"
 			equip_template="q602_item__censer"
@@ -179,7 +181,7 @@
 		name							="q603_circus_crossbow"
 		category						="crossbow"
 		price							="22"
-		weight 							="1.53"
+		weight 							="1.5"
 		enhancement_slots				="0"
 		ability_slots					="0"
 		grid_size						="2"
@@ -195,7 +197,7 @@
 		<base_abilities>				<a>Default weapon _Stats</a>
 										<a>Crossbow 1 _Stats</a>
 		</base_abilities>
-		<recycling_parts>				<parts count="2">Timber</parts>
+		<recycling_parts>				<parts count="1">Timber</parts>
 										<parts count="1">String</parts>
 										<parts count="1">Iron ore</parts>
 		</recycling_parts>

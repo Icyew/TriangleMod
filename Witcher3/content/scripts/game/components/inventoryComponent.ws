@@ -65,7 +65,7 @@ import class CInventoryComponent extends CComponent
 	default	priceRepairMult = 1.0;
 	default	priceRepair = 10.0;
 	default fundsType = EInventoryFunds_Avg;
-	default daysToIncreaseFunds = 5;
+	default daysToIncreaseFunds = 3; //modSigns: 5 -> 3
 
 	
 	
@@ -307,7 +307,7 @@ import class CInventoryComponent extends CComponent
 		var itemName : name;
 		var isWitcherGear : bool;
 		var isRelicGear : bool;
-		var level, baseLevel : int;
+		var level/*, baseLevel*/ : int; //modSigns
 		
 		itemCategory = GetItemCategory(item);
 		itemName = GetItemName(item);
@@ -353,9 +353,10 @@ import class CInventoryComponent extends CComponent
 				break;
 		}
 		
-		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName, baseLevel);
+		level = theGame.params.GetItemLevel(itemCategory, itemAttributes, itemName/*, baseLevel*/); //modSigns
 		
-		if ( FactsQuerySum("NewGamePlus") > 0 )
+		//modSigns: no dancing around levels, level is already clamped by theGame.params.GetItemLevel
+		/*if ( FactsQuerySum("NewGamePlus") > 0 )
 		{
 			if ( baseLevel > GetWitcherPlayer().GetMaxLevel() ) 
 			{
@@ -375,7 +376,7 @@ import class CInventoryComponent extends CComponent
 			{
 				level = GetWitcherPlayer().GetMaxLevel();
 			}
-		}
+		}*/
 		
 		return level;
     }
@@ -758,6 +759,11 @@ import class CInventoryComponent extends CComponent
 		else
 		{
 			
+			if ( CanItemHaveOil(itemId) ) //modSigns: remove all oils on item transfer
+			{
+				RemoveAllOilsFromItem(itemId);
+				RemoveAllOilAbilitiesFromItem(itemId);
+			}
 			arr = GiveItem(otherInventory, itemId, quantity);
 		}
 		
@@ -805,6 +811,76 @@ import class CInventoryComponent extends CComponent
 		}
 		
 		return ret;
+	}
+	
+	//modSigns: handle temp transfer from stash
+	protected var tempTransferredItems : array< SItemUniqueId >;
+	
+	public final function IsItemTempTransferred( item : SItemUniqueId ) : bool
+	{
+		return tempTransferredItems.Contains( item );
+	}
+	
+	public final function TransferStashItemsTo()
+	{
+		var stashInv : CInventoryComponent;
+		var rawItems, arr : array< SItemUniqueId >;
+		var item : SItemUniqueId;
+		var i : int;
+	
+		if( GetEntity() != GetWitcherPlayer() )
+			return;
+			
+		if( tempTransferredItems.Size() != 0 )
+			return;
+		
+		stashInv = GetWitcherPlayer().GetHorseManager().GetInventoryComponent();
+		stashInv.GetAllItems( rawItems );
+		for( i = 0; i < rawItems.Size(); i += 1 )
+		{
+			item = rawItems[i];
+			if( !HasItem( stashInv.GetItemName( item ) ) && stashInv.CanTransferItem( item ) )
+			{
+				arr = stashInv.GiveItem( this, item, stashInv.GetItemQuantity( item ) );
+			}
+		}
+		tempTransferredItems = arr;
+	}
+	
+	public final function CanTransferItem( item : SItemUniqueId ) : bool
+	{
+		if( ItemHasTag( item, theGame.params.TAG_DONT_SHOW ) || ItemHasTag( item, theGame.params.TAG_DONT_SHOW_ONLY_IN_PLAYERS ) )
+			return false;
+		
+		if( GetItemName( item ) == 'Crowns' )
+			return false;
+		
+		if( IsItemHorseItem( item ) && GetWitcherPlayer().GetHorseManager().IsItemEquipped( item ) )
+			return false;
+		
+		if( GetEntity() == GetWitcherPlayer() && GetWitcherPlayer().IsItemEquipped( item ) )
+			return false;
+		
+		return true;
+	}
+	
+	public final function TransferStashItemsFrom()
+	{
+		var stashInv : CInventoryComponent;
+		var arr : array< SItemUniqueId >;
+		var item : SItemUniqueId;
+		var i : int;
+		
+		if( tempTransferredItems.Size() == 0 )
+			return;
+			
+		stashInv = GetWitcherPlayer().GetHorseManager().GetInventoryComponent();
+		for( i = 0; i < tempTransferredItems.Size(); i += 1 )
+		{
+			item = tempTransferredItems[i];
+			arr = GiveItem( stashInv, item, GetItemQuantity( item ) );
+		}
+		tempTransferredItems.Clear();
 	}
 		
 	
@@ -1462,6 +1538,7 @@ import class CInventoryComponent extends CComponent
 		var i : int;
 		var itemName : name;
 		var allItems : array<SItemUniqueId>;
+		var id : SItemUniqueId; //modSigns
 		
 		witcher = GetWitcherPlayer();
 		if(!witcher)
@@ -1478,15 +1555,39 @@ import class CInventoryComponent extends CComponent
 		
 		for(i=allItems.Size()-1; i>=0; i-=1)
 		{
-			itemName = GetItemName(allItems[i]);
+			id = allItems[i];
+			itemName = GetItemName(id);
 			if(recipes.Contains(itemName))
-				RemoveItem(allItems[i], GetItemQuantity(allItems[i]));
+				RemoveItem(id, GetItemQuantity(id));
 		}
 	}
 
 	
 	
 	
+	//modSigns: removes low-level weapons from merchant's inventory
+	public final function ClearLowLevelWeapons()
+	{
+		var witcher : W3PlayerWitcher;
+		var i : int;
+		var allItems : array<SItemUniqueId>;
+		var id : SItemUniqueId;
+		var witcherLevel: int;
+
+		witcher = GetWitcherPlayer();
+		if(!witcher)
+			return;
+		//get weapons
+		allItems = GetAllWeapons();
+		witcherLevel = witcher.GetLevel();
+		//filter
+		for(i=allItems.Size()-1; i>=0; i-=1)
+		{
+			id = allItems[i];
+			if(witcherLevel - GetItemLevel(id) > 3)
+				RemoveItem(id, GetItemQuantity(id));
+		}
+	}
 
 	function LoadBooksDefinitions() : void 
 	{
@@ -2098,28 +2199,45 @@ import class CInventoryComponent extends CComponent
 		var parts : array<SItemParts>;
 		var i : int;
 		
+		var dontMarkAsNew : bool; //modSigns
+		
+		if( this == GetWitcherPlayer().GetInventory() ) //modSigns
+			dontMarkAsNew = false;
+		else
+			dontMarkAsNew = true;
+		
 		parts = GetItemRecyclingParts( id );
 		
 		for ( i = 0; i < parts.Size(); i += 1 )
 		{
-			if ( ECL_Grand_Master == level || ECL_Arch_Master == level )
+			/*if ( ECL_Grand_Master == level || ECL_Arch_Master == level )
 			{
-				currentAdded = AddAnItem( parts[i].itemName, parts[i].quantity );
+				currentAdded = AddAnItem( parts[i].itemName, parts[i].quantity, , dontMarkAsNew ); //modSigns
 			}
 			else if ( ECL_Master == level && parts[i].quantity > 1 )
 			{
-				currentAdded = AddAnItem( parts[i].itemName, RandRange( parts[i].quantity, 1 ) );
+				currentAdded = AddAnItem( parts[i].itemName, RandRange( parts[i].quantity, 1 ), , dontMarkAsNew ); //modSigns
 			}
 			else
 			{
-				currentAdded = AddAnItem( parts[i].itemName, 1 );
-			}
+				currentAdded = AddAnItem( parts[i].itemName, 1, , dontMarkAsNew ); //modSigns
+			}*/
+			//modSigns: always add the same number of recycling parts
+			currentAdded = AddAnItem( parts[i].itemName, parts[i].quantity, , dontMarkAsNew );
 			itemsAdded.PushBack(currentAdded[0]);
 		}
 
 		RemoveItem(id);
 		
 		return itemsAdded;
+	}
+	
+	//modSigns
+	public function ItemHasRecyclingParts( id : SItemUniqueId ) : bool
+	{
+		var parts : array<SItemParts>;
+		parts = GetItemRecyclingParts( id );
+		return parts.Size() > 0;
 	}
 		
 	
@@ -2348,6 +2466,47 @@ import class CInventoryComponent extends CComponent
 		return IsItemSteelSwordUsableByPlayer(id) || IsItemSilverSwordUsableByPlayer(id);
 	}
 	
+	//modSigns: fix oils stuck on transferred items
+	private final function RemoveAllOilAbilitiesFromItem( id : SItemUniqueId )
+	{
+		RemoveItemCraftedAbility( id, 'BeastOil_1');
+		RemoveItemCraftedAbility( id, 'BeastOil_2');
+		RemoveItemCraftedAbility( id, 'BeastOil_3');
+		RemoveItemCraftedAbility( id, 'CursedOil_1');
+		RemoveItemCraftedAbility( id, 'CursedOil_2');
+		RemoveItemCraftedAbility( id, 'CursedOil_3');
+		RemoveItemCraftedAbility( id, 'HangedManVenom_1');
+		RemoveItemCraftedAbility( id, 'HangedManVenom_2');
+		RemoveItemCraftedAbility( id, 'HangedManVenom_3');
+		RemoveItemCraftedAbility( id, 'HybridOil_1');
+		RemoveItemCraftedAbility( id, 'HybridOil_2');
+		RemoveItemCraftedAbility( id, 'HybridOil_3');
+		RemoveItemCraftedAbility( id, 'InsectoidOil_1');
+		RemoveItemCraftedAbility( id, 'InsectoidOil_2');
+		RemoveItemCraftedAbility( id, 'InsectoidOil_3');
+		RemoveItemCraftedAbility( id, 'MagicalsOil_1');
+		RemoveItemCraftedAbility( id, 'MagicalsOil_2');
+		RemoveItemCraftedAbility( id, 'MagicalsOil_3');
+		RemoveItemCraftedAbility( id, 'NecrophageOil_1');
+		RemoveItemCraftedAbility( id, 'NecrophageOil_2');
+		RemoveItemCraftedAbility( id, 'NecrophageOil_3');
+		RemoveItemCraftedAbility( id, 'SpecterOil_1');
+		RemoveItemCraftedAbility( id, 'SpecterOil_2');
+		RemoveItemCraftedAbility( id, 'SpecterOil_3');
+		RemoveItemCraftedAbility( id, 'VampireOil_1');
+		RemoveItemCraftedAbility( id, 'VampireOil_2');
+		RemoveItemCraftedAbility( id, 'VampireOil_3');
+		RemoveItemCraftedAbility( id, 'DraconideOil_1');
+		RemoveItemCraftedAbility( id, 'DraconideOil_2');
+		RemoveItemCraftedAbility( id, 'DraconideOil_3');
+		RemoveItemCraftedAbility( id, 'OgreOil_1');
+		RemoveItemCraftedAbility( id, 'OgreOil_2');
+		RemoveItemCraftedAbility( id, 'OgreOil_3');
+		RemoveItemCraftedAbility( id, 'RelicOil_1');
+		RemoveItemCraftedAbility( id, 'RelicOil_2');
+		RemoveItemCraftedAbility( id, 'RelicOil_3');
+	}
+	
 	public final function RemoveAllOilsFromItem( id : SItemUniqueId )
 	{
 		var i : int;
@@ -2490,6 +2649,65 @@ import class CInventoryComponent extends CComponent
 		return false;
 	}
 	
+	//modSigns
+	public final function GetOilAttackPowerBonus( weaponId : SItemUniqueId, monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		var attrVal : SAbilityAttributeValue;
+		
+		oils = GetOilsAppliedOnItem( weaponId );
+		for( i = 0; i < oils.Size(); i += 1 )
+		{
+			attrVal += oils[ i ].GetAttackPowerBonus( monsterCategory );
+		}
+		return attrVal;
+	}
+	
+	//modSigns
+	public final function GetOilResistReductionBonus( weaponId : SItemUniqueId, monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		var attrVal : SAbilityAttributeValue;
+		
+		oils = GetOilsAppliedOnItem( weaponId );
+		for( i = 0; i < oils.Size(); i += 1 )
+		{
+			attrVal += oils[ i ].GetResistReductionBonus( monsterCategory );
+		}
+		return attrVal;
+	}
+	
+	//modSigns
+	public final function GetOilCriticalChanceBonus( weaponId : SItemUniqueId, monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		var attrVal : SAbilityAttributeValue;
+		
+		oils = GetOilsAppliedOnItem( weaponId );
+		for( i = 0; i < oils.Size(); i += 1 )
+		{
+			attrVal += oils[ i ].GetCriticalChanceBonus( monsterCategory );
+		}
+		return attrVal;
+	}
+	
+	//modSigns
+	public final function GetOilCriticalDamageBonus( weaponId : SItemUniqueId, monsterCategory : EMonsterCategory ) : SAbilityAttributeValue
+	{
+		var i : int;
+		var oils : array< W3Effect_Oil >;
+		var attrVal : SAbilityAttributeValue;
+		
+		oils = GetOilsAppliedOnItem( weaponId );
+		for( i = 0; i < oils.Size(); i += 1 )
+		{
+			attrVal += oils[ i ].GetCriticalDamageBonus( monsterCategory );
+		}
+		return attrVal;
+	}
 	
 	
 	
@@ -2509,6 +2727,9 @@ import class CInventoryComponent extends CComponent
 			case 'Glyphword 5':
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Glyphword 5 _Stats', 'glyphword5_chance', min, max);				
 				i.PushBack( RoundMath( CalculateAttributeValue(min) * 100) );
+				//modSigns: show returned damage %
+				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Glyphword 5 _Stats', 'damage_mult', min, max);
+				i.PushBack( RoundMath( min.valueMultiplicative * 100) );
 				break;
 			case 'Glyphword 6' :
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue('Glyphword 6 _Stats', 'glyphword6_stamina_drain_perc', min, max);				
@@ -3868,19 +4089,18 @@ import class CInventoryComponent extends CComponent
 			ItemHasTag(item, theGame.params.ITEM_SET_TAG_VIPER);
 	}
 	
-	public function GetArmorType(item : SItemUniqueId) : EArmorType
+	public function GetArmorType(item : SItemUniqueId, optional ignoreGlyphwords : bool) : EArmorType //modSigns
 	{
 		var isItemEquipped : bool;
 		
 		isItemEquipped = GetWitcherPlayer().IsItemEquipped(item);
 		
-		
-		if( thePlayer.HasAbility('Glyphword 2 _Stats', true) && isItemEquipped )
-		{return EAT_Light;}
-		if( thePlayer.HasAbility('Glyphword 3 _Stats', true) && isItemEquipped )
-		{return EAT_Medium;}
-		if( thePlayer.HasAbility('Glyphword 4 _Stats', true) && isItemEquipped )
-		{return EAT_Heavy;}
+		if( !ignoreGlyphwords ) //modSigns
+		{
+			if( thePlayer.HasAbility('Glyphword 2 _Stats', true) && isItemEquipped ) return EAT_Light;
+			if( thePlayer.HasAbility('Glyphword 3 _Stats', true) && isItemEquipped ) return EAT_Medium;
+			if( thePlayer.HasAbility('Glyphword 4 _Stats', true) && isItemEquipped ) return EAT_Heavy;
+		}
 	
 		if(ItemHasTag(item, 'LightArmor'))
 			return EAT_Light;
@@ -3910,6 +4130,9 @@ import class CInventoryComponent extends CComponent
 	
 	public function IsItemEncumbranceItem(item : SItemUniqueId) : bool
 	{
+		if(tempTransferredItems.Contains(item)) //modSigns
+			return false;
+	
 		if(ItemHasTag(item, theGame.params.TAG_ENCUMBRANCE_ITEM_FORCE_YES))
 			return true;
 			
@@ -3941,9 +4164,21 @@ import class CInventoryComponent extends CComponent
 	public function GetItemEncumbrance(item : SItemUniqueId) : float
 	{
 		var itemCategory : name;
+		var mult, weight : float; //modSigns
+		if( FactsQuerySum( "modSigns_debug_zero_enc" ) > 0 ) //modSigns: debug
+		{
+			return 0;
+		}
 		if ( IsItemEncumbranceItem( item ) )
 		{
-			itemCategory = GetItemCategory( item );
+			//modSigns
+			mult = 1 - theGame.params.GetEncumbranceMult();
+			weight = GetItemWeight( item );
+			if( weight < 0.01 ) weight = 0.01;
+			weight *= GetItemQuantity( item ) * mult;
+			if( weight < 0.01 ) weight = 0;
+			return weight;
+			/*itemCategory = GetItemCategory( item );
 			if ( itemCategory == 'quest' || itemCategory == 'key' )
 			{
 				return 0.01 * GetItemQuantity( item );
@@ -3959,7 +4194,7 @@ import class CInventoryComponent extends CComponent
 			else
 			{
 				return 0.01 + GetItemWeight( item ) * GetItemQuantity( item ) * 0.5;
-			}
+			}*/
 		}
 		return 0;
 	}
@@ -4236,7 +4471,8 @@ import class CInventoryComponent extends CComponent
 	}
 	
 	
-	function GenerateItemLevel( item : SItemUniqueId, rewardItem : bool )
+	//modSigns: function now returns item level
+	function GenerateItemLevel( item : SItemUniqueId, rewardItem : bool ) : int
 	{
 		var stat : SAbilityAttributeValue;
 		var playerLevel : int;
@@ -4246,17 +4482,16 @@ import class CInventoryComponent extends CComponent
 		
 		playerLevel = GetWitcherPlayer().GetLevel();
 
-		lvl = playerLevel - 1;
-
+		//lvl = playerLevel - 1;
+		lvl = playerLevel; //modSigns
 		
 		if ( ( W3MerchantNPC )GetEntity() )
 		{
-			lvl = RoundF( playerLevel + RandRangeF( 2, 0 ) );
-			AddItemTag( item, 'AutogenUseLevelRange' );
+			lvl = playerLevel + (int)(RandF()*3.9999) - 1;// RandRange(4) - 1; //modSigns: +2...-1
 		}
 		else if ( rewardItem )
 		{
-			lvl = RoundF( playerLevel + RandRangeF( 1, 0 ) );
+			lvl = playerLevel; //modSigns: exactly of player level
 		}
 		else if ( ItemHasTag( item, 'AutogenUseLevelRange') )
 		{
@@ -4264,9 +4499,10 @@ import class CInventoryComponent extends CComponent
 			ilMin = RoundMath(CalculateAttributeValue( GetItemAttributeValue( item, 'item_level_min' ) ));
 			ilMax = RoundMath(CalculateAttributeValue( GetItemAttributeValue( item, 'item_level_max' ) ));
 			
-			lvl += 1; 
+			//modSigns: no dancing around levels
+			//lvl += 1;
 			if ( !ItemHasTag( item, 'AutogenForceLevel') )
-				lvl += RoundMath(RandRangeF( 1, -1 ));
+				lvl = playerLevel + (int)(RandF()*2.9999) - 1;// RandRange(3) - 1; //modSigns: +/- 1
 			
 			if ( FactsQuerySum("NewGamePlus") > 0 )
 			{
@@ -4279,15 +4515,31 @@ import class CInventoryComponent extends CComponent
 				if ( lvl > ilMax ) lvl = ilMax;
 			}
 			
-			if ( quality == 5 ) lvl += 2; 
-			if ( quality == 4 ) lvl += 1;
-			if ( (quality == 5 || quality == 4) && ItemHasTag(item, 'EP1') ) lvl += 1;
+			//if ( quality == 5 ) lvl += 2; //modSigns: no dancing around levels
+			//if ( quality == 4 ) lvl += 1;
+			//if ( (quality == 5 || quality == 4) && ItemHasTag(item, 'EP1') ) lvl += 1;
 		}
 		else if ( !ItemHasTag( item, 'AutogenForceLevel') )
 		{
 			quality = RoundMath( CalculateAttributeValue( GetItemAttributeValue( item, 'quality' ) ) );
-
-			if ( quality == 5 )
+			//modSigns: level variance depends on item quality
+			switch( quality )
+			{
+			case 4: //relic and magic are -1...+2
+			case 3:
+				lvl = playerLevel + (int)(RandF()*3.9999) - 1;
+				break;
+			case 2: //master are -1...1
+				lvl = playerLevel + (int)(RandF()*2.9999) - 1;
+				break;
+			case 1: //common are -1...0
+				lvl = playerLevel + (int)(RandF()*1.9999) - 1;
+				break;
+			default: //just in case: +/-1
+				lvl = playerLevel + (int)(RandF()*2.9999) - 1;
+				break;
+			}
+			/*if ( quality == 5 )
 			{
 				lvl = RoundF( playerLevel + RandRangeF( 2, 0 ) );
 			}
@@ -4321,26 +4573,27 @@ import class CInventoryComponent extends CComponent
 				{
 					lvl = playerLevel;
 				}
-			}
+			}*/
 		}
 		
-		if (FactsQuerySum("StandAloneEP1") > 0)
+		//modSigns: no dancing around levels
+		lvl = Clamp(lvl, 1, GetWitcherPlayer().GetMaxLevel());
+		/*if (FactsQuerySum("StandAloneEP1") > 0)
 			lvl = GetWitcherPlayer().GetLevel() - 1;
 			
-		
 		if ( FactsQuerySum("NewGamePlus") > 0 && !ItemHasTag( item, 'AutogenUseLevelRange') )
 		{	
 			if ( quality == 5 ) lvl += 2; 
 			if ( quality == 4 ) lvl += 1;
 		}
-			
+		
 		if ( lvl < 1 ) lvl = 1; 
-		if ( lvl > GetWitcherPlayer().GetMaxLevel() ) lvl = GetWitcherPlayer().GetMaxLevel();
+		if ( lvl > GetWitcherPlayer().GetMaxLevel() ) lvl = GetWitcherPlayer().GetMaxLevel();*/
 		
 		if ( ItemHasTag( item, 'PlayerSteelWeapon' ) && !( ItemHasAbility( item, 'autogen_steel_base' ) || ItemHasAbility( item, 'autogen_fixed_steel_base' ) )  ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_steel_base') )
-				return;
+				return 0;
 		
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') )
 				AddItemCraftedAbility(item, 'autogen_fixed_steel_base' ); 
@@ -4364,7 +4617,7 @@ import class CInventoryComponent extends CComponent
 		else if ( ItemHasTag( item, 'PlayerSilverWeapon' ) && !( ItemHasAbility( item, 'autogen_silver_base' ) || ItemHasAbility( item, 'autogen_fixed_silver_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_silver_base') )
-				return;
+				return 0;
 			
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') )
 				AddItemCraftedAbility(item, 'autogen_fixed_silver_base' ); 
@@ -4388,7 +4641,7 @@ import class CInventoryComponent extends CComponent
 		else if ( GetItemCategory( item ) == 'armor' && !( ItemHasAbility( item, 'autogen_armor_base' ) || ItemHasAbility( item, 'autogen_fixed_armor_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_armor_base') )
-				return;
+				return 0;
 				
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') )
 				AddItemCraftedAbility(item, 'autogen_fixed_armor_base' ); 
@@ -4412,7 +4665,7 @@ import class CInventoryComponent extends CComponent
 		else if ( ( GetItemCategory( item ) == 'boots' || GetItemCategory( item ) == 'pants' ) && !( ItemHasAbility( item, 'autogen_pants_base' ) || ItemHasAbility( item, 'autogen_fixed_pants_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_pants_base') )
-				return;
+				return 0;
 				
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') )
 				AddItemCraftedAbility(item, 'autogen_fixed_pants_base' ); 
@@ -4436,7 +4689,7 @@ import class CInventoryComponent extends CComponent
 		else if ( GetItemCategory( item ) == 'gloves' && !( ItemHasAbility( item, 'autogen_gloves_base' ) || ItemHasAbility( item, 'autogen_fixed_gloves_base' ) ) ) 
 		{
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') && ItemHasAbility(item, 'autogen_fixed_gloves_base') )
-				return;
+				return 0;
 				
 			if ( ItemHasTag(item, 'AutogenUseLevelRange') )
 				AddItemCraftedAbility(item, 'autogen_fixed_gloves_base' ); 
@@ -4456,7 +4709,34 @@ import class CInventoryComponent extends CComponent
 				else
 					AddItemCraftedAbility(item, 'autogen_gloves_armor', true );
 			}
-		}	
+		}
+		//modSigns: return level
+		return lvl;
+	}
+	
+	//modSigns
+	public function AddItemLevelAbility(item : SItemUniqueId)
+	{
+		if( ItemHasTag( item, 'PlayerSteelWeapon' ) ) 
+		{
+			AddItemCraftedAbility(item, 'autogen_steel_dmg', true ); 
+		}
+		else if( ItemHasTag( item, 'PlayerSilverWeapon' ) ) 
+		{
+			AddItemCraftedAbility(item, 'autogen_silver_dmg', true ); 
+		}
+		else if( GetItemCategory( item ) == 'armor' )
+		{
+			AddItemCraftedAbility(item, 'autogen_armor_armor', true );		
+		}
+		else if( GetItemCategory( item ) == 'boots' || GetItemCategory( item ) == 'pants' )
+		{
+			AddItemCraftedAbility(item, 'autogen_pants_armor', true ); 
+		}
+		else if( GetItemCategory( item ) == 'gloves' )
+		{
+			AddItemCraftedAbility(item, 'autogen_gloves_armor', true );
+		}
 	}
 		
 	
@@ -4474,6 +4754,7 @@ import class CInventoryComponent extends CComponent
 		var dm : CDefinitionsManagerAccessor;
 		var locKey : string;
 		var leaderCardsHack : array<name>;
+		var itemLevel : int; //modSigns
 		
 		var hud : CR4ScriptedHud;
 		var journalUpdateModule : CR4HudModuleJournalUpdate;
@@ -4498,10 +4779,12 @@ import class CInventoryComponent extends CComponent
 		}
 		
 		
+		//modSigns: save/get item level
+		itemLevel = 0;
 		if ( ItemHasTag(itemId, 'Autogen') ) 
-		{
-			GenerateItemLevel( itemId, false );
-		}
+			itemLevel = GenerateItemLevel( itemId, false );
+		if( itemLevel == 0 )
+			itemLevel = GetItemLevel( itemId );
 		
 		witcher = GetWitcherPlayer();
 		
@@ -4513,7 +4796,7 @@ import class CInventoryComponent extends CComponent
 			{
 				
 				if ( GetItemModifierInt(data.ids[i], 'ItemQualityModified') <= 0 )
-					AddRandomEnhancementToItem(data.ids[i]);
+					AddRandomEnhancementToItem(data.ids[i], itemLevel); //modSigns
 				
 				if ( ngp )
 					SetItemModifierInt(data.ids[i], 'DoNotAdjustNGPDLC', 1);	
@@ -4522,6 +4805,7 @@ import class CInventoryComponent extends CComponent
 				
 				if ( ngp && GetItemModifierInt(data.ids[i], 'NGPItemAdjusted') <= 0 && !ItemHasTag(data.ids[i], 'Autogen') )
 				{
+					//modSigns: need to check this thing!
 					IncreaseNGPItemlevel(data.ids[i]);
 				}
 				
@@ -4655,50 +4939,31 @@ import class CInventoryComponent extends CComponent
 			ent.OnItemGiven(data);
 	}
 	
-	public function AddRandomEnhancementToItem(item : SItemUniqueId)
+	//modSigns: separate function for quality abilities
+	function AddQualityAbilityToItem(item : SItemUniqueId)
 	{
+		var ability			: name;
 		var itemCategory 	: name;
 		var itemQuality		: int;
-		var ability			: name;
-		var ent				: CGameplayEntity;
 		
-		
-		
-		
-		if( ItemHasTag(item, 'DoNotEnhance') )
-		{
-			SetItemModifierInt(item, 'ItemQualityModified', 1);
-			return;
-		}
-		
-		itemCategory = GetItemCategory(item);
 		itemQuality = RoundMath(CalculateAttributeValue(GetItemAttributeValue(item, 'quality' )));
+		itemCategory = GetItemCategory(item);
 		
 		if ( itemCategory == 'armor' )
 		{
 			switch ( itemQuality )
 			{
+				case 1:
+					ability = 'quality_common_armor';
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_armor'; 			
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkArmorAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_armor'; 	
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkArmorAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkArmorAbility(), true);
+					break;
+				case 4:
+					ability = 'quality_relic_armor';
 					break;
 				default : break;
 			}
@@ -4707,27 +4972,17 @@ import class CInventoryComponent extends CComponent
 		{
 			switch ( itemQuality )
 			{
+				case 1:
+					ability = 'quality_common_gloves';
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_gloves'; 		
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkGlovesAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_gloves'; 	
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}		
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalGlovesAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkGlovesAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalGlovesAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkGlovesAbility(), true);
+					break;
+				case 4:
+					ability = 'quality_relic_gloves';
 					break;
 				default : break;
 			}
@@ -4736,27 +4991,17 @@ import class CInventoryComponent extends CComponent
 		{
 			switch ( itemQuality )
 			{
+				case 1:
+					ability = 'quality_common_pants';
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_pants'; 			
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkPantsAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_pants'; 	
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalPantsAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkPantsAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalPantsAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkPantsAbility(), true);
+					break;
+				case 4:
+					ability = 'quality_relic_pants';
 					break;
 				default : break;
 			}
@@ -4765,95 +5010,189 @@ import class CInventoryComponent extends CComponent
 		{
 			switch ( itemQuality )
 			{
+				case 1 : 
+					ability = 'quality_common_boots'; 			
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_boots'; 			
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkBootsAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_boots'; 		
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalBootsAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkBootsAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalBootsAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkBootsAbility(), true);
+					break;
+				case 4 : 
+					ability = 'quality_relic_boots'; 			
 					break;
 				default : break;
 			}
 		}
-		else if ( itemCategory == 'steelsword' )
+		else if( itemCategory == 'steelsword' )
 		{
 			switch ( itemQuality )
 			{
+				case 1 : 
+					ability = 'quality_common_steelsword'; 	
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_steelsword'; 	
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_steelsword'; 	
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalWeaponAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalWeaponAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
+					break;
+				case 4 : 
+					ability = 'quality_relic_steelsword'; 	
 					break;
 				default : break;
 			}
 		}
-		else if ( itemCategory == 'silversword' )
+		else if( itemCategory == 'silversword' )
 		{
 			switch ( itemQuality )
 			{
+				case 1 : 
+					ability = 'quality_common_silversword';	
+					break;
 				case 2 : 
 					ability = 'quality_masterwork_silversword';	
-					AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
 					break;
 				case 3 : 
 					ability = 'quality_magical_silversword'; 	
-					if ( ItemHasTag(item, 'EP1') )
-					{
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalArmorAbility(), true);
-						break;
-					}
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalWeaponAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
-					
-					if ( RandF() > 0.5 )
-						AddItemCraftedAbility(item, theGame.params.GetRandomMagicalWeaponAbility(), true);
-					else
-						AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkWeaponAbility(), true);
 					break;
-					
+				case 4 : 
+					ability = 'quality_relic_silversword';	
+					break;
 				default : break;
 			}
 		}
 			
 		if(IsNameValid(ability))
-		{
 			AddItemCraftedAbility(item, ability, false);
-			SetItemModifierInt(item, 'ItemQualityModified', 1);
+	}
+
+	//modSigns: reworked
+	public function AddRandomEnhancementToItem(item : SItemUniqueId, itemLevel : int)
+	{
+		var itemCategory 	: name;
+		var itemQuality		: int;
+		var craftedAbility	: name; 
+		
+		SetItemModifierInt(item, 'ItemQualityModified', 1);
+
+		if( ItemHasTag(item, 'DoNotEnhance') )
+			return;
+		
+		itemQuality = RoundMath(CalculateAttributeValue(GetItemAttributeValue(item, 'quality' )));
+		
+		if( itemQuality > 4 ) //do not process set items
+			return;
+		
+		AddQualityAbilityToItem(item);
+		
+		itemCategory = GetItemCategory(item);
+
+		if( itemQuality == 4 ) //relic items
+		{
+			//relic armor gets one common ability
+			if ( itemCategory == 'armor' )
+				AddItemCraftedAbility(item, theGame.params.GetRandomCommonArmorAbility(), true);
+			return;
+		}
+			
+		//add random abilities
+		if ( itemCategory == 'armor' )
+		{
+			//chest armor gets one common ability + 1 master and magic ability per 10 levels
+			if( itemQuality >= 1 )
+			{
+				AddItemCraftedAbility(item, theGame.params.GetRandomCommonArmorAbility(), true);
+			}
+			if( itemQuality >= 2 )
+			{
+				//same ability multiplied
+				craftedAbility = theGame.params.GetRandomMasterworkArmorAbility();
+				AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 10)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 20)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 30)
+					AddItemCraftedAbility(item, craftedAbility, true);
+			}
+			if( itemQuality >= 3 )
+			{
+				//same ability multiplied
+				craftedAbility = theGame.params.GetRandomMagicalArmorAbility();
+				AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 10)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 20)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 30)
+					AddItemCraftedAbility(item, craftedAbility, true);
+			}
+		}
+		else if ( itemCategory == 'gloves' )
+		{
+			//gloves get only one master + magic ability
+			if( itemQuality >= 2 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkGlovesAbility(), true);
+			if( itemQuality >= 3 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMagicalGlovesAbility(), true);
+		}
+		else if ( itemCategory == 'pants' )
+		{
+			//pants get only one master + magic ability
+			if( itemQuality >= 2 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkPantsAbility(), true);
+			if( itemQuality >= 3 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMagicalPantsAbility(), true);
+		}
+		else if ( itemCategory == 'boots' )
+		{
+			//boots get only one master + magic ability
+			if( itemQuality >= 2 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMasterworkBootsAbility(), true);
+			if( itemQuality >= 3 )
+				AddItemCraftedAbility(item, theGame.params.GetRandomMagicalBootsAbility(), true);
+		}
+		else if ( itemCategory == 'steelsword' || itemCategory == 'silversword' )
+		{
+			//sword gets one ability per 10 levels
+			if( itemQuality >= 1 )
+			{
+				//same ability multiplied
+				craftedAbility = theGame.params.GetRandomCommonWeaponAbility();
+				AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 10)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 20)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 30)
+					AddItemCraftedAbility(item, craftedAbility, true);
+			}
+			if( itemQuality >= 2 )
+			{
+				//same ability multiplied
+				craftedAbility = theGame.params.GetRandomMasterworkWeaponAbility();
+				AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 10)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 20)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 30)
+					AddItemCraftedAbility(item, craftedAbility, true);
+			}
+			if( itemQuality >= 3 )
+			{
+				//same ability multiplied
+				craftedAbility = theGame.params.GetRandomMagicalWeaponAbility();
+				AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 10)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 20)
+					AddItemCraftedAbility(item, craftedAbility, true);
+				if(itemLevel >= 30)
+					AddItemCraftedAbility(item, craftedAbility, true);
+			}
 		}
 	}
 	
@@ -4974,6 +5313,57 @@ import class CInventoryComponent extends CComponent
 		}
 		
 		return false;
+	}
+	
+	//modSigns
+	public function CountArmorPieces(out pieces : array<int>)
+	{
+		var item : SItemUniqueId;
+		var armors : array<SItemUniqueId>;
+		var i : int;
+		var armorType : EArmorType;
+
+		armors.Resize(4);
+		if(GetItemEquippedOnSlot(EES_Armor, item))
+			armors[0] = item;
+		if(GetItemEquippedOnSlot(EES_Boots, item))
+			armors[1] = item;
+		if(GetItemEquippedOnSlot(EES_Pants, item))
+			armors[2] = item;
+		if(GetItemEquippedOnSlot(EES_Gloves, item))
+			armors[3] = item;
+		pieces.Clear();
+		pieces.Resize(3);
+		for(i = 0; i < armors.Size(); i += 1)
+		{
+			armorType = GetArmorType(armors[i], true);
+			if(armorType == EAT_Light)
+				pieces[0] += 1;
+			else if(armorType == EAT_Medium)
+				pieces[1] += 1;
+			else if(armorType == EAT_Heavy)
+				pieces[2] += 1;
+		}
+	}
+	
+	//modSigns
+	public function GetTotalArmorWeight() : float
+	{
+		var armorEq, glovesEq, pantsEq, bootsEq : bool;
+		var tempItem : SItemUniqueId;
+		var weight : float;
+		
+		weight = 0;
+		armorEq = GetItemEquippedOnSlot( EES_Armor, tempItem );
+		if(armorEq) weight += GetItemWeight( tempItem );
+		glovesEq = GetItemEquippedOnSlot( EES_Gloves, tempItem );
+		if(glovesEq) weight += GetItemWeight( tempItem );
+		pantsEq = GetItemEquippedOnSlot( EES_Pants, tempItem );
+		if(pantsEq) weight += GetItemWeight( tempItem );
+		bootsEq = GetItemEquippedOnSlot( EES_Boots, tempItem );
+		if(bootsEq) weight += GetItemWeight( tempItem );
+		
+		return weight;
 	}
 	
 	
@@ -5501,12 +5891,14 @@ import class CInventoryComponent extends CComponent
 		return GetInvalidUniqueId();
 	}
 	
-	public function RemoveUnusedMutagensCountById( itemId:SItemUniqueId, count:int ):void
+	//---=== modPreparations ===---
+	public function RemoveUnusedMutagensCountById( itemId:SItemUniqueId, count:int ):bool
 	{
-		RemoveUnusedMutagensCount( thePlayer.inv.GetItemName( itemId ), count );
+		return RemoveUnusedMutagensCount( thePlayer.inv.GetItemName( itemId ), count );
 	}
 	
-	public function RemoveUnusedMutagensCount( itemName:name, count:int ):void
+	public function RemoveUnusedMutagensCount( itemName:name, count:int ):bool
+	//---=== modPreparations ===---
 	{
 		var items  			: array<SItemUniqueId>;
 		var curItem 		: SItemUniqueId;
@@ -5536,12 +5928,17 @@ import class CInventoryComponent extends CComponent
 					
 					if (itemRemoved >= count)
 					{
-						return;
+						//---=== modPreparations ===---
+						return true;
+						//---=== modPreparations ===---
 					}
 				}
 				
 			}
 		}		
+		//---=== modPreparations ===---
+		return false;
+		//---=== modPreparations ===---
 	}
 	
 }

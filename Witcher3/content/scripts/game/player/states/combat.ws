@@ -660,7 +660,7 @@ state Combat in CR4Player extends ExtendedMovable
 		var aerondight		: W3Effect_Aerondight;
 		var weaponId		: SItemUniqueId;
 		
-		if(parent.HasAbility('Runeword 2 _Stats', true))
+		if((W3PlayerWitcher)parent && ((W3PlayerWitcher)parent).HasRunewordActive('Runeword 2 _Stats')) //modSigns
 		{
 			if(data.attackName == 'attack_heavy_special')
 			{
@@ -675,7 +675,7 @@ state Combat in CR4Player extends ExtendedMovable
 				weaponEntity.PlayEffectSingle('light_trail_extended_fx');
 			}
 		}
-		else if(parent.HasAbility('Runeword 1 _Stats', true) && (W3PlayerWitcher)parent && GetWitcherPlayer().GetRunewordInfusionType() == ST_Igni)
+		else if((W3PlayerWitcher)parent && ((W3PlayerWitcher)parent).HasRunewordActive('Runeword 1 _Stats') && ((W3PlayerWitcher)parent).GetRunewordInfusionType() == ST_Igni) //modSigns
 		{
 			weaponEntity = thePlayer.inv.GetItemEntityUnsafe(thePlayer.inv.GetItemFromSlot(data.weaponSlot));
 			weaponEntity.PlayEffectSingle('runeword1_fire_trail');
@@ -940,13 +940,13 @@ state Combat in CR4Player extends ExtendedMovable
 			}
 		}		
 
-		if(!SkipStaminaDodgeEvadeCost())
-		{
+		//if(!SkipStaminaDodgeEvadeCost()) //modSigns: remove Fleet Footed zero stamina cost
+		//{
 			if(isRolling)
 				parent.DrainStamina(ESAT_Roll);
 			else
 				parent.DrainStamina(ESAT_Dodge);
-		}
+		//}
 		
 		
 		if( parent.CanUseSkill(S_Perk_21) )

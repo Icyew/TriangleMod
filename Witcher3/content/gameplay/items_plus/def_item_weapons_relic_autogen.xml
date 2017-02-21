@@ -3,40 +3,43 @@
   <definitions>
     <abilities>
 
-		<!-- AUTO GEN ABILITIES - DO NOT TOUCH THEM ! -->
+		<!-- AUTO GEN ABILITIES - DO NOT TOUCH THEM ! <- you don't say :) -->
+		<!-- armor and weapons have no levels, level is calculated on the fly instead -->
+		<!-- weapon level is based on damage, armor level is based on armor -->
+		
 			<ability name="autogen_steel_dmg">
-				<SlashingDamage min="7" max="8"/>
+				<SlashingDamage min="8" max="8"/>
 			</ability>		
 			<ability name="autogen_steel_base">
-				<SlashingDamage min="20" max="25"/>
+				<SlashingDamage min="19" max="25"/>
 			</ability>		
 			
 			<ability name="autogen_silver_dmg">
-				<SilverDamage min="8" max="10"/>
+				<SilverDamage min="10" max="10"/>
 			</ability>		
 			<ability name="autogen_silver_base">
-				<SilverDamage min="80" max="90"/>
+				<SilverDamage min="82" max="90"/>
 			</ability>		
 			
 			<ability name="autogen_armor_armor">
-				<armor type="base" min="4" max="5"/>
+				<armor type="base" min="5" max="5"/>
 			</ability>		
 			<ability name="autogen_armor_base">
-				<armor type="base" min="15" max="25"/>
+				<armor type="base" min="21" max="24"/>
 			</ability>		
 			
 			<ability name="autogen_pants_armor">
 				<armor type="base" min="2" max="2"/>
 			</ability>		
 			<ability name="autogen_pants_base">
-				<armor type="base" min="2" max="5"/>
+				<armor type="base" min="4" max="5"/>
 			</ability>		
 			
 			<ability name="autogen_gloves_armor">
 				<armor type="base" min="2" max="2"/>
 			</ability>		
 			<ability name="autogen_gloves_base">
-				<armor type="base" min="0" max="1"/>
+				<armor type="base" min="1" max="1"/>
 			</ability>		
 			
 			

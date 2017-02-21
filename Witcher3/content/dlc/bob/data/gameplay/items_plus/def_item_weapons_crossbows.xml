@@ -5,17 +5,18 @@
 		<!-- ######################## ABILITY DEFINITIONS ######################## -->
 		<abilities>
 			<ability name="Toussaint Crossbow 1 _Stats">
-				<weight 						type="base" min="2.39"				/>
 				<quality						type="add"	min="2"		max="2"		/>
-				<attack_power					type="mult"	min="2.5"	max="2.5"	/>
+				<attack_power					type="mult"	min="2.1"	max="2.1"	/>
 				<ammo							type="add"	min="3"					/>
+				<armor_reduction				type="base"	min="170"	max="190"	/>
 			</ability>
 
 			<ability name="Toussaint Crossbow 2 _Stats">
-				<weight 						type="base" min="2.74"				/>
 				<quality						type="add"	min="3"		max="3"		/>
-				<attack_power					type="mult"	min="3"		max="3"		/>
+				<attack_power					type="mult"	min="2.2"	max="2.2"	/>
 				<ammo							type="add"	min="3"					/>
+				<focus_gain						type="add"	min="0.02"	max="0.02"	/>
+				<armor_reduction				type="base"	min="200"	max="250"	/>
 			</ability>
 
 		</abilities>
@@ -26,8 +27,8 @@
 			<item
 				name							="Toussaint Crossbow 1"
 				category						="crossbow"
-				price							="36"
-				weight 							="1.53"
+				price							="85"
+				weight 							="2"
 				enhancement_slots				="0"
 				ability_slots					="0"
 				grid_size						="2"
@@ -43,18 +44,17 @@
 				<base_abilities>				<a>Default weapon _Stats</a>
 												<a>Toussaint Crossbow 1 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Timber</parts>
+				<recycling_parts>				<parts count="1">Hardened timber</parts>
 												<parts count="1">String</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Iron ore</parts>
+												<parts count="1">Steel ingot</parts>
 				</recycling_parts>
 			</item>
 
 			<item
 				name							="Toussaint Crossbow 2"
 				category						="crossbow"
-				price							="84"
-				weight 							="1.53"
+				price							="100"
+				weight 							="3"
 				enhancement_slots				="0"
 				ability_slots					="0"
 				grid_size						="2"
@@ -70,18 +70,17 @@
 				<base_abilities>				<a>Default weapon _Stats</a>
 												<a>Toussaint Crossbow 2 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Timber</parts>
-												<parts count="2">String</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Dark iron ore</parts>
+				<recycling_parts>				<parts count="1">Hardened timber</parts>
+												<parts count="1">Twine</parts>
+												<parts count="1">Dark iron ingot</parts>
 				</recycling_parts>
 			</item>
 
 			<item
 				name							="Ravix of Fourhorn Crossbow"
 				category						="crossbow"
-				price							="76"
-				weight 							="1.53"
+				price							="100"
+				weight 							="3"
 				enhancement_slots				="0"
 				ability_slots					="0"
 				grid_size						="2"
@@ -95,20 +94,19 @@
 				<tags>							Weapon, crossbow, mod_weapon
 				</tags>
 				<base_abilities>				<a>Default weapon _Stats</a>
-												<a>Toussaint Crossbow 2 _Stats</a>
+												<a>Toussaint Crossbow 1 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Timber</parts>
-												<parts count="1">String</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Dark iron ore</parts>
+				<recycling_parts>				<parts count="1">Hardened timber</parts>
+												<parts count="1">Twine</parts>
+												<parts count="1">Dark iron ingot</parts>
 				</recycling_parts>
 			</item>
 
 			<item
 				name							="Geralt of Rivia Crossbow"
 				category						="crossbow"
-				price							="84"
-				weight 							="1.53"
+				price							="100"
+				weight 							="3"
 				enhancement_slots				="0"
 				ability_slots					="0"
 				grid_size						="2"
@@ -122,12 +120,11 @@
 				<tags>							Weapon, crossbow, mod_weapon
 				</tags>
 				<base_abilities>				<a>Default weapon _Stats</a>
-												<a>Toussaint Crossbow 2 _Stats</a>
+												<a>Toussaint Crossbow 1 _Stats</a>
 				</base_abilities>
-				<recycling_parts>				<parts count="2">Timber</parts>
-												<parts count="2">String</parts>
-												<parts count="2">Thread</parts>
-												<parts count="2">Dark iron ore</parts>
+				<recycling_parts>				<parts count="1">Hardened timber</parts>
+												<parts count="1">Twine</parts>
+												<parts count="1">Dark iron ingot</parts>
 				</recycling_parts>
 			</item>
 

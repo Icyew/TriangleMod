@@ -19,9 +19,9 @@ class CBTTaskShoot extends CBTTaskPlayAnimationEventDecorator
 		InitializeCombatDataStorage();
 		if ( !((CHumanAICombatStorage)combatDataStorage).GetProjectile() )
 		{
-			return CreateProjectile();
+			return CreateProjectile() && super.IsAvailable(); //modSigns
 		}
-		return true;
+		return super.IsAvailable(); //modSigns
 	}
 	
 	private function CreateProjectile() : bool
@@ -206,6 +206,9 @@ class CBTTaskShootDef extends CBTTaskPlayAnimationEventDecoratorDef
 	
 	default dodgeable = true;
 	default useCombatTarget = true;
+	
+	default xmlStaminaCostName 					= 'light_action_stamina_cost'; //modSigns
+	default drainStaminaOnUse					= true; //modSigns
 	
 	public function Initialize()
 	{
