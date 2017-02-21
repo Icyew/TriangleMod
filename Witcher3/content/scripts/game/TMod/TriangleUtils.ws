@@ -381,7 +381,7 @@ function TUtil_NullifyMutagen(mutagen : name, color : ESkillColor)
         dm.GetAbilityAttributeValue(mutagen, 'attack_power', attrVal, max);
         thePlayer.RemoveAbilityAll('T_mutagen_attackpower_negative');
         count = RoundMath(attrVal.valueMultiplicative * 100 * count);
-        thePlayer.AddAbilityMultiple('T_mutagen_attackpower_negative', RoundMath(attrVal.valueMultiplicative * 100 * count));
+        thePlayer.AddAbilityMultiple('T_mutagen_attackpower_negative', count);
     }
 }
 
