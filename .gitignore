@@ -3,3 +3,9 @@ NOTES.txt
 TODO.txt
 temp/*
 ScriptStudio/*
+*.orig
+*_BACKUP_*
+*_BASE_*
+*_REMOTE_*
+*_LOCAL_*
+*.backup*
