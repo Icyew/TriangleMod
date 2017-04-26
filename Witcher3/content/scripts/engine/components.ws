@@ -57,6 +57,7 @@ struct SAnimMultiplyCauser
 {
 	saved var id : int;
 	saved var mul : float;
+	saved var srcName : name; // Triangle robx99 animations adapted
 };
 
 

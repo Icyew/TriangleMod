@@ -279,9 +279,9 @@ class W3Action_Attack extends W3DamageAction
 			//modSigns: oil ammo percentage
 			if( actorAttacker.GetInventory().ItemHasActiveOilApplied( weaponId, monsterCategory ) )
 			{
-				result += actorAttacker.GetInventory().GetOilAttackPowerBonus( weaponId, monsterCategory );
-				//actorAttacker.GetInventory().GetItemAbilities(weaponId, attributes);
-				//result += actorAttacker.GetInventory().GetItemAttributeValue(weaponId, MonsterCategoryToAttackPowerBonus(monsterCategory) );
+				// result += actorAttacker.GetInventory().GetOilAttackPowerBonus( weaponId, monsterCategory ); // Triangle poisoned blades disable this feature for now/ever
+				actorAttacker.GetInventory().GetItemAbilities(weaponId, attributes);
+				result += actorAttacker.GetInventory().GetItemAttributeValue(weaponId, MonsterCategoryToAttackPowerBonus(monsterCategory) );
 			}
 			
 			
@@ -299,43 +299,54 @@ class W3Action_Attack extends W3DamageAction
 		{		
 			
 			
-			//modSigns: exclude crossbow
-			if(IsActionMelee())
-			{
-				if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_2))
-					result += witcherAttacker.GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
-				
-				
-				if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04))
-					result += witcherAttacker.GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s04);
-				
-				
-				if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21))
-					result += witcherAttacker.GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s21);
-							
-				
-				if(witcherAttacker.HasRecentlyCountered() && witcherAttacker.CanUseSkill(S_Sword_s11))
-				{
-					result += witcherAttacker.GetSkillAttributeValue(S_Sword_s11, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s11);
-				}
-				
-				
-				//if(witcherAttacker.IsLightAttack(attackTypeName)) //modSigns
-				//{
-				//	result += witcherAttacker.GetAttributeValue('attack_power_fast_style');
-				//}
-				
-				
-				//if(witcherAttacker.IsHeavyAttack(attackTypeName)) //modSigns
-				//{
-				//	result += witcherAttacker.GetAttributeValue('attack_power_heavy_style');
-				//}
-			}
 			
+
+			
+			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_2))
+				result += witcherAttacker.GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
+			
+			
+			if(witcherAttacker.IsHeavyAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s04) && !TUtil_AreAttackCombosEnabled(true)) // Triangle attack combos
+				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s04);
+			// Triangle attack combos
+			if(witcherAttacker.CanUseSkill(S_Sword_s04) && TUtil_AreAttackCombosEnabled(true)) {
+				result.valueMultiplicative += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboDmgBonus()) * witcherAttacker.GetAttackComboLength(true);
+			}
+			// Triangle end
+			
+			
+			if(witcherAttacker.IsLightAttack(attackTypeName) && witcherAttacker.CanUseSkill(S_Sword_s21) && !TUtil_AreAttackCombosEnabled(false)) // Triangle attack combos
+				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s21);
+			// Triangle attack combos
+			if(witcherAttacker.CanUseSkill(S_Sword_s21) && TUtil_AreAttackCombosEnabled(true)) {
+				result.valueMultiplicative += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboDmgBonus()) * witcherAttacker.GetAttackComboLength(false);
+			}
+			// Triangle end
+						
+			
+			if(witcherAttacker.inv.IsIdValid(crossbowId) && witcherAttacker.CanUseSkill(S_Perk_02))
 			/*if(witcherAttacker.inv.IsIdValid(crossbowId) && witcherAttacker.CanUseSkill(S_Perk_02))
 			{				
 				result += witcherAttacker.GetSkillAttributeValue(S_Perk_02, PowerStatEnumToName(CPS_AttackPower), false, true);
 			}*/ //modSigns
+
+			
+			if(witcherAttacker.HasRecentlyCountered() && witcherAttacker.CanUseSkill(S_Sword_s11))
+			{
+				result += witcherAttacker.GetSkillAttributeValue(S_Sword_s11, PowerStatEnumToName(CPS_AttackPower), false, true) * witcherAttacker.GetSkillLevel(S_Sword_s11);
+			}
+			
+			
+			if(witcherAttacker.IsLightAttack(attackTypeName))
+			{
+				result += witcherAttacker.GetAttributeValue('attack_power_fast_style');
+			}
+			
+			
+			if(witcherAttacker.IsHeavyAttack(attackTypeName))
+			{
+				result += witcherAttacker.GetAttributeValue('attack_power_heavy_style');
+			}
 		}
 			
 		

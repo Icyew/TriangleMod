@@ -197,6 +197,54 @@
       <ability name="FireAuraEffect">
         <duration type="add" min="-1" max="-1" />
       </ability>
+      <!-- Triangle enemy mutations -->
+      <ability name="THypnoAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TFreezingAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TInspiringAuraEffect">
+        <duration type="add" min="-1" max="-1" />
+      </ability>
+      <ability name="TInspiredEffect">
+        <duration type="add" min="0.25" max="0.25" />
+      </ability>
+      <!-- Triangle resolve -->
+      <ability name="TResolveEffect">
+      </ability>
+      <ability name="TResolveDamageBonus">
+        <attack_power type="mult" min="0.01" />
+      </ability>
+      <!-- Triangle endure pain -->
+      <ability name="TIgnorePainEffect">
+        <!-- set things via scripts -->
+        <DirectDamage type="mult" min="0" max="0" />
+      </ability>
+      <!-- Triangle light attack combos -->
+      <ability name="TLightComboEffect">
+      </ability>
+      <!-- Triangle heavy attack combos -->
+      <ability name="THeavyComboEffect">
+      </ability>
+      <!-- Triangle parry -->
+      <ability name="TParryCooldownEffect">
+        <!-- set things via scripts. This xml may not be necessary -->
+        <duration type="add" min="-1" />
+      </ability>
+      <!-- Triangle acquired tolerance -->
+      <ability name="TAcquiredToleranceEffect">
+        <duration type="add" min="1" /> <!-- Extended via code -->
+      </ability>
+      <!-- Triangle spell sword -->
+      <ability name="TSpellSwordEffect">
+      </ability>
+      <!-- Triangle protective coating, spell sword -->
+      <ability name="TWeaknessEffect">
+      <ability name="TOneTimeWeaknessEffect">
+      </ability>
+      </ability>
+      <!-- Triangle end -->
       <ability name="FrozenEffect">
         <duration type="add" min="4" max="4" />
 		<!-- modSigns: it's now a damage increase instead -->
@@ -449,6 +497,26 @@
   <custom>
     <effects>
       <!-- displayed on hud-->
+    <!-- Triangle enemy mutations -->
+    <effect name_name="TInspiredEffect"      defaultAbilityName_name="TInspiredEffect"            iconType_name="EffectAxii" showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_5"  targetEffectName_name="axii_guardian" />
+    <!-- Triangle resolve -->
+    <effect name_name="TResolveEffect"      defaultAbilityName_name="TResolveEffect"            iconType_name="Resolve" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s16"/>
+    <!-- Triangle light attack combo -->
+    <effect name_name="TLightComboEffect"      defaultAbilityName_name="TLightComboEffect"            iconType_name="FastAttack" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
+    <!-- Triangle heavy attack combo -->
+    <effect name_name="THeavyComboEffect"      defaultAbilityName_name="THeavyComboEffect"            iconType_name="HeavyAttack" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_2"/>
+    <!-- Triangle endure pain -->
+    <effect name_name="TIgnorePainEffect"      defaultAbilityName_name="TIgnorePainEffect"            iconType_name="EndurePain" showOnHUD="1" effectNameLocalisationKey_name="skill_name_alchemy_s20"/>
+    <!-- Triangle parry -->
+    <effect name_name="TParryCooldownEffect"      defaultAbilityName_name="TParryCooldownEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_s10"/>
+    <!-- Triangle acquired tolerance -->
+    <effect name_name="TAcquiredToleranceEffect"      defaultAbilityName_name="TAcquiredToleranceEffect"            iconType_name="AcquiredTolerance" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_alchemy_s18"/>
+    <!-- Triangle spell sword -->
+    <effect name_name="TSpellSwordEffect"      defaultAbilityName_name="TSpellSwordEffect"            iconType_name="AardPower" showOnHUD="1" effectNameLocalisationKey_name="skill_desc_magic_s12"/>
+    <!-- Triangle spell sword, protective coating -->
+    <effect name_name="TWeaknessEffect"      defaultAbilityName_name="TWeaknessEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
+    <effect name_name="TOneTimeWeaknessEffect"      defaultAbilityName_name="TOneTimeWeaknessEffect"            iconType_name="EnhancedWeapon" showOnHUD="1" effectNameLocalisationKey_name="skill_name_sword_1"/>
+    <!-- Triangle end -->
 	  <effect name_name="BasicQuenEffect"        	defaultAbilityName_name="BasicQuenEffect"   		iconType_name="Quen" 	 		showOnHUD="1" effectNameLocalisationKey_name="skill_name_magic_4" />
       <effect name_name="BlindnessEffect"        	defaultAbilityName_name="BlindnessEffect"   		iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="critical_blindness" />
 	  <effect name_name="WraithBlindnessEffect"  	defaultAbilityName_name="WraithBlindnessEffect" 	iconType_name="Confused" 	 	showOnHUD="1" effectNameLocalisationKey_name="effect_blindness" 		targetEffectName_name="stunned_ghost" />
@@ -562,6 +630,20 @@
       <applicator_aura name_name="FireAuraEffect" defaultAbilityName_name="FireAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="4.0">
         <effect name_name="BurningEffect" affectsHostile="1" affectsNeutral="1" affectsFriendly="1" />
       </applicator_aura>
+      <!-- Triangle enemy mutations -->
+      <applicator_aura name_name="TFireAuraEffect" defaultAbilityName_name="FireAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="BurningEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="TFreezingAuraEffect" defaultAbilityName_name="TFreezingAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="SlowdownFrostEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="THypnoAuraEffect" defaultAbilityName_name="THypnoAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="3.0">
+        <effect name_name="HypnotizedEffect" affectsHostile="1" affectsNeutral="0" affectsFriendly="0" affectsWitcher="1" />
+      </applicator_aura>
+      <applicator_aura name_name="TInspiringAuraEffect" defaultAbilityName_name="TInspiringAuraEffect" showOnHUD="0" isOneTimeOnly="0" range="8.0">
+        <effect name_name="TInspiredEffect" affectsHostile="0" affectsNeutral="1" affectsFriendly="1" affectsWitcher="0" />
+      </applicator_aura>
+      <!-- Triangle end -->
     </effects>
 	
     <effect_icons>
@@ -587,6 +669,23 @@
 	  <effect iconType_name="EffectNekker"    	path="icons/inventory/potions/pheromone-nekker-64x64.png" />
 	  <effect iconType_name="EffectBear"    	path="icons/inventory/potions/pheromone-bear-64x64.png" />
 	  <effect iconType_name="PopsPotion"    	path="icons/inventory/ingredients/alchemy/alcohol_vodka_pepper_64x64.png" />
+    <!-- Triangle acquired tolerance -->
+    <effect iconType_name="AcquiredTolerance"         path="icons\Skills\Alchemy\alchemy_s18.png" />
+    <!-- Triangle resolve -->
+    <effect iconType_name="Resolve"         path="icons\Skills\Sword\sword_s16.png" />
+    <!-- Triangle light attack combo -->
+    <effect iconType_name="FastAttack"         path="icons\Skills\core\sword_1.png" />
+    <!-- Triangle heavy attack combo -->
+    <effect iconType_name="HeavyAttack"         path="icons\Skills\core\sword_2.png" />
+    <!-- Triangle endure pain -->
+    <effect iconType_name="EndurePain"          path="icons\Skills\Alchemy\alchemy_s20.png" />"icons\Skills\Signs\magic_s6.png"
+    <!-- Triangle spell sword -->
+    <effect iconType_name="AardPower"         path="icons\Skills\Signs\magic_s6.png" />
+    <effect iconType_name="IgniPower"         path="icons\Skills\Signs\magic_s7.png" />
+    <effect iconType_name="YrdenPower"        path="icons\Skills\Signs\magic_s11.png" />
+    <effect iconType_name="QuenPower"         path="icons\Skills\Signs\magic_s13.png" />
+	  <effect iconType_name="AxiiPower"     		path="icons\Skills\Signs\magic_s18.png" />
+    <!-- Triangle end-->
 	  <effect iconType_name="Quen"    			path="icons/Skills/core/magic_4.png" />
 	  <!-- modSigns: Undying effect -->
       <effect iconType_name="UndyingSkillImmortal"	path="icons/Skills/sword/sword_s18.png" />

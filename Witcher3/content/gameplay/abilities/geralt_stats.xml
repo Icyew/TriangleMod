@@ -59,7 +59,7 @@
       <ability name="Lvl48"><tags> "base" </tags><vitality type="base" always_random="false" min="25" max="25" /> <attack_power type="add" always_random="false" min="1" max="1" /> <spell_power type="mult" min="0.001" /> </ability>
       <ability name="Lvl49"><tags> "base" </tags><vitality type="base" always_random="false" min="25" max="25" /> <attack_power type="add" always_random="false" min="1" max="1" /> <spell_power type="mult" min="0.001" /> </ability>
       <ability name="Lvl50"><tags> "base" </tags><vitality type="base" always_random="false" min="25" max="25" /> <attack_power type="add" always_random="false" min="1" max="1" /> <spell_power type="mult" min="0.001" /> </ability>
-	  
+      	  
       <ability name="GeraltMult">
         <tags> "base" </tags>
         <attack_power type="mult" always_random="false" min="10" max="10" />
@@ -137,6 +137,7 @@
 		<roll_stamina_delay type="base" always_random="false" min="1.0" max="1.0" />
         <sprint_stamina_delay type="base" always_random="false" min="1.0" max="1.0" />
         <jump_stamina_delay type="base" always_random="false" min="1.0" max="1.0" />
+        <!-- /modSigns -->
         <usable_item_stamina_delay type="base" always_random="false" min="0.0" max="0.0" />
         <!-- focus points / adrenaline -->
         <light_attack_focus_drain type="add" min="0.05" />
@@ -181,6 +182,24 @@
         <!-- Regen group -->
         <!-- <staminaRegen type="mult" always_random="false" min="-0.05" max="-0.05" /> -->
       </ability>
+      <!-- Triangle debug commands -->
+      <ability name="TDebugSpellPowerBonus">
+        <spell_power type="mult" min="0.01" />
+      </ability>
+      <ability name="TDebugAttackPowerBonus">
+        <attack_power type="mult" min="0.01" />
+      </ability>
+      <ability name="TDebugHealthBonus">
+        <vitality type="base" min="1" />
+      </ability>
+      <ability name="TDebugToxicityBonus">
+        <toxicity type="base" always_random="false" min="1" />
+      </ability>
+      <!-- Triangle toxicity -->
+      <ability name="TBonusToxicity">
+        <toxicity type="base" always_random="false" min="1" />
+      </ability>
+      <!-- Triangle end -->
     </abilities>
   </definitions>  
 </redxml>

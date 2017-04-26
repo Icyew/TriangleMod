@@ -16,7 +16,8 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	private 		var pathPointsSpent : array<int>;							
 	private   saved var skillSlots : array<SSkillSlot>;							
 	protected saved var skillAbilities : array<name>;							
-	private 		var totalSkillSlotsCount : int;								
+	private			var totalSkillSlotsCount : int;
+	private			var orgTotalSkillSlotsCount : int;								//amount of skill slots (Elys) Triangle passive skills
 	private 		var tempSkills : array<ESkill>;								
 	private   saved var mutagenSlots : array<SMutagenSlot>;						
 	private			var temporaryTutorialSkills : array<STutorialTemporarySkill>;	
@@ -128,6 +129,18 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		LoadMutationData();		
 		
 		isInitialized = true;
+
+		// Elys start //
+		// Triangle passive skills Set original skill slots count and equip default passive skills
+
+		orgTotalSkillSlotsCount = totalSkillSlotsCount;
+
+		for(i=0; i<skills.Size(); i+=1)
+		{
+			if( MustEquipSkill(skills[i].skillType) )
+				ForceEquipSkill(skills[i].skillType);
+		}
+		// Elys end //
 		
 		return true;	
 	}
@@ -750,10 +763,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if( skillLevel > 0 )
 			{
 				color = owner.GetInventory().GetSkillMutagenColor( mutagenItemID );
-				current.count = skillLevel * GetSkillGroupColorCount(color, skillGroupID);
+				current.count = skillLevel * FloorF(GetSkillGroupColorCount(color, skillGroupID)); // Triangle synergy returns a float now
 			}
 		}
-		
 		
 		if( current.abilityName != mutagenBonuses[skillGroupID].abilityName )
 		{
@@ -929,9 +941,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function GetSkillGroupColorCount(commonColor : ESkillColor, groupID : int) : ESkillColor
+	public final function GetSkillGroupColorCount(commonColor : ESkillColor, groupID : int) : float // Triangle synergy changed return type
 	{
-		var count, i : int;
+		// Triangle synergy
+		var count : float;
+		var i : int;
+		// Triangle end
 		var mutagenSlot : EEquipmentSlots;
 		var skillColors : array<ESkillColor>;
 		var item : SItemUniqueId;
@@ -949,10 +964,15 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		count = 0;
 		for(i=0; i<skillColors.Size(); i+=1)
 		{
-			if(skillColors[i] == commonColor )	
+			
+			if(skillColors[i] == commonColor || (TOpts_YellowSkillWildcard() && skillColors[i] == SC_Yellow)) // Triangle mutagens
 			{
 				count = count + 1;
+			// Triangle synergy
+			} else if (CanUseSkill(S_Alchemy_s19) && TOpts_AltSynergyBonusPerLevel() > 0 && skillColors[i] != SC_None) {
+				count = count + TOpts_AltSynergyBonusPerLevel() * GetSkillLevel(S_Alchemy_s19);
 			}
+			// Triangle end
 		}
 		
 		return count;
@@ -1031,7 +1051,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	{
 		var reductionCounter : int;
 		var ability, attributeName : name;
-		var ret, costReduction : SAbilityAttributeValue;
+		var ret, costReduction, delay : SAbilityAttributeValue; // Triangle sign options
 	
 		ability = '';
 		
@@ -1045,6 +1065,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			attributeName = theGame.params.STAMINA_COST_DEFAULT;
 		
 		ret = GetSkillAttributeValue(ability, attributeName, true, true);
+		TOpts_SetSignStaminaCost(ability, ret, delay, isPerSec); // Triangle sign options Delay not used
 		
 		
 		reductionCounter = GetSkillLevel(skill) - 1;
@@ -1116,6 +1137,11 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var attributeName : name;
 		var skill : ESkill;
 		//var blizzard : W3Potion_Blizzard;
+		// Triangle alt stamina
+		var tempItem : SItemUniqueId;
+		var witcher : W3PlayerWitcher;
+		var armorCost : float;
+		// Triangle end
 	
 		super.GetStaminaActionCostInternal(action, isPerSec, cost, delay, abilityName);
 		
@@ -1139,6 +1165,34 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			cost.valueMultiplicative = 0;
 		}*/ //modSigns: moved to another place
 		
+		// Triangle alt stamina
+		witcher = GetWitcherPlayer();
+		if(TOpts_AltArmorStaminaMod() &&
+			witcher &&
+			(action == ESAT_LightAttack ||
+			action == ESAT_HeavyAttack ||
+			(action == ESAT_Ability && abilityName == SkillEnumToName(S_Sword_s02)) ||
+			(action == ESAT_Ability && abilityName == SkillEnumToName(S_Sword_s01)) ||
+			action == ESAT_Dodge ||
+			action == ESAT_Roll))
+		{
+			TOpts_SetActionStaminaCost(action, cost, abilityName, isPerSec);
+			armorCost = 0;
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Armor, tempItem))
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Armor, action, abilityName, isPerSec);
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Boots, tempItem))
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Boots, action, abilityName, isPerSec);
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Pants, tempItem))
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Pants, action, abilityName, isPerSec);
+			if(witcher.inv.GetItemEquippedOnSlot(EES_Gloves, tempItem))
+				armorCost += TOpts_ArmorStaminaMod(witcher.inv.GetArmorType(tempItem), EES_Gloves, action, abilityName, isPerSec);
+
+			cost.valueAdditive += RoundMath(armorCost);
+		}
+		if (action == ESAT_Ability) {
+			TOpts_SetSignStaminaCost(abilityName, cost, delay, isPerSec);
+		}
+		// Triangle end
 		
 		/*if( thePlayer.HasBuff( EET_Blizzard ) && owner == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel( EET_Blizzard ) == 3 && thePlayer.HasBuff( EET_BattleTrance ) )
 		{
@@ -1204,6 +1258,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var witcher : W3PlayerWitcher;
 		
 		witcher = GetWitcherPlayer();
+
+		// Triangle alt stamina
+		if (TOpts_AltArmorStaminaMod()) {
+			return 0;
+		}
+		// Triangle end
 		
 		if(!ActionHasPenalty(action) || owner != witcher)
 			return 0;
@@ -1227,6 +1287,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	//modSigns
 	private final function CalcStaminaOverEncumbrancePenalty(action : EStaminaActionType) : float
 	{
+		// Triangle TODO maybe make an option for this?
 		var tmpBool : bool;
 		var witcher : W3PlayerWitcher;
 		
@@ -1368,7 +1429,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool
+	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimeout : bool) : bool // Triangle enemy mutations match base fn
 	{
 		var i : int;
 	
@@ -1432,7 +1493,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
     //modSigns
 	public final function ResetAlchemy05SkillMaxLevel()
 	{
-		skills[S_Alchemy_s05].maxLevel = 3;
+		// skills[S_Alchemy_s05].maxLevel = 3; // Triangle protective coating keep it at 5
 	}
 	
 	protected final function CacheSkills(skillDefinitionName : name, out cache : array<SSkill>)
@@ -1685,6 +1746,12 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			if(uiStateSpecialAttacks)
 				uiStateSpecialAttacks.OnBoughtSkill(skill);
 		}
+		// Elys start
+		// Triangle passive skills equip passive skill
+
+		if( MustEquipSkill(skill) )
+			ForceEquipSkill(skill);
+		// Elys end
 	}
 	
 	protected final function AddSkillInternal(skill : ESkill, spendPoints : bool, isTemporary : bool, optional skipTutorialMessages : bool) : bool
@@ -2022,6 +2089,11 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		if(FactsDoesExist("debug_fact_stamina_boy"))
 			return 0;
 			
+		// Triangle alt stamina
+		if (owner == GetWitcherPlayer()) {
+			GetWitcherPlayer().DrainFocusByStaminaAction(action, abilityName, dt, costMult);
+		}
+		// Triangle end
 		cost = super.DrainStamina(action, fixedCost, fixedDelay, abilityName, dt, costMult);
 		
 		if(cost > 0 && dt > 0)
@@ -2131,19 +2203,19 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var value : SAbilityAttributeValue;
 		
 		
-		if (CanUseSkill(S_Sword_s04))
+		if (CanUseSkill(S_Sword_s04) && !TUtil_IsCustomSkillEnabled(S_Sword_s04) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s04), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
-		if (CanUseSkill(S_Sword_s21))
+		if (CanUseSkill(S_Sword_s21) && !TUtil_IsCustomSkillEnabled(S_Sword_s21) ) // Triangle attack combos
 			attackPower += GetSkillAttributeValue(SkillEnumToName(S_Sword_s21), PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
 		attackPower = attackPower * 0.5;
 		
 		
-		if (CanUseSkill(S_Sword_s08)) 
+		if (CanUseSkill(S_Sword_s08) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 		{
 			steelCritChance += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s08), theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
 			steelCritDmg += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s08), theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);
 		}
-		if (CanUseSkill(S_Sword_s17)) 
+		if (CanUseSkill(S_Sword_s17) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 		{
 			steelCritChance += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s17), theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
 			steelCritDmg += CalculateAttributeValue(GetSkillAttributeValue(SkillEnumToName(S_Sword_s17), theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
@@ -2394,6 +2466,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	public final function EquipSkill(skill : ESkill, slotID : int) : bool
 	{
 		var idx : int;
+		var id : int; // Elys // Triangle passive skills
 		var prevColor : ESkillColor;
 		
 		if(!HasLearnedSkill(skill) || IsCoreSkill(skill))
@@ -2403,6 +2476,18 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		
 		if(idx < 0)
 			return false;
+		// Elys start
+		// Triangle passive skills unequip skills from passive slot when they are added to active slot
+		// NOTE I don't think this block should actually be hit, since we try to unequip before equipping in charactermenu.ws
+		if(IsSkillEquipped(skill))
+		{
+			id = GetSkillSlotID(skill);
+			if (id > orgTotalSkillSlotsCount)
+				UnequipSkill(id, true); // keep passive slot open
+			TUtil_LogMessage("WARNING: this probably shouldn't happen. slotID: " + id + " orgTotalSkillSlotsCount: " + orgTotalSkillSlotsCount + " isPassiveFree: " + IsFreePassiveSlotOpen(GetSkillPathType(skill)));
+
+		}
+		// Elys end
 		
 		prevColor = GetSkillGroupColor(skillSlots[idx].groupID);
 		
@@ -2417,7 +2502,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 	}
 	
 	
-	public final function UnequipSkill(slotID : int) : bool
+	public final function UnequipSkill(slotID : int, optional keepPassiveOpen : bool) : bool // Triangle passive skills
 	{
 		var idx : int;
 		var prevColor : ESkillColor;
@@ -2440,7 +2525,23 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		prevColor = GetSkillGroupColor(skillSlots[idx].groupID);
 		LinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);
 		OnSkillUnequip(skill);
-		
+
+		// Elys Triangle passive skills
+		// if unequipped skill is passive, re-equip in passive slot. Set unequipped skill to free passive slot if eligible
+		if ( slotID <= orgTotalSkillSlotsCount && !keepPassiveOpen) // Triangle used to use idx instead of slotID. Was probably a bug?
+		{
+			if (IsEligibleForFreePassiveSlot(skill))
+			{
+				UnequipFreePassiveSlot(GetSkillPathType(skill));
+			}
+
+			// Might also be a perma passive skill
+			if (MustEquipSkill(skill)) {
+				ForceEquipSkill(skill);
+			}
+		}
+		// Elys Triangle end
+
 		return true;
 	}
 	
@@ -2514,11 +2615,13 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		}
 		else if(skill == S_Alchemy_s20)
 		{
-			if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() )
+			// Triangle endure pain ignore vanilla implementation
+			if ( GetWitcherPlayer().GetStatPercents(BCS_Toxicity) >= GetWitcherPlayer().GetToxicityDamageThreshold() && TOpts_EndurePainDamageRatioPerLevel() == 0)
 				owner.AddEffectDefault(EET_IgnorePain, owner, 'IgnorePain');
+			// Triangle end
 		}
 		
-		if(skill == S_Alchemy_s18)
+		if(skill == S_Alchemy_s18 && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			m_alchemyManager = new W3AlchemyManager in this;
 			m_alchemyManager.Init();
@@ -3009,7 +3112,7 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			
 			
 			cnt -= owner.GetAbilityCount(skillAbilityName);
-			if(cnt > 0)
+			if(cnt > 0 && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 				charStats.AddAbilityMultiple(skillAbilityName, cnt);
 			else if(cnt < 0)
 				charStats.RemoveAbilityMultiple(skillAbilityName, -cnt);
@@ -3161,12 +3264,31 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		var i : int;
 		var skillType : ESkill;
 		
+		for(i=0; i<pathPointsSpent.Size(); i+=1)
+		{
+			pathPointsSpent[i] = 0;
+		}
+
+		// Triangle change when messing with path point bonus
+		// Make sure it's called before adding path points again!
+		owner.RemoveAbilityAll('sword_adrenalinegain');
+		owner.RemoveAbilityAll('magic_staminaregen');
+		owner.RemoveAbilityAll('alchemy_potionduration');
+
 		for(i=0; i<skills.Size(); i+=1)
 		{			
 			skillType = skills[i].skillType;
 			
 			if(IsCoreSkill(skillType))
 				continue;
+			// Dazedy start
+			if(IsDefaultSkill(skillType)){
+				skills[i].level=1;
+				// Triangle TODO don't count default skills for path points?
+				pathPointsSpent[skills[i].skillPath] += 1;
+				continue;
+			}
+			// Dazedy end
 			
 			if(IsSkillEquipped(skillType))
 				UnequipSkill(GetSkillSlotID(skillType));
@@ -3174,21 +3296,17 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			skills[i].level = 0;
 		}
 		
-		for(i=0; i<pathPointsSpent.Size(); i+=1)
-		{
-			pathPointsSpent[i] = 0;
-		}
-		
-		owner.RemoveAbilityAll('sword_adrenalinegain');
-		owner.RemoveAbilityAll('magic_staminaregen');
-		owner.RemoveAbilityAll('alchemy_potionduration');
+		// Triangle not really necessary TODO
+		// SetStatPointMax(BCS_Toxicity, 1000);
+		SetStatPointMax(BCS_Stamina, 100);
 		
 		//modSigns
-		if( FactsQuerySum( "modSigns_S_Alchemy_s05_Fix" ) < 1 )
+		// Triangle protective coating should still have 5 as max level. dont reset!
+		/*if( FactsQuerySum( "modSigns_S_Alchemy_s05_Fix" ) < 1 )
 		{
 			ResetAlchemy05SkillMaxLevel();
 			FactsAdd( "modSigns_S_Alchemy_s05_Fix" );
-		}
+		}*/
 	}
 	
 	
@@ -4379,6 +4497,153 @@ class W3PlayerAbilityManager extends W3AbilityManager
 			LogMutation( "Slot [" + mutationUnlockedSlotsIndexes[ i ] + "] = " + skillSlots[ mutationUnlockedSlotsIndexes[ i ] ].unlocked );
 		}
 	}	
+// Elys start
+
+	// Triangle passive skills This one looks like Elys
+	private final function MustEquipSkill(skill : ESkill) : bool
+	{
+		if(IsSkillEquipped(skill))
+			return false;
+		// Dazedy start
+		if(ShouldBePassiveSkill(skill) && HasLearnedSkill(skill)) // Triangle
+			return true;
+		return false;
+	}
+
+	// Triangle passive skills I forget if Elys or Dazedy wrote this.
+	private final function IsDefaultSkill(skill : ESkill) : bool
+	{
+		// Triangle passive skills These should match xml. these skills always have a point in them, but are not necessarily passive
+		// if(	 skill == S_Perk_05 ||
+		// 		skill == S_Perk_06 ||
+		// 		skill == S_Perk_07 ) {
+		// 	return true;
+		// }
+		// else {
+		// 	return false;
+		// }
+		return false; // no more default skills for now
+	}
+	// Dazedy end
+
+	// Triangle passive skills
+	private final function IsTierOneColorSkill(skill : ESkill) : bool
+	{
+		if(	 skill == S_Sword_s16 ||
+				skill == S_Sword_s04 ||
+				skill == S_Sword_s21 ||
+				skill == S_Sword_s13 ||
+				skill == S_Sword_s10 ||
+				skill == S_Magic_s20 ||
+				skill == S_Magic_s08 ||
+				skill == S_Magic_s10 ||
+				skill == S_Magic_s13 ||
+				skill == S_Magic_s17 ||
+				skill == S_Alchemy_s01 ||
+				skill == S_Alchemy_s12 ||
+				skill == S_Alchemy_s09 ||
+				skill == S_Alchemy_s18 ||
+				skill == S_Alchemy_s16 )
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// Triangle passive skills
+	private final function IsDefinedNonPassiveOnPath(skill : ESkill, path : ESkillPath) : bool
+	{
+		return skill != S_SUndefined && !IsAlwaysPassiveSkill(skill) && GetSkillPathType(skill) == path;
+	}
+
+	// Triangle passive skills check if a passive slot is available for this skill
+	private final function IsFreePassiveSlotOpen(path : ESkillPath) : bool
+	{
+		var socketedSkill : ESkill;
+		var i : int;
+
+		for (i = orgTotalSkillSlotsCount; i < totalSkillSlotsCount; i+=1)
+		{
+			socketedSkill = skillSlots[i].socketedSkill;
+			if (IsDefinedNonPassiveOnPath(socketedSkill, path))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// Triangle passive skills
+	private final function UnequipFreePassiveSlot(path : ESkillPath)
+	{
+		var socketedSkill : ESkill;
+		var i : int;
+
+		for (i = orgTotalSkillSlotsCount; i < totalSkillSlotsCount; i+=1)
+		{
+			socketedSkill = skillSlots[i].socketedSkill;
+			if (IsDefinedNonPassiveOnPath(socketedSkill, path))
+			{
+				UnequipSkill(skillSlots[i].id, true); // Make sure this keeps passive slot empty!
+				break;
+			}
+		}
+	}
+
+	// Triangle passive skills
+	private final function IsAlwaysPassiveSkill(skill : ESkill) : bool
+	{
+		return IsDefaultSkill(skill);
+	}
+
+	// Triangle passive skills
+	private final function IsEligibleForFreePassiveSlot(skill : ESkill) : bool
+	{
+		return !IsAlwaysPassiveSkill(skill) && (IsTierOneColorSkill(skill) || GetSkillPathType(skill) == ESP_Perks) && !IsSkillEquipped(skill);
+	}
+
+	//Chicken Start
+	// Triangle passive skills
+	private final function ShouldBePassiveSkill(skill : ESkill) : bool
+	{
+		return IsAlwaysPassiveSkill(skill) || (IsEligibleForFreePassiveSlot(skill) && IsFreePassiveSlotOpen(GetSkillPathType(skill)));
+	}
+	//Chicken End
+	//Triangle passive skills Pretty sure Elys wrote this
+	private final function GetFreePassiveSkillSlotIndex() : int
+	{
+		var i : int;
+		var slot : SSkillSlot;
+		
+		for(i=0; i<skillSlots.Size(); i+=1)
+		{
+			if(skillSlots[i].socketedSkill == S_SUndefined)
+			{
+				if( (skillSlots[i].unlocked) && (skillSlots[i].id > orgTotalSkillSlotsCount) )
+					return i;
+			}
+		}
+
+		totalSkillSlotsCount += 1;
+		slot.id = totalSkillSlotsCount;
+		slot.unlockedOnLevel = 0;
+		slot.groupID = -1;
+		slot.unlocked = true;
+		skillSlots.PushBack(slot);
+		return skillSlots.Size() - 1;
+	}
+
+	// Triangle passive skills Pretty sure Elys wrote this
+	private final function ForceEquipSkill(skill : ESkill)
+	{
+		var idx : int;
+		idx = GetFreePassiveSkillSlotIndex();
+		
+		skillSlots[idx].socketedSkill = skill;
+		
+		OnSkillEquip(skill);
+	}
+	//Elys end
 }
 
 exec function dbgskillslots()

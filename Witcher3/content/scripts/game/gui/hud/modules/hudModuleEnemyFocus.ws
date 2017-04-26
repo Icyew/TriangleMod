@@ -11,7 +11,12 @@ enum EFloatingValueType
 	EFVT_InstantDeath,
 	EFVT_DoT,
 	EFVT_Heal,
-	EFVT_Buff
+	EFVT_Buff,
+	// Triangle attack combos
+	EFVT_LightCombo,
+	EFVT_HeavyCombo,
+	EFVT_SignCombo,
+	EFVT_Triangle
 }
 
 class CR4HudModuleEnemyFocus extends CR4HudModuleBase
@@ -50,6 +55,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 	private var m_lastEnemyName				: string;
 	private var m_lastUseMutation8Icon		: bool;
 	
+	private var m_comboStrBufferLength		: int; default m_comboStrBufferLength = 0; // Triangle attack combos
 	
 	
 	event  OnConfigUI()
@@ -134,7 +140,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		var hud:CR4ScriptedHud;
 		
 		
-		if(valueType != EFVT_InstantDeath && valueType != EFVT_Buff && value == 0.f)
+		if(valueType != EFVT_InstantDeath && valueType != EFVT_Buff && valueType != EFVT_Triangle && value == 0.f) // Triangle alt stamina
 			return;
 
 		hud = (CR4ScriptedHud)theGame.GetHud();
@@ -146,7 +152,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 		switch (valueType)
 		{
 			case EFVT_Critical:
-				label = GetLocStringByKeyExt("attribute_name_critical_hit_damage");
+				label = "Crit! "; // Triangle attack combos shorten string for attack combo
 				color = 0xFDFFC2;
 				break;
 			case EFVT_InstantDeath:
@@ -169,10 +175,51 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 				label = GetLocStringByKeyExt(stringParam);
 				color = 0xFFF0F0;
 				break;
+			// Trianlge alt stamina
+			case EFVT_Triangle:
+				label = stringParam;
+				color = 0xC20404;
+				break;
+			// Triangle end
 			default:
 				label = GetLocStringByKeyExt("");
 				color = 0xFFF0F0;
 				break;
+		}
+		m_comboStrBufferLength = FloorF(StrLen(NoTrailZeros(CeilF(value)))*3) + FloorF(StrLen(label)*2) + 6; // Triangle attack combos
+		SetDamageText(label, CeilF(value), color);
+	}
+	
+	// Triangle attack combos
+	public function ShowComboType(comboType : EFloatingValueType, value : float)
+	{
+		var label : string;
+		var color : float;
+		var hud : CR4ScriptedHud;
+
+		// No combo!
+		if (value == 0.f)
+			return;
+
+		hud = (CR4ScriptedHud)theGame.GetHud();
+		if ( !hud.AreEnabledEnemyHitEffects() )
+		{
+			return;
+		}
+
+		// Hack that moves text out of the way so it doesn't overlap with damage
+		label = SpaceFill("x", m_comboStrBufferLength + 1, ESFM_JustifyRight);
+		if (comboType == EFVT_LightCombo)
+		{
+			color = 0xFF66FF;
+		}
+		else if (comboType == EFVT_HeavyCombo)
+		{
+			color = 0xFF0000;
+		}
+		else
+		{
+			color = 0xFF00FF;
 		}
 		SetDamageText(label, CeilF(value), color);
 	}
@@ -349,7 +396,7 @@ class CR4HudModuleEnemyFocus extends CR4HudModuleBase
 			{
 				m_nameInterval = 0.25; 
 				
-				UpdateName( l_target.GetDisplayName() );
+				UpdateName( l_target.GetMutatedDisplayName() ); // Triangle enemy mutations
 			}
 
 			

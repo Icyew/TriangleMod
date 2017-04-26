@@ -19,7 +19,7 @@
       <ability name="area_novigrad">
 		<novigrad_price_mult type="add" min="0.9" max="0.9"/>
       </ability>
-	  <!-- hacks -->	  
+	  <!-- hacks -->
 	  <ability name="TutorialStaminaRegenHack">
 		<staminaRegen type="mult" min="0.1"/>
 	  </ability>
@@ -58,32 +58,32 @@
         <!-- Axii -->
         <magic_5 is_ability="true" />
 		<!-- Level 3 Alchemy -->
-		<perk_8 is_ability="true" /> 
+		<perk_8 is_ability="true" />
       </ability>
       <!-- skills not known at the beggining of the game - added only for testing purposes -->
       <ability name="GeraltSkills_Testing">
-        <!-- Whirl (ult) 
+        <!-- Whirl (ult)
         <sword_s1 is_ability="true" />
 		-->
-        <!-- Rend (ult) 
+        <!-- Rend (ult)
         <sword_s2 is_ability="true" />
 		-->
-        <!-- Wave (ult) 
+        <!-- Wave (ult)
         <magic_s1 is_ability="true" />
 		-->
-        <!-- Burn (ult) 
+        <!-- Burn (ult)
         <magic_s2 is_ability="true" />
 		-->
-        <!-- Shock (ult) 
+        <!-- Shock (ult)
         <magic_s3 is_ability="true" />
 		-->
-        <!-- Channeling (ult) 
+        <!-- Channeling (ult)
         <magic_s4 is_ability="true" />
 		-->
-        <!-- Guard Me! (ult) 
+        <!-- Guard Me! (ult)
         <magic_s5 is_ability="true" />
 		-->
-        <!-- Arrow Deflection 
+        <!-- Arrow Deflection
         <sword_s10 is_ability="true" />
 		-->
         <book_27 is_ability="true" />
@@ -93,7 +93,7 @@
         <spell_power type="mult" min="0.1" />
       </ability>
       <ability name="SkillLinkBonus_Green">
-        <vitality type="add" min="200" />
+        <vitality type="add" min="200" /> <!-- Triangle mutagens I dont think this actually does anyting -->
       </ability>
       <ability name="SkillLinkBonus_Red">
         <attack_power type="mult" min="0.1" />
@@ -106,22 +106,26 @@
         <tags></tags>
         <focus_gain type="add" always_random="false" min="0.01" max="0.01" />
       </ability>
-	  
+	
       <!-- Base Skills -->
       <!-- Strong Attack -->
       <ability name="sword_2">
         <tags>sword_2,attack_heavy</tags>
-		<armor_reduction type = "add" min="200" max="200"/>
-		<heavy_attack_dmg_boost type="mult" min="0.25" /> <!-- modSigns -->
-        <!-- <attack_power type="mult" min="0.25" /> -->
+    <armor_reduction type = "add" min="1000" max="1000"/>
+        <!-- Triangle I now use a menu option to control heavy dmg bonus.
+             Option uses a total dmg modifier instead of attack power bonus.
+             Vanilla hardcodes total dmg mod to .833, and subtracts .833 from attack power bonus,
+             so this attack_power bonus usually gets clobbered anyways, unless it is > .833 when
+             combined with the standard .15 heavy attack dmg bonus for all creatures -->
+        <!-- <attack_power type="mult" min="0.333" /> -->
       </ability>
-	  
+	
 	  <!-- Battle Trance -->
       <ability name="sword_5">
         <tags>sword_5</tags>
 		<attack_power type="mult" min="0.1" />	<!-- granted per each focus point -->
-      </ability>	  
-	  
+      </ability>
+	
       <!-- Unlockable Skills -->
       <!-- Whirl (ult) -->
       <ability name="sword_s1">
@@ -134,34 +138,32 @@
 		<whirl_penalty_reduction type="mult" min="0.05" /> <!-- per lvl > 1 -->
 		<whirl_dmg_reduction type="mult" min="0.1" /> <!-- per lvl -->
       </ability>
-	  
+	
       <!-- Rend (ult) -->
-	  <!-- modSigns: stamina delay -->
       <ability name="sword_s2">
         <tags>sword_s2,attack_heavy</tags>
-		<!-- modSigns: should inherit armor reduction from strong attacks -->
-		<!-- <armor_reduction min="1000" max="1000"/> -->
-		<critical_hit_chance type="add" min="0.1" /> <!-- per skill level -->
-		<adrenaline_final_damage_bonus type="mult" min="0.05" /> <!-- per skill level -->
-		<stamina_max_dmg_bonus type="mult" min="0.05" /> <!-- per skill level -->
-		
-		<stamina_cost type="add" min="0" />
-        <stamina_cost_per_sec type="add" min="50" />
-        <stamina_delay type="add" min="2" />
+    <armor_reduction min="10000" max="10000"/> <!-- Triangle rend just in case -->
+    <critical_hit_chance type="add" min="0.1" />
+    <adrenaline_final_damage_bonus type="mult" min="0.334" /> <!-- Triangle rend overridden by menu item -->
+    <stamina_max_dmg_bonus type="mult" min="0.5" /> <!-- Triangle rend overridden by menu item -->
+    
+    <stamina_cost type="add" min="0" />
+        <stamina_cost_per_sec type="add" min="0" /> <!-- Triangle rend This might cause a divide by 0 error if not fixed (should be fixed tho)! -->
+        <stamina_delay type="add" min="1.5" /> <!-- Triangle rend -->
       </ability>
-	  
+	
       <!-- Overwhelm -->
       <ability name="sword_s3">
         <tags>sword_s3</tags>
         <instant_kill_chance type="add" min="0.01" />
       </ability>
-	  
+	
       <!-- Crushing Blows -->
       <ability name="sword_s4">
         <tags>sword_s4,attack_heavy</tags>
 		<attack_power type="mult" min="0.05" />
       </ability>
-	  
+	
       <!-- Crippling Strikes -->
 	  <!-- modSigns -->
       <ability name="sword_s5">
@@ -170,153 +172,154 @@
         <sword_s5_duration type="add" min="8" />
         <sword_s5_dmg_per_sec type="add" min="0.01" /> <!-- 1% per sec -->
       </ability>
-	  
+	
       <!-- Sunder Armor -->
       <ability name="sword_s6">
         <tags>sword_s6</tags>
         <armor_reduction_perc type="add" always_random="false" min="0.05" max="0.05" />
       </ability>
-	  
+	
       <!-- Precision -->
       <ability name="sword_s7">
         <tags>sword_s7</tags>
 		<critical_hit_chance type="add" min="0.05" />
 		<critical_hit_damage_bonus type="add" min="0.15" />
       </ability>
-	  
+	
 	  <!-- Critical hits -->
-	  <ability name="sword_s8"> 
+	  <ability name="sword_s8">
         <tags>sword_s8</tags>
 		<critical_hit_chance type="add" min="0.02" />
 		<critical_hit_damage_bonus type="add" min="0.15" />
       </ability>
-	  
+	
 	  <!-- Fleet Footed -->
-	  <ability name="sword_s9"> 
+	  <ability name="sword_s9">
         <tags>sword_s9</tags>
-		<damage_reduction type="add" min="0.16" />
+		<damage_reduction type="add" min="0.20" />
       </ability>
-	  
+	
 	  <!-- Arrow Deflection-->
-	  <ability name="sword_s10"> 
+	  <ability name="sword_s10">
         <tags>sword_s10 </tags>
 		<damage_increase type="add" min="1" />
       </ability>
-	  
+	
       <!-- Counterattack -->
       <ability name="sword_s11">
         <tags>sword_s11</tags>
         <attack_power type="mult" min="0.3" />
 		<critical_hit_chance type="add" min="1" />
+		<!-- modSigns -->
         <s11_knockdown_chance type="add" min="0.2" />
         <duration type="add" min="2" />
       </ability>
-	  
+	
       <!-- Crippling Shot: ability added on affected monsters -->
       <ability name="sword_s12">
 		<tags>sword_s12</tags>
         <duration type="add" min="5" />
       </ability>
-	  
+	
 	  <!-- Lightning Reflex -->
 	  <ability name="sword_s13">
         <tags>sword_s13</tags>
         <slowdown_mod type="add" min="0.15"/>
       </ability>
-	  
+	
       <!-- Improvised Speedloader -->
       <ability name="sword_s15">
         <tags>sword_s15</tags>
         <focus_gain type="add" min="0.04" />
       </ability>
-	  
+	
 	  <!-- Resolve -->
       <ability name="sword_s16">
         <tags>sword_s16</tags>
         <focus_drain_reduction type="add" min="0.20" />
       </ability>
-	  
+	
       <!-- Critical hits - Fast Style -->
       <ability name="sword_s17">
         <tags>sword_s17,attack_light</tags>
 		<critical_hit_chance type="add" min="0.02" />
 		<critical_hit_damage_bonus type="add" min="0.15" />
       </ability>
-	  
+	
 	  <!-- Undying -->
 	  <ability name="sword_s18">
         <tags>sword_s18</tags>
+		<!-- modSigns -->
 		<!-- <healing_factor type="add" min="0.05" /> --> <!-- precentage of max health healed by FP -->
 		<!-- <healing_bonus type="add" min="0.25" /> -->  <!-- healing bonus per ability level -->
 		<trigger_delay type="add" min="60" /> <!-- activation delay in seconds - modSigns: increased -->
       </ability>
-	  
+	
       <!-- All Out -->
       <ability name="sword_s19">
         <tags>sword_s19</tags>
         <spell_power type="mult" min="0.25" />
       </ability>
-	  
+	
 	  <!-- Still Mind -->
 	  <ability name="sword_s20">
         <tags>sword_s20</tags>
         <focus_gain type="add" min="0.05" />
       </ability>
-	 
+	
       <!-- Fiery Dancer -->
       <ability name="sword_s21">
         <tags>sword_s21,attack_light</tags>
 		<attack_power type="mult" min="0.05" />
       </ability>
-	  
+	
       <!--#################################### Signs Path #####################################-->
-	  
+	
       <ability name="magic_staminaregen">
         <tags></tags>
         <staminaRegen type="mult" always_random="false" min="0.005" max="0.005" />
       </ability>
-	  
+	
       <!-- Base Skills -->
       <!-- Aard -->
       <ability name="magic_1">
         <tags>magic_1</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="1" />
+        <stamina_delay type="base" min="1" /> <!-- modSigns -->
         <stamina_delay type="mult" min="1" />
         <KnockdownTypeApplicator is_ability="true" />
       </ability>
-	  
+	
       <!-- Igni -->
       <ability name="magic_2">
         <tags>magic_2</tags>
-        <stamina_cost type="add" always_random="false" min="100" max="100" />		
-        <stamina_delay type="base" min="1" />
+        <stamina_cost type="add" always_random="false" min="100" max="100" />
+        <stamina_delay type="base" min="1" /> <!-- modSigns -->
         <stamina_delay type="mult" min="1" />
-        <FireDamage type="add" always_random="false" min="150" max="150" />
+        <FireDamage type="add" always_random="false" min="150" max="150" /> <!-- modSigns -->
         <burn_threshold type="add" always_random="false" min="2.2" max="2.2" />
 		<BurningEffect is_ability="true" />
       </ability>
-	  
+	
       <!-- Yrden -->
-	  <!-- modSigns: trap duration changed -->
       <ability name="magic_3">
         <tags>magic_3</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="1" />
+        <stamina_delay type="base" min="1" /> <!-- modSigns -->
         <stamina_delay type="mult" min="1" />
-        <trap_duration type="base" min="5" />
+        <trap_duration type="base" min="5" /> <!-- modSigns -->
         <trap_duration type="mult" min="1" />
 		<SlowdownEffect is_ability="true" />
 		<min_slowdown type="add" min="0.20" />
 		<max_slowdown type="add" min="0.45" />
 		<range type="add" min="2.7" />
       </ability>
-	  	  
+	
       <!-- Quen -->
       <ability name="magic_4">
         <tags>magic_4</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
-        <stamina_delay type="base" min="1" />
+        <stamina_delay type="base" min="1" /> <!-- modSigns -->
         <stamina_delay type="mult" min="1" />
         <shield_duration type="base" min="30" />
         <shield_duration type="mult" min="1" />
@@ -324,23 +327,24 @@
         <shield_health type="base" min="400" />
         <shield_health type="mult" min="1" />
       </ability>
-	  
+	
       <!-- Axii -->
       <ability name="magic_5">
         <tags>magic_5</tags>
         <stamina_cost type="add" always_random="false" min="100" max="100" />
         <stamina_cost_per_sec type="add" always_random="false" min="0" max="0" />
-        <stamina_delay type="base" min="1" />
+        <stamina_delay type="base" min="1" /> <!-- modSigns -->
         <stamina_delay type="mult" min="1" />
-        <duration type="base" min="3" />
+        <duration type="base" min="3" /> <!-- modSigns -->
 		<duration_animals type="base" min="30" />
 		<ConfusionEffect is_ability="true" />
       </ability>
-	  
+	
       <!-- Unlockable Skills -->
       <!-- Wave (ult) -->
       <ability name="magic_s1">
         <tags>magic_s1</tags>
+		<!-- modSigns -->
         <spell_power type="mult" always_random="false" min="-0.4" max="-0.4" />
 		<spell_power_penalty_reduction type="add" min="0.2" />
         <stamina_cost type="add" always_random="false" min="90" max="90" />
@@ -348,12 +352,13 @@
         <stamina_delay type="mult" min="1" />
         <KnockdownTypeApplicator is_ability="true" />
       </ability>
-	  
+	
       <!-- Burn (ult) -->
       <ability name="magic_s2">
         <tags>magic_s2</tags>
         <stamina_cost_per_sec type="add" always_random="false" min="50.0" max="50.0" />
 		<stamina_cost_reduction_after_1 type="mult" min="0.25" />
+        <!-- modSigns -->
         <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
         <FireDamage type="add" always_random="false" min="0" max="0" />
@@ -361,10 +366,11 @@
 		<channeling_damage_after_1 type="add" min="20" max="20" />
         <BurningEffect_FireStream is_ability="true" />
       </ability>
-	  
+	
       <!-- Shock (ult) -->
       <ability name="magic_s3">
         <tags>magic_s3</tags>
+        <!-- modSigns -->
         <stamina_cost_per_sec type="add" always_random="false" min="55" max="55" />
         <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
@@ -376,10 +382,11 @@
 		<damage_bonus_flat_after_1 type="add" min="25" />
 		<!-- range is set by using different trigger component in sign entity -->
       </ability>
-	  
+	
       <!-- Channeling (ult) -->
       <ability name="magic_s4">
         <tags>magic_s4</tags>
+        <!-- modSigns -->
         <stamina_cost_per_sec type="add" always_random="false" min="20" max="20" />
 		<stamina_cost_reduction_after_1 type="mult" min="0.5" />
 		<shield_health_factor type="add" always_random="false" min="3" max="3" />
@@ -387,35 +394,38 @@
         <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
       </ability>
-	  
+	
       <!-- Guard Me! (ult) -->
       <ability name="magic_s5">
         <tags>magic_s5</tags>
         <stamina_cost type="add" always_random="false" min="0" max="0" />
+        <!-- modSigns -->
         <stamina_cost_per_sec type="add" always_random="false" min="30" max="30" />
         <duration type="base" min="8" />
 		<duration_bonus_after1 type="base" min="4" />
 		<duration_animals type="base" min="20" />
 		<AxiiGuardMeEffect is_ability="true" />
+		
 		<!-- attack power bonus -->
 		<attack_power type="mult" min="0.2" />
         <stamina_delay type="base" min="3" />
         <stamina_delay type="mult" min="1" />
       </ability>
-	  
+	
       <!-- Static Discharge -->
       <ability name="magic_s6">
         <tags>magic_s6, magic_1, magic_s1</tags>
-        <ForceDamage type="add" min="70" />
+        <ForceDamage type="add" min="70" /> <!-- modSigns -->
       </ability>
-	  
+	
       <!-- Igni Power -->
       <ability name="magic_s7">
         <tags>magic_s7,Igni</tags>
+        <!-- modSigns -->
 		<fire_damage_bonus type="add" always_random="false" min="40" max="40" />
 		<channeling_damage_bonus type="add" always_random="false" min="15" max="15" />
       </ability>
-	  
+	
       <!-- Melt Armor -->
       <!-- modSigns -->
       <ability name="magic_s8">
@@ -424,13 +434,13 @@
         <!-- <armor type="mult" min="-0.01" /> -->
         <armor_reduction_bonus type="add" min="0.001" />
       </ability>
-	  
-	  <!-- Combustible -->
+	
+	   <!-- Combustible -->
       <ability name="magic_s9">
         <tags>magic_s9</tags>
-        <chance_bonus type="add" min="0.05" />
+        <chance_bonus type="add" min="0.05" /> <!-- modSigns -->
       </ability>
-	  
+	
       <!-- Glyph Sustenance -->
 	  <!-- modSigns: trap duration changed -->
       <ability name="magic_s10">
@@ -439,20 +449,20 @@
         <charge_count type="add" min="2" />
         <trap_duration type="mult" min="0.5" />
       </ability>
-	  
+	
       <!-- Supercharge -->
 	  <!-- modSigns: multiplier instead of plain damage -->
       <ability name="magic_s11">
         <tags>magic_s11</tags>
         <direct_damage_per_sec type="mult" min="0.003" />
       </ability>
-	  
+	
       <!-- aard passive spell power bonus -->
       <ability name="magic_s12">
         <tags>magic_s12,Aard</tags>
         <heavy_knockdown_chance_bonus min="0.05" type="mult" /> <!-- modSigns -->
       </ability>
-	  
+	
 	  <!-- quen impulse -->
 	  <!-- modSigns: damage increased and changed to direct -->
 	  <ability name="magic_s13">
@@ -467,44 +477,44 @@
         <tags>magic_s14, magic_4, magic_s4</tags>
         <discharge_percent type="add" min="0.05" />
       </ability>
-	  
-      <!-- Quen Power -->
+	
+      <!-- Auen Power -->
       <ability name="magic_s15">
         <tags>magic_s15,Quen</tags>
-        <shield_health_bonus type="add" min="40" />
+        <shield_health_bonus type="add" min="40" /> <!-- modSigns -->
       </ability>
-	  
+	
       <!-- Yrden Power -->
       <ability name="magic_s16">
         <tags>magic_s16,Yrden</tags>
-        <turret_bonus_damage type="add" min="40" />
+        <turret_bonus_damage type="add" min="40" /> <!-- modSigns -->
       </ability>
-	  
+	
       <ability name="magic_s17">
         <tags>magic_s17,Axii</tags>
         <axii_slowdown_prc type="add" min="0.3" /> <!-- modSigns: slowdown prc per lvl -->
 		<!-- if player has this skill on lvl 3 then if Axii buff duration (including target resistances) is less than this value then Stagger will be applied instead -->
         <duration_to_force_stagger type="add" min="0.9" />
       </ability>
-	  	  
-	   <!-- Axii Power -->
+	
+	   <!-- Axii Powe -->
       <ability name="magic_s18">
         <tags>magic_s16,Axii</tags>
-        <axii_duration_bonus type="add" min="0.1" />
+        <axii_duration_bonus type="add" min="0.1" /> <!-- modSigns -->
       </ability>
-	  
+	
 	  <!-- Axii Dominate -->
       <ability name="magic_s19">
         <tags>magic_s19</tags>
-        <duration type="mult" min="0.25" />
+        <duration type="mult" min="0.25" /> <!-- modSigns -->
       </ability>
-	  
+	
 	  <!-- Aard Dispersion -->
       <ability name="magic_s20">
         <tags>magic_s20</tags>
         <range type="add" min="1" />
       </ability>
-	  
+	
       <!--################################### Alchemy Path ####################################-->
       <ability name="alchemy_potionduration">
         <tags></tags>
@@ -514,140 +524,142 @@
       <!-- Resistances -->
       <ability name="alchemy_s1">
         <tags>alchemy_s1</tags>
-        <threshold type="add" min="0.05" />
+        <threshold type="add" min="0.04" /> <!-- Triangle heightened tolerance -->
       </ability>
-	  
+	
       <!-- Refreshment -->
       <ability name="alchemy_s2">
         <tags>alchemy_s2</tags>
         <vitality_gain_perc type="add" min="0.05" />
       </ability>
-	  
+	
 	  <!-- Delayed Recovery -->
       <ability name="alchemy_s3">
         <tags>alchemy_s3</tags>
         <toxicity_threshold type="add" min="0.1" />
       </ability>
-	  
+	
 	  <!-- Side Effect -->
       <ability name="alchemy_s4">
         <tags>alchemy_s4</tags>
         <apply_chance type="add" min="0.20004" />
       </ability>
-	  
+	
 	  <ability name="alchemy_s5">
         <tags>alchemy_s5</tags>
         <defence_bonus type="add" min="0.05" />
       </ability>
-	  
+	
 	  <!-- Fixative formula -->
 	  <ability name="alchemy_s6">
         <tags>alchemy_s6</tags>
         <ammo_bonus type="add" min="0.334" />
       </ability>
-	  
+	
       <!-- Application -->
       <ability name="alchemy_s7">
         <tags>alchemy_s7</tags>
         <critical_hit_damage_bonus type="add" min="0.20004" />
       </ability>
-	  
+	
       <!-- Efficiency -->
       <ability name="alchemy_s8">
         <tags>alchemy_s8</tags>
         <item_count type="add" min="1" />
       </ability>
-	  
+	
 	  <ability name="alchemy_s9">
         <tags>alchemy_s9</tags>
         <slowdown_mod type="add" min="0.15"/>
       </ability>
-	  
+	
       <!-- Fragmentation Casing -->
       <ability name="alchemy_s10">
         <tags>alchemy_s10</tags>
+        <!-- modSigns -->
         <PhysicalDamage type="add" min="50" />
         <SilverDamage type="add" min="50" />
       </ability>
-	  
+	
       <!-- Cluster Bomb -->
       <ability name="alchemy_s11">
         <tags>alchemy_s11</tags>
+        <!-- modSigns -->
         <PhysicalDamage type="add" min="150" />
         <SilverDamage type="add" min="150" />
         <FireDamage type="add" min="50" />
       </ability>
-	  
+	
       <!-- Flexibility -->
       <ability name="alchemy_s12">
         <tags>alchemy_s12</tags>
         <PoisonEffect is_ability="true" />
-		<skill_chance type="add" min="0.05" />
+		<skill_chance type="add" min="0.05" /> <!-- modSigns -->
 		<oil_level_chance type="add" min="0.1" />
       </ability>
-	  
+	
       <!-- Transmutation -->
       <ability name="alchemy_s13">
         <tags>alchemy_s13</tags>
         <vitality type="add" min="200" />
       </ability>
-	  
+	
       <!-- Mutant -->
       <ability name="alchemy_s14">
         <tags>alchemy_s14</tags>
         <duration type="mult" min="0.1" />
       </ability>
-	  
+	
       <!-- Condensation -->
       <ability name="alchemy_s15">
         <tags>alchemy_s15</tags>
         <toxicityRegen type="add" min="-1" />
       </ability>
-	  
+	
       <!-- Frenzy -->
       <ability name="alchemy_s16">
         <tags>alchemy_s16</tags>
         <slowdown_ratio type="add" min="0.25" /> <!-- modSigns -->
         <slowdown_duration type="add" min="0.5" /> <!-- modSigns -->
       </ability>
-	  
+	
       <!-- Killing Spree -->
       <ability name="alchemy_s17">
         <tags>alchemy_s17</tags>
         <critical_hit_chance type="add" min="0.1" />
       </ability>
-	  
+	
       <!-- Taster -->
       <ability name="alchemy_s18">
         <tags>alchemy_s18</tags>
         <toxicity type="add" min="1" />
       </ability>
-	  
+	
 	  <ability name="alchemy_s19">
         <tags>alchemy_s19</tags>
 		<synergy_bonus type="add" min="0.1" />
       </ability>
-	  
+	
 	  <!--################################### Perks ####################################-->
 		<ability name="perk_1">
 			<tags>perk_1</tags>
 			<perk_1_day_ability is_ability="true" />
 			<perk_1_night_ability is_ability="true" />
-			<vitalityRegen_tooltip type="add" min="10" />			
-			<staminaRegen_tooltip type="mult" min="0.05" />
+			<vitalityRegen_tooltip type="add" min="10" />
+			<staminaRegen_tooltip type="mult" min="0.05" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_1_day_ability">
 			<tags>perk_1, Day, GlobalPassiveBonus</tags>
-			<vitalityRegen type="add" min="10" />			
-		</ability>		
+			<vitalityRegen type="add" min="10" />
+		</ability>
 		<ability name="perk_1_night_ability">
 			<tags>perk_1, Night, GlobalPassiveBonus</tags>
-			<staminaRegen type="mult" min="0.05" />			
+			<staminaRegen type="mult" min="0.05" /> <!-- modSigns -->
 		</ability>
 		
 		<ability name="perk_2">
 			<tags>perk_2</tags>
-			<xbow_dmg_bonus type="mult" min="0.5" /> <!-- modSigns -->
+			<attack_power type="mult" min="0.5" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_3">
 			<tags>perk_3</tags>
@@ -660,25 +672,21 @@
 		</ability>
 		<ability name="perk_5">
 			<tags>perk_5</tags>
-			<!-- modSigns: this is actually critical hit damage bonus per armor piece -->
-			<!-- <critical_hit_chance_fast_style type="add" min="0.05" /> -->
-			<!-- <attack_power_fast_style type="mult" min="0.05" /> -->
-			<!-- modSigns: more and better crits -->
-			<critical_hit_chance type="add" min="0.025" />
-			<critical_hit_damage_bonus type="add" min="0.075" />
+			<critical_hit_damage_bonus type="add" min="0.25" /> <!-- Triangle armor styles -->
+			<!-- <attack_power_fast_style type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
+			<attack_power type="mult" min="0.05" /> <!-- Triangle armor styles -->
 		</ability>
 		<ability name="perk_6">
 			<tags>perk_6</tags>
 			<spell_power type="mult" min="0.05" />
-			<staminaRegen type="mult" min="0.0125" /> <!-- modSigns -->
+			<attack_power type="mult" min="0.03" /> <!-- Triangle armor styles -->
+			<!-- <staminaRegen type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
 		</ability>
 		<ability name="perk_7">
 			<tags>perk_7</tags>
-			<!-- <vitality type="mult" min="0.05" /> -->
-			<!-- <attack_power_heavy_style type="mult" min="0.05" /> -->
-			<!-- modSigns: more health and adrenaline gain -->
-			<vitality type="mult" min="0.075" />
-			<focus_gain type="add" min="0.025" />
+			<vitality type="mult" min="0.05" />
+			<attack_power_heavy_style type="mult" min="0.05" /> <!-- Triangle armor styles -->
+			<focus_gain type="add" min="0.025" /> <!-- modSigns -->
 		</ability>
 		<ability name="perk_10">
 			<tags>perk_10, GlobalPassiveBonus</tags>
@@ -702,7 +710,7 @@
 						<required_skills isAlternative="false">
 							sword_s21
 						</required_skills>
-					</skill> 
+					</skill>
 				-->
     <!-- CORE SKILLS -->
         <!-- FAST ATTACK -->
@@ -717,32 +725,32 @@
         <skill skill_name="sword_5" isCoreSkill="1" guiPositionID="4" localisationName="skill_name_sword_5" localisationDescription="skill_desc_sword_5" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\core\sword_5.png" />
         <!-- AARD -->
         <skill skill_name="magic_1" isCoreSkill="1" guiPositionID="0" localisationName="skill_name_magic_1" localisationDescription="skill_desc_magic_1" cost="1" pathType_name="Signs" subpathType_name="Signs_Aard" iconPath="icons\Skills\core\magic_1.png" >
-			<modifier_tags> 
-				Aard 
+			<modifier_tags>
+				Aard
 			</modifier_tags>
 		</skill>
         <!-- IGNI -->
         <skill skill_name="magic_2" isCoreSkill="1" guiPositionID="1" localisationName="skill_name_magic_2" localisationDescription="skill_desc_magic_2" cost="1" pathType_name="Signs" subpathType_name="Signs_Igni" iconPath="icons\Skills\core\magic_2.png" >
-			<modifier_tags> 
-				Igni 
+			<modifier_tags>
+				Igni
 			</modifier_tags>
 		</skill>
         <!-- YRDEN -->
         <skill skill_name="magic_3" isCoreSkill="1" guiPositionID="2" localisationName="skill_name_magic_3" localisationDescription="skill_desc_magic_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Yrden" iconPath="icons\Skills\core\magic_3.png" >
-			<modifier_tags> 
-				Yrden 
+			<modifier_tags>
+				Yrden
 			</modifier_tags>
 		</skill>
         <!-- QUEN -->
         <skill skill_name="magic_4" isCoreSkill="1" guiPositionID="3" localisationName="skill_name_magic_4" localisationDescription="skill_desc_magic_4" cost="1" pathType_name="Signs" subpathType_name="Signs_Quen" iconPath="icons\Skills\core\magic_4.png" >
-			<modifier_tags> 
-				Quen 
+			<modifier_tags>
+				Quen
 			</modifier_tags>
 		</skill>
         <!-- AXII -->
         <skill skill_name="magic_5" isCoreSkill="1" guiPositionID="4" localisationName="skill_name_magic_5" localisationDescription="skill_desc_magic_5" cost="1" pathType_name="Signs" subpathType_name="Signs_Axi" iconPath="icons\Skills\core\magic_5.png" >
-			<modifier_tags> 
-				Axii 
+			<modifier_tags>
+				Axii
 			</modifier_tags>
 		</skill>
         <!-- POTIONS -->
@@ -755,7 +763,7 @@
         <skill skill_name="alchemy_4" isCoreSkill="1" guiPositionID="3" localisationName="skill_name_alchemy_4" localisationDescription="skill_desc_alchemy_4" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Mutagens" iconPath="icons\Skills\core\alchemy_4.png" />
         <!-- TRIAL OF GRASSES -->
         <skill skill_name="alchemy_5" isCoreSkill="1" guiPositionID="4" localisationName="skill_name_alchemy_5" localisationDescription="skill_desc_alchemy_5" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Grasses" iconPath="icons\Skills\core\alchemy_5.png" />
-        
+
 	<!-- SWORD -->
 		<!-- FAST STYLE -->
 		<!-- Fiery Dancer -->
@@ -763,10 +771,11 @@
 		<!-- Critical hits -->
         <skill skill_name="sword_s17" requiredPointsSpent="8" maxLevel="5" priority="3"  guiPositionID="32" localisationName="skill_name_sword_s17" localisationDescription="skill_desc_sword_s17" localisationDescriptionLevel2="skill_desc_sword_s17" localisationDescriptionLevel3="skill_desc_sword_s17" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s17.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Whirl -->
-        <skill skill_name="sword_s1"  requiredPointsSpent="20" maxLevel="5" priority="5"  guiPositionID="31" localisationName="skill_name_sword_s1" localisationDescription="skill_desc_sword_s1"  localisationDescriptionLevel2="skill_desc_sword_s1_2"  localisationDescriptionLevel3="skill_desc_sword_s1_2"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s1.png"  linkVertical="red" linkLeft="red" linkRight="red" />     
+        <skill skill_name="sword_s1"  requiredPointsSpent="20" maxLevel="5" priority="5"  guiPositionID="31" localisationName="skill_name_sword_s1" localisationDescription="skill_desc_sword_s1"  localisationDescriptionLevel2="skill_desc_sword_s1_2"  localisationDescriptionLevel3="skill_desc_sword_s1_2"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s1.png"  linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Crippling Strikes -->
-        <skill skill_name="sword_s5"  requiredPointsSpent="30" maxLevel="5" priority="14" guiPositionID="21" localisationName="skill_name_sword_s5" localisationDescription="skill_desc_sword_s5"  localisationDescriptionLevel2="skill_desc_sword_s5"  localisationDescriptionLevel3="skill_desc_sword_s5"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s5.png"  linkVertical="red" linkLeft="red" linkRight="red" />
-		
+    <!-- Triangle skill tree -->
+        <skill skill_name="sword_s5"  requiredPointsSpent="28" maxLevel="5" priority="14" guiPositionID="21" localisationName="skill_name_sword_s5" localisationDescription="skill_desc_sword_s5"  localisationDescriptionLevel2="skill_desc_sword_s5"  localisationDescriptionLevel3="skill_desc_sword_s5"  cost="1" pathType_name="Sword" subpathType_name="Sword_StyleFast" iconPath="icons\Skills\Sword\sword_s5.png"  linkVertical="red" linkLeft="red" linkRight="red" />
+    
 		<!-- STRONG STYLE -->
 		<!-- Crushing Blows -->
         <skill skill_name="sword_s4"  requiredPointsSpent="0"  maxLevel="5" priority="16" guiPositionID="16" localisationName="skill_name_sword_s4" localisationDescription="skill_desc_sword_s4" localisationDescriptionLevel2="skill_desc_sword_s4" localisationDescriptionLevel3="skill_desc_sword_s4" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s4.png" linkVertical="red" linkLeft="red" linkRight="red" />
@@ -775,7 +784,7 @@
 		<!-- Rend -->
         <skill skill_name="sword_s2"  requiredPointsSpent="20" maxLevel="5" priority="4"  guiPositionID="12" localisationName="skill_name_sword_s2" localisationDescription="skill_desc_sword_s2" localisationDescriptionLevel2="skill_desc_sword_s2" localisationDescriptionLevel3="skill_desc_sword_s2" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s2.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Sunder Armor -->
-        <skill skill_name="sword_s6"  requiredPointsSpent="30" maxLevel="5" priority="15" guiPositionID="17" localisationName="skill_name_sword_s6" localisationDescription="skill_desc_sword_s6" localisationDescriptionLevel2="skill_desc_sword_s6" localisationDescriptionLevel3="skill_desc_sword_s6" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s6.png" linkVertical="red" linkLeft="red" linkRight="red" />		
+        <skill skill_name="sword_s6"  requiredPointsSpent="30" maxLevel="5" priority="15" guiPositionID="17" localisationName="skill_name_sword_s6" localisationDescription="skill_desc_sword_s6" localisationDescriptionLevel2="skill_desc_sword_s6" localisationDescriptionLevel3="skill_desc_sword_s6" cost="1" pathType_name="Sword" subpathType_name="Sword_StyleStrong" iconPath="icons\Skills\Sword\sword_s6.png" linkVertical="red" linkLeft="red" linkRight="red" />
 
 		<!-- UTILITY -->
 		<!-- Arrow Deflection -->
@@ -785,8 +794,9 @@
 		<!-- Counterattack -->
         <skill skill_name="sword_s11" requiredPointsSpent="20" maxLevel="3" priority="13" guiPositionID="25" localisationName="skill_name_sword_s11" localisationDescriptionNotAcquired="skill_desc_prev_sword_s11" localisationDescription="skill_desc_sword_s11" localisationDescriptionLevel2="skill_desc_sword_s11_2" localisationDescriptionLevel3="skill_desc_sword_s11_3" cost="1" pathType_name="Sword" subpathType_name="Sword_Utility" iconPath="icons\Skills\Sword\sword_s3.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- Overwhelm -->
-        <skill skill_name="sword_s3"  requiredPointsSpent="30" maxLevel="2" priority="8"  guiPositionID="8"  localisationName="skill_name_sword_s3" localisationDescription="skill_desc_sword_s3"  localisationDescriptionLevel2="skill_desc_sword_s3"  localisationDescriptionLevel3="skill_desc_sword_s3"  cost="1" pathType_name="Sword" subpathType_name="Sword_Utility" iconPath="icons\Skills\Sword\sword_s11.png"  linkVertical="red" linkLeft="red" linkRight="red" />
-	
+		<!-- Triangle skill tree -->
+        <skill skill_name="sword_s3"  requiredPointsSpent="28" maxLevel="2" priority="8"  guiPositionID="8"  localisationName="skill_name_sword_s3" localisationDescription="skill_desc_sword_s3"  localisationDescriptionLevel2="skill_desc_sword_s3"  localisationDescriptionLevel3="skill_desc_sword_s3"  cost="1" pathType_name="Sword" subpathType_name="Sword_Utility" iconPath="icons\Skills\Sword\sword_s11.png"  linkVertical="red" linkLeft="red" linkRight="red" />
+  
 		<!-- CROSSBOW -->
 		<!-- Lightning Reflex -->
         <skill skill_name="sword_s13" requiredPointsSpent="0"  maxLevel="3" priority="2"  guiPositionID="10" localisationName="skill_name_sword_s13" localisationDescription="skill_desc_sword_s13" localisationDescriptionLevel2="skill_desc_sword_s13" localisationDescriptionLevel3="skill_desc_sword_s13" cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s13.png" linkVertical="yellow" linkLeft="red" linkRight="red" />
@@ -795,8 +805,9 @@
 		<!-- Precision -->
         <skill skill_name="sword_s7"  requiredPointsSpent="20" maxLevel="5" priority="6"  guiPositionID="33" localisationName="skill_name_sword_s7" localisationDescription="skill_desc_sword_s7"  localisationDescriptionLevel2="skill_desc_sword_s7"  localisationDescriptionLevel3="skill_desc_sword_s7"  cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s12.png"  linkVertical="yellow" linkLeft="red" linkRight="red" />
 		<!-- Crippling Shot -->
-        <skill skill_name="sword_s12" requiredPointsSpent="30" maxLevel="5" priority="19" guiPositionID="7"  localisationName="skill_name_sword_s12" localisationDescription="skill_desc_sword_s12" localisationDescriptionLevel2="skill_desc_sword_s12" localisationDescriptionLevel3="skill_desc_sword_s12" cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s7.png" linkVertical="yellow" linkLeft="red" linkRight="red" />
-        
+		<!-- Triangle skill tree -->
+        <skill skill_name="sword_s12" requiredPointsSpent="28" maxLevel="5" priority="19" guiPositionID="7"  localisationName="skill_name_sword_s12" localisationDescription="skill_desc_sword_s12" localisationDescriptionLevel2="skill_desc_sword_s12" localisationDescriptionLevel3="skill_desc_sword_s12" cost="1" pathType_name="Sword" subpathType_name="Sword_Crossbow" iconPath="icons\Skills\Sword\sword_s7.png" linkVertical="yellow" linkLeft="red" linkRight="red" />
+
         <!-- BATTLE TRANS -->
 		<!-- Resolve -->
         <skill skill_name="sword_s16" requiredPointsSpent="0"  maxLevel="5" priority="7"  guiPositionID="18" localisationName="skill_name_sword_s16" localisationDescription="skill_desc_sword_s16" localisationDescriptionLevel2="skill_desc_sword_s16" localisationDescriptionLevel3="skill_desc_sword_s16" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s16.png" linkVertical="red" linkLeft="red" linkRight="red" />
@@ -805,16 +816,17 @@
 		<!-- Still Mind -->
         <skill skill_name="sword_s20" requiredPointsSpent="20" maxLevel="5" priority="20" guiPositionID="28" localisationName="skill_name_sword_s20" localisationDescription="skill_desc_sword_s20" localisationDescriptionLevel2="skill_desc_sword_s20" localisationDescriptionLevel3="skill_desc_sword_s20" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s20.png" linkVertical="red" linkLeft="red" linkRight="red" />
 		<!-- All Out -->
-        <skill skill_name="sword_s19" requiredPointsSpent="30" maxLevel="5" priority="1"  guiPositionID="37" localisationName="skill_name_sword_s19" localisationDescription="skill_desc_sword_s19" localisationDescriptionLevel2="skill_desc_sword_s19" localisationDescriptionLevel3="skill_desc_sword_s19" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s19.png" linkVertical="red" linkLeft="red" linkRight="red" />
+		<!-- Triangle skill tree -->
+        <skill skill_name="sword_s19" requiredPointsSpent="28" maxLevel="5" priority="1"  guiPositionID="37" localisationName="skill_name_sword_s19" localisationDescription="skill_desc_sword_s19" localisationDescriptionLevel2="skill_desc_sword_s19" localisationDescriptionLevel3="skill_desc_sword_s19" cost="1" pathType_name="Sword" subpathType_name="Sword_BattleTrance" iconPath="icons\Skills\Sword\sword_s19.png" linkVertical="red" linkLeft="red" linkRight="red" />
 
-    <!-- SIGNS -->        
+    <!-- SIGNS -->
 		<!-- AARD -->
 		<!-- Dispersion -->
         <skill skill_name="magic_s20" requiredPointsSpent="0"  maxLevel="3" priority="20" guiPositionID="31" localisationName="skill_name_magic_s20" localisationDescriptionNotAcquired="skill_desc_prev_magic_s20" localisationDescription="skill_desc_magic_s20" localisationDescriptionLevel2="skill_desc_magic_s20" localisationDescriptionLevel3="skill_desc_magic_s20" cost="1" pathType_name="Signs" subpathType_name="Signs_Aard" iconPath="icons\Skills\Signs\magic_s20.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Wave -->
         <skill skill_name="magic_s1"  requiredPointsSpent="6" maxLevel="3" priority="20" guiPositionID="6" localisationName="skill_name_magic_s1"  localisationDescriptionNotAcquired="skill_desc_prev_magic_s1"  localisationDescription="skill_desc_magic_s1"  localisationDescriptionLevel2="skill_desc_magic_s1_2"  localisationDescriptionLevel3="skill_desc_magic_s1_3"  cost="1" pathType_name="Signs" subpathType_name="Signs_Aard" iconPath="icons\Skills\Signs\magic_s1.png"  linkVertical="blue" linkLeft="blue" linkRight="blue" >
-			<modifier_tags> 
-				Aard 
+			<modifier_tags>
+				Aard
 			</modifier_tags>
 		</skill>
 		<!-- Spell Power -->
@@ -827,8 +839,8 @@
         <skill skill_name="magic_s8" requiredPointsSpent="0"  maxLevel="5" priority="20" guiPositionID="17" localisationName="skill_name_magic_s8" localisationDescriptionNotAcquired="skill_desc_prev_magic_s8" localisationDescription="skill_desc_magic_s8" localisationDescriptionLevel2="skill_desc_magic_s8" localisationDescriptionLevel3="skill_desc_magic_s8" cost="1" pathType_name="Signs" subpathType_name="Signs_Igni" iconPath="icons\Skills\Signs\magic_s8.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Burn -->
         <skill skill_name="magic_s2" requiredPointsSpent="6" maxLevel="3" priority="20" guiPositionID="22" localisationName="skill_name_magic_s2" localisationDescriptionNotAcquired="skill_desc_prev_magic_s2" localisationDescription="skill_desc_magic_s2" localisationDescriptionLevel2="skill_desc_magic_s2_2" localisationDescriptionLevel3="skill_desc_magic_s2_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Igni" iconPath="icons\Skills\Signs\magic_s2.png" linkVertical="blue" linkLeft="blue" linkRight="blue" >
-			<modifier_tags> 
-				Igni 
+			<modifier_tags>
+				Igni
 			</modifier_tags>
 		</skill>
 		<!-- Spell Power (Concentration) -->
@@ -836,20 +848,20 @@
 		<!-- Combustible -->
         <skill skill_name="magic_s9" requiredPointsSpent="28" maxLevel="5" priority="20" guiPositionID="11" localisationName="skill_name_magic_s9" localisationDescriptionNotAcquired="skill_desc_prev_magic_s9" localisationDescription="skill_desc_magic_s9" localisationDescriptionLevel2="skill_desc_magic_s9" localisationDescriptionLevel3="skill_desc_magic_s9" cost="1" pathType_name="Signs" subpathType_name="Signs_Igni" iconPath="icons\Skills\Signs\magic_s9.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		
-		<!-- YRDEN --> 
+		<!-- YRDEN -->
         <!-- Glyph Sustenance -->
         <skill skill_name="magic_s10" requiredPointsSpent="0"  maxLevel="2" priority="20" guiPositionID="27" localisationName="skill_name_magic_s10" localisationDescription="skill_desc_magic_s10" localisationDescriptionLevel2="skill_desc_magic_s10" localisationDescriptionLevel3="skill_desc_magic_s10" cost="1" pathType_name="Signs" subpathType_name="Signs_Yrden" iconPath="icons\Skills\Signs\magic_s10.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Shock -->
         <skill skill_name="magic_s3"  requiredPointsSpent="6" maxLevel="3" priority="20" guiPositionID="31" localisationName="skill_name_magic_s3"  localisationDescriptionNotAcquired="skill_desc_prev_magic_s3"  localisationDescription="skill_desc_magic_s3"  localisationDescriptionLevel2="skill_desc_magic_s3_2"  localisationDescriptionLevel3="skill_desc_magic_s3_3"   cost="1" pathType_name="Signs" subpathType_name="Signs_Yrden" iconPath="icons\Skills\Signs\magic_s3.png"  linkVertical="blue" linkLeft="blue" linkRight="blue" >
-			<modifier_tags> 
-				Yrden 
+			<modifier_tags>
+				Yrden
 			</modifier_tags>
 		</skill>
 		<!-- Spell Power (Pain) -->
         <skill skill_name="magic_s16" requiredPointsSpent="18" maxLevel="5" priority="20" guiPositionID="32" localisationName="skill_name_magic_s16" localisationDescriptionNotAcquired="skill_desc_prev_magic_s16" localisationDescription="skill_desc_magic_s16" localisationDescriptionLevel2="skill_desc_magic_s16" localisationDescriptionLevel3="skill_desc_magic_s16" cost="1" pathType_name="Signs" subpathType_name="Signs_Yrden" iconPath="icons\Skills\Signs\magic_s11.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Supercharge -->
         <skill skill_name="magic_s11" requiredPointsSpent="28" maxLevel="5" priority="20" guiPositionID="28" localisationName="skill_name_magic_s11" localisationDescriptionNotAcquired="skill_desc_prev_magic_s11" localisationDescription="skill_desc_magic_s11" localisationDescriptionLevel2="skill_desc_magic_s11" localisationDescriptionLevel3="skill_desc_magic_s11" cost="1" pathType_name="Signs" subpathType_name="Signs_Yrden" iconPath="icons\Skills\Signs\magic_s16.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
-        
+
 		<!-- QUEN -->
 		<!-- Impulse -->
         <skill skill_name="magic_s13" requiredPointsSpent="0"  maxLevel="3" priority="20" guiPositionID="10" localisationName="skill_name_magic_s13" localisationDescriptionNotAcquired="skill_desc_prev_magic_s13" localisationDescription="skill_desc_magic_s13" localisationDescriptionLevel2="skill_desc_magic_s13_2" localisationDescriptionLevel3="skill_desc_magic_s13_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Quen" iconPath="icons\Skills\Signs\magic_s14.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
@@ -858,9 +870,9 @@
 		<!-- Spell Power (Resilience) -->
         <skill skill_name="magic_s15" requiredPointsSpent="18" maxLevel="5" priority="20" guiPositionID="15" localisationName="skill_name_magic_s15" localisationDescriptionNotAcquired="skill_desc_prev_magic_s15" localisationDescription="skill_desc_magic_s15" localisationDescriptionLevel2="skill_desc_magic_s15" localisationDescriptionLevel3="skill_desc_magic_s15" cost="1" pathType_name="Signs" subpathType_name="Signs_Quen" iconPath="icons\Skills\Signs\magic_s13.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Discharge -->
-        <skill skill_name="magic_s14" requiredPointsSpent="28" maxLevel="5" priority="20" guiPositionID="20"  localisationName="skill_name_magic_s14" localisationDescriptionNotAcquired="skill_desc_prev_magic_s14" localisationDescription="skill_desc_magic_s14" localisationDescriptionLevel2="skill_desc_magic_s14" localisationDescriptionLevel3="skill_desc_magic_s14" cost="1" pathType_name="Signs" subpathType_name="Signs_Quen" iconPath="icons\Skills\Signs\magic_s15.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />		
+        <skill skill_name="magic_s14" requiredPointsSpent="28" maxLevel="5" priority="20" guiPositionID="20"  localisationName="skill_name_magic_s14" localisationDescriptionNotAcquired="skill_desc_prev_magic_s14" localisationDescription="skill_desc_magic_s14" localisationDescriptionLevel2="skill_desc_magic_s14" localisationDescriptionLevel3="skill_desc_magic_s14" cost="1" pathType_name="Signs" subpathType_name="Signs_Quen" iconPath="icons\Skills\Signs\magic_s15.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		
-		<!-- AXI --> 
+		<!-- AXI -->
 		<!-- Expression -->
         <skill skill_name="magic_s17" requiredPointsSpent="0"  maxLevel="3" priority="20" guiPositionID="7"  localisationName="skill_name_magic_s17" localisationDescriptionNotAcquired="skill_desc_prev_magic_s17" localisationDescription="skill_desc_magic_s17" localisationDescriptionLevel2="skill_desc_magic_s17_2" localisationDescriptionLevel3="skill_desc_magic_s17_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Axi" iconPath="icons\Skills\Signs\magic_s17.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Guard Me -->
@@ -868,8 +880,8 @@
 		<!-- Spell Power (Demotivate) -->
         <skill skill_name="magic_s18" requiredPointsSpent="18" maxLevel="5" priority="20" guiPositionID="36" localisationName="skill_name_magic_s18" localisationDescriptionNotAcquired="skill_desc_prev_magic_s18" localisationDescription="skill_desc_magic_s18" localisationDescriptionLevel2="skill_desc_magic_s18" localisationDescriptionLevel3="skill_desc_magic_s18" cost="1" pathType_name="Signs" subpathType_name="Signs_Axi" iconPath="icons\Skills\Signs\magic_s18.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
 		<!-- Dominate -->
-        <skill skill_name="magic_s19" requiredPointsSpent="28" maxLevel="3" priority="20" guiPositionID="18" localisationName="skill_name_magic_s19" localisationDescriptionNotAcquired="skill_desc_prev_magic_s19" localisationDescription="skill_desc_magic_s19" localisationDescriptionLevel2="skill_desc_magic_s19_2" localisationDescriptionLevel3="skill_desc_magic_s19_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Axi" iconPath="icons\Skills\Signs\magic_s19.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />		
-             
+        <skill skill_name="magic_s19" requiredPointsSpent="28" maxLevel="3" priority="20" guiPositionID="18" localisationName="skill_name_magic_s19" localisationDescriptionNotAcquired="skill_desc_prev_magic_s19" localisationDescription="skill_desc_magic_s19" localisationDescriptionLevel2="skill_desc_magic_s19_2" localisationDescriptionLevel3="skill_desc_magic_s19_3" cost="1" pathType_name="Signs" subpathType_name="Signs_Axi" iconPath="icons\Skills\Signs\magic_s19.png" linkVertical="blue" linkLeft="blue" linkRight="blue" />
+
     <!-- ALCHEMY -->
 		<!-- POTIONS -->
 		<!-- Resistances -->
@@ -884,8 +896,8 @@
 		<!-- OILS -->
 		<!-- Flexibility -->
 		<skill skill_name="alchemy_s12" requiredPointsSpent="0"  maxLevel="5" priority="36" guiPositionID="11" localisationName="skill_name_alchemy_s12" localisationDescription="skill_desc_alchemy_s12" localisationDescriptionLevel2="skill_desc_alchemy_s12" localisationDescriptionLevel3="skill_desc_alchemy_s12" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s21.png" linkVertical="green" linkLeft="green" linkRight="green" />
-		<!-- Protective Coating: modSigns - maxLevel reduced to 3 -->
-        <skill skill_name="alchemy_s5"  requiredPointsSpent="8" maxLevel="3" priority="36" guiPositionID="8"  localisationName="skill_name_alchemy_s5" localisationDescription="skill_desc_alchemy_s5"  localisationDescriptionLevel2="skill_desc_alchemy_s5"  localisationDescriptionLevel3="skill_desc_alchemy_s5"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s5.png" linkVertical="green" linkLeft="green" linkRight="green" />
+		<!-- Protective Coating -->
+        <skill skill_name="alchemy_s5"  requiredPointsSpent="8" maxLevel="5" priority="36" guiPositionID="8"  localisationName="skill_name_alchemy_s5" localisationDescription="skill_desc_alchemy_s5"  localisationDescriptionLevel2="skill_desc_alchemy_s5"  localisationDescriptionLevel3="skill_desc_alchemy_s5"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s5.png" linkVertical="green" linkLeft="green" linkRight="green" />
 		<!-- Fixative Formula -->
         <skill skill_name="alchemy_s6"  requiredPointsSpent="20" maxLevel="3" priority="36" guiPositionID="20" localisationName="skill_name_alchemy_s6"  localisationDescriptionNotAcquired="skill_desc_prev_alchemy_s6"  localisationDescription="skill_desc_alchemy_s6"  localisationDescriptionLevel2="skill_desc_alchemy_s6_2"  localisationDescriptionLevel3="skill_desc_alchemy_s6_3"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Oils" iconPath="icons\Skills\Alchemy\alchemy_s6.png" linkVertical="green" linkLeft="green" linkRight="green" />
 		<!-- Application -->
@@ -900,7 +912,7 @@
         <skill skill_name="alchemy_s8"  requiredPointsSpent="20" maxLevel="5" priority="37" guiPositionID="6"  localisationName="skill_name_alchemy_s8" localisationDescription="skill_desc_alchemy_s8"  localisationDescriptionLevel2="skill_desc_alchemy_s8"  localisationDescriptionLevel3="skill_desc_alchemy_s8"  cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Bombs" iconPath="icons\Skills\Alchemy\alchemy_s8.png" linkVertical="green" linkLeft="green" linkRight="green" />
 		<!-- Cluster Bomb -->
         <skill skill_name="alchemy_s11" requiredPointsSpent="28" maxLevel="5" priority="37" guiPositionID="30" localisationName="skill_name_alchemy_s11" localisationDescription="skill_desc_alchemy_s11" localisationDescriptionLevel2="skill_desc_alchemy_s11" localisationDescriptionLevel3="skill_desc_alchemy_s11" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Bombs" iconPath="icons\Skills\Alchemy\alchemy_s11.png" linkVertical="green" linkLeft="green" linkRight="green" />
-        
+
 		<!-- MUTAGENS -->
 		<!-- Taster -->
         <skill skill_name="alchemy_s18" requiredPointsSpent="0"  maxLevel="3" priority="37" guiPositionID="17" localisationName="skill_name_alchemy_s18" localisationDescriptionNotAcquired="skill_desc_prev_alchemy_s18" localisationDescription="skill_desc_alchemy_s18" localisationDescriptionLevel2="skill_desc_alchemy_s18_2" localisationDescriptionLevel3="skill_desc_alchemy_s18_3" cost="1" pathType_name="Alchemy" subpathType_name="Alchemy_Mutagens" iconPath="icons\Skills\Alchemy\alchemy_s18.png" linkVertical="green" linkLeft="green" linkRight="green" />
@@ -939,7 +951,7 @@
 		<!-- Bear's Brawn -->
         <skill skill_name="perk_7" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="5" localisationName="skill_name_perk_7" localisationDescription="skill_desc_perk_7" cost="1" pathType_name="Perks" subpathType_name="Perks_col5" iconPath="icons\Perks\s_perk_9.png" linkVertical="" linkLeft="" linkRight="" />
 		<!-- Expertise -->
-        <skill skill_name="perk_8" isCoreSkill="1" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_8" localisationDescription="skill_desc_perk_8" cost="" pathType_name="" subpathType_name="" iconPath="icons\Perks\s_perk_8.png" linkVertical="" linkLeft="" linkRight="" />
+        	<skill skill_name="perk_8" isCoreSkill="1" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="99" localisationName="skill_name_perk_8" localisationDescription="skill_desc_perk_8" cost="" pathType_name="" subpathType_name="" iconPath="icons\Perks\s_perk_8.png" linkVertical="" linkLeft="" linkRight="" />
 		
 		<!-- Written In Blood -->
         <skill skill_name="perk_9" requiredPointsSpent="0" maxLevel="1" priority="0" guiPositionID="7" localisationName="skill_name_perk_9" localisationDescription="skill_desc_perk_9" cost="1" pathType_name="Perks" subpathType_name="Perks_col2" iconPath="icons\Perks\s_perk_23.png" linkVertical="" linkLeft="" linkRight="" />

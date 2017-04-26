@@ -164,8 +164,19 @@ class W3DamageManagerProcessor extends CObject
 			}
 			
 			
-			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) )
-				focusDrain *= 1 - (CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, true) ) * thePlayer.GetSkillLevel(S_Sword_s16));
+			// Triangle resolve
+			if ( GetWitcherPlayer().CanUseSkill(S_Sword_s16) ) {
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
+					focusDrain *= 1 - TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolvePenaltyReduction());
+					if (focusDrain < 0) {
+						thePlayer.GainStat(BCS_Focus, -1 * focusDrain);
+						focusDrain = 0;
+					}
+				} else {
+					focusDrain *= 1 - (CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, true) ) * thePlayer.GetSkillLevel(S_Sword_s16));
+				}
+			}
+			// Triangle end
 				
 			thePlayer.DrainFocus(focusDrain);
 		}
@@ -424,6 +435,22 @@ class W3DamageManagerProcessor extends CObject
 			if( DamageHitsStamina(  dmgInfos[i].dmgType ) )		action.processedDmg.staminaDamage  += dmgValue;
 		}
 		
+		// Triangle spell sword Add bonus damage from sign power skills. Maybe causes problems if direct damage happens here... don't know
+		if (!anyDamageProcessed)
+			anyDamageProcessed = ProcessSpellSwordStuff();
+		else
+			ProcessSpellSwordStuff();
+		// Triangle resolve
+		if (actorAttacker.HasBuff(EET_TResolve)) {
+			actorAttacker.RemoveAllBuffsOfType(EET_TResolve);
+		}
+		// Triangle protective coating, spell sword, alt stamina
+		// This should happen after all damage is calculated
+		if (actorAttacker && actorAttacker.HasBuff(EET_TOneTimeWeakness)) {
+			actorAttacker.RemoveBuff(EET_TOneTimeWeakness);
+		}
+		// Triangle end
+
 		if(size == 0 && canLog)
 		{
 			LogDMHits("*** There is no incoming damage set (probably only buffs).", action);
@@ -524,6 +551,102 @@ class W3DamageManagerProcessor extends CObject
 		return anyDamageProcessed;
 	}
 	
+	// Triangle spell sword
+	private function DealYrdenSpellSwordDamage(target : CGameplayEntity, dmg : float)
+	{
+		var newAction : W3DamageAction;
+		
+		newAction = new W3DamageAction in this;
+		newAction.Initialize(playerAttacker, target, NULL, TUtil_PowerSkillForSignType(ST_Yrden), EHRT_None, CPS_Undefined, true, false, false, false );
+		newAction.SetCannotReturnDamage( true );
+		newAction.SetHitAnimationPlayType(EAHA_ForceYes);
+		newAction.SetHitReactionType(EHRT_Heavy);
+		
+		newAction.AddDamage(theGame.params.DAMAGE_NAME_SHOCK, dmg);
+
+		theGame.damageMgr.ProcessAction(newAction);
+		delete newAction;
+		
+		target.PlayEffect('yrden_shock');
+	}
+
+	// Triangle spell sword
+	private function ProcessSpellSwordStuff() : bool
+	{
+		var spellSwordSign : ESignType;
+		var associatedSkill : ESkill;
+		var bonusDmgInfo : SRawDamage;
+		var anyDamageProcessed : bool;
+		var witcher : W3PlayerWitcher;
+		var dmgValue : float;
+		var params : SCustomEffectParams;
+		var ents : array<CGameplayEntity>;
+		var i : int;
+		var resistPoints, resistPercents : float;
+		var spellPower : SAbilityAttributeValue;
+		var attrVal : SAbilityAttributeValue;
+
+
+		witcher = (W3PlayerWitcher)actorAttacker;
+		anyDamageProcessed = false;
+		spellSwordSign = witcher.GetSpellSwordSign();
+		if(attackAction && attackAction.IsActionMelee() && witcher && spellSwordSign != ST_None)
+		{
+			associatedSkill = TUtil_PowerSkillForSignType(spellSwordSign);
+			spellPower = witcher.GetTotalSignSpellPower(SignEnumToSkillEnum(spellSwordSign));
+
+			if (witcher.CanUseSkill(associatedSkill))
+			{
+				if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && witcher.IsSpellSwordCharged()) {
+					witcher.DrainSpellSwordStacks();
+					bonusDmgInfo.dmgVal = TOpts_SpellSwordBaseDmg();
+					bonusDmgInfo.dmgType = TUtil_DmgTypeForPowerSkill(associatedSkill);
+					if (spellSwordSign == ST_Aard) {
+						// For some reason, adding resistStat to effect doesnt work
+						// TODO verify resists are working ok
+						attackAction.AddEffectInfo(EET_SlowdownFrost, TOpts_AardPowerFrostDuration() * spellPower.valueMultiplicative);
+					} else if (spellSwordSign == ST_Igni) {
+						bonusDmgInfo.dmgVal += TOpts_IgniPowerScorchFraction() * actorVictim.GetHealth();
+						attackAction.AddEffectInfo(EET_Burning, 0.5);
+					} else if (spellSwordSign == ST_Yrden) {
+						FindGameplayEntitiesInCylinder(ents, attackAction.victim.GetWorldPosition(), TOpts_YrdenPowerRadius(), 5, 100, , FLAG_OnlyAliveActors);
+						for (i = 0; i < ents.Size(); i += 1) {
+							if (ents[i] != thePlayer)
+								DealYrdenSpellSwordDamage(ents[i], bonusDmgInfo.dmgVal);
+						}
+					} else if (spellSwordSign == ST_Axii) {
+						GetDamageResists(theGame.params.DAMAGE_NAME_WILL, resistPoints, resistPercents);
+						attrVal.valueMultiplicative = TOpts_AxiiPowerWeaknessPenalty();
+						attackAction.AddEffectInfo(EET_TOneTimeWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative, attrVal);
+					}
+				}
+				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit()));
+			}
+
+			if (bonusDmgInfo.dmgVal > 0)
+			{
+				dmgValue = MaxF(0, CalculateDamage(bonusDmgInfo, spellPower));
+
+				if (spellSwordSign == ST_Quen) {
+					witcher.GainStat(BCS_Vitality, dmgValue * TOpts_QuenPowerHealRatio());
+					dmgValue *= 1 - TOpts_QuenPowerHealRatio();
+				}
+
+				//add to total damage to be dealt
+				if( DamageHitsEssence(  bonusDmgInfo.dmgType ) )		action.processedDmg.essenceDamage  += dmgValue;
+				if( DamageHitsVitality( bonusDmgInfo.dmgType ) )		action.processedDmg.vitalityDamage += dmgValue;
+				if( DamageHitsMorale(   bonusDmgInfo.dmgType ) )		action.processedDmg.moraleDamage   += dmgValue;
+				if( DamageHitsStamina(  bonusDmgInfo.dmgType ) )		action.processedDmg.staminaDamage  += dmgValue;
+
+				// Add damage to action in case stuff processes it later
+				if (dmgValue > 0) {
+					anyDamageProcessed = true;
+					action.AddDamage(bonusDmgInfo.dmgType, dmgValue);
+				}
+			}
+		}
+		return anyDamageProcessed;
+	}
 	
 	private function ProcessInstantKill()
 	{
@@ -623,6 +746,8 @@ class W3DamageManagerProcessor extends CObject
 		var baseChance, perOilLevelChance, chance : float;
 		var buffs : array<name>;
 		var resPt, resPrc : float; //modSigns
+		var attrVal : SAbilityAttributeValue; // Triangle protective coating
+		var durationBonus : float; // Triangle fixative
 	
 		
 		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s12) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) )
@@ -639,6 +764,12 @@ class W3DamageManagerProcessor extends CObject
 				baseChance = CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Alchemy_s12, 'skill_chance', false, true));
 				perOilLevelChance = CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Alchemy_s12, 'oil_level_chance', false, true));						
 				chance = baseChance * skillLevel + perOilLevelChance * oilLevel;
+				// Triangle poisoned blades
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s12) && attackAction.IsCriticalHit()) {
+					chance += TOpts_PoisonedBladesCritBonus();
+				}
+				// Triangle end
+				
 				//modSigns: check resistance
 				actorVictim.GetResistValue(theGame.effectMgr.GetBuffResistStat(EET_Poison), resPt, resPrc);
 				chance = MaxF(0, chance * (1 - resPrc));
@@ -650,11 +781,29 @@ class W3DamageManagerProcessor extends CObject
 					for(i=0; i<buffs.Size(); i+=1)
 					{
 						EffectNameToType(buffs[i], effectType, effectAbilityName);
+						// Triangle poisoned blades, fixative
+						if (TOpts_PoisonedBladesDuration() > 0) {
+							durationBonus = 1;
+							if (playerAttacker.CanUseSkill(S_Alchemy_s06) && TOpts_FixativeDurationBonus() > 0)
+								durationBonus += TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeDurationBonus());
+							action.AddEffectInfo(effectType, TOpts_PoisonedBladesDuration() * durationBonus, , effectAbilityName);
+						} else
+						// Triangle end
 						action.AddEffectInfo(effectType, , , effectAbilityName);
 					}
 				}
 			}
 		}
+		// Triangle protective coating
+		if( playerAttacker && actorVictim && attackAction && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Alchemy_s05) &&
+				TUtil_IsCustomSkillEnabled(S_Alchemy_s05) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) ) {
+			attrVal.valueMultiplicative = TOpts_ProtectiveCoatingWeaknessPenalty();
+			durationBonus = 1;
+			if (playerAttacker.CanUseSkill(S_Alchemy_s06) && TOpts_FixativeDurationBonus() > 0)
+				durationBonus += TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeDurationBonus());
+			action.AddEffectInfo(EET_TWeakness, TOpts_ProtectiveCoatingDuration() * durationBonus, attrVal);
+		}
+		// Triangle end
 	}
 	
 	
@@ -666,6 +815,7 @@ class W3DamageManagerProcessor extends CObject
 		var samum : CBaseGameplayEffect;
 		var signPower, min, max : SAbilityAttributeValue;
 		var aerondight : W3Effect_Aerondight;
+		var rendLoad : float; // Triangle rend
 		
 		if( action.IsDoTDamage() ) //modSigns: no crits for DoT as DoT doesn't have buffs anyway
 			return;
@@ -699,7 +849,10 @@ class W3DamageManagerProcessor extends CObject
 					
 					if( SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName() )
 					{				
-						critChance += CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
+						// Triangle rend Crit scales with adrenaline points used now
+						rendLoad = GetWitcherPlayer().GetCachedFocusDifference(); // Will always be a natural number
+						critChance += FloorF(rendLoad) * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
+						// Triangle end
 					}
 					
 					
@@ -712,7 +865,52 @@ class W3DamageManagerProcessor extends CObject
 					isLightAttack = playerAttacker.IsLightAttack( attackAction.GetAttackName() );
 					isHeavyAttack = playerAttacker.IsHeavyAttack( attackAction.GetAttackName() );
 					critChance += playerAttacker.GetCriticalHitChance(isLightAttack, isHeavyAttack, actorVictim, victimMonsterCategory, (W3BoltProjectile)action.causer );
-					
+					// Triangle attack combos
+					if(playerAttacker.CanUseSkill(S_Sword_s21) && TUtil_IsCustomSkillEnabled(S_Sword_s21))
+					{
+						critChance += TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritBonus()) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+					}
+					if(playerAttacker.CanUseSkill(S_Sword_s04) && TUtil_IsCustomSkillEnabled(S_Sword_s04))
+					{
+						critChance += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritBonus()) * GetWitcherPlayer().GetAttackComboLength(true); // Combo starts at 2 hits!
+					}
+					// Triangle precise blows
+					if(playerAttacker.CanUseSkill(S_Sword_s17) && TUtil_IsCustomSkillEnabled(S_Sword_s17))
+					{
+						critChance += TUtil_ValueForLevel(S_Sword_s17, TOpts_PreciseBlowsCritChanceBonus()) * GetWitcherPlayer().GetAttackComboLength(false); // Combo starts at 2 hits!
+					}
+					// Triangle crits
+					// Triangle TODO is EET_CounterStrikeHit like stagger?
+					if (actorVictim && (actorVictim.HasBuff(EET_Knockdown)
+						|| actorVictim.GetIsRecoveringFromKnockdown()
+						|| actorVictim.HasBuff(EET_HeavyKnockdown)
+						|| actorVictim.HasBuff(EET_Confusion)
+						|| actorVictim.HasBuff(EET_Paralyzed)
+						|| actorVictim.HasBuff(EET_Blindness)
+						|| actorVictim.HasBuff(EET_Immobilized))) {
+						critChance += TOpts_KnockdownCritChance();
+					} else if (actorVictim && (actorVictim.HasBuff(EET_Stagger) || actorVictim.HasBuff(EET_LongStagger))) {
+						critChance += TOpts_StaggerCritChance();
+					}
+					// if (TUtil_IsEffectFromAard(EET_HeavyKnockdown, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_Knockdown, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_LongStagger, actorVictim)
+					// 	|| TUtil_IsEffectFromAard(EET_Stagger, actorVictim)) {
+					// 	critChance += 1;
+					// }
+					critChance += TOpts_CritChanceBonus();
+					// Triangle resolve
+					if (playerAttacker.HasBuff(EET_TResolve)) {
+						critChance += TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveCritChance());
+					}
+					// Triangle hunter instinct
+					if(TUtil_IsCustomSkillEnabled(S_Alchemy_s07) && playerAttacker.inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) &&
+						(playerAttacker.GetStat( BCS_Focus ) >= 3 || TOpts_NoHunterInstinctFocusReq()) && playerAttacker.CanUseSkill( S_Alchemy_s07 ) ) // Triangle hunter instinct
+					{
+						critChance += TOpts_HunterInstinctCritChance();
+					}
+					// Triangle end
+
 					
 					if(action.GetIsHeadShot())
 					{
@@ -751,10 +949,9 @@ class W3DamageManagerProcessor extends CObject
 				{
 					critChance += 1.0f;
 				}
-				
 				//modSigns: knockdown and confusion add +15% to crit chance instead of adding to instakill chance
-				if(actorVictim.HasBuff(EET_Confusion) || actorVictim.HasBuff(EET_Knockdown) || actorVictim.HasBuff(EET_HeavyKnockdown))
-					critChance += 0.15f;
+				// if(actorVictim.HasBuff(EET_Confusion) || actorVictim.HasBuff(EET_Knockdown) || actorVictim.HasBuff(EET_HeavyKnockdown))
+				// 	critChance += 0.15f;
 			}
 			
 			
@@ -854,7 +1051,22 @@ class W3DamageManagerProcessor extends CObject
 		var addForceDamage : bool;
 		var lynxSetBuff : W3Effect_LynxSetBonus;
 		var mutagen : CBaseGameplayEffect;
+		// Triangle enemy mutations
+		var scaleFactor : float;
+		// Triangle heavy attack simplify alt stamina, attack combos, spell sword, protective coating
+		var compoundDamageMod : float;
+		var weakBuff : W3Effect_TWeakness; // Triangle protective coating, spell sword, alt stamina
+		compoundDamageMod = 1;
 		
+
+		if (actorAttacker && !action.IsDoTDamage() && actorAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
+			scaleFactor = TOpts_HugeScaleFactor();
+			for(i=0; i<dmgInfos.Size(); i+=1)
+			{
+				dmgInfos[i].dmgVal = dmgInfos[i].dmgVal * scaleFactor * scaleFactor;
+			}
+		}
+		// Triangle end
 		witcherAttacker = (W3PlayerWitcher)playerAttacker;
 		npcVictim = (CNewNPC)actorVictim;
 		
@@ -932,13 +1144,28 @@ class W3DamageManagerProcessor extends CObject
 			}
 		}
 		
+		// Triangle alt stamina, spell sword, protective coating
+		if (actorAttacker && (actorAttacker.HasBuff(EET_TWeakness) || actorAttacker.HasBuff(EET_TOneTimeWeakness))) {
+			weakBuff = (W3Effect_TWeakness)actorAttacker.GetBuff(EET_TWeakness);
+			if (weakBuff) {
+				compoundDamageMod *= weakBuff.WeakMod();
+			}
+			weakBuff = (W3Effect_TOneTimeWeakness)actorAttacker.GetBuff(EET_TOneTimeWeakness);
+			if (weakBuff) {
+				compoundDamageMod *= weakBuff.WeakMod();
+			}
+		}
+		// Triangle end
+
 		//damage increase for heavy attack
 		if( actorAttacker && attackAction && actorAttacker.IsHeavyAttack(attackAction.GetAttackName()) )
 		{
-			if( playerAttacker == GetWitcherPlayer() ) //for the player
+			if( witcherAttacker ) //for the player
 			{
-				damageBonus = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_2, 'heavy_attack_dmg_boost', false, true);
-				dmgBonusMult += damageBonus.valueMultiplicative;
+				//damageBonus = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_2, 'heavy_attack_dmg_boost', false, true);
+				//dmgBonusMult += damageBonus.valueMultiplicative;
+				dmgBonusMult += (TOpts_HeavyAttackDamageMod() - 1);
+				dmgBonusMult += TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboMultBonus()) * witcherAttacker.GetAttackComboLength(true);
 			}
 			else
 			{
@@ -974,22 +1201,26 @@ class W3DamageManagerProcessor extends CObject
 		}
 
 		//Rend power multiplier bonus per adrenaline point and stamina used
-		if(playerAttacker && attackAction && SkillNameToEnum(attackAction.GetAttackTypeName()) == S_Sword_s02)
+		if(witcherAttacker && attackAction && SkillNameToEnum(attackAction.GetAttackTypeName()) == S_Sword_s02)
 		{
 			rendBonus = 0;
 			//check how much of the 'gauge' player channeled
 			rendRatio = witcherAttacker.GetSpecialAttackTimeRatio();
 			//use % of adrenaline points depending on current rend ratio
 			rendLoad = rendRatio * playerAttacker.GetStat(BCS_Focus);
+			rendLoad = witcherAttacker.GetCachedFocusDifference(); // Triangle rend Triangle TODO maybe use % of current focus?
 			//do not round adrenaline points, use as many as possible
 			if(rendLoad > 0)
 			{
 				//bonus for adrenaline usage (per skill level)
-				rendBonusPerPoint = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'adrenaline_final_damage_bonus', false, true) * playerAttacker.GetSkillLevel(S_Sword_s02);
+				// rendBonusPerPoint = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'adrenaline_final_damage_bonus', false, true) * playerAttacker.GetSkillLevel(S_Sword_s02); // Triangle rend
+				rendBonusPerPoint.valueMultiplicative = TOpts_RendBonusPerFocusPnt(); // Triangle rend
 				rendBonus += rendLoad * rendBonusPerPoint.valueMultiplicative;
 			}
 			//bonus for stamina usage (per skill level)
-			staminaRendBonus = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'stamina_max_dmg_bonus', false, true) * playerAttacker.GetSkillLevel(S_Sword_s02);
+			// staminaRendBonus = witcherAttacker.GetSkillAttributeValue(S_Sword_s02, 'stamina_max_dmg_bonus', false, true) * playerAttacker.GetSkillLevel(S_Sword_s02); // Triangle rend
+			// Triangle TODO make this compound w/ focus? encourages full charges
+			staminaRendBonus.valueMultiplicative = TOpts_RendChargeBonus(); // Triangle rend			
 			rendBonus += rendRatio * staminaRendBonus.valueMultiplicative;
 			dmgBonusMult += rendBonus;
 			//combat log
@@ -1129,7 +1360,7 @@ class W3DamageManagerProcessor extends CObject
 		{
 			for( i = 0 ; i < dmgInfos.Size() ; i += 1 )
 			{
-				dmgInfos[i].dmgVal *= 1 + dmgBonusMult;
+				dmgInfos[i].dmgVal *= (1 + dmgBonusMult) * compoundDamageMod;
 			}
 		}
 
@@ -1168,7 +1399,11 @@ class W3DamageManagerProcessor extends CObject
 		if(action.WasDodged()) //modSigns
 			return;
 		
-		if((W3PlayerWitcher)playerVictim && !playerAttacker && actorAttacker && !action.IsDoTDamage() && action.IsActionMelee() && (attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire) && actorVictim.HasBuff(EET_BlackBlood))
+		// Triangle enemy mutations add check for vamp mutation
+		if((W3PlayerWitcher)playerVictim && !playerAttacker && actorAttacker && !action.IsDoTDamage() && action.IsActionMelee() &&
+			(attackerMonsterCategory == MC_Necrophage || attackerMonsterCategory == MC_Vampire || actorAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Vampiric)))
+			&& actorVictim.HasBuff(EET_BlackBlood))
+		 // Triangle end
 		{
 			returned = ProcessActionBlackBloodReturnedDamage();		
 		}
@@ -1204,6 +1439,11 @@ class W3DamageManagerProcessor extends CObject
 			
 		}
 		
+		// Triangle enemy mutations
+		if(action.IsActionMelee() && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Electric))) {
+			ProcessActionElectricReturnedDamage();
+		}
+		// Triangle end
 		
 		if(playerVictim && !playerAttacker && actorAttacker && attackAction && attackAction.IsActionMelee() && thePlayer.HasBuff(EET_Mutagen26))
 		{
@@ -1367,6 +1607,35 @@ class W3DamageManagerProcessor extends CObject
 		return true;
 	}
 	
+	// Triangle enemy mutations
+	private function ProcessActionElectricReturnedDamage() : bool
+	{
+		var returnedAction : W3DamageAction;
+		var npcVictim : CNewNPC;
+		
+		npcVictim = (CNewNPC)actorVictim;
+		if(action.processedDmg.essenceDamage <= 0)
+			return false;
+		
+		returnedAction = new W3DamageAction in this;
+		returnedAction.Initialize( action.victim, action.attacker, NULL, TUtil_TEMutationEnumToName(TEM_Electric), EHRT_None, CPS_Undefined, true, false, false, false );
+		returnedAction.SetCannotReturnDamage( true );
+		returnedAction.SetHitAnimationPlayType(EAHA_ForceYes);
+		returnedAction.SetHitReactionType(EHRT_Heavy);
+		
+		returnedAction.AddDamage(theGame.params.DAMAGE_NAME_ELEMENTAL, action.processedDmg.essenceDamage * TOpts_ElectricDamageRatio());
+		
+		if (npcVictim && (W3PlayerWitcher)actorAttacker && GetWitcherPlayer().IsQuenActive(false)) {
+			npcVictim.BlockAbility(TUtil_TEMutationEnumToName(TEM_Electric), true, TOpts_ElectricCooldown());
+		}
+
+		theGame.damageMgr.ProcessAction(returnedAction);
+		delete returnedAction;
+		
+		action.attacker.PlayEffect('yrden_shock');
+		
+		return true;
+	}
 	
 	private function ProcessActionReflectDamage() : bool
 	{
@@ -1477,9 +1746,15 @@ class W3DamageManagerProcessor extends CObject
 	private function GetAttackersPowerMod() : SAbilityAttributeValue
 	{		
 		var powerMod, criticalDamageBonus, min, max, critReduction, sp : SAbilityAttributeValue;
+		var mutagen : CBaseGameplayEffect;
 		var totalBonus : float;
 		var yrdenEnt : W3YrdenEntity; //modSigns
 		var aerondight	: W3Effect_Aerondight; //modSigns
+		// Triangle attack combos heavy attack simplify
+		var dm : CDefinitionsManagerAccessor;
+		var attributes : array<name>;
+		var i : int;
+		var witcherPlayer : W3PlayerWitcher;
 			
 		//no power mod bonuses during fistfight minigames
 		if(thePlayer.IsFistFightMinigameEnabled())
@@ -1509,20 +1784,28 @@ class W3DamageManagerProcessor extends CObject
 			LogDMHits("Attacker has power stat of 0!", action);
 		}
 		
-		//Yrden cached power mod: for Flood of Anger to work properly
-		if( (W3PlayerWitcher)playerAttacker && action.IsActionWitcherSign() && StrContains(action.GetBuffSourceName(), "_sign_yrden_alt") )
+		// Triangle heavy attack simplify
+		// Triangle power stat bonus from attack definition
+		if (playerAttacker && 
+			attackAction && 
+			(playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) || playerAttacker.IsLightAttack(attackAction.GetAttackName())))
 		{
-			yrdenEnt = (W3YrdenEntity)((W3PlayerWitcher)playerAttacker).GetSignEntity(ST_Yrden);
-			if( yrdenEnt )
+			dm = theGame.GetDefinitionsManager();
+			dm.GetAbilityAttributes(attackAction.GetAttackName(), attributes);	  
+			for(i=0; i<attributes.Size(); i+=1)
 			{
-				sp = yrdenEnt.GetCachedYrdenPower();
-				if( !( sp.valueAdditive == 0 && sp.valueBase == 0 && sp.valueMultiplicative == 0 ) )
+				if(PowerStatNameToEnum(attributes[i]) == CPS_AttackPower)
 				{
-					powerMod = sp;
-					//theGame.witcherLog.AddMessage("Yrden turret powerMod: " + powerMod.valueMultiplicative); //modSigns: debug
+					// Note that there will be inconsistent behavior here if you change this to be an actual random value. wont match random val in attackAction.ws
+					// Subtracts attack power bonus from basic_attacks.xml, so we only use the total damage mod and geralt_skills.xml bonus when calculating heavy attack dmg
+					// If you add a global bonus for light attacks, it'll subtract that, too.
+					dm.GetAbilityAttributeValue(attackAction.GetAttackName(), attributes[i], min, max);
+					powerMod -= GetAttributeRandomizedValue(min, max);
+					break;
 				}
 			}
 		}
+		// Triangle end
 		
 		//critical hits
 		if(action.IsCriticalHit())
@@ -1542,15 +1825,37 @@ class W3DamageManagerProcessor extends CObject
 				{
 					//heavy attack bonus from skills
 					if(playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08))
+					// Triangle crushing blows
 					{
+						witcherPlayer = (W3PlayerWitcher)playerAttacker;
+						if (witcherPlayer && TUtil_IsCustomSkillEnabled(S_Sword_s08)) {
+							criticalDamageBonus.valueAdditive += TUtil_ValueForLevel(S_Sword_s08, TOpts_CrushingBlowsCritDmgBonus()) * witcherPlayer.GetAttackComboLength(true);
+						} else
 						criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * playerAttacker.GetSkillLevel(S_Sword_s08);
 					}
+					// Triangle end
 					//light attack bonus from skills
-					else if (!playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s17))
-					{
+					else if (!playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s17) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 						criticalDamageBonus += playerAttacker.GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true) * playerAttacker.GetSkillLevel(S_Sword_s17);
-					}
 				}
+
+				// Triangle attack combos
+				witcherPlayer = (W3PlayerWitcher)playerAttacker;
+				if(witcherPlayer && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Sword_s04))
+				{
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(true) * TUtil_ValueForLevel(S_Sword_s04, TOpts_HeavyAttackComboCritDmgBonus());
+				}
+				if(witcherPlayer && attackAction.IsActionMelee() && playerAttacker.CanUseSkill(S_Sword_s21))
+				{
+					criticalDamageBonus.valueAdditive += witcherPlayer.GetAttackComboLength(false) * TUtil_ValueForLevel(S_Sword_s21, TOpts_LightAttackComboCritDmgBonus());
+				}
+				// Triangle crits
+				if (playerAttacker) {
+					criticalDamageBonus.valueAdditive += TOpts_CritDamageBonus();
+				}
+				// Triangle end
+
+				criticalDamageBonus += actorAttacker.GetAttributeValue(theGame.params.CRITICAL_HIT_DAMAGE_BONUS); // Triangle armor styles Triangle TODO verify this line
 				
 				if( (W3PlayerWitcher)playerAttacker && (W3BoltProjectile)action.causer )
 				{
@@ -1629,6 +1934,12 @@ class W3DamageManagerProcessor extends CObject
 		var i : int;
 		var meltArmorDebuff : float;
 		var meltAblCount : int;
+		// Triangle armor scaling
+		var npcVictim : CNewNPC;
+		// Triangle armor
+		var armor : float;
+		var powerMod : SAbilityAttributeValue;
+		// Triangle end
 		
 		//ignore resistances for fist fights and wooden sword fights
 		if(thePlayer.IsFistFightMinigameEnabled() || (dmgType == theGame.params.DAMAGE_NAME_BLUDGEONING && BothAreUsingFists()) || BothAreUsingWoodenSwords())
@@ -1653,13 +1964,6 @@ class W3DamageManagerProcessor extends CObject
 			//get base resists
 			actorVictim.GetResistValue( GetResistForDamage(dmgType, action.IsDoTDamage()), resistPts, resistPerc );
 			
-			//oil damage reduction if player has skill which makes oil reduce player's received damage when fighting proper monster type
-			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05))
-			{
-				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
-				resistPerc += bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05);
-			}
-			
 			// Mutagen 2 - increase resistPerc based on the encumbrance
 			if(playerVictim == GetWitcherPlayer() && playerVictim.HasBuff(EET_Mutagen02))
 			{
@@ -1678,6 +1982,17 @@ class W3DamageManagerProcessor extends CObject
 				resistPts += bonusReduct;
 				resistPerc += bonusResist;
 			}
+			
+			
+			// Triangle protective coating moved this block so it takes effect after the mutagen above
+			if(playerVictim && actorAttacker && playerVictim.CanUseSkill(S_Alchemy_s05) && !TUtil_IsCustomSkillEnabled(S_Alchemy_s05))
+			{
+				GetOilProtectionAgainstMonster(dmgType, bonusResist, bonusReduct);
+				
+				resistPerc += (1 - resistPerc) * bonusResist * playerVictim.GetSkillLevel(S_Alchemy_s05); // Triangle protective coating
+			}
+			// Triangle end
+			
 			
 			//from attacker
 			if(actorAttacker)
@@ -1717,23 +2032,38 @@ class W3DamageManagerProcessor extends CObject
 		}
 		
 		//add ARMOR if can
-		if(!action.GetIgnoreArmor())
+		// Triangle armor
+		if(!action.GetIgnoreArmor() && TUtil_IsPhysicalDamage(dmgType) && !action.IsDoTDamage()) //point resist only applies to physical damage
 		{
-			resistPts += CalculateAttributeValue( actorVictim.GetTotalArmor() );
-		}
+			armor = CalculateAttributeValue( actorVictim.GetTotalArmor() );
+
+			// Triangle precise blows
+			if (action.IsCriticalHit() && playerAttacker && action.IsActionMelee() && playerAttacker.CanUseSkill(S_Sword_s17) && !playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && TUtil_IsCustomSkillEnabled(S_Sword_s17)) {
+				armor = MaxF(0, armor * (1 - playerAttacker.GetStat(BCS_Focus) * TOpts_PreciseBlowsBonusPerFocusPnt()));
+			}
 		
-		//reduce resistance points by armor reduction
-		resistPts = MaxF(0, resistPts - CalculateAttributeValue(armorReduction) );
-		
-		//Melt Armor new mechanic
-		meltAblCount = actorVictim.GetAbilityCount(SkillEnumToName(S_Magic_s08));
-		if( actorVictim != thePlayer && meltAblCount > 0 )
-		{
-			meltArmorDebuff = meltAblCount * CalculateAttributeValue(actorVictim.GetAbilityAttributeValue(SkillEnumToName(S_Magic_s08), 'armor_reduction_bonus'));
-			resistPts *= 1 - meltArmorDebuff;
+			//Melt Armor new mechanic
+			meltAblCount = actorVictim.GetAbilityCount(SkillEnumToName(S_Magic_s08));
+			if( actorVictim != thePlayer && meltAblCount > 0 )
+			{
+				meltArmorDebuff = meltAblCount * CalculateAttributeValue(actorVictim.GetAbilityAttributeValue(SkillEnumToName(S_Magic_s08), 'armor_reduction_bonus'));
+				armor *= 1 - meltArmorDebuff;
+			}
+
+			// Triangle armor
+			armor = MaxF(0, armor - CalculateAttributeValue(armorReduction) ); // armor reduction only reduces armor!
+			// scale armor after armor reduction and separately from normal armor calculation to simulate applying armor before attack power
+			// Triangle armor removed this option, use GM damage formula always
+			/*if (playerAttacker && TOpts_ArmorAPScaleRatio() > 0) {
+				powerMod = GetAttackersPowerMod();
+				armor *= 1 + (powerMod.valueMultiplicative - 1) * TOpts_ArmorAPScaleRatio(); // only apply scale factor to positive AP
+			}*/
+			resistPts += armor;
+			// Triangle end
 		}
 		
 		//modSigns: NG+ crossbow hack
+		// Triangle TODO this is probably because of physical resist/lvl in GM. change this when you add option for it
 		if( FactsQuerySum("NewGamePlus") > 0 && (W3PlayerWitcher)playerAttacker && action.IsActionRanged() && (W3BoltProjectile)action.causer )
 		{
 			resistPts -= MaxF(0, 5 * (playerAttacker.GetLevel() - theGame.params.GetNewGamePlusLevel()));
@@ -1756,6 +2086,11 @@ class W3DamageManagerProcessor extends CObject
 			}
 		}
 	
+		// Triangle enemy mutations
+		if (actorVictim && actorVictim.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough)) && TUtil_IsPhysicalDamage(dmgType)) {
+			resistPerc += (1 - resistPerc) * TOpts_ToughResistance();
+		}
+
 		//reduce resistance percents by resistance reduction
 		resistPerc = MaxF(0, resistPerc - CalculateAttributeValue(armorReductionPerc)); // can't have negative resistance
 	}
@@ -1790,7 +2125,7 @@ class W3DamageManagerProcessor extends CObject
 		
 		//get total reductions for this damage type
 		GetDamageResists(dmgInfo.dmgType, resistPoints, resistPercents);
-		
+
 		//let point resistance affect raw damage dealt by weapon (+ base damage bonuses from level up for npc)
 		//this way it would really mean something
 		rawDamage = MaxF(0, dmgInfo.dmgVal + powerMod.valueBase - resistPoints);
@@ -1799,7 +2134,7 @@ class W3DamageManagerProcessor extends CObject
 		//additive value is bonus/penalty damage that is not affected nor by armor not by attack power
 		finalDamage = MaxF(0, rawDamage * powerMod.valueMultiplicative + powerMod.valueAdditive);
 		finalIncomingDamage = finalDamage; //for logging
-		
+
 		//apply damage resistance
 		if(finalDamage > 0.f)
 		{
@@ -1980,6 +2315,10 @@ class W3DamageManagerProcessor extends CObject
 		var logStr : string;
 		var hpPerc : float;
 		var npcVictim : CNewNPC;
+		// Triangle crushing blows
+		var witcherPlayer : W3PlayerWitcher;
+		var focusPoints : float;
+		// Triangle end
 	
 		
 		if ( theGame.CanLog() )
@@ -2012,6 +2351,31 @@ class W3DamageManagerProcessor extends CObject
 				{
 					actorVictim.OnTakeDamage(action);
 				}
+				// Triangle crushing blows
+				witcherPlayer = (W3PlayerWitcher)playerAttacker;
+				if(actorVictim.IsAlive() && attackAction && attackAction.IsCriticalHit() && witcherPlayer && playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && playerAttacker.CanUseSkill(S_Sword_s08)) {
+					// TODO is there a problem if you have multiple knockdown/stagger effects, or a stagger and knockdown?
+					// TODO maybe revisit this effect when resistances are redone
+					// TODO this is OP, esp with max adrenaline
+					if (SkillEnumToName(S_Sword_s02) == attackAction.GetAttackTypeName()) {
+						focusPoints = witcherPlayer.GetCachedFocusDifference();
+					}
+					focusPoints = FloorF(focusPoints + witcherPlayer.GetStat(BCS_Focus));
+					if (TUtil_IsCustomSkillEnabled(S_Sword_s08)
+						&& RandF() < (focusPoints * TOpts_CrushingBlowsBonusPerFocusPnt()) * (1 - actorVictim.GetHealthPercents() / hpPerc)
+						&& !actorVictim.IsHuge()
+						&& !(npcVictim && npcVictim.HasShieldedAbility() && npcVictim.IsShielded(witcherPlayer))) {
+						action.AddEffectInfo(EET_Knockdown);
+					}
+				}
+				// Triangle anatomical knowledge
+				// TODO make this a % chance
+				if (attackAction && attackAction.GetIsHeadShot() && witcherPlayer && witcherPlayer.CanUseSkill(S_Sword_s07) && actorVictim.IsAlive() &&
+						witcherPlayer.GetStat(BCS_Focus) >= 1 && TUtil_IsCustomSkillEnabled(S_Sword_s07)) {
+					action.AddEffectInfo(EET_Blindness, TOpts_AnatomicalKnowledgeDuration() * witcherPlayer.GetSkillLevel(S_Sword_s07) / 5);
+					witcherPlayer.DrainFocus(1);
+				}
+				// Triangle end
 			}
 			
 			if(!actorVictim.IsAlive() && hpPerc == 1)
@@ -2679,6 +3043,7 @@ class W3DamageManagerProcessor extends CObject
 	{
 		var inv : CInventoryComponent;
 		var ret : bool;
+		var npcVictim : CNewNPC; // Triangle whirl
 	
 		
 		if(!action.victim.IsAlive() || action.WasDodged() || (attackAction && attackAction.IsActionMelee() && !attackAction.ApplyBuffsIfParried() && attackAction.CanBeParried() && attackAction.IsParried()) )
@@ -2693,7 +3058,16 @@ class W3DamageManagerProcessor extends CObject
 			action.SetBuffSourceName( 'Mutation2ExplosionValid' );
 		}
 	
-		
+
+		// Triangle whirl
+		if (TOpts_WhirlStunLock() > 0 && thePlayer.GetCombatAction() == EBAT_SpecialAttack_Light) {
+			npcVictim = (CNewNPC)actorVictim;
+			if (npcVictim) {
+				npcVictim.StunLock(TOpts_WhirlStunLock(), 1 - TOpts_WhirlStunLockSlow());
+			}
+		}
+		// Triangle end
+
 		if(actorVictim && action.GetEffectsCount() > 0)
 			ret = actorVictim.ApplyActionEffects(action);
 		else
@@ -3210,6 +3584,7 @@ class W3DamageManagerProcessor extends CObject
 			}
 		}
 		
+		// Triangle TODO add option for this mechanic
 		if( mult > 0 )
 			resist = mult * CalculateAttributeValue( thePlayer.GetSkillAttributeValue( S_Alchemy_s05, 'defence_bonus', false, true ) );
 

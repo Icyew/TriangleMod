@@ -76,7 +76,7 @@ class BTTaskFrostSnakeAttack extends CBTTaskAttack
 		if( canTriggerFrenzySlowmo  )
 		{
 			
-			if( ( (W3PlayerWitcher) GetCombatTarget() ) && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && thePlayer.GetStat(BCS_Toxicity) > 0 && thePlayer.CanUseSkill(S_Alchemy_s16))
+			if( ( (W3PlayerWitcher) GetCombatTarget() ) && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && TUtil_CanFrenzy(thePlayer)) // Triangle frenzy
 				((W3PlayerWitcher) GetCombatTarget()).StartFrenzy();
 		}
 		

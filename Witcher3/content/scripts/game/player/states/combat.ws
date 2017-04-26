@@ -660,9 +660,9 @@ state Combat in CR4Player extends ExtendedMovable
 		var aerondight		: W3Effect_Aerondight;
 		var weaponId		: SItemUniqueId;
 		
-		if((W3PlayerWitcher)parent && ((W3PlayerWitcher)parent).HasRunewordActive('Runeword 2 _Stats')) //modSigns
+		if((W3PlayerWitcher)parent && (((W3PlayerWitcher)parent).HasRunewordActive('Runeword 2 _Stats') || TOpts_WhirlAltSeverance())) // Triangle whirl //modSigns
 		{
-			if(data.attackName == 'attack_heavy_special')
+			if(data.attackName == 'attack_heavy_special' && ((W3PlayerWitcher)parent).HasRunewordActive('Runeword 2 _Stats')) // Triangle whirl
 			{
 				data.rangeName = 'runeword2_heavy';		
 				weaponEntity = thePlayer.inv.GetItemEntityUnsafe(thePlayer.inv.GetItemFromSlot(data.weaponSlot));
@@ -1023,9 +1023,9 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.SetCustomRotation( 'Dodge', GetDodgeHeading( playerEvadeType ), 0.0f, 0.1f, false );
 		
 		if (  turnInPlaceBeforeDodge )
-			Sleep( 0.4f );
+			Sleep( 0.4f / parent.GetAnimationTimeMultiplier()); // Triangle armor bonuses enemy mutations This stops dodges from bugging out when geralt is slowed
 		else
-			Sleep( 0.3f );
+			Sleep( 0.3f / parent.GetAnimationTimeMultiplier()); // Triangle armor bonuses enemy mutations
 
 		
 		if ( parent.bLAxisReleased )
@@ -1039,7 +1039,8 @@ state Combat in CR4Player extends ExtendedMovable
 		parent.BindMovementAdjustmentToEvent( 'Dodge', 'Dodge' );
 		parent.AddTimer( 'UpdateDodgeInfoTimer', 0, true );	
 
-		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f );
+		// parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f);
+		parent.WaitForBehaviorNodeDeactivation( 'DodgeComplete', 0.7f / parent.GetAnimationTimeMultiplier()); // Triangle armor bonuses TODO this looks wrong
 		parent.RemoveTimer( 'UpdateDodgeInfoTimer' );
 		
 		

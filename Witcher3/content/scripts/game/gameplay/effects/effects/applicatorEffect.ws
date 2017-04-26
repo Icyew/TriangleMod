@@ -30,8 +30,12 @@ abstract class W3ApplicatorEffect extends CBaseGameplayEffect
 			if(victim == GetCreator() && theGame.effectMgr.IsBuffNegative(spawns[i].spawnType))
 				continue;
 					
-			if( IsRequiredAttitudeBetween(victim, GetCreator(), spawns[i].spawnFlagsHostile, spawns[i].spawnFlagsNeutral, spawns[i].spawnFlagsFriendly) )
+			// Triangle enemy mutations
+			if( IsRequiredAttitudeBetween(victim, GetCreator(), spawns[i].spawnFlagsHostile, spawns[i].spawnFlagsNeutral, spawns[i].spawnFlagsFriendly)
+				|| (spawns[i].spawnFlagsWitcher && (W3PlayerWitcher)victim))
 			{
+				params = spawns[i].spawnCustomParams;
+				// Triangle end
 				params.effectType = spawns[i].spawnType;
 				params.creator = GetCreator();
 				params.sourceName = spawns[i].spawnSourceName;
@@ -102,6 +106,10 @@ abstract class W3ApplicatorEffect extends CBaseGameplayEffect
 						tmpSpawn.spawnFlagsNeutral = tmpBool;
 					if(dm.GetCustomNodeAttributeValueBool(appliedEffects[j], 'affectsFriendly', tmpBool))					
 						tmpSpawn.spawnFlagsFriendly = tmpBool;
+					// Triangle enemy mutations
+					if(dm.GetCustomNodeAttributeValueBool(appliedEffects[j], 'affectsWitcher', tmpBool))
+						tmpSpawn.spawnFlagsWitcher = tmpBool;
+					// Triangle end
 					
 					if(!tmpSpawn.spawnFlagsHostile && !tmpSpawn.spawnFlagsNeutral && !tmpSpawn.spawnFlagsFriendly)
 					{

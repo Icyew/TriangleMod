@@ -6514,7 +6514,7 @@ exec function spawnBoat000()
 	ent = theGame.CreateEntity(template, pos, rot, true, false, false, PM_Persist );
 }
 
-exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int )
+exec function spawn(nam : name, optional quantity : int, optional distance : float, optional isHostile : bool, optional level : int, optional mutation : name ) // Triangle enemy mutations param
 {
 	var ent : CEntity;
 	var horse : CEntity;
@@ -6637,6 +6637,12 @@ exec function spawn(nam : name, optional quantity : int, optional distance : flo
 			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
 		}
 			
+		// Triangle enemy mutation For testing purposes
+		if (TUtil_TEMutationNameToEnum(mutation) != TEM_Undefined) {
+			((CNewNPC)ent).AddAbility(mutation);
+		}
+		// Triangle end
+
 		if ( level != 0 )
 		{
 			((CNewNPC)ent).SetLevel( level );
@@ -14399,4 +14405,32 @@ exec function DLCS()
 exec function Refill()
 {
 	thePlayer.inv.SingletonItemsRefillAmmoNoAlco(true);
+}
+
+// Triangle debug commands
+exec function T_SetSpellPowerBonus(spellPower : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugSpellPowerBonus');
+	thePlayer.AddAbilityMultiple('TDebugSpellPowerBonus', Max(spellPower, 0));
+}
+
+// Triangle debug commands
+exec function T_SetAttackPowerBonus(attackPower : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugAttackPowerBonus');
+	thePlayer.AddAbilityMultiple('TDebugAttackPowerBonus', Max(attackPower, 0));
+}
+
+// Triangle debug commands
+exec function T_SetHealthBonus(health : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugHealthBonus');
+	thePlayer.AddAbilityMultiple('TDebugHealthBonus', Max(health, 0));
+}
+
+// Triangle debug commands
+exec function T_SetToxicityBonus(toxicity : int)
+{
+	thePlayer.RemoveAbilityAll('TDebugToxicityBonus');
+	thePlayer.AddAbilityMultiple('TDebugToxicityBonus', Max(toxicity, 0));
 }

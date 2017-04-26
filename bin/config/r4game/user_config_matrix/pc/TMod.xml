@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<UserConfig>
+	<Group id="TModOptionCombat" displayName="Mods.TMod. Combat ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="CritDamageBonus"					value="75" />
+				<Entry varId="CritChanceBonus"					value="0" />
+				<Entry varId="StaggerCritChance"				value="50" />
+				<Entry varId="KnockdownCritChance"				value="100" />
+				<Entry varId="HeavyAttackDmgMod"				value="1.65" />
+				<Entry varId="ParryCooldown"					value="2" />
+				<Entry varId="MaxParries"						value="3" />
+				<Entry varId="LightAttackFocusGain"				value="0.1" />
+				<Entry varId="HeavyAttackFocusGain"				value="0.15" />
+				<Entry varId="MaxComboDuration"					value="6"	/>
+				<Entry varId="LightAttackMaxCombo"				value="10"	/>
+				<Entry varId="HeavyAttackMaxCombo"				value="5"	/>
+				<Entry varId="LightAttackComboDecay"			value="1.75"/>
+				<Entry varId="HeavyAttackComboDecay"			value="3.5"	/>
+				<Entry varId="AttackComboCrossDecay"			value="0.5"/>
+				<Entry varId="LightAttackComboSpeedBonus"		value="0"	/>
+				<Entry varId="LightAttackComboCritBonus"		value="0"	/>
+				<Entry varId="LightAttackComboCritDmgBonus"		value="0"	/>
+				<Entry varId="LightAttackComboDmgBonus"			value="4"	/>
+				<Entry varId="HeavyAttackComboMultBonus"		value="0"/>
+				<Entry varId="HeavyAttackComboCritBonus"		value="0"	/>
+				<Entry varId="HeavyAttackComboCritDmgBonus"		value="0"	/>
+				<Entry varId="HeavyAttackComboDmgBonus"			value="8"	/>
+				<Entry varId="ResolvePenaltyReduction"			value="400"/>
+				<Entry varId="ResolveDamage"					value="100"/>
+				<Entry varId="ResolveCritChance"				value="100"/>
+				<Entry varId="ResolveDuration"					value="2.5" />
+				<Entry varId="CrushBlowBonusPerFocus"			value="0.75" />
+				<Entry varId="CrushBlowCritDmgBonus"			value="30" />
+				<Entry varId="PrecBlowBonusPerFocus"			value="34" />
+				<Entry varId="PrecBlowCritChanceBonus"			value="2.5"	/>
+				<Entry varId="RendBonusPerFocusPnt"				value="0.34" />
+				<Entry varId="RendChargeBonus"					value="0.5"	/>
+				<Entry varId="AltSpecialAttackInput"			value="1" />
+				<Entry varId="WhirlDrainBoth"					value="1" />
+				<Entry varId="WhirlFocusDiscount"				value="1.25" />
+				<Entry varId="WhirlStaminaDiscount"				value="0.5" />
+				<Entry varId="WhirlAltSeverance"				value="0" />
+				<Entry varId="WhirlStunLock"					value="0.35" />
+				<Entry varId="WhirlStunLockSlow"				value="66" />
+				<Entry varId="ColdBloodedCritMult"				value="1.5" />
+				<Entry varId="AnatomicalKnowledgeDuration"		value="0" />
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="CritDamageBonus"				 displayName="Crit damage: flat crit attack power bonus."								displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CritChanceBonus"				 displayName="Crit chance: flat crit chance % bonus."									displayType="SLIDER;-100;100;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaggerCritChance"				 displayName="Crit chance: bonus crit % vs staggered enemies."							displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="KnockdownCritChance"			 displayName="Crit chance: bonus crit % vs prone, confused, paralyzed, etc."			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackDmgMod"				 displayName="Heavy attack: total damage modifier"							 			displayType="SLIDER;1.00;4;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ParryCooldown"					 displayName="Parry cooldown"													 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MaxParries"					 displayName="Default number of parries before guard is broken"							displayType="SLIDER;0.00;10;10"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackFocusGain"			 displayName="Light attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackFocusGain"		 	 displayName="Heavy attacks: base focus gain per hit (0.1 is vanilla)"					displayType="SLIDER;0.00;1;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MaxComboDuration"			 	 displayName="Attack combo: Maximum time before combos expire"			 				displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackMaxCombo"			 displayName="Light combo: Maximum light attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDecay"			 displayName="Light combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackMaxCombo"			 displayName="Heavy combo: Maximum heavy attack combo"			 						displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDecay"			 displayName="Heavy combo: Time until combo resets (0 reverts all combos to vanilla)"	displayType="SLIDER;0.00;30;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AttackComboCrossDecay"			 displayName="Attack combo: Fraction of time that applies to other attack type"			displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboSpeedBonus"	 displayName="Muscle Memory: Bonus attack speed % per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboCritBonus"		 displayName="Muscle Memory: Bonus crit % per hit"										displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboCritDmgBonus"	 displayName="Muscle Memory: Bonus crit attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LightAttackComboDmgBonus"	 	 displayName="Muscle Memory: Bonus attack power per hit"								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboMultBonus"		 displayName="Strength Training: Total % damage multiplier per hit"						displayType="SLIDER;0.00;50;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboCritBonus"		 displayName="Strength Training: Bonus crit % per hit"									displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboCritDmgBonus"	 displayName="Strength Training: Bonus crit attack power per hit"						displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HeavyAttackComboDmgBonus"		 displayName="Strength Training: Bonus attack power per hit"							displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolvePenaltyReduction"		 displayName="Resolve: % reduction in focus lost. can be > 100 (0 vanilla)"				displayType="SLIDER;0.00;1000;40"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDamage"			 		 displayName="Resolve: Bonus attack power"							 					displayType="SLIDER;0.00;500;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveCritChance"		 		 displayName="Resolve: Bonus crit chance"							 					displayType="SLIDER;0.00;100;20"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResolveDuration"				 displayName="Resolve: Time before bonus damage expires"						 		displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowBonusPerFocus"	 	 displayName="Crushing Blows: Knockdown multiplier per focus pnt (0 for vanilla)"		displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CrushBlowCritDmgBonus"			 displayName="Crushing Blows: Bonus crit attack bonus per hit"							displayType="SLIDER;0.00;40;80"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowBonusPerFocus"	 	 	 displayName="Precise Blows: % armor pen on crit per focus pnt (0 for vanilla)"			displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PrecBlowCritChanceBonus" 	 	 displayName="Precise Blows: Bonus crit % per hit"										displayType="SLIDER;0.00;10;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendBonusPerFocusPnt"			 displayName="Rend: Total damage multiplier per focus point"							displayType="SLIDER;0.00;1;50" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="RendChargeBonus"				 displayName="Rend: Fully charged damage bonus"									 		displayType="SLIDER;0.00;4;16" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSpecialAttackInput"	 	 	 displayName="Whirl Rend: rend/whirl while holding guard/witcher sense + attack."		displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlDrainBoth"	 	 		 displayName="Whirl: Drain focus/stamina simultaneously"								displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlFocusDiscount"	 	 	 displayName="Whirl: Focus drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStaminaDiscount"	 	 	 displayName="Whirl: Stamina drains X times faster/slower."								displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlAltSeverance"	 	 		 displayName="Whirl: Severance range is default."										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLock"	 	 		 	 displayName="Whirl: On hit, disable dodging for X seconds."							displayType="SLIDER;0.00;2;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WhirlStunLockSlow"	 	 		 displayName="Whirl: While dodging disabled, slow by X %."								displayType="SLIDER;0.00;100;50"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ColdBloodedCritMult"	 		 displayName="Cold blooded: Focus gain crit multiplier."								displayType="SLIDER;1.00;3;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AnatomicalKnowledgeDuration"	 displayName="Anatomical knowledge: Blindness duration (0 for vanilla)"					displayType="SLIDER;0.00;10;40"			tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionSigns" displayName="Mods.TMod. Signs ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="UseCustomSignStaminaCosts"		value="1"	/>
+				<Entry varId="BasicSignCost"					value="100"	/>
+				<Entry varId="BasicSignDelay"					value="1"	/>
+				<Entry varId="AltSignDelay"						value="3"	/>
+				<Entry varId="AltAardCost"						value="100"	/>
+				<Entry varId="AltIgniCost"						value="50"	/>
+				<Entry varId="AltYrdenCost"						value="100"	/>
+				<Entry varId="AltQuenCost"						value="15"	/>
+				<Entry varId="AltAxiiCost"						value="15"	/>
+				<Entry varId="QuenStaminaRegenMult"				value="0.5"	/>
+				<Entry varId="QuenDamageRatio"					value="0.5"/>
+				<Entry varId="IgniDuration"						value="1"/>
+				<Entry varId="IgniDurationSpread"				value="0.4"/>
+				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
+				<Entry varId="AardStaminaDelay"					value="1"/>
+				<Entry varId="SpellSwordBaseDmg"				value="1000"/>
+<!-- 			<Entry varId="SpellSwordCost"					value="0"/>
+				<Entry varId="SpellSwordDelay"					value="0"/> -->
+				<Entry varId="SpellSwordStacksPerHit"			value="10"/>
+				<Entry varId="SpellSwordStacksPerSign"			value="30"/>
+				<Entry varId="AardPowerFrostDuration"			value="3"/>
+				<Entry varId="IgniPowerScorch"					value="3"/>
+				<Entry varId="YrdenPowerRadius"					value="5"/>
+				<Entry varId="QuenPowerHealRatio"				value="0.5"/>
+				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
+				<Entry varId="AxiiPowerWeaknessPenalty"			value="50"/>
+				<Entry varId="QuenRemoveDoT"					value="0"/>
+				<Entry varId="QuenAbsorbLastHit"				value="1"/>
+				<Entry varId="QuenAbsorptionRatio"				value="50"/>
+				<Entry varId="QuenBaseHealth"					value="400"/>
+				<Entry varId="QuenBaseDuration"					value="10"/>
+				<Entry varId="QuenSPAffectsDuration"			value="1"/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="UseCustomSignStaminaCosts"		 displayName="Use custom stamina cost/delay."								 			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignCost"	 				 displayName="Stamina cost of basic signs"									 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BasicSignDelay"	 			 displayName="Stamina delay of basic signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSignDelay"	 			 	 displayName="Stamina delay of alt signs"									 			displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAardCost"	 				 displayName="Stamina cost of alt Aard"										 			displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltIgniCost"	 				 displayName="Stamina cost/sec of alt Igni"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltYrdenCost"	 				 displayName="Stamina cost/sec of alt Yrden"										 	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltQuenCost"	 				 displayName="Stamina cost/sec of alt Quen"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltAxiiCost"	 				 displayName="Stamina cost/sec of alt Axii"										 		displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenStaminaRegenMult"	 		 displayName="Total stamina regen multiplier during basic Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenDamageRatio"		 		 displayName="Percentage of damage absorbed per hit by Quen"				 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniDuration"		 		 	 displayName="Igni: base burning duration (0 for vanilla burning)"				 		displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardStaminaDelay"		 	 	 displayName="Aard: aard drains stamina and delays regen for Xs (0 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+<!-- 		<Var id="SpellSwordCost"		 	 	 displayName="Sign Power: stamina cost per hit" 										displayType="SLIDER;0.00;100;100"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordDelay"		 	 	 displayName="Sign Power: stamina delay per hit" 										displayType="SLIDER;0.00;10;40"		 	tags="customNames;nonLocalized;customDisplayName" /> -->
+ 			<Var id="SpellSwordStacksPerHit"	 	 displayName="Sign Power: charge generated per hit" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordStacksPerSign"	 	 displayName="Sign Power: charge generated per sign" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordBaseDmg"		 	 	 displayName="Sign Power: base bonus damage per hit" 									displayType="SLIDER;0.00;1500;60"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardPowerFrostDuration"	 	 displayName="Aard power: duration to freeze enemies (0 vanilla)" 						displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniPowerScorch"	 	 		 displayName="Igni power: % of remaining hp as dmg (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="YrdenPowerRadius"	 	 		 displayName="Yrden power: radius of splash damage (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenPowerHealRatio"	 	 	 displayName="Quen power: fraction of dmg converted to hp instead (0 vanilla)" 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiPowerWeaknessPenalty"	 	 displayName="Axii power: % damage penalty" 											displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenRemoveDoT"	 	 		 	 displayName="Quen: Remove DoT effects on cast (true vanilla)" 							displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenAbsorbLastHit"	 	 		 displayName="Quen: fully absorb hit that breaks Quen (true vanilla)" 					displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenAbsorptionRatio"	 	 	 displayName="Quen: maximum % of damage absorbed (1 vanilla)"							displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenBaseHealth"	 	 	 	 displayName="Quen: base shield health (0 vanilla)" 									displayType="SLIDER;0.00;1000;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenBaseDuration"	 	 	 	 displayName="Quen: base shield duration (0 vanilla)" 									displayType="SLIDER;0.00;60;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenSPAffectsDuration"	 	 	 displayName="Quen: spellpower affects duration (false vanilla)" 						displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionAlchemy" displayName="Mods.TMod. Alchemy ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="BonusToxicity"						value="25" />
+				<Entry varId="DefaultToxicityDrainTime"				value="15" />
+				<Entry varId="EndurePainDamageRatioPerLevel"		value="10" />
+				<Entry varId="EndurePainDuration"					value="8"	/>
+				<Entry varId="AcquiredToleranceDiscount"			value="10"	/>
+				<Entry varId="AcquiredToleranceDurationPerLevel"	value="30"	/>
+				<Entry varId="CustomFrenzy"							value="1"/>
+				<Entry varId="DelayedRecoverySlowFactor"			value="5"/>
+				<Entry varId="AltTawnyOwlDuration"					value="0"	/>
+				<Entry varId="AltTawnyOwlBase"						value="0" />
+				<Entry varId="FastMetabolismDrainFactorPerLevel"	value="1.8" />
+				<Entry varId="AdaptationDiscountPerLevel"			value="4" />
+				<Entry varId="AdaptationMaxDiscount"				value="40" />
+				<Entry varId="PoisonedBladesCritBonus"				value="50" />
+				<Entry varId="PoisonedBladesDuration"				value="5" />
+				<Entry varId="ProtectiveCoatingDuration"			value="10" />
+				<Entry varId="ProtectiveCoatingWeaknessPenalty"		value="25" />
+				<Entry varId="FixativeMultBonus"					value="1" />
+				<Entry varId="FixativeMaxBonus"						value="0" />
+				<Entry varId="FixativeDurationBonus"				value="45" />
+				<Entry varId="AltSynergyPercPerLevel"				value="20" />
+				<Entry varId="YellowSkillWildcard"					value="1" />
+				<Entry varId="MinBlueBonus"							value="5" />
+				<Entry varId="MinGreenBonus"						value="5"/>
+				<Entry varId="GreenGivesToxicity"					value="1" />
+				<Entry varId="MinRedBonus"							value="5" />
+				<Entry varId="ActivePotsInsteadOfTox"				value="1" />
+				<Entry varId="NoHunterInstinctFocusReq"				value="1" />
+				<Entry varId="HunterInstinctCritChance"				value="15" />
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="BonusToxicity"	 						displayName="Bonus toxicity"															displayType="SLIDER;0.00;100;100"		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DefaultToxicityDrainTime"				displayName="Default time to degen 1 toxicity point (0 for vanilla)"					displayType="SLIDER;0.00;60;120" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EndurePainDamageRatioPerLevel"	 		displayName="Endure Pain: Percentage of damage converted to DoT/level (0 for vanilla)"	displayType="SLIDER;0.00;20;40"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EndurePainDuration"			 		displayName="Endure Pain: Duration of DoT (total dmg stays the same)"					displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AcquiredToleranceDiscount"				displayName="Acquired Tolerance: Toxicity cost discount (0 for vanilla)"				displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AcquiredToleranceDurationPerLevel"		displayName="Acquired Tolerance: Duration per potion/level"								displayType="SLIDER;0.00;180;36" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CustomFrenzy"							displayName="Frenzy: Frenzy also grants super armor while attacking"					displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DelayedRecoverySlowFactor"				displayName="Delayed Recovery: Duration/toxicity drain slowdown factor (0 vanilla)"		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltTawnyOwlDuration"					displayName="Tawny Owl: Constant duration for all levels (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltTawnyOwlBase"						displayName="Tawny Owl: Always-on stamina regen for all levels (0 for vanilla)"			displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FastMetabolismDrainFactorPerLevel"		displayName="Fast Metabolism: Toxicity degen multiplier per level (0 for vanilla)"		displayType="SLIDER;0.00;5;50" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AdaptationDiscountPerLevel"			displayName="Adaptation: % discount for decocs after first/level (0 for vanilla)"		displayType="SLIDER;0.00;20;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AdaptationMaxDiscount"					displayName="Adaptation: Max % discount"												displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PoisonedBladesCritBonus"				displayName="Poisoned blades: bonus % to poison on crits (0 vanilla)"					displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="PoisonedBladesDuration"				displayName="Poisoned blades: duration of poison (0 vanilla)"							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ProtectiveCoatingDuration"				displayName="Protective coating: duration (0 vanilla)"									displayType="SLIDER;0.00;60;60" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ProtectiveCoatingWeaknessPenalty"		displayName="Protective coating: % damage penalty"										displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FixativeMultBonus"						displayName="Fixative: Crit effect chance multiplier (1 for vanilla)"					displayType="SLIDER;1.00;10;36" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FixativeMaxBonus"						displayName="Fixative: Max additional crit effect chance per effect"					displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FixativeDurationBonus"					displayName="Fixative: % duration bonus for poisoned blades/protective coating"			displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltSynergyPercPerLevel"				displayName="Synergy: % mod/level for alternate Synergy (0 for vanilla)"				displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="YellowSkillWildcard"					displayName="Mutagens: General skills can link to any mutagen"							displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinBlueBonus"							displayName="Blue mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinGreenBonus"							displayName="Green mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GreenGivesToxicity"					displayName="Green mutagen: Grant toxicity instead of vitality"							displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MinRedBonus"							displayName="Red mutagen: x/1.5x/2x effect val. Req for alt Synergy (0 for vanilla)"	displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ActivePotsInsteadOfTox"				displayName="All: Skills that need tox > 0 instead need active potion effects"			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="NoHunterInstinctFocusReq"				displayName="Hunter instinct: Does not require 3 adrenaline points"						displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HunterInstinctCritChance"				displayName="Hunter instinct: Bonus crit chance"										displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionGeneral" displayName="Mods.TMod. General ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="RuneEffectMultiplier"					value="1"	/>
+				<Entry varId="GlyphEffectMultiplier"				value="1"	/>
+				<!-- <Entry varId="SwitchArmorCalcOrder"					value="1"	/> -->
+				<!-- <Entry varId="ArmorAPScaleRatio"					value="0"	/> -->
+				<Entry varId="VitalityHealthMod"					value="0.5"	/>
+				<Entry varId="EssenceHealthMod"						value="0.5"	/>
+				<Entry varId="QuestBossHealthMod"					value="1"	/>
+				<Entry varId="GeraltHealthMod"						value="0.5"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="RuneEffectMultiplier"				 displayName="Multiplier for % chance based rune effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlyphEffectMultiplier"				 displayName="Multiplier for % chance based glyph effects (not shown in UI)."		displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<!-- <Var id="SwitchArmorCalcOrder"				 displayName="Switch armor point and % resistance calculation order."				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" /> -->
+			<!-- <Var id="ArmorAPScaleRatio"			 		 displayName="Scale enemy armor by atck pwr*x after reduction (0 for vanilla)"		displayType="SLIDER;0.00;1;20" 			tags="customNames;nonLocalized;customDisplayName" /> -->
+			<Var id="VitalityHealthMod"			 		 displayName="Health mod for non-boss enemies w/ vitality"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EssenceHealthMod"			 		 displayName="Health mod for non-boss enemies w/ essence"							displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuestBossHealthMod"			 	 displayName="Health mod for quest and boss enemies (0 defaults to other mods)"		displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GeraltHealthMod"			 	 	 displayName="Health mod for Geralt"												displayType="SLIDER;0.00;2;200" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionStamina" displayName="Mods.TMod. Stamina ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="StaminaRegenMult"					value="1.0"	/>
+				<Entry varId="StaminaRegenBonus"				value="15"	/>
+				<Entry varId="FocusPerMaxStamina"				value="0"	/>
+				<Entry varId="BaseDodgeCost"					value="0"	/>
+				<Entry varId="BaseRollCost"						value="10"	/>
+				<Entry varId="BaseLightAttackCost"				value="0"	/>
+				<Entry varId="BaseHeavyAttackCost"				value="0"	/>
+				<Entry varId="WeakDamageMod"					value="0.25" />
+				<Entry varId="AltArmorStaminaMod"				value="1"	/>
+				<Entry varId="ChestPantsAttackCost"				value="0"	/>
+				<Entry varId="ChestPantsEvasionCost"			value="0"	/>
+				<Entry varId="GlovesBootsAttackCost"			value="0"	/>
+				<Entry varId="GlovesBootsEvasionCost"			value="0"	/>
+				<Entry varId="ChestPantsEvasionMod"				value="7" />
+				<Entry varId="GlovesBootsEvasionMod"			value="3" />
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="StaminaRegenMult"		 		 displayName="Total stamina regen multiplier"								 			displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="StaminaRegenBonus"				 displayName="Additive stamina regen bonus"								 				displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FocusPerMaxStamina"			 displayName="Focus points per bar of max stamina (0 to disable conversion)"			displayType="SLIDER;0.00;3;30" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseDodgeCost"					 displayName="Dodge stamina cost"								 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseRollCost"					 displayName="Roll stamina cost"								 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseLightAttackCost"			 displayName="Light attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="BaseHeavyAttackCost"			 displayName="Heavy attack stamina cost"						 						displayType="SLIDER;0.00;100;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="WeakDamageMod"					 displayName="Damage multiplier for weak attacks (insufficient stamina)"				displayType="SLIDER;0.00;1;20"			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AltArmorStaminaMod"			 displayName="Use alternate armor stamina penalty"										displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsAttackCost" 		 	 displayName="Extra armor stamina cost per weight level for Attacks - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Chest/Pants" 		displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsAttackCost" 		 displayName="Extra armor stamina cost per weight level for Attacks - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionCost" 		 displayName="Extra armor stamina cost per weight level for Evading - Gloves/Boots" 	displayType="SLIDER;0.00;10;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ChestPantsEvasionMod"			 displayName="Light attack/dodge speed % bonus/penalty for chest/pants"					displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GlovesBootsEvasionMod"		 	 displayName="Light attack/dodge speed % bonus/penalty for gloves/boots"			 	displayType="SLIDER;0.00;50;100" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionScaling" displayName="Mods.TMod. Level Scaling ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="AreLevelOptionsEnabled"			value="1"	/>
+				<Entry varId="LinearUpscaling"					value="1"	/>
+				<Entry varId="LinearDownscaling"				value="0"	/>
+				<Entry varId="DontScaleAnimals"					value="1"	/>
+				<Entry varId="UpscalingFactor"					value="0.4"	/>
+				<Entry varId="DownscalingFactor"				value="0.4"	/>
+				<Entry varId="LevelBonus"						value="0.0"	/>
+				<Entry varId="LevelJitter"						value="0.0"	/>
+				<Entry varId="FlatArmorPerLevel"				value="0"	/>
+				<Entry varId="ArmorPerLevelHuman"				value="10"	/>
+				<Entry varId="ArmorPerLevelMonster"				value="10"	/>
+				<Entry varId="ArmorPerScaledLevelMonster"		value="0"	/>
+				<Entry varId="NPCDmgResistLvlBonus"	 		 	value="3.5"/>
+				<Entry varId="GroupArmoredDmgResistLvlBonus"	value="3.5"/>
+				<Entry varId="ArmoredDmgResistLvlBonus"	 	 	value="5"/>
+				<Entry varId="GroupDmgResistLvlBonus"	 	 	value="3.5"/>
+				<Entry varId="MonsterDmgResistLvlBonus"	 	 	value="5"/>
+				<Entry varId="NPCMagicResistLvlBonus"	 	 	value="1.75"/>
+				<Entry varId="GroupArmoredMagicResistLvlBonus"	value="1.75"/>
+				<Entry varId="ArmoredMagicResistLvlBonus"	 	value="2.5"/>
+				<Entry varId="GroupMagicResistLvlBonus"	 	 	value="1.75"/>
+				<Entry varId="MonsterMagicResistLvlBonus"	  	value="2.5"/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="AreLevelOptionsEnabled"		 displayName="Use custom leveling options? Does not affect exp"							displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearUpscaling"				 displayName="Scale weaker enemies up to: x*PlayerLevel + (1-x)*EnemyLevel"				displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LinearDownscaling"				 displayName="Scale stronger enemies down to: y*PlayerLevel + (1-y)*EnemyLevel"			displayType="TOGGLE"					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DontScaleAnimals"		 		 displayName="Exclude animals from level scaling (includes wolves and boars)"			displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="UpscalingFactor" 		 		 displayName="Upscaling factor (x):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="DownscalingFactor" 		 	 displayName="Downscaling factor (y):"								 					displayType="SLIDER;-1.00;1;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelBonus"		 		 	 displayName="Add extra levels to all enemies:"							 				displayType="SLIDER;-20.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="LevelJitter"		 		 	 displayName="Add random levels to all enemies from -k to k, where k ="					displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FlatArmorPerLevel"		 	 	 displayName="Add armor per enemy level for armored enemies"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelHuman"		 	 displayName="Add % of base armor every enemy level - humans"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerLevelMonster"		 	 displayName="Add % of base armor every enemy level - monsters"							displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmorPerScaledLevelMonster"	 displayName="Add % of base armor for every level added due to scaling - monsters"		displayType="SLIDER;0.00;30;30" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="NPCDmgResistLvlBonus"	 		 displayName="Additive damage resist/lvl for human enemies"								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GroupArmoredDmgResistLvlBonus"	 displayName="Additive damage resist/lvl for armored group monsters"					displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmoredDmgResistLvlBonus"	 	 displayName="Additive damage resist/lvl for armored monsters"							displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GroupDmgResistLvlBonus"	 	 displayName="Additive damage resist/lvl for group monsters"							displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MonsterDmgResistLvlBonus"	 	 displayName="Additive damage resist/lvl for regular monsters"							displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="NPCMagicResistLvlBonus"	 	 displayName="Additive magic resist/lvl for human enemies"								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GroupArmoredMagicResistLvlBonus" displayName="Additive magic resist/lvl for armored group monsters"					displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ArmoredMagicResistLvlBonus"	 displayName="Additive magic resist/lvl for armored monsters"							displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="GroupMagicResistLvlBonus"	 	 displayName="Additive magic resist/lvl for group monsters"								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="MonsterMagicResistLvlBonus"	  displayName="Additive magic resist/lvl for regular monsters"							displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+	<Group id="TModOptionEnemies" displayName="Mods.TMod. Enemy Mutations ">
+		<PresetsArray>
+			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
+				<Entry varId="MonstersOnly"						value="1"	/>
+				<Entry varId="EnemyMutationChance"				value="10"	/>
+				<Entry varId="NumEnemyMutationRolls"			value="2"	/>
+				<Entry varId="CripplingShotDurationPerLevel"	value="2.5"	/>
+				<Entry varId="HugeScaleFactor"					value="1.2" />
+				<Entry varId="ToughArmorPerLevel"				value="5" 	/>
+				<Entry varId="ToughResistance"					value="15" 	/>
+				<Entry varId="QuickSpeedBonus"					value="34" 	/>
+				<Entry varId="ResilientRegenPerLevel"			value="4" 	/>
+				<Entry varId="ResilientDuration"				value="8" 	/>
+				<Entry varId="ElectricCooldown"					value="8" 	/>
+				<Entry varId="ElectricDamageRatio"				value="0.5"	/>
+				<Entry varId="VampiricHealRatio"				value="1"	/>
+				<Entry varId="VenomousDuration"					value="10"	/>
+				<Entry varId="ExplosiveBaseDamage"				value="650"	/>
+				<Entry varId="ExplosiveRange"					value="3"	/>
+				<Entry varId="ExplosiveDelay"					value="1.25"/>
+				<Entry varId="FlamingRange"						value="2"	/>
+				<Entry varId="FreezingRange"					value="3"	/>
+				<Entry varId="HypnoticRange"					value="4"	/>
+				<Entry varId="HypnoticDelay"					value="4"	/>
+				<Entry varId="InspiredBonus"					value="35"	/>
+			</Preset>
+		</PresetsArray>
+		<VisibleVars>
+			<Var id="MonstersOnly"			 		 displayName="Only entities using essence (not vitality) can mutate."	 				displayType="TOGGLE" 					tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="EnemyMutationChance"	 		 displayName="Percent chance that an enemy will mutate, per roll."	 					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="NumEnemyMutationRolls"	 		 displayName="Number of rolls per enemy to cause a mutation."	 						displayType="SLIDER;0.00;10;10" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="CripplingShotDurationPerLevel"	 displayName="Crippling shot duration per level."	 									displayType="SLIDER;0.00;10;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HugeScaleFactor"	 			 displayName="Huge: Scale factor. Health/damage scale squared."							displayType="SLIDER;0.00;3;60" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ToughArmorPerLevel"	 		 displayName="Tough: Extra armor per level. Only affects steel/silver."					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ToughResistance"		 		 displayName="Tough: Steel/silver % damage resist (multiplicative)."					displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuickSpeedBonus"		 		 displayName="Quick: Percent speed increase."											displayType="SLIDER;0.00;100;50" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResilientRegenPerLevel"	 	 displayName="Resilient: Health regen per level (flat bonus)."							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ResilientDuration"			 	 displayName="Resilient: Duration of health regen after hit."							displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ElectricCooldown"	 			 displayName="Electric/Flaming/Freezing/Hypnotic: Duration disabled on sign counter."	displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ElectricDamageRatio"			 displayName="Electric: Fraction of returned damage (elemental)."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VampiricHealRatio"				 displayName="Vampiric: Fraction of damage converted to health."						displayType="SLIDER;0.00;2;40" 			tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="VenomousDuration"				 displayName="Venomous: Duration of poison effect."										displayType="SLIDER;0.00;20;20" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveBaseDamage"			 displayName="Explosive: Base rending/bludgeoning dmg. Scales with attack power"		displayType="SLIDER;0.00;1000;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveRange"				 displayName="Explosive: Range of explosion (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="ExplosiveDelay"				 displayName="Explosive: Seconds before explosion."										displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FlamingRange"					 displayName="Flaming: Range of fire aura (meters?)."									displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="FreezingRange"					 displayName="Freezing: Range of freezing aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HypnoticRange"					 displayName="Hypnotic: Range of hypnotism aura (meters?)."								displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="HypnoticDelay"					 displayName="Hypnotic/Inspiring: Min delay before aura returns after being disabled."	displayType="SLIDER;0.00;10;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="InspiredBonus"					 displayName="Inspiring: % bonus to health and attack power."							displayType="SLIDER;0.00;200;40" 		tags="customNames;nonLocalized;customDisplayName" />
+		</VisibleVars>
+	</Group>
+
+</UserConfig>

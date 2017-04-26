@@ -19,9 +19,25 @@ enum EConverserType
 	CT_Child
 };
 
+// Triangle spell sword, protective coating
+struct ExtPrefixEntry
+{
+	var prefix : string;
+	var sourceName : string;
+}
+// Triangle end
 
 statemachine import class CNewNPC extends CActor
 {
+	
+	// Triangle level scaling used to check if you need to re-apply or remove jitter to a creature
+	saved var prevJitterOption	  : int;			  default prevJitterOption = 0;
+	saved var cachedJitter		  : int;			  default cachedJitter = 0;
+	// Triangle spell sword, protective coating
+	var extPrefixes				  : array<ExtPrefixEntry>;
+	// Triangle whirl
+	var stunLocked				  : bool;
+	// Triangle end
 	
 	
 	
@@ -306,7 +322,7 @@ statemachine import class CNewNPC extends CActor
 			if ( IsCountering() )
 			{
 				
-				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && witcher.GetStat(BCS_Toxicity) > 0 && witcher.CanUseSkill(S_Alchemy_s16))
+				if(GetTarget() == witcher && ( thePlayer.IsActionAllowed(EIAB_Dodge) || thePlayer.IsActionAllowed(EIAB_Roll) ) && TUtil_CanFrenzy(witcher)) // Triangle frenzy
 					witcher.StartFrenzy();
 			}
 		}
@@ -369,12 +385,20 @@ statemachine import class CNewNPC extends CActor
 	
 	
 	
+	saved var hasRolledForMutations : bool; default hasRolledForMutations = false; // Triangle enemy mutations
 	event OnSpawned(spawnData : SEntitySpawnData )
 	{
 		var lvlDiff, playerLevel: int;
 		var heading 		: float;
 		var remainingDuration : float;
 		var oldLevel : int;
+		// Triangle enemy mutations
+		var emutations : array < name >;
+		var i : int;
+		var tmpName : name;
+		var tmpBool : bool;
+		var monsterCategory : EMonsterCategory;
+		// Triangle end
 		
 		currentLevel = level;
 		levelBonusesComputedAtPlayerLevel = -1;
@@ -387,6 +411,17 @@ statemachine import class CNewNPC extends CActor
 		
 		GotoStateAuto();		
 		
+
+		// Triangle enemy mutations
+		theGame.GetMonsterParamsForActor(this, monsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+		if (npcGroupType == ENGT_Enemy && monsterCategory != MC_Animal && (UsesEssence() || TOpts_CanVitalityMutate()) && !hasRolledForMutations) {
+			TOpts_RandomEnemyMutations(emutations);
+			for (i = 0; i < emutations.Size(); i += 1) {
+				AddAbility(emutations[i]);
+			}
+			hasRolledForMutations = true;
+		}
+		// Triangle
 		
 		isTalkDisabledTemporary = false;
 		
@@ -430,6 +465,7 @@ statemachine import class CNewNPC extends CActor
 				}
 			}
 		}
+		
 		
 		if( npcGroupType == ENGT_Guard )
 		{
@@ -1087,6 +1123,38 @@ statemachine import class CNewNPC extends CActor
 		return ret;
 	}
 	
+	// Triangle modSigns resists
+	function RemoveLevelResistances()
+	{
+		var dmgNames : array<name>;
+		var magicNames : array<name>;
+		var i : int;
+		TUtil_GetLvlResistanceAbilityNames(dmgNames, magicNames);
+		for (i = 0; i < dmgNames.Size(); i += 1) {
+			RemoveAbilityAll(dmgNames[i]);
+		}
+		for (i = 0; i < magicNames.Size(); i += 1) {
+			RemoveAbilityAll(magicNames[i]);
+		}
+	}
+
+	// Triangle modSigns resists
+	function AddLevelResistances(lvl : int, enemyBonusType : name)
+	{
+		var dmgNames, magicNames : array<name>;
+		var dmgResist, magicResist : float;
+		var dmgCount, magicCount, i : int;
+		TOpts_GetLvlResistances(enemyBonusType, dmgResist, magicResist);
+		dmgCount = RoundMath(dmgResist * 4);
+		magicCount = RoundMath(magicResist * 4);
+		TUtil_GetLvlResistanceAbilityNames(dmgNames, magicNames);
+		for (i = 0; i < dmgNames.Size(); i += 1) {
+			AddAbilityMultiple(dmgNames[i], dmgCount * lvl);
+		}
+		for (i = 0; i < magicNames.Size(); i += 1) {
+			AddAbilityMultiple(magicNames[i], magicCount * lvl);
+		}
+	}
 	
 	//modSigns: remove level bonuses
 	function RemoveAllLevelBonuses()
@@ -1153,6 +1221,7 @@ statemachine import class CNewNPC extends CActor
 		{
 			RemoveAbility('CiriHardcoreDebuffMonster');
 		}
+		RemoveLevelResistances(); // Triangle modSigns resists
 	}
 	
 	function CheckConstitutionAbility() //modSigns: fix multiple constitution abilities
@@ -1202,15 +1271,389 @@ statemachine import class CNewNPC extends CActor
 	
 	var fistFightForcedFromQuest : bool; 
 	
-	//modSigns: reworked
-	timer function AddLevelBonuses (dt : float, id : int)
+	// Triangle whirl
+	public function StunLocked() : bool
+	{
+		return stunLocked;
+	}
+
+	// Triangle whirl
+	public function StunLock(seconds : float, optional speedMod : float)
+	{
+		stunLocked = true;
+		if (speedMod > 0) {
+			PushBaseAnimationMultiplierCauser(speedMod,, 'stunlock');
+		}
+		AddTimer('StunUnlock', seconds,,,,,true);
+	}
+
+	// Triangle whirl
+	timer function StunUnlock(delta : float, id : int)
+	{
+		ResetBaseAnimationMultiplierCauserBySrc('stunlock');
+		stunLocked = false;
+	}
+
+	// Triangle level scaling
+	public function LinearInterpolate ( playerLevel : int, opponentLevel : int, t : float) : float
+	{
+		return t * playerLevel + (1 - t) * opponentLevel;
+	}
+
+	// Triangle level scaling recalculate enemy level with scaling options. Called when level is set via SetLevel only!
+	public function CalculateLevel () : int
+	{
+		var newLevel, playerLevel, opponentLevel, levelJitter : int;
+
+		playerLevel = thePlayer.GetLevel();
+		opponentLevel = currentLevel;
+		newLevel = opponentLevel;
+
+		// Just in case!
+		if (!TOpts_AreLevelOptionsEnabled())
+			return newLevel;
+
+		if (thePlayer.IsCiri())
+			return newLevel;
+
+		if (TOpts_DontScaleAnimals() && ( GetSfxTag() == 'sfx_wolf' || HasAbility('mon_boar_base') || IsAnimal() ))
+			return newLevel;
+
+		// Moved guard stuff from addlevelbonuses for consistency elsewhere, and so we can scale them
+		// Disabling this for now since it looks like it was removed in a patch
+		// if (GetNPCType() == ENGT_Guard)
+		// {
+		// 	opponentLevel = thePlayer.GetLevel() + 13;
+		// 	newLevel = opponentLevel;
+		// }
+
+		if (TOpts_IsUpscalingOn() && opponentLevel < playerLevel)
+		{
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TOpts_UpscalingFactor()));
+		}
+		else if (TOpts_IsDownscalingOn() && opponentLevel > playerLevel)
+		{
+			newLevel = (int)RoundMath(LinearInterpolate(playerLevel, opponentLevel, TOpts_DownscalingFactor()));
+		}
+
+		newLevel += TOpts_FlatLevelBonus();
+
+		levelJitter = TOpts_LevelJitter();
+		if (levelJitter != prevJitterOption)
+		{
+			if (levelJitter > 0)
+				cachedJitter = RandRange(levelJitter*2) - levelJitter;
+			else
+				cachedJitter = 0;
+
+			prevJitterOption = levelJitter;
+		}
+		newLevel += cachedJitter;
+
+		return newLevel;
+	}
+
+	// Triangle enemy mutations armor scaling
+	public function GetTotalArmor() : SAbilityAttributeValue
+	{
+		var totalArmor : SAbilityAttributeValue;
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		totalArmor = super.GetTotalArmor();
+		// NOTE I use valueBase so that melt armor and other multiplier based armor reducers work as expected
+		// Triangle armor scaling
+		if (UsesVitality())
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerLevelHuman() * GetLevel();
+		else if (UsesEssence()) {
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerLevelMonster() * GetLevel();
+			totalArmor.valueBase *= 1 + TOpts_ArmorPerScaledLevelMonster() * (GetLevel() - GetLevelFromLocalVar());
+		}
+		if (totalArmor.valueBase > 0) {
+			totalArmor.valueBase += TOpts_FlatArmorPerLevel() * GetLevel();
+		}
+		// Triangle enemy mutations
+		// Note that this will make non-armored type enemies look like armored types in some parts of the code. use super class' method for those bits
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Tough))) {
+			totalArmor.valueBase += TOpts_ToughArmorPerLevel() * GetLevel();
+		}
+		// Triangle end
+		return totalArmor;
+	}
+
+	// Triangle level scaling Not currently using this anymore. I know I should delete dead code, but eeehh
+	private function AddRemoveAbilityMultiple(abilityName : name, count : int)
+	{
+		if (count > 0)
+			AddAbilityMultiple(abilityName, count);
+		else if (count < 0)
+			RemoveAbilityMultiple(abilityName, count);
+	}
+
+	// Triangle enemy mutations
+	public function GetMutatedDisplayName() : string
+	{
+		return GetExtPrefixString() + TUtil_GetMutatedPrefix(this) + GetDisplayName();
+	}
+
+	// Triangle spell sword, protective coating
+	public function AddPrefix(prefix : string, sourceName : string) {
+		var prefEntry : ExtPrefixEntry;
+		prefEntry.prefix = prefix;
+		prefEntry.sourceName = sourceName;
+		extPrefixes.PushBack(prefEntry);
+	}
+
+	// Triangle spell sword, protective coating
+	public function RemovePrefix(sourceName : string, optional prefix : string) {
+		var i : int;
+		for (i = extPrefixes.Size() - 1; i >= 0; i -= 1) {
+			if (extPrefixes[i].sourceName == sourceName && (!prefix || extPrefixes[i].prefix == prefix)) {
+				extPrefixes.Erase(i);
+				break;
+			}
+		}
+	}
+
+	// Triangle spell sword
+	public function GetExtPrefixString() : string
 	{
 		var i : int;
-		var lvlDiff : int;
-		var ciriEntity  : W3ReplacerCiri;
-		var playerLevel, scalingType, minLevel, maxLevel: int;
+		var prefix : string;
+		prefix = "";
+		for (i = 0; i < extPrefixes.Size(); i += 1) {
+			prefix += extPrefixes[i].prefix + " ";
+		}
+		return prefix;
+	}
+
+	// Triangle enemy mutations
+	timer function PlayElectricity(delta : float, id : int)
+	{
+		PlayEffect('yrden_shock');
+		AddTimer('PlayElectricity', 0.5 + RandF());
+	}
+
+	// Triangle enemy mutations
+	timer function FlameOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3TFireAuraCustomParams;
+		if (IsAlive() && !HasBuff(EET_TFireAura)) {
+			params.effectType = EET_TFireAura;
+			params.creator = this;
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Flaming);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3TFireAuraCustomParams in theGame;
+			specificParams.range = TOpts_FlamingRange();
+			specificParams.burningDuration = 1;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function FreezeOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3TFreezingAuraCustomParams;
+		if (IsAlive() && !HasBuff(EET_TFreezingAura)) {
+			params.effectType = EET_TFreezingAura;
+			params.creator = this;
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Freezing);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3TFreezingAuraCustomParams in theGame;
+			specificParams.range = TOpts_FreezingRange();
+			specificParams.freezingDuration = 1;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function HypnoOn(delta : float, id : int)
+	{
+		var params : SCustomEffectParams;
+		var specificParams : W3THypnoAuraCustomParams;
+		if (IsAlive() && !HasBuff(EET_THypnoAura)) {
+			params.effectType = EET_THypnoAura;
+			params.creator = this;
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Hypnotic);
+			params.duration = -1; // Will fail if you don't set this! Pretty dumb
+			specificParams = new W3THypnoAuraCustomParams in theGame;
+			specificParams.range = TOpts_HypnoticRange();
+			specificParams.hypnoDuration = 0.25;
+			params.buffSpecificParams = specificParams;
+			AddEffectCustom(params);
+		}
+	}
+
+	// Triangle enemy mutations
+	timer function InspireOn(delta : float, id : int)
+	{
+		if (IsAlive() && !HasBuff(EET_TInspiringAura)) {
+			AddEffectDefault(EET_TInspiringAura, this, TUtil_TEMutationEnumToName(TEM_Inspiring));
+		}
+	}
+
+	// Triangle enemy mutations
+	function StartResilientRegen()
+	{
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		stats.RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Resilient));
+		// This might be woefully inefficient but I haven't noticed any problems yet
+		stats.AddAbilityMultiple(TUtil_TEMutationEnumToName(TEM_Resilient), TOpts_ResilientRegenPerLevel() * GetLevel());
+		AddTimer('EndResilientRegen', TOpts_ResilientDuration());
+	}
+
+	// Triangle enemy mutations
+	function EndResilientRegen(delta : float, id : int)
+	{
+		GetCharacterStats().RemoveAbilityAll(TUtil_TEMutationEnumToName(TEM_Resilient));
+	}
+	
+	// Triangle enemy mutations
+	var explosionMutationTriggered : bool; default explosionMutationTriggered = false;
+	timer function ExplodeMutation(dt : float, id : int)
+	{
+		var targets : array< CGameplayEntity >;
+		var ent : CEntity;
+		var i : int;
+		var returnedAction : W3DamageAction;
+		var damage : float;
+		var powerMod : SAbilityAttributeValue;
+
+		StopEffect('critical_burning');
+		if (IsAlive()) {
+			AddTimer('AardDismemberForce',0);
+			SoundEvent('monster_rotfiend_explode');
+			ent = theGame.CreateEntity((CEntityTemplate)LoadResource('rotfiend_explode'), GetWorldPosition(), GetWorldRotation());
+			ent.DestroyAfter(5);
+			FindGameplayEntitiesInSphere(targets, GetWorldPosition() + Vector(0,0,0.1f), TOpts_ExplosiveRange(), 1000, '', FLAG_TestLineOfSight);
+			for(i = 0; i < targets.Size(); i += 1) {
+				if (this != targets[i] && IsRequiredAttitudeBetween(this, targets[i], true, true, true)) {
+					returnedAction = new W3DamageAction in this;
+					returnedAction.Initialize( this, targets[i], NULL, 'TEM_Explode', EHRT_None, CPS_AttackPower, true, false, false, false );
+					returnedAction.SetCannotReturnDamage( true );
+					returnedAction.AddEffectInfo(EET_LongStagger);
+					returnedAction.SetProcessBuffsIfNoDamage(true);
+					
+					// NOTE: Damage bonus from levels are in base attack power. It will get added again later (since this uses attack power), but only after
+					// processing difficulty multiplier (fun fact, it's not actually a 'final' damage multiplier), so I double count it here.
+					powerMod = GetPowerStatValue(CPS_AttackPower,,true);
+					damage = TOpts_ExplosiveBaseDamage() + powerMod.valueBase;
+
+					if (UsesEssence()) {
+						returnedAction.AddDamage(theGame.params.DAMAGE_NAME_RENDING, damage);
+					} else {
+						returnedAction.AddDamage(theGame.params.DAMAGE_NAME_BLUDGEONING, damage);
+					}
+					
+					theGame.damageMgr.ProcessAction(returnedAction);
+					delete returnedAction;
+				}
+			}
+			Kill('TEM_Explode', false, thePlayer);
+		}
+	}
+
+	// Triangle enemy mutations
+	saved var isHuge : bool; default isHuge = false; // For ragdoll stuff
+	function ProcessHugeMutationSize()
+	{
+		var animComp : CComponent;
+		var scaleFactor : float;
+		if (!isHuge)
+			return;
+		animComp = ((CEntity)this).GetComponentByClassName('CAnimatedComponent');
+		if (animComp) {
+			scaleFactor = TOpts_HugeScaleFactor();
+			animComp.SetScale(Vector(scaleFactor, scaleFactor, scaleFactor, 1));
+		}
+	}
+
+	// Triangle enemy mutations
+	public function ProcessMutations()
+	{
+		var animComp : CComponent;
+		var scaleFactor, healthPerc : float;
+		var stats : CCharacterStats;
+		var effectParams : SCustomEffectParams;
+
+		stats = GetCharacterStats();
+
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
+			isHuge = true;
+			ProcessHugeMutationSize();
+			healthPerc = GetHealthPercents();
+			scaleFactor = TOpts_HugeScaleFactor();
+			abilityManager.UpdateStatMaxWrapper(TUtil_GetHealthType(this));
+			SetHealthPerc(healthPerc);
+			stats.AddAbility('mon_type_huge');
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Quick))) {
+			PushBaseAnimationMultiplierCauser(1 + TOpts_QuickSpeedBonus(),, TUtil_TEMutationEnumToName(TEM_Quick));
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Flaming))) {
+			AddTimer('FlameOn', 0);
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Freezing))) {
+			AddTimer('FreezeOn', 0);
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic))) {
+			AddTimer('HypnoOn',0);
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Inspiring))) {
+			AddTimer('InspireOn',0);
+		}
+	}
+
+	// Triangle hp mods
+	function HPModifier() : float
+	{
+		var modifier : float;
+		var healthType : EBaseCharacterStats;
+		var stats : CCharacterStats;
+		stats = GetCharacterStats();
+		healthType = TUtil_GetHealthType(this);
+		if ((stats.HasAbilityWithTag('T_questmonster') || stats.HasAbilityWithTag('Boss') || HasAbility('Boss') || HasAbility('SkillBoss')) && TOpts_QuestBossHealthMod() > 0) {
+			modifier = TOpts_QuestBossHealthMod();
+		} else if (healthType == BCS_Essence) {
+			modifier = TOpts_EssenceHealthMod();
+		} else {
+			modifier = TOpts_VitalityHealthMod();
+		}
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Huge))) {
+			modifier *= TOpts_HugeScaleFactor() * TOpts_HugeScaleFactor();
+		}
+		if (modifier <= 0)
+			modifier = 1;
+		return modifier;
+	}
+
+	// Triangle hp mods
+	function ProcessHPOptions()
+	{
+		var healthPerc : float;
+		healthPerc = GetHealthPercents();
+		abilityManager.UpdateStatMaxWrapper(TUtil_GetHealthType(this));
+		SetHealthPerc(healthPerc);
+	}
+
+	// Triangle level scaling add level bonuses with TMod options
+	timer function AddLevelBonuses (dt : float, id : int)
+	{
+		var ciriEntity  		: W3ReplacerCiri;
+		var ignoreLowLevelCheck : bool;
+		var lvlDiff 			: int;
+		var npcLevel 			: int;
+		var ngpLevel 			: int;
+		var i 					: int;
+		var playerLevel			: int;
+		var stats				: CCharacterStats;
+		var npcGroupType		: ENPCGroupType;
 		
-		RemoveTimer('AddLevelBonuses');
+		RemoveTimer( 'AddLevelBonuses' );
 		
 		//modSigns: dlc7 nekker warrior level fix
 		if( HasTag('sq107_monster_heavy') ) currentLevel = 8;
@@ -1226,7 +1669,7 @@ statemachine import class CNewNPC extends CActor
 		
 		CheckConstitutionAbility(); //check for duplicated constitution ability
 
-		ModSignsAddBonuses(); //health/damage modifiers
+		// ModSignsAddBonuses(); //health/damage modifiers // Triangle use TMod option instead
 		
 		if ( HasAbility('NPCDoNotGainBoost') )
 		{
@@ -1235,54 +1678,15 @@ statemachine import class CNewNPC extends CActor
 		
 		ciriEntity = (W3ReplacerCiri)thePlayer;
 		playerLevel = thePlayer.GetLevel();
-		
-		//level scaling
-		if(!ciriEntity) //for Geralt only
-		{
-			//upscale and/or downscale enemies based on menu settings
-			scalingType = theGame.params.GetEnemyScalingOption();
-			if(theGame.params.GetNoAnimalUpscaling() && (IsAnimal() || IsBeast()) && GetStat( BCS_Vitality, true ) > 0)
-			{
-				if(currentLevel*2 > playerLevel && scalingType > 0)
-					currentLevel = Max(1, playerLevel/2);
-				scalingType = -1;
-			}
-			switch(scalingType)
-			{
-				case 1: /*upscale*/
-					if(currentLevel <  playerLevel)
-						currentLevel = playerLevel;
-					break;
-				case 2: /*match*/
-					if(currentLevel != playerLevel)
-						currentLevel = playerLevel;
-					break;
-				case 3: /*soft*/
-					//soft leveling: upscale "gray" enemies to be no more than 6 levels below player level
-					if(currentLevel < playerLevel - 6)
-						currentLevel = playerLevel - 6;
-					break;
-				case 4: /*random*/
-				case 5: /*random, no downscaling*/
-					//theGame.witcherLog.AddMessage("name = " + GetDisplayName());
-					//theGame.witcherLog.AddMessage("currentLevel = " + currentLevel);
-					//theGame.witcherLog.AddMessage("savedRandomLevel = " + savedRandomLevel);
-                    minLevel = Max(1, playerLevel + theGame.params.GetRandomScalingMinLevel());
-                    maxLevel = Max(minLevel, playerLevel + theGame.params.GetRandomScalingMaxLevel());
-					if( savedRandomLevel == -1 || savedRandomLevel < minLevel || savedRandomLevel > maxLevel )
-					{
-						savedRandomLevel = RandRange(maxLevel + 1, minLevel);
-						if( scalingType == 5 && savedRandomLevel < currentLevel ) //no downscaling
-							savedRandomLevel = currentLevel;
-					}
-					currentLevel = savedRandomLevel;
-					break;
-				default:
-					break;
-			}
+		// Triangle level scaling
+		if (TOpts_AreLevelOptionsEnabled()) {
+			npcLevel = CalculateLevel();
+		} else {
+			npcLevel = currentLevel;
 		}
+		// Triangle end
 		//just in case
-		currentLevel = Max(1, currentLevel);
+		currentLevel = Max(1, npcLevel); // Triangle level scaling use scaled level!
 		//upscale guards
 		if( GetNPCType() == ENGT_Guard ) currentLevel = playerLevel + theGame.params.LEVEL_DIFF_DEADLY + 1;
 		//lvl 1 enemies have no additional abilities
@@ -1300,6 +1704,7 @@ statemachine import class CNewNPC extends CActor
 			//theGame.witcherLog.AddMessage( GetDisplayName() + " uses vitality." );
 			
 			AddAbilityMultiple(theGame.params.ENEMY_BONUS_PER_LEVEL, currentLevel-1);
+			AddLevelResistances(currentLevel-1, theGame.params.ENEMY_BONUS_PER_LEVEL);
 			if ( ciriEntity )
 			{
 				if(theGame.GetDifficultyMode() == EDM_Hardcore) AddAbility('CiriHardcoreDebuffHuman');
@@ -1332,15 +1737,17 @@ statemachine import class CNewNPC extends CActor
 			//debug
 			//theGame.witcherLog.AddMessage( GetDisplayName() + " uses essence." );
 
-			if ( CalculateAttributeValue(GetTotalArmor()) > 0.f ) //armored monsters
+			if ( CalculateAttributeValue(super.GetTotalArmor()) > 0.f ) //armored monsters // Triangle enemy mutations
 			{
 				if ( GetIsMonsterTypeGroup() )
 				{
 					AddAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP_ARMORED, currentLevel-1);
+					AddLevelResistances(currentLevel-1, theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP_ARMORED);
 				}
 				else
 				{
 					AddAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_ARMORED, currentLevel-1);
+					AddLevelResistances(currentLevel-1, theGame.params.MONSTER_BONUS_PER_LEVEL_ARMORED);
 				}
 			}
 			else //unarmored monsters
@@ -1348,10 +1755,12 @@ statemachine import class CNewNPC extends CActor
 				if ( GetIsMonsterTypeGroup() )
 				{
 					AddAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP, currentLevel-1);
+					AddLevelResistances(currentLevel-1, theGame.params.MONSTER_BONUS_PER_LEVEL_GROUP);
 				}
 				else
 				{
 					AddAbilityMultiple(theGame.params.MONSTER_BONUS_PER_LEVEL, currentLevel-1);
+					AddLevelResistances(currentLevel-1, theGame.params.MONSTER_BONUS_PER_LEVEL);
 				}
 			}
 			if ( ciriEntity )
@@ -1381,6 +1790,8 @@ statemachine import class CNewNPC extends CActor
 				}
 			}
 		}
+		ProcessMutations(); // Triangle enemy mutations
+		ProcessHPOptions(); // Triangle hp mods
 		//debug
 		//theGame.witcherLog.AddMessage( GetDisplayName() + " cur lvl = " + currentLevel );
 		//theGame.witcherLog.AddMessage( GetDisplayName() + " abl lvl = " + ((int)CalculateAttributeValue(GetAttributeValue('level',,true))) );
@@ -2095,7 +2506,7 @@ statemachine import class CNewNPC extends CActor
 		}
 
 		
-		if ( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY )
+		 if ( lvlDiff >= theGame.params.LEVEL_DIFF_DEADLY )
 		{
 			strLevel = "";
 			return "deadlyLevel";
@@ -2418,8 +2829,23 @@ statemachine import class CNewNPC extends CActor
 		var burningCauser 									: W3Effect_Burning;
 		var vfxEnt 											: W3VisualFx;
 		var aerondight										: W3Effect_Aerondight;
-		
 		var arrInt											: array<int>; //modSigns
+		// Triangle enemy mutations
+		var ent												: CEntity;
+		var template										: CEntityTemplate;
+		var stats											: CCharacterStats;
+
+		GetCharacterStats().RemoveAbility(TUtil_TEMutationEnumToName(TEM_Electric));
+
+		stats = GetCharacterStats();
+		if (stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Haunted))) {
+			template = (CEntityTemplate)LoadResource('wraith');
+			ent = theGame.CreateEntity(template, GetWorldPosition(), GetWorldRotation());
+			((CActor)ent).SetTemporaryAttitudeGroup( 'hostile_to_player', AGP_Default );
+			((CNewNPC)ent).SetLevel(GetLevel());
+		}
+		// Triangle end
+
 
 		ciriEntity = (W3ReplacerCiri)thePlayer;
 		witcher = GetWitcherPlayer();
@@ -2539,7 +2965,7 @@ statemachine import class CNewNPC extends CActor
 			SoundEvent( "grunt_vo_death" );
 		}
 						
-		if(damageAction.attacker == thePlayer && ((W3PlayerWitcher)thePlayer) && thePlayer.GetStat(BCS_Toxicity) > 0 && thePlayer.CanUseSkill(S_Alchemy_s17))
+		if(damageAction.attacker == thePlayer && ((W3PlayerWitcher)thePlayer) && TUtil_NonZeroToxOrActivePotion() && thePlayer.CanUseSkill(S_Alchemy_s17)) // Triangle killing spree
 		{
 			thePlayer.AddAbilityMultiple( SkillEnumToName(S_Alchemy_s17), thePlayer.GetSkillLevel(S_Alchemy_s17) );
 		}
@@ -2895,6 +3321,7 @@ statemachine import class CNewNPC extends CActor
 				}
 			}
 		}		
+		ProcessHugeMutationSize(); // Triangle enemy mutations This maybe does something
 	}
 	
 	
@@ -3040,6 +3467,12 @@ statemachine import class CNewNPC extends CActor
 		
 		aardedFlight = true;
 		
+		// Triangle enemy mutations
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Flaming), true, TOpts_ElectricCooldown());
+		// Triangle far reaching aard
+		if (TOpts_AardStaminaDelay() > 0 && sign.GetOwner().GetPlayer() && sign.GetOwner().GetPlayer().CanUseSkill(S_Magic_s20))
+			DrainStamina(ESAT_FixedValue, GetStatMax(BCS_Stamina), TOpts_AardStaminaDelay() * (sign.GetOwner().GetPlayer().GetSkillLevel(S_Magic_s20) / 3));
+		// Triangle end
 		
 		if( !sign.GetOwner().GetPlayer() || !GetWitcherPlayer().IsMutationActive( EPMT_Mutation6 ) )
 		{
@@ -3098,6 +3531,10 @@ statemachine import class CNewNPC extends CActor
 	event OnAxiiHit( sign : W3AxiiProjectile )
 	{
 		super.OnAxiiHit(sign);
+
+		// Triangle enemy mutations
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, TOpts_ElectricCooldown());
+		// Triangle end
 		
 		if ( HasAbility('ablIgnoreSigns') )
 		{
@@ -3117,6 +3554,11 @@ statemachine import class CNewNPC extends CActor
 	{
 		var horseComponent : W3HorseComponent;
 		super.OnIgniHit( sign );
+
+		// Triangle enemy mutations
+		BlockAbility(TUtil_TEMutationEnumToName(TEM_Freezing), true, TOpts_ElectricCooldown());
+		// Triangle end
+
 		
 		SignalGameplayEvent( 'IgniHitReceived' );
 		
@@ -4526,6 +4968,7 @@ statemachine import class CNewNPC extends CActor
 		{
 			SetIsInAir(false);
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	var m_storedInteractionPri : EInteractionPriority;
@@ -4542,6 +4985,7 @@ statemachine import class CNewNPC extends CActor
 			m_storedInteractionPri = currentPri;
 			SetInteractionPriority( IP_Max_Unpushable );
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	event OnNoLongerInRagdoll()
@@ -4554,6 +4998,7 @@ statemachine import class CNewNPC extends CActor
 			SetInteractionPriority( m_storedInteractionPri );
 			m_storedInteractionPri = IP_NotSet;
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 	
 	timer function DelayRagdollSwitch( td : float , id : int)
@@ -4568,6 +5013,7 @@ statemachine import class CNewNPC extends CActor
 			
 			AddEffectCustom(params);
 		}
+		ProcessHugeMutationSize(); // Triangle enemy mutations this maybe does something
 	}
 
 	event OnRagdollIsAwayFromCapsule( ragdollPosition : Vector, entityPosition : Vector )
@@ -4592,10 +5038,38 @@ statemachine import class CNewNPC extends CActor
 		var hud : CR4ScriptedHud;
 		var ent : CEntity;
 		var weaponId : SItemUniqueId;
+		// Triangle enemy mutations
+		var stats : CCharacterStats;
+		var healthType : EBaseCharacterStats;
+		var params : SCustomEffectParams;
+		stats = GetCharacterStats();
+
+		healthType = TUtil_GetHealthType(this);
+		if (!explosionMutationTriggered && stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Explosive)) && action.DealsAnyDamage()
+			&& ((healthType == BCS_Essence && action.processedDmg.essenceDamage >= GetStat(healthType))
+				|| (healthType == BCS_Vitality && action.processedDmg.vitalityDamage >= GetStat(healthType)))) {
+			ForceSetStat(healthType, GetStatMax(healthType));
+			action.SetAllProcessedDamageAs(1);
+			explosionMutationTriggered = true;
+			PlayEffect('critical_burning');
+			AddTimer('ExplodeMutation', TOpts_ExplosiveDelay());
+			params.effectType = EET_Immobilized;
+			params.creator = this;
+			params.sourceName = TUtil_TEMutationEnumToName(TEM_Explosive);
+			params.duration = TOpts_ExplosiveDelay() + 1;
+			AddEffectCustom(params);
+		}
+		// Triangle end
 
 		super.OnTakeDamage(action);
 		
 		
+		// Triangle enemy mutations
+		if (action.DealsAnyDamage() && !action.IsDoTDamage() && stats.HasAbility(TUtil_TEMutationEnumToName(TEM_Resilient))) {
+			StartResilientRegen();
+		}
+		// Triangle end
+
 		if(action.IsActionMelee() && action.DealsAnyDamage())
 		{
 			witcher = (W3PlayerWitcher)action.attacker;

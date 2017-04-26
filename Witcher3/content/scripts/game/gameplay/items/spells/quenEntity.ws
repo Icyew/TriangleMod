@@ -80,9 +80,9 @@ statemachine class W3QuenEntity extends W3SignEntity
 		
 	protected function GetSignStats()
 	{
-		var skillBonus : float;
-		var spellPower : SAbilityAttributeValue;
+		var skillBonus : float; // modSigns
 		var min, max : SAbilityAttributeValue;
+		var spellPower : SAbilityAttributeValue; // modSigns // Triangle quen duration spellpower
 		
 		super.GetSignStats();
 		
@@ -92,18 +92,24 @@ statemachine class W3QuenEntity extends W3SignEntity
 			impulseLevel = owner.GetSkillLevel(S_Magic_s13);
 		else
 			impulseLevel = 0;
-		
-		//modSigns: use base quen ability to get shield stats, because they're defined there
-		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_4, 'shield_duration', true, true));
-		//level 3 petri philtre gives +30% to shield duration
-		if(owner.GetPlayer() && owner.GetPlayer().GetPotionBuffLevel(EET_PetriPhiltre) == 3)
-		{
-			shieldDuration *= 1.34;
-			//theGame.witcherLog.AddMessage("Quen shield; Duration: " + shieldDuration); //modSigns: debug
+		shieldDuration = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_duration', true, true));
+		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(skillEnum, 'shield_health', false, true));
+		// Triangle quen base health
+		if (TOpts_QuenBaseHealth() > 0) {
+			shieldHealth = TOpts_QuenBaseHealth();
 		}
-		shieldHealth = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_4, 'shield_health', false, true));
+		// Triangle quen base duration
+		if (TOpts_QuenBaseDuration() > 0) {
+			shieldDuration = TOpts_QuenBaseDuration();
+		}
+		// Triangle quen duration spellpower
+		if (TOpts_QuenSPAffectsDuration()) {
+			spellPower = owner.GetActor().GetTotalSignSpellPower(GetSkill());
+			shieldDuration *= spellPower.valueMultiplicative;
+		}
+		// Triangle end
 		
-		if( owner.CanUseSkill(S_Magic_s14) )
+		if ( owner.CanUseSkill(S_Magic_s14))
 		{			
 			dischargePercent = CalculateAttributeValue(owner.GetSkillAttributeValue(S_Magic_s14, 'discharge_percent', false, true)) * owner.GetSkillLevel(S_Magic_s14);
 			if( owner.GetPlayer().IsSetBonusActive( EISB_Bear_2 ) )
@@ -156,8 +162,6 @@ statemachine class W3QuenEntity extends W3SignEntity
 			}
 			
 			
-			//modSigns: casting quen doesn't remove active DoT effects, but having quen on denies adding DoT (see effectManager)
-			/*
 			if( !IsDoTEffect( crits[i] ) )
 			{
 				continue;
@@ -169,8 +173,11 @@ statemachine class W3QuenEntity extends W3SignEntity
 				continue;
 			}
 			
-			actor.RemoveEffect( crits[i], true );			
-			*/
+			// Triangle quen dot
+			if (TOpts_QuenRemoveDoT()) {
+				actor.RemoveEffect( crits[i], true );			
+			}
+			// Triangle end
 		}		
 	}
 	
@@ -534,6 +541,7 @@ state ShieldActive in W3QuenEntity extends Active
 		var damageTypes : array<SRawDamage>;
 		var i : int;
 		var isBleeding : bool;
+		var modifiedIncomingDamage : float; // Triangle quen ratio
 		
 		//modSigns: DoT damage is not reduced
 		if(damageData.IsDoTDamage())
@@ -600,10 +608,15 @@ state ShieldActive in W3QuenEntity extends Active
 			incomingDamage = MaxF(0, damageData.processedDmg.vitalityDamage - directDamage);
 		}
 		
-		if(incomingDamage < parent.shieldHealth) //modSigns: now this value holds scaled shield HP
-			reducedDamage = incomingDamage;
+		// Triangle quen ratio
+		modifiedIncomingDamage = incomingDamage * TOpts_QuenAbsorptionRatio();
+		if(modifiedIncomingDamage < parent.shieldHealth)
+			reducedDamage = modifiedIncomingDamage;
+		else if (TOpts_QuenAbsorbLastHit())
+			reducedDamage = MaxF(modifiedIncomingDamage, parent.shieldHealth);
 		else
-			reducedDamage = parent.shieldHealth; //modSigns: only shieldHealth amount of damage can be reduced
+			reducedDamage = parent.shieldHealth;
+		// Triangle end
 		
 		//quen hit fx
 		if(!damageData.IsDoTDamage())
@@ -693,6 +706,11 @@ state ShieldActive in W3QuenEntity extends Active
 			}
 			//combat log
 			//theGame.witcherLog.AddCombatMessage("SetEndsQuen", thePlayer, NULL);
+			// Triangle Spell sword stuff
+			if (casterActor == thePlayer)
+				// GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+			// Triangle end
+			
 			damageData.SetEndsQuen(true);
 		}
 	}
@@ -1096,6 +1114,10 @@ state QuenChanneled in W3QuenEntity extends Channeling
 				parent.PlayHitEffect( 'quen_rebound_sphere_impulse', attackerVictimEuler );
 				caster.GetPlayer().QuenImpulse( true, parent, "quen_impulse", parent.impulseLevel, parent.quenPower /*modSigns*/ );
 			}
+			// Triangle spell sword stuff
+			if (casterActor == thePlayer)
+				// GetWitcherPlayer().SetSpellSwordSign(ST_Quen);
+			// Triangle end
 			
 			damageData.SetEndsQuen(true);			
 		}

@@ -53,7 +53,7 @@ def main():
     contentPath = path.join(modPath, 'Witcher3', 'content')
     scriptPath = path.join(contentPath, 'scripts')
     batPath = path.join(modPath, 'pack.bat')
-    # binPath = path.join(modPath, 'bin')
+    binPath = path.join(modPath, 'bin')
     studioPath = path.abspath(path.join(modPath, '..', 'TModScriptStudio'))
     studioLocal = path.join(studioPath, 'scripts', 'local')
     studioSource = path.join(studioPath, 'scripts', 'source')
@@ -97,13 +97,13 @@ def main():
                 shutil.copyfile(filePath, destPath)
                 print(status, relPath)
 
-    # tempBinPath = path.join(tempPath, 'bin')
-    # shutil.copytree(binPath, tempBinPath)
+    tempBinPath = path.join(tempPath, 'bin')
+    shutil.copytree(binPath, tempBinPath)
 
     print('Necessary files have been copied to temp folder!')
 
-    # dir_util.copy_tree(tempBinPath, path.join(gamePath, 'bin'))
-    # shutil.rmtree(tempBinPath)
+    dir_util.copy_tree(tempBinPath, path.join(gamePath, 'bin'))
+    shutil.rmtree(tempBinPath)
 
     gameModPath = path.join(gamePath, 'Mods', modName)
     gameScriptPath = path.join(gamePath, 'Mods', modName, 'content', 'scripts')

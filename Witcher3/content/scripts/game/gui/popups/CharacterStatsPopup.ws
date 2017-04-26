@@ -369,6 +369,10 @@ function AddCharacterStat(tag : string, varKey:name, locKey:string, iconTag:stri
 		valueAbility = sp.valueAdditive + sp.valueMultiplicative * GetWitcherPlayer().GetStatMax(BCS_Stamina);
 		
 		valueAbility *= 1 + GetWitcherPlayer().CalculatedArmorStaminaRegenBonus();
+		// Triangle alt stamina
+		valueAbility += TOpts_StaminaRegenBonus();
+		valueAbility *= TOpts_StaminaRegenMult();
+		// Triangle end
 		valueStr = NoTrailZeros(RoundMath(valueAbility)) + "/" + GetLocStringByKeyExt("per_second"); 
 	}
 	else if ( varKey == 'staminaRegenArmorMod' ) //modSigns: armor stamina modifier
@@ -411,7 +415,7 @@ function AddCharacterStat(tag : string, varKey:name, locKey:string, iconTag:stri
 		valueAbility =  CalculateAttributeValue( GetWitcherPlayer().GetAttributeValue( varKey ) );
 		valueStr = IntToString( RoundMath(  valueAbility ) );
 	}
-	//modSigns: allows using of non-localized text
+	//modSigns: allows using of non-localized text // Triangle TODO not needed due to custom loc fix?
 	final_name = GetLocStringByKeyExt(locKey); if ( final_name == "#" || final_name == "" ) { final_name = locKey; }
 	statObject.SetMemberFlashString("name", final_name);
 	statObject.SetMemberFlashString("value", valueStr);
@@ -970,7 +974,7 @@ function AddCharacterStatU(tag : string, varKey:name, locKey:string, iconTag:str
 			
 		}
 	}
-	//modSigns: allows using of non-localized text
+	//modSigns: allows using of non-localized text // Triangle TODO maybe not needed?
 	final_name = GetLocStringByKeyExt(locKey); if ( final_name == "#" || final_name == "" ) { final_name = locKey; }
 	statObject.SetMemberFlashString("name", final_name);
 	statObject.SetMemberFlashString("value", valueStr );

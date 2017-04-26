@@ -307,6 +307,9 @@ class CBaseGameplayEffect extends CObject
 	{
 		var durationResistance : float;
 		var min, max : SAbilityAttributeValue;
+		// Triangle igni
+		var signEntity : W3SignEntity;
+		// Triangle end
 		
 		if(duration == 0)
 		{
@@ -328,6 +331,16 @@ class CBaseGameplayEffect extends CObject
 				durationResistance = MinF(0.99f, resistance);
 			else
 				durationResistance = resistance;
+				
+			// Triangle igni
+			// Triangle TODO GM stopts SP from affecting sign duration. if you approve, delete this block
+			/*signEntity = (W3SignEntity)GetCreator();
+			if (signEntity && signEntity.GetSignType() == ST_Igni && IsAddedByPlayer()) {
+				duration = MaxF(0, initialDuration * MaxF(0, 1 + (creatorPowerStat.valueMultiplicative - 1) * TOpts_IgniSPDurationFactor()) * (1 - durationResistance) );
+			} else
+			// Triangle end
+			duration = MaxF(0, initialDuration * MaxF(0, creatorPowerStat.valueMultiplicative) * (1 - durationResistance) );
+			*/
 
 			//debug log
 			//theGame.witcherLog.AddMessage("Effect duration:");
@@ -647,17 +660,24 @@ class CBaseGameplayEffect extends CObject
 	public function OnTimeUpdated(dt : float)
 	{	
 		var toxicityThreshold, toxicityRange, toxicityOffset : float; //modSigns
+		var slowFactor : float; // Triangle delayed recovery
 		
 		if( isActive && pauseCounters.Size() == 0)
 		{
 			timeActive += dt;	
 			if( duration != -1 )
 			{
-				timeLeft -= dt;				
+				// Triangle delayed recovery
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s03) && isPotionEffect && thePlayer.CanUseSkill(S_Alchemy_s03) && !thePlayer.IsInCombat()) {
+					slowFactor = TUtil_ValueForLevel(S_Alchemy_s03, TOpts_DelayedRecoverySlowFactor()) + 1;
+					timeLeft = (timeLeft * slowFactor - dt) / slowFactor;
+				} else {
+					timeLeft -= dt;
+				}
+				// Triangle end
 				if( timeLeft <= 0 )
 				{
-					//modSigns: remove WhiteRaffardDecoction from Delayed Recovery affected potions
-					if(isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction)				
+					if(!TUtil_IsCustomSkillEnabled(S_Alchemy_s03) && isPotionEffect && isOnPlayer && thePlayer.CanUseSkill(S_Alchemy_s03) && effectType != EET_WhiteRaffardDecoction ) // Triangle delayed recovery
 					{
 						//toxicityThreshold = thePlayer.GetStatMax(BCS_Toxicity) * (1 - CalculateAttributeValue( thePlayer.GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, true) ) * thePlayer.GetSkillLevel(S_Alchemy_s03));
 						//modSigns: mutagen potions threshold

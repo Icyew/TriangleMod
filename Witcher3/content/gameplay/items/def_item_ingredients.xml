@@ -7,6 +7,30 @@
 
 <!-- *** MUTAGENS *** -->
 
+	<!-- Triangle mutagens synergy -->
+	<ability name="T_mutagen_vitality" >
+		<vitality type="base" min="1" max="1" />
+	</ability>
+	<ability name="T_mutagen_toxicity" >
+		<toxicity type="add" min="1" />
+	</ability>
+	<ability name="T_mutagen_spellpower" >
+		<spell_power type="mult" min="0.01" max="0.01" />
+	</ability>
+	<ability name="T_mutagen_attackpower" >
+		<attack_power type="mult" min="0.01" max="0.01"/>
+	</ability>
+	<ability name="T_mutagen_vitality_negative" >
+		<vitality type="base" min="-1" max="-1" />
+	</ability>
+	<ability name="T_mutagen_spellpower_negative" >
+		<spell_power type="mult" min="-0.01" max="-0.01" />
+	</ability>
+	<ability name="T_mutagen_attackpower_negative" >
+		<attack_power type="mult" min="-0.01" max="-0.01"/>
+	</ability>
+	<!-- Triangle end -->
+
 <!-- GREEN -->
 	<ability name="greater_mutagen_color_green" >
 		<vitality type="base" min="150" max="150" />

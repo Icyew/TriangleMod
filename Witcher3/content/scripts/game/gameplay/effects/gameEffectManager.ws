@@ -216,6 +216,30 @@ class W3GameEffectManager
 	
 		switch(effect)
 		{
+			// Triangle enemy mutations
+			case EET_TFireAura :				effects[effect] = new W3TFireAura in this;							break;
+			case EET_TFreezingAura :			effects[effect] = new W3TFreezingAura in this;						break;
+			case EET_THypnoAura :				effects[effect] = new W3THypnoAura in this;							break;
+			case EET_TInspiringAura :			effects[effect] = new W3TInspiringAura in this;						break;
+			case EET_TInspired :				effects[effect] = new W3Effect_TInspired in this;					break;
+			// Triangle resolve
+			case EET_TResolve :					effects[effect] = new W3Effect_TResolve in this;					break;
+			// Triangle light attack combo
+			case EET_TLightCombo :				effects[effect] = new W3Effect_TLightCombo in this;					break;
+			// Triangle heavy attack combo
+			case EET_THeavyCombo :				effects[effect] = new W3Effect_THeavyCombo in this;					break;
+			// Triangle endure pain
+			case EET_TIgnorePain :				effects[effect] = new W3Effect_TIgnorePain in this;					break;
+			// Triangle parry
+			case EET_TParryCooldown :			effects[effect] = new W3Effect_TParryCooldown in this;				break;
+			// Triangle acquired tolerance
+			case EET_TAcquiredTolerance :		effects[effect] = new W3Effect_TAcquiredTolerance in this;			break;
+			// Triangle spell sword
+			case EET_TSpellSword :				effects[effect] = new W3Effect_TSpellSword in this;					break;
+			// Triangle protective coating, spell sword
+			case EET_TWeakness :				effects[effect] = new W3Effect_TWeakness in this;					break;
+			case EET_TOneTimeWeakness :			effects[effect] = new W3Effect_TOneTimeWeakness in this;			break;
+			// Triangle end
 			
 			case EET_AutoEssenceRegen :			effects[effect] = new W3Effect_AutoEssenceRegen in this; 			break;
 			case EET_AutoMoraleRegen :			effects[effect] = new W3Effect_AutoMoraleRegen in this; 			break;
@@ -615,6 +639,31 @@ function HACK_NO_MEMORY_TO_COMPILE_EffectNameToType_Part1(effectName : name, out
 	
 	switch(effectType)
 	{
+		// Triangle enemy mutations
+		case "TFireAuraEffect" :									type = EET_TFireAura;					break;
+		case "TFreezingAuraEffect" :								type = EET_TFreezingAura;				break;
+		case "THypnoAuraEffect" :									type = EET_THypnoAura;					break;
+		case "TInspiringAuraEffect" :								type = EET_TInspiringAura;				break;
+		case "TInspiredEffect" :									type = EET_TInspired;					break;
+		// Triangle resolve
+		case "TResolveEffect" :										type = EET_TResolve;					break;
+		// Triangle light attack combo
+		case "TLightComboEffect" :									type = EET_TLightCombo;					break;
+		// Triangle heavy attack combo
+		case "THeavyComboEffect" :									type = EET_THeavyCombo;					break;
+		// Triangle endure pain
+		case "TIgnorePainEffect" :									type = EET_TIgnorePain;					break;
+		// Triangle parry
+		case "TParryCooldownEffect" :								type = EET_TParryCooldown;				break;
+		// Triangle acquired tolerance
+		case "TAcquiredToleranceEffect" :							type = EET_TAcquiredTolerance;			break;
+		// Triangle spell sword
+		case "TSpellSwordEffect" :									type = EET_TSpellSword;					break;
+		// Triangle protective coating, spell sword
+		case "TWeaknessEffect" :									type = EET_TWeakness;					break;
+		case "TOneTimeWeaknessEffect" :								type = EET_TOneTimeWeakness;			break;
+		// Triangle end
+
 		case "AutoEssenceRegen" : 							type = EET_AutoEssenceRegen; 			break;
 		case "AutoMoraleRegen" : 							type = EET_AutoMoraleRegen;				break;
 		case "AutoStaminaRegen" : 							type = EET_AutoStaminaRegen;			break;
@@ -817,6 +866,31 @@ function EffectTypeToName(effectType : EEffectType) : name
 {
 	switch(effectType)
 	{
+		// Triangle enemy mutations
+		case EET_TFireAura :							return 'TFireAuraEffect';
+		case EET_TFreezingAura :						return 'TFreezingAuraEffect';
+		case EET_THypnoAura :							return 'THypnoAuraEffect';
+		case EET_TInspiringAura :						return 'TInspiringAuraEffect';
+		case EET_TInspired :							return 'TInspiredEffect';
+		// Triangle resolve
+		case EET_TResolve :								return 'TResolveEffect';
+		// Triangle light attack combo
+		case EET_TLightCombo :							return 'TLightComboEffect';
+		// Triangle heavy attack combo
+		case EET_THeavyCombo :							return 'THeavyComboEffect';
+		// Triangle endure pain
+		case EET_TIgnorePain :							return 'TIgnorePainEffect';
+		// Triangle parry
+		case EET_TParryCooldown :						return 'TParryCooldownEffect';
+		// Triangle acquired tolerance
+		case EET_TAcquiredTolerance :					return 'TAcquiredToleranceEffect';
+		// Triangle spell sword
+		case EET_TSpellSword :							return 'TSpellSwordEffect';
+		// Triangle protective coating, spell sword
+		case EET_TWeakness :							return 'TWeaknessEffect';
+		case EET_TOneTimeWeakness :						return 'TOneTimeWeaknessEffect';
+		// Triangle end
+
 		case EET_AutoEssenceRegen : 					return 'AutoEssenceRegen';
 		case EET_AutoMoraleRegen : 						return 'AutoMoraleRegen';
 		case EET_AutoStaminaRegen : 					return 'AutoStaminaRegen';

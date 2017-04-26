@@ -662,6 +662,14 @@ class W3EffectManager
 			theGame.ReleaseNoSaveLock(criticalStateSaveLockId);
 			hasCriticalStateSaveLock = false;
 		}
+		// Triangle enemy mutations
+		if (GetCriticalBuffsCount() == 0) {
+			// terrible hacks ahead
+			// Unblock timeouts
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, 0.1, true);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, 0.1, true);
+		}
+		// Triangle end
 	}
 	
 	
@@ -675,6 +683,18 @@ class W3EffectManager
 		
 		effectType = effect.GetEffectType();
 		
+		// Triangle enemy mutations
+		if (IsCriticalEffectType(effectType)) {
+			// terrible hacks ahead
+			// Block abilities so that the block will not timeout
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, -1);
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, -1);
+			// Set a timer that ticks down even when timeouts are blocked. These will matter when timeouts are unblocked
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Hypnotic), true, TOpts_MinHypnoticDelay());
+			owner.BlockAbility(TUtil_TEMutationEnumToName(TEM_Inspiring), true, TOpts_MinHypnoticDelay());
+		}
+		// Triangle end
+
 		if(!hasCriticalStateSaveLock && owner == thePlayer && IsCriticalEffectType(effectType) )
 		{
 			 theGame.CreateNoSaveLock("critical_state", criticalStateSaveLockId);
@@ -1011,6 +1031,25 @@ class W3EffectManager
 		return ret;
 	}
 	
+	// Triangle adaptation
+	public final function GetMutagenBuffsCount() : int
+	{
+		var i, cnt : int;
+		var mutagen : W3Mutagen_Effect;
+		
+		cnt = 0;
+		for(i=0; i<effects.Size(); i+=1)
+		{
+			mutagen = (W3Mutagen_Effect) effects[i];
+			if( mutagen )
+			{
+				cnt += 1;
+			}
+		}
+		
+		return cnt;
+	}
+	
 	public final function GetPotionBuffs() : array<CBaseGameplayEffect>
 	{
 		var i : int;
@@ -1033,6 +1072,23 @@ class W3EffectManager
 		for(i=0; i<effects.Size(); i+=1)
 		{
 			if(effects[i].IsPotionEffect())
+				cnt += 1;
+		}
+		
+		return cnt;
+	}	
+	
+	// Triangle frenzy, killing spree
+	public final function GetNonMutagenPotionBuffsCount() : int
+	{
+		var i, cnt : int;
+		var mutagen : W3Mutagen_Effect;
+		
+		cnt = 0;
+		for(i=0; i<effects.Size(); i+=1)
+		{
+			mutagen = (W3Mutagen_Effect) effects[i];
+			if(effects[i].IsPotionEffect() && !mutagen)
 				cnt += 1;
 		}
 		
@@ -1403,6 +1459,10 @@ class W3EffectManager
 		var retB, applyBuff : bool;
 		var signEntity : W3SignEntity;
 		var canLog : bool;
+		// Triangle igni
+		var igniDuration : float;
+		// Triangle end
+
 		
 		canLog = theGame.CanLog();
 		size = action.GetEffects( effectInfos );
@@ -1430,14 +1490,20 @@ class W3EffectManager
 			else
 			{
 				//modSigns: pass resistance for checking
-				applyBuff = GetNonSignApplyBuffTest(effectInfos[i].applyChance, effectInfos[i].effectType, (CActor)action.attacker);
+				applyBuff = GetNonSignApplyBuffTest(effectInfos[i].applyChance, effectInfos[i].effectType, (CActor)action.attacker, action); // Triangle fixative added action param
 			}
 			
 			if(applyBuff)
 			{
-				
+				// Triangle igni
+				if (signEntity && signEntity.GetSignType() == ST_Igni && TOpts_IgniDuration() > 0) {
+					igniDuration = RandRangeF(TOpts_IgniDuration() + TOpts_IgniDurationSpread() / 2, TOpts_IgniDuration() - TOpts_IgniDurationSpread() / 2); // spell power applied in baseEffect.ws CalculateDuration
+					ret = InternalAddEffect(effectInfos[i].effectType, action.attacker, action.GetBuffSourceName(), igniDuration, effectInfos[i].effectCustomValue, effectInfos[i].effectAbilityName, effectInfos[i].customFXName, signEntity, attackerPowerStatValue, effectInfos[i].effectCustomParam );
+				} else
+				// Triangle end
 				ret = InternalAddEffect(effectInfos[i].effectType, action.attacker, action.GetBuffSourceName(), effectInfos[i].effectDuration, effectInfos[i].effectCustomValue, effectInfos[i].effectAbilityName, effectInfos[i].customFXName, signEntity, attackerPowerStatValue, effectInfos[i].effectCustomParam );
 			}
+			// Triangle TODO make sure this wasnt just moved elsewhere. If it wasnt, uncomment it
 			/*else //modSigns - removed
 			{
 				//from sign and failed chance test
@@ -1483,9 +1549,27 @@ class W3EffectManager
 	
 	//Does a test whether non-sign source will apply the buff or not
 	//modSigns: function is rewritten to apply resistances to effect chance
-	private final function GetNonSignApplyBuffTest(applyChance : float, effectType : EEffectType, actorAttacker : CActor) : bool
+	private final function GetNonSignApplyBuffTest(applyChance : float, effectType : EEffectType, actorAttacker : CActor, optional action : W3DamageAction) : bool // Triangle fixative add action param
 	{
 		var resPt, resPrc, chance : float;
+		// Triangle fixative
+		var witcher : W3PlayerWitcher;
+		var victimMonsterCategory : EMonsterCategory;
+		var tmpName : name;
+		var tmpBool	: bool;
+		var attackAction : W3Action_Attack;
+		var actionVictim : CActor;
+		var num : float;
+		if (action && action.IsActionMelee()) {
+			actionVictim = (CActor)action.victim;
+			attackAction = (W3Action_Attack)action;
+			witcher = (W3PlayerWitcher)action.attacker;
+			theGame.GetMonsterParamsForActor(actionVictim, victimMonsterCategory, tmpName, tmpBool, tmpBool, tmpBool);
+			if (attackAction && witcher && witcher.CanUseSkill(S_Alchemy_s06) && witcher.inv.ItemHasActiveOilApplied(attackAction.GetWeaponId(), victimMonsterCategory)) {
+				applyChance = MinF(applyChance * TOpts_FixativeMultBonus(), applyChance + TUtil_ValueForLevel(S_Alchemy_s06, TOpts_FixativeMaxBonus()));
+			}
+		}
+		// Triangle end
 		
 		if(!IsNegativeEffectType( effectType )) // only negative effects are checked against resistance
 			return RandF() < applyChance;
@@ -1718,6 +1802,7 @@ class W3EffectManager
 	{
 		var i : int;
 		var regenEffect : W3RegenEffect;
+		var tawnyOwl : W3Potion_TawnyOwl;
 		
 		for(i=0; i<effects.Size(); i+=1)
 		{
@@ -1726,7 +1811,14 @@ class W3EffectManager
 			{
 				if(regenEffect.GetRegenStat() == CRS_Stamina)
 				{
-					PauseEffects(effects[i].GetEffectType(), sourceName, true, duration, true);
+					// Triangle delayed recovery Triangle tawny owl dont pause tawny owl. just disable
+					tawnyOwl = (W3Potion_TawnyOwl)regenEffect;
+					if (!tawnyOwl) {
+						PauseEffects(effects[i].GetEffectType(), sourceName, true, duration, true);
+					} else {
+						tawnyOwl.DisableRegen(duration);
+					}
+					// Triangle end
 				}
 			}
 		}

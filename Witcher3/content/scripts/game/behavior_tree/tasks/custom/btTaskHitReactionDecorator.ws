@@ -101,6 +101,7 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 		var raiseGuardMultiplier : int;
 		var counterMultiplier : int;
 		var actor : CActor = GetActor();
+		var npc : CNewNPC = GetNPC(); // Triangle whirl
 		
 		hitsToRaiseGuard = (int)CalculateAttributeValue(actor.GetAttributeValue('hits_to_raise_guard'));
 		raiseGuardChance = (int)MaxF(0, 100*CalculateAttributeValue(actor.GetAttributeValue('raise_guard_chance')));
@@ -120,6 +121,13 @@ class CBTTaskHitReactionDecorator extends CBTTaskPlayAnimationEventDecorator
 		{
 			hitsToRaiseGuard = 65536;
 		}
+
+		// Triangle whirl
+		if (npc.StunLocked()) {
+			raiseGuardChance = 0;
+			counterChance = 0;
+		}
+		// Triangle end
 	}
 	
 	function CheckGuardOrCounter() : bool

@@ -23,7 +23,69 @@
       </ability>
 	  <ability name="eredinPhaseChange">
       </ability>
-	  
+	 
+    <!-- Triangle enemy mutations -->
+    <ability name="TEM_Tough">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Quick">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Huge">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Resilient">
+      <tags> TEMutation </tags>
+      <essenceRegen type="add" always_random="false" min="1" max="1" />
+      <vitalityRegen type="add" always_random="false" min="1" max="1" />
+    </ability>
+    <ability name="TEM_Electric">
+      <tags> TEMutation, MonsterSkill </tags>
+      <shock_resistance type="base" always_random="false" min="100" max="100" />
+      <shock_resistance_perc type="base" min="100" max="100" />
+    </ability>
+    <ability name="TEM_Venomous">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Vampiric">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Flaming">
+      <tags> TEMutation, MonsterSkill </tags>
+      <fire_resistance type="base" always_random="false" min="100" max="100" />
+      <fire_resistance_perc type="base" min="100" max="100" />
+      <burning_resistance_perc type="add" min="1.0" max="1.0" />
+      <burning_DoT_damage_resistance_perc type="add" min="1.0" max="1.0" />
+    </ability>
+    <ability name="TEM_Freezing">
+      <tags> TEMutation, MonsterSkill </tags>
+      <frost_resistance type="base" always_random="false" min="100" max="100" />
+      <frost_resistance_perc type="base" min="100" max="100" />
+    </ability>
+    <ability name="TEM_Draining">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Haunted">
+      <tags> TEMutation </tags>
+    </ability>
+    <ability name="TEM_Explosive">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Hypnotic">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <ability name="TEM_Inspiring">
+      <tags> TEMutation, MonsterSkill </tags>
+    </ability>
+    <!-- not actually a mutation but putting it here anyways -->
+    <ability name="TEM_Inspired">
+      <tags> MonsterSkill </tags>
+      <essence type="mult" always_random="false" min="0.01" max="0.01" />
+      <vitality type="mult" always_random="false" min="0.01" max="0.01" />
+      <attack_power type="mult" always_random="false" min="0.01" max="0.01" />
+      <will_resistance_perc type="add" always_random="false" min="100" max="100" />
+    </ability>
+    <!-- Triangle end -->
       <!-- MONSTER OPPONENTS-->
       <!-- Additional Abilities -->
       <ability name="AcidSpit" on_added="" on_ended="">
@@ -428,17 +490,17 @@
       </ability>
 	   
 	  <ability name="mh302_Leshy"> <!-- Kernun - leshen from Novigrad -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
       </ability>
 	  
 	  <ability name="qMq3005_NobleEscort"> <!-- some minor quest in Novigrad -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="1.0" max="1.0" />
       </ability>
 	 
 	  <ability name="q100_PrologGriffon"> <!-- Griffin from White Orchard -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="add" always_random="false" min="2500" max="2500" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 		<!-- DoT damage -->
@@ -452,14 +514,14 @@
       </ability>
 	 
       <ability name="mq0003_noonwraith"> <!-- noon wraight from White Orchard -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <!-- <level type="add" always_random="false" min="1" max="1" /> -->
 		<essence type="mult" always_random="false" min="0.5" max="0.5" />
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
       </ability>
 	   
       <ability name="q503_banditsFakeLevels"> <!-- bandits from bad ending -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<!-- modSigns: fake level was used instead of debuff (lvl 2 -> lvl 28) -->
         <!-- <level type="add" always_random="false" min="32" max="32" /> -->
 		<vitality type="mult" always_random="false" min="-0.8" max="-0.8" />
@@ -476,20 +538,20 @@
 	  </ability>
 	  
 	  <ability name="qmh304_ekima"> <!-- katakan from Oxenfurt -->
-	  <tags> "base" </tags>
+	  <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 		<essenceRegen type="add" always_random="false" min="70" max="70" />
 	  </ability>
 	  
 	  <ability name="q103_werewolf"> <!-- werewolf in baron's quest - Ciri's story -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="add" always_random="false" min="100" max="100" />
 		<essence type="add" always_random="false" min="3000" max="3000" />
 		<essenceRegen type="add" always_random="false" min="-90" max="-90" /> 
       </ability>
  
 	  <ability name="q104_evilKeira"> <!-- Keira evil duplicate during wandering in the dark quest -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 
 	  <ability name="q503_replacer"> <!-- Dandelion and whoreson's bandits nerf for Ciri -->
@@ -497,11 +559,11 @@
       </ability>
 	  
 	  <ability name="qPhilippa_NG"> <!-- one of Philippa's abilities -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	   
 	  <ability name="qs302_ifryt"> <!-- ifryt in Philppa's hideout in Radovid's quest -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="qSUMMONwolfs"> <!-- wolves summoned when fighting leshen -->
@@ -511,19 +573,19 @@
       </ability>
 	    
 	  <ability name="q103_botchling"> <!-- botchling in baron's quest (inherits from ghoul) -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="2.0" max="2.0" />
 		<essenceRegen type="add" always_random="false" min="-100" max="-100" />
       </ability>
 	  
 	  <ability name="qmq2038_gundar"> <!-- in shieldmaiden quest on Skellige -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="2" max="2" />
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
       </ability>
 	    
 	  <ability name="sq209_eredin"> <!-- eredin vision during quest on Skellige -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<!-- modSigns: fake level was used (lvl 17 -> lvl 47), changed w2ent to lvl 30 instead -->
 		<!-- <level type="add" always_random="false" min="30" max="30" /> -->
       </ability>
@@ -535,12 +597,12 @@
       </ability>
 	  
 	  <ability name="mq1019_dealer">
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="2.0" max="2.0" />
       </ability>
 	  
 	  <ability name="qRosaVarAttre"> <!-- one of Rosa Var Attre abilities -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="1500" max="1500" />
 	  </ability>
 	    
@@ -560,28 +622,28 @@
 	  </ability>
 	 
 	  <ability name="q302_whorenson"> <!-- whoreson Ciri fight -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="1200" max="1200" />
       </ability>
 	  
 	  <ability name="q302_bear"> <!-- arena bear during search for whoreson quest -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="q302_mh104"> <!-- ekkima in Velen (missing nilfgaardians) -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.5" max="1.5" />
 		<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
       </ability>
 	  
 	  <ability name="q305_Kidnaper"> <!-- during search for Dandelion -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <!-- <vitality type="add" always_random="false" min="400" max="400" /> -->
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
 	  </ability>
 	  
 	  <ability name="qSergeantFistFIght"> <!-- sergeant in fistfight quest -->
-      <tags> "base" </tags>
+      <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="1500" max="1500" />
       </ability>
 	 
@@ -592,51 +654,51 @@
       </ability>
 	  
 	  <ability name="qmh303_suc"> <!-- succubus monster hunt in Novigrad -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="2" max="2" />	
       </ability>
 	    
 	  <ability name="q302_DwarfsDMG"> <!-- whoreson search dwarfs -->
-      <tags> "base" </tags>
+      <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.7" max="-0.7" /> 
 		<vitality type="mult" always_random="false" min="1" max="1" />
       </ability>
 	  
 	  <ability name="q309_man_chased_key"> <!-- casablanca man with the first key -->
-      <tags> "base" </tags>
+      <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.8" max="-0.8" /> 
 		<vitality type="mult" always_random="false" min="0.5" max="0.5" />
       </ability>
 	  
 	  <ability name="qBanditos"> <!-- bandits in Hattori quest in Novigrad -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="mq1011_merchants"> <!-- merchants in caravan attack encounter in Velen -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
       </ability>
 	  
 	  <ability name="q201_StuffedAnimalsTrp"> <!-- stuffed animals in lab on Skellige -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="mult" always_random="true" min="-0.9" max="-0.9" />
         <attack_power type="mult" always_random="true" min="-0.9" max="-0.9" /> 
 	  </ability>
 	 
 	  <ability name="q201_StuffedAnimalsTrpWOLFS"> <!-- not used? -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="true" min="-0.9" max="-0.9" />
         <attack_power type="mult" always_random="true" min="-0.9" max="-0.9" /> 
 		<!-- <level type="add" always_random="false" min="50" max="50" /> -->
 	  </ability>
 	 
 	  <ability name="qVES_HP"> <!-- Ves' ability -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<!-- <vitality type="add" always_random="true" min="2475" max="2475" /> -->
 		<vitality type="mult" always_random="true" min="3.0" max="3.0" />
 	  </ability>
 	  
 	  <ability name="q206_berserkerhaj"> <!-- hallgrim berserker -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="1500" max="1500" /> -->
 		<essence type="mult" always_random="true" min="2.0" max="2.0" />
       </ability>
@@ -647,7 +709,7 @@
       </ability>
 	  
 	  <ability name="q302_ReplacerThugs"> <!-- whoreson guards for Ciri -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="600" max="600" />
       </ability>
 	 
@@ -657,36 +719,36 @@
 			
 	  <ability name="q103_wraith"> <!-- whraiths in baron's quest and in mines with Keira -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3"/>
 	  </ability>
 		
 	  <ability name="qsq102_Letho"> <!-- Letho's ability -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<!-- <attack_power type="mult" always_random="false" min="-0.8" max="-0.8"/> -->
 	  </ability>
 		
 	  <ability name="qmq3031"> <!-- Nidas (quest about pearl, Novigrad-Skellige) -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="3.0" max="3.0" />
 		<attack_power type="mult" always_random="false" min="0.4" max="0.4"/>
 	  </ability>
 	  
 	  <ability name="qHagGuardingTreasure"> <!-- monsters guarding treasures -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3"/>
 	  </ability>
 		
 	  <ability name="qGargoyleGuardingTreasure"> <!-- monsters guarding treasures -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.7" max="0.7" />
 	  </ability>
 		
 	  <ability name="qWyverneGuardingTreasure"> <!-- monsters guarding treasures -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.2" max="1.2" />
 	  </ability>
 
@@ -696,17 +758,17 @@
       </ability>
 	 
 	  <ability name="q104_dao"> <!-- dao in mines with Keira and in sunstone quest -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.5" max="0.5" />
 	  </ability>
 	 
 	  <ability name="q106_MorowaD"> <!-- plague maiden in Tower Full of Mice -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	 
 	  <ability name="mh306_dao"> <!-- dao in Novigrad -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="mult" always_random="false" min="-0.4" max="-0.4" /> -->
 	  </ability>
 	  
@@ -724,14 +786,14 @@
 	  </ability>
 	 
 	  <ability name="q210_WH_Ghost"> <!-- wild hunt ghosts in sunstone quest -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="1200" max="1200" /> -->
 		<essence type="mult" always_random="false" min="0.5" max="0.5" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	 
 	  <ability name="mq3035"> <!-- halberd in Novigrad -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- modSigns: fake level was used instead of debuff (lvl 20 soldiers appeared as lvl 29) -->
 		<!-- <level type="add" always_random="false" min="9" max="9" /> -->
 		<vitality type="mult" always_random="false" min="-0.5" max="-0.5" />
@@ -739,14 +801,14 @@
 	  </ability>
 	 
 	  <ability name="q210_Wraith"> <!-- not used? -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="3000" max="3000" /> -->
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
 		<attack_power type="mult" always_random="false" min="0.4" max="0.4" />
 	  </ability>
 	 
 	  <ability name="q210_PhilipaDMGBoost"> <!-- one of Philippa's abilities -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	  
@@ -755,18 +817,18 @@
 	  </ability> 
 	  
 	  <ability name="q104_gargoyle"> <!-- gargoyle in mines with Keira -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.5" max="0.5" />
 	  </ability>	
 	  
 	  <ability name="q111_biesBUFFS"> <!-- bies during sabbath quest -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="3500" max="3500" /> -->
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
       </ability>	
 	  
 	  <ability name="q111_fugas"> <!-- fugas during sabath quest -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="2800" max="2800" /> -->
 		<!-- fire -->
 		<fire_resistance_perc type="base" always_random="false" min="1" max="1" />
@@ -779,58 +841,66 @@
 	  </ability>	
 	
 	  <ability name="q107_drowndead"> <!-- not used? -->
+      <tags> TMod_questmonster </tags>
 	    <!-- <essence type="add" always_random="false" min="-1600" max="-1600" /> -->
 		<essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 	    <attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	
 	  <ability name="q107_FIEND"> <!-- fiend in baron's quest -->
+      <tags> TMod_questmonster </tags>
 	  </ability>
 	
 	  <ability name="qMH208_Noonwraith"> <!-- noonwraith monster hunt in Novigrad -->
+      <tags> TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
 	  </ability>
 	  
 	  <ability name="qmh108_fogling"> <!-- fogling monster hunt in Velen swamps -->
+      <tags> TMod_questmonster </tags>
 		<!-- also has MiniBoss ability - modSigns: removed, only this ability left -->
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
 	  </ability>
 	 
 	  <ability name="q104_whminion"> <!-- wild hunt minions in mines with Keira -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.5" max="-0.5"/>
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	 
 	  <ability name="sq104_WW"> <!-- not used? -->
+      <tags> TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.2" max="-0.2"/>
 	  </ability>
 	  
       <ability name="qmq2017"> <!-- Skellige hero wannabe (for flame and glory) -->
+      <tags> TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="5.0" max="5.0"/>
 	  </ability>
 	  
 	  <ability name="qsTEINGRIM"> <!-- Steingrim -->
+      <tags> TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="1.0" max="1.0"/>
 	  </ability>
 	  	   
 	  <ability name="qdjange"> <!-- bounty hunter on Skellige -->
+      <tags> TMod_questmonster </tags>
 		<vitality type="mult" always_random="false" min="3.0" max="3.0"/>
 	  </ability>
 	 
 	  <ability name="sq315_troll"> <!-- Novigrad trolls -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <armor type="base" always_random="false" min="-50" max="-50" /> -->
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability> 
 	 
 	  <ability name="q503_WWnerf"> <!-- not used? -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.9" max="-0.9" />
 	  </ability> 
 	 
 	  <ability name="q202_troll"> <!-- trolls in ice giant quest on Skellige -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <armor type="base" always_random="false" min="-50" max="-50" /> -->
 		<!-- <essence type="add" always_random="false" min="-1000" max="-1000"/> -->
 		<essence type="mult" always_random="false" min="-0.3" max="-0.3"/>
@@ -838,101 +908,105 @@
       </ability> 
 	   
 	  <ability name="q104_wh"> <!-- wild hunt in mines with Keira -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="180" max="180"/> -->
 		<essence type="mult" always_random="false" min="0.3" max="0.3"/>
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2" />
 	  </ability>
 	  
 	  <ability name="q310_bartTroll"> <!-- Bart the troll -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.4" max="-0.4"/>
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
 	  </ability>
 	 
 	  <ability name="q105_WH_replacer"> <!-- not used? -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="12000" max="12000"/> -->
 		<essence type="mult" always_random="false" min="2.0" max="2.0"/>
 		<attack_power type="mult" always_random="false" min="0.7" max="0.7" />
 	  </ability>
 	  
 	  <ability name="q104_whboss"> <!-- wild hunt boss in mines with Keira -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="add" always_random="false" min="4000" max="4000"/>
 		<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
 	  </ability>
 
 	  <ability name="q105_bandits"> <!-- bandits in evil heart quest in Velen -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <vitality type="add" always_random="false" min="500" max="500" /> -->
 		<vitality type="mult" always_random="false" min="0.3" max="0.3"/>
 	  </ability>
 	  
 	  <ability name="q105_Werewolf"> <!-- werewolf in evil heart quest in Velen -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 	  </ability>
 	 
 	  <ability name="q109_keira"> <!-- Keira in her final quest -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<vitality type="add" always_random="false" min="2000" max="2000" />
 		<attack_power type="base" always_random="false" min="250" max="250" />
 		<armor_reduction type="add"	min="-1000"	max="-1000"	/> <!-- to compensate for fists armor reduction -->
 	  </ability>
 	  
 	  <ability name="qmh210_lamia"> <!-- lamia on Skellige -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2.0" max="2.0"/>
         <attack_power type="mult" always_random="false" min="0.5" max="0.5" /> 
 	  </ability>
 	
 	  <ability name="qmh107_fiend"> <!-- modSigns: czart monster hunt in Velen -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.5" max="1.5"/>
         <attack_power type="mult" always_random="false" min="0.5" max="0.5" /> 
 	  </ability>
 	  
 	  <ability name="qmh105_wyvern"> <!-- modSigns: royal wyvern in Velen -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2" max="2" />
 		<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
       </ability>
 	  
 	  <ability name="qmh105_wyverns_other"> <!-- modSigns: wyverns in royal wyvern monster hunt in Velen -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1" max="1" />
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
       </ability>
 	  
 	  <ability name="q309_katakan"> <!-- vampire in Novigrad sewers -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="1000" max="1000"/> -->
 		<essence type="mult" always_random="false" min="0.5" max="0.5"/>
 		<essenceRegen type="add" always_random="false" min="70" max="70" />
 	  </ability>
 	  
 	  <ability name="sq204_leshy"> <!-- modSigns: leshy (forest spirit) on Skellige -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2.0" max="2.0"/>
         <attack_power type="mult" always_random="false" min="0.3" max="0.3" /> 
 	  </ability>
 	
 	  <ability name="sq204_Leshywolf"> <!-- summoned wolves in forest spirit (leshen) quest on Skellige  -->
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="300" max="300" />
         <attack_power type="mult" always_random="false" min="0.3" max="0.3" /> 
       </ability>
 	  
 	  <ability name="sq204_wolfs"> <!-- offering wolves in forest spirit quest on Skellige -->
+      <tags> TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="200" max="200" />
         <attack_power type="mult" always_random="false" min="0.3" max="0.3" /> 
       </ability>
 	  
 	  <ability name="sq204_wolfs23"> <!-- totem wolves in forest spirit quest on Skellige -->
+      <tags> TMod_questmonster </tags>
         <vitality type="add" always_random="false" min="200" max="200" />
         <attack_power type="mult" always_random="false" min="0.3" max="0.3" /> 
       </ability>
 	  
 	  <ability name="sq204_alpha"> <!-- wolf alpha in forest spirit quest on Skellige -->
+      <tags> TMod_questmonster </tags>
 	    <!-- modSigns: fake level removed -->
         <!-- <level type="add" always_random="false" min="8" max="8" /> -->
         <vitality type="add" always_random="false" min="300" max="300" />
@@ -945,26 +1019,26 @@
       </ability>
 	 
 	  <ability name="mh305_doppler"> <!-- doppler monster hunt in Novigrad -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="add" always_random="false" min="500" max="500" />
 		<essence type="mult" always_random="false" min="0.3" max="0.3"/>
       </ability>
 	  
 	  <ability name="qmh206_bies"> <!-- fiend in ruins on Skellige monster hunt -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.5" max="1.5" />
 		<attack_power type="mult" always_random="false" min="0.5" max="0.5" /> 
       </ability>
 	  
 	  <ability name="mh301_Gryphon"> <!-- gryphon in Oxenfurt -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
       </ability>
 	  
 	  <ability name="mh305_doppler_geralt"> <!-- doppler monster hunt in Novigrad -->
         <!-- lvl 14 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="add" always_random="false" min="1000" max="1000" />
         <essence type="mult" always_random="false" min="1.0" max="1.0" />
@@ -972,7 +1046,7 @@
 	  
 	  <ability name="mh307_Minion"> <!-- wild hunt minion monster hunt in Novigrad (halflings) -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <!-- <essence type="add" always_random="false" min="6900" max="6900" /> -->
         <essence type="mult" always_random="false" min="2.0" max="2.0" />
@@ -981,7 +1055,7 @@
 	  
 	  <ability name="mh207_wraith"> <!-- wraiths in lighthouse on Skellige -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="-0.4" max="-0.4" />
 		<attack_power type="mult" always_random="false" min="-0.4" max="-0.4"/>
@@ -989,127 +1063,133 @@
 	  
 	  <ability name="mq2003_wraith"> <!-- wraith - some tombs on Skellige -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 		<attack_power type="mult" always_random="false" min="-0.2" max="-0.2"/>
       </ability>
 	  
 	  <ability name="q202_IceGiantDOOM"> <!-- Ice Giant -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="2" max="2" />
       </ability>
 	  
 	  <ability name="q108_wraith"> <!-- monsters during pellar's quest on Fyke Isle -->
 		<!-- lvl 8 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="-0.5" max="-0.5" />
 		<attack_power type="mult" always_random="false" min="-0.5" max="-0.5"/>
       </ability>
 	  
 	  <ability name="sq205_cyclop"> <!-- cyclop in Gremists's quest on Skellige -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	  
 	  <ability name="mq2012_cyclop"> <!-- Skellige bad place bad time quest -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="700" max="700" /> -->
 		<essence type="mult" always_random="false" min="0.2" max="0.2" />
 		<attack_power type="mult" always_random="false" min="-0.5" max="-0.5"/>
 	  </ability>
 	  
 	  <ability name="q203_cyclop"> <!-- not used? -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<!-- <essence type="add" always_random="false" min="1250" max="1250" /> -->
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 		<attack_power type="mult" always_random="false" min="-0.6" max="-0.6"/>
 	  </ability>
 	 
 	  <ability name="q401_cyclop"> <!-- cyclop in kaer morhen -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.4" max="0.4" />
 	  </ability>
 	  
 	  <ability name="q401_wyvern"> <!-- forktail in kaer morhen -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>	
 	  
 	  <ability name="q403_CiriWHn"> <!-- kaer morhen battle wild hunt nerf for Ciri -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="-0.8" max="-0.8"/>
 	  </ability>	
 	  
 	  <ability name="q108_drowners"> <!-- drowners in pellar's quest on Fyke island -->
-		<tags> "base" </tags>
+    <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="-0.5" max="-0.5"/>
 	  </ability>
 	  
 	  <ability name="q202_fogling"> <!-- foglings in Him quest on Skellige -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="0.6" max="0.6" />
 	  </ability>
 	
 	  <ability name="sq205_fogling"> <!-- foglings in alchemist's quest on Skellige -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<attack_power type="mult" always_random="false" min="0.2" max="0.2" />
 	  </ability>
 	
 	  <ability name="q202_him"> <!-- Him on Skellige (Him inherits from leshen, but he's wraith) -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	
 	  <ability name="mh207_wraith_boss"> <!-- lighthouse monster hunt boss on Skellige -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <vitality type="mult" always_random="false" min="-1" max="-1" />
         <essence type="mult" always_random="false" min="2.0" max="2.0" />
       </ability>
 	  
 	  <ability name="qth1003_kiyan"> <!-- Kiyan -->
         <!-- lvl 19 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
         <!-- <vitality type="add" always_random="false" min="2500" max="2500" /> -->
 		<vitality type="mult" always_random="false" min="2.5" max="2.5" />
       </ability>
 	  
       <ability name="mon_wolfq201"> <!-- not used? -->
+        <tags> TMod_questmonster </tags>
 	   <!-- lvl 11 -->
 	  </ability>
 	  
 	  <ability name="q402_bies"> <!-- Isle of mists bies -->
+      <tags> TMod_questmonster </tags>
         <!-- <essence type="add" always_random="false" min="2300" max="2300" /> -->
         <essence type="mult" always_random="false" min="1.0" max="1.0" />
 	  </ability>
 	  
 	  <ability name="mon_wolfq205"> <!-- frozen coast (lofoten) wolves  -->
+      <tags> TMod_questmonster </tags>
 	   <!-- modSigns: fake level replaced with normal level -->
 	  </ability>
 	 
 	  <ability name="q205CiriWHminion"> <!-- wild hunt minions in lofoten for Ciri -->
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="400" max="400" />
 		<attack_power type="mult" always_random="false" min="-0.4" max="-0.4" />
 	  </ability>
 	  
 	  <ability name="q205CiriWH"> <!-- wild hunt warriors in lofoten for Ciri -->
+      <tags> TMod_questmonster </tags>
         <essence type="add" always_random="false" min="600" max="600" />
 		<attack_power type="mult" always_random="false" min="-0.8" max="-0.8" />
 	  </ability>
 	  
 	  <ability name="qMH101_cockatrice"> <!-- cockatrice in Velen monster hunt -->
+      <tags> TMod_questmonster </tags>
         <essence type="mult" always_random="false" min="1.0" max="1.0" />
 		<attack_power type="mult" always_random="false" min="0.2" max="0.2" />
 	  </ability>
 	  
 	  <ability name="sq201_werewolf"> <!-- Morkvarg -->
         <!-- lvl 23 -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="0.5" max="0.5" />
 		<attack_power type="mult" always_random="false" min="-0.3" max="-0.3" />
 		<experience type="base" always_random="false" min="44" max="44" />
@@ -1137,23 +1217,23 @@
       </ability>
 	  
 	  <ability name="qmh208_forktail"> <!-- forktail monster hunt on Skellige -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="2.0" max="2.0" />
 		<attack_power type="mult" always_random="false" min="0.5" max="0.5" />
       </ability>	
 	
 	  <ability name="qRose"> <!-- not used? -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<!-- <vitality type="add" always_random="false" min="0.6" max="0.6" /> -->
 	  </ability>
 	  
 	  <ability name="q308_wampire"> <!-- coroner psycho vampire -->
-		<tags> "base" </tags>
+		<tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.5" max="1.5" />
 	  </ability>
 	  
 	  <ability name="sq108_Griffon"> <!-- modSigns: master armorer quest griffin buff -->
-        <tags> "base" </tags>
+        <tags> "base", TMod_questmonster </tags>
 		<essence type="mult" always_random="false" min="1.0" max="1.0" />
 		<attack_power type="mult" always_random="false" min="0.3" max="0.3" />
       </ability>
@@ -2890,6 +2970,7 @@
 		<WeatherBonusEffect_wraith is_ability="false" />
       </ability>
       <ability name="mon_wraith_mh"> <!-- lighthouse monster hunt boss on Skellige -->
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="1350" max="1350" />
@@ -2988,6 +3069,7 @@
         <WeatherBonusEffect_nocturnal is_ability="true" />
       </ability>
       <ability name="mon_nightwraith_mh"> <!-- nightwraith monster hunt in Velen, also has Boss ability -->
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="1350" max="1350" />
@@ -3005,6 +3087,7 @@
       </ability>
       <!-- Noonwraith monster hunt -->
       <ability name="mon_noonwraith_mh"> <!--noonwraith monster hunt in Novigrad, also has qMH208_Noonwraith ability -->
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="1350" max="1350" />
@@ -3482,6 +3565,7 @@
 	  
 	  <!-- Wild hunt minionMH - modSigns -->
       <ability name="mon_wild_hunt_minionMH"> <!-- wild hunt minion monster hunt in Novigrad (halflings), also has mh307_Minion ability -->
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="1350" max="1350" />
@@ -4025,6 +4109,7 @@
       </ability>
 	  
       <ability name="mon_forktail_mh"> <!-- forktail monster hunt on Skellige, also has qmh208_forktail ability -->
+        <tags> TMod_questmonster </tags>
         <level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="4" max="4" />
         <essence type="base" always_random="false" min="1350" max="1350" />
@@ -4180,6 +4265,7 @@
       </ability>
 	  
 	  <ability name="mon_fogling_mh"> <!-- fogling monster hunt in Velen swamps, also has qmh108_fogling and MiniBoss abilities -->
+      <tags> TMod_questmonster </tags>
 		<level type="add" always_random="false" min="1" max="1" />
         <threat_level type="add" always_random="false" min="3" max="3" />
         <essence type="base" always_random="false" min="1350" max="1350" />

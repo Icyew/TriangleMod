@@ -125,11 +125,11 @@ import class W3GameParams extends CObject
 		default CRITICAL_HIT_FX = 'critical_hit';
 		default CRITICAL_HIT_DAMAGE_BONUS = 'critical_hit_damage_bonus';
 		default CRITICAL_HIT_REDUCTION = 'critical_hit_damage_reduction';
-		default HEAD_SHOT_CRIT_CHANCE_BONUS = 0.5;
-		default BACK_ATTACK_CRIT_CHANCE_BONUS = 0.5;
+		default HEAD_SHOT_CRIT_CHANCE_BONUS = 1.0; // Triangle enemy mutations all
+		default BACK_ATTACK_CRIT_CHANCE_BONUS = 1.0; // Triangle enemy mutations all
 	
 	
-	public const var DAMAGE_NAME_DIRECT, DAMAGE_NAME_PHYSICAL, DAMAGE_NAME_SILVER, DAMAGE_NAME_SLASHING, DAMAGE_NAME_PIERCING, DAMAGE_NAME_BLUDGEONING, DAMAGE_NAME_RENDING, DAMAGE_NAME_ELEMENTAL, DAMAGE_NAME_FIRE, DAMAGE_NAME_FORCE, DAMAGE_NAME_FROST, DAMAGE_NAME_POISON, DAMAGE_NAME_SHOCK, DAMAGE_NAME_MORALE, DAMAGE_NAME_STAMINA : name;
+	public const var DAMAGE_NAME_DIRECT, DAMAGE_NAME_PHYSICAL, DAMAGE_NAME_SILVER, DAMAGE_NAME_SLASHING, DAMAGE_NAME_PIERCING, DAMAGE_NAME_BLUDGEONING, DAMAGE_NAME_RENDING, DAMAGE_NAME_ELEMENTAL, DAMAGE_NAME_FIRE, DAMAGE_NAME_FORCE, DAMAGE_NAME_FROST, DAMAGE_NAME_POISON, DAMAGE_NAME_SHOCK, DAMAGE_NAME_MORALE, DAMAGE_NAME_STAMINA, DAMAGE_NAME_WILL : name;
 		default DAMAGE_NAME_DIRECT 		= 'DirectDamage';
 		default DAMAGE_NAME_PHYSICAL 	= 'PhysicalDamage';
 		default DAMAGE_NAME_SILVER 		= 'SilverDamage';
@@ -145,6 +145,7 @@ import class W3GameParams extends CObject
 		default DAMAGE_NAME_SHOCK 		= 'ShockDamage';
 		default DAMAGE_NAME_MORALE 		= 'MoraleDamage';
 		default DAMAGE_NAME_STAMINA 	= 'StaminaDamage';
+		default DAMAGE_NAME_WILL		= 'WillDamage'; // Triangle
 		
 	public const var FOCUS_DRAIN_PER_HIT : float;					
 	public const var UNINTERRUPTED_HITS_CAMERA_EFFECT_REGULAR_ENEMY, UNINTERRUPTED_HITS_CAMERA_EFFECT_BIG_ENEMY : name;		
@@ -400,7 +401,7 @@ import class W3GameParams extends CObject
 
 	
 	public const var TOXICITY_DAMAGE_THRESHOLD : float;									
-		default TOXICITY_DAMAGE_THRESHOLD = 0.75;
+		default TOXICITY_DAMAGE_THRESHOLD = 0.8; // Triangle heightened tolerance
 		
 	
 	public const var DEBUG_CHEATS_ENABLED : bool;										

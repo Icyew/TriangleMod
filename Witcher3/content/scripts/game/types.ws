@@ -351,7 +351,7 @@ function ModifyHitSeverityReactionFromDamage( out damageData : W3DamageAction ) 
 	}
 	
 	//theGame.witcherLog.AddMessage("Severity = " + type); //modSigns: debug
-	type = ModifySeverity( type, severityReduction );
+	type = ModifySeverity(actorVictim, type, severityReduction );
 	//theGame.witcherLog.AddMessage("Severity modified = " + type); //modSigns: debug
 	if(type == EHRT_None)
 	{
@@ -365,16 +365,26 @@ function ModifyHitSeverityReaction(target : CActor, type : EHitReactionType) : E
 	
 	severityReduction = RoundMath(CalculateAttributeValue(target.GetAttributeValue('hit_severity')));
 	
-	return ModifySeverity( type, severityReduction ); //modSigns
+	return ModifySeverity(target, type, severityReduction ); //modSigns
 }		
 	
-function ModifySeverity(type : EHitReactionType, severityReduction : int) : EHitReactionType //modSigns
+function ModifySeverity(target : CActor, type : EHitReactionType, severityReduction : int) : EHitReactionType //modSigns
 {
 	var severity : int;
+	var witcherPlayer : W3PlayerWitcher; // Triangle frenzy
 
+	// Triangle frenzy
+	witcherPlayer = (W3PlayerWitcher)target;
+	if (witcherPlayer && TUtil_IsCustomSkillEnabled(S_Alchemy_s16) && TUtil_CanFrenzy(witcherPlayer) && (witcherPlayer.IsInCombatAction_Attack() || witcherPlayer.GetIsSprinting())) {
+		if (witcherPlayer.GetStat(BCS_Focus) >= (witcherPlayer.GetStatMax(BCS_Focus) - witcherPlayer.GetSkillLevel(S_Alchemy_s16) + 1)) {
+			severityReduction += 2;
+		}
+	}
+	// Triangle end
 	if(severityReduction == 0) //modSigns
 		return type;
 		
+	
 	switch(type)
 	{
 		//case EHRT_Igni :

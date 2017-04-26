@@ -220,6 +220,9 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	private var phantomWeaponMgr : CPhantomWeaponManager;
 	
+	// Triangle attack combos armor bonuses
+	protected var expectingCombatActionEnd	: array < int >;
+	// Triangle end
 	
 
 	function EnablePCMode( flag : bool )
@@ -1671,6 +1674,7 @@ statemachine abstract import class CR4Player extends CPlayer
 								{
 									duration = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s11, 'duration', false, true));
 									useKnockdown = true;
+									// Triangle TODO if you revisit counterattack skill, decide if you want to keep this focus cost to countering
 									//modSigns: drain focus points
 									if( !parryInfo.attacker.IsImmuneToBuff(EET_HeavyKnockdown) || !parryInfo.attacker.IsImmuneToBuff(EET_Knockdown) )
 									{
@@ -8236,6 +8240,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		var holdsCrossbow : bool;
 		var critVal : SAbilityAttributeValue;
 		var weaponId : SItemUniqueId; //modSigns
+		var witcherPlayer : W3PlayerWitcher; // Triangle attack combos
 		
 		critChance = 0;
 		
@@ -8262,17 +8267,17 @@ statemachine abstract import class CR4Player extends CPlayer
 			{
 				critVal = inv.GetItemAttributeValue( weapons[i], theGame.params.CRITICAL_HIT_CHANCE );
 				critChance -= CalculateAttributeValue( critVal );
-			}
+			}			
 		}
 		
 		//modSigns: exclude crossbow
 		if( !isBolt )
 		{
-			if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) )
+			if( isHeavyAttack && CanUseSkill( S_Sword_s08 ) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 			{
 				critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s08 );
 			}
-			else if( isLightAttack && CanUseSkill( S_Sword_s17 ) )
+			else if( isLightAttack && CanUseSkill( S_Sword_s17 ) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows
 			{
 				critChance += CalculateAttributeValue( GetSkillAttributeValue( S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true ) ) * GetSkillLevel( S_Sword_s17 );
 			}
@@ -8459,6 +8464,38 @@ statemachine abstract import class CR4Player extends CPlayer
 	
 	
 	
+	// Triangle parry
+	function HasEnoughParries(needed : int) : bool
+	{
+		var parryCooldown : W3Effect_TParryCooldown;
+		if (TOpts_MaxParries() == 0) {
+			return true;
+		}
+		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
+			AddEffectDefault(EET_TParryCooldown, this, "Parry");
+		}
+		parryCooldown = (W3Effect_TParryCooldown)GetBuff(EET_TParryCooldown);
+		if (parryCooldown && parryCooldown.GetStacks() >= needed) {
+			return true;
+		}
+		return !parryCooldown;
+	}
+
+	// Triangle parry
+	function DrainParries(value : int)
+	{
+		var parryCooldown : W3Effect_TParryCooldown;
+		if (TOpts_MaxParries() == 0) {
+			return;
+		}
+		if (!HasBuff(EET_TParryCooldown) && this == GetWitcherPlayer()) {
+			AddEffectDefault(EET_TParryCooldown, this, "Parry");
+		}
+		parryCooldown = (W3Effect_TParryCooldown)GetBuff(EET_TParryCooldown);
+		if (parryCooldown) {
+			parryCooldown.DrainStacks(value);
+		}
+	}
 	
 	function PerformParryCheck( parryInfo : SParryInfo) : bool
 	{
@@ -8487,7 +8524,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			if ( IsInCombatActionFriendly() )
 				RaiseEvent('CombatActionFriendlyEnd');
 			
-			if ( HasStaminaToParry(parryInfo.attackActionName) )
+			if ( HasStaminaToParry(parryInfo.attackActionName) && HasEnoughParries(1)) // Triangle parry
 			{
 				this.SetBehaviorVariable( 'combatActionType', (int)CAT_Parry );
 				
@@ -8505,7 +8542,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				{
 					counter = GetDefendCounter();
 					onHitCounter = parryInfo.attacker.GetAttributeValue( 'break_through_parry_on_hit_counter' );
-					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase )
+					if ( onHitCounter.valueBase > 0 && counter == onHitCounter.valueBase && TOpts_MaxParries() == 0 ) // Triangle parry override vanilla parry counter
 					{
 						AddEffectDefault( EET_Stagger, parryInfo.attacker, "Break through parry" );
 					}
@@ -8524,6 +8561,7 @@ statemachine abstract import class CR4Player extends CPlayer
 			else
 			{
 				AddEffectDefault(EET_Stagger, parryInfo.attacker, "Parry");
+				DrainParries(1); // Triangle parry Even if parry breaks, we want to drain partially recharged parries
 				return true;
 			}
 			
@@ -8550,6 +8588,7 @@ statemachine abstract import class CR4Player extends CPlayer
 				else
 					parryInfo.target.PlayEffectOnHeldWeapon('heavy_block');
 			}
+			DrainParries(1); // Triangle parry
 			return true;
 		}			
 		
@@ -9778,6 +9817,11 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		if (actionResult)
 		{
+			// Triangle attack combos armor bonuses
+			if ((W3PlayerWitcher)this) {
+				expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_ArmorSpeedMod(this.GetInventory(), action)));
+			}
+			// Triangle end
 			SetCombatAction( action ) ;
 			
 			if(GetWitcherPlayer().IsInFrenzy())
@@ -10701,13 +10745,61 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	
+	// Triangle alt stamina
+	public function ShouldDrainFocus(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float) : bool
+	{
+		return !super.HasStaminaToUseAction(action, abilityName, dt, multiplier) && HasFocusToUseAction(action, abilityName, dt, multiplier);
+	}
+
+	// Triangle alt stamina
+	public function DrainFocusByStaminaAction(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float)
+	{
+		if (ShouldDrainFocus(action, abilityName, dt, multiplier)) {
+			if (multiplier == 0)
+				multiplier = 1;
+			DrainFocus(TUtil_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt)));
+		}
+	}
+
+	// Triangle alt stamina
+	// Triangle TODO maybe move rage management here? maybe not
+	public function HasFocusToUseAction(action : EStaminaActionType, optional abilityName : name, optional dt : float, optional multiplier : float) : bool
+	{
+		if (!TOpts_AltArmorStaminaMod()) {
+			return false;
+		}
+		// Whitelist of stamina actions that can drain focus by default
+		switch (action) {
+			case ESAT_LightAttack:
+			case ESAT_HeavyAttack:
+			case ESAT_Dodge:
+			case ESAT_Roll:
+			case ESAT_Evade:
+			case ESAT_Sprint:
+			case ESAT_Swimming:
+			case ESAT_Jump:
+				break;
+			case ESAT_Ability:
+				if (SkillNameToEnum(abilityName) == S_Sword_s02)
+					break;
+			default:
+				return false;
+		}
+		if (TOpts_FocusPerMaxStamina() <= 0)
+			return false;
+
+		if (multiplier == 0)
+			multiplier = 1;
+
+		return GetStat(BCS_Focus) >= TUtil_StaminaCostToFocusCost(multiplier * GetStaminaActionCost(action, abilityName, dt));
+	}
 	
 	public function HasStaminaToUseAction(action : EStaminaActionType, optional abilityName : name, optional dt :float, optional multiplier : float) : bool
 	{
 		var cost : float;
 		var ret : bool;
 		
-		ret = super.HasStaminaToUseAction(action, abilityName, dt, multiplier);
+		ret = super.HasStaminaToUseAction(action, abilityName, dt, multiplier) || HasFocusToUseAction(action, abilityName, dt, multiplier); // Triangle alt stamina
 	
 		if(!ret)
 		{
@@ -10838,7 +10930,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		return '';
 	}
 	
-	public function GetGroupBonusCount(commonColor : ESkillColor,groupID : int) : int
+	public function GetGroupBonusCount(commonColor : ESkillColor,groupID : int) : float // Triangle synergy change return type
 	{
 		if(abilityManager && abilityManager.IsInitialized())
 			return ((W3PlayerAbilityManager)abilityManager).GetSkillGroupColorCount(commonColor, groupID);
@@ -10917,7 +11009,7 @@ statemachine abstract import class CR4Player extends CPlayer
 		ret = ( CanUseSkill(skill) && (abilityManager.GetStat(BCS_Stamina, signHack) >= cost) );
 		
 		
-		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1)
+		if(!ret && IsSkillSign(skill) && CanUseSkill(S_Perk_09) && GetStat(BCS_Focus) >= 1) // Triangle TODO rage management, spell sword
 		{
 			ret = true;
 		}
@@ -11129,7 +11221,7 @@ statemachine abstract import class CR4Player extends CPlayer
 	}
 	
 	
-	public function UnequipSkill(slotID : int) : bool
+	public function UnequipSkill(slotID : int, optional keepPassiveOpen : bool) : bool // Triangle passive skills
 	{
 		var ret : bool;
 		var groupID : int;
@@ -11140,7 +11232,12 @@ statemachine abstract import class CR4Player extends CPlayer
 		{
 			pam = (W3PlayerAbilityManager)abilityManager;
 			GetSkillOnSlot(slotID, skill);
-			ret = pam.UnequipSkill(slotID);
+			// Triangle passive skills
+			if (keepPassiveOpen)
+				ret = pam.UnequipSkill(slotID, true);
+			else
+				ret = pam.UnequipSkill(slotID);
+			// Triangle end
 			if(ret)
 			{
 				groupID = pam.GetSkillGroupIdFromSkillSlotId(slotID);
@@ -11910,7 +12007,15 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var item : SItemUniqueId;
 		var combatActionType : float;
-		
+
+		// Triangle attack combos armor bonuses
+		if ((W3PlayerWitcher)this) {
+			if (expectingCombatActionEnd.Size() > 0) {
+				ResetBaseAnimationMultiplierCauserById(expectingCombatActionEnd[0]);
+				expectingCombatActionEnd.Remove(expectingCombatActionEnd[0]);
+			}
+		}
+		// Triangle end
 		super.OnCombatActionEnd();
 		
 		
@@ -11947,12 +12052,21 @@ statemachine abstract import class CR4Player extends CPlayer
 		
 		
 		
-		SetAttackActionName('');
+		// SetAttackActionName(''); // Triangle rend Race condition with rend causes attack name to be empty sometimes. Maybe effects other things Triangle TODO ?
 		combatActionType = GetBehaviorVariable('combatActionType');
 		
 		
 		if(GetBehaviorVariable('combatActionType') == (int)CAT_SpecialAttack)
 		{
+			// Triangle attack combos Resume combo timer when done with special attacks
+			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Light) {
+				GetWitcherPlayer().ResumeComboTime('Whirl');
+			}
+			// Triangle attack combos
+			if ((W3PlayerWitcher)this && GetBehaviorVariable('playerAttackType') == (int)PAT_Heavy) {
+				GetWitcherPlayer().ResumeComboTime('Rend');
+			}
+			// Triangle end
 			theGame.GetGameCamera().StopAnimation( 'camera_shake_loop_lvl1_1' );
 			OnSpecialAttackHeavyActionProcess();
 		}
@@ -12126,6 +12240,8 @@ statemachine abstract import class CR4Player extends CPlayer
 	{
 		var buff : CBaseGameplayEffect;
 		
+		ClearBaseAnimationMultiplierCausers(); // Triangle attack combos
+		SetAttackActionName(''); // Triangle rend Moved here due to race condition with rend
 		buff = ChooseCurrentCriticalBuffForAnim();
 		SetCombatAction( EBAT_EMPTY );
 		

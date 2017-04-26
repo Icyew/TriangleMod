@@ -37,7 +37,7 @@ import abstract class W3AbilityManager extends IScriptable
 	import final function GetStats( stat : EBaseCharacterStats, out current : float, out max : float ) : bool;
 	import final function SetStatPointCurrent( stat : EBaseCharacterStats, val : float );
 	import final function SetStatPointMax( stat : EBaseCharacterStats, val : float );
-	import final function UpdateStatMax( stat : EBaseCharacterStats );
+	import private final function UpdateStatMax( stat : EBaseCharacterStats ); // Triangle hp mods made private
 	
 	import final function HasResistStat( stat : ECharacterDefenseStats ) : bool;
 	import final function GetResistStat( stat : ECharacterDefenseStats, out resistStat: SResistanceValue ) : bool;
@@ -221,7 +221,10 @@ import abstract class W3AbilityManager extends IScriptable
 				
 				if(blockedAbilities[i].timeWhenEnabledd == 0)		
 				{
-					BlockAbility(blockedAbilities[i].abilityName, false);	
+					// Triangle enemy mutations
+					if (blockedAbilities[i].count < 123456789) // terrible hack
+						BlockAbility(blockedAbilities[i].abilityName, false);	
+					// Triangle end
 				}
 				else
 				{
@@ -233,15 +236,15 @@ import abstract class W3AbilityManager extends IScriptable
 		if(min == 1000000)
 			min = -1;
 			
-		return min;
+		return MinF(min, 0.5); // Triangle enemy mutations
 	}
 	
 	
-	public function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool
+	public function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimout : bool) : bool // Triangle enemy mutations
 	{		
-		var i : int;
+		var i, cnt, currCnt, toAdd : int; // Triangle enemy mutations
 		var ab : SBlockedAbility;
-		var min, cnt : float;
+		var min : float; // Triangle enemy mutations
 		var ret : bool;
 				
 		if(!IsNameValid(abilityName))
@@ -255,13 +258,28 @@ import abstract class W3AbilityManager extends IScriptable
 				{	
 					cnt = blockedAbilities[i].count;
 					blockedAbilities.Erase(i);					
-					if(cnt > 0)									
-						charStats.AddAbility(abilityName, cnt);					
+					// Triangle enemy mutations
+					if (cnt >= 123456789) // terrible hack
+						cnt -= 123456789;
+					currCnt = charStats.GetAbilityCount(abilityName);
+					if(cnt > currCnt)	{
+						charStats.AddAbilityMultiple(abilityName, cnt - currCnt);
+					}
+					// Triangle end
 					
 					return true;
 				}
 				else
 				{
+					// Triangle enemy mutations
+					blockedAbilities[i].timeWhenEnabledd = MaxF(blockedAbilities[i].timeWhenEnabledd, cooldown);
+					// terrible hack
+					if (cooldown <= 0 && blockedAbilities[i].count < 123456789)
+						blockedAbilities[i].count += 123456789;
+					if (unblockTimout && blockedAbilities[i].count >= 123456789)
+						blockedAbilities[i].count -= 123456789;
+					owner.AddTimer('CheckBlockedAbilities', 0, , , , true); // Triangle enemy mutations
+					// Triangle end
 					return false;
 				}
 			}
@@ -270,6 +288,7 @@ import abstract class W3AbilityManager extends IScriptable
 		if(block)
 		{
 			ab.abilityName = abilityName;
+			ab.count = 0; // Triangle enemy mutations I like to explicitly initialize things
 			
 			if(cooldown > 0)				
 			{
@@ -286,25 +305,48 @@ import abstract class W3AbilityManager extends IScriptable
 				}
 				
 				
-				owner.AddTimer('CheckBlockedAbilities', min, , , , true);
+				owner.AddTimer('CheckBlockedAbilities', MinF(min, 0.5), , , , true); // Triangle enemy mutations
 			}
 			else
 			{
 				ab.timeWhenEnabledd = -1;
+				ab.count = 123456789; // Triangle enemy mutations terrible hack. no timeouts if count >= 123456789
 			}
 			
 			
-			ab.count = charStats.GetAbilityCount(abilityName);
+			ab.count += Max(charStats.GetAbilityCount(abilityName), 0); // Triangle enemy mutations
 	
 			
-			ret = charStats.RemoveAbility(abilityName);
+			// Triangle enemy mutations
+			ret = charStats.HasAbility(abilityName);
+			charStats.RemoveAbilityAll(abilityName);
+			ret = ret && !charStats.HasAbility(abilityName);
 			blockedAbilities.PushBack(ab);
+			// Triangle end
 			return ret;
 		}
 		else
 		{
 			return false;
 		}
+	}
+
+	// Triangle enemy mutations
+	public function GetBlockedAbilityTimeRemaining(abilityName : name) : float
+	{
+		var i : int;
+		for (i = 0; i < blockedAbilities.Size(); i += 1)
+		{
+			if (blockedAbilities[i].abilityName == abilityName) {
+				if (blockedAbilities[i].count > 123456789)
+					return -1;
+				else if (blockedAbilities[i].count == 123456789 || blockedAbilities[i].count == 0)
+					return 0;
+				else
+					return blockedAbilities[i].timeWhenEnabledd;
+			}
+		}
+		return 0;
 	}
 	
 	import public final function IsAbilityBlocked(abilityName : name) : bool;
@@ -342,7 +384,7 @@ import abstract class W3AbilityManager extends IScriptable
 			charPts = resistStat.points;
 			charPerc = resistStat.percents;		
 		}
-		
+
 		
 		if(stat == CDS_DoTBurningDamageRes || stat == CDS_DoTPoisonDamageRes || stat == CDS_DoTBleedingDamageRes)
 		{
@@ -642,12 +684,34 @@ import abstract class W3AbilityManager extends IScriptable
 	
 	public function OnAbilityAdded( abilityName : name )
 	{
+		// Triangle enemy mutations
+		var mutation : TEMutation;
+		var npcOwner : CNewNPC;
+		npcOwner = (CNewNPC)owner;
+		mutation = TUtil_TEMutationNameToEnum(abilityName);
+		if (owner)
+			owner.ResumeEffects(TUtil_TEMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == TUtil_TEMutationEnumToName(TEM_Electric) && npcOwner.IsAlive()) {
+			npcOwner.AddTimer('PlayElectricity', 0);
+		}
+		// Triangle end
 		OnAbilityChanged( abilityName );
 	}
 	
 	
 	public function OnAbilityRemoved( abilityName : name )
 	{
+		// Triangle enemy mutations
+		var mutation : TEMutation;
+		var npcOwner : CNewNPC;
+		npcOwner = (CNewNPC)owner;
+		mutation = TUtil_TEMutationNameToEnum(abilityName);
+		if (owner)
+			owner.PauseEffects(TUtil_TEMutationEnumToEffectType(mutation), abilityName);
+		if (npcOwner && abilityName == TUtil_TEMutationEnumToName(TEM_Electric)) {
+			npcOwner.RemoveTimer('PlayElectricity');
+		}
+		// Triangle end
 		if( abilityName == 'Runeword 4 _Stats' )
 		{
 			ResetOverhealBonus();
@@ -657,6 +721,16 @@ import abstract class W3AbilityManager extends IScriptable
 	}
 	
 	
+	// Triangle hp mods
+	function UpdateStatMaxWrapper(stat : EBaseCharacterStats)
+	{
+		UpdateStatMax(stat);
+		if (stat == BCS_Essence)
+			SetStatPointMax(BCS_Essence, GetStatMax(BCS_Essence) * owner.HPModifier());
+		else if (stat == BCS_Vitality)
+			SetStatPointMax(BCS_Vitality, GetStatMax(BCS_Vitality) * owner.HPModifier());
+	}
+
 	protected function OnAbilityChanged( abilityName : name )
 	{
 		var atts, tags : array<name>;
@@ -710,14 +784,14 @@ import abstract class W3AbilityManager extends IScriptable
 					if(abilityName == theGame.params.GLOBAL_ENEMY_ABILITY || abilityName == theGame.params.GLOBAL_PLAYER_ABILITY || abilityName == theGame.params.ENEMY_BONUS_PER_LEVEL)
 					{
 						
-						UpdateStatMax(stat);
+						UpdateStatMaxWrapper(stat); // Triangle hp mods
 						RestoreStat(stat);
 					}
 					else
 					{
 						
 						oldMax = GetStatMax(stat);
-						UpdateStatMax(stat);
+						UpdateStatMaxWrapper(stat); // Triangle hp mods
 						MutliplyStatBy(stat, GetStatMax(stat) / oldMax);
 					}
 				}
@@ -776,14 +850,14 @@ import abstract class W3AbilityManager extends IScriptable
 				if(maxVit > 0)
 				{
 					oldMax = maxVit;
-					UpdateStatMax(BCS_Vitality);					
+					UpdateStatMaxWrapper(BCS_Vitality);	// Triangle hp mods
 					MutliplyStatBy(BCS_Vitality, GetStatMax(BCS_Vitality) / oldMax);
 				}
 				
 				if(maxEss > 0)
 				{
 					oldMax = maxEss;
-					UpdateStatMax(BCS_Essence);					
+					UpdateStatMaxWrapper(BCS_Essence); // Triangle hp mods
 					MutliplyStatBy(BCS_Essence, GetStatMax(BCS_Essence) / oldMax);
 				}
 				

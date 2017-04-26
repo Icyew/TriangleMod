@@ -28,7 +28,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private saved var enemiesKilledByType				: array<int>; //modSigns
 	
 	
-	private 			var fastAttackCounter, heavyAttackCounter	: int;		
+	// Triangle attack combos
+	// ONCE AGAIN NOT USED. But they're in the vanilla code still so have to keep them
+	private				var fastAttackCounter, heavyAttackCounter	: int;
+	// Triangle rend
+	protected			var cachedFocusDifference										: float; default cachedFocusDifference = 0;
+	private				var undrainedFocusDifference									: float; default undrainedFocusDifference = 0;
+	// Triangle end
 	private				var isInFrenzy : bool;
 	private				var hasRecentlyCountered : bool;
 	//private saved 		var cannotUseUndyingSkill : bool;						
@@ -174,6 +180,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		amountOfSetPiecesEquipped.Resize( EnumGetMax( 'EItemSetType' ) + 1 );
 		
 		runewordInfusionType = ST_None;
+		
+		// spellSwordSign = ST_None; // Triangle spell sword
 				
 		
 		inv = GetInventory();			
@@ -390,6 +398,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 			RemoveBuff( EET_UndyingSkillImmortal );
 		}
 		
+		// Triangle toxicity
+		RemoveAbilityAll('TBonusToxicity');
+		AddAbilityMultiple('TBonusToxicity', TOpts_BonusToxicity());
+		// Triangle end
+
 		
 		theGame.GameplayFactsAdd( "PlayerIsGeralt" );
 		
@@ -1762,12 +1775,79 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		_HoldBeforeOpenRadialMenuTime = time;
 	}
+
+	// Triangle spell sword
+	public function AddSpellSwordStacks(value : float)
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			spellSwordEffect.AddStacks(value);
+		}
+	}
+
+	// Triangle spell sword
+	public function DrainSpellSwordStacks()
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			spellSwordEffect.DrainStacks();
+		}
+	}
+
+	// Triangle spell sword
+	public function IsSpellSwordCharged() : bool
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			if (spellSwordEffect.GetStacks() == spellSwordEffect.GetMaxStacks()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	// Triangle spell sword
+	public function GetSpellSwordSign() : ESignType
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+		if (spellSwordEffect) {
+			return spellSwordEffect.GetSign();
+		} else {
+			return ST_None;
+		}
+	}
 	
-	
-	
-	
-	
+	// Triangle spell sword
+	public function SetSpellSwordSign(sign : ESignType)
+	{
+		var spellSwordEffect : W3Effect_TSpellSword;
+		var params : SCustomEffectParams;
+		var extraParams : W3TSpellSwordCustomParams;
+
+		if (sign == ST_None) {
+			RemoveBuff(EET_TSpellSword);
+		} else if (TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(sign)) && CanUseSkill(TUtil_PowerSkillForSignType(sign)) && sign != GetSpellSwordSign()) {
+			extraParams = new W3TSpellSwordCustomParams in theGame;
+			extraParams.signType = sign;
+			if (HasBuff(EET_TSpellSword)) {
+				spellSwordEffect = (W3Effect_TSpellSword)GetBuff(EET_TSpellSword);
+				extraParams.initialStacks = spellSwordEffect.GetStacks();
+				RemoveBuff(EET_TSpellSword);
+			}
+
+			params.effectType = EET_TSpellSword;
+			params.creator = this;
+			params.sourceName = TUtil_PowerSkillForSignType(sign);
+			params.duration = -1;
+			params.buffSpecificParams = extraParams;
+			theGame.VibrateControllerHard(0.5f);
+			AddEffectCustom(params);
+		}
+	}
 	
 	public function RepairItem (  rapairKitId : SItemUniqueId, usedOnItem : SItemUniqueId )
 	{
@@ -1896,6 +1976,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var min, max : SAbilityAttributeValue;
 		var skillLevel : int;
 		var chance : float;
+		// Triangle endure pain
+		var params : SCustomEffectParams;
+		var dmgRatio : float;
+		// Triangle end
 		
 		super.ReduceDamage(damageData);
 		
@@ -1993,7 +2077,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				LogDMHits("W3PlayerWitcher.ReduceDamage: Processing Quen sign damage reduction...", damageData);
 			}
 			quen.OnTargetHit( damageData );
-		}
+		}	
 		
 		//modSigns: gryphon set tier 2 damage reduction
 		if( HasBuff( EET_GryphonSetBonusYrden ) )
@@ -2069,6 +2153,19 @@ statemachine class W3PlayerWitcher extends CR4Player
 			if(actorAttacker && damageData.DealsAnyDamage() )
 				actorAttacker.SignalGameplayEventParamObject( 'DamageInstigated', damageData );
 		}
+		// Triangle endure pain
+		if (CanUseSkill(S_Alchemy_s20) && !damageData.IsDoTDamage() && damageData.processedDmg.vitalityDamage > 0 && TOpts_EndurePainDamageRatioPerLevel() > 0) {
+			params.effectType = EET_TIgnorePain;
+			params.creator = actorAttacker; // This is important. otherwise, tresolve effect will be immediately removed when added
+			params.sourceName = "Endure Pain";
+			params.duration = TOpts_EndurePainDuration();
+			dmgRatio = TOpts_EndurePainDamageRatioPerLevel() * GetSkillLevel(S_Alchemy_s20);
+			params.effectValue.valueAdditive = damageData.processedDmg.vitalityDamage * dmgRatio / params.duration;
+			damageData.processedDmg.vitalityDamage = damageData.processedDmg.vitalityDamage * (1 - dmgRatio);
+			RemoveBuff(EET_TIgnorePain); // I forget if this is necessary
+			AddEffectCustom(params);
+		}
+		// Triangle end
 	}
 	
 	/*timer function UndyingSkillCooldown(dt : float, id : int)
@@ -2090,10 +2187,27 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var killSourceName : string;
 		var aerondight	: W3Effect_Aerondight;
 		var quen : W3QuenEntity; //modSigns
+		var params : SCustomEffectParams; // Triangle resolve
 	
 		currVitality = GetStat(BCS_Vitality);
 		
-		
+
+		// Triangle enemy mutations
+		if (action.DealsAnyDamage() && action.attacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Draining))) {
+			DrainStamina(ESAT_FixedValue, GetStat(BCS_Stamina), 2);
+		}
+		// Triangle resolve
+		if (CanUseSkill(S_Sword_s16) && TUtil_IsCustomSkillEnabled(S_Sword_s16) && !action.IsDoTDamage() && action.DealsAnyDamage()) {
+			params.effectType = EET_TResolve;
+			params.creator = this;
+			params.sourceName = "Resolve";
+			params.duration = TOpts_ResolveDuration();
+			params.effectValue.valueMultiplicative = TUtil_ValueForLevel(S_Sword_s16, TOpts_ResolveDamage());
+			RemoveAllBuffsOfType(EET_TResolve);
+			AddEffectCustom(params);
+		}
+		// Triangle end
+
 		if(action.processedDmg.vitalityDamage >= currVitality)
 		{
 			killSourceName = action.GetBuffSourceName();
@@ -2323,7 +2437,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		bonus = super.GetCriticalHitDamageBonus(weaponId, victimMonsterCategory, isStrikeAtBack);
 		
-		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && GetStat( BCS_Focus ) >= 3 && CanUseSkill( S_Alchemy_s07 ) )
+		
+		if( inv.ItemHasActiveOilApplied( weaponId, victimMonsterCategory ) && (GetStat( BCS_Focus ) >= 3 || TOpts_NoHunterInstinctFocusReq()) && CanUseSkill( S_Alchemy_s07 ) ) // Triangle hunter instinct
 		{
 			monsterBonusType = MonsterCategoryToAttackPowerBonus( victimMonsterCategory );
 			oilBonus = inv.GetItemAttributeValue( weaponId, monsterBonusType );
@@ -2393,6 +2508,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		attackAction = (W3Action_Attack)action;
 		actorVictim = (CActor)action.victim;
 		
+		// Triangle rend Need to do this even if the target dies. Possibly a bug in vanilla
+		// Didn't comment out the stuff in the original location, since I prefer not to touch what i dont need to
+		if(attackAction && attackAction.IsActionMelee() && SkillNameToEnum(attackAction.GetAttackTypeName()) == S_Sword_s02)
+		{
+			if (GetSkillLevel(S_Sword_s02) < 5 || actorVictim.IsAlive()) // Refund focus on kill if lvl 5 rend and target was killed
+				ResetCachedFocusDifference();
+			OnSpecialAttackHeavyActionProcess();
+		}
+		// Triangle rend
+		
 		if(attackAction)
 		{
 			if(attackAction.IsActionMelee())
@@ -2409,9 +2534,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 					//rendLoad = FloorF(rendLoad);					
 					
 					//modSigns
-					rendLoad = GetSpecialAttackTimeRatio() * GetStat(BCS_Focus);
+					// rendLoad = GetSpecialAttackTimeRatio() * GetStatMax(BCS_Focus);
 
-					DrainFocus(rendLoad);
+					// DrainFocus(rendLoad); // Triangle rend focus is already drained
 					
 					OnSpecialAttackHeavyActionProcess();
 				}
@@ -2438,8 +2563,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 						AddEffectDefault( EET_Mutation3, this, "", false );
 					}
 					
-					GainStat(BCS_Focus, 0.1f * (1 + CalculateAttributeValue(value)) );
-					
+					// Triangle focus gain
+					if (IsHeavyAttack(attackAction.GetAttackName())){
+						GainStat(BCS_Focus, TOpts_HeavyAttackFocusGain() * (1 + CalculateAttributeValue(value)) );
+					} else {
+						GainStat(BCS_Focus, TOpts_LightAttackFocusGain() * (1 + CalculateAttributeValue(value)) );
+					}
+					// Triangle end
 					//modSigns: lynx set tier 2 bonus - doubled adrenaline gain for critical hits
 					if( attackAction.IsCriticalHit() && IsSetBonusActive( EISB_Lynx_2 ) && !inv.IsItemFists( attackAction.GetWeaponId() ) && !attackAction.WasDodged() && !attackAction.IsParried() && !attackAction.IsCountered() )
 					{
@@ -2509,6 +2639,31 @@ statemachine class W3PlayerWitcher extends CR4Player
 					weaponEnt.StopEffect('runeword_yrden');
 				}
 				
+				// Triangle spell sword effect from sign power skills
+				if(!action.WasDodged() && spellSwordSign != ST_None
+					&& CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign))
+					&& TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(spellSwordSign)))
+				{
+					// Triangle TODO dead code
+					// if(spellSwordSign == ST_Axii)
+					// {
+					// 	actorVictim.SoundEvent('sign_axii_release');
+					// }
+					// else if(spellSwordSign == ST_Igni)
+					// {
+					// 	actorVictim.SoundEvent('sign_igni_charge_begin');
+					// }
+					// else if(spellSwordSign == ST_Quen)
+					// {
+					// 	PlayEffectSingle('drain_energy_caretaker_shovel');
+					// }
+					// else if(spellSwordSign == ST_Yrden)
+					// {
+					// 	actorVictim.SoundEvent('sign_yrden_shock_activate');
+					// }
+					// SetSpellSwordSign(ST_None);
+				}
+				// Triangle end
 				
 				if(ShouldProcessTutorial('TutorialLightAttacks') || ShouldProcessTutorial('TutorialHeavyAttacks'))
 				{
@@ -2528,6 +2683,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(CanUseSkill(S_Sword_s15))
 				{				
 					value = GetSkillAttributeValue(S_Sword_s15, 'focus_gain', false, true) * GetSkillLevel(S_Sword_s15) ;
+					// Triangle cold blooded
+					if (attackAction.IsCriticalHit())
+						value = value * TOpts_ColdBloodedCritMultiplier();
+					// Triangle end
 					GainStat(BCS_Focus, CalculateAttributeValue(value) );
 				}
 				
@@ -2549,7 +2708,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					if(abs.Size() > 0)
 					{
 						value = GetSkillAttributeValue(S_Sword_s12, 'duration', true, true) * GetSkillLevel(S_Sword_s12);
-						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, CalculateAttributeValue(value));
+						actorVictim.BlockAbility(abs[ RandRange(abs.Size()) ], true, TOpts_CripplingShotDurationPerLevel() * GetSkillLevel(S_Sword_s12)); // Triangle enemy mutations
 					}
 				}
 			}
@@ -2966,6 +3125,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		runewordInfusionType = ST_None;
 		
+		SetSpellSwordSign(ST_None); //Triangle spell sword 'discharge' sign power skill bonus damage thing // Triangle TODO should this still be here? should really clean up leftover spell sword stuff
+		
 		
 		
 		
@@ -3066,9 +3227,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 					cost = MaxF(0, cost * (1 - reduction.valueMultiplicative) - reduction.valueAdditive);
 				}*/
 				
-				DrainStamina(ESAT_FixedValue, cost, delay, GetSkillAbilityName(S_Sword_s01));
+				DrainStamina(ESAT_FixedValue, cost * TOpts_WhirlStaminaDiscount(), delay, GetSkillAbilityName(S_Sword_s01)); // Triangle whirl
 			}
-			else				
+			if (GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) // Triangle whirl
 			{				
 				GetSkillAttributeValue(S_Sword_s01, 'focus_cost_per_sec', false, true);
 				focusPerSec = GetWhirlFocusCostPerSec();
@@ -3076,7 +3237,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 			}
 		}
 		
-		if(GetStat(BCS_Stamina) <= 0 && GetStat(BCS_Focus) <= 0)
+		if((GetStat(BCS_Stamina) <= 0 || TOpts_DoesWhirlDrainBoth()) && GetStat(BCS_Focus) <= 0) // Triangle whirl
 		{
 			OnPerformSpecialAttack(true, false);
 		}
@@ -3094,24 +3255,61 @@ statemachine class W3PlayerWitcher extends CR4Player
 		if(skillLevel > 1)
 			ability -= GetSkillAttributeValue(S_Sword_s01, 'cost_reduction', false, false) * (skillLevel-1);*/
 			
-		val = CalculateAttributeValue(ability);
+		val = CalculateAttributeValue(ability) * TOpts_WhirlFocusDiscount(); // Triangle whirl
 		
 		return val;
 	}
+
+	// Triangle rend
+	public function ResetCachedFocusDifference()
+	{
+		cachedFocusDifference = 0;
+		undrainedFocusDifference = 0;
+	}
+
+	// Triangle rend
+	public function GetCachedFocusDifference() : float
+	{
+		return cachedFocusDifference;
+	}
+
+	// Triangle rend
+	public function RefundRend()
+	{
+		GainStat(BCS_Focus, cachedFocusDifference);
+		ResetCachedFocusDifference();
+	}
+
 	
 	public final timer function SpecialAttackHeavySustainCost(dt : float, id : int)
 	{
 		var focusHighlight, ratio : float;
 		var hud : CR4ScriptedHud;
 		var hudWolfHeadModule : CR4HudModuleWolfHead;		
+		var focusCost : float; // Triangle rend
 
 		PauseStaminaRegen('RendSkill'); //modSigns
 		
 		DrainStamina(ESAT_Ability, 0, 0, GetSkillAbilityName(S_Sword_s02), dt);
+		// Triangle rend
+		focusCost = GetStatMax(BCS_Focus) * dt / specialHeavyChargeDuration;
+		undrainedFocusDifference += focusCost;
+		if (undrainedFocusDifference >= 1 && GetStat(BCS_Focus) >= 1) {
+			DrainFocus(1);
+			undrainedFocusDifference -= 1;
+			cachedFocusDifference += 1;
+		}
+		// Triangle
 
+		// Triangle rend Moved to below
+		// if(GetStat(BCS_Stamina) <= 0)
+		// 	OnPerformSpecialAttack(false, false);
+		// Triangle end
 		
-		if(GetStat(BCS_Stamina) <= 0)
-			OnPerformSpecialAttack(false, false);
+		// Triangle rend disabled		
+		// if(GetStat(BCS_Stamina) <= 0)
+		// 	OnPerformSpecialAttack(false, false);
+		// Triangle end
 			
 		
 		ratio = EngineTimeToFloat(theGame.GetEngineTime() - specialHeavyStartEngineTime) / specialHeavyChargeDuration;
@@ -3123,21 +3321,25 @@ statemachine class W3PlayerWitcher extends CR4Player
 		SetSpecialAttackTimeRatio(ratio);
 		
 		
-		//focusHighlight = ratio * GetStatMax(BCS_Focus);
-		//focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
-		//focusHighlight = FloorF(focusHighlight);
-		//modSigns
-		/*focusHighlight = FloorF(ratio * GetStat(BCS_Focus));
+		// Triangle rend
+		// Moved this line to be after setting the ratio - edit: let player keep going, but it'll be a 'weak' hit
+		// if(GetStat(BCS_Focus) < 1) // Triangle rend stop when focus is out instead of stamina
+		// 	OnPerformSpecialAttack(false, false);
+
+		// focusHighlight = ratio * GetStatMax(BCS_Focus);
+		// focusHighlight = MinF(focusHighlight, GetStat(BCS_Focus));
+		// focusHighlight = FloorF(focusHighlight);
 		
-		hud = (CR4ScriptedHud)theGame.GetHud();
-		if ( hud )
-		{
-			hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
-			if ( hudWolfHeadModule )
-			{
-				hudWolfHeadModule.LockFocusPoints((int)focusHighlight);
-			}		
-		}*/
+		// hud = (CR4ScriptedHud)theGame.GetHud();
+		// if ( hud )
+		// {
+		// 	hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
+		// 	if ( hudWolfHeadModule )
+		// 	{
+		// 		hudWolfHeadModule.LockFocusPoints((int)focusHighlight);
+		// 	}		
+		// }
+		// Triangle end
 	}
 	
 	public function OnSpecialAttackHeavyActionProcess()
@@ -3147,15 +3349,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		super.OnSpecialAttackHeavyActionProcess();
 
-		hud = (CR4ScriptedHud)theGame.GetHud();
-		if ( hud )
-		{
-			hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
-			if ( hudWolfHeadModule )
-			{
-				hudWolfHeadModule.ResetFocusPoints();
-			}		
-		}
+		// Triangle rend
+		RefundRend();
+		// hud = (CR4ScriptedHud)theGame.GetHud();
+		// if ( hud )
+		// {
+		// 	hudWolfHeadModule = (CR4HudModuleWolfHead)hud.GetHudModule( "WolfHeadModule" );
+		// 	if ( hudWolfHeadModule )
+		// 	{
+		// 		hudWolfHeadModule.ResetFocusPoints();
+		// 	}		
+		// }
+		// Triangle end
 	}
 	
 	timer function IsSpecialLightAttackInputHeld ( time : float, id : int )
@@ -3227,7 +3432,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if( (bufferAction == EBAT_Dodge && IsActionAllowed(EIAB_Dodge)) || (bufferAction == EBAT_Roll && IsActionAllowed(EIAB_Roll)) )
 		{
-			//modSigns: check for stamina
+			//modSigns: check for stamina // Triangle TODO If you ever re-enable stamina cost for alt stamina, you should probably delete this
 			if( bufferAction == EBAT_Dodge && !HasStaminaToUseAction(ESAT_Dodge, '', 0, 0 ) ||
 				bufferAction == EBAT_Roll && !HasStaminaToUseAction(ESAT_Roll, '', 0, 0 ) )
 			{
@@ -3405,6 +3610,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if (actionResult)
 		{
+			// Triangle attack combos
+			if (action == EBAT_SpecialAttack_Light && stage == BS_Pressed) {
+				PauseComboTime('Whirl');
+				if (TOpts_LightAttackComboSpeedBonus() > 0) {
+					expectingCombatActionEnd.PushBack(PushBaseAnimationMultiplierCauser(TOpts_LightAttackComboSpeedBonus() * GetWitcherPlayer().GetAttackComboCounter(false) / 100 + 1)); // triggers before combo inc, so use raw counter
+				}
+			}
+			// Triangle attack combos
+			if (action == EBAT_SpecialAttack_Heavy && stage == BS_Pressed) {
+				PauseComboTime('Rend');
+			}
+			// Triangle end
 			SetCombatAction( action ) ;
 		}
 		
@@ -3457,6 +3674,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 	{
 		var ret : bool;
 		var skill : ESkill;
+		// Triangle attack combos
+		var attackTypeName : name;
+		var maxLightCombo, maxHeavyCombo : float;
+		var null : ETickGroup;
 	
 		ret = super.PrepareAttackAction(hitTarget, animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity, attackAction);
 		
@@ -3466,25 +3687,173 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(attackAction.IsActionMelee())
 		{			
-			skill = SkillNameToEnum( attackAction.GetAttackTypeName() );
-			if( skill != S_SUndefined && CanUseSkill(skill))
+			// Triangle attack combos
+			attackTypeName = attackAction.GetAttackTypeName();
+			if(attackTypeName)
 			{
-				if(IsLightAttack(animData.attackName))
-					fastAttackCounter += 1;
-				else
-					fastAttackCounter = 0;
+				if(IsLightAttack(attackTypeName) && SkillNameToEnum(attackTypeName) != S_Sword_s01)
+				{
+					if (TUtil_ShouldAttackCombo(this, false))
+						IncAttackCombo(false);
+					if (TUtil_ShouldAttackCombo(this, true))
+						IncComboTime(true, TOpts_AttackComboCrossDecayFactor() * TOpts_LightAttackComboDecay());
+				}
 				
-				if(IsHeavyAttack(animData.attackName))
-					heavyAttackCounter += 1;
-				else
-					heavyAttackCounter = 0;				
-			}		
+				if(IsHeavyAttack(attackTypeName))
+				{
+					if (TUtil_ShouldAttackCombo(this, true))
+						IncAttackCombo(true);
+					if (TUtil_ShouldAttackCombo(this, false))
+						IncComboTime(false, TOpts_AttackComboCrossDecayFactor() * TOpts_HeavyAttackComboDecay());
+				}
+			}
+			// Triangle end
 		}
-		
-		AddTimer('FastAttackCounterDecay',5.0);
-		AddTimer('HeavyAttackCounterDecay',5.0);
+
 		
 		return true;
+	}
+
+	// Triangle attack combos
+	public function GetOrCreateAttackComboEffect(effectType : EEffectType) : W3Effect_TAttackCombo
+	{
+		var params : SCustomEffectParams;
+
+		if (HasBuff(effectType)) {
+			return (W3Effect_TAttackCombo)GetBuff(effectType);
+		} else {
+			params.effectType = effectType;
+			params.creator = this;
+			params.sourceName = 'attackcombo';
+			params.duration = TOpts_MaxComboDuration();
+			AddEffectCustom(params);
+			return (W3Effect_TAttackCombo)GetBuff(effectType);
+		}
+	}
+
+	// Triangle attack combos
+	public function IncAttackCombo(isHeavyAttack : bool)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		comboEffect = GetOrCreateAttackComboEffect(effectType);
+		comboEffect.IncCombo();
+		comboEffect.IncTime();
+	}
+
+	// Triangle attack combos
+	public function DecAttackCombo(isHeavyAttack : bool)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.DecCombo();
+		}
+
+	}
+
+	// Triangle attack combos
+	public function IncComboTime(isHeavyAttack : bool, optional fixedTime : float)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.IncTime(fixedTime);
+		}
+	}
+
+	// Triangle attack combos
+	public function PauseComboTime(srcName : name)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		effectType = EET_THeavyCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Pause(srcName);
+		}
+		effectType = EET_TLightCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Pause(srcName);
+		}
+	}
+
+	// Triangle attack combos
+	public function ResumeComboTime(srcName : name)
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		effectType = EET_THeavyCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Resume(srcName);
+		}
+		effectType = EET_TLightCombo;
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			comboEffect.Resume(srcName);
+		}
+	}
+
+	// Triangle attack combos
+	public function GetAttackComboCounter(isHeavyAttack : bool) : int
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			return comboEffect.ComboCount();
+		} else {
+			return 0;
+		}
+	}
+
+	// Triangle attack combos
+	public function GetAttackComboLength(isHeavyAttack : bool) : int
+	{
+		var comboEffect : W3Effect_TAttackCombo;
+		var effectType : EEffectType;
+
+		if (isHeavyAttack)
+			effectType = EET_THeavyCombo;
+		else
+			effectType = EET_TLightCombo;
+
+		if (HasBuff(effectType)) {
+			comboEffect = (W3Effect_TAttackCombo)GetBuff(effectType);
+			return comboEffect.ComboLength();
+		} else {
+			return 0;
+		}
 	}
 	
 	protected function TestParryAndCounter(data : CPreAttackEventData, weaponId : SItemUniqueId, out parried : bool, out countered : bool) : array<CActor>
@@ -3495,17 +3864,6 @@ statemachine class W3PlayerWitcher extends CR4Player
 			
 		return super.TestParryAndCounter(data, weaponId, parried, countered);
 	}
-		
-	private timer function FastAttackCounterDecay(delta : float, id : int)
-	{
-		fastAttackCounter = 0;
-	}
-	
-	private timer function HeavyAttackCounterDecay(delta : float, id : int)
-	{
-		heavyAttackCounter = 0;
-	}
-		
 	
 	public function GetCraftingSchematicsNames() : array<name>		{return craftingSchematics;}
 	
@@ -4284,6 +4642,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 	
 	
+	// Triangle frenzy, killing spree
+	public final function GetNonMutagenPotionBuffsCount() : float
+	{
+		if(effectManager)
+		{
+			return effectManager.GetNonMutagenPotionBuffsCount();
+		}
+		return 0;
+	}
+
 	public final function GetMutagenBuffs() : array< W3Mutagen_Effect >
 	{
 		var null : array< W3Mutagen_Effect >;
@@ -4294,6 +4662,16 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	
 		return null;
+	}
+
+	// Triangle adaptation
+	public final function GetMutagenBuffsCount() : float
+	{
+		if(effectManager)
+		{
+			return effectManager.GetMutagenBuffsCount();
+		}
+		return 0;
 	}
 	
 	public function GetAlchemyRecipes() : array<name>
@@ -4368,7 +4746,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		m_alchemyManager.GetRecipe(nam, recipe);
 			
 		
-		if(CanUseSkill(S_Alchemy_s18))
+		if(CanUseSkill(S_Alchemy_s18) && TOpts_AcquiredToleranceDiscount() <= 0) // Triangle acquired tolerance
 		{
 			//modSigns
 			//if ((recipe.cookedItemType != EACIT_Bolt) && (recipe.cookedItemType != EACIT_Undefined) && (recipe.cookedItemType != EACIT_Dye) && (recipe.level <= GetSkillLevel(S_Alchemy_s18)))
@@ -4864,8 +5242,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		UnequipItemFromSlot(EES_SkillMutagen3);
 		UnequipItemFromSlot(EES_SkillMutagen4);
 		
+		// Triangle safe cleardevelop
+		Debug_ClearCharacterDevelopment();
 		levelManager.ResetCharacterDev();
-		((W3PlayerAbilityManager)abilityManager).ResetCharacterDev();		
+		// ((W3PlayerAbilityManager)abilityManager).ResetCharacterDev();		// Triangle safe cleardevelop
 	}
 	
 	public final function ResetMutationsDev()
@@ -6330,6 +6710,30 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
+	// Triangle synergy
+	public final function GetMutagenItemIDFromGroupID( skillGroupID : int ) : SItemUniqueId
+	{
+		var pam : W3PlayerAbilityManager;
+		
+		pam = (W3PlayerAbilityManager)abilityManager;
+		if(pam && pam.IsInitialized())
+			return pam.GetMutagenItemIDFromGroupID(skillGroupID);
+			
+		return GetInvalidUniqueId();
+	}
+	
+	// Triangle synergy
+	public final function GetSkillGroupIDFromSkill(skillType : ESkill) : int
+	{
+		var pam : W3PlayerAbilityManager;
+		
+		pam = (W3PlayerAbilityManager)abilityManager;
+		if(pam && pam.IsInitialized())
+			return pam.GetSkillGroupIdFromSkill(skillType);
+			
+		return -1;
+	}
+	
 	public final function GetSkillGroupIDFromIndex(idx : int) : int
 	{
 		var pam : W3PlayerAbilityManager;
@@ -6819,6 +7223,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
 		potionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+		// Triangle adaptation
+		if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
+		}
+		// Triangle end
 		
 		if(effectType != EET_WhiteHoney)
 		{
@@ -6836,6 +7245,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var i : int;
 		var maxTox, toxicityOffset, adrenaline : float;
 		var costReduction : SAbilityAttributeValue;
+		var acquiredToleranceEffect : W3Effect_TAcquiredTolerance; // Triangle acquired tolerance
 		
 		
 		if( effectType == EET_WhiteHoney )
@@ -6847,6 +7257,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		maxTox = abilityManager.GetStatMax(BCS_Toxicity);
 		finalPotionToxicity = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity'));
 		toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+		// Triangle adaptation
+		if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+			toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
+		}
+		// Triangle end
 		
 		
 		if(CanUseSkill(S_Perk_13))
@@ -6857,6 +7272,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			finalPotionToxicity = (finalPotionToxicity - costReduction.valueBase) * (1 - costReduction.valueMultiplicative) - costReduction.valueAdditive;
 			finalPotionToxicity = MaxF(0.f, finalPotionToxicity);
 		}
+
+		// Triangle acquired tolerance
+		acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
+		if (CanUseSkill(S_Alchemy_s18) && acquiredToleranceEffect && acquiredToleranceEffect.IsActive()) {
+			finalPotionToxicity = MaxF(0, finalPotionToxicity - TOpts_AcquiredToleranceDiscount());
+		}
+		// Triangle end
 		
 		
 		if(abilityManager.GetStat(BCS_Toxicity, false) + finalPotionToxicity + toxicityOffset > maxTox )
@@ -6880,6 +7302,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var atts : array<name>;
 		var i : int;
 		var mutagenParams : W3MutagenBuffCustomParams;
+		var acquiredToleranceEffect : W3Effect_TAcquiredTolerance; // Triangle acquired tolerance
 		
 		
 		if(itemId != GetInvalidUniqueId())
@@ -6929,6 +7352,11 @@ statemachine class W3PlayerWitcher extends CR4Player
 		{
 			mutagenParams = new W3MutagenBuffCustomParams in theGame;
 			mutagenParams.toxicityOffset = CalculateAttributeValue(inv.GetItemAttributeValue(item, 'toxicity_offset'));
+			// Triangle adaptation
+			if (CanUseSkill(S_Alchemy_s14) && TOpts_AdaptationDiscountPerLevel() > 0) {
+				mutagenParams.toxicityOffset *= 1 - TUtil_GetAdaptationDiscount(this);
+			}
+			// Triangle end
 			mutagenParams.potionItemName = inv.GetItemName(item);
 			
 			potionParams.buffSpecificParams = mutagenParams;
@@ -6975,6 +7403,20 @@ statemachine class W3PlayerWitcher extends CR4Player
 			{
 				abilityManager.GainStat(BCS_Toxicity, finalPotionToxicity );
 			}
+
+			// Triangle acquired tolerance
+			if (CanUseSkill(S_Alchemy_s18) && TOpts_AcquiredToleranceDiscount() > 0) {
+				if (!HasBuff(EET_TAcquiredTolerance)) {
+					AddEffectDefault(EET_TAcquiredTolerance, this, "Acquired Tolerance");
+				}
+				acquiredToleranceEffect = (W3Effect_TAcquiredTolerance)GetBuff(EET_TAcquiredTolerance);
+				if (!acquiredToleranceEffect && !acquiredToleranceEffect.IsActive()) {
+					TUtil_LogMessage("Acquired Tolerance effect failed to add for some reason");
+				} else {
+					acquiredToleranceEffect.AddTimeLeft(TOpts_AcquiredToleranceDurationPerLevel() * GetSkillLevel(S_Alchemy_s18));
+				}
+			}
+			// Triangle end
 			
 			
 			if(CanUseSkill(S_Perk_13))
@@ -7735,6 +8177,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 	
 
 	//modSigns: chance to ignore hit anim
+	// Triangle TODO remove this if heavy armor needs a little nerf
 	public function GetChanceToIgnoreHitAnim() : float
 	{
 		var armorPieces : array<int>;
@@ -7996,6 +8439,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		bootsEq = inv.GetItemEquippedOnSlot( EES_Boots, bootsId );
 		
 		//glyphwords change stamina, not replace it
+		// Triangle TODO alt stamina glphwords should change stamina cost, not regen
 		if( HasGlyphwordActive( 'Glyphword 2 _Stats' ) )
 		{
 			if ( armorEq && !inv.ItemHasTag(armorId, 'LightArmor') )
@@ -8031,6 +8475,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 			staminaRegenVal += 0.03;
 		if ( !bootsEq )
 			staminaRegenVal += 0.04;
+		// Triangle alt stamina
+		if (TOpts_AltArmorStaminaMod())
+		{
+			staminaRegenVal = 0;
+		}
+		// Triangle end
 		
 		//debug
 		//theGame.witcherLog.AddMessage( "staminaRegenVal = " + staminaRegenVal );
@@ -8070,17 +8520,18 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		//attack type specific bonuses
 		fastAPBonus = GetSkillAttributeValue(S_Sword_1, PowerStatEnumToName(CPS_AttackPower), false, true);
-		strongAPBonus = GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true);
-		if (CanUseSkill(S_Sword_s21))
+		strongAPBonus = GetSkillAttributeValue(S_Sword_2, PowerStatEnumToName(CPS_AttackPower), false, true); // Triangle heavy attack simplify this should be set to 0 in xml
+		if (CanUseSkill(S_Sword_s21) && !TUtil_IsCustomSkillEnabled(S_Sword_s21)) // Triangle attack combos
 			fastAPBonus += GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s21); 
-		if (CanUseSkill(S_Sword_s04))
+		if (CanUseSkill(S_Sword_s04) && !TUtil_IsCustomSkillEnabled(S_Sword_s04)) // Triangle attack combos
 			strongAPBonus += GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, true) * GetSkillLevel(S_Sword_s04);
-		if (CanUseSkill(S_Sword_s17)) 
+		if (CanUseSkill(S_Sword_s17) && !TUtil_IsCustomSkillEnabled(S_Sword_s17)) // Triangle precise blows 
 		{
 			fastCritChanceBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s17);
 			fastCritPowerBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s17);
 		}
-		if (CanUseSkill(S_Sword_s08)) 
+		
+		if (CanUseSkill(S_Sword_s08) && !TUtil_IsCustomSkillEnabled(S_Sword_s08)) // Triangle crushing blows
 		{
 			strongCritChanceBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * GetSkillLevel(S_Sword_s08);
 			strongCritPowerBonus = CalculateAttributeValue(GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true)) * GetSkillLevel(S_Sword_s08);
@@ -8103,6 +8554,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				steelAPBonus += GetInventory().GetItemAttributeValue(steelSword, 'attack_power');
 			}
 			//New bonus for Chernobog rune
+			// Triangle TODO make sure we want to keep this.
 			bonusDmgMultSteel += CalculateAttributeValue(GetInventory().GetItemAttributeValue(steelSword, 'sword_dmg_bonus'));
 		}
 		
@@ -8202,7 +8654,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			playerOffenseStats.steelFastCritDmg = ((steelDmg + elementalSteel) * (1 + bonusDmgMult + bonusDmgMultSteel) + steelFastCritAP.valueBase) * steelFastCritAP.valueMultiplicative + steelFastCritAP.valueAdditive;
 			playerOffenseStats.steelFastDPS = playerOffenseStats.steelFastDmg * (1 - steelFastCritChance) + playerOffenseStats.steelFastCritDmg * steelFastCritChance;
 			playerOffenseStats.steelStrongDmg = ((steelDmg + elementalSteel) * (strongDmgMult + bonusDmgMult + bonusDmgMultSteel) + steelStrongAP.valueBase) * steelStrongAP.valueMultiplicative + steelStrongAP.valueAdditive;
+			playerOffenseStats.steelStrongDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.steelStrongCritDmg = ((steelDmg + elementalSteel) * (strongDmgMult + bonusDmgMult + bonusDmgMultSteel) + steelStrongCritAP.valueBase) * steelStrongCritAP.valueMultiplicative + steelStrongCritAP.valueAdditive;
+			playerOffenseStats.steelStrongCritDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;		
 			playerOffenseStats.steelStrongDPS = playerOffenseStats.steelStrongDmg * (1 - steelStrongCritChance) + playerOffenseStats.steelStrongCritDmg * steelStrongCritChance;
 		}
 		if ( silverDmg != 0 )
@@ -8211,7 +8665,9 @@ statemachine class W3PlayerWitcher extends CR4Player
 			playerOffenseStats.silverFastCritDmg = ((silverDmg + elementalSilver) * (1 + bonusDmgMult + bonusDmgMultSilver) + silverFastCritAP.valueBase) * silverFastCritAP.valueMultiplicative + silverFastCritAP.valueAdditive;
 			playerOffenseStats.silverFastDPS = playerOffenseStats.silverFastDmg * (1 - silverFastCritChance) + playerOffenseStats.silverFastCritDmg * silverFastCritChance;
 			playerOffenseStats.silverStrongDmg = ((silverDmg + elementalSilver) * (strongDmgMult + bonusDmgMult + bonusDmgMultSilver) + silverStrongAP.valueBase) * silverStrongAP.valueMultiplicative + silverStrongAP.valueAdditive;
+			playerOffenseStats.silverStrongDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.silverStrongCritDmg = ((silverDmg + elementalSilver) * (strongDmgMult + bonusDmgMult + bonusDmgMultSilver) + silverStrongCritAP.valueBase) * silverStrongCritAP.valueMultiplicative + silverStrongCritAP.valueAdditive;
+			playerOffenseStats.silverStrongCritDmg *= TOpts_HeavyAttackDamageMod(); // Triangle heavy attack simplify vanilla:1.833f;
 			playerOffenseStats.silverStrongDPS = playerOffenseStats.silverStrongDmg * (1 - silverStrongCritChance) + playerOffenseStats.silverStrongCritDmg * silverStrongCritChance;
 		}
 		
@@ -8247,6 +8703,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 				if(IsNameValid(playerOffenseStats.crossbowElementaDmgType))
 					inv.GetItemStatByName(inv.GetItemName(bolt), playerOffenseStats.crossbowElementaDmgType, playerOffenseStats.crossbowElementaDmg);
 			}
+
 			
 			//Water Hag decoction
 			if ( HasBuff(EET_Mutagen05) && GetHealthPercents() > 0.99 )
@@ -8477,6 +8934,8 @@ statemachine class W3PlayerWitcher extends CR4Player
 	private saved var runewordInfusionType : ESignType;
 	default runewordInfusionType = ST_None;
 	
+	private saved var spellSwordSign : ESignType; default spellSwordSign = ST_None; // Triangle spell sword
+	
 	public final function GetRunewordInfusionType() : ESignType
 	{
 		return runewordInfusionType;
@@ -8520,6 +8979,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		
 		if(level >= 2)
 		{
+			
 			dm.GetAbilityAttributes(skillAbilityName, atts);
 			for(i=0; i<atts.Size(); i+=1)
 			{
@@ -8715,6 +9175,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 		
 		//theGame.witcherLog.AddMessage("OnSignCastPerformed: " + signType + "; isAlternate: " + isAlternate); //modSigns: debug
+
+		// Triangle spell sword
+		AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign()));
+		// Triangle end
 	}
 	
 	public saved var savedQuenHealth, savedQuenDuration : float;
@@ -9560,6 +10024,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		}
 	}
 	
+	// Triangle safe cleardevelop
 	public function Debug_ClearCharacterDevelopment(optional keepInv : bool)
 	{
 		var template : CEntityTemplate;
@@ -9568,12 +10033,40 @@ statemachine class W3PlayerWitcher extends CR4Player
 		var i : int;
 		var items : array<SItemUniqueId>;
 		var abs : array<name>;
-	
-		delete abilityManager;
-		delete levelManager;
-		delete effectManager;
-		
-		
+		var totalExp : int;
+		var currentLevel : int;
+		var totalSkillPoints : int;
+		var skillPointDifference : int;
+		//Chicken Start
+		var eqweapon, eqarmor : array<SItemUniqueId>;
+
+		eqweapon = inv.GetHeldWeapons();
+		eqarmor = GetEquippedItems();
+
+		HorseUnequipItem(EES_HorseTrophy);
+
+		for(i=0; i<eqweapon.Size(); i+=1)
+		{
+			UnequipItem(eqweapon[i]);
+			EquipItem(eqweapon[i]);
+		}
+
+		for(i=0; i<eqarmor.Size(); i+=1)
+		{
+			UnequipItem(eqarmor[i]);
+			EquipItem(eqarmor[i]);
+		}
+		//Chicken end
+
+
+		inv.GetAllItems(items);
+		for(i=0; i<items.Size(); i+=1)
+		{
+			if(inv.ItemHasTag(items[i], 'MutagenIngredient'))   
+				UnequipItem(items[i]);
+		}
+
+
 		GetCharacterStats().GetAbilities(abs, false);
 		for(i=0; i<abs.Size(); i+=1)
 			RemoveAbility(abs[i]);
@@ -9583,47 +10076,50 @@ statemachine class W3PlayerWitcher extends CR4Player
 		GetCharacterStatsParam(abs);		
 		for(i=0; i<abs.Size(); i+=1)
 			AddAbility(abs[i]);
-					
-		
+
+		// Triangle save character data before clearing
+		totalExp = levelManager.GetPointsTotal(EExperiencePoint);
+		currentLevel = levelManager.GetLevel();
+		totalSkillPoints = levelManager.GetPointsTotal(ESkillPoint);
+
+		//leveling
+		delete levelManager;
 		levelManager = new W3LevelManager in this;			
 		levelManager.Initialize();
 		levelManager.PostInit(this, false, true);		
-						
+
+		// Triangle re-level
+		levelManager.AddPoints(EExperiencePoint, totalExp, false);
+		DisplayHudMessage("Re-add points from places of power with addSkillPoints(# of points)");
+		/*
+		// Triangle re-level and re-point
+		levelManager.AddPoints(EExperiencePoint, totalExp, true, true);
+		if ( theGame.GetInGameConfigWrapper().IsGroupVisible('SCOptionLB') )
+				skillPointDifference = totalSkillPoints - (levelManager.GetPointsTotal(ESkillPoint)/StringToInt(theGame.GetInGameConfigWrapper().GetVarValue('SCOptionLB', 'SPG')));
+			else
+				skillPointDifference = totalSkillPoints - levelManager.GetPointsTotal(ESkillPoint);
 		
-		AddAbility('GeraltSkills_Testing');
-		SetAbilityManager();		
-		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
-		
-		SetEffectManager();
-		
-		abilityManager.PostInit();						
-		
-		
-		
-		
-		
-		if(!keepInv)
+		if (skillPointDifference > 0)
 		{
-			inv.RemoveAllItems();
-		}		
-		
-		
-		template = (CEntityTemplate)LoadResource("geralt_inventory_release");
-		entity = theGame.CreateEntity(template, Vector(0,0,0));
-		invTesting = (CInventoryComponent)entity.GetComponentByClassName('CInventoryComponent');
-		invTesting.GiveAllItemsTo(inv, true);
-		entity.Destroy();
-		
-		
-		inv.GetAllItems(items);
-		for(i=0; i<items.Size(); i+=1)
-		{
-			if(!inv.ItemHasTag(items[i], 'NoDrop'))			
-				EquipItem(items[i]);
+			levelManager.AddPoints(ESkillPoint, skillPointDifference, true);
 		}
-			
+		*/
+
+		//skills, perks etc., exp, buffs
+		delete abilityManager;
+		//AddAbility('GeraltSkills_Testing');
+		SetAbilityManager();		//defined in inheriting classes but must be called before setting any other managers - sets skills and stats
+		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
+
+		delete effectManager;
+		SetEffectManager();
+
+		// Triangle toxicity
+		RemoveAbilityAll('TBonusToxicity');
+		AddAbilityMultiple('TBonusToxicity', TOpts_BonusToxicity());
+		// Triangle end
 		
-		Debug_GiveTestingItems(0);
+		abilityManager.PostInit();
 	}
 	
 	function Debug_BearSetBonusQuenSkills()
@@ -9735,11 +10231,13 @@ statemachine class W3PlayerWitcher extends CR4Player
 			else
 				return false;
 		}
-		if( GetCurrentStateName() != 'Swimming' && GetStat(BCS_Stamina) <= 0 )
-		{
-			SetSprintActionPressed(false,true);
-			return false;
-		}
+		// Triangle alt stamina running out of stamina and focus doesn't end sprint
+		// if( GetCurrentStateName() != 'Swimming' && GetStat(BCS_Stamina) <= 0)
+		// {
+		// 	SetSprintActionPressed(false,true);
+		// 	return false;
+		// }
+		// Triangle end
 		
 		return true;
 	}
@@ -11500,6 +11998,12 @@ statemachine class W3PlayerWitcher extends CR4Player
 		FactsRemove( "StandAloneEP2" );
 		
 		theGame.GetJournalManager().ForceUntrackingQuestForEP1Savegame();
+	}
+
+	// Triangle hp mods
+	function HPModifier() : float
+	{
+		return TOpts_GeraltHealthMod();
 	}
 }
 

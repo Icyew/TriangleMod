@@ -431,6 +431,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			CheckAdditionalSlots();
 	}
 	
+	// Triangle TODO make sure this doesnt interfere with passive skill slots
 	function CheckAdditionalSlots() //modSigns: fix a bug with skills permanently stuck in locked slots after 1.22 patch
 	{
 		var skillSlots : array<SSkillSlot>;
@@ -1222,7 +1223,7 @@ class CR4CharacterMenu extends CR4MenuBase
 			LogChannel('CHR', "tryUnequipSkill, currentSkillSlotIdx " + currentSkillSlotIdx);
 			if (currentSkillSlotIdx > -1)
 			{
-				res = thePlayer.UnequipSkill(currentSkillSlotIdx + 1);
+				res = thePlayer.UnequipSkill(currentSkillSlotIdx + 1, true); // Triangle passive skills keep passive slot open
 			}
 			
 			m_fxClearSkillSlot.InvokeSelfOneArg(FlashArgInt(currentSkillSlotIdx + 1));
@@ -1303,6 +1304,31 @@ class CR4CharacterMenu extends CR4MenuBase
 				thePlayer.RemoveAbility( 'mutagen_color_red_x' );
 				thePlayer.RemoveAbility( 'mutagen_color_blue_x' );
 			}	
+		// Triangle mutagens synergy
+		thePlayer.RemoveAbilityAll('T_mutagen_vitality_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_spellpower_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_attackpower_negative');
+		thePlayer.RemoveAbilityAll('T_mutagen_attackpower');
+		thePlayer.RemoveAbilityAll('T_mutagen_vitality');
+		thePlayer.RemoveAbilityAll('T_mutagen_toxicity');
+		thePlayer.RemoveAbilityAll('T_mutagen_spellpower');
+		// Cancel out default mutagen effects so we can replace them with custom options
+		if (TOpts_MinRedBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_red', SC_Red);
+			TUtil_NullifyMutagen('lesser_mutagen_color_red', SC_Red);
+			TUtil_NullifyMutagen('greater_mutagen_color_red', SC_Red);
+		}
+		if (TOpts_MinGreenBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_green', SC_Green);
+			TUtil_NullifyMutagen('lesser_mutagen_color_green', SC_Green);
+			TUtil_NullifyMutagen('greater_mutagen_color_green', SC_Green);
+		}
+		if (TOpts_MinBlueBonus() > 0) {
+			TUtil_NullifyMutagen('mutagen_color_blue', SC_Blue);
+			TUtil_NullifyMutagen('lesser_mutagen_color_blue', SC_Blue);
+			TUtil_NullifyMutagen('greater_mutagen_color_blue', SC_Blue);
+		}
+		// Triangle end
 	}
 	
 	private function GetGroupBonusDescription( groupId:int, out color : ESkillColor ):string
@@ -1321,12 +1347,16 @@ class CR4CharacterMenu extends CR4MenuBase
 		var attributeValue			: float;
 		var synergyBonus			: float;
 		var pam : W3PlayerAbilityManager;
+		var mutagenBonus, curColorCountPartial : float; // Triangle mutagens synergy
 		
 		hasMutagen = GetWitcherPlayer().GetItemEquippedOnSlot(thePlayer.GetMutagenSlotIDFromGroupID(groupId), mutagen);
 		
 		pam = (W3PlayerAbilityManager)thePlayer.abilityManager;
 		curAbilityName = thePlayer.GetSkillGroupBonus(groupId);
-		curColorCount =  1 + thePlayer.GetGroupBonusCount( thePlayer.GetInventory().GetSkillMutagenColor( mutagen ), groupId );
+		// Triangle synergy
+		curColorCountPartial =  1 + thePlayer.GetGroupBonusCount( thePlayer.GetInventory().GetSkillMutagenColor( mutagen ), groupId );
+		curColorCount = FloorF(curColorCountPartial);
+		// Triangle end
 		
 		hasAbility = thePlayer.HasAbility(curAbilityName);
 		
@@ -1342,48 +1372,84 @@ class CR4CharacterMenu extends CR4MenuBase
 			_inv.GetItemStats(mutagen, mutagenStats);
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 2, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'mutagen_color_lesser_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 1, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('lesser_mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
 			
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_red_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Red, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_red_x' , curColorCount - 1);
 				color = SC_Red;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_green_synergy_bonus' ) 		
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Green, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_green_x' , curColorCount - 1);
 				color = SC_Green;
 			}
 			if ( pam.GetMutagenBonusAbilityName(mutagen) == 'greater_mutagen_color_blue_synergy_bonus' ) 
 			{
+				// Triangle mutagens synergy
+				mutagenBonus = TUtil_AddMutagenBonuses(SC_Blue, 3, curColorCountPartial);
+				if (mutagenBonus == 0)
+				// Triangle end
 				thePlayer.AddAbilityMultiple('greater_mutagen_color_blue_x' , curColorCount - 1);
 				color = SC_Blue;
 			}
@@ -1391,12 +1457,21 @@ class CR4CharacterMenu extends CR4MenuBase
 			for (i = 0; i < mutagenStats.Size(); i += 1)
 			{
 				curDescription = mutagenStats[i].attributeName + " ";
+				// Triangle mutagens
+				if (color == SC_Green && mutagenBonus > 0 && TOpts_GreenGivesToxicity())
+					curDescription = "Toxicity ";
+				// Triangle end
 				if (i > 0)
 				{
 					curDescription += ", ";
 				}
-				
-				if (hasAbility)
+			
+				// Triangle mutagens synergy
+				if (mutagenBonus > 0) {
+					attributeValue = mutagenBonus;
+				}
+				else if (hasAbility)
+				// Triangle end
 				{
 					attributeValue = mutagenStats[i].value * curColorCount;
 				}
@@ -1405,7 +1480,7 @@ class CR4CharacterMenu extends CR4MenuBase
 					attributeValue = mutagenStats[i].value * curColorCount;
 				}
 				
-				if ( GetWitcherPlayer().CanUseSkill ( S_Alchemy_s19 ) )
+				if ( GetWitcherPlayer().CanUseSkill ( S_Alchemy_s19 ) && TOpts_AltSynergyBonusPerLevel() == 0) // Triangle synergy
 				{
 					synergyBonus = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s19, 'synergy_bonus', false, false));
 					synergyBonus *= GetWitcherPlayer().GetSkillLevel(S_Alchemy_s19);
@@ -1414,6 +1489,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				
 				if( mutagenStats[i].percentageValue )
 				{
+					// Triangle synergy mutagens synergy
+					if (mutagenBonus > 0)
+						curDescription += "+" + RoundMath(attributeValue ) +"%";
+					else
+					// Triangle end
 					curDescription += "+" + RoundMath(attributeValue * 100 ) +"%";
 				}
 				else
@@ -1722,8 +1802,23 @@ class CR4CharacterMenu extends CR4MenuBase
 		
 		var originSkillLevel : int;
 		var boostedSkillLevel : int;
-		
+		// Triangle synergy
+		var groupID : int;
+		var mutagenColor : ESkillColor;
+		var witcher : W3PlayerWitcher;
+		var mutagenItemId : SItemUniqueId;
+		witcher = GetWitcherPlayer();
+		groupID = witcher.GetSkillGroupIDFromSkill(curSkill.skillType);
+		mutagenItemId = witcher.GetMutagenItemIDFromGroupID(groupID);
+
 		skillColor = thePlayer.GetSkillColor(curSkill.skillType);
+		if ((TOpts_YellowSkillWildcard() && skillColor == SC_Yellow) ||
+			(skillColor != SC_None && thePlayer.CanUseSkill(S_Alchemy_s19) && witcher.GetInventory().IsIdValid(mutagenItemId) && TOpts_AltSynergyBonusPerLevel() > 0)) {
+			mutagenColor = witcher.GetInventory().GetSkillMutagenColor(mutagenItemId);
+			if (mutagenColor != SC_None)
+				skillColor = mutagenColor;
+		}
+		// Triangle end
 		
 		dataObject.SetMemberFlashInt('id', curSkill.skillType); 
 		dataObject.SetMemberFlashInt('skillTypeId', curSkill.skillType);
@@ -1857,6 +1952,8 @@ class CR4CharacterMenu extends CR4MenuBase
 		var ability		: SAbilityAttributeValue;
 		var min, max	: SAbilityAttributeValue;
 		var dm 			: CDefinitionsManagerAccessor;
+		var maxLevel	: int; // Triangle everything
+		maxLevel = GetWitcherPlayer().GetSkillMaxLevel(targetSkill.skillType); // Triangle everything
 		
 		
 		dm = theGame.GetDefinitionsManager();
@@ -1979,6 +2076,18 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
 				argsString.PushBack( NoTrailZeros( arg * 100 ) );
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+
+				// Triangle rend
+				// Triangle TODO compare to GM rend description, needs updating
+				// baseString = "Unleash an attack that ignores enemy Defense and increases total damage by " + NoTrailZeros(TOpts_RendChargeBonus()*100) + "% when fully charged." +
+				// 	" Adrenaline points increase critical chance by " + NoTrailZeros(RoundMath(arg*100)) + "% and total damage by " + NoTrailZeros(TOpts_RendBonusPerFocusPnt()*100) + "%.";
+				// if (skillLevel >= 5){
+				// 	baseString += "<br>Adrenaline points are refunded on a miss or a killing blow.";
+				// } else {
+				// 	baseString += "<br>Adrenaline points are refunded on a miss.";
+				// }
+				baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle end
 				break;
 			case S_Sword_s03:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s03, 'instant_kill_chance', false, false)) * skillLevel;
@@ -1990,6 +2099,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s04, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle attack combos
+				if (TUtil_AreAttackCombosEnabled(true)) {
+					baseString = "Each heavy attack combo count increases attack power by " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_HeavyAttackComboDmgBonus()*100, maxLevel, skillLevel)) + 
+						"%.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s05:
 				//modSigns: new mechanic
@@ -2008,6 +2123,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle anatomical knowledge
+				// Triangle TODO compare to GM description
+				// if (TOpts_AnatomicalKnowledgeDuration() > 0) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Headshots drain 1 adrenaline point and blind your enemies for " +
+				// 		NoTrailZeros(TUtil_RoundTo(TOpts_AnatomicalKnowledgeDuration() * skillLevel / 5, 1)) + "s.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// }
+				// Triangle end
 				break;
 			case S_Sword_s08:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
@@ -2015,6 +2138,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s08, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle crushing blows
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s08)) {
+					baseString = "Each heavy combo count increases crit damage by " + NoTrailZeros(100 * TOpts_CrushingBlowsCritDmgBonus() * (skillLevel / 5))
+						+ "%. Critical hits have a chance for knockdown that scales with adrenaline."
+						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s09:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s09, 'damage_reduction', false, false)) * skillLevel;
@@ -2054,11 +2184,42 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s15, 'focus_gain', false, false)) * skillLevel;
 				argsFloat.PushBack(arg);
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt, argsFloat) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle cold blooded
+				if (TOpts_ColdBloodedCritMultiplier() > 1) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt, argsFloat) + " Critical hits yield " + NoTrailZeros(TOpts_ColdBloodedCritMultiplier()) + "x as much adrenaline." +
+						"<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s16:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s16, 'focus_drain_reduction', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle resolve
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
+					arg = TUtil_InterpolateLevelValue(TOpts_ResolvePenaltyReduction(), maxLevel, skillLevel);
+					baseString = "Adrenaline loss from enemy attacks is reduced by " + NoTrailZeros(MaxF(arg * 100, 100)) + "%.";
+					if (arg > 1) {
+						baseString += " Additionally, " + NoTrailZeros((arg - 1) * 100) + "% of the original loss is converted to adrenaline gain.";
+					}
+					if (TOpts_ResolveDuration() > 0) {
+						baseString += " On taking damage,";
+						if (TOpts_ResolveDamage() > 0) {
+							baseString += " the attack power of your next attack is increased by " +
+								NoTrailZeros(TOpts_ResolveDamage() * 100) + "%";
+						}
+						if (TOpts_ResolveCritChance() > 0) {
+							if (TOpts_ResolveDamage() > 0) {
+								baseString += ", and";
+							}
+							baseString += " the critical hit chance of your next attack is increased by " +
+								NoTrailZeros(TOpts_ResolveCritChance() * 100) + "%";
+						}
+						baseString += ". Expires after " + NoTrailZeros(TOpts_ResolveDuration()) + "s.";
+					}
+					baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s17:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
@@ -2066,6 +2227,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s17, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle precise blows
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s17)) {
+					baseString = "Each light combo count increases crit chance by " + NoTrailZeros(TOpts_PreciseBlowsCritChanceBonus() * 100 * skillLevel / 5)
+						+ "%. Critical hits ignore " + NoTrailZeros(TOpts_PreciseBlowsBonusPerFocusPnt() * 100) + "% of armor per adrenaline point."
+						+ "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			case S_Sword_s18:
 				/*if (skillLevel > 1)
@@ -2101,6 +2269,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s21, PowerStatEnumToName(CPS_AttackPower), false, false) * skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// Triangle attack combos
+				if (TUtil_IsCustomSkillEnabled(S_Sword_s21)) {
+					baseString = "Each light attack combo count attack power by " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_LightAttackComboDmgBonus(), maxLevel, skillLevel)*100) + 
+						"%.<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				}
+				// Triangle end
 				break;
 			default:
 				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);
@@ -2122,6 +2296,8 @@ class CR4CharacterMenu extends CR4MenuBase
 		var min, max	: SAbilityAttributeValue;
 		var dm 			: CDefinitionsManagerAccessor;
 		var argsString	: array<string>; //modSigns
+		var maxLevel	: int; // Triangle everything
+		maxLevel = GetWitcherPlayer().GetSkillMaxLevel(targetSkill.skillType); // Triangle everything
 		
 		// Stamina regen bonus per skill level
 		dm = theGame.GetDefinitionsManager();
@@ -2222,6 +2398,16 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s07, 'channeling_damage_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+					baseString += "<br>Cast Igni while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, an extra " + NoTrailZeros(TOpts_IgniPowerScorchFraction() * 100) + "% of the target's remaining hp as damage," +
+						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
+					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
+				// Triangle end
 				break;
 			case S_Magic_s08:
 				//modSigns
@@ -2263,6 +2449,16 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+					baseString += "<br>Cast Aard while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, slows the target for " + NoTrailZeros(TOpts_AardPowerFrostDuration()) + "s," +
+						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
+					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
+				// Triangle end
 				break;
 			case S_Magic_s13:
 				//modSigns: better description
@@ -2283,12 +2479,32 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s15, 'shield_health_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+					baseString += "<br>Cast Quen while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg() * (1 - TOpts_QuenPowerHealRatio())) + " damage, heals you for " + NoTrailZeros(TOpts_SpellSwordBaseDmg() * TOpts_QuenPowerHealRatio()) + "," +
+						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and hp restored.";
+					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
+				// Triangle end
 				break;
 			case S_Magic_s16:
 				//modSigns
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s16, 'turret_bonus_damage', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+					baseString += "<br>Cast Yrden while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage to all enemies in a " + NoTrailZeros(TOpts_YrdenPowerRadius()) + "m radius," +
+						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
+					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
+				// Triangle end
 				break;
 			case S_Magic_s17:
 				//modSigns: show xml values
@@ -2301,6 +2517,16 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s18, 'axii_duration_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle spell sword
+				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+					baseString += "<br>Cast Axii while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, weakens the target's next attack by " + NoTrailZeros(TOpts_AxiiPowerWeaknessPenalty() * 100) + "% for " + NoTrailZeros(TOpts_AxiiPowerWeaknessDuration()) +
+						"s, and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
+					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
+				// Triangle end
 				break;
 			case S_Magic_s19:
 				//modSigns: show xml values
@@ -2312,6 +2538,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s20, 'range', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle far reaching aard
+				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit with Aard, stamina drains and regen is delayed for " + NoTrailZeros(TOpts_AardStaminaDelay() * skillLevel / 3) + "s." +
+					"<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				break;					
 		}
 		
@@ -2330,6 +2560,8 @@ class CR4CharacterMenu extends CR4MenuBase
 		var ability			: SAbilityAttributeValue;
 		var min, max		: SAbilityAttributeValue;
 		var dm 				: CDefinitionsManagerAccessor;
+		var maxLevel	: int; // Triangle everything
+		maxLevel = GetWitcherPlayer().GetSkillMaxLevel(targetSkill.skillType); // Triangle everything
 		
 		
 		dm = theGame.GetDefinitionsManager();
@@ -2359,6 +2591,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = 1 - CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s03, 'toxicity_threshold', false, false)) * skillLevel;
 				argsInt.PushBack(Max(0, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle delayed recovery
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s03)) {
+					baseString = "Potion duration and toxicity drain " + NoTrailZeros(TUtil_RoundTo(TUtil_InterpolateLevelValue(TOpts_DelayedRecoverySlowFactor(), maxLevel, skillLevel) + 1, 2)) +
+						"x slower out of combat.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s04:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s04, 'apply_chance', false, false)) * skillLevel;
@@ -2369,16 +2607,43 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s05, 'defence_bonus', false, false)) * skillLevel; //modSigns
 				argsInt.PushBack(RoundMath(arg * 100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle protective coating
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s05)) {
+					baseString = "Oil applied to blades will weaken the target enemy type on hit, reducing their damage by " +
+						NoTrailZeros(100*TUtil_InterpolateLevelValue(TOpts_ProtectiveCoatingWeaknessPenalty(), maxLevel, skillLevel)) + "% for " +
+						NoTrailZeros(TOpts_ProtectiveCoatingDuration()) + "s.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s06:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s06, 'ammo_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(Min(100, RoundMath(arg*100)));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle fixative
+				if (TOpts_FixativeDurationBonus() > 0) {
+					baseString += " Durations of Poisoned Blades and Protective Coating effects are increased by " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_FixativeDurationBonus() * 100, maxLevel, skillLevel)) + "%.";
+				}
+				if (TOpts_FixativeMultBonus() != 1) {
+					baseString += " Critical effects from sword attacks are " +
+						NoTrailZeros(TOpts_FixativeMultBonus()) + "x as likely to activate, with a maximum bonus of " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_FixativeMaxBonus() * 100, maxLevel, skillLevel)) + "% per effect.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s07:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s07, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, false)) * skillLevel;				
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle hunter instinct
+				if (TOpts_NoHunterInstinctFocusReq()) {
+					baseString = StrReplace(baseString, "When Adrenaline Points are at their maximum, c", "C");
+				}
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s07)) {
+					baseString += " In Addition, critical hit chance against the target is increased by " +
+						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_HunterInstinctCritChance() * 100, maxLevel, skillLevel)) + "%.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s08:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s08, 'item_count', false, false)) * skillLevel;
@@ -2408,6 +2673,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg * 100));
 				argsInt.PushBack(RoundMath(arg * 2 * 100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle poisoned blades
+				if (TOpts_PoisonedBladesDuration() > 0) {
+					baseString += " Poison lasts for " + NoTrailZeros(TOpts_PoisonedBladesDuration()) + "s.";
+				}
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s12)) {
+					baseString += " Critical hits have a " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_PoisonedBladesCritBonus() * 100, maxLevel, skillLevel)) + "% bonus chance to poison.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s13:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s13, 'vitality', false, false)) * skillLevel;
@@ -2418,12 +2691,23 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s14, 'duration', false, false) * skillLevel;				
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle adaptation
+				if (TOpts_AdaptationDiscountPerLevel() > 0) {
+					baseString = "Toxicity cost of mutagen decoctions are reduced " + NoTrailZeros(TOpts_AdaptationDiscountPerLevel() * skillLevel * 100) +
+						"% for each active decoction to a maximum of " + NoTrailZeros(TOpts_AdaptationMaxDiscount() * 100) + "%.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s15:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s15, 'toxicityRegen', false, false)) * skillLevel;
 				if(arg < 0) arg = -arg;
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle fast metabolism
+				if (TOpts_FastMetabolismDrainFactorPerLevel() > 0) {
+					baseString = "Toxicity drains " + NoTrailZeros(TUtil_RoundTo(TOpts_FastMetabolismDrainFactorPerLevel() * skillLevel + 1, 1)) + "x faster.";
+				}
+				// Triangle end
 				break;
 			case S_Alchemy_s16: //modSigns: better description
 				arg = skillLevel * CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s16, 'slowdown_ratio', false, false));
@@ -2431,16 +2715,40 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = skillLevel * CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s16, 'slowdown_duration', false, false));
 				argsString.PushBack(FloatToStringPrec(arg, 2));
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
+				// Triangle frenzy
+				// Triangle TODO make sure this still works
+				// if (TOpts_ActivePotsInsteadOfTox()) {
+				// 	baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
+				// }
+				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s16)) {
+					baseString += " If a non-mutagen potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", normal enemy attacks do not interrupt you while attacking or sprinting.";
+				}
 				break;
+				// Triangle end
 			case S_Alchemy_s17:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s17, 'critical_hit_chance', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle killing spree
+				if (TOpts_ActivePotsInsteadOfTox()) {
+					baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
+				}
+				// Triangle end
 				break;
+			// Triangle acquired tolerance
+			case S_Alchemy_s18:
+				baseString = "After drinking a potion, toxicity of all potions are decreased by " + NoTrailZeros(TOpts_AcquiredToleranceDiscount()) + " for " +
+					NoTrailZeros(TOpts_AcquiredToleranceDurationPerLevel() * skillLevel) + "s.";
+				break;
+			// Triangle end
 			case S_Alchemy_s19:
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Alchemy_s19, 'synergy_bonus', false, false)) * skillLevel;
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle synergy
+				baseString = "Skills will take on the color of whatever mutagen is equipped to its group. Links like this grant " + NoTrailZeros(TOpts_AltSynergyBonusPerLevel() * skillLevel * 100) +
+					"% of their normal bonus.";
+				// Triangle end
 				break;
 			case S_Alchemy_s20:
 				theGame.GetDefinitionsManager().GetAbilityAttributeValue(EffectTypeToName(EET_IgnorePain), StatEnumToName(BCS_Vitality), min, max);
@@ -2448,6 +2756,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = ability.valueMultiplicative * skillLevel;				
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// Triangle endure pain
+				if (TOpts_EndurePainDamageRatioPerLevel() > 0) {
+					baseString = "If a potion effect is active, " + NoTrailZeros(TOpts_EndurePainDamageRatioPerLevel() * skillLevel * 100) +
+						"% of damage taken is drained over " + NoTrailZeros(TOpts_EndurePainDuration()) + "s. This damage cannot kill you.";
+				}
+				// Triangle end
 				break;
 			default:
 				if (skillLevel == 2) 		baseString = GetLocStringByKeyExt(targetSkill.localisationDescriptionLevel2Key);
@@ -2495,6 +2809,13 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'critical_hit_damage_bonus', false, true));
 				argsString.PushBack( NoTrailZeros( arg * 100 ) );
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
+				// Triangle armor styles
+				// Triangle TODO compare descriptions
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'attack_power', false, true);
+				// baseString = "Each piece of light armor increases attack power by " + RoundMath(ability.valueMultiplicative*100) + "% ";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
+				// baseString += "and critical hit damage by " + RoundMath(ability.valueAdditive*100) + "%.";
+				// Triangle end
 				break;
 			case S_Perk_06:
 				//modSigns: precise percents
@@ -2503,6 +2824,12 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'staminaRegen', false, true);
 				argsString.PushBack( NoTrailZeros( ability.valueMultiplicative * 100 ) );
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
+				// Triangle armor styles
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'spell_power', false, true);
+				// baseString = "Each piece of medium armor increases spell power by " + RoundMath(ability.valueMultiplicative*100) + "% ";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'attack_power', false, true);
+				// baseString += "and attack power by " + RoundMath(ability.valueMultiplicative*100) + "%.";
+				// Triangle end
 				break;
 			case S_Perk_07:
 				//modSigns: new mechanic, precise percents

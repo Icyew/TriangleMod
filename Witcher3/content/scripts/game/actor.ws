@@ -1,4 +1,4 @@
-﻿/***********************************************************************/
+/***********************************************************************/
 /** 	© 2015 CD PROJEKT S.A. All rights reserved.
 /** 	THE WITCHER® is a trademark of CD PROJEKT S. A.
 /** 	The Witcher game is based on the prose of Andrzej Sapkowski.
@@ -96,6 +96,7 @@ import abstract class CActor extends CGameplayEntity
 	saved var abilityManager : W3AbilityManager;		
 	
 	private var effectsUpdateTicking : bool;		default effectsUpdateTicking = false;
+	
 	
 	public function GetIgnoreImmortalDodge() : bool
 	{
@@ -231,8 +232,9 @@ import abstract class CActor extends CGameplayEntity
 			abilityManager.OnAbilityRemoved(abilityName);
 	}
 
+	public function GetBlockedAbilityTimeRemaining(abilityName : name) : float									{return abilityManager.GetBlockedAbilityTimeRemaining(abilityName);} // Triangle enemy mutations
 	public final function IsAbilityBlocked(abilityName : name) : bool											{return abilityManager.IsAbilityBlocked(abilityName);}
-	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float) : bool		{return abilityManager.BlockAbility(abilityName, block, cooldown);}
+	public final function BlockAbility(abilityName : name, block : bool, optional cooldown : float, optional unblockTimeout : bool) : bool		{return abilityManager.BlockAbility(abilityName, block, cooldown, unblockTimeout);} // Triangle enemy mutations
 	
 	import public function MuteHeadAudio( mute: bool );
 	import public function CanPush( canPush: bool );
@@ -491,7 +493,7 @@ import abstract class CActor extends CGameplayEntity
 				
 	
 	private saved var nextFreeAnimMultCauserId : int;							
-		default nextFreeAnimMultCauserId = 0;
+		default nextFreeAnimMultCauserId = 1; // Triangle attack combos Originally 0, which should cause a bug but I didn't confirm
 	
 	private var animationMultiplierCausers : array< SAnimMultiplyCauser >;		
 				
@@ -1196,7 +1198,7 @@ import abstract class CActor extends CGameplayEntity
 	
 	import final function SetAnimationTimeMultiplier( mult : float );
 		
-	
+
 	public function SetAnimationSpeedMultiplier( mul : float, optional overrideExistingId : int ) : int
 	{
 		var causer : SAnimMultiplyCauser;
@@ -1231,14 +1233,97 @@ import abstract class CActor extends CGameplayEntity
 		
 		return causer.id;
 	}
-	
-	
+
+	// Triangle attack combos
+	private saved var baseAnimationMultiplierCausers : array< SAnimMultiplyCauser >;
+	private saved var nextFreeBaseAnimMultCauserId : int; default nextFreeBaseAnimMultCauserId = 1;
+	public function TopBaseAnimationMultiplierCauserMul() : float
+	{
+		var causer : SAnimMultiplyCauser;
+		if (baseAnimationMultiplierCausers.Size() > 0) {
+			causer = baseAnimationMultiplierCausers[baseAnimationMultiplierCausers.Size() - 1];
+			if (causer.mul > 0)
+				return causer.mul;
+		}
+
+		return 1;
+	}
+
+	public function PushBaseAnimationMultiplierCauser( mul : float, optional overrideExistingId : int, optional srcName : name ) : int
+	{
+		var causer, newCauser : SAnimMultiplyCauser;
+		var finalMul : float;
+		var i, size : int;
+
+		if( overrideExistingId != -1 ) {
+			size = baseAnimationMultiplierCausers.Size();
+			for(i = 0; i < size; i += 1) {
+				causer = baseAnimationMultiplierCausers[i];
+				if( causer.id == overrideExistingId || (srcName != '' && causer.srcName == srcName)) {
+					baseAnimationMultiplierCausers.Remove(causer);
+					baseAnimationMultiplierCausers.PushBack(causer);
+					causer.mul = mul;
+					SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
+					return causer.id;
+				}
+			}
+		}
+		
+		newCauser.mul = mul;
+		newCauser.id = nextFreeBaseAnimMultCauserId;
+		if (srcName) {
+			newCauser.srcName = srcName;
+		}
+		nextFreeBaseAnimMultCauserId += 1;
+		baseAnimationMultiplierCausers.PushBack( newCauser );
+		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier() );
+		
+		return newCauser.id;
+	}
+
+	public function ResetBaseAnimationMultiplierCauserById( id : int )
+	{
+		var i : int;
+		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
+			if (baseAnimationMultiplierCausers[i].id == id) {
+				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
+				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+				break;
+			}
+		}
+	}
+
+	// Triangle robx99 animations adapted
+	public function ResetBaseAnimationMultiplierCauserBySrc( srcName : name )
+	{
+		var i : int;
+		for (i = 0; i < baseAnimationMultiplierCausers.Size(); i += 1) {
+			if (baseAnimationMultiplierCausers[i].srcName == srcName) {
+				baseAnimationMultiplierCausers.Remove(baseAnimationMultiplierCausers[i]);
+				SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+				break;
+			}
+		}
+	}
+
+	public function ClearBaseAnimationMultiplierCausers()
+	{
+		baseAnimationMultiplierCausers.Clear();
+		SetAnimationTimeMultiplier( CalculateFinalAnimationSpeedMultiplier());
+	}
+	// Triangle end
+
 	private function CalculateFinalAnimationSpeedMultiplier() : float
 	{
+		// Triangle attack combos
+		var baseMultiplier : float;
+
+		baseMultiplier = TopBaseAnimationMultiplierCauserMul();
 		if(animationMultiplierCausers.Size() > 0)
-			return animationMultiplierCausers[animationMultiplierCausers.Size()-1].mul;
+			return animationMultiplierCausers[animationMultiplierCausers.Size()-1].mul * baseMultiplier;
 		
-		return 1;
+		return baseMultiplier;
+		// Triangle end
 	}
 	
 	
@@ -1267,6 +1352,7 @@ import abstract class CActor extends CGameplayEntity
 	{
 		animationMultiplierCausers.Clear();
 		SetAnimationTimeMultiplier( 1.0f );
+		baseAnimationMultiplierCausers.Clear(); // Triangle attack combos
 	}
 	
 	
@@ -2149,7 +2235,12 @@ import abstract class CActor extends CGameplayEntity
 	public function UpdateStatMax(stat : EBaseCharacterStats)
 	{
 		if(abilityManager && abilityManager.IsInitialized() && IsAlive())
-			abilityManager.UpdateStatMax(stat);
+			abilityManager.UpdateStatMaxWrapper(stat); // Triangle hp mods
+	}
+
+	public function HPModifier() : float
+	{
+		return 1;
 	}
 	
 	public function ForceSetStat(stat : EBaseCharacterStats, val : float)
@@ -2401,10 +2492,37 @@ import abstract class CActor extends CGameplayEntity
 		var lifeLeech, health, stamina : float;
 		var wasAlive : bool;
 		var hudModuleDamageType : EFloatingValueType;
+		// Triangle attack combos
+		var witcherPlayer : W3PlayerWitcher;
+		var attackAction : W3Action_Attack;
+		// Triangle enemy mutations
+		var npcAttacker : CNewNPC;
+		var customParams : SCustomEffectParams;
+		var healAmount : float;
+		var healthType : EBaseCharacterStats;
 		
 		playerAttacker = (CPlayer)action.attacker;
 		wasAlive = IsAlive();
 		
+		// Triangle enemy mutations
+		npcAttacker = (CNewNPC)action.attacker;
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Venomous))) {
+			customParams.effectType = EET_PoisonCritical;
+			customParams.creator = npcAttacker;
+			customParams.sourceName = TUtil_TEMutationEnumToName(TEM_Venomous);
+			customParams.duration = TOpts_VenomousDuration();
+			effectManager.AddEffectCustom(customParams);
+		}
+		if (action.DealsAnyDamage() && npcAttacker && npcAttacker.HasAbility(TUtil_TEMutationEnumToName(TEM_Vampiric)) && npcAttacker.UsesEssence()) {
+			healthType = TUtil_GetHealthType(this);
+			if (healthType == BCS_Vitality)
+				healAmount = action.processedDmg.vitalityDamage * TOpts_VampiricHealRatio();
+			else
+				healAmount = action.processedDmg.essenceDamage * TOpts_VampiricHealRatio();
+			npcAttacker.GainStat(healthType, healAmount);
+			npcAttacker.ShowFloatingValue(EFVT_Heal, FloorF(healAmount), false);
+		}
+		// Triangle end
 		
 		buffs = GetBuffs(EET_Frozen);
 		for(i=0; i<buffs.Size(); i+=1)
@@ -2462,7 +2580,34 @@ import abstract class CActor extends CGameplayEntity
 				hudModuleDamageType = EFVT_None;
 			}			
 		
-			ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) );
+			// Triangle alt stamina, enemy mutations
+			if (playerAttacker && playerAttacker.HasBuff(EET_TWeakness)) {
+				ShowFloatingValue(EFVT_Triangle, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT) , "Weak!");
+			} else {
+				ShowFloatingValue(hudModuleDamageType, action.GetDamageDealt(), (hudModuleDamageType == EFVT_DoT));
+			}
+			// Triangle end
+			// Triangle attack combos
+			witcherPlayer = (W3PlayerWitcher)action.attacker;
+			attackAction = (W3Action_Attack)action;
+			if(witcherPlayer)
+			{
+				if(attackAction && !witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s21))
+				{
+					ShowFloatingValue(EFVT_LightCombo, witcherPlayer.GetAttackComboLength(false), false);
+				}
+				else if(attackAction && witcherPlayer.IsHeavyAttack(attackAction.GetAttackTypeName()) && witcherPlayer.CanUseSkill(S_Sword_s04))
+				{
+					ShowFloatingValue(EFVT_HeavyCombo, witcherPlayer.GetAttackComboLength(true), false);
+				}
+				// Triangle TODO dead code
+				/*else if(action.GetSignSkill() != S_SUndefined && action.GetSignSkill() != S_Magic_3)
+				{
+					ShowFloatingValue(EFVT_SignCombo, witcherPlayer.GetLightAttackCounter(), false);
+					makeRoom = true;
+				}*/
+			}
+			// Triangle end
 		}
 		
 		
@@ -3018,7 +3163,7 @@ import abstract class CActor extends CGameplayEntity
 			
 			effectName = damageAction.GetHitEffect(IsAttackerAtBack(damageAction.attacker), !damageAction.DealsAnyDamage());
 		}
-		
+
 		if(IsNameValid(effectName))
 			PlayEffect(effectName);
 			
@@ -5320,7 +5465,16 @@ import abstract class CActor extends CGameplayEntity
 		phantomStrike = false;
 		weaponEntity = GetInventory().GetItemEntityUnsafe(weaponId);
 		
-		
+		// Triangle attack combos
+		if (this == thePlayer && hitTargets.Size() == 0) {
+			if (IsLightAttack(attackActionName) && !GetWitcherPlayer().IsDoingSpecialAttack(false)) {
+				GetWitcherPlayer().DecAttackCombo(false); // misses decrease your combo
+			} else if (IsHeavyAttack(attackActionName)) {
+				GetWitcherPlayer().RefundRend(); // Triangle rend Refund if a miss
+				GetWitcherPlayer().DecAttackCombo(true); // misses decrease your combo
+			}
+		}
+		// Triangle end
 		for(i=0; i<hitTargets.Size(); i+=1)
 		{				
 			Attack(hitTargets[i], animData, weaponId, parried, countered, parriedBy, attackAnimationName, hitTime, weaponEntity);
@@ -7004,7 +7158,12 @@ import abstract class CActor extends CGameplayEntity
 				module = (CR4HudModuleEnemyFocus)hud.GetHudModule("EnemyFocusModule");
 				if(module)
 				{
+					// Triangle attack combos
+					if(type == EFVT_LightCombo || type == EFVT_HeavyCombo || type == EFVT_SignCombo)
+						module.ShowComboType(type, value);
+					else
 					module.ShowDamageType(type, value, stringParam);
+					// Triangle end
 				}
 			}
 		}

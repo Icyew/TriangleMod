@@ -59,6 +59,7 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		var dmgValue, min, max : SAbilityAttributeValue;
 		var currentStateName 	: name;
 		var currentThreshold	: int;
+		var slowFactor : float; // Triangle delayed recovery
 	
 		super.OnUpdate(deltaTime);
 		
@@ -132,8 +133,10 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 			}
 			
 			
-			if(thePlayer.CanUseSkill(S_Alchemy_s20) && !target.HasBuff(EET_IgnorePain))
+			// Triangle endure pain ignore vanilla effect
+			if(thePlayer.CanUseSkill(S_Alchemy_s20) && !target.HasBuff(EET_IgnorePain) && TOpts_EndurePainDamageRatioPerLevel() == 0)
 				target.AddEffectDefault(EET_IgnorePain, target, 'IgnorePain');
+			// Triangle end
 		}
 		else
 		{
@@ -142,7 +145,14 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		}
 			
 		
-		drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) );
+		// Triangle delayed recovery
+		if (TUtil_IsCustomSkillEnabled(S_Alchemy_s03) && thePlayer.CanUseSkill(S_Alchemy_s03) && !thePlayer.IsInCombat()) {
+			slowFactor = TUtil_ValueForLevel(S_Alchemy_s03, TOpts_DelayedRecoverySlowFactor()) + 1;
+			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) ) / slowFactor;
+		} else {
+			drainVal = deltaTime * (effectValue.valueAdditive + (effectValue.valueMultiplicative * (effectValue.valueBase + target.GetStatMax(BCS_Toxicity)) ) );		
+		}
+		// Triangle end
 		
 		
 		if(!target.IsInCombat())
@@ -237,7 +247,7 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 	{
 		var min, max : SAbilityAttributeValue;
 		var dm : CDefinitionsManagerAccessor;
-	
+
 		if(!IsNameValid(abilityName))
 			return;
 	
@@ -245,9 +255,18 @@ class W3Effect_Toxicity extends CBaseGameplayEffect
 		dm = theGame.GetDefinitionsManager();
 		dm.GetAbilityAttributeValue(abilityName, attributeName, min, max);
 		effectValue = GetAttributeRandomizedValue(min, max);
+		// Triangle toxicity drain
+		if (TOpts_DefaultToxicityDrainTime() > 0) {
+			effectValue.valueAdditive = RoundTo(-1 / TOpts_DefaultToxicityDrainTime(), 4);
+		}
+		// Triangle end
 		
-		
-		if(thePlayer.CanUseSkill(S_Alchemy_s15))
+		// Triangle fast metabolism
+		if (thePlayer.CanUseSkill(S_Alchemy_s15) && TOpts_FastMetabolismDrainFactorPerLevel() > 0) {
+			effectValue.valueAdditive *= 1 + TOpts_FastMetabolismDrainFactorPerLevel() * thePlayer.GetSkillLevel(S_Alchemy_s15);
+		}
+		else if(thePlayer.CanUseSkill(S_Alchemy_s15))
+		// Triangle end
 			effectValue += thePlayer.GetSkillAttributeValue(S_Alchemy_s15, attributeName, false, true) * thePlayer.GetSkillLevel(S_Alchemy_s15);
 			
 		if(thePlayer.HasAbility('Runeword 8 Regen'))

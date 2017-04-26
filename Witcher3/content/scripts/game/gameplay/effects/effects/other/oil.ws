@@ -280,6 +280,7 @@ class W3Effect_Oil extends CBaseGameplayEffect
 			//theGame.witcherLog.AddCombatMessage("Ability: " + oilAbility, thePlayer, NULL);
 			//theGame.witcherLog.AddCombatMessage("Attribute: " + MonsterCategoryToCriticalChanceBonus( monsterCategory ), thePlayer, NULL);
 			//theGame.witcherLog.AddCombatMessage("Value: " + CalculateAttributeValue( attrVal ), thePlayer, NULL);
+			// Triangle TODO add option for whether to use ammo percentage
 			attrVal.valueBase *= GetAmmoPercentage();
 			attrVal.valueAdditive *= GetAmmoPercentage();
 			attrVal.valueMultiplicative *= GetAmmoPercentage();
