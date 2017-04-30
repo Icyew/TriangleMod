@@ -96,6 +96,10 @@ def main():
                 os.makedirs(destDir, exist_ok=True)
                 shutil.copyfile(filePath, destPath)
                 print(status, relPath)
+            elif ext == '.w3strings':
+                os.makedirs(path.join(tempPath, dirname), exist_ok=True)
+                shutil.copyfile(filePath, tempFilePath)
+                print(status, relPath)
 
     tempBinPath = path.join(tempPath, 'bin')
     shutil.copytree(binPath, tempBinPath)
@@ -106,12 +110,24 @@ def main():
     shutil.rmtree(tempBinPath)
 
     gameModPath = path.join(gamePath, 'Mods', modName)
-    gameScriptPath = path.join(gamePath, 'Mods', modName, 'content', 'scripts')
+    gameContentPath = path.join(gameModPath, 'content')
+    gameScriptPath = path.join(gameContentPath, 'scripts')
+    tempContentPath = re.sub(modPath, tempPath, contentPath)
     tempScriptPath = re.sub(modPath, tempPath, scriptPath)
+    # copy scripts
     if path.exists(tempScriptPath):
         shutil.rmtree(gameScriptPath, ignore_errors=True)
         shutil.copytree(tempScriptPath, gameScriptPath)
         shutil.rmtree(tempScriptPath)
+    # copy any localized strings
+    for filename in os.listdir(gameContentPath):
+        if filename.endswith('.w3strings'):
+            os.remove(path.join(gameContentPath, filename))
+    for filename in os.listdir(tempContentPath):
+        print(filename)
+        if filename.endswith('.w3strings'):
+            shutil.move(path.join(tempContentPath, filename), path.join(gameContentPath, filename))
+
 
     print('Script and bin files copied to game folder!')
 

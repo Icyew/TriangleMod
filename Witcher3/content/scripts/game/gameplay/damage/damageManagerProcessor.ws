@@ -851,7 +851,7 @@ class W3DamageManagerProcessor extends CObject
 					{				
 						// Triangle rend Crit scales with adrenaline points used now
 						rendLoad = GetWitcherPlayer().GetCachedFocusDifference(); // Will always be a natural number
-						critChance += FloorF(rendLoad) * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
+						critChance += rendLoad * CalculateAttributeValue(playerAttacker.GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, true)) * playerAttacker.GetSkillLevel(S_Sword_s02);
 						// Triangle end
 					}
 					

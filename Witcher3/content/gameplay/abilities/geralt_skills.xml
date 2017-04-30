@@ -672,14 +672,17 @@
 		</ability>
 		<ability name="perk_5">
 			<tags>perk_5</tags>
-			<critical_hit_damage_bonus type="add" min="0.25" /> <!-- Triangle armor styles -->
+			<critical_hit_damage_bonus type="add" min="0.2" /> <!-- Triangle armor styles -->
 			<!-- <attack_power_fast_style type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
 			<attack_power type="mult" min="0.05" /> <!-- Triangle armor styles -->
+      <critical_hit_chance type="add" min="0.025" /> <!-- modSigns -->
+      <!-- <critical_hit_damage_bonus type="add" min="0.075" /> --> <!-- modSigns -->
 		</ability>
 		<ability name="perk_6">
 			<tags>perk_6</tags>
 			<spell_power type="mult" min="0.05" />
-			<attack_power type="mult" min="0.03" /> <!-- Triangle armor styles -->
+      <attack_power type="mult" min="0.025" /> <!-- Triangle armor styles -->
+			<vitality type="mult" min="0.025" /> <!-- Triangle armor styles -->
 			<!-- <staminaRegen type="mult" min="0.05" /> --> <!-- Triangle armor styles -->
 		</ability>
 		<ability name="perk_7">

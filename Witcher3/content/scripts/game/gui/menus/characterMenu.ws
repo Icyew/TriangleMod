@@ -2075,10 +2075,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsString.PushBack( NoTrailZeros( arg + arg2 * 3 ) );
 				arg = CalculateAttributeValue(GetWitcherPlayer().GetSkillAttributeValue(S_Sword_s02, theGame.params.CRITICAL_HIT_CHANCE, false, false)) * skillLevel;
 				argsString.PushBack( NoTrailZeros( arg * 100 ) );
-				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
-
 				// Triangle rend
-				// Triangle TODO compare to GM rend description, needs updating
+				baseString = StrReplace(GetLocStringByKeyExtWithParams(locKey, , , argsString), "Increases critical hit chance by", "Each Adrenaline Point increases critical hit chance by");
+				baseString += " Adrenaline Points are refunded on a killing blow."; // Triangle TODO should maybe add an option to change the refund percentage; only refund half?
+				baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+
 				// baseString = "Unleash an attack that ignores enemy Defense and increases total damage by " + NoTrailZeros(TOpts_RendChargeBonus()*100) + "% when fully charged." +
 				// 	" Adrenaline points increase critical chance by " + NoTrailZeros(RoundMath(arg*100)) + "% and total damage by " + NoTrailZeros(TOpts_RendBonusPerFocusPnt()*100) + "%.";
 				// if (skillLevel >= 5){
@@ -2086,7 +2087,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				// } else {
 				// 	baseString += "<br>Adrenaline points are refunded on a miss.";
 				// }
-				baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
+				// baseString += "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle end
 				break;
 			case S_Sword_s03:
@@ -2124,7 +2125,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + "<br>" + GetLocStringByKeyExt("focus_gain") + ": +" + RoundF((arg_focus * 100) * skillLevel) + "%";
 				// Triangle anatomical knowledge
-				// Triangle TODO compare to GM description
+				// Triangle TODO GM is crit chance and crit damage. maybe disable the TMod feature? got to test out GM crossbow
 				// if (TOpts_AnatomicalKnowledgeDuration() > 0) {
 				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " Headshots drain 1 adrenaline point and blind your enemies for " +
 				// 		NoTrailZeros(TUtil_RoundTo(TOpts_AnatomicalKnowledgeDuration() * skillLevel / 5, 1)) + "s.";
@@ -2716,12 +2717,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsString.PushBack(FloatToStringPrec(arg, 2));
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
 				// Triangle frenzy
-				// Triangle TODO make sure this still works
-				// if (TOpts_ActivePotsInsteadOfTox()) {
-				// 	baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
-				// }
+				if (TOpts_ActivePotsInsteadOfTox()) {
+					baseString = StrReplace(baseString, "If Toxicity is above zero", "If a potion effect is active");
+				}
 				if (TUtil_IsCustomSkillEnabled(S_Alchemy_s16)) {
-					baseString += " If a non-mutagen potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", normal enemy attacks do not interrupt you while attacking or sprinting.";
+					baseString += " If a potion effect is active and adrenaline >= " + NoTrailZeros((GetWitcherPlayer().GetStatMax(BCS_Focus) - skillLevel) + 1) + ", attacking and sprinting cannot be interrupted with normal attacks.";
 				}
 				break;
 				// Triangle end
@@ -2731,7 +2731,7 @@ class CR4CharacterMenu extends CR4MenuBase
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
 				// Triangle killing spree
 				if (TOpts_ActivePotsInsteadOfTox()) {
-					baseString = StrReplace(baseString, "If Toxicity is above 0", "If a non-mutagen potion effect is active");
+					baseString = StrReplace(baseString, "If Toxicity is above 0", "If a potion effect is active");
 				}
 				// Triangle end
 				break;
@@ -2810,11 +2810,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsString.PushBack( NoTrailZeros( arg * 100 ) );
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
 				// Triangle armor styles
-				// Triangle TODO compare descriptions
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, 'attack_power', false, true);
-				// baseString = "Each piece of light armor increases attack power by " + RoundMath(ability.valueMultiplicative*100) + "% ";
-				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
-				// baseString += "and critical hit damage by " + RoundMath(ability.valueAdditive*100) + "%.";
+				baseString = StrReplace(baseString, "Each piece of light armor increases", "Each piece of light armor increases attack power by " + RoundMath(ability.valueMultiplicative*100) + "%,");
+				// ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_05, theGame.params.CRITICAL_HIT_DAMAGE_BONUS, false, true);
 				// Triangle end
 				break;
 			case S_Perk_06:
@@ -2826,9 +2824,11 @@ class CR4CharacterMenu extends CR4MenuBase
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
 				// Triangle armor styles
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'spell_power', false, true);
-				// baseString = "Each piece of medium armor increases spell power by " + RoundMath(ability.valueMultiplicative*100) + "% ";
+				baseString = "Each piece of medium armor increases Spell Power by " + NoTrailZeros(ability.valueMultiplicative*100) + "% ";
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'attack_power', false, true);
-				// baseString += "and attack power by " + RoundMath(ability.valueMultiplicative*100) + "%.";
+				baseString += ", Attack Power by " + NoTrailZeros(ability.valueMultiplicative*100) + "%.";
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_06, 'vitality', false, true);
+				baseString += ", and maximum Vitality by " + NoTrailZeros(ability.valueMultiplicative*100) + "%.";
 				// Triangle end
 				break;
 			case S_Perk_07:
@@ -2838,6 +2838,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_07, 'focus_gain', false, true);
 				argsString.PushBack( NoTrailZeros( ability.valueAdditive * 100 ) );
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
+				// Triangle armor styles
+				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_07, 'attack_power_heavy_style', false, true);
+				baseString = StrReplace(baseString, "damage dealt by melee attacks", "and heavy attack damage by " + NoTrailZeros( ability.valueMultiplicative * 100 ) + "%. Each melee attack");
+				// Triangle end
 				break;
 			case S_Perk_10:
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Perk_10, 'focus_gain', false, true);
