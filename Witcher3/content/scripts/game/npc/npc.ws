@@ -51,6 +51,7 @@ statemachine import class CNewNPC extends CActor
 	editable var RemainsTags 		: array<name>;		hint RemainsTags="If set then the NPC's remains will be tagged with given tags";
 	editable var level 				: int;				default level = 1;
 	var currentLevel		: int;
+	var originalLevel		: int; // Triangle level scaling
 	editable saved var levelFakeAddon     : int;				default levelFakeAddon = 0;
 	private	 saved var newGamePlusFakeLevelAddon : bool;		default newGamePlusFakeLevelAddon = false;
 	private	 saved var xmlLevel		: SAbilityAttributeValue;
@@ -401,6 +402,7 @@ statemachine import class CNewNPC extends CActor
 		// Triangle end
 		
 		currentLevel = level;
+		originalLevel = currentLevel; // Triangle level scaling
 		levelBonusesComputedAtPlayerLevel = -1;
 		
 		super.OnSpawned(spawnData);
@@ -1306,7 +1308,7 @@ statemachine import class CNewNPC extends CActor
 		var newLevel, playerLevel, opponentLevel, levelJitter : int;
 
 		playerLevel = thePlayer.GetLevel();
-		opponentLevel = currentLevel;
+		opponentLevel = originalLevel;
 		newLevel = opponentLevel;
 
 		// Just in case!
