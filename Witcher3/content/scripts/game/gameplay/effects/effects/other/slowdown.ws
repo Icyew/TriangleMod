@@ -11,7 +11,7 @@
 
 class W3Effect_Slowdown extends CBaseGameplayEffect
 {
-	private saved var slowdownCauserId : int;
+	private saved var slowdownCauserId : int; default slowdownCauserId = -1; // Triangle yrden Marks whether there is no causer
 	private saved var decayPerSec : float;			
 	private saved var decayDelay : float;			
 	private saved var delayTimer : float;			
@@ -55,7 +55,8 @@ class W3Effect_Slowdown extends CBaseGameplayEffect
 		theGame.witcherLog.AddMessage("Shock resist prc: " + prc);
 		theGame.witcherLog.AddMessage("Slowdown prc: " + slowdown * 100);*/
 		
-		slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - slowdown );
+		// slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - slowdown );
+		target.PushBaseAnimationMultiplierCauser(1 - slowdown,, 'yrden');
 		delayTimer = 0;
 	}
 	
@@ -66,12 +67,19 @@ class W3Effect_Slowdown extends CBaseGameplayEffect
 		{
 			if(delayTimer >= decayDelay)
 			{
-				target.ResetAnimationSpeedMultiplier(slowdownCauserId);
+				// Triangle yrden
+				// Triangle TODO not used since decay_per_sec/decay_delay are not defined in xml. Fix just in case you enable
+				if (slowdownCauserId >= 0) {
+					target.ResetAnimationSpeedMultiplier(slowdownCauserId); // Triangle yrden
+				}
+				target.ResetBaseAnimationMultiplierCauserBySrc('yrden');
+				// Triangle end
 				slowdown -= decayPerSec * dt;
 				
-				if(slowdown > 0)
-					slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - slowdown );
-				else
+				if(slowdown > 0) {
+					// slowdownCauserId = target.SetAnimationSpeedMultiplier( 1 - slowdown ); // Triangle yrden
+					target.PushBaseAnimationMultiplierCauser(1 - slowdown,, 'yrden'); // Triangle yrden
+				} else
 					isActive = false;
 			}
 			else
@@ -92,7 +100,12 @@ class W3Effect_Slowdown extends CBaseGameplayEffect
 	event OnEffectRemoved()
 	{
 		super.OnEffectRemoved();		
-		target.ResetAnimationSpeedMultiplier(slowdownCauserId);
+		// Triangle yrden
+		if (slowdownCauserId >= 0) {
+			target.ResetAnimationSpeedMultiplier(slowdownCauserId);
+		}
+		target.ResetBaseAnimationMultiplierCauserBySrc('yrden');
+		// Triangle end
 	}
 	
 	event OnEffectAddedPost()
