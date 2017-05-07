@@ -133,7 +133,9 @@ class W3PlayerAbilityManager extends W3AbilityManager
 		// Elys start //
 		// Triangle passive skills Set original skill slots count and equip default passive skills
 
-		orgTotalSkillSlotsCount = totalSkillSlotsCount;
+		if (!isFromLoad || orgTotalSkillSlotsCount == 0) {
+			orgTotalSkillSlotsCount = totalSkillSlotsCount;
+		}
 
 		for(i=0; i<skills.Size(); i+=1)
 		{
