@@ -90,18 +90,15 @@ class W3Effect_TSpellSword extends CBaseGameplayEffect
 	private function SetSign(signType : ESignType)
 	{
 		var weaponEnt : CEntity;
-		var associatedSkill : ESkill;
 		var witcher : W3PlayerWitcher;
 
 		if (signType == ST_None) {
 			TUtil_LogMessage("ERROR: Tried to set W3Effect_TSpellSword to ST_None. Should remove effect instead!");
 			return;
 		}
-	
-		associatedSkill = TUtil_PowerSkillForSignType(signType);
 
 		weaponEnt = GetWeapon();
-		if(weaponEnt && associatedSkill != S_SUndefined)
+		if(weaponEnt)
 		{
 			currentSign = signType;
 			iconPath = theGame.effectMgr.GetPathForEffectIconTypeName(SignTypeToIconName(signType));

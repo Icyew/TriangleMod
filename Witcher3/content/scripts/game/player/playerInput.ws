@@ -2155,7 +2155,7 @@ class CPlayerInput
 				}
 			
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(thePlayer.GetEquippedSign())) && TUtil_IsAltSignPowerPressedAndUsable(thePlayer.GetEquippedSign())) {
+				if (TUtil_IsAltSignPowerPressedAndUsable(thePlayer.GetEquippedSign()) && thePlayer.inv.GetCurrentlyHeldSword() != GetInvalidUniqueId()) {
 					if (GetWitcherPlayer().GetSpellSwordSign() == thePlayer.GetEquippedSign()) {
 						GetWitcherPlayer().SetSpellSwordSign(ST_None);
 					} else {

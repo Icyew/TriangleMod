@@ -1,5 +1,6 @@
 // Some utility functions for mod I didn't feel like putting elsewhere
 
+// Triangle spell sword not used since moving feature to conductors of magic mutation
 function TUtil_PowerSkillForSignType(sign : ESignType) : ESkill
 {
     var associatedSkill : ESkill;
@@ -19,17 +20,17 @@ function TUtil_PowerSkillForSignType(sign : ESignType) : ESkill
     return associatedSkill;
 }
 
-function TUtil_DmgTypeForPowerSkill(skill : ESkill) : name
+function TUtil_DmgTypeForSpellSword(sign : ESignType) : name
 {
-    if (skill == S_Magic_s12)
-        return theGame.params.DAMAGE_NAME_FORCE;
-    else if (skill == S_Magic_s07)
+    if (sign == ST_Aard)
+        return theGame.params.DAMAGE_NAME_FROST;
+    else if (sign == ST_Igni)
         return theGame.params.DAMAGE_NAME_FIRE;
-    else if (skill == S_Magic_s16)
+    else if (sign == ST_Yrden)
         return theGame.params.DAMAGE_NAME_SHOCK;
-    else if (skill == S_Magic_s15)
+    else if (sign == ST_Quen)
         return theGame.params.DAMAGE_NAME_FORCE;
-    else if (skill == S_Magic_s18)
+    else if (sign == ST_Axii)
         return theGame.params.DAMAGE_NAME_WILL;
     return '';
 }
@@ -317,8 +318,30 @@ function TUtil_IsAltSpecialAttackPressedAndEnabled() : bool
 // Triangle spell sword
 function TUtil_IsAltSignPowerPressedAndUsable(signType : ESignType) : bool
 {
-    return thePlayer.CanUseSkill(TUtil_PowerSkillForSignType(signType)) && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
+    return TUtil_CanUseSpellSword((W3PlayerWitcher)thePlayer, signType) && (theInput.IsActionPressed('LockAndGuard') || theInput.IsActionPressed('Focus'));
 }
+
+// Triangle spell sword
+function TUtil_CanUseSpellSword(player : W3PlayerWitcher, sign : ESignType) : bool
+{
+    if (player && TUtil_SpellSwordEnabled(sign)) {
+        return player.IsMutationActive( EPMT_Mutation1 );
+    }
+    return false;
+}
+
+// Triangle spell sword
+function TUtil_SpellSwordSource(sign : ESignType) : name
+{
+    return 'mutation1';
+}
+
+// Triangle spell sword
+function TUtil_SpellSwordEnabled(sign : ESignType) : bool
+{
+    return TOpts_SpellSwordEnabled();
+}
+
 
 // Triangle synergy mutagens
 function TUtil_AddMutagenBonuses(color : ESkillColor, level : int, count : float) : float
@@ -445,15 +468,17 @@ function TUtil_IsCustomSkillEnabled(skill : ESkill) : bool
         case S_Sword_s07:
             return TOpts_AnatomicalKnowledgeDuration() > 0;
         case S_Magic_s12:
-            return TOpts_AardPowerFrostDuration() > 0;
+            return TOpts_AardSwordFrostDuration() > 0;
         case S_Magic_s07:
-            return TOpts_IgniPowerScorchFraction() > 0;
+            return TOpts_IgniSwordScorchFraction() > 0;
         case S_Magic_s16:
-            return TOpts_YrdenPowerRadius() > 0;
+            return TOpts_YrdenSwordRadius() > 0;
         case S_Magic_s15:
-            return TOpts_QuenPowerHealRatio() > 0;
+            return TOpts_QuenSwordHealRatio() > 0;
         case S_Magic_s18:
-            return TOpts_AxiiPowerWeaknessDuration() > 0;
+            return TOpts_AxiiSwordWeaknessDuration() > 0;
+        case S_Magic_s20:
+            return TOpts_AardStaminaDelay() > 0;
         case S_Alchemy_s03:
             return TOpts_DelayedRecoverySlowFactor() > 0;
         case S_Alchemy_s12:

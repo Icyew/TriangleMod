@@ -9736,6 +9736,12 @@ statemachine abstract import class CR4Player extends CPlayer
 						{
 							OnEquipMeleeWeapon( PW_Steel, false, true );
 						}
+
+						// Triangle spell sword
+						if ((W3PlayerWitcher)this) {
+							GetWitcherPlayer().SetSpellSwordSign(ST_None);
+						}
+						// Triangle end
 						
 						actionResult = false;
 						
@@ -9764,6 +9770,12 @@ statemachine abstract import class CR4Player extends CPlayer
 						{
 							OnEquipMeleeWeapon( PW_Silver, false, true );
 						}
+
+						// Triangle spell sword
+						if ((W3PlayerWitcher)this) {
+							GetWitcherPlayer().SetSpellSwordSign(ST_None);
+						}
+						// Triangle end
 						
 						actionResult = false;
 						
@@ -9796,6 +9808,12 @@ statemachine abstract import class CR4Player extends CPlayer
 								OnEquipMeleeWeapon( PW_Steel, false, true );
 							}
 						}
+
+						// Triangle spell sword Doesn't look like this path gets used, leaving it here just in case
+						if ((W3PlayerWitcher)this) {
+							GetWitcherPlayer().SetSpellSwordSign(ST_None);
+						}
+						// Triangle end
 						
 						actionResult = false;
 						

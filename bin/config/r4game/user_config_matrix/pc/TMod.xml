@@ -110,17 +110,18 @@
 				<Entry varId="IgniDurationSpread"				value="0.4"/>
 				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
 				<Entry varId="AardStaminaDelay"					value="1"/>
-				<Entry varId="SpellSwordBaseDmg"				value="1000"/>
 <!-- 			<Entry varId="SpellSwordCost"					value="0"/>
 				<Entry varId="SpellSwordDelay"					value="0"/> -->
+				<Entry varId="SpellSwordEnabled"				value="1"/>
 				<Entry varId="SpellSwordStacksPerHit"			value="10"/>
 				<Entry varId="SpellSwordStacksPerSign"			value="30"/>
-				<Entry varId="AardPowerFrostDuration"			value="3"/>
-				<Entry varId="IgniPowerScorch"					value="3"/>
-				<Entry varId="YrdenPowerRadius"					value="5"/>
-				<Entry varId="QuenPowerHealRatio"				value="0.5"/>
-				<Entry varId="AxiiPowerWeaknessDuration"		value="8"/>
-				<Entry varId="AxiiPowerWeaknessPenalty"			value="50"/>
+				<Entry varId="SpellSwordDmgBonusPerc"			value="200"/>
+				<Entry varId="AardSwordFrostDuration"			value="3"/>
+				<Entry varId="IgniSwordScorch"					value="3"/>
+				<Entry varId="YrdenSwordRadius"					value="5"/>
+				<Entry varId="QuenSwordHealRatio"				value="0.5"/>
+				<Entry varId="AxiiSwordWeaknessDuration"		value="8"/>
+				<Entry varId="AxiiSwordWeaknessPenalty"			value="50"/>
 				<Entry varId="QuenRemoveDoT"					value="0"/>
 				<Entry varId="QuenAbsorbLastHit"				value="1"/>
 				<Entry varId="QuenAbsorptionRatio"				value="50"/>
@@ -145,17 +146,18 @@
 			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="AardStaminaDelay"		 	 	 displayName="Aard: aard drains stamina and delays regen for Xs (0 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
-<!-- 		<Var id="SpellSwordCost"		 	 	 displayName="Sign Power: stamina cost per hit" 										displayType="SLIDER;0.00;100;100"	 	tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="SpellSwordDelay"		 	 	 displayName="Sign Power: stamina delay per hit" 										displayType="SLIDER;0.00;10;40"		 	tags="customNames;nonLocalized;customDisplayName" /> -->
- 			<Var id="SpellSwordStacksPerHit"	 	 displayName="Sign Power: charge generated per hit" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="SpellSwordStacksPerSign"	 	 displayName="Sign Power: charge generated per sign" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="SpellSwordBaseDmg"		 	 	 displayName="Sign Power: base bonus damage per hit" 									displayType="SLIDER;0.00;1500;60"	 	tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AardPowerFrostDuration"	 	 displayName="Aard power: duration to freeze enemies (0 vanilla)" 						displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="IgniPowerScorch"	 	 		 displayName="Igni power: % of remaining hp as dmg (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="YrdenPowerRadius"	 	 		 displayName="Yrden power: radius of splash damage (0 vanilla)" 						displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="QuenPowerHealRatio"	 	 	 displayName="Quen power: fraction of dmg converted to hp instead (0 vanilla)" 			displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AxiiPowerWeaknessDuration"	 	 displayName="Axii power: weakness duration (0 vanilla)" 								displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AxiiPowerWeaknessPenalty"	 	 displayName="Axii power: % damage penalty" 											displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
+<!-- 		<Var id="SpellSwordCost"		 	 	 displayName="Spell sword: stamina cost per hit" 										displayType="SLIDER;0.00;100;100"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordDelay"		 	 	 displayName="Spell sword: stamina delay per hit" 										displayType="SLIDER;0.00;10;40"		 	tags="customNames;nonLocalized;customDisplayName" /> -->
+ 			<Var id="SpellSwordEnabled"	 	 		 displayName="Spell sword: Enable Conductors of Magic custom effect" 					displayType="TOGGLE"				 	tags="customNames;nonLocalized;customDisplayName" />
+ 			<Var id="SpellSwordStacksPerHit"	 	 displayName="Spell sword: charge generated per hit" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordStacksPerSign"	 	 displayName="Spell sword: charge generated per sign" 									displayType="SLIDER;0.00;100;200"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="SpellSwordDmgBonusPerc"	 	 displayName="Spell sword: % of base sword damage dealt as bonus"						displayType="SLIDER;0.00;400;80"	 	tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardSwordFrostDuration"	 	 displayName="Aard sword: duration to freeze enemies" 									displayType="SLIDER;0.00;10;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="IgniSwordScorch"	 	 		 displayName="Igni sword: % of remaining hp as dmg" 									displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="YrdenSwordRadius"	 	 		 displayName="Yrden sword: radius of splash damage" 									displayType="SLIDER;0.00;20;40"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="QuenSwordHealRatio"	 	 	 displayName="Quen sword: fraction of dmg converted to hp instead" 						displayType="SLIDER;0.00;1;20"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiSwordWeaknessDuration"	 	 displayName="Axii sword: weakness duration" 											displayType="SLIDER;0.00;20;40" 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AxiiSwordWeaknessPenalty"	 	 displayName="Axii sword: % damage penalty" 											displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenRemoveDoT"	 	 		 	 displayName="Quen: Remove DoT effects on cast (true vanilla)" 							displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenAbsorbLastHit"	 	 		 displayName="Quen: fully absorb hit that breaks Quen (true vanilla)" 					displayType="TOGGLE"	 				tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="QuenAbsorptionRatio"	 	 	 displayName="Quen: maximum % of damage absorbed (1 vanilla)"							displayType="SLIDER;0.00;100;20" 		tags="customNames;nonLocalized;customDisplayName" />

@@ -557,7 +557,7 @@ class W3DamageManagerProcessor extends CObject
 		var newAction : W3DamageAction;
 		
 		newAction = new W3DamageAction in this;
-		newAction.Initialize(playerAttacker, target, NULL, TUtil_PowerSkillForSignType(ST_Yrden), EHRT_None, CPS_Undefined, true, false, false, false );
+		newAction.Initialize(playerAttacker, target, NULL, TUtil_SpellSwordSource(ST_Yrden), EHRT_None, CPS_SpellPower, true, false, false, false );
 		newAction.SetCannotReturnDamage( true );
 		newAction.SetHitAnimationPlayType(EAHA_ForceYes);
 		newAction.SetHitReactionType(EHRT_Heavy);
@@ -571,10 +571,35 @@ class W3DamageManagerProcessor extends CObject
 	}
 
 	// Triangle spell sword
+	private function SpellSwordDamageBonus() : float
+	{
+		var sword : SItemUniqueId;
+		var damageVal : SAbilityAttributeValue;
+		var returnVal : float;
+
+		if (!playerAttacker)
+			return 0;
+
+		sword = playerAttacker.inv.GetCurrentlyHeldSword();
+		damageVal.valueBase = 0;
+		damageVal.valueMultiplicative = 1;
+		damageVal.valueAdditive = 0;
+		if( playerAttacker.inv.GetItemCategory(sword) == 'steelsword' )
+		{
+			damageVal += playerAttacker.inv.GetItemAttributeValue(sword, theGame.params.DAMAGE_NAME_SLASHING);
+		}
+		else if( playerAttacker.inv.GetItemCategory(sword) == 'silversword' )
+		{
+			damageVal += playerAttacker.inv.GetItemAttributeValue(sword, theGame.params.DAMAGE_NAME_SILVER);
+		}
+		returnVal = CalculateAttributeValue(damageVal) * (1 + TOpts_SpellSwordDmgBonusPerc());
+		return returnVal;
+	}
+
+	// Triangle spell sword
 	private function ProcessSpellSwordStuff() : bool
 	{
 		var spellSwordSign : ESignType;
-		var associatedSkill : ESkill;
 		var bonusDmgInfo : SRawDamage;
 		var anyDamageProcessed : bool;
 		var witcher : W3PlayerWitcher;
@@ -587,49 +612,48 @@ class W3DamageManagerProcessor extends CObject
 		var attrVal : SAbilityAttributeValue;
 
 
-		witcher = (W3PlayerWitcher)actorAttacker;
+		witcher = (W3PlayerWitcher)playerAttacker;
 		anyDamageProcessed = false;
-		spellSwordSign = witcher.GetSpellSwordSign();
-		if(attackAction && attackAction.IsActionMelee() && witcher && spellSwordSign != ST_None)
+		if (witcher)
+			spellSwordSign = witcher.GetSpellSwordSign();
+		if(attackAction && attackAction.IsActionMelee() && witcher && spellSwordSign != ST_None && TUtil_CanUseSpellSword(witcher, spellSwordSign))
 		{
-			associatedSkill = TUtil_PowerSkillForSignType(spellSwordSign);
 			spellPower = witcher.GetTotalSignSpellPower(SignEnumToSkillEnum(spellSwordSign));
 
-			if (witcher.CanUseSkill(associatedSkill))
-			{
-				if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && witcher.IsSpellSwordCharged()) {
-					witcher.DrainSpellSwordStacks();
-					bonusDmgInfo.dmgVal = TOpts_SpellSwordBaseDmg();
-					bonusDmgInfo.dmgType = TUtil_DmgTypeForPowerSkill(associatedSkill);
-					if (spellSwordSign == ST_Aard) {
-						// For some reason, adding resistStat to effect doesnt work
-						// TODO verify resists are working ok
-						attackAction.AddEffectInfo(EET_SlowdownFrost, TOpts_AardPowerFrostDuration() * spellPower.valueMultiplicative);
-					} else if (spellSwordSign == ST_Igni) {
-						bonusDmgInfo.dmgVal += TOpts_IgniPowerScorchFraction() * actorVictim.GetHealth();
-						attackAction.AddEffectInfo(EET_Burning, 0.5);
-					} else if (spellSwordSign == ST_Yrden) {
-						FindGameplayEntitiesInCylinder(ents, attackAction.victim.GetWorldPosition(), TOpts_YrdenPowerRadius(), 5, 100, , FLAG_OnlyAliveActors);
-						for (i = 0; i < ents.Size(); i += 1) {
-							if (ents[i] != thePlayer)
-								DealYrdenSpellSwordDamage(ents[i], bonusDmgInfo.dmgVal);
-						}
-					} else if (spellSwordSign == ST_Axii) {
-						GetDamageResists(theGame.params.DAMAGE_NAME_WILL, resistPoints, resistPercents);
-						attrVal.valueMultiplicative = TOpts_AxiiPowerWeaknessPenalty();
-						attackAction.AddEffectInfo(EET_TOneTimeWeakness, TOpts_AxiiPowerWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative, attrVal);
+			// Expend charges
+			if (playerAttacker.IsHeavyAttack(attackAction.GetAttackName()) && witcher.IsSpellSwordCharged()) {
+				witcher.DrainSpellSwordStacks();
+				bonusDmgInfo.dmgVal = SpellSwordDamageBonus();
+				bonusDmgInfo.dmgType = TUtil_DmgTypeForSpellSword(spellSwordSign);
+				if (spellSwordSign == ST_Aard) {
+					// For some reason, adding resistStat to effect doesnt work
+					// Triangle TODO verify resists are working ok
+					attackAction.AddEffectInfo(EET_SlowdownFrost, TOpts_AardSwordFrostDuration() * spellPower.valueMultiplicative);
+				} else if (spellSwordSign == ST_Igni) {
+					bonusDmgInfo.dmgVal += TOpts_IgniSwordScorchFraction() * actorVictim.GetHealth();
+					attackAction.AddEffectInfo(EET_Burning, 0.5);
+				} else if (spellSwordSign == ST_Yrden) {
+					FindGameplayEntitiesInCylinder(ents, attackAction.victim.GetWorldPosition(), TOpts_YrdenSwordRadius(), 5, 100, , FLAG_OnlyAliveActors);
+					for (i = 0; i < ents.Size(); i += 1) {
+						if (ents[i] != thePlayer)
+							DealYrdenSpellSwordDamage(ents[i], bonusDmgInfo.dmgVal);
 					}
+				} else if (spellSwordSign == ST_Axii) {
+					GetDamageResists(theGame.params.DAMAGE_NAME_WILL, resistPoints, resistPercents);
+					attrVal.valueMultiplicative = TOpts_AxiiSwordWeaknessPenalty();
+					attackAction.AddEffectInfo(EET_TOneTimeWeakness, TOpts_AxiiSwordWeaknessDuration() * (1 - resistPercents) * spellPower.valueMultiplicative, attrVal);
 				}
-				witcher.AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(witcher.GetSpellSwordSign()), TOpts_SpellSwordStacksPerHit()));
 			}
+
+			witcher.AddSpellSwordStacks(TOpts_SpellSwordStacksPerHit());
 
 			if (bonusDmgInfo.dmgVal > 0)
 			{
 				dmgValue = MaxF(0, CalculateDamage(bonusDmgInfo, spellPower));
 
 				if (spellSwordSign == ST_Quen) {
-					witcher.GainStat(BCS_Vitality, dmgValue * TOpts_QuenPowerHealRatio());
-					dmgValue *= 1 - TOpts_QuenPowerHealRatio();
+					witcher.GainStat(BCS_Vitality, dmgValue * TOpts_QuenSwordHealRatio());
+					dmgValue *= 1 - TOpts_QuenSwordHealRatio();
 				}
 
 				//add to total damage to be dealt
@@ -2122,7 +2146,7 @@ class W3DamageManagerProcessor extends CObject
 
 		npcAttacker = (CNewNPC)actorAttacker;
 		npcVictim = (CNewNPC)actorVictim;
-		
+
 		//get total reductions for this damage type
 		GetDamageResists(dmgInfo.dmgType, resistPoints, resistPercents);
 

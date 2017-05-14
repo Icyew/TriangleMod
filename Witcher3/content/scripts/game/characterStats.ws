@@ -440,7 +440,8 @@ struct SPlayerOffenseStats
 	var crossbowCritDmgBonus:float;
 }
 
-//modSigns
+//modSigns // Triangle TODO may want to customize based on sign type, or move elsewhere
+// 100% could mean diff things for sign type, and alt signs
 function PowerStatToPowerBonus( valueMult : float ) : float
 {
 	return ClampF(valueMult - 1, 0, 1)*0.5 + ClampF(valueMult - 2, 0, 1)*0.3 + ClampF(valueMult - 3, 0, 1)*0.2;

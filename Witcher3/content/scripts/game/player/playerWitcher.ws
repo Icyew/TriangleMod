@@ -1830,7 +1830,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 
 		if (sign == ST_None) {
 			RemoveBuff(EET_TSpellSword);
-		} else if (TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(sign)) && CanUseSkill(TUtil_PowerSkillForSignType(sign)) && sign != GetSpellSwordSign()) {
+		} else if (TUtil_CanUseSpellSword(this, sign) && sign != GetSpellSwordSign()) {
 			extraParams = new W3TSpellSwordCustomParams in theGame;
 			extraParams.signType = sign;
 			if (HasBuff(EET_TSpellSword)) {
@@ -1841,7 +1841,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 
 			params.effectType = EET_TSpellSword;
 			params.creator = this;
-			params.sourceName = TUtil_PowerSkillForSignType(sign);
+			params.sourceName = TUtil_SpellSwordSource(sign);
 			params.duration = -1;
 			params.buffSpecificParams = extraParams;
 			theGame.VibrateControllerHard(0.5f);
@@ -2640,10 +2640,10 @@ statemachine class W3PlayerWitcher extends CR4Player
 				}
 				
 				// Triangle spell sword effect from sign power skills
-				if(!action.WasDodged() && spellSwordSign != ST_None
-					&& CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign))
-					&& TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(spellSwordSign)))
-				{
+				// if(!action.WasDodged() && spellSwordSign != ST_None
+				// 	&& CanUseSkill(TUtil_PowerSkillForSignType(spellSwordSign))
+				// 	&& TUtil_IsCustomSkillEnabled(TUtil_PowerSkillForSignType(spellSwordSign)))
+				// {
 					// Triangle TODO dead code
 					// if(spellSwordSign == ST_Axii)
 					// {
@@ -2662,7 +2662,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 					// 	actorVictim.SoundEvent('sign_yrden_shock_activate');
 					// }
 					// SetSpellSwordSign(ST_None);
-				}
+				// }
 				// Triangle end
 				
 				if(ShouldProcessTutorial('TutorialLightAttacks') || ShouldProcessTutorial('TutorialHeavyAttacks'))
@@ -9177,7 +9177,7 @@ statemachine class W3PlayerWitcher extends CR4Player
 		//theGame.witcherLog.AddMessage("OnSignCastPerformed: " + signType + "; isAlternate: " + isAlternate); //modSigns: debug
 
 		// Triangle spell sword
-		AddSpellSwordStacks(TUtil_ValueForLevel(TUtil_PowerSkillForSignType(GetSpellSwordSign()), TOpts_SpellSwordStacksPerSign()));
+		AddSpellSwordStacks(TOpts_SpellSwordStacksPerSign());
 		// Triangle end
 	}
 	

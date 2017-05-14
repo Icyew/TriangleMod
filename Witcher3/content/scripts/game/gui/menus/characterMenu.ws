@@ -2199,9 +2199,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				// Triangle resolve
 				if (TUtil_IsCustomSkillEnabled(S_Sword_s16)) {
 					arg = TUtil_InterpolateLevelValue(TOpts_ResolvePenaltyReduction(), maxLevel, skillLevel);
-					baseString = "Adrenaline loss from enemy attacks is reduced by " + NoTrailZeros(MaxF(arg * 100, 100)) + "%.";
+					baseString = "Adrenaline loss from enemy attacks is reduced by " + NoTrailZeros(MinF(arg * 100, 100)) + "%.";
 					if (arg > 1) {
-						baseString += " Additionally, " + NoTrailZeros((arg - 1) * 100) + "% of the original loss is converted to adrenaline gain.";
+						baseString += " " + NoTrailZeros((arg - 1) * 100) + "% of the original loss is gained instead.";
 					}
 					if (TOpts_ResolveDuration() > 0) {
 						baseString += " On taking damage,";
@@ -2400,14 +2400,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-					baseString += "<br>Cast Igni while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, an extra " + NoTrailZeros(TOpts_IgniPowerScorchFraction() * 100) + "% of the target's remaining hp as damage," +
-						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
-						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
-					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
-				}
+				// if (TUtil_SpellSwordEnabled(ST_Igni)) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// 	baseString += "<br>Cast Igni while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+				// 		NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, an extra " + NoTrailZeros(TOpts_IgniSwordScorchFraction() * 100) + "% of the target's remaining hp as damage," +
+				// 		" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+				// 		NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// }
 				// Triangle end
 				break;
 			case S_Magic_s08:
@@ -2451,14 +2451,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-					baseString += "<br>Cast Aard while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, slows the target for " + NoTrailZeros(TOpts_AardPowerFrostDuration()) + "s," +
-						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
-						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
-					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
-				}
+				// if (TUtil_SpellSwordEnabled(ST_Aard)) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// 	baseString += "<br>Cast Aard while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+				// 		NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, slows the target for " + NoTrailZeros(TOpts_AardSwordFrostDuration()) + "s," +
+				// 		" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+				// 		NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// }
 				// Triangle end
 				break;
 			case S_Magic_s13:
@@ -2481,14 +2481,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-					baseString += "<br>Cast Quen while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg() * (1 - TOpts_QuenPowerHealRatio())) + " damage, heals you for " + NoTrailZeros(TOpts_SpellSwordBaseDmg() * TOpts_QuenPowerHealRatio()) + "," +
-						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
-						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and hp restored.";
-					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
-				}
+				// if (TUtil_SpellSwordEnabled(ST_Quen)) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// 	baseString += "<br>Cast Quen while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+				// 		NoTrailZeros(TOpts_SpellSwordBaseDmg() * (1 - TOpts_QuenSwordHealRatio())) + " damage, heals you for " + NoTrailZeros(TOpts_SpellSwordBaseDmg() * TOpts_QuenSwordHealRatio()) + "," +
+				// 		" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+				// 		NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and hp restored.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// }
 				// Triangle end
 				break;
 			case S_Magic_s16:
@@ -2497,14 +2497,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-					baseString += "<br>Cast Yrden while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage to all enemies in a " + NoTrailZeros(TOpts_YrdenPowerRadius()) + "m radius," +
-						" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
-						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
-					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
-				}
+				// if (TUtil_SpellSwordEnabled(ST_Yrden)) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// 	baseString += "<br>Cast Yrden while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+				// 		NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage to all enemies in a " + NoTrailZeros(TOpts_YrdenSwordRadius()) + "m radius," +
+				// 		" and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+				// 		NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// }
 				// Triangle end
 				break;
 			case S_Magic_s17:
@@ -2519,14 +2519,14 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle spell sword
-				if (TUtil_IsCustomSkillEnabled(targetSkill.skillType)) {
-					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
-					baseString += "<br>Cast Axii while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
-						NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, weakens the target's next attack by " + NoTrailZeros(TOpts_AxiiPowerWeaknessPenalty() * 100) + "% for " + NoTrailZeros(TOpts_AxiiPowerWeaknessDuration()) +
-						"s, and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
-						NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
-					baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
-				}
+				// if (TUtil_SpellSwordEnabled(ST_Axii)) {
+				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);
+				// 	baseString += "<br>Cast Axii while guarding to enchant your weapon. At full charge, a heavy attack deals an extra " +
+				// 		NoTrailZeros(TOpts_SpellSwordBaseDmg()) + " damage, weakens the target's next attack by " + NoTrailZeros(TOpts_AxiiSwordWeaknessPenalty() * 100) + "% for " + NoTrailZeros(TOpts_AxiiSwordWeaknessDuration()) +
+				// 		"s, and depletes your weapon. Sword attacks charge " + NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerHit(), maxLevel, skillLevel)) + "% per hit, and signs charge " +
+				// 		NoTrailZeros(TUtil_InterpolateLevelValue(TOpts_SpellSwordStacksPerSign(), maxLevel, skillLevel)) + "% per cast.<br> Spellpower increases damage and duration.";
+				// 	baseString += "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// }
 				// Triangle end
 				break;
 			case S_Magic_s19:
@@ -2540,8 +2540,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				argsInt.PushBack(RoundMath(arg));
 				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
 				// Triangle far reaching aard
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit with Aard, stamina drains and regen is delayed for " + NoTrailZeros(TOpts_AardStaminaDelay() * skillLevel / 3) + "s." +
-					"<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				if (TUtil_IsCustomSkillEnabled(S_Magic_s20)) {
+					baseString = GetLocStringByKeyExtWithParams(locKey, argsInt) + " On being hit with Aard, stamina drains and regen is delayed for " + NoTrailZeros(TUtil_RoundTo(TUtil_InterpolateLevelValue(TOpts_AardStaminaDelay(), maxLevel, skillLevel), 2)) +
+						"s." + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				}
 				// Triangle end
 				break;					
 		}
