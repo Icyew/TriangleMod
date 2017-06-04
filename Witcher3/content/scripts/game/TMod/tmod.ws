@@ -579,9 +579,24 @@ function TOpts_IgniSPDurationFactor() : float
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'IgniSPDurationFactor' ) );
 }
 
+function TOpts_AardSPMult() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardSPMult' ) );
+}
+
+function TOpts_AardSPLinearMult() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardSPLinearMult' ) );
+}
+
 function TOpts_AardStaminaDelay() : float
 {
 	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardStaminaDelay' ) );
+}
+
+function TOpts_AardPowerBonus() : float
+{
+	return StringToFloat( theGame.GetInGameConfigWrapper().GetVarValue('TModOptionSigns', 'AardPowerBonus' ) );
 }
 
 function TOpts_SpellSwordEnabled() : bool

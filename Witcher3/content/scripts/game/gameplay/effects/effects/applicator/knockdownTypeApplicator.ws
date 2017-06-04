@@ -28,7 +28,7 @@ class W3Effect_KnockdownTypeApplicator extends W3ApplicatorEffect
 		var roll : float; //modSigns
 		var appliedType : EEffectType;
 		var null, sp, abl : SAbilityAttributeValue; //modSigns
-		var resPts, resPrc, rawSP, bonusChance : float; //modSigns
+		var resPts, resPrc, rawSP, effectPower, bonusChance : float; //modSigns // Triangle aard
 		var npc : CNewNPC;
 		var params : SCustomEffectParams;
 		var witcher : W3PlayerWitcher; //modSigns
@@ -50,16 +50,20 @@ class W3Effect_KnockdownTypeApplicator extends W3ApplicatorEffect
 		else
 			sp = creatorPowerStat;
 		//target.GetResistValue(resistStat, resPts, resPrc); // get both pts and prc
-		rawSP = PowerStatToPowerBonus(sp.valueMultiplicative); // modSigns
+		// rawSP = PowerStatToPowerBonus(sp.valueMultiplicative); // modSigns // Triangle aard
 		//move Petri philtre effect here -> removed
 		/*if(isSignEffect && GetCreator() == GetWitcherPlayer() && GetWitcherPlayer().GetPotionBuffLevel(EET_PetriPhiltre) == 3)
 		{
 			rawSP += 0.5;
 		}*/
-		if(isSignEffect) // Aard
+		// Triangle aard
+		// Use custom curves for aard spell power
+		rawSP = sp.valueMultiplicative - 1;
+		if(isSignEffect)
 			aardPower = MaxF(0, rawSP - resistancePts/100) * (1 - resistance);
 		else
 			aardPower = MaxF(0.1, 0.5 + rawSP - resistancePts/100) * (1 - resistance);
+		// Triangle end
 		//combat log
 		//theGame.witcherLog.AddCombatMessage("Sign power: " + FloatToString(sp.valueMultiplicative), thePlayer, NULL);
 		//theGame.witcherLog.AddCombatMessage("Knockdown applicator: aard power = " + FloatToString(aardPower), thePlayer, NULL);
@@ -119,25 +123,33 @@ class W3Effect_KnockdownTypeApplicator extends W3ApplicatorEffect
 		if( !target.HasAbility( 'WeakToAard' ) )
 		{
 			npc = (CNewNPC)target;
-			aardPower = ClampF(aardPower, 0.0, 1.0);
-			possibleTypes.PushBack( EET_Stagger );				probs.PushBack(            0.45 - aardPower*0.40 );
-			possibleTypes.PushBack( EET_LongStagger );			probs.PushBack( probs[0] + 0.25 + aardPower*0.05 );
+			// Triangle aard Reworked probability curves for aard
 			if( !(npc && npc.IsShielded(GetCreator())) && !target.HasAbility( 'mon_type_huge' ) )
 			{
-				possibleTypes.PushBack( EET_Knockdown );		probs.PushBack( probs[1] + 0.20 + aardPower*0.15 );
-				possibleTypes.PushBack( EET_HeavyKnockdown );	probs.PushBack( probs[2] + 0.10 + aardPower*0.20 );
+				bonusChance = 1;
+				if (GetCreator() == GetWitcherPlayer() && GetWitcherPlayer().CanUseSkill(S_Magic_s12))
+					bonusChance += TUtil_ValueForLevel(S_Magic_s12, TOpts_AardPowerBonus()); // this is a multiplier
+				possibleTypes.PushBack( EET_Stagger );				probs.PushBack(            TUtil_ChanceForStagger(aardPower) );
+				possibleTypes.PushBack( EET_LongStagger );			probs.PushBack( probs[0] + TUtil_ChanceForLongStagger(aardPower) );
+				possibleTypes.PushBack( EET_Knockdown );		probs.PushBack( probs[1] + TUtil_ChanceForKnockdown(aardPower, bonusChance) );
+				possibleTypes.PushBack( EET_HeavyKnockdown );	probs.PushBack( probs[2] + TUtil_ChanceForHeavyKnockdown(aardPower, bonusChance) );
 				witcher = (W3PlayerWitcher)GetCreator();
-				if( witcher && witcher.CanUseSkill(S_Magic_s12) )
-				{
-					abl = witcher.GetSkillAttributeValue(S_Magic_s12, 'heavy_knockdown_chance_bonus', false, false);
-					bonusChance = abl.valueMultiplicative * witcher.GetSkillLevel(S_Magic_s12);
-					probs[3] += bonusChance;
-					probs[2] -= bonusChance;
-					if(probs[2] < probs[1])
-						probs[1] = probs[2];
-				}
+			} else {
+				possibleTypes.PushBack( EET_Stagger );				probs.PushBack(            TUtil_ChanceForStagger(aardPower, true) );
+				possibleTypes.PushBack( EET_LongStagger );			probs.PushBack( probs[0] + TUtil_ChanceForLongStagger(aardPower, true) );
 			}
+			// Triangle end
 			roll = RandF() * probs[probs.Size() - 1];
+			// Triangle aard logging stuff that I may need later
+			// for( i = 0; i < possibleTypes.Size(); i += 1 )
+			// {
+			// 	if (i > 0)
+			// 		TUtil_LogMessage(probs[i] - probs[i-1]);
+			// 	else
+			// 		TUtil_LogMessage(probs[i]);
+			// }
+			// TUtil_LogMessage("rawSP: " + rawSP + " aardPower: " + aardPower + " pntRes: " + resistancePts + " percRes: " + resistance + " roll: " + roll);
+			// Triangle end
 			for( i = 0; i < possibleTypes.Size(); i += 1 )
 			{
 				if( roll < probs[i] )

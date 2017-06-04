@@ -5,8 +5,8 @@
 			<Preset id="0" displayName="Default" tags="customNames;nonLocalized;customDisplayName">
 				<Entry varId="CritDamageBonus"					value="50" />
 				<Entry varId="CritChanceBonus"					value="0" />
-				<Entry varId="StaggerCritChance"				value="50" />
-				<Entry varId="KnockdownCritChance"				value="100" />
+				<Entry varId="StaggerCritChance"				value="25" />
+				<Entry varId="KnockdownCritChance"				value="50" />
 				<Entry varId="HeavyAttackDmgMod"				value="1.65" />
 				<Entry varId="ParryCooldown"					value="2" />
 				<Entry varId="MaxParries"						value="3" />
@@ -109,7 +109,10 @@
 				<Entry varId="IgniDuration"						value="1"/>
 				<Entry varId="IgniDurationSpread"				value="0.4"/>
 				<Entry varId="IgniSPDurationFactor"				value="0.5"/>
+				<Entry varId="AardSPMult"						value="0.7"/>
+				<Entry varId="AardSPLinearMult"					value="0.03"/>
 				<Entry varId="AardStaminaDelay"					value="1"/>
+				<Entry varId="AardPowerBonus"					value="1"/>
 <!-- 			<Entry varId="SpellSwordCost"					value="0"/>
 				<Entry varId="SpellSwordDelay"					value="0"/> -->
 				<Entry varId="SpellSwordEnabled"				value="1"/>
@@ -145,7 +148,10 @@
 			<Var id="IgniDuration"		 		 	 displayName="Igni: base burning duration (0 for vanilla burning)"				 		displayType="SLIDER;0.00;5;100" 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniDurationSpread"		 	 displayName="Igni: spread for randomizing duration"				 					displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="IgniSPDurationFactor"		 	 displayName="Igni: each point of SP inc burning duration by X% (1 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
-			<Var id="AardStaminaDelay"		 	 	 displayName="Aard: aard drains stamina and delays regen for Xs (0 for vanilla)" 		displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardSPMult"			 	 	 displayName="Aard sp curve: spellpower multiplier (1 for 1:1 ratio)" 					displayType="SLIDER;0.00;1;60"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardSPLinearMult"		 	 	 displayName="Aard sp curve: spellpower linear bonus multiplier (0 for nothing)" 		displayType="SLIDER;0.00;1;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardStaminaDelay"		 	 	 displayName="Far reaching aard: drains stamina and delays regen for Xs (0 vanilla)" 	displayType="SLIDER;0.00;5;100"	 		tags="customNames;nonLocalized;customDisplayName" />
+			<Var id="AardPowerBonus"		 	 	 displayName="Aard power: heavy knockdown chance bonus multiplier" 						displayType="SLIDER;0.00;2;40"	 		tags="customNames;nonLocalized;customDisplayName" />
 <!-- 		<Var id="SpellSwordCost"		 	 	 displayName="Spell sword: stamina cost per hit" 										displayType="SLIDER;0.00;100;100"	 	tags="customNames;nonLocalized;customDisplayName" />
 			<Var id="SpellSwordDelay"		 	 	 displayName="Spell sword: stamina delay per hit" 										displayType="SLIDER;0.00;10;40"		 	tags="customNames;nonLocalized;customDisplayName" /> -->
  			<Var id="SpellSwordEnabled"	 	 		 displayName="Spell sword: Enable Conductors of Magic custom effect" 					displayType="TOGGLE"				 	tags="customNames;nonLocalized;customDisplayName" />

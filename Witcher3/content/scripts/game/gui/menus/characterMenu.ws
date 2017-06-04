@@ -1975,11 +1975,20 @@ class CR4CharacterMenu extends CR4MenuBase
 					ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, 'heavy_knockdown_chance_bonus', false, false);
 					arg3 = ability.valueMultiplicative * GetWitcherPlayer().GetSkillLevel(S_Magic_s12);
 				}
-				arg = MaxF(0.1 + arg2*0.2 + arg3, 0.20 + arg2*0.15 + 0.10 + arg2*0.20);
+				// Triangle aard
+				// arg = MaxF(0.1 + arg2*0.2 + arg3, 0.20 + arg2*0.15 + 0.10 + arg2*0.20);
+				arg2 = 1; // heavy knockdown multiplier from aard power
+				if (GetWitcherPlayer().CanUseSkill(S_Magic_s12))
+					arg2 += TUtil_ValueForLevel(S_Magic_s12, TOpts_AardPowerBonus());
+				arg = TUtil_ChanceForKnockdown(ability.valueMultiplicative - 1, arg2); // Knockdown chance
 				argsInt.PushBack(RoundMath(arg*100));
-				arg = 0.1 + arg2*0.2 + arg3;
+				// arg = 0.1 + arg2*0.2 + arg3;
+				arg = TUtil_ChanceForHeavyKnockdown(ability.valueMultiplicative - 1, arg2); // Heavy knockdown chance
 				argsInt.PushBack(RoundMath(arg*100));
 				baseString = GetLocStringByKeyExtWithParams(targetSkill.localisationDescriptionKey, argsInt);
+				baseString = StrReplace(baseString, "additional 15%", "additional " + NoTrailZeros(RoundMath(TOpts_StaggerCritChance()*100)) + "%");
+				baseString = StrReplace(baseString, "knocked down enemy", "staggered enemies, and " + NoTrailZeros(RoundMath(TOpts_KnockdownCritChance()*100)) + "% for knocked down enemies");
+				// Triange end
 				break;
 			case S_Magic_2:
 				ability = GetWitcherPlayer().GetTotalSignSpellPower(S_Magic_2);
@@ -2036,6 +2045,9 @@ class CR4CharacterMenu extends CR4MenuBase
 				arg *= (1 + PowerStatToPowerBonus(ability.valueMultiplicative) + arg2);
 				argsString.PushBack(FloatToStringPrec(arg, 1));
 				baseString = GetLocStringByKeyExtWithParams(locKey, , , argsString);
+				// Triangle axii
+				baseString = StrReplace(baseString, "additional 15%", "additional " + NoTrailZeros(RoundMath(TOpts_KnockdownCritChance()*100)) + "%");
+				// Triangle end
 				break;
 			
 			case S_Sword_2: //modSigns
@@ -2449,7 +2461,10 @@ class CR4CharacterMenu extends CR4MenuBase
 				ability = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, 'heavy_knockdown_chance_bonus', false, false);
 				ability.valueMultiplicative *= skillLevel;
 				argsInt.PushBack(RoundMath(ability.valueMultiplicative*100));
-				baseString = GetLocStringByKeyExtWithParams(locKey, argsInt)  + "<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle aard power
+				baseString = "Aard is " + NoTrailZeros(TUtil_RoundTo(1 + TUtil_InterpolateLevelValue(TOpts_AardPowerBonus(), maxLevel, skillLevel), 2)) + "x as likely to cause heavy knockdown" +
+					"<br>" + GetLocStringByKeyExt("attribute_name_staminaregen") + ": +" + NoTrailZeros((arg_stamina * 100) * skillLevel) + "/" + GetLocStringByKeyExt("per_second");
+				// Triangle end
 				// Triangle spell sword
 				// if (TUtil_SpellSwordEnabled(ST_Aard)) {
 				// 	baseString = GetLocStringByKeyExtWithParams(locKey, argsInt);

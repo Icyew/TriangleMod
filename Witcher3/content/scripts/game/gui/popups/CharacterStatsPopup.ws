@@ -476,6 +476,7 @@ function AddCharacterStatSigns(tag : string, varKey:name, locKey:string, iconTag
 	var fVal : float;
 	var sp, mutDmgMod, mutMin, mutMax : SAbilityAttributeValue;
 	var sword : SItemUniqueId;
+	var bonusChance : float; // Triangle aard
 	
 	statObject = flashMaster.CreateTempFlashObject();
 	
@@ -510,6 +511,14 @@ function AddCharacterStatSigns(tag : string, varKey:name, locKey:string, iconTag
 			sp = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, 'heavy_knockdown_chance_bonus', false, false);
 			valueAbility = MaxF(0.10 + valueAbility*0.20 + sp.valueMultiplicative * GetWitcherPlayer().GetSkillLevel(S_Magic_s12), valueAbility);
 		}
+		// Triangle aard
+		sp = GetWitcherPlayer().GetTotalSignSpellPower(S_Magic_1);
+		bonusChance = 1;
+		if (GetWitcherPlayer().CanUseSkill(S_Magic_s12))
+			bonusChance += TUtil_ValueForLevel(S_Magic_s12, TOpts_AardPowerBonus()); // this is a multiplier
+		valueAbility = TUtil_ChanceForKnockdown(sp.valueMultiplicative - 1, bonusChance);
+		// Triangle end
+		TUtil_LogMessage("statsKnock: " + valueAbility + " sp: " + sp.valueMultiplicative);
 		valueStr = (string)RoundMath( valueAbility * 100 ) + " %";
 	}
 	else if ( varKey == 'aard_heavyknockdownchance' )	
@@ -525,6 +534,14 @@ function AddCharacterStatSigns(tag : string, varKey:name, locKey:string, iconTag
 			sp = GetWitcherPlayer().GetSkillAttributeValue(S_Magic_s12, 'heavy_knockdown_chance_bonus', false, false);
 			valueAbility += sp.valueMultiplicative * GetWitcherPlayer().GetSkillLevel(S_Magic_s12);
 		}
+		// Triangle aard
+		sp = GetWitcherPlayer().GetTotalSignSpellPower(S_Magic_1);
+		bonusChance = 1;
+		if (GetWitcherPlayer().CanUseSkill(S_Magic_s12))
+			bonusChance += TUtil_ValueForLevel(S_Magic_s12, TOpts_AardPowerBonus()); // this is a multiplier
+		valueAbility = TUtil_ChanceForHeavyKnockdown(sp.valueMultiplicative - 1, bonusChance);
+		// Triangle end
+		TUtil_LogMessage("statsHeavyKnock: " + valueAbility + " sp: " + sp.valueMultiplicative);
 		valueStr = (string)RoundMath( valueAbility * 100 ) + " %";
 	}
 	else if ( varKey == 'aard_damage' ) 	

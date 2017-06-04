@@ -540,3 +540,41 @@ function TUtil_GetLvlResistanceAbilityNames(out dmgArr : array<name>, out magicA
     magicArr.PushBack('TModResistanceLvlBonus_Fire');
     magicArr.PushBack('TModResistanceLvlBonus_Frost');
 }
+
+// Triangle aard
+function TUtil_ChanceForSomeStagger(sp : float, optional immuneToKnockdown : bool) : float
+{
+    if (immuneToKnockdown)
+        return 1;
+    return 0.7 / (1 + TOpts_AardSPMult()*sp) - TOpts_AardSPLinearMult()*sp;
+}
+
+// Triangle aard
+function TUtil_ChanceForStagger(sp : float, optional immuneToKnockdown : bool) : float
+{
+    return (0.64 * TUtil_ChanceForSomeStagger(sp, immuneToKnockdown)) / (1 + TOpts_AardSPMult()*sp);
+}
+
+// Triangle aard
+function TUtil_ChanceForLongStagger(sp : float, optional immuneToKnockdown : bool) : float
+{
+    return TUtil_ChanceForSomeStagger(sp, immuneToKnockdown) - TUtil_ChanceForStagger(sp);
+}
+
+// Triangle aard
+function TUtil_ChanceForSomeKnockdown(sp : float) : float
+{
+    return 1 - TUtil_ChanceForSomeStagger(sp);
+}
+
+// Triangle aard
+function TUtil_ChanceForKnockdown(sp : float, heavyKnockdownBonus : float) : float
+{
+    return TUtil_ChanceForSomeKnockdown(sp) * 2 / (3 * heavyKnockdownBonus);
+}
+
+// Triangle aard
+function TUtil_ChanceForHeavyKnockdown(sp : float, heavyKnockdownBonus : float) : float
+{
+    return TUtil_ChanceForSomeKnockdown(sp) * heavyKnockdownBonus / 3;
+}
